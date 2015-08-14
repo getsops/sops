@@ -383,9 +383,8 @@ def write_file(tree, path=None, filetype=None):
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
     if filetype == "yaml":
-        data = ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper)
-        for entry in data:
-            fd.write(entry)
+        fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
+                                  indent=4))
     elif filetype == "json":
         json.dump(tree, fd, sort_keys=True, indent=4)
     else:
