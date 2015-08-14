@@ -172,7 +172,7 @@ def decrypt(branch, root):
         if k == 'sops':
             continue    # everything under the `sops` key can be skipped
         if type(v) is dict or type(v) is CommentedMap:
-            branch[k] = encrypt(v, root)
+            branch[k] = decrypt(v, root)
         else:
             if v[0:15] != "ENC[AES256_GCM,":
                 continue
