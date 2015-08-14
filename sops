@@ -20,6 +20,9 @@ from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 from cryptography.hazmat.backends import default_backend
 import time
 import subprocess
+import random
+import re
+
 
 DESC = """
 `sops` encrypts and decrypts secrets using AWS KMS. It requires access
@@ -101,36 +104,49 @@ def main():
         tree = dict()
 
     if args.encrypt:
-        # encrypt the tree
-        tree = encrypt(tree, tree)
+        # Encrypt mode: encrypt, display and exit
+        key = get_kms_data_key(tree)
+        tree = walk_and_encrypt(tree, key)
+
     elif args.decrypt:
-        # decrypt the tree
-        tree = decrypt(tree, tree)
+        # Decrypt mode: decrypt, display and exit
+        key = get_kms_data_key(tree)
+        tree = walk_and_decrypt(tree, key)
+
     else:
-        # edit the tree: decrypt, edit, encrypt, save
-        tree = decrypt(tree, tree)
-        # write decrypted tree to a tempfile
+        # EDIT Mode: decrypt, edit, encrypt and save
+        key = get_kms_data_key(tree)
+
+        # we need a stash to save the IV and AAD and reuse them
+        # if a given value has not changed during editing
+        stash = {'sops': { 'has_stash': True } }
+        tree = walk_and_decrypt(tree, key, stash=stash)
+
+        # the decrypted tree is written to a tempfile and an editor
+        # is opened on the file
         tmppath = write_file(tree, filetype=otype)
         tmpstamp = os.stat(tmppath)
-        # invoke text editor on tempfile
         run_editor(tmppath)
+
+        # verify if file has been modified, and if not, just exit
         tmpstamp2 = os.stat(tmppath)
         if tmpstamp == tmpstamp2:
-            # file not modified. remove temp file and exit
             os.remove(tmppath)
             panic("%s has not been modified, exit without writing" % args.file)
-        # read edited tree from tempfile
+
+        # encrypt the tree
         tree = load_tree(tmppath, otype)
         os.remove(tmppath)
-        # encrypt edited tree
-        tree = encrypt(tree, tree)
+        tree = walk_and_encrypt(tree, key, stash)
 
-    # write encrypted tree to origin file
+    # if we're in -e or -d mode, display to stdout
     if args.encrypt or args.decrypt:
         tmppath = write_file(tree, filetype=otype)
         with open(tmppath, 'r') as f:
             print(f.read())
         os.remove(tmppath)
+
+    # otherwise, write the encrypted tree to a file
     else:
         path = write_file(tree, path=args.file, filetype=otype)
         print("file written to %s" % (path), file=sys.stderr)
@@ -163,62 +179,118 @@ def load_tree(path, filetype):
             return f.read()
 
 
-def decrypt(branch, root):
+def walk_and_decrypt(branch, key, stash=None):
     """
-    Decrypt walks the tree and decrypt encrypted values using KMS.
-    Return a copy of the tree with decrypted values
-    """
-    for k, v in branch.items():
-        if k == 'sops':
-            continue    # everything under the `sops` key can be skipped
-        if type(v) is dict or type(v) is CommentedMap:
-            branch[k] = decrypt(v, root)
-        else:
-            if v[0:15] != "ENC[AES256_GCM,":
-                continue
-            # extract the base64 encrypted value from the enveloppe
-            enc_value, tag = v[15:-1].split(",", 1)
-            enc_value = b64decode(enc_value)
-            tag = b64decode(tag)
-            # get the data decryption key, and decrypt
-            key, iv = get_kms_data_key(root)
-            decryptor = Cipher(
-                algorithms.AES(key),
-                modes.GCM(iv, tag),
-                default_backend()
-            ).decryptor()
-            branch[k] = decryptor.update(enc_value) + decryptor.finalize()
-            key = None  # cleanup the key, just a precaution
-    return branch
-
-
-def encrypt(branch, root):
-    """
-    Encrypt walks through the tree and encrypts all the leaves.
-    Return a copy of the three with encrypted values.
+    Walk the branch recursively and decrypt leaves
     """
     for k, v in branch.items():
         if k == 'sops':
             continue    # everything under the `sops` key stays in clear
-        if type(v) is dict or type(v) is CommentedMap:
-            branch[k] = encrypt(v, root)
+        nstash = dict()
+        if stash:
+            stash[k] = {'has_stash': True}
+            nstash = stash[k]
+        if isinstance(v, dict):
+            branch[k] = walk_and_decrypt(v, key, nstash)
         else:
-            # encrypt the value using a data key and aes-gcm
-            if v is not str and v is not list and v is not tuple:
-                # convert the type of v to something we can encrypt
-                v = str(v)
-            key, iv = get_kms_data_key(root)
-            encryptor = Cipher(
-                algorithms.AES(key),
-                modes.GCM(iv),
-                default_backend()).encryptor()
-            enc_value = encryptor.update(v) + encryptor.finalize()
-            branch[k] = "ENC[AES256_GCM,{value},{tag}]".format(
-                value=b64encode(enc_value),
-                tag=b64encode(encryptor.tag)
-            )
-            key = None  # cleanup the key, just a precaution
+            # this is a value, decrypt it
+            if isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
+                ev = decrypt(str(v), key, nstash)
+                branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
+            elif isinstance(v, list):
+                lstash = dict()
+                kl = []
+                for i, lv in enumerate(list(v)):
+                    if nstash:
+                        nstash[i] = {'has_stash': True}
+                        lstash = nstash[i]
+                    kl.append(decrypt(lv, key, lstash))
+                branch[k] = kl
+            else:
+                branch[k] = decrypt(v, key, nstash)
     return branch
+
+
+def decrypt(value, key, stash=None):
+    """
+    Return a decrypted value
+    """
+    # extract fields using a regex
+    res = re.match(r'^ENC\[AES256_GCM,data=(.+),iv=(.+),aad=(.+),tag=(.+)\]$',
+                   value)
+    enc_value = b64decode(res.group(1))
+    iv = b64decode(res.group(2))
+    aad = b64decode(res.group(3))
+    tag = b64decode(res.group(4))
+    decryptor = Cipher(algorithms.AES(key),
+                       modes.GCM(iv, tag),
+                       default_backend()).decryptor()
+    decryptor.authenticate_additional_data(aad)
+    cleartext = decryptor.update(enc_value) + decryptor.finalize()
+    if stash:
+        # save the values for later if we need to reencrypt
+        stash['iv'] = iv
+        stash['aad'] = aad
+        stash['cleartext'] = cleartext
+    return cleartext
+
+
+def walk_and_encrypt(branch, key, stash=None):
+    """
+    Walk the branch recursively and call encrypt of leaves.
+    """
+    for k, v in branch.items():
+        if k == 'sops':
+            continue    # everything under the `sops` key stays in clear
+        nstash = dict()
+        if stash and k in stash:
+            nstash = stash[k]
+        if isinstance(v, dict):
+            # recursively walk the tree
+            branch[k] = walk_and_encrypt(v, key, nstash)
+        else:
+            # this is a value, convert v to an encryptable type
+            # and encrypt
+            if isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
+                ev = encrypt(str(v), key, nstash)
+                branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
+            elif type(v) is not list and isinstance(v, list):
+                lstash = dict()
+                kl = []
+                for i, lv in enumerate(list(v)):
+                    if nstash and i in nstash:
+                        lstash = nstash[i]
+                    kl.append(encrypt(lv, key, lstash))
+                branch[k] = kl
+            else:
+                branch[k] = encrypt(v, key, nstash)
+    return branch
+
+
+def encrypt(value, key, stash=None):
+    """
+    Return an encrypted string of the value provided.
+    """
+    # if we have a stash, and the value of cleartext has not changed,
+    # attempt to take the IV and AAD value from the stash.
+    # if the stash has no existing value, or the cleartext has changed,
+    # generate new IV and AAD.
+    if stash and stash['cleartext'] == value:
+        iv = stash['iv']
+        aad = stash['aad']
+    else:
+        iv = os.urandom(32)
+        aad = os.urandom(32)
+    encryptor = Cipher(algorithms.AES(key),
+                       modes.GCM(iv),
+                       default_backend()).encryptor()
+    encryptor.authenticate_additional_data(aad)
+    enc_value = encryptor.update(value) + encryptor.finalize()
+    return "ENC[AES256_GCM,data={value},iv={iv},aad={aad}," \
+           "tag={tag}]".format(value=b64encode(enc_value),
+                               iv=b64encode(iv),
+                               aad=b64encode(aad),
+                               tag=b64encode(encryptor.tag))
 
 
 def get_kms_arn(tree):
@@ -249,10 +321,7 @@ def get_kms_data_key(tree):
     Obtain a key and an IV. The values are either stored in encrypted form in
     the tree, and we ask KMS to decrypt it, or it doesn't exist and we
     ask KMS to generate one.
-    The 64 bytes are split in two:
-        - first 32 bytes (256 bits) used as an AES encryption key
-        - last 32 bytes used as an IV
-    Return (key, iv)
+    Return a 32 bytes key
     """
     kms = boto3.client('kms')
     kms_key = get_kms_arn(tree)
@@ -263,7 +332,7 @@ def get_kms_data_key(tree):
         # no key found, ask KMS for a data key
         try:
             kms_response = kms.generate_data_key(KeyId=kms_key,
-                                                 NumberOfBytes=64)
+                                                 NumberOfBytes=32)
         except:
             panic("Could not obtain data key from KMS using ARN %s" % kms_key)
         # store the encrypted blob of the data key in the tree
@@ -282,7 +351,7 @@ def get_kms_data_key(tree):
                 CiphertextBlob=b64decode(tree['sops']['kms']['enc']))
         except Exception as e:
             panic("Data key decryption error %s" % e)
-    return (kms_response['Plaintext'][:32], kms_response['Plaintext'][32:])
+    return kms_response['Plaintext'][:32]
 
 
 def write_file(tree, path=None, filetype=None):
@@ -300,7 +369,9 @@ def write_file(tree, path=None, filetype=None):
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
     if filetype == "yaml":
-        fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper))
+        data = ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper)
+        for entry in data:
+            fd.write(entry)
     elif filetype == "json":
         json.dump(tree, fd, sort_keys=True, indent=4)
     else:
