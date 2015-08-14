@@ -1,0 +1,23 @@
+{
+    "datadog_agent::api_key": "ENC[AES256_GCM,3/0Ra7/8KA==,micMmZrU0UrhOYkSRF7W5A==]", 
+    "duosecurity::duo_api_host": "ENC[AES256_GCM,mvBMfqKqbJSW691RmNr69Q/btLw=,GYlmhLzUDlZDDU+FV4z+2A==]", 
+    "duosecurity::duo_integration_key": "ENC[AES256_GCM,jv5RY+6hbA==,o91fgz8D61dDtZbjJs8rOA==]", 
+    "duosecurity::duo_security_key": "ENC[AES256_GCM,m/ZNbuWrbA==,GVGQ6QYaIfCOu5lFolFwnw==]", 
+    "lvl1": {
+        "lvl2": {
+            "lvl3": {
+                "mysecretkey": "ENC[AES256_GCM,nvpAeOm6b5qJ+9sV2IC6uQ==,L9O8jqCxKPAmb/GXlD37ug==]"
+            }
+        }
+    }, 
+    "puppet-config::ssh_key": "ENC[AES256_GCM,wLIOJ6GMXLyswJ52ufKu3HPxjZBYuFL/UjRa4rJfQOD0El3Nc+BSZsXi1pZbeQRDz3JuJGqOiSB/DcsfiPsZrGY591Nib+gU3yR7lVRhdqDzdbFqt2bmv9+ro8L/wGK0u5o4xnVVGSL/H36gL49tronwEgTuU4WjOAIZab7pHnBAinhOdQ0syClVoYZmUclN8Sb5Plop2X8FyCtJDdO6YfsM5tZEPLTPtPrW/3wrgJtAUsKCnE6aag==,46mTmiFTCz9XfADARGb5pA==]", 
+    "puppet-config::ssh_pubkey": "ENC[AES256_GCM,nuxLJ/69eNukz/9lqIDA9kD76rx4uTDyXF4tmaoGLIz8GUPqNt0pZ9SQxbJscXBqmVpRB0633Q5cR9AWodhN+SUU8UI=,FJvfYI7JLi7mbB6fvkkAkg==]", 
+    "sops": {
+        "kms": {
+            "arn": "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e", 
+            "enc": "CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxLLAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAACiMIGfBgkqhkiG9w0BBwaggZEwgY4CAQAwgYgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMqZGQfXkyHphzSL6bAgEQgFuFJjpC/eXdsCXhabUP2oFUBGDq1ymkkr7X6QLEgg5ouKkpfev1tHjK0pCB9o5x8ehgQf6Uo4oXZEysiLX4bJBRWc7DhrRtLUyre4RV31/RobMFUumqsl0Uh1qc"
+        }
+    }, 
+    "stackdriver::stackdriver_api_key": "ENC[AES256_GCM,2s1pWr8=,eLezt3DWmgKFwxRnN01iDg==]", 
+    "stackdriver::statsd::statsd_stackdriver_api_key": "ENC[AES256_GCM,utRlPw==,XIRA4zq+okAr0VQ9UjpKjQ==]"
+}
