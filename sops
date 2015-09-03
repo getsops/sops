@@ -1,0 +1,424 @@
+#!/usr/bin/env python
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
+
+from __future__ import print_function
+import os
+import sys
+import tempfile
+import argparse
+from base64 import b64encode, b64decode
+from ruamel.yaml.comments import CommentedMap
+from textwrap import dedent
+import ruamel.yaml
+import json
+import boto3
+from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
+from cryptography.hazmat.backends import default_backend
+import time
+import subprocess
+import random
+import re
+
+
+DESC = """
+`sops` encrypts and decrypts secrets using AWS KMS. It requires access
+to AWS uising credentials in ~/.aws/credentials .
+
+The ARN of the KMS Key used to encrypt/decrypt a document must be specified
+in a top-level key of the document. For example:
+    YAML
+        sops:
+            kms:
+                arn: arn:aws:kms:us-east-1:656532927350:key/305caadb
+    JSON
+        {"sops":{"kms":{"arn": "arn:aws:kms:us-east-1:650:key/305caadb"}}}
+    TEXT
+        SOPS_KMS_ARN="arn:aws:kms:us-east-1:6565350:key/30db-b886-4e12-8d"
+
+Alternatively, the KMS Key ID can be defined on the command line (-k flag) and
+in the environment variable $SOPS_KMS_ARN. The order of preference to select
+which KMS ID to use is: 1) file, 2) -k flag, 3) environment variable.
+
+By default, editing is done in vim. Set the env variable $EDITOR to use
+a different editor.
+
+Mozilla Services - ulfr, relud - 2015
+"""
+SOPS_KMS_ARN = ""
+SOPS_FOOTER = "# --- sops encryption info. do not edit. ---"
+
+def main():
+    argparser = argparse.ArgumentParser(
+        usage='sops <file>',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description='Encrypted secrets editor',
+        epilog=dedent(DESC))
+    argparser.add_argument('file',
+                           help="file to edit; create it if it doesn't exist")
+    argparser.add_argument('-k', '--kms', dest='kmsarn',
+                           help="ARN of KMS key used for (en|de)cryption, "
+                                "if none is defined in <file>.")
+    argparser.add_argument('-d', '--decrypt', action='store_true',
+                           dest='decrypt',
+                           help="Decrypt <file> and print it to stdout")
+    argparser.add_argument('-e', '--encrypt', action='store_true',
+                           dest='encrypt',
+                           help="encrypt <file> and print it to stdout")
+    argparser.add_argument('--input-type', dest='input_type',
+                           help="input type (yaml, json, ...). "
+                                "If undef, use file extension.")
+    argparser.add_argument('--output-type', dest='output_type',
+                           help="output type (yaml, json, ...). "
+                                "If undef, use input type.")
+    args = argparser.parse_args()
+
+    global SOPS_KMS_ARN
+    if args.kmsarn:
+        SOPS_KMS_ARN = args.kmsarn
+    elif 'SOPS_KMS_ARN' in os.environ:
+        SOPS_KMS_ARN = os.environ['SOPS_KMS_ARN']
+
+    if args.input_type:
+        itype = args.input_type
+    else:
+        itype = detect_filetype(args.file)
+
+    if args.output_type:
+        otype = args.output_type
+    else:
+        otype = itype
+
+    try:
+        fstat = os.stat(args.file)
+        # read the encrypted file from disk
+        tree = load_tree(args.file, itype)
+    except:
+        if args.encrypt or args.decrypt:
+            panic("cannot operate on non-existent file")
+        print("%s doesn't exist, creating it." % args.file)
+        tree = dict()
+
+    if args.encrypt:
+        # Encrypt mode: encrypt, display and exit
+        key = get_kms_data_key(tree)
+        tree = walk_and_encrypt(tree, key)
+
+    elif args.decrypt:
+        # Decrypt mode: decrypt, display and exit
+        key = get_kms_data_key(tree)
+        tree = walk_and_decrypt(tree, key)
+
+    else:
+        # EDIT Mode: decrypt, edit, encrypt and save
+        key = get_kms_data_key(tree)
+
+        # we need a stash to save the IV and AAD and reuse them
+        # if a given value has not changed during editing
+        stash = {'sops': {'has_stash': True}}
+        tree = walk_and_decrypt(tree, key, stash=stash)
+
+        # the decrypted tree is written to a tempfile and an editor
+        # is opened on the file
+        tmppath = write_file(tree, filetype=otype)
+        tmpstamp = os.stat(tmppath)
+        run_editor(tmppath)
+
+        # verify if file has been modified, and if not, just exit
+        tmpstamp2 = os.stat(tmppath)
+        if tmpstamp == tmpstamp2:
+            os.remove(tmppath)
+            panic("%s has not been modified, exit without writing" % args.file)
+
+        # encrypt the tree
+        tree = load_tree(tmppath, otype)
+        os.remove(tmppath)
+        tree = walk_and_encrypt(tree, key, stash)
+
+    # if we're in -e or -d mode, display to stdout
+    if args.encrypt or args.decrypt:
+        tmppath = write_file(tree, filetype=otype)
+        with open(tmppath, 'r') as f:
+            print(f.read())
+        os.remove(tmppath)
+
+    # otherwise, write the encrypted tree to a file
+    else:
+        path = write_file(tree, path=args.file, filetype=otype)
+        print("file written to %s" % (path), file=sys.stderr)
+
+
+def detect_filetype(file):
+    """
+    Detect the type of file based on its extension.
+    Return a string that describes the format: `text`, `yaml`, `json`
+    """
+    if len(file) > 5:
+        if file[-5:] == '.yaml':
+            return 'yaml'
+        elif file[-5:] == '.json':
+            return 'json'
+    return 'text'
+
+
+def load_tree(path, filetype):
+    """
+    Read data from `path` using format defined by `filetype`.
+    Return a dictionary with the data
+    """
+    with open(path, "r") as fd:
+        if filetype == 'yaml':
+            return ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
+        elif filetype == 'json':
+            return json.load(fd)
+        else:
+            tree = dict()
+            tree['data'] = ""
+            tree['sops'] = dict()
+            tree['sops']['kms'] = dict()
+            for line in fd:
+                if line.startswith(SOPS_FOOTER):
+                    continue
+                elif line.startswith('SOPS_KMS_ARN'):
+                    tree['sops']['kms']['arn'] = line.rstrip('\n').split('=', 1)[1]
+                elif line.startswith('SOPS_KMS_ENCTS'):
+                    tree['sops']['kms']['enc_ts'] = line.rstrip('\n').split('=', 1)[1]
+                elif line.startswith('SOPS_KMS_ENC'):
+                    tree['sops']['kms']['enc'] = line.rstrip('\n').split('=', 1)[1]
+                else:
+                    tree['data'] += line
+            return tree
+
+
+def walk_and_decrypt(branch, key, stash=None):
+    """
+    Walk the branch recursively and decrypt leaves
+    """
+    for k, v in branch.items():
+        if k == 'sops':
+            continue    # everything under the `sops` key stays in clear
+        nstash = dict()
+        if stash:
+            stash[k] = {'has_stash': True}
+            nstash = stash[k]
+        if isinstance(v, dict):
+            branch[k] = walk_and_decrypt(v, key, nstash)
+        else:
+            # this is a value, decrypt it
+            if isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
+                ev = decrypt(str(v), key, nstash)
+                branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
+            elif isinstance(v, list):
+                lstash = dict()
+                kl = []
+                for i, lv in enumerate(list(v)):
+                    if nstash:
+                        nstash[i] = {'has_stash': True}
+                        lstash = nstash[i]
+                    kl.append(decrypt(lv, key, lstash))
+                branch[k] = kl
+            else:
+                branch[k] = decrypt(v, key, nstash)
+    return branch
+
+
+def decrypt(value, key, stash=None):
+    """
+    Return a decrypted value
+    """
+    # extract fields using a regex
+    res = re.match(r'^ENC\[AES256_GCM,data=(.+),iv=(.+),aad=(.+),tag=(.+)\]$',
+                   value)
+    enc_value = b64decode(res.group(1))
+    iv = b64decode(res.group(2))
+    aad = b64decode(res.group(3))
+    tag = b64decode(res.group(4))
+    decryptor = Cipher(algorithms.AES(key),
+                       modes.GCM(iv, tag),
+                       default_backend()).decryptor()
+    decryptor.authenticate_additional_data(aad)
+    cleartext = decryptor.update(enc_value) + decryptor.finalize()
+    if stash:
+        # save the values for later if we need to reencrypt
+        stash['iv'] = iv
+        stash['aad'] = aad
+        stash['cleartext'] = cleartext
+    return cleartext
+
+
+def walk_and_encrypt(branch, key, stash=None):
+    """
+    Walk the branch recursively and call encrypt of leaves.
+    """
+    for k, v in branch.items():
+        if k == 'sops':
+            continue    # everything under the `sops` key stays in clear
+        nstash = dict()
+        if stash and k in stash:
+            nstash = stash[k]
+        if isinstance(v, dict):
+            # recursively walk the tree
+            branch[k] = walk_and_encrypt(v, key, nstash)
+        else:
+            # this is a value, convert v to an encryptable type
+            # and encrypt
+            if isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
+                ev = encrypt(str(v), key, nstash)
+                branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
+            elif type(v) is not list and isinstance(v, list):
+                lstash = dict()
+                kl = []
+                for i, lv in enumerate(list(v)):
+                    if nstash and i in nstash:
+                        lstash = nstash[i]
+                    kl.append(encrypt(lv, key, lstash))
+                branch[k] = kl
+            else:
+                branch[k] = encrypt(v, key, nstash)
+    return branch
+
+
+def encrypt(value, key, stash=None):
+    """
+    Return an encrypted string of the value provided.
+    """
+    # if we have a stash, and the value of cleartext has not changed,
+    # attempt to take the IV and AAD value from the stash.
+    # if the stash has no existing value, or the cleartext has changed,
+    # generate new IV and AAD.
+    if stash and stash['cleartext'] == value:
+        iv = stash['iv']
+        aad = stash['aad']
+    else:
+        iv = os.urandom(32)
+        aad = os.urandom(32)
+    encryptor = Cipher(algorithms.AES(key),
+                       modes.GCM(iv),
+                       default_backend()).encryptor()
+    encryptor.authenticate_additional_data(aad)
+    enc_value = encryptor.update(value) + encryptor.finalize()
+    return "ENC[AES256_GCM,data={value},iv={iv},aad={aad}," \
+           "tag={tag}]".format(value=b64encode(enc_value),
+                               iv=b64encode(iv),
+                               aad=b64encode(aad),
+                               tag=b64encode(encryptor.tag))
+
+
+def get_kms_arn(tree):
+    """
+    Return the ARN of the KMS Key used to encrypt/decrypt the AES key.
+    If the value exists in the tree, use it. Otherwise try to read it
+    from env variable SOPS_KMS_ARN. If neither exist, panic!
+    """
+    if 'sops' not in tree or \
+       'kms' not in tree['sops'] or \
+       'arn' not in tree['sops']['kms'] or \
+       tree['sops']['kms']['arn'] == "":
+        # key is not in tree, try the env variable and store it in the tree
+        if SOPS_KMS_ARN != "":
+            if 'sops' not in tree:
+                tree['sops'] = dict()
+            if 'kms' not in tree['sops']:
+                tree['sops']['kms'] = dict()
+            tree['sops']['kms']['arn'] = SOPS_KMS_ARN
+            return SOPS_KMS_ARN
+        else:
+            panic("KMS ARN not found, unable to continue")
+    return tree['sops']['kms']['arn']
+
+
+def get_kms_data_key(tree):
+    """
+    Obtain a key and an IV. The values are either stored in encrypted form in
+    the tree, and we ask KMS to decrypt it, or it doesn't exist and we
+    ask KMS to generate one.
+    Return a 32 bytes key
+    """
+    kms = boto3.client('kms')
+    kms_key = get_kms_arn(tree)
+    if 'sops' not in tree or \
+       'kms' not in tree['sops'] or \
+       'enc' not in tree['sops']['kms'] or \
+       tree['sops']['kms'] == "":
+        # no key found, ask KMS for a data key
+        try:
+            kms_response = kms.generate_data_key(KeyId=kms_key,
+                                                 NumberOfBytes=32)
+        except:
+            panic("Could not obtain data key from KMS using ARN %s" % kms_key)
+        # store the encrypted blob of the data key in the tree
+        if 'sops' not in tree:
+            tree['sops'] = dict()
+        if 'kms' not in tree['sops']:
+            tree['sops']['kms'] = dict()
+        tree['sops']['kms']['enc'] = b64encode(kms_response['CiphertextBlob'])
+        tree['sops']['kms']['enc_ts'] = time.time()
+        print("new data key generated from kms: %s..." %
+              tree['sops']['kms']['enc'][0:32], file=sys.stderr)
+    else:
+        # use existing data key, ask kms to decrypt it
+        try:
+            kms_response = kms.decrypt(
+                CiphertextBlob=b64decode(tree['sops']['kms']['enc']))
+        except Exception as e:
+            panic("Data key decryption error %s" % e)
+    return kms_response['Plaintext'][:32]
+
+
+def write_file(tree, path=None, filetype=None):
+    """
+    Write the content of `tree` encoded using the format defined by `filetype`
+    at the location `path`.
+    If `path` is not defined, a tempfile is created.
+    if `filetype` is not defined, tree is treated as a blob of data.
+
+    Return the path of the file written.
+    """
+    if path:
+        fd = open(path, "wb")
+    else:
+        fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
+        path = fd.name
+    if filetype == "yaml":
+        fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
+                                  indent=4))
+    elif filetype == "json":
+        json.dump(tree, fd, sort_keys=True, indent=4)
+    else:
+        if 'data' in tree:
+            fd.write(tree['data'] + "\n")
+        if 'sops' in tree and 'kms' in tree['sops']:
+            fd.write("%s\n" % SOPS_FOOTER)
+            if 'arn' in tree['sops']['kms']:
+                fd.write("SOPS_KMS_ARN=%s\n" % tree['sops']['kms']['arn'])
+            if 'enc' in tree['sops']['kms']:
+                fd.write("SOPS_KMS_ENC=%s\n" % tree['sops']['kms']['enc'])
+            if 'enc_ts' in tree['sops']['kms']:
+                fd.write("SOPS_KMS_ENCTS=%s\n" %
+                         tree['sops']['kms']['enc_ts'])
+    fd.close()
+    return path
+
+
+def run_editor(path):
+    """
+    Call a text editor on the file given by path.
+    """
+    editor = "vim"
+    if 'EDITOR' in os.environ:
+        editor = os.environ['EDITOR']
+    subprocess.call([editor, path])
+    return
+
+
+def panic(msg):
+    from sys import exit
+    print(msg, file=sys.stderr)
+    exit(1)
+
+
+if __name__ == '__main__':
+    main()
