@@ -1,15 +1,127 @@
 SOPS: Secrets OPerationS
 ========================
-`sops` is a cli that encrypt values of yaml, json or text files using AWS KMS.
+`sops` is a secrets management tool that encrypts YAML, JSON and TEXT files
+using AWS KMS and/or PGP (via GnuPG).
+
+Requirements
+------------
+First install some libraries from your package manager:
+
+* RHEL family::
+
+	sudo yum install libyaml-devel python-devel libffi-devel
+
+* Debian family::
+
+	sudo apt-get install libyaml-dev python-dev libffi-dev
+
+Then install the python requirements from pip::
+
+	pip install boto3 ruamel.yaml cryptography
+	git clone https://github.com/mozilla-services/sops.git
+	cd sops && ./sops -h
+
+* `boto3 <https://pypi.python.org/pypi/boto3/1.1.1>`_
+* `ruamel.yaml <https://pypi.python.org/pypi/ruamel.yaml>`_
+* `cryptography <https://pypi.python.org/pypi/cryptography>`_
 
 Usage
 -----
 
-Editing
-~~~~~~~
+If you're using AWS KMS, create one or multiple master keys in the IAM console
+and export them, comma separated, in the **SOPS_KMS_ARN** env variable. It is
+recommended to use at least two master keys in different regions.
 
-`sops` encrypted file contain the necessary KMS information to decrypt their
-content. All a user of `sops` need is valid AWS credentials and the necessary
+.. code:: bash
+
+	export SOPS_KMS_ARN="arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e,arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
+
+Your AWS credentials must be present in `~/.aws/credentials`. sops uses boto3.
+
+.. code::
+
+	$ cat ~/.aws/credentials 
+	[default]
+	aws_access_key_id = AKI.....
+	aws_secret_access_key = mw......
+
+If you want to use PGP, export the fingerprints of the public keys, comma
+separated, in the **SOPS_PGP_FP** env variable.
+
+.. code:: bash
+
+	export SOPS_PGP_FP="85D77543B3D624B63CEA9E6DBC17301B491B3F21,E60892BB9BD89A69F759A1A0A3D652173B763E8F"
+
+Note: you can use both PGP and KMS simultaneously.
+
+Then simply call `sops` with a file path as argument. It will handle the
+encryption/decryption transparently and open the cleartext file in an editor.
+
+.. code:: bash
+
+	$ sops mynewtestfile.yaml
+	mynewtestfile.yaml doesn't exist, creating it.
+	please wait while an encryption key is being generated and stored in a secure fashion
+	[... editing happens in vim, or whatever $EDITOR is set to ...]
+	file written to mynewtestfile.yaml
+
+.. code:: yaml
+
+    myapp1: ENC[AES256_GCM,data:Tr7oc19nc6t1m9OrUeo=,iv:1vzlPZLfy6wa14/x17P8Ix8wEGDeY0v2dIboZmmwpww=,aad:NpobRzMzpDOkqijzONm8KglltzG+aBV7BJAxtm77veo=,tag:kaYqRgGGBhXhODSSmIZwyA==]
+    app2:
+        db:
+            user: ENC[AES256_GCM,data:CwE4O1s=,iv:S0fozGAOxNma/pWDUuk1iEaYw0wlba0VOLHjPxIok2k=,aad:nEVizsMMyBXOxySnOHw/trTFBSW72nh+Q80YU7TPgIo=,tag:XaGsYaL9LCkLWJI0uxnTYw==]
+            password: ENC[AES256_GCM,data:p673JCgHYw==,iv:EOOeivCp/Fd80xFdMYX0QeZn6orGTK8CeckmipjKqYY=,aad:UAhi/SHK0aCzptnFkFG4dW8Vv1ASg7TDHD6lui9mmKQ=,tag:QE6uuhRx+cGInwSVdmxXzA==]
+        # private key for secret operations in app2
+        key: |-
+            ENC[AES256_GCM,data:Ea3zTFSOlg1PDZmBa1U2dtKl3pO4nTmaFswJx41fPfq3u8O2/Bq1UVfXn2SrO13obfr6xH4zuUceCDTvW2qvphlan5ir609EXt4dE2TEEcjVKhmAHf4LMwlZVAbvTJtlsnvo/aYJH95uctjsSX5h8pBlLaTGBGYwMrZuMyRU6vdcMWyha+piJckUc9sq7fevy1TSqIxf1Usbn/0NEklWm2VSNzQ2Urqtny6EXar+xU7NfYSRJ3mqmcJZ14oIeXPdpk962RwMEFWdYrbE7D59kWU2BgMjDxYJD5KXpWiw2YCrA/wsATxVCbZlwqC+TJFA5WAUZX756mFhV/t2Li3zQyDNUe6KkMXV9qwf/oV1j5sVRVFsKDYIBqhi3qWBVA+SO9RloQMjhru+IsdbQcS4LKq/1DrBENeZuJ0djUAxKLVfJzMGUf89ju3m9IEPovW8mfF0RbfAGRwFHMO9nEXCxrTLERf3owdR3u4j5/rNBpIvvy1z+2dy6sAx/eyNdS+cn5qO9BPAxsXpSwkaI96rlBagwH1Pfxus0x/D00j93OpE+M8MgQ/9LA68FlCFU4OAQlvw8f7MPoxnq+/+gFTS/qqjTR6EoUuX5NH2WY93YCC5TCbe4GOXyP0H05PbIWq55UMVLNcpAyac3gO4kL5O5U8=,iv:Dl61tsemKH0fdmNul/PmEEsRYFAh8GorR8GRupus/EM=,aad:Ft2aSYYukD1x8pMj1WvmodLjJV6waPy5FqdlImWyQKA=,tag:EPg4KpWqni/buCFjFL857A==]
+    an_array:
+    - ENC[AES256_GCM,data:v8dfh92oL8IcgjQ=,iv:HgNNPlQh9GNdE+YPvG4Ufpb2I0sIlEpCsOW3lJA1uBE=,aad:21GroP5gb9sCTxZIahN1NhMGqRPQZZksAr5Q7eCeHRc=,tag:gLsjVqot9+Pqck9LJC+bVA==]
+    - ENC[AES256_GCM,data:X1LMy27AE9SI4h0=,iv:oA1kSg9esGxAvi3qhpcM6Ewrh+p0CFV5cgf6jSPpM08=,aad:CZ7FGJNko6367sd6PwbrIgN/V7Rly4TptbQ1gVsXT1Q=,tag:HerE4nTstX2QZhMn3CPZcw==]
+    - ENC[AES256_GCM,data:KNkH9iI0bSyvcP3E+BRbqfcPUv3YBbCmtvbK1y+sHMI6Z1kXnkX4RoyYiZZXrM680Nh/p0TxNOdNsA==,iv:1h3KbThwTsRaVF+k+dnSwfocSEoyT00X279Dg1Wro60=,aad:foCwpM862VeAD2/7bHRJHAYISneTUJweoSRl2oAdsI4=,tag:tNuCjsNqIy5FVDRu39dQcw==]
+    sops:
+        kms:
+        -   created_at: 1441570389.775376
+            enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAgB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxn6jfG4e44/phCddICARCAOzfGN/7WlU0MouQRXv22Pix46dSocMH1K7Xf47WqF1rCEcuN1aMVBj+IxwOgOVxVsr0Kze4lnMqPm1Hm
+            arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+        -   created_at: 1441570391.925734
+            enc: CiBdfsKZbRNf/Li8Tf2SjeSdP76DineB1sbPjV0TV+meTxKnAQEBAgB4XX7CmW0TX/y4vE39ko3knT++g4p3gdbGz41dE1fpnk8AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxGzsadorzSGbp73+ECARCAO0hc3cYxgNF2OU5TfTj8iyt/S6DTKDO+gwcHc3sy3ELQ/pUjSFJScYOQmqYpvsznhZ4YjHQWDdbRawNx
+            arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
+        pgp:
+        -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+            created_at: 1441570391.930042
+            enc: |
+                -----BEGIN PGP MESSAGE-----
+                Version: GnuPG v1
+
+                hQIMA0t4uZHfl9qgAQ//UvGAwGePyHuf2/zayWcloGaDs0MzI+zw6CmXvMRNPUsA
+                pAgRKczJmDu4+XzN+cxX5Iq9xEWIbny9B5rOjwTXT3qcUYZ4Gkzbq4MWkjuPp/Iv
+                qO4MJaYzoH5YxC4YORQ2LvzhA2YGsCzYnljmatGEUNg01yJ6r5mwFwDxl4Nc80Cn
+                RwnHuGExK8j1jYJZu/juK1qRbuBOAuruIPPWVdFB845PA7waacG1IdUW3ZtBkOy3
+                O0BIfG2ekRg0Nik6sTOhDUA+l2bewCcECI8FYCEjwHm9Sg5cxmP2V5m1mby+uKAm
+                kewaoOyjbmV1Mh3iI1b/AQMr+/6ZE9MT2KnsoWosYamFyjxV5r1ZZM7cWKnOT+tu
+                KOvGhTV1TeOfVpajNTNwtV/Oyh3mMLQ0F0HgCTqomQVqw5+sj7OWAASuD3CU/dyo
+                pcmY5Qe0TNL1JsMNEH8LJDqSh+E0hsUxdY1ouVsg3ysf6mdM8ciWb3WRGxih1Vmf
+                unfLy8Ly3V7ZIC8EHV8aLJqh32jIZV4i2zXIoO4ZBKrudKcECY1C2+zb/TziVAL8
+                qyPe47q8gi1rIyEv5uirLZjgpP+JkDUgoMnzlX334FZ9pWtQMYW4Y67urAI4xUq6
+                /q1zBAeHoeeeQK+YKDB7Ak/Y22YsiqQbNp2n4CKSKAE4erZLWVtDvSp+49SWmS/S
+                XgGi+13MaXIp0ecPKyNTBjF+NOw/I3muyKr8EbDHrd2XgIT06QXqjYLsCb1TZ0zm
+                xgXsOTY3b+ONQ2zjhcovanDp7/k77B+gFitLYKg4BLZsl7gJB12T8MQnpfSmRT4=
+                =oJgS
+                -----END PGP MESSAGE-----
+
+A copy of the encryption/decryption key is stored securely in each KMS and PGP
+block. As long as one of the KMS or PGP method is still usable, you will be able
+to access you data.
+
+To decrypt a file in a `cat` fashion, use the `-d` flag:
+
+.. code:: bash
+
+	$ sops -d mynewtestfile.yaml
+
+`sops` encrypted files contain the necessary information to decrypt their content.
+All a user of `sops` need is valid AWS credentials and the necessary
 permissions on KMS keys.
 
 Given that, the only command a `sops` user need is:
@@ -19,109 +131,92 @@ Given that, the only command a `sops` user need is:
 	$ sops <file>
 
 `<file>` will be opened, decrypted, passed to a text editor (vim by default),
-encrypted if modified, and save back to its original location. All of these
+encrypted if modified, and saved back to its original location. All of these
 steps, apart from the actual editing, are transparent to the user.
 
-Creating
-~~~~~~~~
+Cryptographic details
+---------------------
 
-In order to create a file, the KMS ARN must be provided to `sops`, either on the
-command line in the `-k` flag, or in the environment variable **SOPS_KMS_ARN**.
+When sops creates a file, it generates a random 256 bits data key and asks each
+KMS and PGP master key to encrypt the data key. The encrypted version of the data
+key is stored in the `sops` metadata under `sops.kms` and `sops.pgp`.
 
-`sops` automatically create a file if the given path doesn't exist (it will not
-create folders, however).
-
-.. code:: bash
-
-	$ sops newfile.yaml -k arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
-	newfile.yaml doesn't exist, creating it.
-	new data key generated from kms: CiC6yCOtzsnFhkfdIs...
-	file written to newfile.yaml
-
-Input some cleartext yaml:
+For KMS:
 
 .. code:: yaml
 
-    myapp1: t00m4nys3cr3tz
-    app2:
-        db:
-            user: bob
-            password: c4r1b0u
-        # private key for secret operations in app2
-        key: |
-            -----BEGIN RSA PRIVATE KEY-----
-            MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
-            Erb0xAEyVV7e8J0CIQC8VBY8f8yg+Y7Kxbw4zDYGyb3KkXL10YorpeuZR4LuQQIg
-            bKGPkMM4w5blyE1tqGN0T7sJwEx+EUOgacRNqM2ljVA=
-            -----END RSA PRIVATE KEY-----
-    an_array:
-        - secretuser1 # a super secret user
-        - secretuser2
     sops:
         kms:
-            enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usg......
-            enc_ts: 1439587921.752637
+        -   enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyGdRODuYMHbA8Ozj8CARCAO7opMolPJUmBXd39Zlp0L2H9fzMKidHm1vvaF6nNFq0ClRY7FlIZmTm4JfnOebPseffiXFn9tG8cq7oi
+            enc_ts: 1439568549.245995
             arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
 
-After saving the file and exiting, it is automatically encrypted. Keys are
-still in cleartext, but value are now unreadable.
+For PGP:
 
 .. code:: yaml
 
-    myapp1: ENC[AES256_GCM,data=s4mlbkPqyk+GFDluAHY=,iv=7c9X8CwZyK5PsRRmUpzxL4CeQmp7+ry6mVemJtmpR7U=,aad=CFVNHUiz8xupOCMNYUlF4l+TcCjGaxayiknL9tQtolw=,tag=5ecBRedoXPJJ3uBjaj7J1w==]
-    app2:
-        db:
-            user: ENC[AES256_GCM,data=CmkT,iv=xnUTxXU4g5lKEqetiZrM2s+m20idUUt9xGU6XitsIic=,aad=KidFJD6ioPXKqz+BYVYXtHk8Dd6e1yvhPx6kO5BOJTs=,tag=7WDZbBf2oqMuXi3YH4m2Ig==]
-            password: ENC[AES256_GCM,data=zw2yh6Oz8Q==,iv=Apme9l8h+OwdwgbozsuXa1mVK+b821eoQNEBBSF6Ihs=,aad=SZFoaQDlNe0SkRaX65zB7E8SDyhkr9uVBI+3GWUBKsQ=,tag=We5dwW455S1M4ob1HzAu7Q==]
-        # private key for secret operations in app2
-        key: |-
-            ENC[AES256_GCM,data=feo0o1qW8p4Nw2tN9/QAt0zoeGZHgolORWXH+7hk4Oc5nQcA/Ve3mYQ9TKSZAtzsYr+OEnEVUAg/RzvXy40F9dXsv2ugux+DLS1SIWddKRAdeL283vjnsDtydc3+AP+UuEuCyIVHqT8uKcqQnenzzu/yx07scIwcMQ6Vs2RnQ3WwrOrkBsbPQ4PpuPsrlck7EbcKkMnoIe09AMN3/J3A+mlmOGBxAio1ahFXpeBzzYeoRkjffojvigT2ULZy92Kx1afRSnWXNmUtMKqbJDIIvYulWHW5efAnulk/nHZ0Bhy+wxV0jqXAp7mKiIlGuydxRZ6DPon7jhABWV5d93EZdZJ+/33sUiOyQKIEukqae17C2Hrt0QoGg7OhG/O0oyTKiql0Nj6KC3bFbkdM7sSFbsIbv/of0P5Kb2zr3VYAJriJqUWMKzj3i7M6z9+wxrTVxuMQ4Lvzw3aHDjNOgJobkfjxxMYUvF5l2OWRFrdxtY9WxBYAcDzkJnBYtkPnUzlEc/8ieypefqOBlcphOvzl+EjM1I0N4OGG5ij5nNsHQ/MSoM3FJpjROQKclhz8ZN5CH41LUemP3AdddPpoUuwzHCxR8NskUhyHBlep0iZL9xGFLL7SwYEACKxk2BCwHMWeNmXfKo6co+wjCmn+un3FANE=,iv=NworRcR7VnLgW30c4W9OmVgBaY7tA1fd090JQpBM5ho=,aad=sbwFbTuEr9FbPd/ofR7BL9NORUpfmNd+X3Q+tJqmj8g=,tag=wc7RWWBArQrTMt3AAbSwZQ==]
-    an_array:
-    - ENC[AES256_GCM,data=L3Y0Bzn2M6yERcU=,iv=FslXY0z783MXhjCaz9ZZTqNaEwBWZkspNHAtHJaENH0=,aad=x0x9+PnDW81oLbYufq72RmaRZB29IPCALCL94KtmsvQ=,tag=qPyqJ3I9JM6wIJDOmgmJkQ==]
-    - ENC[AES256_GCM,data=To5dwUDJi4Mh3hc=,iv=03vcf/AJaUKcHKEnGPq7ih8/xaKHewYiFkQcWOsh7So=,aad=nxUVG7rA+TjyK9BrzVtDGbCp7Iu7BCRLjYvZSnI5iCI=,tag=41ExX9KH+jRYvn51aaP6OA==]
     sops:
-        kms:
-            enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwkRAZG5vQyIKvIKPwCARCAO9zQ43qeQ8loKu0HzXRnpqi6MK/+TpbO22sH0NkVXddXNTl7lfPjKc6gJynrEVdu6aCslUYIid+3FONY
-            enc_ts: 1439587921.752637
-            arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+        pgp:
+        -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+            created_at: 1441570391.930042
+            enc: |
+                -----BEGIN PGP MESSAGE-----
+                Version: GnuPG v1
 
-To decrypt, using flag `-d`.
+                hQIMA0t4uZHfl9qgAQ//UvGAwGePyHuf2/zayWcloGaDs0MzI+zw6CmXvMRNPUsA
+                pAgRKczJmDu4+XzN+cxX5Iq9xEWIbny9B5rOjwTXT3qcUYZ4Gkzbq4MWkjuPp/Iv
+                qO4MJaYzoH5YxC4YORQ2LvzhA2YGsCzYnljmatGEUNg01yJ6r5mwFwDxl4Nc80Cn
+                RwnHuGExK8j1jYJZu/juK1qRbuBOAuruIPPWVdFB845PA7waacG1IdUW3ZtBkOy3
+                O0BIfG2ekRg0Nik6sTOhDUA+l2bewCcECI8FYCEjwHm9Sg5cxmP2V5m1mby+uKAm
+                kewaoOyjbmV1Mh3iI1b/AQMr+/6ZE9MT2KnsoWosYamFyjxV5r1ZZM7cWKnOT+tu
+                KOvGhTV1TeOfVpajNTNwtV/Oyh3mMLQ0F0HgCTqomQVqw5+sj7OWAASuD3CU/dyo
+                pcmY5Qe0TNL1JsMNEH8LJDqSh+E0hsUxdY1ouVsg3ysf6mdM8ciWb3WRGxih1Vmf
+                unfLy8Ly3V7ZIC8EHV8aLJqh32jIZV4i2zXIoO4ZBKrudKcECY1C2+zb/TziVAL8
+                qyPe47q8gi1rIyEv5uirLZjgpP+JkDUgoMnzlX334FZ9pWtQMYW4Y67urAI4xUq6
+                /q1zBAeHoeeeQK+YKDB7Ak/Y22YsiqQbNp2n4CKSKAE4erZLWVtDvSp+49SWmS/S
+                XgGi+13MaXIp0ecPKyNTBjF+NOw/I3muyKr8EbDHrd2XgIT06QXqjYLsCb1TZ0zm
+                xgXsOTY3b+ONQ2zjhcovanDp7/k77B+gFitLYKg4BLZsl7gJB12T8MQnpfSmRT4=
+                =oJgS
+                -----END PGP MESSAGE-----
 
-.. code:: bash
+sops then opens a text editor on the newly created file. The user adds data to the
+file and saves it when done.
 
-	$ sops -d newfile.yaml
-	myapp1: t00m4nys3cr3tz
-	app2:
-		db:
-			user: bob
-	[...]	
+Upon save, sops browses the entire file as of a key/value tree. Every time sops
+encounters a leaf value (a value that does not have children), it encrypts the
+value with AES256_GCM using the data key, a 256 bits random initialization vector
+and 256 bits of random additional data. While the same data key is used to
+encrypt all values of a document, each value receives a unique initialization
+vector and unique authentication data.
 
-Set the env variable **SOPS_KMS_ARN** to your KMS ARN value to avoid
-needing to set the `-k` flag every time you create a file.
+The result of AES256_GCM encryption is stored in the leaf of the tree using a
+simple key/value format::
 
-.. code:: bash
+    ENC[AES256_GCM,
+        data:CwE4O1s=,
+        iv:S0fozGAOxNma/pWDUuk1iEaYw0wlba0VOLHjPxIok2k=,
+        aad:nEVizsMMyBXOxySnOHw/trTFBSW72nh+Q80YU7TPgIo=,
+        tag:XaGsYaL9LCkLWJI0uxnTYw==]
 
-	$ export SOPS_KMS_ARN="arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e"
-	$ sops newfile.yaml
+where:
 
-Requirements
-------------
-* `boto3 <https://pypi.python.org/pypi/boto3/1.1.1>`_
-* `ruamel.yaml <https://pypi.python.org/pypi/ruamel.yaml>`_; requires
-  libyaml-devel and python-devel prior to `pip install`-ing it.
+* **data** is the encrypted value
+* **iv** is the 256 bits initialization vector
+* **aad** is the 256 bits additional data
+* **tag** is the authentication tag
 
-.. code::
+The encrypted file is written to disk with nested keys in cleartext and
+encrypted values. We expect that keys do not carry sensitive information, and
+keeping them in cleartext allows for better diff and overall readability.
 
-	sudo yum install libyaml-devel python-devel
-	sudo pip install ruamel.yaml
+Any valid KMS or PGP master key can later decrypt the data key and access the
+data.
 
-* `cryptography <https://pypi.python.org/pypi/cryptography>`_; requires
-  libffi-devel prior to `pip install`-ing it.
-
-.. code::
-
-	sudo yum install libffi-devel
-	sudo pip install cryptography
+Multiple master keys allow for sharing encrypted files without sharing master
+keys, and provide disaster recovery solution. The recommended way to use sops
+is to have two KMS master keys in different region and one PGP public key with
+the private key stored offline. If, by any chance, both KMS master keys are
+lost, you can always recover the encrypted data using the PGP private key.
 
 License
 -------
@@ -129,7 +224,7 @@ Mozilla Public License Version 2.0
 
 Authors
 -------
-* Julien Vehent
+* Julien Vehent <jvehent@mozilla.com>
 
 Credits
 -------

@@ -6,50 +6,73 @@
 # Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
 
 from __future__ import print_function
-import os
-import sys
-import tempfile
-import argparse
 from base64 import b64encode, b64decode
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 from ruamel.yaml.comments import CommentedMap
 from textwrap import dedent
-import ruamel.yaml
-import json
+import argparse
 import boto3
-from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
-from cryptography.hazmat.backends import default_backend
-import time
-import subprocess
+import json
+import os
 import random
 import re
+import ruamel.yaml
+import subprocess
+import sys
+import tempfile
+import time
 
 
 DESC = """
 `sops` encrypts and decrypts secrets using AWS KMS. It requires access
-to AWS uising credentials in ~/.aws/credentials .
+to AWS using credentials in ~/.aws/credentials .
 
-The ARN of the KMS Key used to encrypt/decrypt a document must be specified
-in a top-level key of the document. For example:
+`sops` supports both AWS KMS and PGP encryption.
+    * To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
+      in the `-k` flag or in the environment variable SOPS_KMS_ARN.
+    * To encrypt or decrypt using PGP, specify the PGP fingerprint in the
+      `-g` flag os in the environment variable SOPS_PGP_FP.
+
+Those flags are ignored if the document already stores encryption info.
+Internally, the KMS and PGP key IDs are stored in the document under
+sops.kms and sops.pgp.
+
     YAML
         sops:
             kms:
-                arn: arn:aws:kms:us-east-1:656532927350:key/305caadb
-    JSON
-        {"sops":{"kms":{"arn": "arn:aws:kms:us-east-1:650:key/305caadb"}}}
-    TEXT
-        SOPS_KMS_ARN="arn:aws:kms:us-east-1:6565350:key/30db-b886-4e12-8d"
+            - {arn: "aws:kms:us-east-1:656532927350:key/305caadb" }
+            - {arn: "aws:kms:us-west-2:457153232612:key/f7da420e" }
+            pgp:
+            - {fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21}
 
-Alternatively, the KMS Key ID can be defined on the command line (-k flag) and
-in the environment variable $SOPS_KMS_ARN. The order of preference to select
-which KMS ID to use is: 1) file, 2) -k flag, 3) environment variable.
+    JSON
+        {"sops": {
+            "kms": [
+                {"arn": "aws:kms:us-east-1:650:key/305caadb"},
+                {"arn": "aws:kms:us-west-2:457153232612:key/f7da420e" }
+            ],
+            "pgp": [
+                {"fp": 85D77543B3D624B63CEA9E6DBC17301B491B3F21}
+            ]}
+        }
+
+    TEXT (serialized JSON of the `sops` object)
+        SOPS={"sops":{"kms":[{"arn":"aws:kms:us-east-1:650:ke...}]}}
+
+The environment variables SOPS_KMS_ARN and SOPS_PGP_FP can take multiple
+keys separated by commas. All spaces are trimmed.
 
 By default, editing is done in vim. Set the env variable $EDITOR to use
 a different editor.
 
 Mozilla Services - ulfr, relud - 2015
 """
+
 SOPS_KMS_ARN = ""
+SOPS_PGP_FP = ""
 SOPS_FOOTER = "# --- sops encryption info. do not edit. ---"
+
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -60,8 +83,9 @@ def main():
     argparser.add_argument('file',
                            help="file to edit; create it if it doesn't exist")
     argparser.add_argument('-k', '--kms', dest='kmsarn',
-                           help="ARN of KMS key used for (en|de)cryption, "
-                                "if none is defined in <file>.")
+                           help="ARN of KMS key used for encryption")
+    argparser.add_argument('-g', '--pgp', dest='pgpfp',
+                           help="Fingerprint of PGP key for decryption")
     argparser.add_argument('-d', '--decrypt', action='store_true',
                            dest='decrypt',
                            help="Decrypt <file> and print it to stdout")
@@ -82,6 +106,12 @@ def main():
     elif 'SOPS_KMS_ARN' in os.environ:
         SOPS_KMS_ARN = os.environ['SOPS_KMS_ARN']
 
+    global SOPS_PGP_FP
+    if args.pgpfp:
+        SOPS_PGP_FP = args.pgpfp
+    elif 'SOPS_PGP_FP' in os.environ:
+        SOPS_PGP_FP = os.environ['SOPS_PGP_FP']
+
     if args.input_type:
         itype = args.input_type
     else:
@@ -92,29 +122,31 @@ def main():
     else:
         otype = itype
 
+    need_key = False
     try:
         fstat = os.stat(args.file)
         # read the encrypted file from disk
-        tree = load_tree(args.file, itype)
+        tree, need_key = load_tree(args.file, itype)
     except:
         if args.encrypt or args.decrypt:
             panic("cannot operate on non-existent file")
         print("%s doesn't exist, creating it." % args.file)
         tree = dict()
+        tree, need_key = verify_or_create_sops_branch(tree)
 
     if args.encrypt:
         # Encrypt mode: encrypt, display and exit
-        key = get_kms_data_key(tree)
+        key, tree = get_key(tree, need_key)
         tree = walk_and_encrypt(tree, key)
 
     elif args.decrypt:
         # Decrypt mode: decrypt, display and exit
-        key = get_kms_data_key(tree)
+        key, tree = get_key(tree)
         tree = walk_and_decrypt(tree, key)
 
     else:
         # EDIT Mode: decrypt, edit, encrypt and save
-        key = get_kms_data_key(tree)
+        key, tree = get_key(tree, need_key)
 
         # we need a stash to save the IV and AAD and reuse them
         # if a given value has not changed during editing
@@ -134,7 +166,7 @@ def main():
             panic("%s has not been modified, exit without writing" % args.file)
 
         # encrypt the tree
-        tree = load_tree(tmppath, otype)
+        tree, need_key = load_tree(tmppath, otype)
         os.remove(tmppath)
         tree = walk_and_encrypt(tree, key, stash)
 
@@ -169,28 +201,56 @@ def load_tree(path, filetype):
     Read data from `path` using format defined by `filetype`.
     Return a dictionary with the data
     """
+    tree = dict()
     with open(path, "r") as fd:
         if filetype == 'yaml':
-            return ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
+            tree = ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         elif filetype == 'json':
-            return json.load(fd)
+            tree = json.load(fd)
         else:
-            tree = dict()
-            tree['data'] = ""
-            tree['sops'] = dict()
-            tree['sops']['kms'] = dict()
             for line in fd:
                 if line.startswith(SOPS_FOOTER):
                     continue
-                elif line.startswith('SOPS_KMS_ARN'):
-                    tree['sops']['kms']['arn'] = line.rstrip('\n').split('=', 1)[1]
-                elif line.startswith('SOPS_KMS_ENCTS'):
-                    tree['sops']['kms']['enc_ts'] = line.rstrip('\n').split('=', 1)[1]
-                elif line.startswith('SOPS_KMS_ENC'):
-                    tree['sops']['kms']['enc'] = line.rstrip('\n').split('=', 1)[1]
+                elif line.startswith('SOPS='):
+                    tree['sops'] = json.load(
+                            line.rstrip('\n').split('=', 1)[1])
                 else:
                     tree['data'] += line
-            return tree
+    return verify_or_create_sops_branch(tree)
+
+
+def verify_or_create_sops_branch(tree):
+    """
+    if the current tree doesn't have a sops branch with either kms or pgp
+    information, create it using the content of the global variables and
+    indicate that an encryption is needed when returning
+    """
+    if 'sops' not in tree:
+        tree['sops'] = dict()
+    if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
+        # check that we have at least one ARN to work with
+        for entry in tree['sops']['kms']:
+            if 'arn' in entry and entry['arn'] != "":
+                return tree, False
+    # if we're here, no arn was found
+    if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
+        # check that we have at least one fingerprint to work with
+        for entry in tree['sops']['pgp']:
+            if 'fp' in entry and entry['fp'] != "":
+                return tree, False
+    # if we're here, no fingerprint was found either
+    if SOPS_KMS_ARN != "":
+        tree['sops']['kms'] = list()
+        for arn in SOPS_KMS_ARN.split(','):
+            entry = {"arn": arn.replace(" ", "")}
+            tree['sops']['kms'].append(entry)
+    if SOPS_PGP_FP != "":
+        tree['sops']['pgp'] = list()
+        for fp in SOPS_PGP_FP.split(','):
+            entry = {"fp": fp.replace(" ", "")}
+            tree['sops']['pgp'].append(entry)
+    # return True to indicate an encryption key needs to be created
+    return tree, True
 
 
 def walk_and_decrypt(branch, key, stash=None):
@@ -230,7 +290,7 @@ def decrypt(value, key, stash=None):
     Return a decrypted value
     """
     # extract fields using a regex
-    res = re.match(r'^ENC\[AES256_GCM,data=(.+),iv=(.+),aad=(.+),tag=(.+)\]$',
+    res = re.match(r'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)\]$',
                    value)
     enc_value = b64decode(res.group(1))
     iv = b64decode(res.group(2))
@@ -238,7 +298,8 @@ def decrypt(value, key, stash=None):
     tag = b64decode(res.group(4))
     decryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv, tag),
-                       default_backend()).decryptor()
+                       default_backend()
+                       ).decryptor()
     decryptor.authenticate_additional_data(aad)
     cleartext = decryptor.update(enc_value) + decryptor.finalize()
     if stash:
@@ -300,72 +361,177 @@ def encrypt(value, key, stash=None):
                        default_backend()).encryptor()
     encryptor.authenticate_additional_data(aad)
     enc_value = encryptor.update(value) + encryptor.finalize()
-    return "ENC[AES256_GCM,data={value},iv={iv},aad={aad}," \
-           "tag={tag}]".format(value=b64encode(enc_value),
+    return "ENC[AES256_GCM,data:{value},iv:{iv},aad:{aad}," \
+           "tag:{tag}]".format(value=b64encode(enc_value),
                                iv=b64encode(iv),
                                aad=b64encode(aad),
                                tag=b64encode(encryptor.tag))
 
 
-def get_kms_arn(tree):
+def get_key(tree, need_key=False):
     """
-    Return the ARN of the KMS Key used to encrypt/decrypt the AES key.
-    If the value exists in the tree, use it. Otherwise try to read it
-    from env variable SOPS_KMS_ARN. If neither exist, panic!
+    Obtain a 256 bits symetric key. If the document contain an
+    encrypted key, try to decrypt it using KMS or PGP. Otherwise,
+    generate a new random key.
     """
-    if 'sops' not in tree or \
-       'kms' not in tree['sops'] or \
-       'arn' not in tree['sops']['kms'] or \
-       tree['sops']['kms']['arn'] == "":
-        # key is not in tree, try the env variable and store it in the tree
-        if SOPS_KMS_ARN != "":
-            if 'sops' not in tree:
-                tree['sops'] = dict()
-            if 'kms' not in tree['sops']:
-                tree['sops']['kms'] = dict()
-            tree['sops']['kms']['arn'] = SOPS_KMS_ARN
-            return SOPS_KMS_ARN
-        else:
-            panic("KMS ARN not found, unable to continue")
-    return tree['sops']['kms']['arn']
+    if need_key:
+        # if we're here, the tree doesn't have a key yet. generate
+        # one and store it in the tree
+        print("please wait while an encryption key is being generated"
+              " and stored in a secure fashion", file=sys.stderr)
+        key = os.urandom(32)
+        tree = encrypt_key_with_kms(key, tree)
+        tree = encrypt_key_with_pgp(key, tree)
+        return key, tree
+    key = get_key_from_kms(tree)
+    if not (key is None):
+        return key, tree
+    key = get_key_from_pgp(tree)
+    if not (key is None):
+        return key, tree
+    print("[error] couldn't retrieve a key to encrypt/decrypt the tree",
+          file=sys.stderr)
+    sys.exit(128)
 
 
-def get_kms_data_key(tree):
-    """
-    Obtain a key and an IV. The values are either stored in encrypted form in
-    the tree, and we ask KMS to decrypt it, or it doesn't exist and we
-    ask KMS to generate one.
-    Return a 32 bytes key
-    """
-    kms = boto3.client('kms')
-    kms_key = get_kms_arn(tree)
-    if 'sops' not in tree or \
-       'kms' not in tree['sops'] or \
-       'enc' not in tree['sops']['kms'] or \
-       tree['sops']['kms'] == "":
-        # no key found, ask KMS for a data key
+def get_key_from_kms(tree):
+    try:
+        kms_tree = tree['sops']['kms']
+    except KeyError:
+        return None
+    i = -1
+    for entry in kms_tree:
+        i += 1
         try:
-            kms_response = kms.generate_data_key(KeyId=kms_key,
-                                                 NumberOfBytes=32)
+            enc = entry['enc']
+        except KeyError:
+            continue
+        if 'arn' not in entry or entry['arn'] == "":
+            print("KMS ARN not found, skipping entry %s" % i, file=sys.stderr)
+            continue
+        # extract the region from the ARN
+        # arn:aws:kms:{REGION}:...
+        res = re.match(r'^arn:aws:kms:(.+):([0-9]+):key/(.+)$',
+                       entry['arn'])
+        if res is None:
+            print("Invalid ARN '%s' in entry %s" % (entry['arn'], i),
+                  file=sys.stderr)
+            continue
+        try:
+            region = res.group(1)
         except:
-            panic("Could not obtain data key from KMS using ARN %s" % kms_key)
-        # store the encrypted blob of the data key in the tree
-        if 'sops' not in tree:
-            tree['sops'] = dict()
-        if 'kms' not in tree['sops']:
-            tree['sops']['kms'] = dict()
-        tree['sops']['kms']['enc'] = b64encode(kms_response['CiphertextBlob'])
-        tree['sops']['kms']['enc_ts'] = time.time()
-        print("new data key generated from kms: %s..." %
-              tree['sops']['kms']['enc'][0:32], file=sys.stderr)
-    else:
+            print("Unable to find region from ARN '%s' in entry %s" %
+                  (entry['arn'], i), file=sys.stderr)
+            continue
+        kms = boto3.client('kms', region_name=region)
         # use existing data key, ask kms to decrypt it
         try:
-            kms_response = kms.decrypt(
-                CiphertextBlob=b64decode(tree['sops']['kms']['enc']))
+            kms_response = kms.decrypt(CiphertextBlob=b64decode(enc))
         except Exception as e:
-            panic("Data key decryption error %s" % e)
-    return kms_response['Plaintext'][:32]
+            print("failed to decrypt key using kms: %s, skipping it" % e,
+                  file=sys.stderr)
+            continue
+        return kms_response['Plaintext']
+    return None
+
+
+def encrypt_key_with_kms(key, tree):
+    try:
+        isinstance(tree['sops']['kms'], list)
+    except KeyError:
+        return tree
+    i = -1
+    for entry in tree['sops']['kms']:
+        i += 1
+        if 'enc' in entry and entry['enc'] != "":
+            # key is already encrypted with kms, skipping
+            continue
+        if 'arn' not in entry or entry['arn'] == "":
+            print("KMS ARN not found, skipping entry %d" % i, file=sys.stderr)
+            continue
+        arn = entry['arn']
+        # extract the region from the ARN
+        # arn:aws:kms:{REGION}:...
+        res = re.match(r'^arn:aws:kms:(.+):([0-9]+):key/(.+)$',
+                       arn)
+        if res is None:
+            print("Invalid ARN '%s' in entry %s" % (entry['arn'], i),
+                  file=sys.stderr)
+            continue
+        try:
+            region = res.group(1)
+        except:
+            print("Unable to find region from ARN '%s' in entry %s" %
+                  (entry['arn'], i), file=sys.stderr)
+            continue
+        kms = boto3.client('kms', region_name=region)
+        try:
+            kms_response = kms.encrypt(KeyId=arn, Plaintext=key)
+        except Exception as e:
+            print("failed to encrypt key using kms arn %s: %s, skipping it" %
+                  (arn, e), file=sys.stderr)
+            continue
+        entry['enc'] = b64encode(kms_response['CiphertextBlob'])
+        entry['created_at'] = time.time()
+        tree['sops']['kms'][i] = entry
+    return tree
+
+
+def get_key_from_pgp(tree):
+    try:
+        pgp_tree = tree['sops']['pgp']
+    except KeyError:
+        return None
+    i = -1
+    for entry in pgp_tree:
+        i += 1
+        try:
+            enc = entry['enc']
+        except KeyError:
+            continue
+        try:
+            p = subprocess.Popen(['gpg', '-d'], stdout=subprocess.PIPE,
+                                 stdin=subprocess.PIPE)
+            key = p.communicate(input=enc)[0]
+        except Exception as e:
+            print("PGP decryption failed in entry %s with error: %s" %
+                  (i, e), file=sys.stderr)
+            continue
+        return key
+    return None
+
+
+def encrypt_key_with_pgp(key, tree):
+    try:
+        isinstance(tree['sops']['pgp'], list)
+    except KeyError:
+        return tree
+    i = -1
+    for entry in tree['sops']['pgp']:
+        i += 1
+        if 'enc' in entry and entry['enc'] != "":
+            # key is already encrypted with pgp, skipping
+            continue
+        if 'fp' not in entry or entry['fp'] == "":
+            print("PGP fingerprint not found, skipping entry %d" % i,
+                  file=sys.stderr)
+            continue
+        fp = entry['fp']
+        try:
+            p = subprocess.Popen(['gpg', '--no-default-recipient', '--yes',
+                                  '--encrypt', '-a', '-r', fp, '--trusted-key',
+                                  fp[-16:], '--no-encrypt-to'],
+                                 stdout=subprocess.PIPE,
+                                 stdin=subprocess.PIPE)
+            enc = p.communicate(input=key)[0]
+        except Exception as e:
+            print("failed to encrypt key using pgp fp %s: %s, skipping it" %
+                  (fp, e), file=sys.stderr)
+            continue
+        entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
+        entry['created_at'] = time.time()
+        tree['sops']['pgp'][i] = entry
+    return tree
 
 
 def write_file(tree, path=None, filetype=None):
@@ -390,15 +556,10 @@ def write_file(tree, path=None, filetype=None):
     else:
         if 'data' in tree:
             fd.write(tree['data'] + "\n")
-        if 'sops' in tree and 'kms' in tree['sops']:
+        if 'sops' in tree:
+            jsonstr = json.dump(tree['sops'])
             fd.write("%s\n" % SOPS_FOOTER)
-            if 'arn' in tree['sops']['kms']:
-                fd.write("SOPS_KMS_ARN=%s\n" % tree['sops']['kms']['arn'])
-            if 'enc' in tree['sops']['kms']:
-                fd.write("SOPS_KMS_ENC=%s\n" % tree['sops']['kms']['enc'])
-            if 'enc_ts' in tree['sops']['kms']:
-                fd.write("SOPS_KMS_ENCTS=%s\n" %
-                         tree['sops']['kms']['enc_ts'])
+            fd.write("SOPS=%s\n" % jsonstr)
     fd.close()
     return path
 
