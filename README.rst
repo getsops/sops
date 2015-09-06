@@ -218,6 +218,50 @@ is to have two KMS master keys in different region and one PGP public key with
 the private key stored offline. If, by any chance, both KMS master keys are
 lost, you can always recover the encrypted data using the PGP private key.
 
+Threat Model
+------------
+
+The security of the data stored using sops is as strong as the weakest
+cryptographic mechanism. Values are encrypted using AES256_GCM which is the
+strongest symetric encryption algorithm known today. Data keys are encrypted
+in either KMS, which also uses AES256_GCM, or PGP which uses either RSA or
+ECDSA keys. 
+
+Going from the most likely to the least likely, the threats are as follow:
+
+1. Compromised AWS credentials grant access to KMS master key
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An attacker with access to an AWS console can grant itself access to one of
+the KMS master key used to encrypt a sops data key. This threat should be
+mitigated by protecting AWS accesses with strong controls, such as multi-factor
+authentication, and also by performing regular audits of permissions granted
+to AWS users.
+
+2. Compromised PGP key
+~~~~~~~~~~~~~~~~~~~~~~
+
+PGP keys are routinely mishandled, either because owners copy them from
+machine to machine, or because the key is left forgotten on an unused machine
+an attacker gains access to. When using PGP encryption, sops users should take
+special care of PGP private keys, and store them on smart cards or offline
+as often as possible.
+
+3. Factorized RSA key
+~~~~~~~~~~~~~~~~~~~~~
+
+sops doesn't apply any restriction on the size or type of PGP keys. A weak PGP
+keys, for example 512 bits RSA, could be factorized by an attacker to gain
+access to the private key and decrypt the data key. Users of sops should rely
+on strong keys, such as 2048+ bits RSA keys, or 256+ bits ECDSA keys.
+
+4. Weak AES cryptography
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+A vulnerability in AES256_GCM could potentially leak the data key or the KMS
+master key used by a sops encrypted file. While no such vulnerability exists
+today, we recommend that users keep their encrypted files reasonably private.
+
 License
 -------
 Mozilla Public License Version 2.0
