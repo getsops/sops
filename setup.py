@@ -1,17 +1,12 @@
-#!/usr/bin/env python
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
 import os
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name            = "sops",
-    packages        = ['sops'],
+    py_modules      = ['sops'],
     version         = "0.2",
     author          = "Julien Vehent",
     author_email    = "jvehent@mozilla.com",
@@ -20,10 +15,15 @@ setup(
     keywords        = "mozilla secret credential encryption aws kms",
     url             = "https://github.com/mozilla-services/sops",
     long_description= read('README.rst'),
-    install_requires= ['ruamel.yaml', 'json', 'boto3', 'cryptography'],
+    install_requires= ['ruamel.yaml>=0.10.7', 'boto3>=1.1.3', 'cryptography>=0.9.3'],
     classifiers     = [
         "Development Status :: 5 - Production/Stable",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     ],
+    entry_points    = {
+        'console_scripts': [
+            'sops = sops:main'
+        ]
+    }
 )

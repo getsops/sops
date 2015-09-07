@@ -15,15 +15,9 @@ First install some libraries from your package manager:
 
 	sudo apt-get install libyaml-dev python-dev libffi-dev
 
-Then install the python requirements from pip::
+Then install `sops` from pip::
 
-	pip install boto3 ruamel.yaml cryptography
-	git clone https://github.com/mozilla-services/sops.git
-	cd sops && ./sops -h
-
-* `boto3 <https://pypi.python.org/pypi/boto3/1.1.1>`_
-* `ruamel.yaml <https://pypi.python.org/pypi/ruamel.yaml>`_
-* `cryptography <https://pypi.python.org/pypi/cryptography>`_
+	pip install sops
 
 Usage
 -----

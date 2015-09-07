@@ -1,8 +1,8 @@
 all:
-	./setup.py build
+	python setup.py build
 
 install:
-	./setup.py install
+	python setup.py install
 
 rpm:
 	fpm -s python -t rpm -d pytz -d python-requests-futures ./setup.py
@@ -12,10 +12,10 @@ deb:
 
 tests: test
 test:
-	python ./sops -d example.yaml
+	python sops -d example.yaml
 
 pypi:
-	 python setup.py sdist check upload --sign
+	python setup.py sdist check upload --sign
 
 clean:
 	rm -rf *pyc
