@@ -6,22 +6,23 @@
 # Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
 
 from __future__ import print_function
-from base64 import b64encode, b64decode
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
-from ruamel.yaml.comments import CommentedMap
-from textwrap import dedent
 import argparse
-import boto3
+from base64 import b64encode, b64decode
 import json
 import os
 import random
 import re
-import ruamel.yaml
 import subprocess
 import sys
 import tempfile
+from textwrap import dedent
 import time
+
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
+import boto3
+import ruamel.yaml
+from ruamel.yaml.comments import CommentedMap
 
 
 DESC = """
@@ -71,8 +72,15 @@ a different editor.
 Mozilla Services - ulfr, relud - 2015
 """
 
+# a list of KMS ARNs either provided on the command line or retrieved
+# from the user environment
 SOPS_KMS_ARN = ""
+
+# a list of PGP fingeprints either provided on the command line or
+# retrieved from the user environment
 SOPS_PGP_FP = ""
+
+# just a string to add in files stored in text mode
 SOPS_FOOTER = "# --- sops encryption info. do not edit. ---"
 
 
@@ -87,19 +95,19 @@ def main():
     argparser.add_argument('-k', '--kms', dest='kmsarn',
                            help="ARN of KMS key used for encryption")
     argparser.add_argument('-g', '--pgp', dest='pgpfp',
-                           help="Fingerprint of PGP key for decryption")
+                           help="fingerprint of PGP key for decryption")
     argparser.add_argument('-d', '--decrypt', action='store_true',
                            dest='decrypt',
-                           help="Decrypt <file> and print it to stdout")
+                           help="decrypt <file> and print it to stdout")
     argparser.add_argument('-e', '--encrypt', action='store_true',
                            dest='encrypt',
                            help="encrypt <file> and print it to stdout")
     argparser.add_argument('--input-type', dest='input_type',
-                           help="input type (yaml, json, ...). "
-                                "If undef, use file extension.")
+                           help="input type (yaml, json, ...), "
+                                "if undef, use file extension")
     argparser.add_argument('--output-type', dest='output_type',
-                           help="output type (yaml, json, ...). "
-                                "If undef, use input type.")
+                           help="output type (yaml, json, ...), "
+                                "if undef, use input type")
     args = argparser.parse_args()
 
     global SOPS_KMS_ARN
@@ -114,6 +122,7 @@ def main():
     elif 'SOPS_PGP_FP' in os.environ:
         SOPS_PGP_FP = os.environ['SOPS_PGP_FP']
 
+    # use input type as output type if not specified
     if args.input_type:
         itype = args.input_type
     else:
@@ -128,7 +137,8 @@ def main():
     try:
         fstat = os.stat(args.file)
         # read the encrypted file from disk
-        tree, need_key = load_tree(args.file, itype)
+        tree = load_tree(args.file, itype)
+        tree, need_key = verify_or_create_sops_branch(tree)
     except:
         if args.encrypt or args.decrypt:
             panic("cannot operate on non-existent file")
@@ -168,7 +178,7 @@ def main():
             panic("%s has not been modified, exit without writing" % args.file)
 
         # encrypt the tree
-        tree, need_key = load_tree(tmppath, otype)
+        tree = load_tree(tmppath, otype)
         os.remove(tmppath)
         tree = walk_and_encrypt(tree, key, stash)
 
@@ -190,11 +200,11 @@ def detect_filetype(file):
     Detect the type of file based on its extension.
     Return a string that describes the format: `text`, `yaml`, `json`
     """
-    if len(file) > 5:
-        if file[-5:] == '.yaml':
-            return 'yaml'
-        elif file[-5:] == '.json':
-            return 'json'
+    base, ext = os.path.splitext(file)
+    if ext == '.yaml':
+        return 'yaml'
+    elif ext == '.json':
+        return 'json'
     return 'text'
 
 
@@ -214,11 +224,13 @@ def load_tree(path, filetype):
                 if line.startswith(SOPS_FOOTER):
                     continue
                 elif line.startswith('SOPS='):
-                    tree['sops'] = json.load(
+                    tree['sops'] = json.loads(
                             line.rstrip('\n').split('=', 1)[1])
                 else:
+                    if 'data' not in tree:
+                        tree['data'] = str()
                     tree['data'] += line
-    return verify_or_create_sops_branch(tree)
+    return tree
 
 
 def verify_or_create_sops_branch(tree):
@@ -241,16 +253,23 @@ def verify_or_create_sops_branch(tree):
             if 'fp' in entry and entry['fp'] != "":
                 return tree, False
     # if we're here, no fingerprint was found either
+    has_at_least_one_method = False
     if SOPS_KMS_ARN != "":
         tree['sops']['kms'] = list()
         for arn in SOPS_KMS_ARN.split(','):
             entry = {"arn": arn.replace(" ", "")}
             tree['sops']['kms'].append(entry)
+            has_at_least_one_method = True
     if SOPS_PGP_FP != "":
         tree['sops']['pgp'] = list()
         for fp in SOPS_PGP_FP.split(','):
             entry = {"fp": fp.replace(" ", "")}
             tree['sops']['pgp'].append(entry)
+            has_at_least_one_method = True
+    if not has_at_least_one_method:
+        print("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
+              "key, read the help (-h) for more information.", file=sys.stderr)
+        sys.exit(111)
     # return True to indicate an encryption key needs to be created
     return tree, True
 
@@ -268,23 +287,32 @@ def walk_and_decrypt(branch, key, stash=None):
             nstash = stash[k]
         if isinstance(v, dict):
             branch[k] = walk_and_decrypt(v, key, nstash)
+        elif isinstance(v, list):
+            branch[k] = walk_list_and_decrypt(v, key, nstash)
+        elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
+            ev = decrypt(str(v), key, nstash)
+            branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            # this is a value, decrypt it
-            if isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-                ev = decrypt(str(v), key, nstash)
-                branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
-            elif isinstance(v, list):
-                lstash = dict()
-                kl = []
-                for i, lv in enumerate(list(v)):
-                    if nstash:
-                        nstash[i] = {'has_stash': True}
-                        lstash = nstash[i]
-                    kl.append(decrypt(lv, key, lstash))
-                branch[k] = kl
-            else:
-                branch[k] = decrypt(v, key, nstash)
+            branch[k] = decrypt(str(v), key, nstash)
     return branch
+
+
+def walk_list_and_decrypt(branch, key, stash=None):
+    """
+    Walk a list contained in a branch and decrypts its leaves
+    """
+    nstash = dict()
+    kl = []
+    for i, v in enumerate(list(branch)):
+        if stash and i in stash:
+            nstash = stash[i]
+        if isinstance(v, dict):
+            kl.append(walk_and_decrypt(v, key, nstash))
+        elif isinstance(v, list):
+            kl.append(walk_list_and_decrypt(v, key, nstash))
+        else:
+            kl.append(decrypt(str(v), key, nstash))
+    return kl
 
 
 def decrypt(value, key, stash=None):
@@ -314,7 +342,7 @@ def decrypt(value, key, stash=None):
 
 def walk_and_encrypt(branch, key, stash=None):
     """
-    Walk the branch recursively and call encrypt of leaves.
+    Walk the branch recursively and encrypts its leaves.
     """
     for k, v in branch.items():
         if k == 'sops':
@@ -325,23 +353,32 @@ def walk_and_encrypt(branch, key, stash=None):
         if isinstance(v, dict):
             # recursively walk the tree
             branch[k] = walk_and_encrypt(v, key, nstash)
+        elif isinstance(v, list):
+            branch[k] = walk_list_and_encrypt(v, key, nstash)
+        elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
+            ev = encrypt(str(v), key, nstash)
+            branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            # this is a value, convert v to an encryptable type
-            # and encrypt
-            if isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-                ev = encrypt(str(v), key, nstash)
-                branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
-            elif type(v) is not list and isinstance(v, list):
-                lstash = dict()
-                kl = []
-                for i, lv in enumerate(list(v)):
-                    if nstash and i in nstash:
-                        lstash = nstash[i]
-                    kl.append(encrypt(lv, key, lstash))
-                branch[k] = kl
-            else:
-                branch[k] = encrypt(v, key, nstash)
+            branch[k] = encrypt(str(v), key, nstash)
     return branch
+
+
+def walk_list_and_encrypt(branch, key, stash=None):
+    """
+    Walk a list contained in a branch and encrypts its leaves
+    """
+    nstash = dict()
+    kl = []
+    for i, v in enumerate(list(branch)):
+        if stash and i in stash:
+            nstash = stash[i]
+        if isinstance(v, dict):
+            kl.append(walk_and_encrypt(v, key, nstash))
+        elif isinstance(v, list):
+            kl.append(walk_list_and_encrypt(v, key, nstash))
+        else:
+            kl.append(encrypt(str(v), key, nstash))
+    return kl
 
 
 def encrypt(value, key, stash=None):
@@ -379,8 +416,8 @@ def get_key(tree, need_key=False):
     if need_key:
         # if we're here, the tree doesn't have a key yet. generate
         # one and store it in the tree
-        print("please wait while an encryption key is being generated"
-              " and stored in a secure fashion", file=sys.stderr)
+        print("please wait while a data encryption key is being generated"
+              " and stored securely", file=sys.stderr)
         key = os.urandom(32)
         tree = encrypt_key_with_kms(key, tree)
         tree = encrypt_key_with_pgp(key, tree)
@@ -559,7 +596,7 @@ def write_file(tree, path=None, filetype=None):
         if 'data' in tree:
             fd.write(tree['data'] + "\n")
         if 'sops' in tree:
-            jsonstr = json.dump(tree['sops'])
+            jsonstr = json.dumps(tree['sops'])
             fd.write("%s\n" % SOPS_FOOTER)
             fd.write("SOPS=%s\n" % jsonstr)
     fd.close()

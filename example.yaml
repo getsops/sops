@@ -1,7 +1,7 @@
 myapp1: ENC[AES256_GCM,data:Tr7oc19nc6t1m9OrUeo=,iv:1vzlPZLfy6wa14/x17P8Ix8wEGDeY0v2dIboZmmwpww=,aad:NpobRzMzpDOkqijzONm8KglltzG+aBV7BJAxtm77veo=,tag:kaYqRgGGBhXhODSSmIZwyA==]
 app2:
     db:
-        user: ENC[AES256_GCM,data:CwE4O1s=,iv:S0fozGAOxNma/pWDUuk1iEaYw0wlba0VOLHjPxIok2k=,aad:nEVizsMMyBXOxySnOHw/trTFBSW72nh+Q80YU7TPgIo=,tag:XaGsYaL9LCkLWJI0uxnTYw==]
+        user: ENC[AES256_GCM,data:YNKE,iv:H9CDb4aUHBJeF2MSTKHQuOwlLxQVdx12AhT0+Dob4JQ=,aad:jlF2KvytlQIgyMpOoO/BiQbukiMwrh1j94Oys+YMgk0=,tag:NeDysIHV9CGtMAQq9i4vMg==]
         password: ENC[AES256_GCM,data:p673JCgHYw==,iv:EOOeivCp/Fd80xFdMYX0QeZn6orGTK8CeckmipjKqYY=,aad:UAhi/SHK0aCzptnFkFG4dW8Vv1ASg7TDHD6lui9mmKQ=,tag:QE6uuhRx+cGInwSVdmxXzA==]
     # private key for secret operations in app2
     key: |-
