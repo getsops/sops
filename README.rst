@@ -15,9 +15,13 @@ First install some libraries from your package manager:
 
 	sudo apt-get install libyaml-dev python-dev libffi-dev
 
+* MacOS::
+
+	brew install libffi libyaml
+
 Then install `sops` from pip::
 
-	pip install sops
+	sudo pip install --upgrade sops
 
 Usage
 -----
