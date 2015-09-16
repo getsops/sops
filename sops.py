@@ -201,7 +201,7 @@ def detect_filetype(file):
     Return a string that describes the format: `text`, `yaml`, `json`
     """
     base, ext = os.path.splitext(file)
-    if ext == '.yaml':
+    if (ext == '.yaml') or (ext == '.yml'):
         return 'yaml'
     elif ext == '.json':
         return 'json'
