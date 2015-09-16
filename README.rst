@@ -9,15 +9,16 @@ First install some libraries from your package manager:
 
 * RHEL family::
 
-	sudo yum install libyaml-devel python-devel libffi-devel
+	sudo yum install libyaml-devel python-devel libffi-devel pip
 
 * Debian family::
 
-	sudo apt-get install libyaml-dev python-dev libffi-dev
+	sudo apt-get install libyaml-dev python-dev libffi-dev python-pip
 
 * MacOS::
 
 	brew install libffi libyaml
+	sudo easy_install pip
 
 Then install `sops` from pip::
 
