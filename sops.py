@@ -80,9 +80,6 @@ SOPS_KMS_ARN = ""
 # retrieved from the user environment
 SOPS_PGP_FP = ""
 
-# just a string to add in files stored in text mode
-SOPS_FOOTER = "# --- sops encryption info. do not edit. ---"
-
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -221,9 +218,7 @@ def load_tree(path, filetype):
             tree = json.load(fd)
         else:
             for line in fd:
-                if line.startswith(SOPS_FOOTER):
-                    continue
-                elif line.startswith('SOPS='):
+                if line.startswith('SOPS='):
                     tree['sops'] = json.loads(
                             line.rstrip('\n').split('=', 1)[1])
                 else:
@@ -322,6 +317,9 @@ def decrypt(value, key, stash=None):
     # extract fields using a regex
     res = re.match(r'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)\]$',
                    value)
+    # if the value isn't in encrypted form, return it as is
+    if res is None:
+        return value
     enc_value = b64decode(res.group(1))
     iv = b64decode(res.group(2))
     aad = b64decode(res.group(3))
@@ -594,11 +592,13 @@ def write_file(tree, path=None, filetype=None):
         json.dump(tree, fd, sort_keys=True, indent=4)
     else:
         if 'data' in tree:
-            fd.write(tree['data'] + "\n")
+            # add a newline if there's none
+            if tree['data'][-1:] != '\n':
+                tree['data'] += '\n'
+            fd.write(tree['data'])
         if 'sops' in tree:
-            jsonstr = json.dumps(tree['sops'])
-            fd.write("%s\n" % SOPS_FOOTER)
-            fd.write("SOPS=%s\n" % jsonstr)
+            jsonstr = json.dumps(tree['sops'], sort_keys=True)
+            fd.write("SOPS=%s" % jsonstr)
     fd.close()
     return path
 
