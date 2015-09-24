@@ -181,10 +181,7 @@ def main():
 
     # if we're in -e or -d mode, display to stdout
     if args.encrypt or args.decrypt:
-        tmppath = write_file(tree, filetype=otype)
-        with open(tmppath, 'r') as f:
-            print(f.read())
-        os.remove(tmppath)
+        write_file(tree, path='/dev/stdout', filetype=otype)
 
     # otherwise, write the encrypted tree to a file
     else:
