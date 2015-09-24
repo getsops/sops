@@ -101,7 +101,8 @@ def main():
                            help="encrypt <file> and print it to stdout")
     argparser.add_argument('-i', '--in-place', action='store_true',
                            dest='in_place',
-                           help="write output back to <file> instead of stdout for encrypt/decrypt")
+                           help="write output back to <file> instead "
+                                "of stdout for encrypt/decrypt")
     argparser.add_argument('--input-type', dest='input_type',
                            help="input type (yaml, json, ...), "
                                 "if undef, use file extension")
