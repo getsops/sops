@@ -24,6 +24,11 @@ Then install `sops` from pip::
 
 	sudo pip install --upgrade sops
 
+note: on centos/sl, you may need to upgrade `botocore` after installing
+sops to deal with a `requirement conflict
+<https://github.com/boto/botocore/issues/660>`_.
+Do so with `sudo pip install -U botocore`.
+
 Usage
 -----
 
