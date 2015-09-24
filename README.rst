@@ -1,5 +1,6 @@
 SOPS: Secrets OPerationS
 ========================
+
 `sops` is a secrets management tool that encrypts YAML, JSON and TEXT files
 using AWS KMS and/or PGP (via GnuPG).
 
@@ -138,6 +139,20 @@ Given that, the only command a `sops` user need is:
 encrypted if modified, and saved back to its original location. All of these
 steps, apart from the actual editing, are transparent to the user.
 
+Key Rotation
+~~~~~~~~~~~~
+
+It is recommend to renew the data key on a regular basis. `sops` supports key
+rotation via the `-r` flag. A simple approach is to decrypt and reencrypt all
+files in place with rotation enabled:
+
+.. code:: bash
+
+	for file in $(find . -type f -name "*.yaml"); do
+		sops -d -i $file
+		sops -e -i -r $file
+	done
+
 Cryptographic details
 ---------------------
 
@@ -273,11 +288,13 @@ Mozilla Public License Version 2.0
 Authors
 -------
 * Julien Vehent <jvehent@mozilla.com>
+* Daniel Thornton <dthornton@mozilla.com>
 
 Credits
 -------
 
-`sops` is inspired by projects like `hiera-eyaml
-<https://github.com/TomPoulton/hiera-eyaml>`_, `credstash
-<https://github.com/LuminalOSS/credstash>`_ and `sneaker
-<https://github.com/codahale/sneaker>`_. 
+`sops` is inspired by `hiera-eyaml <https://github.com/TomPoulton/hiera-eyaml>`_,
+`credstash <https://github.com/LuminalOSS/credstash>`_ ,
+`sneaker <https://github.com/codahale/sneaker>`_,
+`password store <http://www.passwordstore.org/>`_ and too many years managing
+PGP encrypted files by hand...

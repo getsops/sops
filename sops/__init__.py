@@ -103,6 +103,10 @@ def main():
                            dest='in_place',
                            help="write output back to <file> instead "
                                 "of stdout for encrypt/decrypt")
+    argparser.add_argument('-r', '--rotate', action='store_true',
+                           dest='rotate',
+                           help="generate a new data encryption key and "
+                                "encrypt all values with the new key")
     argparser.add_argument('--input-type', dest='input_type',
                            help="input type (yaml, json, ...), "
                                 "if undef, use file extension")
@@ -147,9 +151,13 @@ def main():
         tree = dict()
         tree, need_key = verify_or_create_sops_branch(tree)
 
+    if args.rotate:
+        need_key = True
+
     if args.encrypt:
         # Encrypt mode: encrypt, display and exit
         key, tree = get_key(tree, need_key)
+
         tree = walk_and_encrypt(tree, key)
 
     elif args.decrypt:
@@ -481,9 +489,6 @@ def encrypt_key_with_kms(key, tree):
     i = -1
     for entry in tree['sops']['kms']:
         i += 1
-        if 'enc' in entry and entry['enc'] != "":
-            # key is already encrypted with kms, skipping
-            continue
         if 'arn' not in entry or entry['arn'] == "":
             print("KMS ARN not found, skipping entry %d" % i, file=sys.stderr)
             continue
@@ -547,9 +552,6 @@ def encrypt_key_with_pgp(key, tree):
     i = -1
     for entry in tree['sops']['pgp']:
         i += 1
-        if 'enc' in entry and entry['enc'] != "":
-            # key is already encrypted with pgp, skipping
-            continue
         if 'fp' not in entry or entry['fp'] == "":
             print("PGP fingerprint not found, skipping entry %d" % i,
                   file=sys.stderr)
