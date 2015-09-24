@@ -4,15 +4,15 @@ all:
 install:
 	python setup.py install
 
-rpm:
-	fpm -s python -t rpm -d pytz -d python-requests-futures ./setup.py
+requirements:
+	sudo pip install -U -r requirements.txt
 
-deb:
-	fpm -s python -t deb ./setup.py
+dev-requirements:
+	sudo pip install -U -r dev-requirements.txt
 
-tests: test
-test:
-	python sops -d example.yaml
+tests:
+	py.test tests
+test: tests
 
 pypi:
 	python setup.py sdist check upload --sign
