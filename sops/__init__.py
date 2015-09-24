@@ -99,6 +99,9 @@ def main():
     argparser.add_argument('-e', '--encrypt', action='store_true',
                            dest='encrypt',
                            help="encrypt <file> and print it to stdout")
+    argparser.add_argument('-i', '--in-place', action='store_true',
+                           dest='in_place',
+                           help="write output back to <file> instead of stdout for encrypt/decrypt")
     argparser.add_argument('--input-type', dest='input_type',
                            help="input type (yaml, json, ...), "
                                 "if undef, use file extension")
@@ -179,11 +182,11 @@ def main():
         os.remove(tmppath)
         tree = walk_and_encrypt(tree, key, stash)
 
-    # if we're in -e or -d mode, display to stdout
-    if args.encrypt or args.decrypt:
+    # if we're in -e or -d mode, and not in -i mode, display to stdout
+    if (args.encrypt or args.decrypt) and not args.in_place:
         write_file(tree, path='/dev/stdout', filetype=otype)
 
-    # otherwise, write the encrypted tree to a file
+    # otherwise, write the tree to a file
     else:
         path = write_file(tree, path=args.file, filetype=otype)
         print("file written to %s" % (path), file=sys.stderr)
