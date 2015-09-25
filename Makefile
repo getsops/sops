@@ -10,15 +10,16 @@ requirements:
 dev-requirements:
 	sudo pip install -U -r dev-requirements.txt
 
-tests:
+tests: install dev-requirements
 	py.test tests
+
 test: tests
 
 pypi:
 	python setup.py sdist check upload --sign
 
 clean:
-	rm -rf *pyc
-	rm -rf build
-	rm -rf __pycache__
-	rm -rf dist
+	rm -rf *.pyc sops/*.pyc
+	rm -rf __pycache__ sops/__pycache__
+	rm -rf build/ dist/
+	rm -fr .tox/
