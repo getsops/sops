@@ -1,11 +1,15 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
+# Contributor: Julien Vehent <jvehent@mozilla.com> [:ulfr]
+# Contributor: Daniel Thornton <daniel@relud.com>
+# Contributor: Alexis Metaireau <alexis@mozilla.com> [:alexis]
+# Contributor: Rémy Hubscher <natim@mozilla.com> [:natim]
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 import argparse
 import json
 import os
@@ -301,7 +305,7 @@ def walk_and_decrypt(branch, key, stash=None):
 
 
 def walk_list_and_decrypt(branch, key, stash=None):
-    """Walk a list contained in a branch and decrypts its leaves."""
+    """Walk a list contained in a branch and decrypts its values."""
     nstash = dict()
     kl = []
     for i, v in enumerate(list(branch)):
@@ -364,7 +368,7 @@ def walk_and_encrypt(branch, key, stash=None):
 
 
 def walk_list_and_encrypt(branch, key, stash=None):
-    """Walk a list contained in a branch and encrypts its leaves."""
+    """Walk a list contained in a branch and encrypts its values."""
     nstash = dict()
     kl = []
     for i, v in enumerate(list(branch)):
@@ -472,7 +476,7 @@ def get_key_from_kms(tree):
 
 
 def encrypt_key_with_kms(key, tree):
-    """Encrypt the key using the KMS key."""
+    """Encrypt the key using the KMS."""
     try:
         isinstance(tree['sops']['kms'], list)
     except KeyError:
