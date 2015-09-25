@@ -10,7 +10,6 @@ import argparse
 from base64 import b64encode, b64decode
 import json
 import os
-import random
 import re
 import subprocess
 import sys
@@ -22,7 +21,6 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 import boto3
 import ruamel.yaml
-from ruamel.yaml.comments import CommentedMap
 
 
 DESC = """
@@ -140,7 +138,7 @@ def main():
 
     need_key = False
     try:
-        fstat = os.stat(args.file)
+        os.stat(args.file)
         # read the encrypted file from disk
         tree = load_tree(args.file, itype)
         tree, need_key = verify_or_create_sops_branch(tree)
@@ -229,7 +227,7 @@ def load_tree(path, filetype):
             for line in fd:
                 if line.startswith('SOPS='):
                     tree['sops'] = json.loads(
-                            line.rstrip('\n').split('=', 1)[1])
+                        line.rstrip('\n').split('=', 1)[1])
                 else:
                     if 'data' not in tree:
                         tree['data'] = str()
