@@ -322,6 +322,7 @@ def walk_list_and_decrypt(branch, key, stash=None):
 
 def decrypt(value, key, stash=None):
     """Return a decrypted value."""
+    value = value.encode('utf-8')
     # extract fields using a regex
     res = re.match(r'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)\]$',
                    value)
@@ -589,7 +590,7 @@ def write_file(tree, path=None, filetype=None):
         path = fd.name
     if filetype == "yaml":
         fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
-                                  indent=4))
+                                  indent=4).encode('utf-8'))
     elif filetype == "json":
         json.dump(tree, fd, sort_keys=True, indent=4)
     else:
@@ -597,20 +598,31 @@ def write_file(tree, path=None, filetype=None):
             # add a newline if there's none
             if tree['data'][-1:] != '\n':
                 tree['data'] += '\n'
-            fd.write(tree['data'])
+            fd.write(tree['data'].encode('utf-8'))
         if 'sops' in tree:
             jsonstr = json.dumps(tree['sops'], sort_keys=True)
-            fd.write("SOPS=%s" % jsonstr)
+            fd.write(("SOPS=%s" % jsonstr).encode('utf-8'))
     fd.close()
     return path
 
 
 def run_editor(path):
     """Open the text editor on the given file path."""
-    editor = "vim"
+    editor = None
     if 'EDITOR' in os.environ:
         editor = os.environ['EDITOR']
-    subprocess.call([editor, path])
+    else:
+        process = subprocess.Popen(["which", "vim", "nano"],
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        for line in process.stdout:
+            editor = line.strip()
+            break
+
+    if editor:
+        subprocess.call([editor, path])
+    else:
+        panic("Please define your EDITOR environment variable.", 201)
     return
 
 
