@@ -7,37 +7,37 @@
 
 from __future__ import print_function
 import argparse
-from base64 import b64encode, b64decode
 import json
 import os
 import re
 import subprocess
 import sys
 import tempfile
-from textwrap import dedent
 import time
+from base64 import b64encode, b64decode
+from textwrap import dedent
 
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 import boto3
 import ruamel.yaml
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 
 
 DESC = """
 `sops` is an encryption manager and editor for files that contains secrets.
 
-`sops` supports both AWS KMS and PGP encryption:
+`sops` supports both AWS, KMS and PGP encryption:
 
     * To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
-      in the `-k` flag or in the environment variable SOPS_KMS_ARN.
+      in the `-k` flag or in the ``SOPS_KMS_ARN`` environment variable.
       (you need valid credentials in ~/.aws/credentials)
 
     * To encrypt or decrypt using PGP, specify the PGP fingerprint in the
-      `-g` flag os in the environment variable SOPS_PGP_FP.
+      `-g` flag or in the ``SOPS_PGP_FP`` environment variable.
 
 Those flags are ignored if the document already stores encryption info.
-Internally, the KMS and PGP key IDs are stored in the document under
-sops.kms and sops.pgp.
+Internally the KMS and PGP key IDs are stored in the document under
+``sops.kms`` and ``sops.pgp``.
 
     YAML
         sops:
@@ -58,23 +58,23 @@ sops.kms and sops.pgp.
             ]}
         }
 
-    TEXT (serialized JSON of the `sops` object)
+    TEXT (JSON serialization of the `sops` object)
         SOPS={"sops":{"kms":[{"arn":"aws:kms:us-east-1:650:ke...}]}}
 
-The environment variables SOPS_KMS_ARN and SOPS_PGP_FP can take multiple
-keys separated by commas. All spaces are trimmed.
+The ``SOPS_KMS_ARN`` and ``SOPS_PGP_FP`` environment variables can
+take multiple keys separated by commas. All spaces are trimmed.
 
-By default, editing is done in vim. Set the env variable $EDITOR to use
-a different editor.
+By default, editing is done in vim. Set the env variable ``$EDITOR``
+to use a different editor.
 
 Mozilla Services - ulfr, relud - 2015
 """
 
-# a list of KMS ARNs either provided on the command line or retrieved
+# A list of KMS ARNs either provided on the command line or retrieved
 # from the user environment
 SOPS_KMS_ARN = ""
 
-# a list of PGP fingeprints either provided on the command line or
+# A list of PGP fingeprints either provided on the command line or
 # retrieved from the user environment
 SOPS_PGP_FP = ""
 
@@ -144,7 +144,7 @@ def main():
         tree, need_key = verify_or_create_sops_branch(tree)
     except:
         if args.encrypt or args.decrypt:
-            panic("cannot operate on non-existent file")
+            panic("cannot operate on non-existent file", error_code=100)
         print("%s doesn't exist, creating it." % args.file)
         tree = dict()
         tree, need_key = verify_or_create_sops_branch(tree)
@@ -182,7 +182,8 @@ def main():
         tmpstamp2 = os.stat(tmppath)
         if tmpstamp == tmpstamp2:
             os.remove(tmppath)
-            panic("%s has not been modified, exit without writing" % args.file)
+            panic("%s has not been modified, exit without writing" % args.file,
+                  error_code=200)
 
         # encrypt the tree
         tree = load_tree(tmppath, otype)
@@ -200,8 +201,7 @@ def main():
 
 
 def detect_filetype(file):
-    """
-    Detect the type of file based on its extension.
+    """Detect the type of file based on its extension.
     Return a string that describes the format: `text`, `yaml`, `json`
     """
     base, ext = os.path.splitext(file)
@@ -213,9 +213,11 @@ def detect_filetype(file):
 
 
 def load_tree(path, filetype):
-    """
+    """Load the tree.
+
     Read data from `path` using format defined by `filetype`.
-    Return a dictionary with the data
+    Return a dictionary with the data.
+
     """
     tree = dict()
     with open(path, "r") as fd:
@@ -236,10 +238,12 @@ def load_tree(path, filetype):
 
 
 def verify_or_create_sops_branch(tree):
-    """
-    if the current tree doesn't have a sops branch with either kms or pgp
+    """Verify or create the sops branch in the tree.
+
+    If the current tree doesn't have a sops branch with either kms or pgp
     information, create it using the content of the global variables and
-    indicate that an encryption is needed when returning
+    indicate that an encryption is needed when returning.
+
     """
     if 'sops' not in tree:
         tree['sops'] = dict()
@@ -269,17 +273,14 @@ def verify_or_create_sops_branch(tree):
             tree['sops']['pgp'].append(entry)
             has_at_least_one_method = True
     if not has_at_least_one_method:
-        print("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
-              "key, read the help (-h) for more information.", file=sys.stderr)
-        sys.exit(111)
+        panic("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
+              "key, read the help (-h) for more information.", 111)
     # return True to indicate an encryption key needs to be created
     return tree, True
 
 
 def walk_and_decrypt(branch, key, stash=None):
-    """
-    Walk the branch recursively and decrypt leaves
-    """
+    """Walk the branch recursively and decrypt leaves."""
     for k, v in branch.items():
         if k == 'sops':
             continue    # everything under the `sops` key stays in clear
@@ -300,9 +301,7 @@ def walk_and_decrypt(branch, key, stash=None):
 
 
 def walk_list_and_decrypt(branch, key, stash=None):
-    """
-    Walk a list contained in a branch and decrypts its leaves
-    """
+    """Walk a list contained in a branch and decrypts its leaves."""
     nstash = dict()
     kl = []
     for i, v in enumerate(list(branch)):
@@ -318,9 +317,7 @@ def walk_list_and_decrypt(branch, key, stash=None):
 
 
 def decrypt(value, key, stash=None):
-    """
-    Return a decrypted value
-    """
+    """Return a decrypted value."""
     # extract fields using a regex
     res = re.match(r'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)\]$',
                    value)
@@ -346,9 +343,7 @@ def decrypt(value, key, stash=None):
 
 
 def walk_and_encrypt(branch, key, stash=None):
-    """
-    Walk the branch recursively and encrypts its leaves.
-    """
+    """Walk the branch recursively and encrypts its leaves."""
     for k, v in branch.items():
         if k == 'sops':
             continue    # everything under the `sops` key stays in clear
@@ -369,9 +364,7 @@ def walk_and_encrypt(branch, key, stash=None):
 
 
 def walk_list_and_encrypt(branch, key, stash=None):
-    """
-    Walk a list contained in a branch and encrypts its leaves
-    """
+    """Walk a list contained in a branch and encrypts its leaves."""
     nstash = dict()
     kl = []
     for i, v in enumerate(list(branch)):
@@ -387,9 +380,7 @@ def walk_list_and_encrypt(branch, key, stash=None):
 
 
 def encrypt(value, key, stash=None):
-    """
-    Return an encrypted string of the value provided.
-    """
+    """Return an encrypted string of the value provided."""
     # if we have a stash, and the value of cleartext has not changed,
     # attempt to take the IV and AAD value from the stash.
     # if the stash has no existing value, or the cleartext has changed,
@@ -413,10 +404,11 @@ def encrypt(value, key, stash=None):
 
 
 def get_key(tree, need_key=False):
-    """
-    Obtain a 256 bits symetric key. If the document contain an
-    encrypted key, try to decrypt it using KMS or PGP. Otherwise,
-    generate a new random key.
+    """Obtain a 256 bits symetric key.
+
+    If the document contain an encrypted key, try to decrypt it using
+    KMS or PGP. Otherwise, generate a new random key.
+
     """
     if need_key:
         # if we're here, the tree doesn't have a key yet. generate
@@ -433,12 +425,12 @@ def get_key(tree, need_key=False):
     key = get_key_from_pgp(tree)
     if not (key is None):
         return key, tree
-    print("[error] couldn't retrieve a key to encrypt/decrypt the tree",
-          file=sys.stderr)
-    sys.exit(128)
+    panic("[error] couldn't retrieve a key to encrypt/decrypt the tree",
+          error_code=128)
 
 
 def get_key_from_kms(tree):
+    """Get the key form the KMS tree leave."""
     try:
         kms_tree = tree['sops']['kms']
     except KeyError:
@@ -480,6 +472,7 @@ def get_key_from_kms(tree):
 
 
 def encrypt_key_with_kms(key, tree):
+    """Encrypt the key using the KMS key."""
     try:
         isinstance(tree['sops']['kms'], list)
     except KeyError:
@@ -519,6 +512,7 @@ def encrypt_key_with_kms(key, tree):
 
 
 def get_key_from_pgp(tree):
+    """Retreive the key from the PGP tree leave."""
     try:
         pgp_tree = tree['sops']['pgp']
     except KeyError:
@@ -543,6 +537,7 @@ def get_key_from_pgp(tree):
 
 
 def encrypt_key_with_pgp(key, tree):
+    """Encrypt the key using the PGP key."""
     try:
         isinstance(tree['sops']['pgp'], list)
     except KeyError:
@@ -573,13 +568,15 @@ def encrypt_key_with_pgp(key, tree):
 
 
 def write_file(tree, path=None, filetype=None):
-    """
-    Write the content of `tree` encoded using the format defined by `filetype`
-    at the location `path`.
+    """Write the tree content in a file using filetype format.
+
+    Write the content of `tree` encoded using the format defined by
+    `filetype` at the location `path`.
     If `path` is not defined, a tempfile is created.
     if `filetype` is not defined, tree is treated as a blob of data.
 
     Return the path of the file written.
+
     """
     if path:
         fd = open(path, "wb")
@@ -605,9 +602,7 @@ def write_file(tree, path=None, filetype=None):
 
 
 def run_editor(path):
-    """
-    Call a text editor on the file given by path.
-    """
+    """Open the text editor on the given file path."""
     editor = "vim"
     if 'EDITOR' in os.environ:
         editor = os.environ['EDITOR']
@@ -615,10 +610,9 @@ def run_editor(path):
     return
 
 
-def panic(msg):
-    from sys import exit
+def panic(msg, error_code=1):
     print(msg, file=sys.stderr)
-    exit(1)
+    sys.exit(error_code)
 
 
 if __name__ == '__main__':
