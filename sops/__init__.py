@@ -214,6 +214,7 @@ def main():
         tree = load_tree(tmppath, otype)
         os.remove(tmppath)
         tree = walk_and_encrypt(tree, key, stash)
+        tree = update_sops_branch(tree, key)
 
     # if we're in -e or -d mode, and not in -i mode, display to stdout
     if (args.encrypt or args.decrypt) and not args.in_place:
@@ -277,13 +278,13 @@ def verify_or_create_sops_branch(tree):
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
         # check that we have at least one ARN to work with
         for entry in tree['sops']['kms']:
-            if 'arn' in entry and entry['arn'] != "":
+            if 'arn' in entry and entry['arn'] != "" and entry['enc'] != "":
                 return tree, False
     # if we're here, no arn was found
     if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
         # check that we have at least one fingerprint to work with
         for entry in tree['sops']['pgp']:
-            if 'fp' in entry and entry['fp'] != "":
+            if 'fp' in entry and entry['fp'] != "" and entry['enc'] != "":
                 return tree, False
     # if we're here, no fingerprint was found either
     has_at_least_one_method = False
@@ -304,6 +305,33 @@ def verify_or_create_sops_branch(tree):
               "key, read the help (-h) for more information.", 111)
     # return True to indicate an encryption key needs to be created
     return tree, True
+
+
+def update_sops_branch(tree, key):
+    """ If master keys have been added to the SOPS branch, encrypt the data key
+        with them, and store the new encrypted values.
+    """
+    if 'kms' in tree['sops']:
+        if not isinstance(tree['sops']['kms'], list):
+            panic("invalid KMS format in SOPS branch, must be a list")
+        i = -1
+        for entry in tree['sops']['kms']:
+            i += 1
+            if not ('enc' in entry) or entry['enc'] == "":
+                print("updating kms entry")
+                updated = encrypt_key_with_kms(key, entry)
+                tree['sops']['kms'][i] = updated
+    if 'pgp' in tree['sops']:
+        if not isinstance(tree['sops']['pgp'], list):
+            panic("invalid PGP format in SOPS branch, must be a list")
+        i = -1
+        for entry in tree['sops']['pgp']:
+            i += 1
+            if not ('enc' in entry) or entry['enc'] == "":
+                print("updating pgp entry")
+                updated = encrypt_key_with_pgp(key, entry)
+                tree['sops']['pgp'][i] = updated
+    return tree
 
 
 def walk_and_decrypt(branch, key, stash=None):
@@ -410,7 +438,7 @@ def walk_list_and_encrypt(branch, key, stash=None):
 
 def encrypt(value, key, stash=None):
     """Return an encrypted string of the value provided."""
-    value = value.encode('utf-8')
+    value = str(value).encode('utf-8')
     # if we have a stash, and the value of cleartext has not changed,
     # attempt to take the IV and AAD value from the stash.
     # if the stash has no existing value, or the cleartext has changed,
@@ -446,8 +474,18 @@ def get_key(tree, need_key=False):
         print("please wait while a data encryption key is being generated"
               " and stored securely", file=sys.stderr)
         key = os.urandom(32)
-        tree = encrypt_key_with_kms(key, tree)
-        tree = encrypt_key_with_pgp(key, tree)
+        if 'kms' in tree['sops']:
+            i = -1
+            for entry in tree['sops']['kms']:
+                i += 1
+                updated = encrypt_key_with_kms(key, entry)
+                tree['sops']['kms'][i] = updated
+        if 'pgp' in tree['sops']:
+            i = -1
+            for entry in tree['sops']['pgp']:
+                i += 1
+                updated = encrypt_key_with_pgp(key, entry)
+                tree['sops']['pgp'][i] = updated
         return key, tree
     key = get_key_from_kms(tree)
     if not (key is None):
@@ -501,49 +539,38 @@ def get_key_from_kms(tree):
     return None
 
 
-def encrypt_key_with_kms(key, tree):
+def encrypt_key_with_kms(key, entry):
     """Encrypt the key using the KMS."""
+    if 'arn' not in entry or entry['arn'] == "":
+        print("KMS ARN not found, skipping entry", file=sys.stderr)
+        return entry
+    # extract the region from the ARN
+    # arn:aws:kms:{REGION}:...
+    res = re.match('^arn:aws:kms:(.+):([0-9]+):key/(.+)$', entry['arn'])
+    if res is None:
+        print("Invalid ARN '%s' in entry" % entry['arn'], file=sys.stderr)
+        return entry
     try:
-        isinstance(tree['sops']['kms'], list)
-    except KeyError:
-        return tree
-    i = -1
-    for entry in tree['sops']['kms']:
-        i += 1
-        if 'arn' not in entry or entry['arn'] == "":
-            print("KMS ARN not found, skipping entry %d" % i, file=sys.stderr)
-            continue
-        arn = entry['arn']
-        # extract the region from the ARN
-        # arn:aws:kms:{REGION}:...
-        res = re.match(r'^arn:aws:kms:(.+):([0-9]+):key/(.+)$',
-                       arn)
-        if res is None:
-            print("Invalid ARN '%s' in entry %s" % (entry['arn'], i),
-                  file=sys.stderr)
-            continue
-        try:
-            region = res.group(1)
-        except:
-            print("Unable to find region from ARN '%s' in entry %s" %
-                  (entry['arn'], i), file=sys.stderr)
-            continue
-        kms = boto3.client('kms', region_name=region)
-        try:
-            kms_response = kms.encrypt(KeyId=arn, Plaintext=key)
-        except Exception as e:
-            print("failed to encrypt key using kms arn %s: %s, skipping it" %
-                  (arn, e), file=sys.stderr)
-            continue
-        entry['enc'] = b64encode(
-            kms_response['CiphertextBlob']).decode('utf-8')
-        entry['created_at'] = time.time()
-        tree['sops']['kms'][i] = entry
-    return tree
+        region = res.group(1)
+    except:
+        print("Unable to find region from ARN '%s' in entry" %
+              entry['arn'], file=sys.stderr)
+        return entry
+    kms = boto3.client('kms', region_name=region)
+    try:
+        kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key)
+    except Exception as e:
+        print("failed to encrypt key using kms arn %s: %s, skipping it" %
+              (entry['arn'], e), file=sys.stderr)
+        return entry
+    entry['enc'] = b64encode(
+        kms_response['CiphertextBlob']).decode('utf-8')
+    entry['created_at'] = time.time()
+    return entry
 
 
 def get_key_from_pgp(tree):
-    """Retreive the key from the PGP tree leave."""
+    """Retrieve the key from the PGP tree leave."""
     try:
         pgp_tree = tree['sops']['pgp']
     except KeyError:
@@ -567,36 +594,27 @@ def get_key_from_pgp(tree):
     return None
 
 
-def encrypt_key_with_pgp(key, tree):
+def encrypt_key_with_pgp(key, entry):
     """Encrypt the key using the PGP key."""
+    if 'fp' not in entry or entry['fp'] == "":
+        print("PGP fingerprint not found, skipping entry", file=sys.stderr)
+        return entry
+    fp = entry['fp']
     try:
-        isinstance(tree['sops']['pgp'], list)
-    except KeyError:
-        return tree
-    i = -1
-    for entry in tree['sops']['pgp']:
-        i += 1
-        if 'fp' not in entry or entry['fp'] == "":
-            print("PGP fingerprint not found, skipping entry %d" % i,
-                  file=sys.stderr)
-            continue
-        fp = entry['fp']
-        try:
-            p = subprocess.Popen(['gpg', '--no-default-recipient', '--yes',
-                                  '--encrypt', '-a', '-r', fp, '--trusted-key',
-                                  fp[-16:], '--no-encrypt-to'],
-                                 stdout=subprocess.PIPE,
-                                 stdin=subprocess.PIPE)
-            enc = p.communicate(input=key)[0]
-        except Exception as e:
-            print("failed to encrypt key using pgp fp %s: %s, skipping it" %
-                  (fp, e), file=sys.stderr)
-            continue
-        enc = enc.decode('utf-8')
-        entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
-        entry['created_at'] = time.time()
-        tree['sops']['pgp'][i] = entry
-    return tree
+        p = subprocess.Popen(['gpg', '--no-default-recipient', '--yes',
+                              '--encrypt', '-a', '-r', fp, '--trusted-key',
+                              fp[-16:], '--no-encrypt-to'],
+                             stdout=subprocess.PIPE,
+                             stdin=subprocess.PIPE)
+        enc = p.communicate(input=key)[0]
+    except Exception as e:
+        print("failed to encrypt key using pgp fp %s: %s, skipping it" %
+              (fp, e), file=sys.stderr)
+        return entry
+    enc = enc.decode('utf-8')
+    entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
+    entry['created_at'] = time.time()
+    return entry
 
 
 def write_file(tree, path=None, filetype=None):
@@ -654,7 +672,7 @@ def run_editor(path):
 
 
 def panic(msg, error_code=1):
-    print(msg, file=sys.stderr)
+    print("PANIC: %s" % msg, file=sys.stderr)
     sys.exit(error_code)
 
 
