@@ -82,6 +82,19 @@ SOPS_KMS_ARN = ""
 # retrieved from the user environment
 SOPS_PGP_FP = ""
 
+DEFAULT_YAML = """# Welcome to SOPS. This is the default template.
+# Remove these lines and add your data.
+# Don't modify the `sops` section, it contains key material.
+example_key: example_value
+example_array:
+    - example_value1
+    - example_value2
+example_multiline: |
+    this is a
+    multiline
+    entry
+"""
+
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -141,6 +154,7 @@ def main():
         otype = itype
 
     need_key = False
+    is_new_file = False
     try:
         os.stat(args.file)
         # read the encrypted file from disk
@@ -150,7 +164,13 @@ def main():
         if args.encrypt or args.decrypt:
             panic("cannot operate on non-existent file", error_code=100)
         print("%s doesn't exist, creating it." % args.file)
-        tree = dict()
+        is_new_file = True
+        if itype is "yaml":
+            tree = ruamel.yaml.load(DEFAULT_YAML, ruamel.yaml.RoundTripLoader)
+        else:
+            tree = dict()
+            tree['data'] = 'Welcome to SOPS. ' + \
+                'Remove this line and add your data to the file.'
         tree, need_key = verify_or_create_sops_branch(tree)
 
     if args.rotate:
@@ -174,7 +194,8 @@ def main():
         # we need a stash to save the IV and AAD and reuse them
         # if a given value has not changed during editing
         stash = {'sops': {'has_stash': True}}
-        tree = walk_and_decrypt(tree, key, stash=stash)
+        if not is_new_file:
+            tree = walk_and_decrypt(tree, key, stash=stash)
 
         # the decrypted tree is written to a tempfile and an editor
         # is opened on the file
@@ -251,6 +272,8 @@ def verify_or_create_sops_branch(tree):
     """
     if 'sops' not in tree:
         tree['sops'] = dict()
+        tree['sops']['attention'] = 'This section contains key material' + \
+            ' that should only be modified with extra care. See `sops -h`.'
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
         # check that we have at least one ARN to work with
         for entry in tree['sops']['kms']:
