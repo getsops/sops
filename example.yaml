@@ -7,11 +7,12 @@ app2:
     # private key for secret operations in app2
     key: |-
         ENC[AES256_GCM,data:Ea3zTFSOlg1PDZmBa1U2dtKl3pO4nTmaFswJx41fPfq3u8O2/Bq1UVfXn2SrO13obfr6xH4zuUceCDTvW2qvphlan5ir609EXt4dE2TEEcjVKhmAHf4LMwlZVAbvTJtlsnvo/aYJH95uctjsSX5h8pBlLaTGBGYwMrZuMyRU6vdcMWyha+piJckUc9sq7fevy1TSqIxf1Usbn/0NEklWm2VSNzQ2Urqtny6EXar+xU7NfYSRJ3mqmcJZ14oIeXPdpk962RwMEFWdYrbE7D59kWU2BgMjDxYJD5KXpWiw2YCrA/wsATxVCbZlwqC+TJFA5WAUZX756mFhV/t2Li3zQyDNUe6KkMXV9qwf/oV1j5sVRVFsKDYIBqhi3qWBVA+SO9RloQMjhru+IsdbQcS4LKq/1DrBENeZuJ0djUAxKLVfJzMGUf89ju3m9IEPovW8mfF0RbfAGRwFHMO9nEXCxrTLERf3owdR3u4j5/rNBpIvvy1z+2dy6sAx/eyNdS+cn5qO9BPAxsXpSwkaI96rlBagwH1Pfxus0x/D00j93OpE+M8MgQ/9LA68FlCFU4OAQlvw8f7MPoxnq+/+gFTS/qqjTR6EoUuX5NH2WY93YCC5TCbe4GOXyP0H05PbIWq55UMVLNcpAyac3gO4kL5O5U8=,iv:Dl61tsemKH0fdmNul/PmEEsRYFAh8GorR8GRupus/EM=,aad:Ft2aSYYukD1x8pMj1WvmodLjJV6waPy5FqdlImWyQKA=,tag:EPg4KpWqni/buCFjFL857A==]
-an_array:
-- ENC[AES256_GCM,data:5e59uvuZeA7lX24=,iv:4iH/632pENCEZ5qwsaVdFT49GpTLBB08T9p8gGCbES4=,aad:W6+ucNcND9VE3XvVhbPkfzkMVA3ye4C8sevlDSyCg4w=,tag:YFb53Hef5xlX4BrEwCVHBw==]
-- ENC[AES256_GCM,data:G125ub+JDpmXAiE=,iv:TWRxt26ADGyTp4G54i6NkiaJ2wZc9UtJGyueQ467wXo=,aad:A2gfhgZ8eBS3hXrC7iwljqEd/N5zNmyC1bN8rZIp6d0=,tag:ttcG4k7zNt9/DsyUjt5nbQ==]
-- ENC[AES256_GCM,data:zrsW2QtNlLjlvL+aWyCZu51WAhjzcScA4cguSrcjL+c0ohNeWELrj6DnvIaEv65OAOfCqCcWPoCHAw==,iv:/rMHp0u8aJ+kKdy6XPdTINajGXTr7aPwh33bvgw40JM=,aad:x6GUx/DDB4BlBtVh6rNYRJOb4nbrLSmpwXi5MCCUvT4=,tag:DAAjGg08/f1ZHtivSgHOPg==]
 number: ENC[AES256_GCM,data:XMrBalgZ9tvBxQ==,iv:XyEAAaIzVy/2trnJhLrjMInLg8tMI4CAX9+ccnj3T1Y=,aad:JOlAkP159UxDjL1CrumTuQDqgW2+VOIwz7bdfaJIIn4=,tag:WOHOMJS4nhSdj/aQcGbU1A==]
+an_array:
+- ENC[AES256_GCM,data:td1aAv4s4cOzSo0=,iv:ErVqte7GpQ3JfzVpVRf7pWSQZDHn6W0iAntKWFsMqio=,aad:RiYy8fKX/yVY7KRgXSOIzydT0+TwK7WGzSFSy+1GmVM=,tag:aSGLCmNZsGcBjxEGvNQRwA==]
+- ENC[AES256_GCM,data:2K8C418jef8zoAY=,iv:cXE4Hwdl4ZHzAHHyyXqaIMFs0mn65JUehDdaw/aM0WI=,aad:RlAgUZUZ1DvxD9/lZQk9KOHKl4L+fYETaAdpDVekCaA=,tag:CORSBzis6Vy45dEvT/UtMg==]
+- ENC[AES256_GCM,data:hbcOBbsaWmlnrpeuwLfh1ttsi8zj/pxMc1LYqhdksT/oQb80g2z0FE4QwUVb7VV+x98LAWHofVyV8Q==,iv:/sXHXde82r2FyG3Z3vC5x8zONB14RwC0GmtkiYEUNLI=,aad:BQb8l5fZzF/aa/EYnrOQvRfGUTq9QmJOAR/zmgOfYDA=,tag:fjNeg3Manjl6B2U2oflRhg==]
+- ENC[AES256_GCM,data:LLHkzGobqL53ws6E2zglkA==,iv:g9z3zz4DUzJr4Cim0SVqKF736w2mZoItqbB0TcsGrQU=,aad:Odrvz0loqFdd9wKJz0ULMX/lyEQcX8WaHE59MgeXkcI=,tag:V+rV/AeZ4uEgtwGhlamTag==]
 sops: # Data key is stored encrypted by both KMS and PGP. Either can decrypt.
     kms:
     -   enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyGdRODuYMHbA8Ozj8CARCAO7opMolPJUmBXd39Zlp0L2H9fzMKidHm1vvaF6nNFq0ClRY7FlIZmTm4JfnOebPseffiXFn9tG8cq7oi

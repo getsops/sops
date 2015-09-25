@@ -360,7 +360,8 @@ def walk_list_and_decrypt(branch, key, stash=None):
     nstash = dict()
     kl = []
     for i, v in enumerate(list(branch)):
-        if stash and i in stash:
+        if stash:
+            stash[i] = {'has_stash': True}
             nstash = stash[i]
         if isinstance(v, dict):
             kl.append(walk_and_decrypt(v, key, nstash))
