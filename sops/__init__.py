@@ -165,7 +165,7 @@ def main():
             panic("cannot operate on non-existent file", error_code=100)
         print("%s doesn't exist, creating it." % args.file)
         is_new_file = True
-        if itype is "yaml":
+        if itype == "yaml":
             tree = ruamel.yaml.load(DEFAULT_YAML, ruamel.yaml.RoundTripLoader)
         else:
             tree = dict()

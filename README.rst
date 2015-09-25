@@ -4,6 +4,10 @@ SOPS: Secrets OPerationS
 `sops` is a secrets management tool that encrypts YAML, JSON and TEXT files
 using AWS KMS and/or PGP (via GnuPG).
 
+.. image:: http://i.imgur.com/IL6dlhm.gif
+
+`full demo video on youtube <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_
+
 Requirements
 ------------
 First install some libraries from your package manager:
