@@ -289,6 +289,8 @@ Authors
 -------
 * Julien Vehent <jvehent@mozilla.com>
 * Daniel Thornton <dthornton@mozilla.com>
+* Alexis Metaireau <alexis@mozilla.com>
+* Rémy Hubscher <natim@mozilla.com>
 
 Credits
 -------
