@@ -1,3 +1,4 @@
+# The secrets below are unreadable without access to one of the sops master key
 myapp1: ENC[AES256_GCM,data:Tr7oc19nc6t1m9OrUeo=,iv:1vzlPZLfy6wa14/x17P8Ix8wEGDeY0v2dIboZmmwpww=,aad:NpobRzMzpDOkqijzONm8KglltzG+aBV7BJAxtm77veo=,tag:kaYqRgGGBhXhODSSmIZwyA==]
 app2:
     db:
@@ -7,11 +8,34 @@ app2:
     key: |-
         ENC[AES256_GCM,data:Ea3zTFSOlg1PDZmBa1U2dtKl3pO4nTmaFswJx41fPfq3u8O2/Bq1UVfXn2SrO13obfr6xH4zuUceCDTvW2qvphlan5ir609EXt4dE2TEEcjVKhmAHf4LMwlZVAbvTJtlsnvo/aYJH95uctjsSX5h8pBlLaTGBGYwMrZuMyRU6vdcMWyha+piJckUc9sq7fevy1TSqIxf1Usbn/0NEklWm2VSNzQ2Urqtny6EXar+xU7NfYSRJ3mqmcJZ14oIeXPdpk962RwMEFWdYrbE7D59kWU2BgMjDxYJD5KXpWiw2YCrA/wsATxVCbZlwqC+TJFA5WAUZX756mFhV/t2Li3zQyDNUe6KkMXV9qwf/oV1j5sVRVFsKDYIBqhi3qWBVA+SO9RloQMjhru+IsdbQcS4LKq/1DrBENeZuJ0djUAxKLVfJzMGUf89ju3m9IEPovW8mfF0RbfAGRwFHMO9nEXCxrTLERf3owdR3u4j5/rNBpIvvy1z+2dy6sAx/eyNdS+cn5qO9BPAxsXpSwkaI96rlBagwH1Pfxus0x/D00j93OpE+M8MgQ/9LA68FlCFU4OAQlvw8f7MPoxnq+/+gFTS/qqjTR6EoUuX5NH2WY93YCC5TCbe4GOXyP0H05PbIWq55UMVLNcpAyac3gO4kL5O5U8=,iv:Dl61tsemKH0fdmNul/PmEEsRYFAh8GorR8GRupus/EM=,aad:Ft2aSYYukD1x8pMj1WvmodLjJV6waPy5FqdlImWyQKA=,tag:EPg4KpWqni/buCFjFL857A==]
 an_array:
-- ENC[AES256_GCM,data:v8dfh92oL8IcgjQ=,iv:HgNNPlQh9GNdE+YPvG4Ufpb2I0sIlEpCsOW3lJA1uBE=,aad:21GroP5gb9sCTxZIahN1NhMGqRPQZZksAr5Q7eCeHRc=,tag:gLsjVqot9+Pqck9LJC+bVA==]
-- ENC[AES256_GCM,data:X1LMy27AE9SI4h0=,iv:oA1kSg9esGxAvi3qhpcM6Ewrh+p0CFV5cgf6jSPpM08=,aad:CZ7FGJNko6367sd6PwbrIgN/V7Rly4TptbQ1gVsXT1Q=,tag:HerE4nTstX2QZhMn3CPZcw==]
-- ENC[AES256_GCM,data:KNkH9iI0bSyvcP3E+BRbqfcPUv3YBbCmtvbK1y+sHMI6Z1kXnkX4RoyYiZZXrM680Nh/p0TxNOdNsA==,iv:1h3KbThwTsRaVF+k+dnSwfocSEoyT00X279Dg1Wro60=,aad:foCwpM862VeAD2/7bHRJHAYISneTUJweoSRl2oAdsI4=,tag:tNuCjsNqIy5FVDRu39dQcw==]
-sops:
+- ENC[AES256_GCM,data:5e59uvuZeA7lX24=,iv:4iH/632pENCEZ5qwsaVdFT49GpTLBB08T9p8gGCbES4=,aad:W6+ucNcND9VE3XvVhbPkfzkMVA3ye4C8sevlDSyCg4w=,tag:YFb53Hef5xlX4BrEwCVHBw==]
+- ENC[AES256_GCM,data:G125ub+JDpmXAiE=,iv:TWRxt26ADGyTp4G54i6NkiaJ2wZc9UtJGyueQ467wXo=,aad:A2gfhgZ8eBS3hXrC7iwljqEd/N5zNmyC1bN8rZIp6d0=,tag:ttcG4k7zNt9/DsyUjt5nbQ==]
+- ENC[AES256_GCM,data:zrsW2QtNlLjlvL+aWyCZu51WAhjzcScA4cguSrcjL+c0ohNeWELrj6DnvIaEv65OAOfCqCcWPoCHAw==,iv:/rMHp0u8aJ+kKdy6XPdTINajGXTr7aPwh33bvgw40JM=,aad:x6GUx/DDB4BlBtVh6rNYRJOb4nbrLSmpwXi5MCCUvT4=,tag:DAAjGg08/f1ZHtivSgHOPg==]
+number: ENC[AES256_GCM,data:XMrBalgZ9tvBxQ==,iv:XyEAAaIzVy/2trnJhLrjMInLg8tMI4CAX9+ccnj3T1Y=,aad:JOlAkP159UxDjL1CrumTuQDqgW2+VOIwz7bdfaJIIn4=,tag:WOHOMJS4nhSdj/aQcGbU1A==]
+sops: # Data key is stored encrypted by both KMS and PGP. Either can decrypt.
     kms:
     -   enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyGdRODuYMHbA8Ozj8CARCAO7opMolPJUmBXd39Zlp0L2H9fzMKidHm1vvaF6nNFq0ClRY7FlIZmTm4JfnOebPseffiXFn9tG8cq7oi
         enc_ts: 1439568549.245995
         arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+    pgp:
+    -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+        enc: |
+            -----BEGIN PGP MESSAGE-----
+            Version: GnuPG v1
+
+            hQIMA0t4uZHfl9qgAQ//ZvUMJOLUJyzKa/Uigwh1jKVhx3feHUitVjCWBfVTPgj1
+            rRbaTcaF/mYi+rLdW+6kmAg1UEPoVgEBEiBvCTcHjyDzw3m0DoQwvK85nqOpEhkx
+            rjU1XAnKZ8LNFfIaj8Xo/L6qzE882gwOhfCPU+QmnkWdijs6dQof06DButQDTx5D
+            KlFvr9CgSa52/uPazZ41disho9guS06k+KrV/P2F4jrU5aB5mfP7YZY9mkVcm2bv
+            9C5O9neNlXcivgWqKQjB5fmv1Z9yUFAUBNg98wjT8o5Hxz6P6hIbV3f+vn/Vu+VZ
+            Qo+E7g3/2ItaT89KAIVXgQdHhwJneoDBVpJ4rYz7LLbcvEyAbipKIY4Fl3Cn1ggH
+            9odIZWA6FWZxHNhRVonMVHZ8Jei5NkUdpJltjDmPJpl3B+7XiWg4NS8dp860fLeL
+            8nrkR0Z4nVK8DNg+7nQiOxHL9wye6ljWl7/xapJ5r+mYA6eLybsSSlxDo9/OmeON
+            CYo3jV8HT8amrXYVi4MyZ3LV2TTyGVPObnthYEN2lPSJmms6ei6t/xKaZtAj6779
+            EzGbUP9VpTKKf5tqGcy9MeGEk2p5ed5hJGinrrt92cNIebcMBJpkLQAy++V/fKnH
+            Meecaoj1NThBnRguNuz73WSy2C5u/g7OoI50HJJCmoVXY+8D64tWmCZc8Ib2fprS
+            XgFcoR9u5yPkLZW8xASpRXfKKTbRTTjAXdYEyaYuuOW2nFWo62/d1mZsT7kY21ja
+            AhVVoxwsj45FCuk63bDVceAJJm+9xxufMp0gNW1GUk858VLyE8gn+uAB5zBcS5c=
+            =BN/t
+            -----END PGP MESSAGE-----
+        created_at: 1443203323.058362
