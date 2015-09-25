@@ -34,7 +34,7 @@ tests: dev-requirements
 	$(VENV)/bin/tox
 
 tests-once: install dev-requirements
-	$(VENV)/bin/py.test tests
+	$(VENV)/bin/py.test --cov-report term-missing --cov sops tests/
 
 pypi:
 	$(PYTHON) setup.py sdist check upload --sign
@@ -44,3 +44,4 @@ clean:
 	rm -rf __pycache__ sops/__pycache__
 	rm -rf build/ dist/
 	rm -fr .tox/ .venv/
+	rm -fr .coverage

@@ -5,3 +5,4 @@ __pycache__/
 *.egg
 .tox/
 .venv/
+.coverage
