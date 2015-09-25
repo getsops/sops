@@ -4,3 +4,4 @@ __pycache__/
 *.egg-info/
 *.egg
 .tox/
+.venv/

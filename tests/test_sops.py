@@ -1,10 +1,10 @@
 import unittest2
 import mock
+import six
 
 import sops
 
-from sys import version_info
-if version_info.major == 2:
+if six.PY2:
     import __builtin__ as builtins  # pylint:disable=import-error
 else:
     import builtins  # pylint:disable=import-error
