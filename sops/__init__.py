@@ -224,7 +224,7 @@ def load_tree(path, filetype):
 
     """
     tree = dict()
-    with open(path, "r") as fd:
+    with open(path, "rt") as fd:
         if filetype == 'yaml':
             tree = ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         elif filetype == 'json':
@@ -297,10 +297,10 @@ def walk_and_decrypt(branch, key, stash=None):
         elif isinstance(v, list):
             branch[k] = walk_list_and_decrypt(v, key, nstash)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = decrypt(str(v), key, nstash)
+            ev = decrypt(v, key, nstash)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = decrypt(str(v), key, nstash)
+            branch[k] = decrypt(v, key, nstash)
     return branch
 
 
@@ -316,15 +316,16 @@ def walk_list_and_decrypt(branch, key, stash=None):
         elif isinstance(v, list):
             kl.append(walk_list_and_decrypt(v, key, nstash))
         else:
-            kl.append(decrypt(str(v), key, nstash))
+            kl.append(decrypt(v, key, nstash))
     return kl
 
 
 def decrypt(value, key, stash=None):
     """Return a decrypted value."""
+    # operate on bytes, but return a string
     value = value.encode('utf-8')
     # extract fields using a regex
-    res = re.match(r'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)\]$',
+    res = re.match(b'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)\]$',
                    value)
     # if the value isn't in encrypted form, return it as is
     if res is None:
@@ -344,7 +345,7 @@ def decrypt(value, key, stash=None):
         stash['iv'] = iv
         stash['aad'] = aad
         stash['cleartext'] = cleartext
-    return cleartext
+    return cleartext.decode('utf-8')
 
 
 def walk_and_encrypt(branch, key, stash=None):
@@ -361,10 +362,10 @@ def walk_and_encrypt(branch, key, stash=None):
         elif isinstance(v, list):
             branch[k] = walk_list_and_encrypt(v, key, nstash)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = encrypt(str(v), key, nstash)
+            ev = encrypt(v, key, nstash)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = encrypt(str(v), key, nstash)
+            branch[k] = encrypt(v, key, nstash)
     return branch
 
 
@@ -380,12 +381,13 @@ def walk_list_and_encrypt(branch, key, stash=None):
         elif isinstance(v, list):
             kl.append(walk_list_and_encrypt(v, key, nstash))
         else:
-            kl.append(encrypt(str(v), key, nstash))
+            kl.append(encrypt(v, key, nstash))
     return kl
 
 
 def encrypt(value, key, stash=None):
     """Return an encrypted string of the value provided."""
+    value = value.encode('utf-8')
     # if we have a stash, and the value of cleartext has not changed,
     # attempt to take the IV and AAD value from the stash.
     # if the stash has no existing value, or the cleartext has changed,
@@ -402,10 +404,10 @@ def encrypt(value, key, stash=None):
     encryptor.authenticate_additional_data(aad)
     enc_value = encryptor.update(value) + encryptor.finalize()
     return "ENC[AES256_GCM,data:{value},iv:{iv},aad:{aad}," \
-           "tag:{tag}]".format(value=b64encode(enc_value),
-                               iv=b64encode(iv),
-                               aad=b64encode(aad),
-                               tag=b64encode(encryptor.tag))
+           "tag:{tag}]".format(value=b64encode(enc_value).decode('utf-8'),
+                               iv=b64encode(iv).decode('utf-8'),
+                               aad=b64encode(aad).decode('utf-8'),
+                               tag=b64encode(encryptor.tag).decode('utf-8'))
 
 
 def get_key(tree, need_key=False):
@@ -510,7 +512,8 @@ def encrypt_key_with_kms(key, tree):
             print("failed to encrypt key using kms arn %s: %s, skipping it" %
                   (arn, e), file=sys.stderr)
             continue
-        entry['enc'] = b64encode(kms_response['CiphertextBlob'])
+        entry['enc'] = b64encode(
+            kms_response['CiphertextBlob']).decode('utf-8')
         entry['created_at'] = time.time()
         tree['sops']['kms'][i] = entry
     return tree
@@ -566,6 +569,7 @@ def encrypt_key_with_pgp(key, tree):
             print("failed to encrypt key using pgp fp %s: %s, skipping it" %
                   (fp, e), file=sys.stderr)
             continue
+        enc = enc.decode('utf-8')
         entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
         entry['created_at'] = time.time()
         tree['sops']['pgp'][i] = entry
@@ -592,7 +596,7 @@ def write_file(tree, path=None, filetype=None):
         fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
                                   indent=4).encode('utf-8'))
     elif filetype == "json":
-        json.dump(tree, fd, sort_keys=True, indent=4)
+        fd.write(json.dumps(tree, sort_keys=True, indent=4).encode('utf-8'))
     else:
         if 'data' in tree:
             # add a newline if there's none
