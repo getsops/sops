@@ -10,6 +10,7 @@
 
 import unittest2
 import mock
+import os
 import sys
 
 import sops
@@ -23,22 +24,28 @@ else:
 class TreeTest(unittest2.TestCase):
 
     def test_json_loader_is_used_on_json_filetype(self):
-        # XXX put some real json here.
-        m = mock.mock_open(read_data='"content"')
+        m = mock.mock_open(read_data=sops.DEFAULT_JSON)
         with mock.patch.object(builtins, 'open', m):
-            assert sops.load_tree('path', 'json') == "content"
+            tree = sops.load_file_into_tree('path', 'json')
+            assert tree['example_key'] == 'example_value'
 
     def test_yaml_loader_is_used_on_yaml_filetype(self):
-        # XXX put some real yaml here.
-        m = mock.mock_open(read_data='"content"')
+        m = mock.mock_open(read_data=sops.DEFAULT_YAML)
         with mock.patch.object(builtins, 'open', m):
-            assert sops.load_tree('path', 'yaml') == "content"
+            tree = sops.load_file_into_tree('path', 'yaml')
+            assert tree['example_key'] == 'example_value'
+
+    #def test_text_loader_is_used_on_text_filetype(self):
+    #    m = mock.mock_open(read_data=sops.DEFAULT_TEXT)
+    #    with mock.patch.object(builtins, 'open', m):
+    #        tree = sops.load_file_into_tree('path', 'text')
+    #        assert tree['data'].startswith(sops.DEFAULT_TEXT[0:15])
 
     @mock.patch('sops.json.load')
     def test_example_with_a_mocked_call(self, json_mock):
         m = mock.mock_open(read_data='"content"')
         with mock.patch.object(builtins, 'open', m):
-            sops.load_tree('path', 'json')
+            sops.load_file_into_tree('path', 'json')
             json_mock.assert_called_with(m())
 
     def test_detect_filetype_handle_json(self):
@@ -63,6 +70,12 @@ class TreeTest(unittest2.TestCase):
         # - panic error is raise and program quit with code 111 if
         #   nothing is defined
 
+    def test_update_sops_branch(self):
+        """ If master keys have been added to the SOPS branch, encrypt the data key
+            with them, and store the new encrypted values.
+        """
+        # - verify data key gets encrypted with new master key
+
     # Test decryption
     def test_walk_and_decrypt(self):
         """Walk the branch recursively and decrypt leaves."""
@@ -80,17 +93,35 @@ class TreeTest(unittest2.TestCase):
         # - test ScalarString
         # - test string decryption
 
-    def test_decrypt(self):
-        """Test decrypt return a decrypted value."""
-
     # Test encryption
     def test_walk_and_encrypt(self):
         """Walk the branch recursively and encrypts its leaves."""
-        # - test stash value
         # - test dict encryption
         # - test list values encryption
         # - test ScalarString
         # - test string encryption
+        # TODO: 
+        # - test stash value
+        m = mock.mock_open(read_data=sops.DEFAULT_YAML)
+        tree = dict()
+        key = os.urandom(32)
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'yaml')
+        crypttree = sops.walk_and_encrypt(tree, key)
+        assert crypttree['example_key'].startswith("ENC[AES256_GCM,data:")
+        assert isinstance(crypttree['example_array'], list)
+        assert len(crypttree['example_array']) == 2
+
+    def test_walk_and_encrypt_and_decrypt(self):
+        """Test a roundtrip on the tree encryption/decryption code"""
+        m = mock.mock_open(read_data=sops.DEFAULT_JSON)
+        tree = dict()
+        key = os.urandom(32)
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'json')
+        crypttree = sops.walk_and_encrypt(tree, key)
+        cleartree = sops.walk_and_decrypt(crypttree, key)
+        assert cleartree == tree
 
     def test_walk_list_and_encrypt(self):
         """Walk a list contained in a branch and encrypts its values."""
@@ -100,8 +131,18 @@ class TreeTest(unittest2.TestCase):
         # - test ScalarString
         # - test string encryption
 
-    def test_encrypt(self):        
+    def test_encrypt(self):
         """Test encrypt return a encrypted value."""
+        cryptstr = sops.encrypt("AAAAAAA", os.urandom(32))
+        assert cryptstr.startswith("ENC[AES256_GCM,data:")
+        assert cryptstr[-1:] == "]"
+
+    def test_encrypt_decrypt(self):
+        """Test a roundtrip in the encryption/decryption code"""
+        key = os.urandom(32)
+        cryptstr = sops.encrypt("AAAAAAA", key)
+        clearstr = sops.decrypt(cryptstr, key)
+        assert clearstr == "AAAAAAA"
 
     # Test keys management
     def test_get_key(self):
@@ -135,7 +176,7 @@ class TreeTest(unittest2.TestCase):
         with mock.patch.object(builtins, 'print') as print_mock:
             with mock.patch("sys.exit") as sys_exit_mock:
                 sops.panic("Foobar")
-                print_mock.assert_called_with("Foobar", file=sys.stderr)
+                print_mock.assert_called_with("PANIC: Foobar", file=sys.stderr)
                 sys_exit_mock.assert_called_with(1)
 
     def test_panic_handles_exit_error_code(self):

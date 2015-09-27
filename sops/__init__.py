@@ -93,6 +93,19 @@ example_multiline: |
     this is a
     multiline
     entry
+
+"""
+
+DEFAULT_JSON = """{
+"example_key": "example_value",
+"example_array": [
+    "example_value1",
+    "example_value2"
+]}"""
+
+DEFAULT_TEXT = """Welcome to SOPS!
+Remove this text and add your content to the file.
+
 """
 
 
@@ -153,27 +166,15 @@ def main():
     else:
         otype = itype
 
-    need_key = False
-    is_new_file = False
-    try:
-        os.stat(args.file)
-        # read the encrypted file from disk
-        tree = load_tree(args.file, itype)
-        tree, need_key = verify_or_create_sops_branch(tree)
-    except:
-        if args.encrypt or args.decrypt:
+    tree, need_key, existing_file = initialize_tree(args.file, itype)
+    if not existing_file:
+        if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
-        print("%s doesn't exist, creating it." % args.file)
-        is_new_file = True
-        if itype == "yaml":
-            tree = ruamel.yaml.load(DEFAULT_YAML, ruamel.yaml.RoundTripLoader)
         else:
-            tree = dict()
-            tree['data'] = 'Welcome to SOPS. ' + \
-                'Remove this line and add your data to the file.'
-        tree, need_key = verify_or_create_sops_branch(tree)
+            print("%s doesn't exist, creating it." % args.file)
 
     if args.rotate:
+        # if rotate is set, force a data key generation even if one exists
         need_key = True
 
     if args.encrypt:
@@ -194,7 +195,7 @@ def main():
         # we need a stash to save the IV and AAD and reuse them
         # if a given value has not changed during editing
         stash = {'sops': {'has_stash': True}}
-        if not is_new_file:
+        if existing_file:
             tree = walk_and_decrypt(tree, key, stash=stash)
 
         # the decrypted tree is written to a tempfile and an editor
@@ -211,7 +212,7 @@ def main():
                   error_code=200)
 
         # encrypt the tree
-        tree = load_tree(tmppath, otype)
+        tree = load_file_into_tree(tmppath, otype)
         os.remove(tmppath)
         tree = walk_and_encrypt(tree, key, stash)
         tree = update_sops_branch(tree, key)
@@ -238,7 +239,39 @@ def detect_filetype(file):
     return 'text'
 
 
-def load_tree(path, filetype):
+def initialize_tree(path, itype):
+    """ Try to load the file from path in a tree, and failing that,
+        initialize a new tree using default data
+    """
+    need_key = False
+    try:
+        existing_file = os.stat(path)
+    except:
+        existing_file = False
+    if existing_file:
+        # read the encrypted file from disk
+        try:
+            tree = load_file_into_tree(path, itype)
+        except Exception as e:
+            panic("failed to load file: %s" % e, 72)
+        try:
+            tree, need_key = verify_or_create_sops_branch(tree)
+        except Exception as e:
+            panic("failed to initialize encryption data: %s" % e, 32)
+    else:
+        # load a new tree using template data
+        if itype == "yaml":
+            tree = ruamel.yaml.load(DEFAULT_YAML, ruamel.yaml.RoundTripLoader)
+        elif itype == "json":
+            tree = json.loads(DEFAULT_JSON)
+        else:
+            tree = dict()
+            tree['data'] = DEFAULT_TEXT
+        tree, need_key = verify_or_create_sops_branch(tree)
+    return tree, need_key, existing_file
+
+
+def load_file_into_tree(path, filetype):
     """Load the tree.
 
     Read data from `path` using format defined by `filetype`.
