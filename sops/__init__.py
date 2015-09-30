@@ -607,6 +607,7 @@ def get_aws_session_for_entry(entry):
                                   RoleSessionName='sops@'+gethostname())
     except Exception as e:
         print("Unable to switch roles: %s" % e, file=sys.stderr)
+        return None
     try:
         print("Assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
               file=sys.stderr)
