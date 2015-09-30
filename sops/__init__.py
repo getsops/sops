@@ -316,7 +316,7 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
                 return tree, False
     # if we're here, no fingerprint was found either
     has_at_least_one_method = False
-    if kms_arns:
+    if not (kms_arns is None):
         tree['sops']['kms'] = list()
         for arn in kms_arns.split(','):
             arn = arn.replace(" ", "")
@@ -328,7 +328,7 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
                 entry = {"arn": arn}
             tree['sops']['kms'].append(entry)
             has_at_least_one_method = True
-    if pgp_fps:
+    if not (pgp_fps is None):
         tree['sops']['pgp'] = list()
         for fp in pgp_fps.split(','):
             entry = {"fp": fp.replace(" ", "")}
@@ -550,8 +550,9 @@ def get_key_from_kms(tree):
             continue
         kms = get_aws_session_for_entry(entry)
         if kms is None:
-            panic("failed to initialize AWS KMS client for entry",
+            print("failed to initialize AWS KMS client for entry",
                   file=sys.stderr)
+            continue
         try:
             kms_response = kms.decrypt(CiphertextBlob=b64decode(enc))
         except Exception as e:
@@ -569,8 +570,9 @@ def encrypt_key_with_kms(key, entry):
         return entry
     kms = get_aws_session_for_entry(entry)
     if kms is None:
-        panic("failed to initialize AWS KMS client for entry",
+        print("failed to initialize AWS KMS client for entry",
               file=sys.stderr)
+        return entry
     try:
         kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key)
     except Exception as e:
