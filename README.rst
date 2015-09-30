@@ -5,8 +5,11 @@ SOPS: Secrets OPerationS
 
 .. image:: http://i.imgur.com/IL6dlhm.gif
 
-.. image:: https://travis-ci.org/mozilla-services/sops.svg?branch=master
-    :target: https://travis-ci.org/mozilla-services/sops
+.. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
+	:target: https://travis-ci.org/mozilla/sops
+
+.. sectnum::
+.. contents:: Table of Contents
 
 Requirements
 ------------
@@ -74,49 +77,37 @@ encryption/decryption transparently and open the cleartext file in an editor.
 	[... editing happens in vim, or whatever $EDITOR is set to ...]
 	file written to mynewtestfile.yaml
 
+The resulting encrypted file looks like this:
+
 .. code:: yaml
 
-    myapp1: ENC[AES256_GCM,data:Tr7oc19nc6t1m9OrUeo=,iv:1vzlPZLfy6wa14/x17P8Ix8wEGDeY0v2dIboZmmwpww=,aad:NpobRzMzpDOkqijzONm8KglltzG+aBV7BJAxtm77veo=,tag:kaYqRgGGBhXhODSSmIZwyA==]
+    myapp1: ENC[AES256_GCM,data:Tr7o=,iv:1=,aad:No=,tag:k=]
     app2:
         db:
-            user: ENC[AES256_GCM,data:CwE4O1s=,iv:S0fozGAOxNma/pWDUuk1iEaYw0wlba0VOLHjPxIok2k=,aad:nEVizsMMyBXOxySnOHw/trTFBSW72nh+Q80YU7TPgIo=,tag:XaGsYaL9LCkLWJI0uxnTYw==]
-            password: ENC[AES256_GCM,data:p673JCgHYw==,iv:EOOeivCp/Fd80xFdMYX0QeZn6orGTK8CeckmipjKqYY=,aad:UAhi/SHK0aCzptnFkFG4dW8Vv1ASg7TDHD6lui9mmKQ=,tag:QE6uuhRx+cGInwSVdmxXzA==]
+            user: ENC[AES256_GCM,data:CwE4O1s=,iv:2k=,aad:o=,tag:w==]
+            password: ENC[AES256_GCM,data:p673w==,iv:YY=,aad:UQ=,tag:A=]
         # private key for secret operations in app2
         key: |-
-            ENC[AES256_GCM,data:Ea3zTFSOlg1PDZmBa1U2dtKl3pO4nTmaFswJx41fPfq3u8O2/Bq1UVfXn2SrO13obfr6xH4zuUceCDTvW2qvphlan5ir609EXt4dE2TEEcjVKhmAHf4LMwlZVAbvTJtlsnvo/aYJH95uctjsSX5h8pBlLaTGBGYwMrZuMyRU6vdcMWyha+piJckUc9sq7fevy1TSqIxf1Usbn/0NEklWm2VSNzQ2Urqtny6EXar+xU7NfYSRJ3mqmcJZ14oIeXPdpk962RwMEFWdYrbE7D59kWU2BgMjDxYJD5KXpWiw2YCrA/wsATxVCbZlwqC+TJFA5WAUZX756mFhV/t2Li3zQyDNUe6KkMXV9qwf/oV1j5sVRVFsKDYIBqhi3qWBVA+SO9RloQMjhru+IsdbQcS4LKq/1DrBENeZuJ0djUAxKLVfJzMGUf89ju3m9IEPovW8mfF0RbfAGRwFHMO9nEXCxrTLERf3owdR3u4j5/rNBpIvvy1z+2dy6sAx/eyNdS+cn5qO9BPAxsXpSwkaI96rlBagwH1Pfxus0x/D00j93OpE+M8MgQ/9LA68FlCFU4OAQlvw8f7MPoxnq+/+gFTS/qqjTR6EoUuX5NH2WY93YCC5TCbe4GOXyP0H05PbIWq55UMVLNcpAyac3gO4kL5O5U8=,iv:Dl61tsemKH0fdmNul/PmEEsRYFAh8GorR8GRupus/EM=,aad:Ft2aSYYukD1x8pMj1WvmodLjJV6waPy5FqdlImWyQKA=,tag:EPg4KpWqni/buCFjFL857A==]
+            ENC[AES256_GCM,data:Ea3kL5O5U8=,iv:DM=,aad:FKA=,tag:EA==]
     an_array:
-    - ENC[AES256_GCM,data:v8dfh92oL8IcgjQ=,iv:HgNNPlQh9GNdE+YPvG4Ufpb2I0sIlEpCsOW3lJA1uBE=,aad:21GroP5gb9sCTxZIahN1NhMGqRPQZZksAr5Q7eCeHRc=,tag:gLsjVqot9+Pqck9LJC+bVA==]
-    - ENC[AES256_GCM,data:X1LMy27AE9SI4h0=,iv:oA1kSg9esGxAvi3qhpcM6Ewrh+p0CFV5cgf6jSPpM08=,aad:CZ7FGJNko6367sd6PwbrIgN/V7Rly4TptbQ1gVsXT1Q=,tag:HerE4nTstX2QZhMn3CPZcw==]
-    - ENC[AES256_GCM,data:KNkH9iI0bSyvcP3E+BRbqfcPUv3YBbCmtvbK1y+sHMI6Z1kXnkX4RoyYiZZXrM680Nh/p0TxNOdNsA==,iv:1h3KbThwTsRaVF+k+dnSwfocSEoyT00X279Dg1Wro60=,aad:foCwpM862VeAD2/7bHRJHAYISneTUJweoSRl2oAdsI4=,tag:tNuCjsNqIy5FVDRu39dQcw==]
+    - ENC[AES256_GCM,data:v8jQ=,iv:HBE=,aad:21c=,tag:gA==]
+    - ENC[AES256_GCM,data:X10=,iv:o8=,aad:CQ=,tag:Hw==]
+    - ENC[AES256_GCM,data:KN=,iv:160=,aad:fI4=,tag:tNw==]
     sops:
         kms:
         -   created_at: 1441570389.775376
-            enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAgB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxn6jfG4e44/phCddICARCAOzfGN/7WlU0MouQRXv22Pix46dSocMH1K7Xf47WqF1rCEcuN1aMVBj+IxwOgOVxVsr0Kze4lnMqPm1Hm
+            enc: CiC....Pm1Hm
             arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
         -   created_at: 1441570391.925734
-            enc: CiBdfsKZbRNf/Li8Tf2SjeSdP76DineB1sbPjV0TV+meTxKnAQEBAgB4XX7CmW0TX/y4vE39ko3knT++g4p3gdbGz41dE1fpnk8AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxGzsadorzSGbp73+ECARCAO0hc3cYxgNF2OU5TfTj8iyt/S6DTKDO+gwcHc3sy3ELQ/pUjSFJScYOQmqYpvsznhZ4YjHQWDdbRawNx
+            enc: Ci...awNx
             arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
         pgp:
         -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
             created_at: 1441570391.930042
             enc: |
                 -----BEGIN PGP MESSAGE-----
-                Version: GnuPG v1
-
                 hQIMA0t4uZHfl9qgAQ//UvGAwGePyHuf2/zayWcloGaDs0MzI+zw6CmXvMRNPUsA
-                pAgRKczJmDu4+XzN+cxX5Iq9xEWIbny9B5rOjwTXT3qcUYZ4Gkzbq4MWkjuPp/Iv
-                qO4MJaYzoH5YxC4YORQ2LvzhA2YGsCzYnljmatGEUNg01yJ6r5mwFwDxl4Nc80Cn
-                RwnHuGExK8j1jYJZu/juK1qRbuBOAuruIPPWVdFB845PA7waacG1IdUW3ZtBkOy3
-                O0BIfG2ekRg0Nik6sTOhDUA+l2bewCcECI8FYCEjwHm9Sg5cxmP2V5m1mby+uKAm
-                kewaoOyjbmV1Mh3iI1b/AQMr+/6ZE9MT2KnsoWosYamFyjxV5r1ZZM7cWKnOT+tu
-                KOvGhTV1TeOfVpajNTNwtV/Oyh3mMLQ0F0HgCTqomQVqw5+sj7OWAASuD3CU/dyo
-                pcmY5Qe0TNL1JsMNEH8LJDqSh+E0hsUxdY1ouVsg3ysf6mdM8ciWb3WRGxih1Vmf
-                unfLy8Ly3V7ZIC8EHV8aLJqh32jIZV4i2zXIoO4ZBKrudKcECY1C2+zb/TziVAL8
-                qyPe47q8gi1rIyEv5uirLZjgpP+JkDUgoMnzlX334FZ9pWtQMYW4Y67urAI4xUq6
-                /q1zBAeHoeeeQK+YKDB7Ak/Y22YsiqQbNp2n4CKSKAE4erZLWVtDvSp+49SWmS/S
-                XgGi+13MaXIp0ecPKyNTBjF+NOw/I3muyKr8EbDHrd2XgIT06QXqjYLsCb1TZ0zm
-                xgXsOTY3b+ONQ2zjhcovanDp7/k77B+gFitLYKg4BLZsl7gJB12T8MQnpfSmRT4=
-                =oJgS
+				...=oJgS
                 -----END PGP MESSAGE-----
 
 A copy of the encryption/decryption key is stored securely in each KMS and PGP
@@ -142,6 +133,82 @@ Given that, the only command a `sops` user need is:
 `<file>` will be opened, decrypted, passed to a text editor (vim by default),
 encrypted if modified, and saved back to its original location. All of these
 steps, apart from the actual editing, are transparent to the user.
+
+Adding and removing keys
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+When creating a new files, `sops` uses the PGP and KMS defined in the command
+line arguments `--kms` and `--pgp`, or from the environment variables
+`SOPS_KMS_ARN` and `SOPS_PGP_FP`. That information is stored in the file under
+the `sops` section. When editing a file, it is trivial to add or remove keys:
+simply add or remove kms or pgp keys under the sops section.
+
+For example, to add a KMS master key to a file, we would add the following
+entry:
+
+.. code:: yaml
+
+	sops:
+	    kms:
+	    - arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+
+And, similarly, to add a PGP master key, we add its fingerprint:
+
+.. code:: yaml
+
+	sops:
+	    pgp:
+	    - fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+
+When the file is saved, `sops` will update its metadata and encrypt the data key
+with the freshly added master keys. The removed entries are simply deleted from
+the file.
+
+Using KMS master keys in various AWS accounts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can use keys in various accounts by tying each KMS master key to a role that
+the user is allowed to assume in each account. The `IAM roles
+<http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html>`_
+documentation has full details on how this needs to be configured on AWS's side.
+From the point of view of `sops`, you only need to specify the role a KMS key
+must assume alongside its ARN, as follows:
+
+.. code:: yaml
+
+	sops:
+	    kms:
+	    -	arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+	        role: arn:aws:iam::927034868273:role/sops-dev-xyz
+
+The role must have permission to call Encrypt and Decrypt using KMS. An example
+policy is shown below.
+
+.. code:: json
+
+	{
+	  "Sid": "Allow use of the key",
+	  "Effect": "Allow",
+	  "Action": [
+		"kms:Encrypt",
+		"kms:Decrypt",
+		"kms:ReEncrypt*",
+		"kms:GenerateDataKey*",
+		"kms:DescribeKey"
+	  ],
+	  "Resource": "*",
+	  "Principal": {
+		"AWS": [
+		  "arn:aws:iam::927034868273:role/sops-dev-xyz"
+		]
+	  }
+	}
+
+You can specify a role in the `--kms` flag and `SOPS_KMS_ARN` variable by
+appending it to the ARN of the master key, separated by a **+** sign::
+
+	<KMS ARN>+<ROLE ARN>
+	arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz
 
 Key Rotation
 ~~~~~~~~~~~~

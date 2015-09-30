@@ -19,6 +19,7 @@ import sys
 import tempfile
 import time
 from base64 import b64encode, b64decode
+from socket import gethostname
 from textwrap import dedent
 
 import boto3
@@ -70,17 +71,7 @@ take multiple keys separated by commas. All spaces are trimmed.
 
 By default, editing is done in vim. Set the env variable ``$EDITOR``
 to use a different editor.
-
-Mozilla Services - ulfr, relud - 2015
 """
-
-# A list of KMS ARNs either provided on the command line or retrieved
-# from the user environment
-SOPS_KMS_ARN = ""
-
-# A list of PGP fingeprints either provided on the command line or
-# retrieved from the user environment
-SOPS_PGP_FP = ""
 
 DEFAULT_YAML = """# Welcome to SOPS. This is the default template.
 # Remove these lines and add your data.
@@ -143,17 +134,17 @@ def main():
                                 "if undef, use input type")
     args = argparser.parse_args()
 
-    global SOPS_KMS_ARN
+    kms_arns = ""
+    if 'SOPS_KMS_ARN' in os.environ:
+        kms_arns = os.environ['SOPS_KMS_ARN']
     if args.kmsarn:
-        SOPS_KMS_ARN = args.kmsarn
-    elif 'SOPS_KMS_ARN' in os.environ:
-        SOPS_KMS_ARN = os.environ['SOPS_KMS_ARN']
+        kms_arns = args.kmsarn
 
-    global SOPS_PGP_FP
+    pgp_fps = ""
+    if 'SOPS_PGP_FP' in os.environ:
+        pgp_fps = os.environ['SOPS_PGP_FP']
     if args.pgpfp:
-        SOPS_PGP_FP = args.pgpfp
-    elif 'SOPS_PGP_FP' in os.environ:
-        SOPS_PGP_FP = os.environ['SOPS_PGP_FP']
+        pgp_fps = args.pgpfp
 
     # use input type as output type if not specified
     if args.input_type:
@@ -166,7 +157,9 @@ def main():
     else:
         otype = itype
 
-    tree, need_key, existing_file = initialize_tree(args.file, itype)
+    tree, need_key, existing_file = initialize_tree(args.file, itype,
+                                                    kms_arns=kms_arns,
+                                                    pgp_fps=pgp_fps)
     if not existing_file:
         if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
@@ -239,7 +232,7 @@ def detect_filetype(file):
     return 'text'
 
 
-def initialize_tree(path, itype):
+def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
     """ Try to load the file from path in a tree, and failing that,
         initialize a new tree using default data
     """
@@ -255,7 +248,9 @@ def initialize_tree(path, itype):
         except Exception as e:
             panic("failed to load file: %s" % e, 72)
         try:
-            tree, need_key = verify_or_create_sops_branch(tree)
+            tree, need_key = verify_or_create_sops_branch(tree,
+                                                          kms_arns=kms_arns,
+                                                          pgp_fps=pgp_fps)
         except Exception as e:
             panic("failed to initialize encryption data: %s" % e, 32)
     else:
@@ -267,7 +262,7 @@ def initialize_tree(path, itype):
         else:
             tree = dict()
             tree['data'] = DEFAULT_TEXT
-        tree, need_key = verify_or_create_sops_branch(tree)
+        tree, need_key = verify_or_create_sops_branch(tree, kms_arns, pgp_fps)
     return tree, need_key, existing_file
 
 
@@ -296,7 +291,7 @@ def load_file_into_tree(path, filetype):
     return tree
 
 
-def verify_or_create_sops_branch(tree):
+def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     """Verify or create the sops branch in the tree.
 
     If the current tree doesn't have a sops branch with either kms or pgp
@@ -321,15 +316,21 @@ def verify_or_create_sops_branch(tree):
                 return tree, False
     # if we're here, no fingerprint was found either
     has_at_least_one_method = False
-    if SOPS_KMS_ARN != "":
+    if kms_arns:
         tree['sops']['kms'] = list()
-        for arn in SOPS_KMS_ARN.split(','):
-            entry = {"arn": arn.replace(" ", "")}
+        for arn in kms_arns.split(','):
+            arn = arn.replace(" ", "")
+            entry = {}
+            rolepos = arn.find("+arn:aws:iam::")
+            if rolepos > 0:
+                entry = {"arn": arn[:rolepos], "role": arn[rolepos+1:]}
+            else:
+                entry = {"arn": arn}
             tree['sops']['kms'].append(entry)
             has_at_least_one_method = True
-    if SOPS_PGP_FP != "":
+    if pgp_fps:
         tree['sops']['pgp'] = list()
-        for fp in SOPS_PGP_FP.split(','):
+        for fp in pgp_fps.split(','):
             entry = {"fp": fp.replace(" ", "")}
             tree['sops']['pgp'].append(entry)
             has_at_least_one_method = True
@@ -547,22 +548,10 @@ def get_key_from_kms(tree):
         if 'arn' not in entry or entry['arn'] == "":
             print("KMS ARN not found, skipping entry %s" % i, file=sys.stderr)
             continue
-        # extract the region from the ARN
-        # arn:aws:kms:{REGION}:...
-        res = re.match(r'^arn:aws:kms:(.+):([0-9]+):key/(.+)$',
-                       entry['arn'])
-        if res is None:
-            print("Invalid ARN '%s' in entry %s" % (entry['arn'], i),
+        kms = get_aws_session_for_entry(entry)
+        if kms is None:
+            panic("failed to initialize AWS KMS client for entry",
                   file=sys.stderr)
-            continue
-        try:
-            region = res.group(1)
-        except:
-            print("Unable to find region from ARN '%s' in entry %s" %
-                  (entry['arn'], i), file=sys.stderr)
-            continue
-        kms = boto3.client('kms', region_name=region)
-        # use existing data key, ask kms to decrypt it
         try:
             kms_response = kms.decrypt(CiphertextBlob=b64decode(enc))
         except Exception as e:
@@ -578,19 +567,10 @@ def encrypt_key_with_kms(key, entry):
     if 'arn' not in entry or entry['arn'] == "":
         print("KMS ARN not found, skipping entry", file=sys.stderr)
         return entry
-    # extract the region from the ARN
-    # arn:aws:kms:{REGION}:...
-    res = re.match('^arn:aws:kms:(.+):([0-9]+):key/(.+)$', entry['arn'])
-    if res is None:
-        print("Invalid ARN '%s' in entry" % entry['arn'], file=sys.stderr)
-        return entry
-    try:
-        region = res.group(1)
-    except:
-        print("Unable to find region from ARN '%s' in entry" %
-              entry['arn'], file=sys.stderr)
-        return entry
-    kms = boto3.client('kms', region_name=region)
+    kms = get_aws_session_for_entry(entry)
+    if kms is None:
+        panic("failed to initialize AWS KMS client for entry",
+              file=sys.stderr)
     try:
         kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key)
     except Exception as e:
@@ -601,6 +581,45 @@ def encrypt_key_with_kms(key, entry):
         kms_response['CiphertextBlob']).decode('utf-8')
     entry['created_at'] = time.time()
     return entry
+
+
+def get_aws_session_for_entry(entry):
+    """Return a boto3 session using a role if one exists in the entry"""
+    # extract the region from the ARN
+    # arn:aws:kms:{REGION}:...
+    res = re.match('^arn:aws:kms:(.+):([0-9]+):key/(.+)$', entry['arn'])
+    if res is None:
+        print("Invalid ARN '%s' in entry" % entry['arn'], file=sys.stderr)
+        return None
+    try:
+        region = res.group(1)
+    except:
+        print("Unable to find region from ARN '%s' in entry" %
+              entry['arn'], file=sys.stderr)
+        return None
+    # if there are no role to assume, return the client directly
+    if not ('role' in entry):
+        return boto3.client('kms', region_name=region)
+    # otherwise, create a client using temporary tokens that assume the role
+    try:
+        client = boto3.client('sts')
+        role = client.assume_role(RoleArn=entry['role'],
+                                  RoleSessionName='sops@'+gethostname())
+    except Exception as e:
+        print("Unable to switch roles: %s" % e, file=sys.stderr)
+        return None
+    try:
+        print("Assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
+              file=sys.stderr)
+        keyid = role['Credentials']['AccessKeyId']
+        secretkey = role['Credentials']['SecretAccessKey']
+        token = role['Credentials']['SessionToken']
+        return boto3.client('kms', region_name=region,
+                            aws_access_key_id=keyid,
+                            aws_secret_access_key=secretkey,
+                            aws_session_token=token)
+    except KeyError:
+        return None
 
 
 def get_key_from_pgp(tree):
