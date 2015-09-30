@@ -78,7 +78,9 @@ class TreeTest(unittest2.TestCase):
         pgp_fps = "85D77543B3D624B63CEA9E6DBC17301B491B3F21," + \
                 "C9CAB0AF1165060DB58D6D6B2653B624D620786D"
         tree = dict()
-        tree, ign = sops.verify_or_create_sops_branch(tree, kms_arns, pgp_fps)
+        tree, ign = sops.verify_or_create_sops_branch(tree,
+                                                      kms_arns=kms_arns,
+                                                      pgp_fps=pgp_fps)
         log.debug("%s", tree)
         assert len(tree['sops']['kms']) == 2
         assert tree['sops']['kms'][0]['arn'] == "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e"

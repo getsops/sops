@@ -158,7 +158,8 @@ def main():
         otype = itype
 
     tree, need_key, existing_file = initialize_tree(args.file, itype,
-                                                    kms_arns, pgp_fps)
+                                                    kms_arns=kms_arns,
+                                                    pgp_fps=pgp_fps)
     if not existing_file:
         if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
@@ -231,7 +232,7 @@ def detect_filetype(file):
     return 'text'
 
 
-def initialize_tree(path, itype, kms_arns, pgp_fps):
+def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
     """ Try to load the file from path in a tree, and failing that,
         initialize a new tree using default data
     """
@@ -247,8 +248,9 @@ def initialize_tree(path, itype, kms_arns, pgp_fps):
         except Exception as e:
             panic("failed to load file: %s" % e, 72)
         try:
-            tree, need_key = verify_or_create_sops_branch(tree, kms_arns,
-                                                          pgp_fps)
+            tree, need_key = verify_or_create_sops_branch(tree,
+                                                          kms_arns=kms_arns,
+                                                          pgp_fps=pgp_fps)
         except Exception as e:
             panic("failed to initialize encryption data: %s" % e, 32)
     else:
@@ -289,7 +291,7 @@ def load_file_into_tree(path, filetype):
     return tree
 
 
-def verify_or_create_sops_branch(tree, kms_arns, pgp_fps):
+def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     """Verify or create the sops branch in the tree.
 
     If the current tree doesn't have a sops branch with either kms or pgp
@@ -314,7 +316,7 @@ def verify_or_create_sops_branch(tree, kms_arns, pgp_fps):
                 return tree, False
     # if we're here, no fingerprint was found either
     has_at_least_one_method = False
-    if kms_arns != "":
+    if kms_arns:
         tree['sops']['kms'] = list()
         for arn in kms_arns.split(','):
             arn = arn.replace(" ", "")
@@ -326,7 +328,7 @@ def verify_or_create_sops_branch(tree, kms_arns, pgp_fps):
                 entry = {"arn": arn}
             tree['sops']['kms'].append(entry)
             has_at_least_one_method = True
-    if pgp_fps != "":
+    if pgp_fps:
         tree['sops']['pgp'] = list()
         for fp in pgp_fps.split(','):
             entry = {"fp": fp.replace(" ", "")}
@@ -588,20 +590,23 @@ def get_aws_session_for_entry(entry):
     res = re.match('^arn:aws:kms:(.+):([0-9]+):key/(.+)$', entry['arn'])
     if res is None:
         print("Invalid ARN '%s' in entry" % entry['arn'], file=sys.stderr)
-        return entry
+        return None
     try:
         region = res.group(1)
     except:
         print("Unable to find region from ARN '%s' in entry" %
               entry['arn'], file=sys.stderr)
-        return entry
+        return None
     # if there are no role to assume, return the client directly
     if not ('role' in entry):
         return boto3.client('kms', region_name=region)
     # otherwise, create a client using temporary tokens that assume the role
-    client = boto3.client('sts')
-    role = client.assume_role(RoleArn=entry['role'],
-                              RoleSessionName='sops@'+gethostname())
+    try:
+        client = boto3.client('sts')
+        role = client.assume_role(RoleArn=entry['role'],
+                                  RoleSessionName='sops@'+gethostname())
+    except Exception as e:
+        print("Unable to switch roles: %s" % e, file=sys.stderr)
     try:
         print("Assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
               file=sys.stderr)
