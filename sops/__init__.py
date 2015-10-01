@@ -204,7 +204,19 @@ def main():
         # is opened on the file
         tmppath = write_file(tree, filetype=otype)
         tmpstamp = os.stat(tmppath)
-        run_editor(tmppath)
+
+        # open an editor on the file and, if the file is yaml or json,
+        # verify that it doesn't contain errors before continuing
+        valid_syntax = False
+        while valid_syntax is False:
+            run_editor(tmppath)
+            try:
+                valid_syntax = validate_syntax(tmppath, otype)
+            except Exception as e:
+                print("Syntax error: %s\nPress a key to return into "
+                      "the editor, or ctrl+c to exit without saving." % e,
+                      file=sys.stderr)
+                raw_input()
 
         # verify if file has been modified, and if not, just exit
         tmpstamp2 = os.stat(tmppath)
@@ -742,6 +754,18 @@ def run_editor(path):
     else:
         panic("Please define your EDITOR environment variable.", 201)
     return
+
+
+def validate_syntax(path, filetype):
+    """Attempt to load a file and return an exception if it fails."""
+    if filetype == 'text':
+        return True
+    with open(path, "rt") as fd:
+        if filetype == 'yaml':
+            ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
+        if filetype == 'json':
+            json.load(fd)
+    return True
 
 
 def panic(msg, error_code=1):

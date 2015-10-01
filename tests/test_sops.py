@@ -212,3 +212,24 @@ class TreeTest(unittest2.TestCase):
             with mock.patch("sys.exit") as sys_exit_mock:
                 sops.panic("Foobar", 111)
                 sys_exit_mock.assert_called_with(111)
+
+    def test_valid_json_syntax(self):
+        m = mock.mock_open(read_data=sops.DEFAULT_JSON)
+        with mock.patch.object(builtins, 'open', m):
+            assert sops.validate_syntax('path', 'json') == True
+
+    def test_invalid_json_syntax(self):
+        m = mock.mock_open(read_data='{,,,,,}')
+        with mock.patch.object(builtins, 'open', m):
+            with self.assertRaises(ValueError):
+                sops.validate_syntax('path', 'json')
+
+    def test_valid_yaml_syntax(self):
+        m = mock.mock_open(read_data=sops.DEFAULT_YAML)
+        with mock.patch.object(builtins, 'open', m):
+            assert sops.validate_syntax('path', 'yaml') == True
+
+    def test_text_syntax(self):
+        m = mock.mock_open(read_data=sops.DEFAULT_TEXT)
+        with mock.patch.object(builtins, 'open', m):
+            assert sops.validate_syntax('path', 'text') == True
