@@ -141,7 +141,8 @@ When creating a new files, `sops` uses the PGP and KMS defined in the command
 line arguments `--kms` and `--pgp`, or from the environment variables
 `SOPS_KMS_ARN` and `SOPS_PGP_FP`. That information is stored in the file under
 the `sops` section. When editing a file, it is trivial to add or remove keys:
-simply add or remove kms or pgp keys under the sops section.
+invoke `sops` with the flag **-s** to display the master keys while editing, and
+add or remove kms or pgp keys under the sops section.
 
 For example, to add a KMS master key to a file, we would add the following
 entry:

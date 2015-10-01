@@ -13,7 +13,7 @@ an_array:
 - ENC[AES256_GCM,data:2K8C418jef8zoAY=,iv:cXE4Hwdl4ZHzAHHyyXqaIMFs0mn65JUehDdaw/aM0WI=,aad:RlAgUZUZ1DvxD9/lZQk9KOHKl4L+fYETaAdpDVekCaA=,tag:CORSBzis6Vy45dEvT/UtMg==]
 - ENC[AES256_GCM,data:hbcOBbsaWmlnrpeuwLfh1ttsi8zj/pxMc1LYqhdksT/oQb80g2z0FE4QwUVb7VV+x98LAWHofVyV8Q==,iv:/sXHXde82r2FyG3Z3vC5x8zONB14RwC0GmtkiYEUNLI=,aad:BQb8l5fZzF/aa/EYnrOQvRfGUTq9QmJOAR/zmgOfYDA=,tag:fjNeg3Manjl6B2U2oflRhg==]
 - ENC[AES256_GCM,data:LLHkzGobqL53ws6E2zglkA==,iv:g9z3zz4DUzJr4Cim0SVqKF736w2mZoItqbB0TcsGrQU=,aad:Odrvz0loqFdd9wKJz0ULMX/lyEQcX8WaHE59MgeXkcI=,tag:V+rV/AeZ4uEgtwGhlamTag==]
-sops: # Data key is stored encrypted by both KMS and PGP. Either can decrypt.
+sops:
     kms:
     -   enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyGdRODuYMHbA8Ozj8CARCAO7opMolPJUmBXd39Zlp0L2H9fzMKidHm1vvaF6nNFq0ClRY7FlIZmTm4JfnOebPseffiXFn9tG8cq7oi
         enc_ts: 1439568549.245995

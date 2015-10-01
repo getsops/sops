@@ -132,6 +132,10 @@ def main():
     argparser.add_argument('--output-type', dest='output_type',
                            help="output type (yaml, json, ...), "
                                 "if undef, use input type")
+    argparser.add_argument('-s', '--show_master_keys', action='store_true',
+                           dest='show_master_keys',
+                           help="display master encryption keys in the file"
+                                "during editing (off by default).")
     args = argparser.parse_args()
 
     kms_arns = ""
@@ -187,9 +191,14 @@ def main():
 
         # we need a stash to save the IV and AAD and reuse them
         # if a given value has not changed during editing
-        stash = {'sops': {'has_stash': True}}
+        stash = dict()
+        stash['sops'] = dict(tree['sops'])
         if existing_file:
             tree = walk_and_decrypt(tree, key, stash=stash)
+
+        # hide the sops branch during editing
+        if not args.show_master_keys:
+            tree.pop('sops', None)
 
         # the decrypted tree is written to a tempfile and an editor
         # is opened on the file
@@ -205,7 +214,13 @@ def main():
                   error_code=200)
 
         # encrypt the tree
-        tree = load_file_into_tree(tmppath, otype)
+        if args.show_master_keys:
+            # use the sops data from the file
+            tree = load_file_into_tree(tmppath, otype)
+        else:
+            # sops branch was removed for editing, restoring it
+            tree = load_file_into_tree(tmppath, otype,
+                                       restore_sops=stash['sops'])
         os.remove(tmppath)
         tree = walk_and_encrypt(tree, key, stash)
         tree = update_sops_branch(tree, key)
@@ -266,7 +281,7 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
     return tree, need_key, existing_file
 
 
-def load_file_into_tree(path, filetype):
+def load_file_into_tree(path, filetype, restore_sops=None):
     """Load the tree.
 
     Read data from `path` using format defined by `filetype`.
@@ -288,6 +303,8 @@ def load_file_into_tree(path, filetype):
                     if 'data' not in tree:
                         tree['data'] = str()
                     tree['data'] += line
+    if not (restore_sops is None):
+        tree['sops'] = restore_sops.copy()
     return tree
 
 
@@ -645,7 +662,8 @@ def get_key_from_pgp(tree):
             print("PGP decryption failed in entry %s with error: %s" %
                   (i, e), file=sys.stderr)
             continue
-        return key
+        if len(key) == 32:
+            return key
     return None
 
 

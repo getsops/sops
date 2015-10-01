@@ -42,6 +42,14 @@ class TreeTest(unittest2.TestCase):
     #        tree = sops.load_file_into_tree('path', 'text')
     #        assert tree['data'].startswith(sops.DEFAULT_TEXT[0:15])
 
+    def test_sops_branch_is_restored(self):
+        m = mock.mock_open(read_data=sops.DEFAULT_YAML)
+        b = {'kms': [ { 'arn': 'test' } ] }
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'yaml',
+                                            restore_sops=b)
+            assert tree['sops']['kms'][0]['arn'] == 'test'
+
     @mock.patch('sops.json.load')
     def test_example_with_a_mocked_call(self, json_mock):
         m = mock.mock_open(read_data='"content"')
