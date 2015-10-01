@@ -84,7 +84,7 @@ example_multiline: |
     this is a
     multiline
     entry
-
+example_number: 1234.5678
 """
 
 DEFAULT_JSON = """{
@@ -92,7 +92,9 @@ DEFAULT_JSON = """{
 "example_array": [
     "example_value1",
     "example_value2"
-]}"""
+],
+"example_number": 1234.5678
+}"""
 
 DEFAULT_TEXT = """Welcome to SOPS!
 Remove this text and add your content to the file.
@@ -437,11 +439,12 @@ def walk_list_and_decrypt(branch, key, stash=None):
 
 def decrypt(value, key, stash=None):
     """Return a decrypted value."""
-    # operate on bytes, but return a string
-    value = value.encode('utf-8')
+    valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)'
     # extract fields using a regex
-    res = re.match(b'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)\]$',
-                   value)
+    if 'type:' in value:
+        valre += b',type:(.+)'
+    valre += b'\]'
+    res = re.match(valre, value.encode('utf-8'))
     # if the value isn't in encrypted form, return it as is
     if res is None:
         return value
@@ -449,6 +452,11 @@ def decrypt(value, key, stash=None):
     iv = b64decode(res.group(2))
     aad = b64decode(res.group(3))
     tag = b64decode(res.group(4))
+    valtype = 'str'
+    try:
+        valtype = res.group(5)
+    except:
+        None
     decryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv, tag),
                        default_backend()
@@ -460,7 +468,12 @@ def decrypt(value, key, stash=None):
         stash['iv'] = iv
         stash['aad'] = aad
         stash['cleartext'] = cleartext
-    return cleartext.decode('utf-8')
+    if valtype == b'str':
+        return cleartext.decode('utf-8')
+    if valtype == b'int':
+        return int(cleartext.decode('utf-8'))
+    if valtype == b'float':
+        return float(cleartext.decode('utf-8'))
 
 
 def walk_and_encrypt(branch, key, stash=None):
@@ -502,6 +515,11 @@ def walk_list_and_encrypt(branch, key, stash=None):
 
 def encrypt(value, key, stash=None):
     """Return an encrypted string of the value provided."""
+    valtype = 'str'
+    if isinstance(value, int):
+        valtype = 'int'
+    if isinstance(value, float):
+        valtype = 'float'
     value = str(value).encode('utf-8')
     # if we have a stash, and the value of cleartext has not changed,
     # attempt to take the IV and AAD value from the stash.
@@ -519,10 +537,12 @@ def encrypt(value, key, stash=None):
     encryptor.authenticate_additional_data(aad)
     enc_value = encryptor.update(value) + encryptor.finalize()
     return "ENC[AES256_GCM,data:{value},iv:{iv},aad:{aad}," \
-           "tag:{tag}]".format(value=b64encode(enc_value).decode('utf-8'),
-                               iv=b64encode(iv).decode('utf-8'),
-                               aad=b64encode(aad).decode('utf-8'),
-                               tag=b64encode(encryptor.tag).decode('utf-8'))
+        "tag:{tag},type:{valtype}]".format(
+            value=b64encode(enc_value).decode('utf-8'),
+            iv=b64encode(iv).decode('utf-8'),
+            aad=b64encode(aad).decode('utf-8'),
+            tag=b64encode(encryptor.tag).decode('utf-8'),
+            valtype=valtype)
 
 
 def get_key(tree, need_key=False):

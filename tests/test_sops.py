@@ -78,7 +78,7 @@ class TreeTest(unittest2.TestCase):
         # - SOPS_PGP_FP env variable is used
         # - panic error is raise and program quit with code 111 if
         #   nothing is defined
-        log= logging.getLogger( "TreeTest.test_verify_or_create_sops_branch" )
+        log = logging.getLogger( "TreeTest.test_verify_or_create_sops_branch" )
         kms_arns = "arn:aws:kms:us-east-1:656532927350:key/" + \
                 "920aff2e-c5f1-4040-943a-047fa387b27e+arn:aws:iam::" +\
                 "927034868273:role/sops-dev, arn:aws:kms:ap-southeast-1:" + \
@@ -147,8 +147,19 @@ class TreeTest(unittest2.TestCase):
         key = os.urandom(32)
         with mock.patch.object(builtins, 'open', m):
             tree = sops.load_file_into_tree('path', 'json')
-        crypttree = sops.walk_and_encrypt(tree, key)
-        cleartree = sops.walk_and_decrypt(crypttree, key)
+        crypttree = sops.walk_and_encrypt(dict(tree), key)
+        cleartree = sops.walk_and_decrypt(dict(crypttree), key)
+        assert cleartree == tree
+
+    def test_numbers_encrypt_and_decrypt(self):
+        """Test encryption/decryption of numbers"""
+        m = mock.mock_open(read_data='{"a":1234,"b":[567,890.123],"c":5.4999517527e+10}')
+        tree = dict()
+        key = os.urandom(32)
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'json')
+        crypttree = sops.walk_and_encrypt(dict(tree), key)
+        cleartree = sops.walk_and_decrypt(dict(crypttree), key)
         assert cleartree == tree
 
     def test_walk_list_and_encrypt(self):
@@ -167,10 +178,10 @@ class TreeTest(unittest2.TestCase):
 
     def test_encrypt_decrypt(self):
         """Test a roundtrip in the encryption/decryption code"""
+        origin = "AAAAAAAA"
         key = os.urandom(32)
-        cryptstr = sops.encrypt("AAAAAAA", key)
-        clearstr = sops.decrypt(cryptstr, key)
-        assert clearstr == "AAAAAAA"
+        clearstr = sops.decrypt(sops.encrypt(origin, key), key)
+        assert clearstr == origin
 
     # Test keys management
     def test_get_key(self):
