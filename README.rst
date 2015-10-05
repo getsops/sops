@@ -225,6 +225,13 @@ files in place with rotation enabled:
 		sops -e -i -r $file
 	done
 
+Note on YAML
+------------
+
+`sops` is designed to encrypt files that contain secrets, which are most likely
+strings or numbers. It will not work on complex YAML files that use references
+or anchors.
+
 Cryptographic details
 ---------------------
 
