@@ -225,14 +225,6 @@ files in place with rotation enabled:
 		sops -e -i -r $file
 	done
 
-Limitations on types
-~~~~~~~~~~~~~~~~~~~~
-
-`sops` converts all values to string prior to encrypting them. If you wish to
-encrypt YAML or JSON types that are not string, you may need to perform an extra
-conversion step after `sops` decryption to recover your original type. We will
-most likely fix this in the future.
-
 Cryptographic details
 ---------------------
 
