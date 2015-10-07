@@ -19,6 +19,7 @@ import sys
 import tempfile
 import time
 from base64 import b64encode, b64decode
+from collections import OrderedDict
 from socket import gethostname
 from textwrap import dedent
 
@@ -302,12 +303,12 @@ def load_file_into_tree(path, filetype, restore_sops=None):
     Return a dictionary with the data.
 
     """
-    tree = dict()
+    tree = OrderedDict()
     with open(path, "rt") as fd:
         if filetype == 'yaml':
             tree = ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         elif filetype == 'json':
-            tree = json.load(fd)
+            tree = json.load(fd, object_pairs_hook=OrderedDict)
         else:
             for line in fd:
                 if line.startswith('SOPS='):
@@ -331,7 +332,7 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
 
     """
     if 'sops' not in tree:
-        tree['sops'] = dict()
+        tree['sops'] = OrderedDict()
         tree['sops']['attention'] = 'This section contains key material' + \
             ' that should only be modified with extra care. See `sops -h`.'
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
@@ -742,7 +743,7 @@ def write_file(tree, path=None, filetype=None):
         fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
                                   indent=4).encode('utf-8'))
     elif filetype == "json":
-        fd.write(json.dumps(tree, sort_keys=True, indent=4).encode('utf-8'))
+        fd.write(json.dumps(tree, indent=4).encode('utf-8'))
     else:
         if 'data' in tree:
             # add a newline if there's none

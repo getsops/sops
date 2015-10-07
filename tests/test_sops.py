@@ -13,6 +13,7 @@ import unittest2
 import mock
 import os
 import sys
+from collections import OrderedDict
 
 import sops
 
@@ -55,7 +56,7 @@ class TreeTest(unittest2.TestCase):
         m = mock.mock_open(read_data='"content"')
         with mock.patch.object(builtins, 'open', m):
             sops.load_file_into_tree('path', 'json')
-            json_mock.assert_called_with(m())
+            json_mock.assert_called_with(m(), object_pairs_hook=OrderedDict)
 
     def test_detect_filetype_handle_json(self):
         assert sops.detect_filetype("file.json") == "json"
