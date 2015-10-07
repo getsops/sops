@@ -17,8 +17,8 @@ import re
 import subprocess
 import sys
 import tempfile
-import time
 from base64 import b64encode, b64decode
+from datetime import datetime
 from socket import gethostname
 from textwrap import dedent
 
@@ -684,7 +684,7 @@ def encrypt_key_with_kms(key, entry):
         return entry
     entry['enc'] = b64encode(
         kms_response['CiphertextBlob']).decode('utf-8')
-    entry['created_at'] = time.time()
+    entry['created_at'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
     return entry
 
 
@@ -772,7 +772,7 @@ def encrypt_key_with_pgp(key, entry):
         return entry
     enc = enc.decode('utf-8')
     entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
-    entry['created_at'] = time.time()
+    entry['created_at'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
     return entry
 
 
