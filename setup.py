@@ -9,7 +9,7 @@ def read(fname):
 setup(
     name="sops",
     py_modules=['sops'],
-    version="0.7",
+    version="0.8",
     author="Julien Vehent",
     author_email="jvehent@mozilla.com",
     description="Secrets OPerationS (sops) is an editor of encrypted files",

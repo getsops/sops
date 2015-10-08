@@ -35,19 +35,17 @@ else:
     import json
     from collections import OrderedDict
 
+VERSION = 0.8
 
 DESC = """
 `sops` is an encryption manager and editor for files that contains secrets.
 
-`sops` supports both AWS, KMS and PGP encryption:
-
+`sops` supports AWS KMS and PGP encryption:
     * To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
       in the `-k` flag or in the ``SOPS_KMS_ARN`` environment variable.
       (you need valid credentials in ~/.aws/credentials)
-
     * To encrypt or decrypt using PGP, specify the PGP fingerprint in the
-      `-g` flag or in the ``SOPS_PGP_FP`` environment variable.
-
+      `-p` flag or in the ``SOPS_PGP_FP`` environment variable.
 Those flags are ignored if the document already stores encryption info.
 Internally the KMS and PGP key IDs are stored in the document under
 ``sops.kms`` and ``sops.pgp``.
@@ -120,7 +118,7 @@ def main():
                            help="file to edit; create it if it doesn't exist")
     argparser.add_argument('-k', '--kms', dest='kmsarn',
                            help="ARN of KMS key used for encryption")
-    argparser.add_argument('-g', '--pgp', dest='pgpfp',
+    argparser.add_argument('-p', '--pgp', dest='pgpfp',
                            help="fingerprint of PGP key for decryption")
     argparser.add_argument('-d', '--decrypt', action='store_true',
                            dest='decrypt',
@@ -344,46 +342,69 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     indicate that an encryption is needed when returning.
 
     """
+    need_new_data_key = False
     if 'sops' not in tree:
         tree['sops'] = OrderedDict()
         tree['sops']['attention'] = 'This section contains key material' + \
             ' that should only be modified with extra care. See `sops -h`.'
+        tree['sops']['version'] = VERSION
+
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
         # check that we have at least one ARN to work with
         for entry in tree['sops']['kms']:
             if 'arn' in entry and entry['arn'] != "" and entry['enc'] != "":
-                return tree, False
+                return tree, need_new_data_key
+
     # if we're here, no arn was found
     if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
         # check that we have at least one fingerprint to work with
         for entry in tree['sops']['pgp']:
             if 'fp' in entry and entry['fp'] != "" and entry['enc'] != "":
-                return tree, False
-    # if we're here, no fingerprint was found either
+                return tree, need_new_data_key
+
+    # if we're here, no pgp fingerprint was found either
     has_at_least_one_method = False
+    need_new_data_key = True
     if not (kms_arns is None):
-        tree['sops']['kms'] = list()
-        for arn in kms_arns.split(','):
-            arn = arn.replace(" ", "")
-            entry = {}
-            rolepos = arn.find("+arn:aws:iam::")
-            if rolepos > 0:
-                entry = {"arn": arn[:rolepos], "role": arn[rolepos+1:]}
-            else:
-                entry = {"arn": arn}
-            tree['sops']['kms'].append(entry)
-            has_at_least_one_method = True
+        tree, has_at_least_one_method = parse_kms_arn(tree, kms_arns)
     if not (pgp_fps is None):
-        tree['sops']['pgp'] = list()
-        for fp in pgp_fps.split(','):
-            entry = {"fp": fp.replace(" ", "")}
-            tree['sops']['pgp'].append(entry)
-            has_at_least_one_method = True
+        tree, has_at_least_one_method = parse_pgp_fp(tree, pgp_fps)
     if not has_at_least_one_method:
         panic("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
               "key, read the help (-h) for more information.", 111)
-    # return True to indicate an encryption key needs to be created
-    return tree, True
+    return tree, need_new_data_key
+
+
+def parse_kms_arn(tree, kms_arns):
+    """Take a string that contains one or more KMS ARNs, possibly with roles,
+       and transform them it into KMS entries of the sops tree
+    """
+    has_at_least_one_method = False
+    tree['sops']['kms'] = list()
+    for arn in kms_arns.split(','):
+        arn = arn.replace(" ", "")
+        entry = {}
+        rolepos = arn.find("+arn:aws:iam::")
+        if rolepos > 0:
+            entry = {"arn": arn[:rolepos], "role": arn[rolepos+1:]}
+        else:
+            entry = {"arn": arn}
+        tree['sops']['kms'].append(entry)
+        has_at_least_one_method = True
+    return tree, has_at_least_one_method
+
+
+def parse_pgp_fp(tree, pgp_fps):
+    """Take a string of PGP fingerprint
+       and create pgp entries in the sops tree
+    """
+    has_at_least_one_method = False
+    tree['sops']['pgp'] = list()
+    for fp in pgp_fps.split(','):
+        entry = {"fp": fp.replace(" ", "")}
+        tree['sops']['pgp'].append(entry)
+        has_at_least_one_method = True
+    return tree, has_at_least_one_method
 
 
 def update_sops_branch(tree, key):
@@ -410,6 +431,14 @@ def update_sops_branch(tree, key):
                 print("updating pgp entry")
                 updated = encrypt_key_with_pgp(key, entry)
                 tree['sops']['pgp'][i] = updated
+
+    # update version number if newer than current
+    if 'version' in tree['sops']:
+        if tree['sops']['version'] < VERSION:
+            tree['sops']['version'] = VERSION
+    else:
+        tree['sops']['version'] = VERSION
+
     return tree
 
 

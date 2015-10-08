@@ -14,7 +14,7 @@ an_array:
 - ENC[AES256_GCM,data:oAkO6uRAV70w+ZOSScMLzUk5rtwybj0epc2tesZkeXuNuM9R0I8l34yQ2/jjCEgLcGYtqB6+i4ljGg==,iv:bniytY7Y+oZen0T3OjBBlQMoHVx4TwnYUI5IgHbf2AY=,tag:7CRdL76zQkwbumga9kWgsg==,type:str]
 - ENC[AES256_GCM,data:n5ZMVViz/IZwqRDgIljrQg==,iv:8A9X2UyYwyGsFKwoTO1MH69MCpUa31QJ3jSgde9i2Pc=,tag:vG4j9Y01cVg+oJ7peeA6PQ==,type:str]
 sops:
-    mac: ENC[AES256_GCM,data:rNiflHDZo2IayVwE4Wghr1VObZ4TDvg45qurpEK0+BCdi5KoNXrfmWuAr9O8baBNYvMTfPC4Yi1Yuu6bwk7NU0+uzKmWFZxGjC4GH9dAbyg5dTMF1WFIug+91wBoUC3lWwZ+ltwMvbfshNvGGebvoPlnONsM6NYC51u8s58/Hmk=,iv:M+XC1Yue8b7LW/DZl0NsQJaQFjBZagc7xZC2+PffoC4=,tag:MjDeR64LXMi7jX6WE8LEww==,type:str]
+    mac: ENC[AES256_GCM,data:sTti+RCOa7zLNhcgqiMTG7ikbYEr34WqESP+38M1KdF2tIADPNLe4JuRZlhRLbdKYuBhhOG+pAHpMyzz0DMlFHTzONACFL1CMivBj0ZyjZtaXLke8HXFO4wK4/7qEzTXBA2JrxzL4x3qSQYCRE+rKjhiWa8xHdS35dN8rjejPA4=,iv:mqb80ZfTgROVilsEr2XIWVycJJZSCpo3ZAGKKrki4+M=,tag:tWrQOMgxPlIISMGV3/UJbg==,type:str]
     attention: This section contains key material that should only be modified with
         extra care. See `sops -h`.
     kms:
@@ -24,6 +24,7 @@ sops:
     -   created_at: 1444233192.474385
         enc: CiBdfsKZbRNf/Li8Tf2SjeSdP76DineB1sbPjV0TV+meTxKnAQEBAgB4XX7CmW0TX/y4vE39ko3knT++g4p3gdbGz41dE1fpnk8AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAww2lEDZcq5evsCFcACARCAOxuzZh55fs9x7WE/ZpiRKIG85bvTWVn8wFnFozK/dT3tlPmNv5JwGiXQw1BG6e+fw31npvcGoIvzkwje
         arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
+    version: 0.8
     pgp:
     -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
         created_at: 1444233192.486551
