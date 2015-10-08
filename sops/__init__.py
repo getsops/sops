@@ -772,7 +772,7 @@ def get_key_from_pgp(tree):
         try:
             p = subprocess.Popen(['gpg', '-d'], stdout=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
-            key = p.communicate(input=enc)[0]
+            key = p.communicate(input=enc.encode('utf-8'))[0]
         except Exception as e:
             print("PGP decryption failed in entry %s with error: %s" %
                   (i, e), file=sys.stderr)
