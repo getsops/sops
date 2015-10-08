@@ -35,6 +35,9 @@ else:
     import json
     from collections import OrderedDict
 
+if sys.version_info[0] == 3:
+    raw_input = input
+
 VERSION = 0.8
 
 DESC = """

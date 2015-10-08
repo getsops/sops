@@ -19,7 +19,7 @@
         }
     ], 
     "sops": {
-        "mac": "ENC[AES256_GCM,data:sMQOEOLOyVoamdHBRCFceMgNfdXNzyb1DQYRPIjU5IMU3kGSP3qMVxBbf8Mv26AwrCo65/ai/Z0af81cxs2nIg1XegwuCMNpAgNi5q9+bZ1xG0rmrwUOmBaH/fIfmZeUbPYmczre89J8nfD2aTetIWqu1PwC/TyD2/snrif3Vns=,iv:MxMABoPMrUCBwzI/gX2xGpvT0/qo5k0CYuUuIt2U+G4=,tag:K4aeS24U+PzzeSrGJAcfvw==,type:str]", 
+        "mac": "ENC[AES256_GCM,data:2ffgLOYXFoMS7ECteIOWzV0iyHa316sxCXN5Ms4nDYrMpOADf+l3xLYXO6UZa/LIhI2LcQaDplFv3ukrJ2Zrr1vntz52E+MDV2xwetY1/QioFM2GHCfG33vbL6PEoi2lUKlUyIj+3UejV1hY9B4xDVIkXP6b1I7IwPi9wqYCx0g=,iv:4vlcBtZ5iI/0WVes0ZDvenBToEXthCul2LA37z1SS+0=,tag:FbesWYn7mPemYbU/F8VUZg==,type:str]", 
         "attention": "This section contains key material that should only be modified with extra care. See `sops -h`.", 
         "kms": [
             {
@@ -34,6 +34,11 @@
             }
         ], 
         "pgp": [
+            {
+                "fp": "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A", 
+                "enc": "-----BEGIN PGP MESSAGE-----\nVersion: GnuPG v1\n\nhIwDEEVDpnzXnMABBACqAUiwqLNn7w7WyQ6J24oIxPC/9Hx5NmqWLperCA2W3lIM\ndvW8WHP10MsbPaj7CWCkillppKmxkuQqivRvgcxWeSMXbotlnCAfczwDCpf1o1/T\nJctzN4qSBlCpEF+2OyRTEVz22Zd7UfOZqzoJ4e7yA3WiLpe47X5YhpPie0HClNJe\nAZ1zPj9zvAuHLf1ZRthuLwpM40cyjfPmPI0jDknUpfvWV6GueXcozSuJEWJcVBKn\nDyR3mZfWpxPee0CVmuqTMT8OIM2p+5uNNrNWqy5eM8nhY6lRyMxN915xccN36g==\n=LxSJ\n-----END PGP MESSAGE-----\n", 
+                "created_at": "2015-10-08T15:33:31Z"
+            }, 
             {
                 "fp": "85D77543B3D624B63CEA9E6DBC17301B491B3F21", 
                 "created_at": 1444233151.309663, 
