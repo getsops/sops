@@ -16,6 +16,11 @@ import sys
 
 import sops
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+
 if sys.version_info[0] == 2:
     import __builtin__ as builtins
 else:
@@ -55,7 +60,7 @@ class TreeTest(unittest2.TestCase):
         m = mock.mock_open(read_data='"content"')
         with mock.patch.object(builtins, 'open', m):
             sops.load_file_into_tree('path', 'json')
-            json_mock.assert_called_with(m())
+            json_mock.assert_called_with(m(), object_pairs_hook=OrderedDict)
 
     def test_detect_filetype_handle_json(self):
         assert sops.detect_filetype("file.json") == "json"
@@ -85,7 +90,7 @@ class TreeTest(unittest2.TestCase):
                 "656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
         pgp_fps = "85D77543B3D624B63CEA9E6DBC17301B491B3F21," + \
                 "C9CAB0AF1165060DB58D6D6B2653B624D620786D"
-        tree = dict()
+        tree = OrderedDict()
         tree, ign = sops.verify_or_create_sops_branch(tree,
                                                       kms_arns=kms_arns,
                                                       pgp_fps=pgp_fps)
@@ -131,8 +136,8 @@ class TreeTest(unittest2.TestCase):
         # TODO: 
         # - test stash value
         m = mock.mock_open(read_data=sops.DEFAULT_YAML)
-        tree = dict()
         key = os.urandom(32)
+        tree = OrderedDict()
         with mock.patch.object(builtins, 'open', m):
             tree = sops.load_file_into_tree('path', 'yaml')
         crypttree = sops.walk_and_encrypt(tree, key)
@@ -143,23 +148,26 @@ class TreeTest(unittest2.TestCase):
     def test_walk_and_encrypt_and_decrypt(self):
         """Test a roundtrip on the tree encryption/decryption code"""
         m = mock.mock_open(read_data=sops.DEFAULT_JSON)
-        tree = dict()
         key = os.urandom(32)
+        tree = OrderedDict()
         with mock.patch.object(builtins, 'open', m):
             tree = sops.load_file_into_tree('path', 'json')
-        crypttree = sops.walk_and_encrypt(dict(tree), key)
-        cleartree = sops.walk_and_decrypt(dict(crypttree), key)
+        tree['sops'] = dict()
+        crypttree = sops.walk_and_encrypt(OrderedDict(tree), key, isRoot=True)
+        cleartree = sops.walk_and_decrypt(OrderedDict(crypttree), key, isRoot=True)
         assert cleartree == tree
 
     def test_numbers_encrypt_and_decrypt(self):
         """Test encryption/decryption of numbers"""
         m = mock.mock_open(read_data='{"a":1234,"b":[567,890.123],"c":5.4999517527e+10}')
-        tree = dict()
         key = os.urandom(32)
+        tree = OrderedDict()
         with mock.patch.object(builtins, 'open', m):
             tree = sops.load_file_into_tree('path', 'json')
-        crypttree = sops.walk_and_encrypt(dict(tree), key)
-        cleartree = sops.walk_and_decrypt(dict(crypttree), key)
+        tree['sops'] = dict()
+        crypttree = sops.walk_and_encrypt(OrderedDict(tree), key, isRoot=True)
+        assert tree['sops']['mac'].startswith("ENC[AES256_GCM,data:")
+        cleartree = sops.walk_and_decrypt(OrderedDict(crypttree), key, isRoot=True)
         assert cleartree == tree
 
     def test_walk_list_and_encrypt(self):
@@ -180,7 +188,8 @@ class TreeTest(unittest2.TestCase):
         """Test a roundtrip in the encryption/decryption code"""
         origin = "AAAAAAAA"
         key = os.urandom(32)
-        clearstr = sops.decrypt(sops.encrypt(origin, key), key)
+        aad = os.urandom(32)
+        clearstr = sops.decrypt(sops.encrypt(origin, key, aad=aad), key, aad=aad)
         assert clearstr == origin
 
     # Test keys management

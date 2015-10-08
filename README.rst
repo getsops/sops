@@ -282,29 +282,34 @@ file and saves it when done.
 
 Upon save, sops browses the entire file as of a key/value tree. Every time sops
 encounters a leaf value (a value that does not have children), it encrypts the
-value with AES256_GCM using the data key, a 256 bits random initialization vector
-and 256 bits of random additional data. While the same data key is used to
-encrypt all values of a document, each value receives a unique initialization
-vector and unique authentication data.
+value with AES256_GCM using the data key and a 256 bits random initialization
+vector.
+
+Each file uses a single data key to encrypt all values of a document, but each
+value receives a unique initialization vector and has unique authentication data.
+
+Additional data is used to guarantee the integrity of the encrypted data
+and of the tree structure: when encrypting the tree, key names are concatenated
+into a byte string that is used as AEAD additional data (aad) when encrypting
+the value. The `aad` field is not stored with the value but reconstructed from
+the tree structure every time.
 
 The result of AES256_GCM encryption is stored in the leaf of the tree using a
-simple key/value format::
+base64 encoded string format::
 
     ENC[AES256_GCM,
         data:CwE4O1s=,
         iv:S0fozGAOxNma/pWDUuk1iEaYw0wlba0VOLHjPxIok2k=,
-        aad:nEVizsMMyBXOxySnOHw/trTFBSW72nh+Q80YU7TPgIo=,
         tag:XaGsYaL9LCkLWJI0uxnTYw==]
 
 where:
 
 * **data** is the encrypted value
 * **iv** is the 256 bits initialization vector
-* **aad** is the 256 bits additional data
 * **tag** is the authentication tag
 
 The encrypted file is written to disk with nested keys in cleartext and
-encrypted values. We expect that keys do not carry sensitive information, and
+values encrypted. We expect that keys do not carry sensitive information, and
 keeping them in cleartext allows for better diff and overall readability.
 
 Any valid KMS or PGP master key can later decrypt the data key and access the
@@ -315,6 +320,14 @@ keys, and provide disaster recovery solution. The recommended way to use sops
 is to have two KMS master keys in different region and one PGP public key with
 the private key stored offline. If, by any chance, both KMS master keys are
 lost, you can always recover the encrypted data using the PGP private key.
+
+Message Authentication Code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In addition to authenticating branches of the tree using keys as additional
+data, sops computes a MAC on all the values to ensure that no value has been
+added or removed fraudulently. The MAC is stored encrypted with AES_GCM and
+the data key under tree->`sops`->`mac`.
 
 Threat Model
 ------------

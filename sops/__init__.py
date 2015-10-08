@@ -11,14 +11,14 @@
 
 from __future__ import print_function, unicode_literals
 import argparse
-import json
+import hashlib
 import os
 import re
 import subprocess
 import sys
 import tempfile
-import time
 from base64 import b64encode, b64decode
+from datetime import datetime
 from socket import gethostname
 from textwrap import dedent
 
@@ -27,19 +27,28 @@ import ruamel.yaml
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 
+if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    # python2.6 needs simplejson and ordereddict
+    import simplejson as json
+    from ordereddict import OrderedDict
+else:
+    import json
+    from collections import OrderedDict
+
+if sys.version_info[0] == 3:
+    raw_input = input
+
+VERSION = 0.8
 
 DESC = """
 `sops` is an encryption manager and editor for files that contains secrets.
 
-`sops` supports both AWS, KMS and PGP encryption:
-
+`sops` supports AWS KMS and PGP encryption:
     * To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
       in the `-k` flag or in the ``SOPS_KMS_ARN`` environment variable.
       (you need valid credentials in ~/.aws/credentials)
-
     * To encrypt or decrypt using PGP, specify the PGP fingerprint in the
-      `-g` flag or in the ``SOPS_PGP_FP`` environment variable.
-
+      `-p` flag or in the ``SOPS_PGP_FP`` environment variable.
 Those flags are ignored if the document already stores encryption info.
 Internally the KMS and PGP key IDs are stored in the document under
 ``sops.kms`` and ``sops.pgp``.
@@ -112,7 +121,7 @@ def main():
                            help="file to edit; create it if it doesn't exist")
     argparser.add_argument('-k', '--kms', dest='kmsarn',
                            help="ARN of KMS key used for encryption")
-    argparser.add_argument('-g', '--pgp', dest='pgpfp',
+    argparser.add_argument('-p', '--pgp', dest='pgpfp',
                            help="fingerprint of PGP key for decryption")
     argparser.add_argument('-d', '--decrypt', action='store_true',
                            dest='decrypt',
@@ -138,6 +147,10 @@ def main():
                            dest='show_master_keys',
                            help="display master encryption keys in the file"
                                 "during editing (off by default).")
+    argparser.add_argument('--ignore-mac', action='store_true',
+                           dest='ignore_mac',
+                           help="ignore Message Authentication Code "
+                                "during decryption")
     args = argparser.parse_args()
 
     kms_arns = ""
@@ -180,12 +193,13 @@ def main():
         # Encrypt mode: encrypt, display and exit
         key, tree = get_key(tree, need_key)
 
-        tree = walk_and_encrypt(tree, key)
+        tree = walk_and_encrypt(tree, key, isRoot=True)
 
     elif args.decrypt:
         # Decrypt mode: decrypt, display and exit
         key, tree = get_key(tree)
-        tree = walk_and_decrypt(tree, key)
+        tree = walk_and_decrypt(tree, key, isRoot=True,
+                                ignoreMac=args.ignore_mac)
 
     else:
         # EDIT Mode: decrypt, edit, encrypt and save
@@ -196,7 +210,8 @@ def main():
         stash = dict()
         stash['sops'] = dict(tree['sops'])
         if existing_file:
-            tree = walk_and_decrypt(tree, key, stash=stash)
+            tree = walk_and_decrypt(tree, key, stash=stash, isRoot=True,
+                                    ignoreMac=args.ignore_mac)
 
         # hide the sops branch during editing
         if not args.show_master_keys:
@@ -236,7 +251,7 @@ def main():
             tree = load_file_into_tree(tmppath, otype,
                                        restore_sops=stash['sops'])
         os.remove(tmppath)
-        tree = walk_and_encrypt(tree, key, stash)
+        tree = walk_and_encrypt(tree, key, stash=stash, isRoot=True)
         tree = update_sops_branch(tree, key)
 
     # if we're in -e or -d mode, and not in -i mode, display to stdout
@@ -265,6 +280,7 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
     """ Try to load the file from path in a tree, and failing that,
         initialize a new tree using default data
     """
+    tree = OrderedDict()
     need_key = False
     try:
         existing_file = os.stat(path)
@@ -287,9 +303,8 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
         if itype == "yaml":
             tree = ruamel.yaml.load(DEFAULT_YAML, ruamel.yaml.RoundTripLoader)
         elif itype == "json":
-            tree = json.loads(DEFAULT_JSON)
+            tree = json.loads(DEFAULT_JSON, object_pairs_hook=OrderedDict)
         else:
-            tree = dict()
             tree['data'] = DEFAULT_TEXT
         tree, need_key = verify_or_create_sops_branch(tree, kms_arns, pgp_fps)
     return tree, need_key, existing_file
@@ -302,12 +317,12 @@ def load_file_into_tree(path, filetype, restore_sops=None):
     Return a dictionary with the data.
 
     """
-    tree = dict()
+    tree = OrderedDict()
     with open(path, "rt") as fd:
         if filetype == 'yaml':
             tree = ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         elif filetype == 'json':
-            tree = json.load(fd)
+            tree = json.load(fd, object_pairs_hook=OrderedDict)
         else:
             for line in fd:
                 if line.startswith('SOPS='):
@@ -330,46 +345,69 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     indicate that an encryption is needed when returning.
 
     """
+    need_new_data_key = False
     if 'sops' not in tree:
         tree['sops'] = dict()
         tree['sops']['attention'] = 'This section contains key material' + \
             ' that should only be modified with extra care. See `sops -h`.'
+        tree['sops']['version'] = VERSION
+
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
         # check that we have at least one ARN to work with
         for entry in tree['sops']['kms']:
             if 'arn' in entry and entry['arn'] != "" and entry['enc'] != "":
-                return tree, False
+                return tree, need_new_data_key
+
     # if we're here, no arn was found
     if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
         # check that we have at least one fingerprint to work with
         for entry in tree['sops']['pgp']:
             if 'fp' in entry and entry['fp'] != "" and entry['enc'] != "":
-                return tree, False
-    # if we're here, no fingerprint was found either
+                return tree, need_new_data_key
+
+    # if we're here, no pgp fingerprint was found either
     has_at_least_one_method = False
+    need_new_data_key = True
     if not (kms_arns is None):
-        tree['sops']['kms'] = list()
-        for arn in kms_arns.split(','):
-            arn = arn.replace(" ", "")
-            entry = {}
-            rolepos = arn.find("+arn:aws:iam::")
-            if rolepos > 0:
-                entry = {"arn": arn[:rolepos], "role": arn[rolepos+1:]}
-            else:
-                entry = {"arn": arn}
-            tree['sops']['kms'].append(entry)
-            has_at_least_one_method = True
+        tree, has_at_least_one_method = parse_kms_arn(tree, kms_arns)
     if not (pgp_fps is None):
-        tree['sops']['pgp'] = list()
-        for fp in pgp_fps.split(','):
-            entry = {"fp": fp.replace(" ", "")}
-            tree['sops']['pgp'].append(entry)
-            has_at_least_one_method = True
+        tree, has_at_least_one_method = parse_pgp_fp(tree, pgp_fps)
     if not has_at_least_one_method:
         panic("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
               "key, read the help (-h) for more information.", 111)
-    # return True to indicate an encryption key needs to be created
-    return tree, True
+    return tree, need_new_data_key
+
+
+def parse_kms_arn(tree, kms_arns):
+    """Take a string that contains one or more KMS ARNs, possibly with roles,
+       and transform them it into KMS entries of the sops tree
+    """
+    has_at_least_one_method = False
+    tree['sops']['kms'] = list()
+    for arn in kms_arns.split(','):
+        arn = arn.replace(" ", "")
+        entry = {}
+        rolepos = arn.find("+arn:aws:iam::")
+        if rolepos > 0:
+            entry = {"arn": arn[:rolepos], "role": arn[rolepos+1:]}
+        else:
+            entry = {"arn": arn}
+        tree['sops']['kms'].append(entry)
+        has_at_least_one_method = True
+    return tree, has_at_least_one_method
+
+
+def parse_pgp_fp(tree, pgp_fps):
+    """Take a string of PGP fingerprint
+       and create pgp entries in the sops tree
+    """
+    has_at_least_one_method = False
+    tree['sops']['pgp'] = list()
+    for fp in pgp_fps.split(','):
+        entry = {"fp": fp.replace(" ", "")}
+        tree['sops']['pgp'].append(entry)
+        has_at_least_one_method = True
+    return tree, has_at_least_one_method
 
 
 def update_sops_branch(tree, key):
@@ -396,31 +434,60 @@ def update_sops_branch(tree, key):
                 print("updating pgp entry")
                 updated = encrypt_key_with_pgp(key, entry)
                 tree['sops']['pgp'][i] = updated
+
+    # update version number if newer than current
+    if 'version' in tree['sops']:
+        if tree['sops']['version'] < VERSION:
+            tree['sops']['version'] = VERSION
+    else:
+        tree['sops']['version'] = VERSION
+
     return tree
 
 
-def walk_and_decrypt(branch, key, stash=None):
+def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
+                     isRoot=False, ignoreMac=False):
     """Walk the branch recursively and decrypt leaves."""
+    if isRoot and not ignoreMac:
+        digest = hashlib.sha512()
+
     for k, v in branch.items():
-        if k == 'sops':
+        if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
         nstash = dict()
+        aad += k.encode('utf-8')
         if stash:
             stash[k] = {'has_stash': True}
             nstash = stash[k]
         if isinstance(v, dict):
-            branch[k] = walk_and_decrypt(v, key, nstash)
+            branch[k] = walk_and_decrypt(v, key, aad=aad, stash=nstash,
+                                         digest=digest)
         elif isinstance(v, list):
-            branch[k] = walk_list_and_decrypt(v, key, nstash)
+            branch[k] = walk_list_and_decrypt(v, key, aad=aad, stash=nstash,
+                                              digest=digest)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = decrypt(v, key, nstash)
+            ev = decrypt(v, key, aad=aad, stash=nstash, digest=digest)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = decrypt(v, key, nstash)
+            branch[k] = decrypt(v, key, aad=aad, stash=nstash, digest=digest)
+
+    if isRoot and not ignoreMac:
+        # compute the hash computed on values with the one stored
+        # in the file. If they match, all is well.
+        if not ('mac' in branch['sops']):
+            panic("'mac' not found, unable to verify file integrity", 52)
+        h = digest.hexdigest().upper()
+        # We know the original hash is trustworthy because it is encrypted
+        # with the data key and authenticated using the tree keys
+        orig_h = decrypt(branch['sops']['mac'], key, aad=aad)
+        if h != orig_h:
+            panic("Hash verification failed!\nexpected %s\nbut got  %s" %
+                  (orig_h, h), 51)
+
     return branch
 
 
-def walk_list_and_decrypt(branch, key, stash=None):
+def walk_list_and_decrypt(branch, key, aad=b'', stash=None, digest=None):
     """Walk a list contained in a branch and decrypts its values."""
     nstash = dict()
     kl = []
@@ -429,17 +496,19 @@ def walk_list_and_decrypt(branch, key, stash=None):
             stash[i] = {'has_stash': True}
             nstash = stash[i]
         if isinstance(v, dict):
-            kl.append(walk_and_decrypt(v, key, nstash))
+            kl.append(walk_and_decrypt(v, key, aad=aad, stash=nstash,
+                                       digest=digest))
         elif isinstance(v, list):
-            kl.append(walk_list_and_decrypt(v, key, nstash))
+            kl.append(walk_list_and_decrypt(v, key, aad=aad, stash=nstash,
+                                            digest=digest))
         else:
-            kl.append(decrypt(v, key, nstash))
+            kl.append(decrypt(v, key, aad=aad, stash=nstash, digest=digest))
     return kl
 
 
-def decrypt(value, key, stash=None):
+def decrypt(value, key, aad=b'', stash=None, digest=None):
     """Return a decrypted value."""
-    valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),aad:(.+),tag:(.+)'
+    valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
     # extract fields using a regex
     if 'type:' in value:
         valre += b',type:(.+)'
@@ -450,11 +519,10 @@ def decrypt(value, key, stash=None):
         return value
     enc_value = b64decode(res.group(1))
     iv = b64decode(res.group(2))
-    aad = b64decode(res.group(3))
-    tag = b64decode(res.group(4))
+    tag = b64decode(res.group(3))
     valtype = 'str'
     try:
-        valtype = res.group(5)
+        valtype = res.group(4)
     except:
         None
     decryptor = Cipher(algorithms.AES(key),
@@ -468,6 +536,8 @@ def decrypt(value, key, stash=None):
         stash['iv'] = iv
         stash['aad'] = aad
         stash['cleartext'] = cleartext
+    if digest:
+        digest.update(cleartext)
     if valtype == b'str':
         return cleartext.decode('utf-8')
     if valtype == b'int':
@@ -476,28 +546,38 @@ def decrypt(value, key, stash=None):
         return float(cleartext.decode('utf-8'))
 
 
-def walk_and_encrypt(branch, key, stash=None):
+def walk_and_encrypt(branch, key, aad=b'', stash=None,
+                     isRoot=False, digest=None):
     """Walk the branch recursively and encrypts its leaves."""
+    if isRoot:
+        digest = hashlib.sha512()
     for k, v in branch.items():
-        if k == 'sops':
+        if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
+        aad += k.encode('utf-8')
         nstash = dict()
         if stash and k in stash:
             nstash = stash[k]
         if isinstance(v, dict):
             # recursively walk the tree
-            branch[k] = walk_and_encrypt(v, key, nstash)
+            branch[k] = walk_and_encrypt(v, key, aad=aad, stash=nstash,
+                                         digest=digest)
         elif isinstance(v, list):
-            branch[k] = walk_list_and_encrypt(v, key, nstash)
+            branch[k] = walk_list_and_encrypt(v, key, aad=aad, stash=nstash,
+                                              digest=digest)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = encrypt(v, key, nstash)
+            ev = encrypt(v, key, aad=aad, stash=nstash, digest=digest)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = encrypt(v, key, nstash)
+            branch[k] = encrypt(v, key, aad=aad, stash=nstash, digest=digest)
+    if isRoot:
+        # finalize and store the message authentication code in encrypted form
+        h = digest.hexdigest().upper()
+        branch['sops']['mac'] = encrypt(h, key, aad=aad)
     return branch
 
 
-def walk_list_and_encrypt(branch, key, stash=None):
+def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None):
     """Walk a list contained in a branch and encrypts its values."""
     nstash = dict()
     kl = []
@@ -505,15 +585,18 @@ def walk_list_and_encrypt(branch, key, stash=None):
         if stash and i in stash:
             nstash = stash[i]
         if isinstance(v, dict):
-            kl.append(walk_and_encrypt(v, key, nstash))
+            kl.append(walk_and_encrypt(v, key, aad=aad, stash=nstash,
+                                       digest=digest))
         elif isinstance(v, list):
-            kl.append(walk_list_and_encrypt(v, key, nstash))
+            kl.append(walk_list_and_encrypt(v, key, aad=aad, stash=nstash,
+                                            digest=digest))
         else:
-            kl.append(encrypt(v, key, nstash))
+            kl.append(encrypt(v, key, aad=aad, stash=nstash,
+                              digest=digest))
     return kl
 
 
-def encrypt(value, key, stash=None):
+def encrypt(value, key, aad=b'', stash=None, digest=None):
     """Return an encrypted string of the value provided."""
     valtype = 'str'
     if isinstance(value, int):
@@ -521,6 +604,8 @@ def encrypt(value, key, stash=None):
     if isinstance(value, float):
         valtype = 'float'
     value = str(value).encode('utf-8')
+    if digest:
+        digest.update(value)
     # if we have a stash, and the value of cleartext has not changed,
     # attempt to take the IV and AAD value from the stash.
     # if the stash has no existing value, or the cleartext has changed,
@@ -530,13 +615,14 @@ def encrypt(value, key, stash=None):
         aad = stash['aad']
     else:
         iv = os.urandom(32)
-        aad = os.urandom(32)
+        if aad == b'':
+            aad = os.urandom(32)
     encryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv),
                        default_backend()).encryptor()
     encryptor.authenticate_additional_data(aad)
     enc_value = encryptor.update(value) + encryptor.finalize()
-    return "ENC[AES256_GCM,data:{value},iv:{iv},aad:{aad}," \
+    return "ENC[AES256_GCM,data:{value},iv:{iv}," \
         "tag:{tag},type:{valtype}]".format(
             value=b64encode(enc_value).decode('utf-8'),
             iv=b64encode(iv).decode('utf-8'),
@@ -630,7 +716,7 @@ def encrypt_key_with_kms(key, entry):
         return entry
     entry['enc'] = b64encode(
         kms_response['CiphertextBlob']).decode('utf-8')
-    entry['created_at'] = time.time()
+    entry['created_at'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
     return entry
 
 
@@ -689,7 +775,7 @@ def get_key_from_pgp(tree):
         try:
             p = subprocess.Popen(['gpg', '-d'], stdout=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
-            key = p.communicate(input=enc)[0]
+            key = p.communicate(input=enc.encode('utf-8'))[0]
         except Exception as e:
             print("PGP decryption failed in entry %s with error: %s" %
                   (i, e), file=sys.stderr)
@@ -718,7 +804,7 @@ def encrypt_key_with_pgp(key, entry):
         return entry
     enc = enc.decode('utf-8')
     entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
-    entry['created_at'] = time.time()
+    entry['created_at'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
     return entry
 
 
@@ -742,7 +828,7 @@ def write_file(tree, path=None, filetype=None):
         fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
                                   indent=4).encode('utf-8'))
     elif filetype == "json":
-        fd.write(json.dumps(tree, sort_keys=True, indent=4).encode('utf-8'))
+        fd.write(json.dumps(tree, indent=4).encode('utf-8'))
     else:
         if 'data' in tree:
             # add a newline if there's none
