@@ -344,7 +344,7 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     """
     need_new_data_key = False
     if 'sops' not in tree:
-        tree['sops'] = OrderedDict()
+        tree['sops'] = dict()
         tree['sops']['attention'] = 'This section contains key material' + \
             ' that should only be modified with extra care. See `sops -h`.'
         tree['sops']['version'] = VERSION
