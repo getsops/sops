@@ -1,7 +1,7 @@
 {
     "firstName": "ENC[AES256_GCM,data:Sf9dCw==,iv:OtsxqCFAvsDfiUIu+FmMT+9SZZ+hwFXxWAoA/fFt4n0=,tag:UJpAMAlrLm+TMIAkQCShTg==,type:str]", 
     "lastName": "ENC[AES256_GCM,data:8CSE1Fc=,iv:ZwNczZao5fK44uYH+TU+RwXSC6OHjbBWCrQiO97Ws3I=,tag:ghRiOGqNPvotGEIE80XpRg==,type:str]", 
-    "age": "ENC[AES256_GCM,data:hXI=,iv:er2l2sivl6Q00VwfF/YTOSs19q3AYqwVCSdBZkUZ9cc=,tag:U9IQcgO8nRdZGKuk/GaB+w==,type:int]", 
+    "age": "ENC[AES256_GCM,data:UHBRAg==,iv:79skTitX1Tq8EtiyAYeP6Ir8dAkiporJGSHqRThHh5g=,tag:NhZfAZs64lX/+HtePiOkww==,type:float]", 
     "address": {
         "city": "ENC[AES256_GCM,data:DKo/DSI8QjU=,iv:ZVT8sB8Lq7Q1l4kRmEpjq78BLXL6VSG5Wl+s0skKz9k=,tag:VQ8t+CtkTd6l20wrQHECPA==,type:str]", 
         "postalCode": "ENC[AES256_GCM,data:DxjkWjslhRKFeA==,iv:jZYRetIj1Brxj0Dhc6e06NOwQt4nR0wW6iVRN/n5SwI=,tag:L2fq3kQuNyJ04nGGPpJV9Q==,type:str]", 
@@ -19,8 +19,8 @@
         }
     ], 
     "sops": {
-        "mac": "ENC[AES256_GCM,data:2ffgLOYXFoMS7ECteIOWzV0iyHa316sxCXN5Ms4nDYrMpOADf+l3xLYXO6UZa/LIhI2LcQaDplFv3ukrJ2Zrr1vntz52E+MDV2xwetY1/QioFM2GHCfG33vbL6PEoi2lUKlUyIj+3UejV1hY9B4xDVIkXP6b1I7IwPi9wqYCx0g=,iv:4vlcBtZ5iI/0WVes0ZDvenBToEXthCul2LA37z1SS+0=,tag:FbesWYn7mPemYbU/F8VUZg==,type:str]", 
-        "attention": "This section contains key material that should only be modified with extra care. See `sops -h`.", 
+        "mac": "ENC[AES256_GCM,data:PnFjXqwLfBi2R+wbe3dJTsb14e0GFiJA18bAVHDKPc1EVXpOHbtI4uswWMsCfSM23lkVLGe9nLo62V+b2KUvQrPt0AQGqCNa6oXZi0sW1rRAHFdV93x6IJ42mwHrz3MOrgbMPp32ZQYmFU0QTqAAA3zu1DW1MajbRIxECDCsOkc=,iv:QJm3YiR1NwFrSTZUMpCqLSemqwyEsg9l1ubCnMO1pP4=,tag:7qZ1+5NbP9DNefZKg1VJ8A==,type:str]", 
+        "version": 0.8, 
         "kms": [
             {
                 "created_at": 1444233149.795402, 
@@ -45,6 +45,7 @@
                 "enc": "-----BEGIN PGP MESSAGE-----\nVersion: GnuPG v1\n\nhQIMA0t4uZHfl9qgARAAgQdMpnTNMCdbdFRpBsC9kxi334LbBrFUkp5lI+YzutZy\nSic85ea06FGL3O93tII9mwGAsESwKlN4nX0d31vuh/lYxMDakyd1IK/BkMG4Z1xG\n52MsACG/pyitMBXkIIyjmR0tVR+CixDsy5cUJxoWq+mfuE2ywziPY+KbEZ50hFXg\naAdKCdInXlLHdId+aXhThhXUGN1seQjtdyZjVXnp8c9hHS2YQdyp/SZf47NJ4A2y\nkO40kNS4oaHUUZIZLtzaFhWytZlpWEJJkIgH/vefL3jLW4SiIiqz24wr7MncsF+A\np8Pteulc5VrvA5CzQIq9qF3Zwn9HV2a0KWLZ/J29EYzSM8u9HLOYqsmNKt0TcVbX\n6eoG3JTJoRDrzO0DZvR3pMm4gQ0WXzHKzpu8g+JYnoQ19AMWJAPbTp5ej3MWHcXD\nXFjz4gsSYbwc4h/zVBOWsYoHlyTLUMwg2BA1YiL89xs8MIhIHOAmvM0mv+QuZQ7S\nCfc1mS04CZSmJvTcNkvE5n76n2iXs6nYNk8TYyQlhYebuQmJQKJuUYjKIHhuxZFa\n30WaSGnKHqIQn1pl7jqyqm8sVTzaKMyhbM0T+UQUJhXcWVr7r+CtRAt8XjVnJMvo\nviJwTWy1Ddo0Vu1licMFJXMnQbQlVh+CZS6FHqcbxfPaYfe7JldGmhwKg+F/NEHS\nXgEf78iLm3FNb4yeOkB/z2xjiZ3XvUAQjsUK5ofF1CJYcQ//YIFex1oO55Z0+qIt\njdDtqivLgf4SFRf0uhOxUrQNuFAvY361F1mvrGPcTubh/Ygq0aVzWzgC9gn7DTo=\n=uQw0\n-----END PGP MESSAGE-----\n"
             }
         ], 
-        "version": 0.8
+        "lastmodified": "2015-10-09T13:18:13Z", 
+        "attention": "This section contains key material that should only be modified with extra care. See `sops -h`."
     }
 }

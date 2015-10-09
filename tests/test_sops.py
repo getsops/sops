@@ -140,6 +140,7 @@ class TreeTest(unittest2.TestCase):
         tree = OrderedDict()
         with mock.patch.object(builtins, 'open', m):
             tree = sops.load_file_into_tree('path', 'yaml')
+        tree['sops'] = dict()
         crypttree = sops.walk_and_encrypt(tree, key)
         assert crypttree['example_key'].startswith("ENC[AES256_GCM,data:")
         assert isinstance(crypttree['example_array'], list)

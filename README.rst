@@ -11,8 +11,8 @@ SOPS: Secrets OPerationS
 .. sectnum::
 .. contents:: Table of Contents
 
-Requirements
-------------
+Up and running in 60 seconds
+----------------------------
 First install some libraries from your package manager:
 
 * RHEL family::
@@ -32,10 +32,15 @@ Then install `sops` from pip::
 
 	sudo pip install --upgrade sops
 
-note: on centos/sl, you may need to upgrade `botocore` after installing
-sops to deal with a `requirement conflict
-<https://github.com/boto/botocore/issues/660>`_.
-Do so with `sudo pip install -U botocore`.
+Clone the repository, load the test PGP key and open the test files::
+
+	$ git clone https://github.com/mozilla/sops.git
+	$ cd sops
+	$ gpg --import tests/sops_functional_tests_key.asc
+	$ sops example.yaml
+
+This last step will decrypt `example.yaml` using the test private key. To create
+your own secrets files using keys under your control, keep reading.
 
 Usage
 -----

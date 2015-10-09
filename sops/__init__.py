@@ -110,6 +110,8 @@ Remove this text and add your content to the file.
 
 """
 
+NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -193,13 +195,12 @@ def main():
         # Encrypt mode: encrypt, display and exit
         key, tree = get_key(tree, need_key)
 
-        tree = walk_and_encrypt(tree, key, isRoot=True)
+        tree = walk_and_encrypt(tree, key)
 
     elif args.decrypt:
         # Decrypt mode: decrypt, display and exit
         key, tree = get_key(tree)
-        tree = walk_and_decrypt(tree, key, isRoot=True,
-                                ignoreMac=args.ignore_mac)
+        tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
 
     else:
         # EDIT Mode: decrypt, edit, encrypt and save
@@ -210,7 +211,7 @@ def main():
         stash = dict()
         stash['sops'] = dict(tree['sops'])
         if existing_file:
-            tree = walk_and_decrypt(tree, key, stash=stash, isRoot=True,
+            tree = walk_and_decrypt(tree, key, stash=stash,
                                     ignoreMac=args.ignore_mac)
 
         # hide the sops branch during editing
@@ -251,7 +252,7 @@ def main():
             tree = load_file_into_tree(tmppath, otype,
                                        restore_sops=stash['sops'])
         os.remove(tmppath)
-        tree = walk_and_encrypt(tree, key, stash=stash, isRoot=True)
+        tree = walk_and_encrypt(tree, key, stash=stash)
         tree = update_sops_branch(tree, key)
 
     # if we're in -e or -d mode, and not in -i mode, display to stdout
@@ -446,7 +447,7 @@ def update_sops_branch(tree, key):
 
 
 def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
-                     isRoot=False, ignoreMac=False):
+                     isRoot=True, ignoreMac=False):
     """Walk the branch recursively and decrypt leaves."""
     if isRoot and not ignoreMac:
         digest = hashlib.sha512()
@@ -461,7 +462,7 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
             nstash = stash[k]
         if isinstance(v, dict):
             branch[k] = walk_and_decrypt(v, key, aad=aad, stash=nstash,
-                                         digest=digest)
+                                         digest=digest, isRoot=False)
         elif isinstance(v, list):
             branch[k] = walk_list_and_decrypt(v, key, aad=aad, stash=nstash,
                                               digest=digest)
@@ -478,8 +479,9 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
             panic("'mac' not found, unable to verify file integrity", 52)
         h = digest.hexdigest().upper()
         # We know the original hash is trustworthy because it is encrypted
-        # with the data key and authenticated using the tree keys
-        orig_h = decrypt(branch['sops']['mac'], key, aad=aad)
+        # with the data key and authenticated using the lastmodified timestamp
+        orig_h = decrypt(branch['sops']['mac'], key,
+                         aad=branch['sops']['lastmodified'].encode('utf-8'))
         if h != orig_h:
             panic("Hash verification failed!\nexpected %s\nbut got  %s" %
                   (orig_h, h), 51)
@@ -497,7 +499,7 @@ def walk_list_and_decrypt(branch, key, aad=b'', stash=None, digest=None):
             nstash = stash[i]
         if isinstance(v, dict):
             kl.append(walk_and_decrypt(v, key, aad=aad, stash=nstash,
-                                       digest=digest))
+                                       digest=digest, isRoot=False))
         elif isinstance(v, list):
             kl.append(walk_list_and_decrypt(v, key, aad=aad, stash=nstash,
                                             digest=digest))
@@ -547,7 +549,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
 
 
 def walk_and_encrypt(branch, key, aad=b'', stash=None,
-                     isRoot=False, digest=None):
+                     isRoot=True, digest=None):
     """Walk the branch recursively and encrypts its leaves."""
     if isRoot:
         digest = hashlib.sha512()
@@ -561,7 +563,7 @@ def walk_and_encrypt(branch, key, aad=b'', stash=None,
         if isinstance(v, dict):
             # recursively walk the tree
             branch[k] = walk_and_encrypt(v, key, aad=aad, stash=nstash,
-                                         digest=digest)
+                                         digest=digest, isRoot=False)
         elif isinstance(v, list):
             branch[k] = walk_list_and_encrypt(v, key, aad=aad, stash=nstash,
                                               digest=digest)
@@ -571,9 +573,12 @@ def walk_and_encrypt(branch, key, aad=b'', stash=None,
         else:
             branch[k] = encrypt(v, key, aad=aad, stash=nstash, digest=digest)
     if isRoot:
+        branch['sops']['lastmodified'] = NOW
         # finalize and store the message authentication code in encrypted form
         h = digest.hexdigest().upper()
-        branch['sops']['mac'] = encrypt(h, key, aad=aad)
+        mac = encrypt(h, key,
+                      aad=branch['sops']['lastmodified'].encode('utf-8'))
+        branch['sops']['mac'] = mac
     return branch
 
 
@@ -586,7 +591,7 @@ def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None):
             nstash = stash[i]
         if isinstance(v, dict):
             kl.append(walk_and_encrypt(v, key, aad=aad, stash=nstash,
-                                       digest=digest))
+                                       digest=digest, isRoot=False))
         elif isinstance(v, list):
             kl.append(walk_list_and_encrypt(v, key, aad=aad, stash=nstash,
                                             digest=digest))
@@ -691,7 +696,7 @@ def get_key_from_kms(tree):
         try:
             kms_response = kms.decrypt(CiphertextBlob=b64decode(enc))
         except Exception as e:
-            print("failed to decrypt key using kms: %s, skipping it" % e,
+            print("[warning] skipping kms %s: %s " % (entry['arn'], e),
                   file=sys.stderr)
             continue
         return kms_response['Plaintext']
@@ -716,7 +721,7 @@ def encrypt_key_with_kms(key, entry):
         return entry
     entry['enc'] = b64encode(
         kms_response['CiphertextBlob']).decode('utf-8')
-    entry['created_at'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    entry['created_at'] = NOW
     return entry
 
 
@@ -804,7 +809,7 @@ def encrypt_key_with_pgp(key, entry):
         return entry
     enc = enc.decode('utf-8')
     entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
-    entry['created_at'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    entry['created_at'] = NOW
     return entry
 
 

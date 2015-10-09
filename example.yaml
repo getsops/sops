@@ -7,16 +7,15 @@ app2:
     # private key for secret operations in app2
     key: |-
         ENC[AES256_GCM,data:78VMY0v+DvYl2LePvuDsN4SeyPQK9uBPE9L/kadbUgFF3S36OgWu4XJnDnpZfHRfsRDqlJM+mF2vze6+psRy+5o1O89FlOFpRykicV96kpToCM1TyaVzlQs0bAUWJ5S3H/pStQvU03E2Avx2KR5pxvOajPkb4orfU3nkgmnU8SJSZcLgmxC2eQgkx5ajXcQ26CLvQreczOGFtRGRo9WP3ePg93S4DcDrwjWsIqoMwS+2Pv+iAGVy+bhSleKe8WpmhtCSBpwlq9vNiykPEXktAhBugDyWgkLtTnAL3VcJ7z8xWoKIdGPBIMTgGk8Vdkuc0z6Y32bhyRvJr2xg08lZZDwyzpmP8+qSTi4gc/y4C8B8hIm6ldQMImSvdKNFs3yehxMTnensy/qT8wisX9UELaFClJZDRqgF2g7+2Oeci3c7RNa0HXt+qMjUREQ1Px4m3mi2AAvxU/bOduBmf/d0eyR/jn5I1wbDWH/IHkulfF0eAezG3PYS5BIkoN4iluPX87RBkxKjzkQmMUQCBb0pPSVjbVdTzKyhZD2gpca5rrxw3jbUU7wObfWO9EWxPdvzxxr/8Ul4rWzpohL+/2B0+SjHCOq4ZMk7wR4Y4dnZHd8gHb6U59g6ayelaYv3RCP4bHrW7dWYgfCeqKErsvGqzik=,iv:rOwVWlkdSomHVVXwBwxGLUgbsPvPBqnV7E12gcmmzlY=,tag:dliz9mVOhTA4zfBsCGVyqQ==,type:str]
-number: ENC[AES256_GCM,data:uJyCZeY4/KnlJg==,iv:uTq9o812BitYNuuFPMqWAgIV6HarNErQV1JfvKb3tmU=,tag:hfNTc2iAoD40hk4lHihwTQ==,type:int]
+number: ENC[AES256_GCM,data:FveYIOa4aPM4HvGm5w==,iv:7/CYCTI4aLHoYS2T3sMhibReeO29opiqzyMIXUvVD3w=,tag:3Rn+oZ+1PS7DYUlGCWJMQA==,type:float]
 an_array:
 - ENC[AES256_GCM,data:kUbSpUwaGDtAcyI=,iv:94+201+1O3Sb9SgY7kc/1QWE9H1Tk1oN42A3OshBsb8=,tag:ciZwcgXAfhhrqltDWM7ZTQ==,type:str]
 - ENC[AES256_GCM,data:pZWqRK5ZYpOfGHw=,iv:kSqcJz3/t78O+xDQkBDvoG6pxA1w5uzNAMlEBgnkRR8=,tag:RvniVpPKwr/o/VAvFrxqSA==,type:str]
 - ENC[AES256_GCM,data:oAkO6uRAV70w+ZOSScMLzUk5rtwybj0epc2tesZkeXuNuM9R0I8l34yQ2/jjCEgLcGYtqB6+i4ljGg==,iv:bniytY7Y+oZen0T3OjBBlQMoHVx4TwnYUI5IgHbf2AY=,tag:7CRdL76zQkwbumga9kWgsg==,type:str]
 - ENC[AES256_GCM,data:n5ZMVViz/IZwqRDgIljrQg==,iv:8A9X2UyYwyGsFKwoTO1MH69MCpUa31QJ3jSgde9i2Pc=,tag:vG4j9Y01cVg+oJ7peeA6PQ==,type:str]
 sops:
-    mac: ENC[AES256_GCM,data:AZ2oYrcDSYgvnVbKMUS35/qMfbnMz5dibgJCts1z/S6krwEXv/4+j5Mh4nZOgT+wav2WS88j8lmNzfbL81LwY7fI0ajAjNwYTQKnJvH/YP3vFyCSVuRfsR4meheg2DpdN5vALPfdmz8Ib70wgpyQLqWVgDqz46to+0RdCJHwMuk=,iv:Sy3CcFl19xxht7ZfBiwVW5RPxIeGILAt/0FgmCGPz2A=,tag:BKmcOD5XfglXh7rRlfhGfg==,type:str]
-    attention: This section contains key material that should only be modified with
-        extra care. See `sops -h`.
+    mac: ENC[AES256_GCM,data:uASXtE/p4eVE82+bMzctzxVZJDhjXsa+E+U9WgSEhQ43exet2edQ4ClvFl0C1oVGLbDwoeSoG3nYJ+08TrPtclEpuLpUNJaySiPwnjbCxbImw494UYVmK7WSfNcSqLmX9KEKM0VJr8cxc2A29uF2cZDNG1PB/gRoNfvWX+ax784=,iv:HMICJ1axBjGuukEc8iF8KOAMY6F+Z77aodJiMh84ZqM=,tag:9ZbE3oUermAWNMTV0LEyfg==,type:str]
+    version: 0.8
     kms:
     -   created_at: 1444233191.408969
         enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAgB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzV1o6Prf6blP9lLM4CARCAO+JL69F23WaIi3c2mQdHBTSUf1OdyRTq0+yFYxZCmCARmYAM3GEnTiuFMMCFP4I09TJJBBuc58/RTM0u
@@ -24,7 +23,6 @@ sops:
     -   created_at: 1444233192.474385
         enc: CiBdfsKZbRNf/Li8Tf2SjeSdP76DineB1sbPjV0TV+meTxKnAQEBAgB4XX7CmW0TX/y4vE39ko3knT++g4p3gdbGz41dE1fpnk8AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAww2lEDZcq5evsCFcACARCAOxuzZh55fs9x7WE/ZpiRKIG85bvTWVn8wFnFozK/dT3tlPmNv5JwGiXQw1BG6e+fw31npvcGoIvzkwje
         arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
-    version: 0.8
     pgp:
     -   fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
         enc: |
@@ -60,3 +58,6 @@ sops:
             FcjpqVkpIdddl1AUuY5NVBc0Xkhglz244o+xjIkULVLdlAFFGpv5CnXMLOOm5Bs=
             =MGKv
             -----END PGP MESSAGE-----
+    lastmodified: '2015-10-09T13:17:59Z'
+    attention: This section contains key material that should only be modified with
+        extra care. See `sops -h`.
