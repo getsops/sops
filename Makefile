@@ -70,7 +70,7 @@ functional-tests-once:
 		python sops/__init__.py -d /tmp/testdataenc.$$type > /dev/null || exit 1; \
 	done
 
-pypi:
+pypi: tests functional-tests
 	$(PYTHON) setup.py sdist check upload --sign
 
 clean:

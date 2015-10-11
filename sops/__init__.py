@@ -41,22 +41,23 @@ if sys.version_info[0] == 3:
 VERSION = 0.8
 
 DESC = """
-SOPS - an editor of encrypted files that uses AWS KMS and PGP
-
 `sops` supports AWS KMS and PGP encryption:
     * To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
       in the `-k` flag or in the ``SOPS_KMS_ARN`` environment variable.
-      (you need valid credentials in ~/.aws/credentials)
+      (you need valid credentials in ~/.aws/credentials or in your env)
     * To encrypt or decrypt using PGP, specify the PGP fingerprint in the
       `-p` flag or in the ``SOPS_PGP_FP`` environment variable.
 
-Those flags are ignored if the document already stores encryption info.
+To use multiple KMS or PGP keys, separate them by commas. For example:
+    $ sops -p "10F2[...]0A, 85D[...]B3F21" file.yaml
 
-The ``SOPS_KMS_ARN`` and ``SOPS_PGP_FP`` environment variables can
-take multiple keys separated by commas. All spaces are trimmed.
+The -p and -k flags are ignored if the document already contains master
+keys. To add/remove master keys in existing documents, open then with -s
+and edit the `sops` branch directly.
 
-By default, editing is done in vim. Set the env variable ``$EDITOR``
-to use a different editor.
+By default, editing is done in vim, and will use the $EDITOR env if set.
+
+See the Readme at github.com/mozilla/sops
 """
 
 DEFAULT_YAML = """# Welcome to SOPS. This is the default template.
@@ -94,14 +95,14 @@ def main():
     argparser = argparse.ArgumentParser(
         usage='sops <file>',
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Encrypted secrets editor',
+        description='SOPS - encrypted files editor that uses AWS KMS and PGP',
         epilog=dedent(DESC))
     argparser.add_argument('file',
                            help="file to edit; create it if it doesn't exist")
     argparser.add_argument('-k', '--kms', dest='kmsarn',
-                           help="ARN of KMS key used for encryption")
+                           help="comma separated list of KMS ARNs")
     argparser.add_argument('-p', '--pgp', dest='pgpfp',
-                           help="fingerprint of PGP key for decryption")
+                           help="comma separated list of PGP fingerprints")
     argparser.add_argument('-d', '--decrypt', action='store_true',
                            dest='decrypt',
                            help="decrypt <file> and print it to stdout")
@@ -124,7 +125,7 @@ def main():
                                 "if undef, use input type")
     argparser.add_argument('-s', '--show_master_keys', action='store_true',
                            dest='show_master_keys',
-                           help="display master encryption keys in the file"
+                           help="display master encryption keys in the file "
                                 "during editing (off by default).")
     argparser.add_argument('--ignore-mac', action='store_true',
                            dest='ignore_mac',
