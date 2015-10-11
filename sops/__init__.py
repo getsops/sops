@@ -41,7 +41,7 @@ if sys.version_info[0] == 3:
 VERSION = 0.8
 
 DESC = """
-`sops` is an encryption manager and editor for files that contains secrets.
+SOPS - an editor of encrypted files that uses AWS KMS and PGP
 
 `sops` supports AWS KMS and PGP encryption:
     * To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
@@ -49,31 +49,8 @@ DESC = """
       (you need valid credentials in ~/.aws/credentials)
     * To encrypt or decrypt using PGP, specify the PGP fingerprint in the
       `-p` flag or in the ``SOPS_PGP_FP`` environment variable.
+
 Those flags are ignored if the document already stores encryption info.
-Internally the KMS and PGP key IDs are stored in the document under
-``sops.kms`` and ``sops.pgp``.
-
-    YAML
-        sops:
-            kms:
-            -   arn: "aws:kms:us-east-1:656532927350:key/305caadb"
-            -   arn: "aws:kms:us-west-2:457153232612:key/f7da420e"
-            pgp:
-            -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
-
-    JSON
-        {"sops": {
-            "kms": [
-                {"arn": "aws:kms:us-east-1:650:key/305caadb"},
-                {"arn": "aws:kms:us-west-2:457153232612:key/f7da420e" }
-            ],
-            "pgp": [
-                {"fp": 85D77543B3D624B63CEA9E6DBC17301B491B3F21}
-            ]}
-        }
-
-    TEXT (JSON serialization of the `sops` object)
-        SOPS={"sops":{"kms":[{"arn":"aws:kms:us-east-1:650:ke...}]}}
 
 The ``SOPS_KMS_ARN`` and ``SOPS_PGP_FP`` environment variables can
 take multiple keys separated by commas. All spaces are trimmed.
@@ -222,19 +199,45 @@ def main():
         # is opened on the file
         tmppath = write_file(tree, filetype=otype)
         tmpstamp = os.stat(tmppath)
+        print("temp file created at %s" % tmppath, file=sys.stderr)
 
         # open an editor on the file and, if the file is yaml or json,
         # verify that it doesn't contain errors before continuing
         valid_syntax = False
-        while valid_syntax is False:
+        has_master_keys = False
+        while not valid_syntax or not has_master_keys:
             run_editor(tmppath)
             try:
                 valid_syntax = validate_syntax(tmppath, otype)
             except Exception as e:
-                print("Syntax error: %s\nPress a key to return into "
-                      "the editor, or ctrl+c to exit without saving." % e,
-                      file=sys.stderr)
-                raw_input()
+                try:
+                    print("Syntax error: %s\nPress a key to return into "
+                          "the editor, or ctrl+c to exit without saving." % e,
+                          file=sys.stderr)
+                    raw_input()
+                except KeyboardInterrupt:
+                    os.remove(tmppath)
+                    panic("ctrl+c captured, exiting without saving", 85)
+
+            if args.show_master_keys:
+                # use the sops data from the file
+                tree = load_file_into_tree(tmppath, otype)
+            else:
+                # sops branch was removed for editing, restoring it
+                tree = load_file_into_tree(tmppath, otype,
+                                           restore_sops=stash['sops'])
+            if check_master_keys(tree):
+                has_master_keys = True
+            else:
+                try:
+                    print("Could not find a valid master key to encrypt the "
+                          "data key with.\nAdd at least one KMS or PGP "
+                          "master key to the `sops` branch,\nor ctrl+c to "
+                          "exit without saving.")
+                    raw_input()
+                except KeyboardInterrupt:
+                    os.remove(tmppath)
+                    panic("ctrl+c captured, exiting without saving", 85)
 
         # verify if file has been modified, and if not, just exit
         tmpstamp2 = os.stat(tmppath)
@@ -243,17 +246,9 @@ def main():
             panic("%s has not been modified, exit without writing" % args.file,
                   error_code=200)
 
-        # encrypt the tree
-        if args.show_master_keys:
-            # use the sops data from the file
-            tree = load_file_into_tree(tmppath, otype)
-        else:
-            # sops branch was removed for editing, restoring it
-            tree = load_file_into_tree(tmppath, otype,
-                                       restore_sops=stash['sops'])
-        os.remove(tmppath)
         tree = walk_and_encrypt(tree, key, stash=stash)
-        tree = update_sops_branch(tree, key)
+        tree = update_master_keys(tree, key)
+        os.remove(tmppath)
 
     # if we're in -e or -d mode, and not in -i mode, display to stdout
     if (args.encrypt or args.decrypt) and not args.in_place:
@@ -411,7 +406,7 @@ def parse_pgp_fp(tree, pgp_fps):
     return tree, has_at_least_one_method
 
 
-def update_sops_branch(tree, key):
+def update_master_keys(tree, key):
     """ If master keys have been added to the SOPS branch, encrypt the data key
         with them, and store the new encrypted values.
     """
@@ -444,6 +439,21 @@ def update_sops_branch(tree, key):
         tree['sops']['version'] = VERSION
 
     return tree
+
+
+def check_master_keys(tree):
+    """ Make sure that we have at least one valid master key to encrypt
+        the data key with
+    """
+    if 'kms' in tree['sops']:
+        for entry in tree['sops']['kms']:
+            if 'arn' in entry and entry['arn'] != "":
+                return True
+    if 'pgp' in tree['sops']:
+        for entry in tree['sops']['pgp']:
+            if 'fp' in entry and entry['fp'] != "":
+                return True
+    return False
 
 
 def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
@@ -649,18 +659,25 @@ def get_key(tree, need_key=False):
         print("please wait while a data encryption key is being generated"
               " and stored securely", file=sys.stderr)
         key = os.urandom(32)
+        has_at_least_one_method = False
         if 'kms' in tree['sops']:
             i = -1
             for entry in tree['sops']['kms']:
                 i += 1
                 updated = encrypt_key_with_kms(key, entry)
-                tree['sops']['kms'][i] = updated
+                if 'enc' in updated and updated['enc'] != "":
+                    tree['sops']['kms'][i] = updated
+                    has_at_least_one_method = True
         if 'pgp' in tree['sops']:
             i = -1
             for entry in tree['sops']['pgp']:
                 i += 1
                 updated = encrypt_key_with_pgp(key, entry)
-                tree['sops']['pgp'][i] = updated
+                if 'enc' in updated and updated['enc'] != "":
+                    tree['sops']['pgp'][i] = updated
+                    has_at_least_one_method = True
+        if not has_at_least_one_method:
+            panic("No method available to store new data key, aborting", 37)
         return key, tree
     key = get_key_from_kms(tree)
     if not (key is None):
@@ -668,7 +685,7 @@ def get_key(tree, need_key=False):
     key = get_key_from_pgp(tree)
     if not (key is None):
         return key, tree
-    panic("[error] couldn't retrieve a key to encrypt/decrypt the tree",
+    panic("could not retrieve a key to encrypt/decrypt the tree",
           error_code=128)
 
 
@@ -718,7 +735,7 @@ def encrypt_key_with_kms(key, entry):
     except Exception as e:
         print("failed to encrypt key using kms arn %s: %s, skipping it" %
               (entry['arn'], e), file=sys.stderr)
-        return entry
+        return None
     entry['enc'] = b64encode(
         kms_response['CiphertextBlob']).decode('utf-8')
     entry['created_at'] = NOW
@@ -806,7 +823,7 @@ def encrypt_key_with_pgp(key, entry):
     except Exception as e:
         print("failed to encrypt key using pgp fp %s: %s, skipping it" %
               (fp, e), file=sys.stderr)
-        return entry
+        return None
     enc = enc.decode('utf-8')
     entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
     entry['created_at'] = NOW
