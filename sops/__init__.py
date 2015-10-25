@@ -562,6 +562,11 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
         return int(cleartext.decode('utf-8'))
     if valtype == b'float':
         return float(cleartext.decode('utf-8'))
+    if valtype == b'bool':
+        if cleartext.lower() == b'true':
+            return True
+        return False
+
 
 
 def walk_and_encrypt(branch, key, aad=b'', stash=None,
@@ -624,6 +629,8 @@ def encrypt(value, key, aad=b'', stash=None, digest=None):
         valtype = 'int'
     if isinstance(value, float):
         valtype = 'float'
+    if isinstance(value, bool):
+        valtype = 'bool'
     value = str(value).encode('utf-8')
     if digest:
         digest.update(value)
