@@ -469,26 +469,32 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
     """Walk the branch recursively and decrypt leaves."""
     if isRoot and not ignoreMac:
         digest = hashlib.sha512()
-
+    carryaad = aad
     for k, v in branch.items():
         if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
         nstash = dict()
-        aad += k.encode('utf-8')
+        caad = aad
+        if INPUT_VERSION >= 0.9:
+            caad = aad + k.encode('utf-8') + b':'
+        else:
+            caad = carryaad
+            caad += k.encode('utf-8')
+            carryaad = caad
         if stash:
             stash[k] = {'has_stash': True}
             nstash = stash[k]
         if isinstance(v, dict):
-            branch[k] = walk_and_decrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_and_decrypt(v, key, aad=caad, stash=nstash,
                                          digest=digest, isRoot=False)
         elif isinstance(v, list):
-            branch[k] = walk_list_and_decrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_list_and_decrypt(v, key, aad=caad, stash=nstash,
                                               digest=digest)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = decrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            ev = decrypt(v, key, aad=caad, stash=nstash, digest=digest)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = decrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            branch[k] = decrypt(v, key, aad=caad, stash=nstash, digest=digest)
 
     if isRoot and not ignoreMac:
         # compute the hash computed on values with the one stored
@@ -577,22 +583,22 @@ def walk_and_encrypt(branch, key, aad=b'', stash=None,
     for k, v in branch.items():
         if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
-        aad += k.encode('utf-8')
+        caad = aad + k.encode('utf-8') + b':'
         nstash = dict()
         if stash and k in stash:
             nstash = stash[k]
         if isinstance(v, dict):
             # recursively walk the tree
-            branch[k] = walk_and_encrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_and_encrypt(v, key, aad=caad, stash=nstash,
                                          digest=digest, isRoot=False)
         elif isinstance(v, list):
-            branch[k] = walk_list_and_encrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_list_and_encrypt(v, key, aad=caad, stash=nstash,
                                               digest=digest)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = encrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            ev = encrypt(v, key, aad=caad, stash=nstash, digest=digest)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = encrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            branch[k] = encrypt(v, key, aad=caad, stash=nstash, digest=digest)
     if isRoot:
         branch['sops']['lastmodified'] = NOW
         # finalize and store the message authentication code in encrypted form
@@ -635,16 +641,13 @@ def encrypt(value, key, aad=b'', stash=None, digest=None):
     if digest:
         digest.update(value)
     # if we have a stash, and the value of cleartext has not changed,
-    # attempt to take the IV and AAD value from the stash.
+    # attempt to take the IV.
     # if the stash has no existing value, or the cleartext has changed,
-    # generate new IV and AAD.
+    # generate new IV.
     if stash and 'cleartext' in stash and stash['cleartext'] == value:
         iv = stash['iv']
-        aad = stash['aad']
     else:
         iv = os.urandom(32)
-        if aad == b'':
-            aad = os.urandom(32)
     encryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv),
                        default_backend()).encryptor()
@@ -654,7 +657,6 @@ def encrypt(value, key, aad=b'', stash=None, digest=None):
         "tag:{tag},type:{valtype}]".format(
             value=b64encode(enc_value).decode('utf-8'),
             iv=b64encode(iv).decode('utf-8'),
-            aad=b64encode(aad).decode('utf-8'),
             tag=b64encode(encryptor.tag).decode('utf-8'),
             valtype=valtype)
 
