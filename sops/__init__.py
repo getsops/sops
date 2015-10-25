@@ -92,6 +92,7 @@ NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
 INPUT_VERSION = VERSION
 
+
 def main():
     argparser = argparse.ArgumentParser(
         usage='sops <file>',
@@ -572,7 +573,6 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
         if cleartext.lower() == b'true':
             return True
         return False
-
 
 
 def walk_and_encrypt(branch, key, aad=b'', stash=None,
