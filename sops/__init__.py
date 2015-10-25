@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 0.8
+VERSION = 0.9
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -57,8 +57,8 @@ and edit the `sops` branch directly.
 
 By default, editing is done in vim, and will use the $EDITOR env if set.
 
-See the Readme at github.com/mozilla/sops
-"""
+Version {version} - See the Readme at github.com/mozilla/sops
+""".format(version=VERSION)
 
 DEFAULT_YAML = """# Welcome to SOPS. This is the default template.
 # Remove these lines and add your data.
@@ -90,6 +90,7 @@ Remove this text and add your content to the file.
 
 NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
+INPUT_VERSION = VERSION
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -295,6 +296,12 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
                                                           pgp_fps=pgp_fps)
         except Exception as e:
             panic("failed to initialize encryption data: %s" % e, 32)
+        # try to set the input version to the one set in the file
+        try:
+            global INPUT_VERSION
+            INPUT_VERSION = tree['sops']['version']
+        except:
+            None
     else:
         # load a new tree using template data
         if itype == "yaml":
@@ -494,7 +501,7 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
         orig_h = decrypt(branch['sops']['mac'], key,
                          aad=branch['sops']['lastmodified'].encode('utf-8'))
         if h != orig_h:
-            panic("Hash verification failed!\nexpected %s\nbut got  %s" %
+            panic("Checksum verification failed!\nexpected %s\nbut got  %s" %
                   (orig_h, h), 51)
 
     return branch
@@ -523,7 +530,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
     """Return a decrypted value."""
     valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
     # extract fields using a regex
-    if 'type:' in value:
+    if INPUT_VERSION >= 0.8:
         valre += b',type:(.+)'
     valre += b'\]'
     res = re.match(valre, value.encode('utf-8'))
@@ -534,10 +541,8 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
     iv = b64decode(res.group(2))
     tag = b64decode(res.group(3))
     valtype = 'str'
-    try:
+    if INPUT_VERSION >= 0.8:
         valtype = res.group(4)
-    except:
-        None
     decryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv, tag),
                        default_backend()
@@ -626,7 +631,7 @@ def encrypt(value, key, aad=b'', stash=None, digest=None):
     # attempt to take the IV and AAD value from the stash.
     # if the stash has no existing value, or the cleartext has changed,
     # generate new IV and AAD.
-    if stash and stash['cleartext'] == value:
+    if stash and 'cleartext' in stash and stash['cleartext'] == value:
         iv = stash['iv']
         aad = stash['aad']
     else:
