@@ -275,6 +275,38 @@ original file after encrypting or decrypting it.
 	$ sops -d -i /path/to/existing/file.yaml
 	# file.yaml is back in cleartext
 
+Encrypting binary files
+~~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` primary use case is encrypting YAML and JSON configuration files, but it
+also has the ability to manage binary files. When encrypting a binary, sops will
+read the data as bytes, encrypt it, store the encrypted base64 under
+`tree['data']` and write the result as JSON.
+
+Note that the base64 encoding of encrypted data can actually make the encrypted
+file larger than the cleartext one.
+
+In-place encryption/decryption also works on binary files.
+
+.. code::
+
+	$ dd if=/dev/urandom of=/tmp/somerandom bs=1024
+	count=512
+	512+0 records in
+	512+0 records out
+	524288 bytes (524 kB) copied, 0.0466158 s, 11.2 MB/s
+
+	$ sha512sum /tmp/somerandom
+	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
+
+	$ sops -e -i /tmp/somerandom 
+	please wait while a data encryption key is being generated and stored securely
+
+	$ sops -d -i /tmp/somerandom 
+
+	$ sha512sum /tmp/somerandom
+	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
+
 Extract a sub-part of a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

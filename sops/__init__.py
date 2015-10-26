@@ -182,8 +182,13 @@ def main():
         # Encrypt mode: encrypt, display and exit
         key, tree = get_key(tree, need_key)
         tree = walk_and_encrypt(tree, key)
-        finalize_output(tree, args.file, encrypt=True, in_place=args.in_place,
-                        output_type=otype)
+        dest = '/dev/stdout'
+        if args.in_place:
+            dest = args.file
+        if otype == "bytes":
+            otype = "json"
+        write_file(tree, path=dest, filetype=otype)
+        sys.exit(0)
 
     if args.decrypt:
         # Decrypt mode: decrypt, display and exit
@@ -191,8 +196,13 @@ def main():
         tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
         if not args.show_master_keys:
             tree.pop('sops', None)
-        finalize_output(tree, args.file, decrypt=True, in_place=args.in_place,
-                        output_type=otype, tree_path=args.tree_path)
+        dest = '/dev/stdout'
+        if args.in_place:
+            dest = args.file
+        if args.tree_path:
+            tree = truncate_tree(tree, args.tree_path)
+        write_file(tree, path=dest, filetype=otype)
+        sys.exit(0)
 
     # EDIT Mode: decrypt, edit, encrypt and save
     key, tree = get_key(tree, need_key)
@@ -264,7 +274,12 @@ def main():
     tree = update_master_keys(tree, key)
     os.remove(tmppath)
 
-    finalize_output(tree, args.file, output_type=otype)
+    # always store encrypted binary files in a json enveloppe
+    if otype == "bytes":
+        otype = "json"
+    path = write_file(tree, path=args.file, filetype=otype)
+    print("file written to %s" % (path), file=sys.stderr)
+    sys.exit(0)
 
 
 def detect_filetype(file):
@@ -878,32 +893,6 @@ def encrypt_key_with_pgp(key, entry):
     entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
     entry['created_at'] = NOW
     return entry
-
-
-def finalize_output(tree, path, encrypt=False, decrypt=False, in_place=False,
-                    output_type="json", tree_path=None):
-    """ Write the final output of sops to a destination path """
-    # if we're in -e or -d mode, and not in -i mode, display to stdout
-    if encrypt and not in_place:
-        if output_type == "bytes":
-            output_type = "json"
-        write_file(tree, path='/dev/stdout', filetype=output_type)
-
-    elif decrypt and not in_place:
-        if tree_path:
-            tree = truncate_tree(tree, tree_path)
-        # don't show sops metadata in decrypt mode
-
-        write_file(tree, path='/dev/stdout', filetype=output_type)
-
-    # otherwise, write the tree to a file
-    else:
-        if output_type == "bytes":
-            output_type = "json"
-        path = write_file(tree, path=path, filetype=output_type)
-        print("file written to %s" % (path), file=sys.stderr)
-    # it's called "finalize" for a reason...
-    sys.exit(0)
 
 
 def write_file(tree, path=None, filetype=None):
