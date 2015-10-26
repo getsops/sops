@@ -233,6 +233,48 @@ files in place with rotation enabled:
 Examples
 --------
 
+Creating a new file
+~~~~~~~~~~~~~~~~~~~
+
+The command below create a new file with a data key encrypted by KMS and PGP.
+
+.. code:: bash
+
+	$ sops --kms "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500" --pgp C9CAB0AF1165060DB58D6D6B2653B624D620786D /path/to/new/file.yaml
+
+Encrypting an existing file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Similar to the previous command, we tell sops to use one KMS and one PGP key.
+The path points to an existing cleartext file, so we give sops flag `-e` to
+encrypt the file, and redirect the output to a destination file.
+
+.. code:: bash
+
+	$ export SOPS_KMS+ARN="arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500"
+	$ export SOPS_PGP_FP="C9CAB0AF1165060DB58D6D6B2653B624D620786D"
+	$ sops -e /path/to/existing/file.yaml > /path/to/new/encrypted/file.yaml
+
+Decrypt the file with `-d`.
+
+.. code:: bash
+
+	$ sops -d /path/to/new/encrypted/file.yaml
+
+Encrypt or decrypt a file in place
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Rather than redirecting the output of `-e` or `-d`, sops can replace the
+original file after encrypting or decrypting it.
+
+.. code:: bash
+
+	# file.yaml is in cleartext
+	$ sops -e -i /path/to/existing/file.yaml
+	# file.yaml is now encrypted
+	$ sops -d -i /path/to/existing/file.yaml
+	# file.yaml is back in cleartext
+
 Extract a sub-part of a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -261,6 +303,21 @@ them.
 
 	$ sops -d ~/git/svc/sops/example.yaml -t '["an_array"][1]'
 	secretuser2
+
+Using sops as a library in a python script
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can import sops as a module and use it in your python program.
+
+.. code:: python
+
+	import sops
+
+	pathtype = sops.detect_filetype(path)
+	tree = sops.load_file_into_tree(path, pathtype)
+	sops_key, tree = sops.get_key(tree)
+	tree = sops.walk_and_decrypt(tree, sops_key)
+	sops.write_file(tree, path=path, filetype=pathtype)
 
 YAML types limitations
 ----------------------
