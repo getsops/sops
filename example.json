@@ -19,7 +19,7 @@
         }
     ],
     "sops": {
-        "mac": "ENC[AES256_GCM,data:IIVPhOc9mNHBL4tYpyBlgi1EgpC3UUd/ndLkT4ZDvn4RmScQzUVkWwblylqR26ObR1U3sTmmQLnE5w/eLugssS+SycPzIWqz7wRWDCbZxrU3wLVV1Qa7BzZDVarKs94FbY+46+9NLL+/M4QcGgfN8aArDj4N3NrCCfazyGSEKuc=,iv:6ukma4Rj0e2027T/S2JWKcqvJwSwT3pDMmJfSGbvek0=,tag:Ek6gppFf6TaaV9J9pIUlKA==,type:str]",
+        "mac": "ENC[AES256_GCM,data:DA4H2c++XgR3Oy8LThU70sIGfd11jdy+7vSs0b2n1bEWd6XgCkCEJWDpy58CJPISJY/y8iOCyEh/oeOaD0/Y+qqoOxAeK/FQmXDpKRQrrSxPcn3nbAMbkaTvTaPwjrgtJXH2cN0lQwlPF+s9FifZXKJe0aGwj7jbxjfWXaEc6pk=,iv:iwbQBuoEaEWLhA1TYeuoxFoO1ITHGg2qeciD4aUA2pw=,tag:oz9bhv60yOiQ8IxurJw0Zw==,type:str]",
         "version": 0.90000000000000002,
         "kms": [
             {
@@ -45,7 +45,7 @@
                 "enc": "-----BEGIN PGP MESSAGE-----\nVersion: GnuPG v1\n\nhQIMA0t4uZHfl9qgARAAgQdMpnTNMCdbdFRpBsC9kxi334LbBrFUkp5lI+YzutZy\nSic85ea06FGL3O93tII9mwGAsESwKlN4nX0d31vuh/lYxMDakyd1IK/BkMG4Z1xG\n52MsACG/pyitMBXkIIyjmR0tVR+CixDsy5cUJxoWq+mfuE2ywziPY+KbEZ50hFXg\naAdKCdInXlLHdId+aXhThhXUGN1seQjtdyZjVXnp8c9hHS2YQdyp/SZf47NJ4A2y\nkO40kNS4oaHUUZIZLtzaFhWytZlpWEJJkIgH/vefL3jLW4SiIiqz24wr7MncsF+A\np8Pteulc5VrvA5CzQIq9qF3Zwn9HV2a0KWLZ/J29EYzSM8u9HLOYqsmNKt0TcVbX\n6eoG3JTJoRDrzO0DZvR3pMm4gQ0WXzHKzpu8g+JYnoQ19AMWJAPbTp5ej3MWHcXD\nXFjz4gsSYbwc4h/zVBOWsYoHlyTLUMwg2BA1YiL89xs8MIhIHOAmvM0mv+QuZQ7S\nCfc1mS04CZSmJvTcNkvE5n76n2iXs6nYNk8TYyQlhYebuQmJQKJuUYjKIHhuxZFa\n30WaSGnKHqIQn1pl7jqyqm8sVTzaKMyhbM0T+UQUJhXcWVr7r+CtRAt8XjVnJMvo\nviJwTWy1Ddo0Vu1licMFJXMnQbQlVh+CZS6FHqcbxfPaYfe7JldGmhwKg+F/NEHS\nXgEf78iLm3FNb4yeOkB/z2xjiZ3XvUAQjsUK5ofF1CJYcQ//YIFex1oO55Z0+qIt\njdDtqivLgf4SFRf0uhOxUrQNuFAvY361F1mvrGPcTubh/Ygq0aVzWzgC9gn7DTo=\n=uQw0\n-----END PGP MESSAGE-----\n"
             }
         ],
-        "lastmodified": "2015-10-25T13:54:31Z",
+        "lastmodified": "2015-10-26T18:15:31Z",
         "attention": "This section contains key material that should only be modified with extra care. See `sops -h`."
     }
 }

@@ -22,7 +22,7 @@ this:
             nested:
                 value: ENC[AES256_GCM,data:TzfuYK7BOwJlmlxydTmtPKlfIvSxoaIMiqrt,iv:q+YKcwFOImx8VX4Ti1ECjBWLz32gtkxzBDq12uOsmvk=,tag:GXz+BkXKbblwfEc/dZLgzg==,type:str]
 sops:
-    mac: ENC[AES256_GCM,data:e3y7iNcEW4XuADj02f8mqJpA1I3nNkzk2Hx2k7NjT7KAyYF0fZGwVaOYu0/nIADUp0rSknJY827W++TcRfyM2iwRQ1FH7ydLWCYZsiL8UJtC7SrTy1goAxqCvUpJX5YlgB3jZLw9XmkxSCQ/oHT6JWwyqLtVtuHV6zWUds4s5Oc=,iv:WFMmLUkiuEL3ILZaP5RRx+uPOTjHFv+FNJUR6GJvZjI=,tag:G4+LNwAXecQrJLJs1g+2BA==,type:str]
+    mac: ENC[AES256_GCM,data:gj86GUajphvwhmUS5Z+1nK+yxqleOTOSj71WVl48K4P6R3o/K9rE+doLFl1z2xAw0TxSFnNAR5L/fpvR/3uZCQRfXb9yLTZNOAOtc0JYh3B9Epsa78uznGXnQwuuiX4rXprsrLZ0d07cEuCkhFJww7v27C6zlP8MpthpYTWMXfM=,iv:NlJqEdMb5Y6V54hbzTAwDZ067xFUvxobX05Xa2PuwZs=,tag:Wk9061XNFX8Xpp7duxE+tg==,type:str]
     version: 0.90000000000000002
     kms:
     -   created_at: '2015-10-25T12:52:27Z'
@@ -66,6 +66,6 @@ sops:
             8HwuI2CMQ9skRKtoQJUV1gdSXuLYWzfJKCv0nrLk6Ot94QQV9RsxMeKaqf2V47o=
             =ca1h
             -----END PGP MESSAGE-----
-    lastmodified: '2015-10-25T13:55:10Z'
+    lastmodified: '2015-10-26T18:15:24Z'
     attention: This section contains key material that should only be modified with
         extra care. See `sops -h`.
