@@ -254,3 +254,15 @@ class TreeTest(unittest2.TestCase):
         m = mock.mock_open(read_data=sops.DEFAULT_TEXT)
         with mock.patch.object(builtins, 'open', m):
             assert sops.validate_syntax('path', 'text') == True
+
+    def test_subtree(self):
+        """Extract a subtree from a document."""
+        m = mock.mock_open(read_data=sops.DEFAULT_YAML)
+        key = os.urandom(32)
+        tree = OrderedDict()
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'yaml')
+        ntree = sops.truncate_tree(dict(tree), '["example"]["nested"]["values"]')
+        assert ntree == tree["example"]["nested"]["values"]
+        ntree = sops.truncate_tree(dict(tree), '["example_array"][1]')
+        assert ntree == tree["example_array"][1]

@@ -230,6 +230,38 @@ files in place with rotation enabled:
 		sops -e -i -r $file
 	done
 
+Examples
+--------
+
+Extract a sub-part of a document tree
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` can extract a specific part of a YAML or JSON document, by provided the
+path in the `--extract` command line flag. This is useful to extract specific
+values, like keys, without needed an extra parser.
+
+.. code:: bash
+
+	$ sops -d ~/git/svc/sops/example.yaml -t '["app2"]["key"]'
+	-----BEGIN RSA PRIVATE KEY-----
+	MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
+	ImcbNkqAKnELzFAPSBeEMhrBN0PyOC9lYlMCAwEAAQJBALXD4sjuBn1E7Y9aGiMz
+	bJEBuZJ4wbhYxomVoQKfaCu+kH80uLFZKoSz85/ySauWE8LgZcMLIBoiXNhDKfQL
+	vHECIQD6tCG9NMFWor69kgbX8vK5Y+QL+kRq+9HK6yZ9a+hsLQIhAPn4Ie6HGTjw
+	fHSTXWZpGSan7NwTkIu4U5q2SlLjcZh/AiEA78NYRRBwGwAYNUqzutGBqyXKUl4u
+	Erb0xAEyVV7e8J0CIQC8VBY8f8yg+Y7Kxbw4zDYGyb3KkXL10YorpeuZR4LuQQIg
+	bKGPkMM4w5blyE1tqGN0T7sJwEx+EUOgacRNqM2ljVA=
+	-----END RSA PRIVATE KEY-----
+
+The tree path syntax uses a regular python dictionary syntax, without the
+variable name. Extract keys by naming them, and array elements by numbering
+them.
+
+.. code:: bash
+
+	$ sops -d ~/git/svc/sops/example.yaml -t '["an_array"][1]'
+	secretuser2
+
 YAML types limitations
 ----------------------
 
@@ -307,14 +339,16 @@ the tree structure every time, thus guaranteeing the integrity of the file
 structure.
 
 For example, the following YAML document:
-```yaml
-path:
-	to:
-		my:
-			information:
-				- value1
-				- value2
-```
+
+.. code:: yaml
+
+	path:
+		to:
+			my:
+				information:
+					- value1
+					- value2
+
 will be encrypted with AAD `path:to:my:information:` and verified at decryption.
 
 The result of AES256_GCM encryption is stored in the leaf of the tree using a

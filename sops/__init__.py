@@ -72,6 +72,9 @@ example_multiline: |
     multiline
     entry
 example_number: 1234.5678
+example:
+    nested:
+        values: delete_me
 """
 
 DEFAULT_JSON = """{
@@ -119,6 +122,10 @@ def main():
                            dest='rotate',
                            help="generate a new data encryption key and "
                                 "encrypt all values with the new key")
+    argparser.add_argument('--extract', dest='tree_path',
+                           help="extract a specific key or branch from the "
+                                "input JSON or YAML document. (decrypt mode "
+                                "only). ex: --extract '[\"somekey\"][0]'")
     argparser.add_argument('--input-type', dest='input_type',
                            help="input type (yaml, json, ...), "
                                 "if undef, use file extension")
@@ -254,7 +261,12 @@ def main():
         os.remove(tmppath)
 
     # if we're in -e or -d mode, and not in -i mode, display to stdout
-    if (args.encrypt or args.decrypt) and not args.in_place:
+    if args.encrypt and not args.in_place:
+        write_file(tree, path='/dev/stdout', filetype=otype)
+
+    elif args.decrypt and not args.in_place:
+        if args.tree_path:
+            tree = truncate_tree(tree, args.tree_path)
         write_file(tree, path='/dev/stdout', filetype=otype)
 
     # otherwise, write the tree to a file
@@ -861,6 +873,12 @@ def write_file(tree, path=None, filetype=None):
     else:
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
+
+    if not isinstance(tree, dict) and not isinstance(tree, list):
+        fd.write(tree.encode('utf-8'))
+        fd.close()
+        return path
+
     if filetype == "yaml":
         fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
                                   indent=4).encode('utf-8'))
@@ -909,6 +927,24 @@ def validate_syntax(path, filetype):
         if filetype == 'json':
             json.load(fd)
     return True
+
+
+def truncate_tree(tree, path):
+    """ return the branch or value of a tree at the path provided """
+    comps = path.split('[', -1)
+    for comp in comps:
+        if comp == "":
+            continue
+        if comp[len(comp)-1] != "]":
+            panic("invalid tree path format: tree"+path, 91)
+        comp = comp[0:len(comp)-1]
+        comp = comp.replace('"', '', 2)
+        comp = comp.replace("'", "", 2)
+        if re.search(b'^\d+$', comp.encode('utf-8')):
+            tree = tree[int(comp)]
+        else:
+            tree = tree[comp]
+    return tree
 
 
 def panic(msg, error_code=1):
