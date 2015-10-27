@@ -672,7 +672,7 @@ def encrypt(value, key, aad=b'', stash=None, digest=None):
     # the order in which we do this matters. For example, a bool
     # is also an int, but an int isn't a bool, so we test for bool first
     if isinstance(value, str) or \
-       (sys.version_info[0] == 2 and isinstance(value, unicode)):
+       (sys.version_info[0] == 2 and isinstance(value, unicode)):  # noqa
         valtype = 'str'
     elif isinstance(value, bool):
         valtype = 'bool'
