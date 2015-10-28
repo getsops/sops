@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 0.8
+VERSION = 0.9
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -57,8 +57,8 @@ and edit the `sops` branch directly.
 
 By default, editing is done in vim, and will use the $EDITOR env if set.
 
-See the Readme at github.com/mozilla/sops
-"""
+Version {version} - See the Readme at github.com/mozilla/sops
+""".format(version=VERSION)
 
 DEFAULT_YAML = """# Welcome to SOPS. This is the default template.
 # Remove these lines and add your data.
@@ -72,6 +72,9 @@ example_multiline: |
     multiline
     entry
 example_number: 1234.5678
+example:
+    nested:
+        values: delete_me
 """
 
 DEFAULT_JSON = """{
@@ -89,6 +92,8 @@ Remove this text and add your content to the file.
 """
 
 NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+INPUT_VERSION = VERSION
 
 
 def main():
@@ -117,6 +122,10 @@ def main():
                            dest='rotate',
                            help="generate a new data encryption key and "
                                 "encrypt all values with the new key")
+    argparser.add_argument('--extract', dest='tree_path',
+                           help="extract a specific key or branch from the "
+                                "input JSON or YAML document. (decrypt mode "
+                                "only). ex: --extract '[\"somekey\"][0]'")
     argparser.add_argument('--input-type', dest='input_type',
                            help="input type (yaml, json, ...), "
                                 "if undef, use file extension")
@@ -172,105 +181,117 @@ def main():
     if args.encrypt:
         # Encrypt mode: encrypt, display and exit
         key, tree = get_key(tree, need_key)
-
         tree = walk_and_encrypt(tree, key)
+        dest = '/dev/stdout'
+        if args.in_place:
+            dest = args.file
+        if otype == "bytes":
+            otype = "json"
+        write_file(tree, path=dest, filetype=otype)
+        sys.exit(0)
 
-    elif args.decrypt:
+    if args.decrypt:
         # Decrypt mode: decrypt, display and exit
         key, tree = get_key(tree)
         tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
-
-    else:
-        # EDIT Mode: decrypt, edit, encrypt and save
-        key, tree = get_key(tree, need_key)
-
-        # we need a stash to save the IV and AAD and reuse them
-        # if a given value has not changed during editing
-        stash = dict()
-        stash['sops'] = dict(tree['sops'])
-        if existing_file:
-            tree = walk_and_decrypt(tree, key, stash=stash,
-                                    ignoreMac=args.ignore_mac)
-
-        # hide the sops branch during editing
         if not args.show_master_keys:
             tree.pop('sops', None)
+        dest = '/dev/stdout'
+        if args.in_place:
+            dest = args.file
+        if args.tree_path:
+            tree = truncate_tree(tree, args.tree_path)
+        write_file(tree, path=dest, filetype=otype)
+        sys.exit(0)
 
-        # the decrypted tree is written to a tempfile and an editor
-        # is opened on the file
-        tmppath = write_file(tree, filetype=otype)
-        tmpstamp = os.stat(tmppath)
-        print("temp file created at %s" % tmppath, file=sys.stderr)
+    # EDIT Mode: decrypt, edit, encrypt and save
+    key, tree = get_key(tree, need_key)
 
-        # open an editor on the file and, if the file is yaml or json,
-        # verify that it doesn't contain errors before continuing
-        valid_syntax = False
-        has_master_keys = False
-        while not valid_syntax or not has_master_keys:
-            run_editor(tmppath)
+    # we need a stash to save the IV and AAD and reuse them
+    # if a given value has not changed during editing
+    stash = dict()
+    stash['sops'] = dict(tree['sops'])
+    if existing_file:
+        tree = walk_and_decrypt(tree, key, stash=stash,
+                                ignoreMac=args.ignore_mac)
+
+    # hide the sops branch during editing
+    if not args.show_master_keys:
+        tree.pop('sops', None)
+
+    # the decrypted tree is written to a tempfile and an editor
+    # is opened on the file
+    tmppath = write_file(tree, filetype=otype)
+    tmpstamp = os.stat(tmppath)
+    print("temp file created at %s" % tmppath, file=sys.stderr)
+
+    # open an editor on the file and, if the file is yaml or json,
+    # verify that it doesn't contain errors before continuing
+    valid_syntax = False
+    has_master_keys = False
+    while not valid_syntax or not has_master_keys:
+        run_editor(tmppath)
+        try:
+            valid_syntax = validate_syntax(tmppath, otype)
+        except Exception as e:
             try:
-                valid_syntax = validate_syntax(tmppath, otype)
-            except Exception as e:
-                try:
-                    print("Syntax error: %s\nPress a key to return into "
-                          "the editor, or ctrl+c to exit without saving." % e,
-                          file=sys.stderr)
-                    raw_input()
-                except KeyboardInterrupt:
-                    os.remove(tmppath)
-                    panic("ctrl+c captured, exiting without saving", 85)
+                print("Syntax error: %s\nPress a key to return into "
+                      "the editor, or ctrl+c to exit without saving." % e,
+                      file=sys.stderr)
+                raw_input()
+            except KeyboardInterrupt:
+                os.remove(tmppath)
+                panic("ctrl+c captured, exiting without saving", 85)
 
-            if args.show_master_keys:
-                # use the sops data from the file
-                tree = load_file_into_tree(tmppath, otype)
-            else:
-                # sops branch was removed for editing, restoring it
-                tree = load_file_into_tree(tmppath, otype,
-                                           restore_sops=stash['sops'])
-            if check_master_keys(tree):
-                has_master_keys = True
-            else:
-                try:
-                    print("Could not find a valid master key to encrypt the "
-                          "data key with.\nAdd at least one KMS or PGP "
-                          "master key to the `sops` branch,\nor ctrl+c to "
-                          "exit without saving.")
-                    raw_input()
-                except KeyboardInterrupt:
-                    os.remove(tmppath)
-                    panic("ctrl+c captured, exiting without saving", 85)
+        if args.show_master_keys:
+            # use the sops data from the file
+            tree = load_file_into_tree(tmppath, otype)
+        else:
+            # sops branch was removed for editing, restoring it
+            tree = load_file_into_tree(tmppath, otype,
+                                       restore_sops=stash['sops'])
+        if check_master_keys(tree):
+            has_master_keys = True
+        else:
+            try:
+                print("Could not find a valid master key to encrypt the "
+                      "data key with.\nAdd at least one KMS or PGP "
+                      "master key to the `sops` branch,\nor ctrl+c to "
+                      "exit without saving.")
+                raw_input()
+            except KeyboardInterrupt:
+                os.remove(tmppath)
+                panic("ctrl+c captured, exiting without saving", 85)
 
-        # verify if file has been modified, and if not, just exit
-        tmpstamp2 = os.stat(tmppath)
-        if tmpstamp == tmpstamp2:
-            os.remove(tmppath)
-            panic("%s has not been modified, exit without writing" % args.file,
-                  error_code=200)
-
-        tree = walk_and_encrypt(tree, key, stash=stash)
-        tree = update_master_keys(tree, key)
+    # verify if file has been modified, and if not, just exit
+    tmpstamp2 = os.stat(tmppath)
+    if tmpstamp == tmpstamp2:
         os.remove(tmppath)
+        panic("%s has not been modified, exit without writing" % args.file,
+              error_code=200)
 
-    # if we're in -e or -d mode, and not in -i mode, display to stdout
-    if (args.encrypt or args.decrypt) and not args.in_place:
-        write_file(tree, path='/dev/stdout', filetype=otype)
+    tree = walk_and_encrypt(tree, key, stash=stash)
+    tree = update_master_keys(tree, key)
+    os.remove(tmppath)
 
-    # otherwise, write the tree to a file
-    else:
-        path = write_file(tree, path=args.file, filetype=otype)
-        print("file written to %s" % (path), file=sys.stderr)
+    # always store encrypted binary files in a json enveloppe
+    if otype == "bytes":
+        otype = "json"
+    path = write_file(tree, path=args.file, filetype=otype)
+    print("file written to %s" % (path), file=sys.stderr)
+    sys.exit(0)
 
 
 def detect_filetype(file):
     """Detect the type of file based on its extension.
-    Return a string that describes the format: `text`, `yaml`, `json`
+    Return a string that describes the format: `bytes`, `yaml`, `json`
     """
     base, ext = os.path.splitext(file)
     if (ext == '.yaml') or (ext == '.yml'):
         return 'yaml'
     elif ext == '.json':
         return 'json'
-    return 'text'
+    return 'bytes'
 
 
 def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
@@ -285,16 +306,16 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
         existing_file = False
     if existing_file:
         # read the encrypted file from disk
+        tree = load_file_into_tree(path, itype)
+        tree, need_key = verify_or_create_sops_branch(tree,
+                                                      kms_arns=kms_arns,
+                                                      pgp_fps=pgp_fps)
+        # try to set the input version to the one set in the file
         try:
-            tree = load_file_into_tree(path, itype)
-        except Exception as e:
-            panic("failed to load file: %s" % e, 72)
-        try:
-            tree, need_key = verify_or_create_sops_branch(tree,
-                                                          kms_arns=kms_arns,
-                                                          pgp_fps=pgp_fps)
-        except Exception as e:
-            panic("failed to initialize encryption data: %s" % e, 32)
+            global INPUT_VERSION
+            INPUT_VERSION = tree['sops']['version']
+        except:
+            None
     else:
         # load a new tree using template data
         if itype == "yaml":
@@ -315,21 +336,27 @@ def load_file_into_tree(path, filetype, restore_sops=None):
 
     """
     tree = OrderedDict()
-    with open(path, "rt") as fd:
+    with open(path, "rb") as fd:
         if filetype == 'yaml':
             tree = ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         elif filetype == 'json':
-            tree = json.load(fd, object_pairs_hook=OrderedDict)
+            data = fd.read()
+            if isinstance(data, bytes):
+                data = data.decode('utf-8')
+            tree = json.loads(data, object_pairs_hook=OrderedDict)
         else:
-            for line in fd:
-                if line.startswith('SOPS='):
-                    tree['sops'] = json.loads(
-                        line.rstrip('\n').split('=', 1)[1])
-                else:
-                    if 'data' not in tree:
-                        tree['data'] = str()
-                    tree['data'] += line
-    if not (restore_sops is None):
+            data = fd.read()
+            # try to guess what type of file it is. It may be a previously sops
+            # encrypted file, in which case it's in JSON format. If not, load
+            # the bytes as such in the 'data' key.
+            try:
+                tree = json.loads(data.decode('utf-8'),
+                                  object_pairs_hook=OrderedDict)
+                if "version" not in tree['sops']:
+                    tree['data'] = data
+            except:
+                tree['data'] = data
+    if restore_sops:
         tree['sops'] = restore_sops.copy()
     return tree
 
@@ -462,26 +489,32 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
     """Walk the branch recursively and decrypt leaves."""
     if isRoot and not ignoreMac:
         digest = hashlib.sha512()
-
+    carryaad = aad
     for k, v in branch.items():
         if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
         nstash = dict()
-        aad += k.encode('utf-8')
+        caad = aad
+        if INPUT_VERSION >= 0.9:
+            caad = aad + k.encode('utf-8') + b':'
+        else:
+            caad = carryaad
+            caad += k.encode('utf-8')
+            carryaad = caad
         if stash:
             stash[k] = {'has_stash': True}
             nstash = stash[k]
         if isinstance(v, dict):
-            branch[k] = walk_and_decrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_and_decrypt(v, key, aad=caad, stash=nstash,
                                          digest=digest, isRoot=False)
         elif isinstance(v, list):
-            branch[k] = walk_list_and_decrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_list_and_decrypt(v, key, aad=caad, stash=nstash,
                                               digest=digest)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = decrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            ev = decrypt(v, key, aad=caad, stash=nstash, digest=digest)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = decrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            branch[k] = decrypt(v, key, aad=caad, stash=nstash, digest=digest)
 
     if isRoot and not ignoreMac:
         # compute the hash computed on values with the one stored
@@ -494,7 +527,7 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
         orig_h = decrypt(branch['sops']['mac'], key,
                          aad=branch['sops']['lastmodified'].encode('utf-8'))
         if h != orig_h:
-            panic("Hash verification failed!\nexpected %s\nbut got  %s" %
+            panic("Checksum verification failed!\nexpected %s\nbut got  %s" %
                   (orig_h, h), 51)
 
     return branch
@@ -523,7 +556,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
     """Return a decrypted value."""
     valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
     # extract fields using a regex
-    if 'type:' in value:
+    if INPUT_VERSION >= 0.8:
         valre += b',type:(.+)'
     valre += b'\]'
     res = re.match(valre, value.encode('utf-8'))
@@ -534,29 +567,49 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
     iv = b64decode(res.group(2))
     tag = b64decode(res.group(3))
     valtype = 'str'
-    try:
+    if INPUT_VERSION >= 0.8:
         valtype = res.group(4)
-    except:
-        None
     decryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv, tag),
                        default_backend()
                        ).decryptor()
     decryptor.authenticate_additional_data(aad)
     cleartext = decryptor.update(enc_value) + decryptor.finalize()
+
     if stash:
         # save the values for later if we need to reencrypt
         stash['iv'] = iv
         stash['aad'] = aad
         stash['cleartext'] = cleartext
+
     if digest:
         digest.update(cleartext)
+
+    if valtype == b'bytes':
+        return cleartext
     if valtype == b'str':
-        return cleartext.decode('utf-8')
+        # Welcome to python compatibility hell... :(
+        # Python 2 treats everything as str, but python 3 treats bytes and str
+        # as different types. So if a file was encrypted by sops with py2, and
+        # contains bytes data, it will have type 'str' and py3 will decode
+        # it as utf-8. This will result in a UnicodeDecodeError exception
+        # because random bytes are not unicode. So the little try block below
+        # catches it and returns the raw bytes if the value isn't unicode.
+        cv = cleartext
+        try:
+            cv = cleartext.decode('utf-8')
+        except UnicodeDecodeError:
+            return cleartext
+        return cv
     if valtype == b'int':
         return int(cleartext.decode('utf-8'))
     if valtype == b'float':
         return float(cleartext.decode('utf-8'))
+    if valtype == b'bool':
+        if cleartext.lower() == b'true':
+            return True
+        return False
+    panic("unknown type "+valtype, 23)
 
 
 def walk_and_encrypt(branch, key, aad=b'', stash=None,
@@ -567,25 +620,26 @@ def walk_and_encrypt(branch, key, aad=b'', stash=None,
     for k, v in branch.items():
         if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
-        aad += k.encode('utf-8')
+        caad = aad + k.encode('utf-8') + b':'
         nstash = dict()
         if stash and k in stash:
             nstash = stash[k]
         if isinstance(v, dict):
             # recursively walk the tree
-            branch[k] = walk_and_encrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_and_encrypt(v, key, aad=caad, stash=nstash,
                                          digest=digest, isRoot=False)
         elif isinstance(v, list):
-            branch[k] = walk_list_and_encrypt(v, key, aad=aad, stash=nstash,
+            branch[k] = walk_list_and_encrypt(v, key, aad=caad, stash=nstash,
                                               digest=digest)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = encrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            ev = encrypt(v, key, aad=caad, stash=nstash, digest=digest)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = encrypt(v, key, aad=aad, stash=nstash, digest=digest)
+            branch[k] = encrypt(v, key, aad=caad, stash=nstash, digest=digest)
     if isRoot:
         branch['sops']['lastmodified'] = NOW
         # finalize and store the message authentication code in encrypted form
+        h = str()
         h = digest.hexdigest().upper()
         mac = encrypt(h, key,
                       aad=branch['sops']['lastmodified'].encode('utf-8'))
@@ -614,25 +668,36 @@ def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None):
 
 def encrypt(value, key, aad=b'', stash=None, digest=None):
     """Return an encrypted string of the value provided."""
-    valtype = 'str'
-    if isinstance(value, int):
+    # save the original type
+    # the order in which we do this matters. For example, a bool
+    # is also an int, but an int isn't a bool, so we test for bool first
+    if isinstance(value, str) or \
+       (sys.version_info[0] == 2 and isinstance(value, unicode)):  # noqa
+        valtype = 'str'
+    elif isinstance(value, bool):
+        valtype = 'bool'
+    elif isinstance(value, int):
         valtype = 'int'
-    if isinstance(value, float):
+    elif isinstance(value, float):
         valtype = 'float'
-    value = str(value).encode('utf-8')
+    else:
+        valtype = 'bytes'
+
+    if not isinstance(value, bytes):
+        # if not bytes, convert to bytes
+        value = str(value).encode('utf-8')
+
     if digest:
         digest.update(value)
+
     # if we have a stash, and the value of cleartext has not changed,
-    # attempt to take the IV and AAD value from the stash.
+    # attempt to take the IV.
     # if the stash has no existing value, or the cleartext has changed,
-    # generate new IV and AAD.
-    if stash and stash['cleartext'] == value:
+    # generate new IV.
+    if stash and 'cleartext' in stash and stash['cleartext'] == value:
         iv = stash['iv']
-        aad = stash['aad']
     else:
         iv = os.urandom(32)
-        if aad == b'':
-            aad = os.urandom(32)
     encryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv),
                        default_backend()).encryptor()
@@ -642,7 +707,6 @@ def encrypt(value, key, aad=b'', stash=None, digest=None):
         "tag:{tag},type:{valtype}]".format(
             value=b64encode(enc_value).decode('utf-8'),
             iv=b64encode(iv).decode('utf-8'),
-            aad=b64encode(aad).decode('utf-8'),
             tag=b64encode(encryptor.tag).decode('utf-8'),
             valtype=valtype)
 
@@ -847,6 +911,12 @@ def write_file(tree, path=None, filetype=None):
     else:
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
+
+    if not isinstance(tree, dict) and not isinstance(tree, list):
+        fd.write(tree.encode('utf-8'))
+        fd.close()
+        return path
+
     if filetype == "yaml":
         fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
                                   indent=4).encode('utf-8'))
@@ -854,13 +924,14 @@ def write_file(tree, path=None, filetype=None):
         fd.write(json.dumps(tree, indent=4).encode('utf-8'))
     else:
         if 'data' in tree:
-            # add a newline if there's none
-            if tree['data'][-1:] != '\n':
-                tree['data'] += '\n'
-            fd.write(tree['data'].encode('utf-8'))
+            try:
+                fd.write(tree['data'].encode('utf-8'))
+            except:
+                fd.write(tree['data'])
         if 'sops' in tree:
             jsonstr = json.dumps(tree['sops'], sort_keys=True)
             fd.write(("SOPS=%s" % jsonstr).encode('utf-8'))
+
     fd.close()
     return path
 
@@ -887,14 +958,32 @@ def run_editor(path):
 
 def validate_syntax(path, filetype):
     """Attempt to load a file and return an exception if it fails."""
-    if filetype == 'text':
+    if filetype == 'bytes':
         return True
-    with open(path, "rt") as fd:
+    with open(path, "rb") as fd:
         if filetype == 'yaml':
             ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         if filetype == 'json':
             json.load(fd)
     return True
+
+
+def truncate_tree(tree, path):
+    """ return the branch or value of a tree at the path provided """
+    comps = path.split('[', -1)
+    for comp in comps:
+        if comp == "":
+            continue
+        if comp[len(comp)-1] != "]":
+            panic("invalid tree path format: tree"+path, 91)
+        comp = comp[0:len(comp)-1]
+        comp = comp.replace('"', '', 2)
+        comp = comp.replace("'", "", 2)
+        if re.search(b'^\d+$', comp.encode('utf-8')):
+            tree = tree[int(comp)]
+        else:
+            tree = tree[comp]
+    return tree
 
 
 def panic(msg, error_code=1):

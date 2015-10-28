@@ -170,13 +170,23 @@ When the file is saved, `sops` will update its metadata and encrypt the data key
 with the freshly added master keys. The removed entries are simply deleted from
 the file.
 
-Using KMS master keys in various AWS accounts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Assuming roles and using KMS in various AWS accounts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SOPS has the ability to use KMS in multiple AWS accounts by assuming roles in
+each account. Being able to assume roles is a nice feature of AWS that allows
+administrator to establish trust relationships between accounts, typically from
+the most secure account to the least secure one. In our use-case, we use roles
+to indicate that a user of the Master AWS account is allowed to make use of KMS
+master keys in development and staging AWS accounts. Using roles, a single file
+can be encrypted with KMS keys in multiple accounts, thus increasing reliability
+and ease of use.
 
 You can use keys in various accounts by tying each KMS master key to a role that
 the user is allowed to assume in each account. The `IAM roles
 <http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html>`_
 documentation has full details on how this needs to be configured on AWS's side.
+
 From the point of view of `sops`, you only need to specify the role a KMS key
 must assume alongside its ARN, as follows:
 
@@ -230,15 +240,145 @@ files in place with rotation enabled:
 		sops -e -i -r $file
 	done
 
-Note on YAML
-------------
+Examples
+--------
 
-`sops` is designed to encrypt files that contain secrets, which are most likely
-strings or numbers. It will not work on complex YAML files that use references
-or anchors.
+Creating a new file
+~~~~~~~~~~~~~~~~~~~
 
-Cryptographic details
----------------------
+The command below create a new file with a data key encrypted by KMS and PGP.
+
+.. code:: bash
+
+	$ sops --kms "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500" --pgp C9CAB0AF1165060DB58D6D6B2653B624D620786D /path/to/new/file.yaml
+
+Encrypting an existing file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Similar to the previous command, we tell sops to use one KMS and one PGP key.
+The path points to an existing cleartext file, so we give sops flag `-e` to
+encrypt the file, and redirect the output to a destination file.
+
+.. code:: bash
+
+	$ export SOPS_KMS+ARN="arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500"
+	$ export SOPS_PGP_FP="C9CAB0AF1165060DB58D6D6B2653B624D620786D"
+	$ sops -e /path/to/existing/file.yaml > /path/to/new/encrypted/file.yaml
+
+Decrypt the file with `-d`.
+
+.. code:: bash
+
+	$ sops -d /path/to/new/encrypted/file.yaml
+
+Encrypt or decrypt a file in place
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Rather than redirecting the output of `-e` or `-d`, sops can replace the
+original file after encrypting or decrypting it.
+
+.. code:: bash
+
+	# file.yaml is in cleartext
+	$ sops -e -i /path/to/existing/file.yaml
+	# file.yaml is now encrypted
+	$ sops -d -i /path/to/existing/file.yaml
+	# file.yaml is back in cleartext
+
+Encrypting binary files
+~~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` primary use case is encrypting YAML and JSON configuration files, but it
+also has the ability to manage binary files. When encrypting a binary, sops will
+read the data as bytes, encrypt it, store the encrypted base64 under
+`tree['data']` and write the result as JSON.
+
+Note that the base64 encoding of encrypted data can actually make the encrypted
+file larger than the cleartext one.
+
+In-place encryption/decryption also works on binary files.
+
+.. code::
+
+	$ dd if=/dev/urandom of=/tmp/somerandom bs=1024
+	count=512
+	512+0 records in
+	512+0 records out
+	524288 bytes (524 kB) copied, 0.0466158 s, 11.2 MB/s
+
+	$ sha512sum /tmp/somerandom
+	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
+
+	$ sops -e -i /tmp/somerandom 
+	please wait while a data encryption key is being generated and stored securely
+
+	$ sops -d -i /tmp/somerandom 
+
+	$ sha512sum /tmp/somerandom
+	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
+
+Extract a sub-part of a document tree
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` can extract a specific part of a YAML or JSON document, by provided the
+path in the `--extract` command line flag. This is useful to extract specific
+values, like keys, without needed an extra parser.
+
+.. code:: bash
+
+	$ sops -d ~/git/svc/sops/example.yaml -t '["app2"]["key"]'
+	-----BEGIN RSA PRIVATE KEY-----
+	MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
+	ImcbNkqAKnELzFAPSBeEMhrBN0PyOC9lYlMCAwEAAQJBALXD4sjuBn1E7Y9aGiMz
+	bJEBuZJ4wbhYxomVoQKfaCu+kH80uLFZKoSz85/ySauWE8LgZcMLIBoiXNhDKfQL
+	vHECIQD6tCG9NMFWor69kgbX8vK5Y+QL+kRq+9HK6yZ9a+hsLQIhAPn4Ie6HGTjw
+	fHSTXWZpGSan7NwTkIu4U5q2SlLjcZh/AiEA78NYRRBwGwAYNUqzutGBqyXKUl4u
+	Erb0xAEyVV7e8J0CIQC8VBY8f8yg+Y7Kxbw4zDYGyb3KkXL10YorpeuZR4LuQQIg
+	bKGPkMM4w5blyE1tqGN0T7sJwEx+EUOgacRNqM2ljVA=
+	-----END RSA PRIVATE KEY-----
+
+The tree path syntax uses a regular python dictionary syntax, without the
+variable name. Extract keys by naming them, and array elements by numbering
+them.
+
+.. code:: bash
+
+	$ sops -d ~/git/svc/sops/example.yaml -t '["an_array"][1]'
+	secretuser2
+
+Using sops as a library in a python script
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can import sops as a module and use it in your python program.
+
+.. code:: python
+
+	import sops
+
+	pathtype = sops.detect_filetype(path)
+	tree = sops.load_file_into_tree(path, pathtype)
+	sops_key, tree = sops.get_key(tree)
+	tree = sops.walk_and_decrypt(tree, sops_key)
+	sops.write_file(tree, path=path, filetype=pathtype)
+
+Implementation details
+----------------------
+
+YAML types limitations
+~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` only supports a subset of `YAML`'s many types. Encrypting YAML files that
+contain strings, numbers and booleans will work fine.
+
+Files that contain anchors will not work, because the anchors redefine that
+structure of the file at load time. `sops` uses the path to a value as
+additional data in the AEAD encryption, and thus dynamic paths generated by
+anchors break the authentication step.
+
+JSON and TEXT file types have no such feature and do not suffer this limitation.
+
+Encryption method
+~~~~~~~~~~~~~~~~~
 
 When sops creates a file, it generates a random 256 bits data key and asks each
 KMS and PGP master key to encrypt the data key. The encrypted version of the data
@@ -296,24 +436,6 @@ value receives a unique initialization vector and has unique authentication data
 Additional data is used to guarantee the integrity of the encrypted data
 and of the tree structure: when encrypting the tree, key names are concatenated
 into a byte string that is used as AEAD additional data (aad) when encrypting
-the value. The `aad` field is not stored with the value but reconstructed from
-the tree structure every time.
-
-The result of AES256_GCM encryption is stored in the leaf of the tree using a
-base64 encoded string format::
-
-    ENC[AES256_GCM,
-        data:CwE4O1s=,
-        iv:S0fozGAOxNma/pWDUuk1iEaYw0wlba0VOLHjPxIok2k=,
-        tag:XaGsYaL9LCkLWJI0uxnTYw==]
-
-where:
-
-* **data** is the encrypted value
-* **iv** is the 256 bits initialization vector
-* **tag** is the authentication tag
-
-The encrypted file is written to disk with nested keys in cleartext and
 values encrypted. We expect that keys do not carry sensitive information, and
 keeping them in cleartext allows for better diff and overall readability.
 
@@ -333,6 +455,111 @@ In addition to authenticating branches of the tree using keys as additional
 data, sops computes a MAC on all the values to ensure that no value has been
 added or removed fraudulently. The MAC is stored encrypted with AES_GCM and
 the data key under tree->`sops`->`mac`.
+
+Motivation
+----------
+
+Automating the distribution of secrets and credentials to components of an
+infrastructure is a hard problem. We know how to encrypt secrets and share them
+between humans, but extending that trust to systems is difficult. Particularly
+when these systems follow devops principles and are created and destroyed
+without human intervention. The issue boils down to establishing the initial
+trust of a system that just joined the infrastructure, and providing it access
+to the secrets it needs to configure itself.
+
+The initial trust
+~~~~~~~~~~~~~~~~~
+
+In many infrastructures, even highly dynamic ones, the initial trust is
+established by a human. An example is seen in Puppet by the way certificates are
+issued: when a new system attempts to join a Puppetmaster, an administrator
+must, by default, manually approve the issuance of the certificate the system
+needs. This is cumbersome, and many puppetmasters are configured to auto-sign
+new certificates to work around that issue. This is obviously not recommended
+and far from ideal.
+
+AWS provides a more flexible approach to trusting new systems. It uses a
+powerful mechanism of roles and identities. In AWS, it is possible to verify
+that a new system has been granted a specific role at creation, and it is
+possible to map that role to specific resources. Instead of trusting new systems
+directly, the administrator trusts the AWS permission model and its automation
+infrastructure. As long as AWS keys are safe, and the AWS API is secure, we can
+assume that trust is maintained and systems are who they say they are.
+
+KMS, Trust and secrets distribution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using the AWS trust model, we can create fine grained access controls to
+Amazon's Key Management Service (KMS). KMS is a service that encrypts and
+decrypts data with AES_GCM, using keys that are never visible to users of the
+service. Each KMS master key has a set of role-based access controls, and
+individual roles are permitted to encrypt or decrypt using the master key. KMS
+helps solve the problem of distributing keys, by shifting it into an access
+control problem that can be solved using AWS's trust model.
+
+Operational requirements
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+When Mozilla's Services Operations team started revisiting the issue of
+distributing secrets to EC2 instances, we set the goal to store these secrets
+encrypted until the very last moment, when they need to be decrypted on target
+systems. Not unlike many other organizations that operate sufficiently complex
+automation, we found this to be a hard problem with a number of prerequisites:
+
+1. Secrets must be stored in YAML files for easy integration into hiera
+	    
+2. Secrets must be stored in GIT, and when a new CloudFormation stack is
+   built, the current HEAD is pinned to the stack. (This allows secrets to
+   be changed in GIT without impacting the current stack that may
+   autoscale).
+
+3. Entries must be encrypted separately. Encrypting entire files as blobs makes
+   git conflict resolution almost impossible. Encrypting each entry
+   separately is much easier to manage.
+
+4. Secrets must always be encrypted on disk (admin laptop, upstream
+   git repo, jenkins and S3) and only be decrypted on the target
+   systems
+
+SOPS can be used to encrypt YAML, JSON and BINARY files. In BINARY mode, the
+content of the file is treated as a blob, the same way PGP would encrypt an
+entire file. In YAML and JSON modes, however, the content of the file is
+manipulated as a tree where keys are stored in cleartext, and values are
+encrypted. hiera-eyaml does something similar, and over the years we learned
+to appreciate its benefits, namely:
+
+* diff are meaningful. If a single value of a file is modified, only that
+  value will show up in the diff. The diff is still limited to only showing
+  encrypted data, but that information is already more granular that
+  indicating that an entire file has changed.
+
+* conflicts are easier to resolve. If multiple users are working on the
+  same encrypted files, as long as they don't modify the same values,
+  changes are easy to merge. This is an improvement over the PGP
+  encryption approach where unsolvable conflicts often happen when
+  multiple users work on the same file.
+
+OpenPGP integration
+~~~~~~~~~~~~~~~~~~~
+
+OpenPGP gets a lot of bad press for being an outdated crypto protocol, and while
+true, what really made look for alternatives is the difficulty to manage and
+distribute keys to systems. With KMS, we manage permissions to an API, not keys,
+and that's a lot easier to do.
+
+But PGP is not dead yet, and we still rely on it heavily as a backup solution:
+all our files are encrypted with KMS and with one PGP public key, with its
+private key stored securely for emergency decryption in the event that we lose
+all our KMS master keys.
+
+SOPS can be used without KMS entirely, the same way you would use an encrypted
+PGP file: by referencing the pubkeys of each individual who has access to the file.
+It can easily be done by providing sops with a comma-separated list of public keys
+when creating a new file:
+
+.. code:: bash
+
+	$ sops --pgp "E60892BB9BD89A69F759A1A0A3D652173B763E8F,84050F1D61AF7C230A12217687DF65059EF093D3,85D77543B3D624B63CEA9E6DBC17301B491B3F21" mynewfile.yaml
 
 Threat Model
 ------------

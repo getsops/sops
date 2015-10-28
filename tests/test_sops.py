@@ -55,13 +55,6 @@ class TreeTest(unittest2.TestCase):
                                             restore_sops=b)
             assert tree['sops']['kms'][0]['arn'] == 'test'
 
-    @mock.patch('sops.json.load')
-    def test_example_with_a_mocked_call(self, json_mock):
-        m = mock.mock_open(read_data='"content"')
-        with mock.patch.object(builtins, 'open', m):
-            sops.load_file_into_tree('path', 'json')
-            json_mock.assert_called_with(m(), object_pairs_hook=OrderedDict)
-
     def test_detect_filetype_handle_json(self):
         assert sops.detect_filetype("file.json") == "json"
 
@@ -72,7 +65,7 @@ class TreeTest(unittest2.TestCase):
         assert sops.detect_filetype("file.yaml") == "yaml"
 
     def test_detect_filetype_returns_text_if_unknown(self):
-        assert sops.detect_filetype("file.xml") == "text"
+        assert sops.detect_filetype("file.xml") == "bytes"
 
     def test_verify_or_create_sops_branch(self):
         """Verify or create the sops branch"""
@@ -171,6 +164,17 @@ class TreeTest(unittest2.TestCase):
         cleartree = sops.walk_and_decrypt(OrderedDict(crypttree), key, isRoot=True)
         assert cleartree == tree
 
+    def test_bytes_encrypt_and_decrypt(self):
+        """Test encryption/decryption of numbers"""
+        key = os.urandom(32)
+        tree = OrderedDict()
+        tree['data'] = os.urandom(4096)
+        tree['sops'] = dict()
+        crypttree = sops.walk_and_encrypt(OrderedDict(tree), key, isRoot=True)
+        assert tree['sops']['mac'].startswith("ENC[AES256_GCM,data:")
+        cleartree = sops.walk_and_decrypt(OrderedDict(crypttree), key, isRoot=True)
+        assert cleartree == tree
+
     def test_walk_list_and_encrypt(self):
         """Walk a list contained in a branch and encrypts its values."""
         # - test stash value
@@ -250,7 +254,19 @@ class TreeTest(unittest2.TestCase):
         with mock.patch.object(builtins, 'open', m):
             assert sops.validate_syntax('path', 'yaml') == True
 
-    def test_text_syntax(self):
+    def test_bytes_syntax(self):
         m = mock.mock_open(read_data=sops.DEFAULT_TEXT)
         with mock.patch.object(builtins, 'open', m):
-            assert sops.validate_syntax('path', 'text') == True
+            assert sops.validate_syntax('path', 'bytes') == True
+
+    def test_subtree(self):
+        """Extract a subtree from a document."""
+        m = mock.mock_open(read_data=sops.DEFAULT_YAML)
+        key = os.urandom(32)
+        tree = OrderedDict()
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'yaml')
+        ntree = sops.truncate_tree(dict(tree), '["example"]["nested"]["values"]')
+        assert ntree == tree["example"]["nested"]["values"]
+        ntree = sops.truncate_tree(dict(tree), '["example_array"][1]')
+        assert ntree == tree["example_array"][1]

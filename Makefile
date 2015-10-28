@@ -43,7 +43,7 @@ functional-tests:
 			echo "Testing Python$$ver $$type decryption" && \
 			python$$ver sops/__init__.py -d example.$$type > /tmp/testdata.$$type && \
 			echo "Testing Python$$ver $$type encryption" && \
-			python$$ver sops/__init__.py -e /tmp/testdata.$$type > /tmp/testdata$$ver.$$type; \
+			python$$ver sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata.$$type > /tmp/testdata$$ver.$$type; \
 		done && \
 		echo "Testing Python2.6 decryption of a 2.7 $$type file" && \
 		python2.6 sops/__init__.py -d /tmp/testdata2.7.$$type > /dev/null && \
@@ -57,6 +57,17 @@ functional-tests:
 		python3.4 sops/__init__.py -d /tmp/testdata2.6.$$type > /dev/null && \
 		echo "Testing Python3.4 decryption of a 2.7 $$type file" && \
 		python3.4 sops/__init__.py -d /tmp/testdata2.7.$$type > /dev/null || exit 1; \
+	done && \
+	for ver in 2.6 2.7 3.4; do \
+		echo "Testing Python$$ver round-trip on binary file" && \
+		dd if=/dev/urandom of=/tmp/testdata-$$ver-randomfile bs=1024 count=1024 2>&1 1>/dev/null && \
+		python$$ver sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata-$$ver-randomfile > /tmp/testdata-$$ver-randomfile.enc && \
+		python$$ver sops/__init__.py -d /tmp/testdata-$$ver-randomfile.enc > /tmp/testdata-$$ver-randomfile.dec && \
+		if [ $$(sha256sum /tmp/testdata-$$ver-randomfile | cut -d ' ' -f 1) != $$(sha256sum /tmp/testdata-$$ver-randomfile.dec | cut -d ' ' -f 1) ]; then \
+			echo "Binary file roundtrip failed, checksum doesn't match"; exit 0; \
+		else \
+			echo "Binary file roundtrip succeeded"; \
+		fi; \
 	done
 
 functional-tests-once:
@@ -65,7 +76,7 @@ functional-tests-once:
 		echo "Testing $$type decryption" && \
 		python sops/__init__.py -d example.$$type > /tmp/testdata.$$type && \
 		echo "Testing $$type encryption" && \
-		python sops/__init__.py -e /tmp/testdata.$$type > /tmp/testdataenc.$$type; \
+		python sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata.$$type > /tmp/testdataenc.$$type; \
 		echo "Testing $$type re-decryption" && \
 		python sops/__init__.py -d /tmp/testdataenc.$$type > /dev/null || exit 1; \
 	done
