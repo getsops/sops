@@ -361,6 +361,35 @@ You can import sops as a module and use it in your python program.
 	tree = sops.walk_and_decrypt(tree, sops_key)
 	sops.write_file(tree, path=path, filetype=pathtype)
 
+Showing diffs in cleartext in git
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You most likely want to store encrypted files in a version controlled repository.
+Sops can be used with git to decrypt files when showing diffs between versions.
+This is very handy for reviewing changes or visualizing history.
+
+To configure sops to decrypt files during diff, create a `.gitattributes` file
+at the root of your repository that contains a filter and a command.
+
+... code::
+
+	*.yaml diff=sopsdiffer
+
+Here we only care about YAML files. `sopsdiffer` is an arbitrary name that we map
+to a sops command in the git configuration file of the repository.
+
+.. code:: bash
+
+	$ git config diff.sopsdiffer.textconv "sops -d"
+
+	$ grep -A 1 sopsdiffer .git/config
+	[diff "sopsdiffer"]
+		textconv = "sops -d"
+
+With this in place, calls to `git diff` will decrypt both previous and current
+version of the target file prior to displaying the diff. And it even works with
+git client interfaces, because they call git diff under the hood!
+
 Implementation details
 ----------------------
 
