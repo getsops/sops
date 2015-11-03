@@ -42,6 +42,20 @@ Clone the repository, load the test PGP key and open the test files::
 This last step will decrypt `example.yaml` using the test private key. To create
 your own secrets files using keys under your control, keep reading.
 
+Install in a virtualenv
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Assuming you already have libffi and libyaml installed, the following commands will install sops in a virtualenv:
+
+.. code:: bash
+
+    $ sudo pip install virtualenv --upgrade
+    $ virtualenv ~/sopsvenv
+    $ source ~/sopsvenv/bin/activate
+    $ pip install -U sops
+    $ sops -h | grep ^Version
+    Version 0.9
+
 Usage
 -----
 
@@ -601,8 +615,8 @@ ECDSA keys.
 
 Going from the most likely to the least likely, the threats are as follow:
 
-1. Compromised AWS credentials grant access to KMS master key
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compromised AWS credentials grant access to KMS master key
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An attacker with access to an AWS console can grant itself access to one of
 the KMS master key used to encrypt a sops data key. This threat should be
@@ -610,8 +624,8 @@ mitigated by protecting AWS accesses with strong controls, such as multi-factor
 authentication, and also by performing regular audits of permissions granted
 to AWS users.
 
-2. Compromised PGP key
-~~~~~~~~~~~~~~~~~~~~~~
+Compromised PGP key
+~~~~~~~~~~~~~~~~~~~
 
 PGP keys are routinely mishandled, either because owners copy them from
 machine to machine, or because the key is left forgotten on an unused machine
@@ -619,16 +633,16 @@ an attacker gains access to. When using PGP encryption, sops users should take
 special care of PGP private keys, and store them on smart cards or offline
 as often as possible.
 
-3. Factorized RSA key
-~~~~~~~~~~~~~~~~~~~~~
+Factorized RSA key
+~~~~~~~~~~~~~~~~~~
 
 sops doesn't apply any restriction on the size or type of PGP keys. A weak PGP
 keys, for example 512 bits RSA, could be factorized by an attacker to gain
 access to the private key and decrypt the data key. Users of sops should rely
 on strong keys, such as 2048+ bits RSA keys, or 256+ bits ECDSA keys.
 
-4. Weak AES cryptography
-~~~~~~~~~~~~~~~~~~~~~~~~
+Weak AES cryptography
+~~~~~~~~~~~~~~~~~~~~~
 
 A vulnerability in AES256_GCM could potentially leak the data key or the KMS
 master key used by a sops encrypted file. While no such vulnerability exists
