@@ -347,16 +347,24 @@ def load_file_into_tree(path, filetype, restore_sops=None):
             tree = json.loads(data, object_pairs_hook=OrderedDict)
         else:
             data = fd.read()
-            # try to guess what type of file it is. It may be a previously sops
-            # encrypted file, in which case it's in JSON format. If not, load
-            # the bytes as such in the 'data' key.
+            # try to guess what type of file it is. It may be a previously
+            # sops encrypted file, in which case it's in JSON format. If not,
+            # we need to load the bytes as such in the 'data' key. If a line
+            # with `SOPS=` is found, it must be decoded as json in the
+            # tree['sops'] key.
             try:
                 tree = json.loads(data.decode('utf-8'),
                                   object_pairs_hook=OrderedDict)
                 if "version" not in tree['sops']:
                     tree['data'] = data
             except:
-                tree['data'] = data
+                valre = b'(.+)^SOPS=({.+})$'
+                res = re.match(valre, data, flags=(re.MULTILINE | re.DOTALL))
+                if res is None:
+                    tree['data'] = data
+                else:
+                    tree['data'] = res.group(1)
+                    tree['sops'] = json.loads(res.group(2))
     if restore_sops:
         tree['sops'] = restore_sops.copy()
     return tree
