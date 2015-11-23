@@ -242,6 +242,7 @@ def main():
             except KeyboardInterrupt:
                 os.remove(tmppath)
                 panic("ctrl+c captured, exiting without saving", 85)
+            continue
 
         if args.show_master_keys:
             # use the sops data from the file
