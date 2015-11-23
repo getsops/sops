@@ -140,7 +140,13 @@ def main():
                            dest='ignore_mac',
                            help="ignore Message Authentication Code "
                                 "during decryption")
+    argparser.add_argument('--no-latest-check', action='store_true',
+                           dest='nolatestcheck',
+                           help="skip check for latest version of sops")
     args = argparser.parse_args()
+
+    if not args.nolatestcheck:
+        check_latest_version()
 
     kms_arns = ""
     if 'SOPS_KMS_ARN' in os.environ:
@@ -998,6 +1004,23 @@ def truncate_tree(tree, path):
 def panic(msg, error_code=1):
     print("PANIC: %s" % msg, file=sys.stderr)
     sys.exit(error_code)
+
+
+def check_latest_version():
+    try:
+        import xmlrpclib
+    except ImportError:
+        import xmlrpc.client as xmlrpclib
+    try:
+        client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
+        latest = client.package_releases('sops')[0]
+        if VERSION < float(latest):
+            print("INFO: your version of sops is outdated. Version {latest} "
+                  "is available, install it with "
+                  "$ pip install 'sops=={latest}'."
+                  .format(latest=latest), file=sys.stderr)
+    except:
+        pass
 
 
 if __name__ == '__main__':
