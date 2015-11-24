@@ -1,10 +1,10 @@
 import os
+import codecs
 from setuptools import setup, find_packages
 
-
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
+here = os.path.abspath(os.path.dirname(__file__))
+with codecs.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+        README = f.read()
 
 setup(
     name="sops",
@@ -18,7 +18,7 @@ setup(
     url="https://github.com/mozilla/sops",
     packages=find_packages(),
     zip_safe=True,
-    long_description=read('README.rst'),
+    long_description=README,
     install_requires=[
         'ruamel.yaml>=0.10.7', 'boto3>=1.1.3', 'cryptography>=0.9.3'],
     classifiers=[
