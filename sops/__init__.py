@@ -136,6 +136,21 @@ def main():
                            dest='show_master_keys',
                            help="display master encryption keys in the file "
                                 "during editing (off by default).")
+    argparser.add_argument('--add-kms', dest='add_kms',
+                           help="Add the given comma separated KMS ARNs to the"
+                                " list of master keys on an existing file.")
+    argparser.add_argument('--rm-kms', dest='rm_kms',
+                           help="Remove the given comma separated KMS ARNs "
+                                "from the list of master keys on an existing "
+                                "file.")
+    argparser.add_argument('--add-pgp', dest='add_pgp',
+                           help="Add the given comma separated PGP fingerprint"
+                                " to the list of master keys on an existing "
+                                "file.")
+    argparser.add_argument('--rm-pgp', dest='rm_pgp',
+                           help="Remove the given comma separated PGP "
+                                "fingerprint from the list of master keys on "
+                                "an existing file.")
     argparser.add_argument('--ignore-mac', action='store_true',
                            dest='ignore_mac',
                            help="ignore Message Authentication Code "
@@ -175,6 +190,11 @@ def main():
                                                     kms_arns=kms_arns,
                                                     pgp_fps=pgp_fps)
     if not existing_file:
+        if len(args.add_kms) > 0 or len(args.add_pgp) > 0 \
+           or len(args.rm_kms) > 0 or len(args.rm_pgp) > 0:
+            panic("cannot add or remove keys on non-existent files, use "
+                  "`--kms` and `--pgp` instead.", error_code=49)
+        # encrypt and decrypt modes are not available on non-existent files
         if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
         else:
@@ -278,6 +298,8 @@ def main():
               error_code=200)
 
     tree = walk_and_encrypt(tree, key, stash=stash)
+    tree = add_new_master_keys(tree, args.add_kms, args.add_pgp)
+    tree = remove_master_keys(tree, args.rm_kms, args.rm_pgp)
     tree = update_master_keys(tree, key)
     os.remove(tmppath)
 
@@ -497,6 +519,76 @@ def check_master_keys(tree):
             if 'fp' in entry and entry['fp'] != "":
                 return True
     return False
+
+
+def add_new_master_keys(tree, new_kms, new_pgp):
+    """ Add new master keys by creating a new tree and updating
+        the main tree with them
+    """
+    if new_kms and len(new_kms) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_kms_arn(newtree, new_kms)
+        if 'kms' in newtree['sops']:
+            for newentry in newtree['sops']['kms']:
+                if 'kms' not in tree['sops']:
+                    tree['sops']['kms'] = [newentry]
+                    continue
+                shouldadd = True
+                for entry in tree['sops']['kms']:
+                    if newentry['arn'] == entry['arn']:
+                        # arn already present, don't re-add it
+                        shouldadd = False
+                        break
+                if shouldadd:
+                    tree['sops']['kms'].append(newentry)
+    if new_pgp and len(new_pgp) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_pgp_fp(newtree, new_pgp)
+        if 'pgp' in newtree['sops']:
+            for newentry in newtree['sops']['pgp']:
+                if 'pgp' not in tree['sops']:
+                    tree['sops']['pgp'] = [newentry]
+                    continue
+                shouldadd = True
+                for entry in tree['sops']['pgp']:
+                    if newentry['fp'] == entry['fp']:
+                        # arn already present, don't re-add it
+                        shouldadd = False
+                        break
+                if shouldadd:
+                    tree['sops']['pgp'].append(newentry)
+    return tree
+
+
+def remove_master_keys(tree, rm_kms, rm_pgp):
+    """ remove master keys by creating a new tree and removing
+        the master keys present in the new tree from the old tree
+    """
+    if rm_kms and len(rm_kms) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_kms_arn(newtree, rm_kms)
+        if 'kms' in newtree['sops'] and 'kms' in tree['sops']:
+            for rmentry in newtree['sops']['kms']:
+                i = 0
+                for entry in tree['sops']['kms']:
+                    if rmentry['arn'] == entry['arn']:
+                        del tree['sops']['kms'][i]
+                    i += 1
+    if rm_pgp and len(rm_pgp) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_pgp_fp(newtree, rm_pgp)
+        if 'pgp' in newtree['sops'] and 'pgp' in tree['sops']:
+            for rmentry in newtree['sops']['pgp']:
+                i = 0
+                for entry in tree['sops']['pgp']:
+                    if rmentry['fp'] == entry['fp']:
+                        del tree['sops']['pgp'][i]
+                    i += 1
+    return tree
 
 
 def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
