@@ -236,6 +236,8 @@ def main():
         tree = add_new_master_keys(tree, args.add_kms, args.add_pgp)
         tree = remove_master_keys(tree, args.rm_kms, args.rm_pgp)
         tree = update_master_keys(tree, key)
+        if otype == "bytes":
+            otype = "json"
         path = write_file(tree, path=args.file, filetype=otype)
         print("Data key rotated and file written to %s" % (path),
               file=sys.stderr)
