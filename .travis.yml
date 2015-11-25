@@ -1,3 +1,4 @@
+sudo: false
 language: python
 python:
     - "2.6"
@@ -8,9 +9,14 @@ env:
     - TOX_ENV=py27
     - TOX_ENV=py34
     - TOX_ENV=flake8
-before_install:
-    - sudo apt-get update
-    - sudo apt-get install -y libyaml-dev python-dev libffi-dev python-pip gnupg
+addons:
+    apt:
+        packages:
+            - libyaml-dev
+            - python-dev
+            - libffi-dev
+            - python-pip
+            - gnupg
 install:
     - pip install tox
     - pip install -r requirements.txt
