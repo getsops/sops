@@ -18,7 +18,7 @@ import subprocess
 import sys
 import tempfile
 from base64 import b64encode, b64decode
-from datetime import datetime
+from datetime import datetime, timedelta
 from socket import gethostname
 from textwrap import dedent
 
@@ -215,6 +215,7 @@ def main():
     if args.decrypt:
         # Decrypt mode: decrypt, display and exit
         key, tree = get_key(tree)
+        check_rotation_needed(tree)
         tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
         if not args.show_master_keys:
             tree.pop('sops', None)
@@ -242,6 +243,7 @@ def main():
 
     # EDIT Mode: decrypt, edit, encrypt and save
     key, tree = get_key(tree, need_key)
+    check_rotation_needed(tree)
 
     # we need a stash to save the IV and AAD and reuse them
     # if a given value has not changed during editing
@@ -491,16 +493,19 @@ def update_master_keys(tree, key):
         i = -1
         for entry in tree['sops']['kms']:
             i += 1
+            # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
                 print("updating kms entry")
                 updated = encrypt_key_with_kms(key, entry)
                 tree['sops']['kms'][i] = updated
+
     if 'pgp' in tree['sops']:
         if not isinstance(tree['sops']['pgp'], list):
             panic("invalid PGP format in SOPS branch, must be a list")
         i = -1
         for entry in tree['sops']['pgp']:
             i += 1
+            # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
                 print("updating pgp entry")
                 updated = encrypt_key_with_pgp(key, entry)
@@ -1123,6 +1128,35 @@ def check_latest_version():
                   .format(latest=latest), file=sys.stderr)
     except:
         pass
+
+
+def check_rotation_needed(tree):
+    """ Browse the master keys and check their creation date to
+        display a warning if older than 6 months (it's time to rotate).
+    """
+    show_rotation_warning = False
+    six_months_ago = datetime.utcnow()-timedelta(days=183)
+    if 'kms' in tree['sops']:
+        for entry in tree['sops']['kms']:
+            # check if creation date is older than 6 months
+            if 'created_at' in entry:
+                d = datetime.strptime(entry['created_at'],
+                                      '%Y-%m-%dT%H:%M:%SZ')
+                if d < six_months_ago:
+                    show_rotation_warning = True
+
+    if 'pgp' in tree['sops']:
+        for entry in tree['sops']['pgp']:
+            # check if creation date is older than 6 months
+            if 'created_at' in entry:
+                d = datetime.strptime(entry['created_at'],
+                                      '%Y-%m-%dT%H:%M:%SZ')
+                if d < six_months_ago:
+                    show_rotation_warning = True
+    if show_rotation_warning:
+        print("INFO: the data key on this document is over 6 months old. "
+              "Considering rotating it with $ sops -r <file> ",
+              file=sys.stderr)
 
 
 if __name__ == '__main__':
