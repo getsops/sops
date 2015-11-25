@@ -79,6 +79,8 @@ functional-tests-once:
 		python sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata.$$type > /tmp/testdataenc.$$type; \
 		echo "Testing $$type re-decryption" && \
 		python sops/__init__.py -d /tmp/testdataenc.$$type > /dev/null || exit 1; \
+		echo "Testing removing PGP key to $$type encrypted file" && \
+		python sops/__init__.py -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 /tmp/testdataenc.$$type || exit 1; \
 	done
 
 pypi: tests functional-tests

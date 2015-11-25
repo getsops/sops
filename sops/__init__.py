@@ -114,14 +114,14 @@ def main():
     argparser.add_argument('-e', '--encrypt', action='store_true',
                            dest='encrypt',
                            help="encrypt <file> and print it to stdout")
+    argparser.add_argument('-r', '--rotate', action='store_true',
+                           dest='rotate',
+                           help="generate a new data encryption key and "
+                                "reencrypt all values with the new key")
     argparser.add_argument('-i', '--in-place', action='store_true',
                            dest='in_place',
                            help="write output back to <file> instead "
                                 "of stdout for encrypt/decrypt")
-    argparser.add_argument('-r', '--rotate', action='store_true',
-                           dest='rotate',
-                           help="generate a new data encryption key and "
-                                "encrypt all values with the new key")
     argparser.add_argument('--extract', dest='tree_path',
                            help="extract a specific key or branch from the "
                                 "input JSON or YAML document. (decrypt mode "
@@ -200,10 +200,6 @@ def main():
         else:
             print("%s doesn't exist, creating it." % args.file)
 
-    if args.rotate:
-        # if rotate is set, force a data key generation even if one exists
-        need_key = True
-
     if args.encrypt:
         # Encrypt mode: encrypt, display and exit
         key, tree = get_key(tree, need_key)
@@ -228,6 +224,20 @@ def main():
         if args.tree_path:
             tree = truncate_tree(tree, args.tree_path)
         write_file(tree, path=dest, filetype=otype)
+        sys.exit(0)
+
+    if args.rotate:
+        # Rotate mode: generate new data keys and reencrypt the file
+        key, tree = get_key(tree)
+        tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
+        key, tree = get_key(tree, True)
+        tree = walk_and_encrypt(tree, key)
+        tree = add_new_master_keys(tree, args.add_kms, args.add_pgp)
+        tree = remove_master_keys(tree, args.rm_kms, args.rm_pgp)
+        tree = update_master_keys(tree, key)
+        path = write_file(tree, path=args.file, filetype=otype)
+        print("Data key rotated and file written to %s" % (path),
+              file=sys.stderr)
         sys.exit(0)
 
     # EDIT Mode: decrypt, edit, encrypt and save

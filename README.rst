@@ -171,11 +171,11 @@ syntax as the `--kms` and `--pgp` arguments when creating new files.
 
 .. code:: bash
 
-	# add a new pgp key to the file while editing
-	$ sops --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+	# add a new pgp key to the file and rotate the data key
+	$ sops -r --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
-	# remove a pgp key from the file while editing
-	$ sops --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+	# remove a pgp key from the file and rotate the data key
+	$ sops -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
 Alternatively, invoking `sops` with the flag **-s** will display the master keys
 while editing. This method can be used to add or remove kms or pgp keys under the
@@ -201,6 +201,10 @@ And, similarly, to add a PGP master key, we add its fingerprint:
 When the file is saved, `sops` will update its metadata and encrypt the data key
 with the freshly added master keys. The removed entries are simply deleted from
 the file.
+
+When removing keys, it is recommended to rotate the data key using `-r`,
+otherwise owners of the removed key may have add access to the data key in the
+past.
 
 Assuming roles and using KMS in various AWS accounts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -262,15 +266,13 @@ Key Rotation
 ~~~~~~~~~~~~
 
 It is recommended to renew the data key on a regular basis. `sops` supports key
-rotation via the `-r` flag. A simple approach is to decrypt and reencrypt all
-files in place with rotation enabled:
+rotation via the `-r` flag. Invoking it on an existing file causes sops to
+reencrypt the file with a new data key, which is then encrypted with the various
+KMS and PGP master keys defined in the file.
 
 .. code:: bash
 
-	for file in $(find . -type f -name "*.yaml"); do
-		sops -d -i $file
-		sops -e -i -r $file
-	done
+	sops -r example.yaml
 
 Examples
 --------
