@@ -71,7 +71,7 @@ Your AWS credentials must be present in `~/.aws/credentials`. sops uses boto3.
 
 .. code::
 
-	$ cat ~/.aws/credentials 
+	$ cat ~/.aws/credentials
 	[default]
 	aws_access_key_id = AKI.....
 	aws_secret_access_key = mw......
@@ -156,15 +156,33 @@ steps, apart from the actual editing, are transparent to the user.
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-When creating a new files, `sops` uses the PGP and KMS defined in the command
+When creating new files, `sops` uses the PGP and KMS defined in the command
 line arguments `--kms` and `--pgp`, or from the environment variables
 `SOPS_KMS_ARN` and `SOPS_PGP_FP`. That information is stored in the file under
-the `sops` section. When editing a file, it is trivial to add or remove keys:
-invoke `sops` with the flag **-s** to display the master keys while editing, and
-add or remove kms or pgp keys under the sops section.
+the `sops` section, such that decrypting files does not require providing those
+parameters again.
 
-For example, to add a KMS master key to a file, we would add the following
-entry:
+Master PGP and KMS keys can be added and removed from a `sops` file in one of
+two ways: by using command line flag, or by editing the file directly.
+
+Command line flag `--add-kms`, `--add-pgp`, `--rm-kms` and `--rm-pgp` can be
+used to add and remove keys from a file. These flags use the comma separated
+syntax as the `--kms` and `--pgp` arguments when creating new files.
+
+.. code:: bash
+
+	# add a new pgp key to the file and rotate the data key
+	$ sops -r --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+
+	# remove a pgp key from the file and rotate the data key
+	$ sops -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+
+Alternatively, invoking `sops` with the flag **-s** will display the master keys
+while editing. This method can be used to add or remove kms or pgp keys under the
+sops section.
+
+For example, to add a KMS master key to a file, add the following entry while
+editing:
 
 .. code:: yaml
 
@@ -183,6 +201,10 @@ And, similarly, to add a PGP master key, we add its fingerprint:
 When the file is saved, `sops` will update its metadata and encrypt the data key
 with the freshly added master keys. The removed entries are simply deleted from
 the file.
+
+When removing keys, it is recommended to rotate the data key using `-r`,
+otherwise owners of the removed key may have add access to the data key in the
+past.
 
 Assuming roles and using KMS in various AWS accounts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -244,15 +266,13 @@ Key Rotation
 ~~~~~~~~~~~~
 
 It is recommended to renew the data key on a regular basis. `sops` supports key
-rotation via the `-r` flag. A simple approach is to decrypt and reencrypt all
-files in place with rotation enabled:
+rotation via the `-r` flag. Invoking it on an existing file causes sops to
+reencrypt the file with a new data key, which is then encrypted with the various
+KMS and PGP master keys defined in the file.
 
 .. code:: bash
 
-	for file in $(find . -type f -name "*.yaml"); do
-		sops -d -i $file
-		sops -e -i -r $file
-	done
+	sops -r example.yaml
 
 Examples
 --------
@@ -323,10 +343,10 @@ In-place encryption/decryption also works on binary files.
 	$ sha512sum /tmp/somerandom
 	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
 
-	$ sops -e -i /tmp/somerandom 
+	$ sops -e -i /tmp/somerandom
 	please wait while a data encryption key is being generated and stored securely
 
-	$ sops -d -i /tmp/somerandom 
+	$ sops -d -i /tmp/somerandom
 
 	$ sha512sum /tmp/somerandom
 	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
@@ -550,7 +570,7 @@ systems. Not unlike many other organizations that operate sufficiently complex
 automation, we found this to be a hard problem with a number of prerequisites:
 
 1. Secrets must be stored in YAML files for easy integration into hiera
-	    
+
 2. Secrets must be stored in GIT, and when a new CloudFormation stack is
    built, the current HEAD is pinned to the stack. (This allows secrets to
    be changed in GIT without impacting the current stack that may
@@ -611,7 +631,7 @@ The security of the data stored using sops is as strong as the weakest
 cryptographic mechanism. Values are encrypted using AES256_GCM which is the
 strongest symetric encryption algorithm known today. Data keys are encrypted
 in either KMS, which also uses AES256_GCM, or PGP which uses either RSA or
-ECDSA keys. 
+ECDSA keys.
 
 Going from the most likely to the least likely, the threats are as follows:
 

@@ -18,7 +18,7 @@ import subprocess
 import sys
 import tempfile
 from base64 import b64encode, b64decode
-from datetime import datetime
+from datetime import datetime, timedelta
 from socket import gethostname
 from textwrap import dedent
 
@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 0.9
+VERSION = 1.0
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -114,14 +114,14 @@ def main():
     argparser.add_argument('-e', '--encrypt', action='store_true',
                            dest='encrypt',
                            help="encrypt <file> and print it to stdout")
+    argparser.add_argument('-r', '--rotate', action='store_true',
+                           dest='rotate',
+                           help="generate a new data encryption key and "
+                                "reencrypt all values with the new key")
     argparser.add_argument('-i', '--in-place', action='store_true',
                            dest='in_place',
                            help="write output back to <file> instead "
                                 "of stdout for encrypt/decrypt")
-    argparser.add_argument('-r', '--rotate', action='store_true',
-                           dest='rotate',
-                           help="generate a new data encryption key and "
-                                "encrypt all values with the new key")
     argparser.add_argument('--extract', dest='tree_path',
                            help="extract a specific key or branch from the "
                                 "input JSON or YAML document. (decrypt mode "
@@ -136,11 +136,32 @@ def main():
                            dest='show_master_keys',
                            help="display master encryption keys in the file "
                                 "during editing (off by default).")
+    argparser.add_argument('--add-kms', dest='add_kms',
+                           help="Add the given comma separated KMS ARNs to the"
+                                " list of master keys on an existing file.")
+    argparser.add_argument('--rm-kms', dest='rm_kms',
+                           help="Remove the given comma separated KMS ARNs "
+                                "from the list of master keys on an existing "
+                                "file.")
+    argparser.add_argument('--add-pgp', dest='add_pgp',
+                           help="Add the given comma separated PGP fingerprint"
+                                " to the list of master keys on an existing "
+                                "file.")
+    argparser.add_argument('--rm-pgp', dest='rm_pgp',
+                           help="Remove the given comma separated PGP "
+                                "fingerprint from the list of master keys on "
+                                "an existing file.")
     argparser.add_argument('--ignore-mac', action='store_true',
                            dest='ignore_mac',
                            help="ignore Message Authentication Code "
                                 "during decryption")
+    argparser.add_argument('--no-latest-check', action='store_true',
+                           dest='nolatestcheck',
+                           help="skip check for latest version of sops")
     args = argparser.parse_args()
+
+    if not args.nolatestcheck:
+        check_latest_version()
 
     kms_arns = ""
     if 'SOPS_KMS_ARN' in os.environ:
@@ -169,14 +190,15 @@ def main():
                                                     kms_arns=kms_arns,
                                                     pgp_fps=pgp_fps)
     if not existing_file:
+        if len(args.add_kms) > 0 or len(args.add_pgp) > 0 \
+           or len(args.rm_kms) > 0 or len(args.rm_pgp) > 0:
+            panic("cannot add or remove keys on non-existent files, use "
+                  "`--kms` and `--pgp` instead.", error_code=49)
+        # encrypt and decrypt modes are not available on non-existent files
         if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
         else:
             print("%s doesn't exist, creating it." % args.file)
-
-    if args.rotate:
-        # if rotate is set, force a data key generation even if one exists
-        need_key = True
 
     if args.encrypt:
         # Encrypt mode: encrypt, display and exit
@@ -193,6 +215,7 @@ def main():
     if args.decrypt:
         # Decrypt mode: decrypt, display and exit
         key, tree = get_key(tree)
+        check_rotation_needed(tree)
         tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
         if not args.show_master_keys:
             tree.pop('sops', None)
@@ -204,8 +227,25 @@ def main():
         write_file(tree, path=dest, filetype=otype)
         sys.exit(0)
 
+    if args.rotate:
+        # Rotate mode: generate new data keys and reencrypt the file
+        key, tree = get_key(tree)
+        tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
+        key, tree = get_key(tree, True)
+        tree = walk_and_encrypt(tree, key)
+        tree = add_new_master_keys(tree, args.add_kms, args.add_pgp)
+        tree = remove_master_keys(tree, args.rm_kms, args.rm_pgp)
+        tree = update_master_keys(tree, key)
+        if otype == "bytes":
+            otype = "json"
+        path = write_file(tree, path=args.file, filetype=otype)
+        print("Data key rotated and file written to %s" % (path),
+              file=sys.stderr)
+        sys.exit(0)
+
     # EDIT Mode: decrypt, edit, encrypt and save
     key, tree = get_key(tree, need_key)
+    check_rotation_needed(tree)
 
     # we need a stash to save the IV and AAD and reuse them
     # if a given value has not changed during editing
@@ -242,6 +282,7 @@ def main():
             except KeyboardInterrupt:
                 os.remove(tmppath)
                 panic("ctrl+c captured, exiting without saving", 85)
+            continue
 
         if args.show_master_keys:
             # use the sops data from the file
@@ -271,6 +312,8 @@ def main():
               error_code=200)
 
     tree = walk_and_encrypt(tree, key, stash=stash)
+    tree = add_new_master_keys(tree, args.add_kms, args.add_pgp)
+    tree = remove_master_keys(tree, args.rm_kms, args.rm_pgp)
     tree = update_master_keys(tree, key)
     os.remove(tmppath)
 
@@ -346,16 +389,24 @@ def load_file_into_tree(path, filetype, restore_sops=None):
             tree = json.loads(data, object_pairs_hook=OrderedDict)
         else:
             data = fd.read()
-            # try to guess what type of file it is. It may be a previously sops
-            # encrypted file, in which case it's in JSON format. If not, load
-            # the bytes as such in the 'data' key.
+            # try to guess what type of file it is. It may be a previously
+            # sops encrypted file, in which case it's in JSON format. If not,
+            # we need to load the bytes as such in the 'data' key. If a line
+            # with `SOPS=` is found, it must be decoded as json in the
+            # tree['sops'] key.
             try:
                 tree = json.loads(data.decode('utf-8'),
                                   object_pairs_hook=OrderedDict)
                 if "version" not in tree['sops']:
                     tree['data'] = data
             except:
-                tree['data'] = data
+                valre = b'(.+)^SOPS=({.+})$'
+                res = re.match(valre, data, flags=(re.MULTILINE | re.DOTALL))
+                if res is None:
+                    tree['data'] = data
+                else:
+                    tree['data'] = res.group(1)
+                    tree['sops'] = json.loads(res.group(2))
     if restore_sops:
         tree['sops'] = restore_sops.copy()
     return tree
@@ -444,16 +495,19 @@ def update_master_keys(tree, key):
         i = -1
         for entry in tree['sops']['kms']:
             i += 1
+            # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
                 print("updating kms entry")
                 updated = encrypt_key_with_kms(key, entry)
                 tree['sops']['kms'][i] = updated
+
     if 'pgp' in tree['sops']:
         if not isinstance(tree['sops']['pgp'], list):
             panic("invalid PGP format in SOPS branch, must be a list")
         i = -1
         for entry in tree['sops']['pgp']:
             i += 1
+            # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
                 print("updating pgp entry")
                 updated = encrypt_key_with_pgp(key, entry)
@@ -482,6 +536,76 @@ def check_master_keys(tree):
             if 'fp' in entry and entry['fp'] != "":
                 return True
     return False
+
+
+def add_new_master_keys(tree, new_kms, new_pgp):
+    """ Add new master keys by creating a new tree and updating
+        the main tree with them
+    """
+    if new_kms and len(new_kms) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_kms_arn(newtree, new_kms)
+        if 'kms' in newtree['sops']:
+            for newentry in newtree['sops']['kms']:
+                if 'kms' not in tree['sops']:
+                    tree['sops']['kms'] = [newentry]
+                    continue
+                shouldadd = True
+                for entry in tree['sops']['kms']:
+                    if newentry['arn'] == entry['arn']:
+                        # arn already present, don't re-add it
+                        shouldadd = False
+                        break
+                if shouldadd:
+                    tree['sops']['kms'].append(newentry)
+    if new_pgp and len(new_pgp) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_pgp_fp(newtree, new_pgp)
+        if 'pgp' in newtree['sops']:
+            for newentry in newtree['sops']['pgp']:
+                if 'pgp' not in tree['sops']:
+                    tree['sops']['pgp'] = [newentry]
+                    continue
+                shouldadd = True
+                for entry in tree['sops']['pgp']:
+                    if newentry['fp'] == entry['fp']:
+                        # arn already present, don't re-add it
+                        shouldadd = False
+                        break
+                if shouldadd:
+                    tree['sops']['pgp'].append(newentry)
+    return tree
+
+
+def remove_master_keys(tree, rm_kms, rm_pgp):
+    """ remove master keys by creating a new tree and removing
+        the master keys present in the new tree from the old tree
+    """
+    if rm_kms and len(rm_kms) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_kms_arn(newtree, rm_kms)
+        if 'kms' in newtree['sops'] and 'kms' in tree['sops']:
+            for rmentry in newtree['sops']['kms']:
+                i = 0
+                for entry in tree['sops']['kms']:
+                    if rmentry['arn'] == entry['arn']:
+                        del tree['sops']['kms'][i]
+                    i += 1
+    if rm_pgp and len(rm_pgp) > 0:
+        newtree = {}
+        newtree['sops'] = {}
+        newtree, throwaway = parse_pgp_fp(newtree, rm_pgp)
+        if 'pgp' in newtree['sops'] and 'pgp' in tree['sops']:
+            for rmentry in newtree['sops']['pgp']:
+                i = 0
+                for entry in tree['sops']['pgp']:
+                    if rmentry['fp'] == entry['fp']:
+                        del tree['sops']['pgp'][i]
+                    i += 1
+    return tree
 
 
 def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
@@ -989,6 +1113,52 @@ def truncate_tree(tree, path):
 def panic(msg, error_code=1):
     print("PANIC: %s" % msg, file=sys.stderr)
     sys.exit(error_code)
+
+
+def check_latest_version():
+    try:
+        import xmlrpclib
+    except ImportError:
+        import xmlrpc.client as xmlrpclib
+    try:
+        client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
+        latest = client.package_releases('sops')[0]
+        if VERSION < float(latest):
+            print("INFO: your version of sops is outdated. Version {latest} "
+                  "is available, install it with "
+                  "$ pip install 'sops=={latest}'."
+                  .format(latest=latest), file=sys.stderr)
+    except:
+        pass
+
+
+def check_rotation_needed(tree):
+    """ Browse the master keys and check their creation date to
+        display a warning if older than 6 months (it's time to rotate).
+    """
+    show_rotation_warning = False
+    six_months_ago = datetime.utcnow()-timedelta(days=183)
+    if 'kms' in tree['sops']:
+        for entry in tree['sops']['kms']:
+            # check if creation date is older than 6 months
+            if 'created_at' in entry:
+                d = datetime.strptime(entry['created_at'],
+                                      '%Y-%m-%dT%H:%M:%SZ')
+                if d < six_months_ago:
+                    show_rotation_warning = True
+
+    if 'pgp' in tree['sops']:
+        for entry in tree['sops']['pgp']:
+            # check if creation date is older than 6 months
+            if 'created_at' in entry:
+                d = datetime.strptime(entry['created_at'],
+                                      '%Y-%m-%dT%H:%M:%SZ')
+                if d < six_months_ago:
+                    show_rotation_warning = True
+    if show_rotation_warning:
+        print("INFO: the data key on this document is over 6 months old. "
+              "Considering rotating it with $ sops -r <file> ",
+              file=sys.stderr)
 
 
 if __name__ == '__main__':
