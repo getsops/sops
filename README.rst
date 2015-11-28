@@ -54,7 +54,7 @@ Assuming you already have libffi and libyaml installed, the following commands w
     $ source ~/sopsvenv/bin/activate
     $ pip install -U sops
     $ sops -h | grep ^Version
-    Version 0.9
+    Version 1.0
 
 Usage
 -----
@@ -667,6 +667,13 @@ Weak AES cryptography
 A vulnerability in AES256_GCM could potentially leak the data key or the KMS
 master key used by a sops encrypted file. While no such vulnerability exists
 today, we recommend that users keep their encrypted files reasonably private.
+
+Backward compatibility
+----------------------
+
+`sops` will remain backward compatible on the major version, meaning that all
+improvements brought to the 1.X branch (current) will maintain the file format
+introduced in **1.0**.
 
 License
 -------
