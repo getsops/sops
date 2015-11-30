@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.0
+VERSION = 1.1
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -190,8 +190,7 @@ def main():
                                                     kms_arns=kms_arns,
                                                     pgp_fps=pgp_fps)
     if not existing_file:
-        if len(args.add_kms) > 0 or len(args.add_pgp) > 0 \
-           or len(args.rm_kms) > 0 or len(args.rm_pgp) > 0:
+        if args.add_kms or args.add_pgp or args.rm_kms or args.rm_pgp:
             panic("cannot add or remove keys on non-existent files, use "
                   "`--kms` and `--pgp` instead.", error_code=49)
         # encrypt and decrypt modes are not available on non-existent files
