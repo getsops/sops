@@ -295,7 +295,7 @@ encrypt the file, and redirect the output to a destination file.
 
 .. code:: bash
 
-	$ export SOPS_KMS+ARN="arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500"
+	$ export SOPS_KMS_ARN="arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500"
 	$ export SOPS_PGP_FP="C9CAB0AF1165060DB58D6D6B2653B624D620786D"
 	$ sops -e /path/to/existing/file.yaml > /path/to/new/encrypted/file.yaml
 
