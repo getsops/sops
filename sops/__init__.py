@@ -261,7 +261,7 @@ def main():
     # the decrypted tree is written to a tempfile and an editor
     # is opened on the file
     tmppath = write_file(tree, filetype=otype)
-    tmpstamp = os.stat(tmppath)
+    tmphash = get_file_hash(tmppath)
     print("temp file created at %s" % tmppath, file=sys.stderr)
 
     # open an editor on the file and, if the file is yaml or json,
@@ -304,8 +304,7 @@ def main():
                 panic("ctrl+c captured, exiting without saving", 85)
 
     # verify if file has been modified, and if not, just exit
-    tmpstamp2 = os.stat(tmppath)
-    if tmpstamp == tmpstamp2:
+    if tmphash == get_file_hash(tmppath):
         os.remove(tmppath)
         panic("%s has not been modified, exit without writing" % args.file,
               error_code=200)
@@ -1158,6 +1157,17 @@ def check_rotation_needed(tree):
         print("INFO: the data key on this document is over 6 months old. "
               "Considering rotating it with $ sops -r <file> ",
               file=sys.stderr)
+
+
+def get_file_hash(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        while True:
+            data = f.read(4096)
+            if not data:
+                break
+            digest.update(data)
+    return digest.digest()
 
 
 if __name__ == '__main__':
