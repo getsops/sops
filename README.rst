@@ -17,11 +17,11 @@ First install some libraries from your package manager:
 
 * RHEL family::
 
-	sudo yum install libyaml-devel python-devel libffi-devel pip
+	sudo yum install gcc git libffi-devel libyaml-devel make openssl openssl-devel python-devel python-pip
 
 * Debian family::
 
-	sudo apt-get install libyaml-dev python-dev libffi-dev python-pip
+	sudo apt-get install gcc git libffi-dev libssl-dev libyaml-dev make openssl python-dev python-pip
 
 * MacOS::
 
