@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.2
+VERSION = 1.3
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -405,6 +405,8 @@ def load_file_into_tree(path, filetype, restore_sops=None):
                 else:
                     tree['data'] = res.group(1)
                     tree['sops'] = json.loads(res.group(2))
+    if tree is None:
+        panic("failed to load file into tree, got an empty tree", 39)
     if restore_sops:
         tree['sops'] = restore_sops.copy()
     return tree
