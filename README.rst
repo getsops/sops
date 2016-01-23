@@ -28,6 +28,10 @@ First install some libraries from your package manager:
 	brew install libffi libyaml
 	sudo easy_install pip
 
+	# note: on OSX El Capitan, Apple stopped shipping the OpenSSL headers
+	# the command below is a workaround to install the Cryptography package
+	env LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix openssl)/include" pip install cryptography
+
 Then install `sops` from pip::
 
 	sudo pip install --upgrade sops
