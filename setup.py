@@ -9,7 +9,7 @@ with codecs.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
     name="sops",
     py_modules=['sops'],
-    version="1.3",
+    version="1.4",
     author="Julien Vehent",
     author_email="jvehent@mozilla.com",
     description="Secrets OPerationS (sops) is an editor of encrypted files",
