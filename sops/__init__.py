@@ -1044,10 +1044,14 @@ def write_file(tree, path=None, filetype=None):
 
     if filetype == "yaml":
         if path == 'stdout':
-            sys.stdout.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,indent=4))
+            sys.stdout.write(
+                ruamel.yaml.dump(tree,
+                                 Dumper=ruamel.yaml.RoundTripDumper,
+                                 indent=4))
         else:
-            fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
-                indent=4).encode('utf-8'))
+            fd.write(ruamel.yaml.dump(tree,
+                                      Dumper=ruamel.yaml.RoundTripDumper,
+                                      indent=4).encode('utf-8'))
     elif filetype == "json":
         jsonstr = json.dumps(tree, indent=4)
         if path == 'stdout':
