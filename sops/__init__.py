@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.3
+VERSION = 1.4
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -203,7 +203,7 @@ def main():
         # Encrypt mode: encrypt, display and exit
         key, tree = get_key(tree, need_key)
         tree = walk_and_encrypt(tree, key)
-        dest = '/dev/stdout'
+        dest = 'stdout'
         if args.in_place:
             dest = args.file
         if otype == "bytes":
@@ -218,7 +218,7 @@ def main():
         tree = walk_and_decrypt(tree, key, ignoreMac=args.ignore_mac)
         if not args.show_master_keys:
             tree.pop('sops', None)
-        dest = '/dev/stdout'
+        dest = 'stdout'
         if args.in_place:
             dest = args.file
         if args.tree_path:
@@ -1031,7 +1031,8 @@ def write_file(tree, path=None, filetype=None):
 
     """
     if path:
-        fd = open(path, "wb")
+        if path != 'stdout':
+            fd = open(path, "wb")
     else:
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
@@ -1042,21 +1043,41 @@ def write_file(tree, path=None, filetype=None):
         return path
 
     if filetype == "yaml":
-        fd.write(ruamel.yaml.dump(tree, Dumper=ruamel.yaml.RoundTripDumper,
-                                  indent=4).encode('utf-8'))
+        if path == 'stdout':
+            sys.stdout.write(
+                ruamel.yaml.dump(tree,
+                                 Dumper=ruamel.yaml.RoundTripDumper,
+                                 indent=4))
+        else:
+            fd.write(ruamel.yaml.dump(tree,
+                                      Dumper=ruamel.yaml.RoundTripDumper,
+                                      indent=4).encode('utf-8'))
     elif filetype == "json":
-        fd.write(json.dumps(tree, indent=4).encode('utf-8'))
+        jsonstr = json.dumps(tree, indent=4)
+        if path == 'stdout':
+            sys.stdout.write(jsonstr)
+        else:
+            fd.write(jsonstr.encode('utf-8'))
     else:
         if 'data' in tree:
             try:
-                fd.write(tree['data'].encode('utf-8'))
+                if path == 'stdout':
+                    sys.stdout.write(tree['data'])
+                else:
+                    fd.write(tree['data'].encode('utf-8'))
             except:
-                fd.write(tree['data'])
+                if path == 'stdout':
+                    sys.stdout.write(tree['data'].decode('utf-8'))
+                else:
+                    fd.write(tree['data'])
         if 'sops' in tree:
             jsonstr = json.dumps(tree['sops'], sort_keys=True)
-            fd.write(("SOPS=%s" % jsonstr).encode('utf-8'))
-
-    fd.close()
+            if path == 'stdout':
+                sys.stdout.write("SOPS=%s" % jsonstr)
+            else:
+                fd.write("SOPS=%s" % jsonstr.encode('utf8'))
+    if path != 'stdout':
+        fd.close()
     return path
 
 

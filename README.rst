@@ -685,7 +685,8 @@ Mozilla Public License Version 2.0
 
 Authors
 -------
-* Julien Vehent <jvehent@mozilla.com>
+* Julien Vehent <jvehent@mozilla.com> (lead & maintainer)
+
 * Daniel Thornton <dthornton@mozilla.com>
 * Alexis Metaireau <alexis@mozilla.com>
 * Rémy Hubscher <natim@mozilla.com>
