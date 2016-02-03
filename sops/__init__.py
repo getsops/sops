@@ -1111,7 +1111,7 @@ def validate_syntax(path, filetype):
     """Attempt to load a file and return an exception if it fails."""
     if filetype == 'bytes':
         return True
-    with open(path, "rb") as fd:
+    with open(path, "r") as fd:
         if filetype == 'yaml':
             ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         if filetype == 'json':
