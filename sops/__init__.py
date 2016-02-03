@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.5
+VERSION = 1.6
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -795,6 +795,9 @@ def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None):
 
 def encrypt(value, key, aad=b'', stash=None, digest=None):
     """Return an encrypted string of the value provided."""
+    if not value:
+        # if the value is empty, return it as is, don't encrypt
+        return ""
     # save the original type
     # the order in which we do this matters. For example, a bool
     # is also an int, but an int isn't a bool, so we test for bool first
@@ -1108,7 +1111,7 @@ def validate_syntax(path, filetype):
     """Attempt to load a file and return an exception if it fails."""
     if filetype == 'bytes':
         return True
-    with open(path, "rb") as fd:
+    with open(path, "r") as fd:
         if filetype == 'yaml':
             ruamel.yaml.load(fd, ruamel.yaml.RoundTripLoader)
         if filetype == 'json':
