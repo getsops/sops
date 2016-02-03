@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.4
+VERSION = 1.5
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -158,6 +158,9 @@ def main():
     argparser.add_argument('--no-latest-check', action='store_true',
                            dest='nolatestcheck',
                            help="skip check for latest version of sops")
+    argparser.add_argument('-v', '--version', action='version',
+                           version='%(prog)s ' + str(VERSION))
+
     args = argparser.parse_args()
 
     if not args.nolatestcheck:
