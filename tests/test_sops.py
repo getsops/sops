@@ -139,6 +139,39 @@ class TreeTest(unittest2.TestCase):
         assert isinstance(crypttree['example_array'], list)
         assert len(crypttree['example_array']) == 2
 
+    def test_walk_and_encrypt_unencrypted(self):
+        """Walk the branch with whitelisted leaves and verify they are untouched."""
+        m = mock.mock_open(read_data="""{
+            "str_unencrypted": "STRING",
+            "list_unencrypted": ["A", "B"],
+            "dict_unencrypted": {
+                "key": "value"
+            },
+            "foo": "bar"
+        }""")
+        # Verify data stays unencrypted upon encryption
+        key = os.urandom(32)
+        tree = OrderedDict()
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'json')
+        tree['sops'] = dict()
+        crypttree = sops.walk_and_encrypt(OrderedDict(tree), key, isRoot=True)
+        assert crypttree['str_unencrypted'] == 'STRING'
+        assert crypttree['list_unencrypted'] == ['A', 'B']
+        assert crypttree['dict_unencrypted'] == {"key": "value"}
+        assert crypttree['foo'].startswith("ENC[AES256_GCM,data:")
+
+        # Verify we have a MAC and it includes unencrypted values
+        assert tree['sops']['mac'].startswith("ENC[AES256_GCM,data:")
+        empty_tree = OrderedDict()
+        empty_tree['sops'] = dict()
+        sops.walk_and_encrypt(OrderedDict(empty_tree), key, isRoot=True)
+        tree_mac = sops.decrypt(tree['sops']['mac'], key,
+                                aad=tree['sops']['lastmodified'].encode('utf-8'))
+        empty_tree_mac = sops.decrypt(empty_tree['sops']['mac'], key,
+                                      aad=empty_tree['sops']['lastmodified'].encode('utf-8'))
+        assert tree_mac != empty_tree_mac
+
     def test_walk_and_encrypt_and_decrypt(self):
         """Test a roundtrip on the tree encryption/decryption code"""
         m = mock.mock_open(read_data=sops.DEFAULT_JSON)
@@ -169,6 +202,26 @@ class TreeTest(unittest2.TestCase):
         key = os.urandom(32)
         tree = OrderedDict()
         tree['data'] = os.urandom(4096)
+        tree['sops'] = dict()
+        crypttree = sops.walk_and_encrypt(OrderedDict(tree), key, isRoot=True)
+        assert tree['sops']['mac'].startswith("ENC[AES256_GCM,data:")
+        cleartree = sops.walk_and_decrypt(OrderedDict(crypttree), key, isRoot=True)
+        assert cleartree == tree
+
+    def test_walk_and_encrypt_and_decrypt_unencrypted(self):
+        """Test a roundtrip on the tree encryption/decryption code with unencrypted leaves"""
+        m = mock.mock_open(read_data="""{
+            "str_unencrypted": "STRING",
+            "list_unencrypted": ["A", "B"],
+            "dict_unencrypted": {
+                "key": "value"
+            },
+            "foo": "bar"
+        }""")
+        key = os.urandom(32)
+        tree = OrderedDict()
+        with mock.patch.object(builtins, 'open', m):
+            tree = sops.load_file_into_tree('path', 'json')
         tree['sops'] = dict()
         crypttree = sops.walk_and_encrypt(OrderedDict(tree), key, isRoot=True)
         assert tree['sops']['mac'].startswith("ENC[AES256_GCM,data:")
