@@ -525,6 +525,24 @@ With this in place, calls to `git diff` will decrypt both previous and current
 versions of the target file prior to displaying the diff. And it even works with
 git client interfaces, because they call git diff under the hood!
 
+Encrypting only parts of a file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note: this only works on YAML and JSON files, not on BINARY files.
+
+By default, `sops` encrypts all the values of a YAML or JSON file and leaves the
+keys in cleartext. In some instances, you may want to exclude some values from
+being encrypted. This can be accomplished by adding the suffix **_unencrypted**
+to any key of a file. When set, all values underneath the key that set the
+**_unencrypted** prefix will be left in cleartext. 
+
+Note that, while in cleartext, unencrypted content is still added to the
+checksum of the file, and thus cannot be modified outside of sops without
+breaking the file integrity check.
+
+The unencrypted suffix can be set to a different value using the
+`--unencrypted-suffix` option.
+
 Encryption Protocol
 -------------------
 
@@ -771,6 +789,7 @@ Authors
 * Daniel Thornton <dthornton@mozilla.com>
 * Alexis Metaireau <alexis@mozilla.com>
 * Rémy Hubscher <natim@mozilla.com>
+* Todd Wolfson <todd@twolfson.com>
 
 Credits
 -------

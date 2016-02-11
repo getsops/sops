@@ -15,15 +15,26 @@ an_array:
 - ENC[AES256_GCM,data:nLmw6dwybYVA65FXDbgD8Q==,iv:E047Yxv3tlwKIDrg2rm0Yng3DIdmqOPKlukcyLSsqO0=,tag:oCtYybAn4SnlpVAdwKOLnQ==,type:str]
 somebooleans:
 - ENC[AES256_GCM,data:LZkyvg==,iv:a9QepfteG4ZWipwWEnb3JRDztHCWNNxdbfC6L2op0dM=,tag:CY1rv9Nntbz2pMMz/A9OvQ==,type:bool]
-- ENC[AES256_GCM,data:+BODbI4=,iv:+mWt88WI1hZcRL+L4XI9qprTaDzU0XlK5CpGJnQ09go=,tag:2UULI8UhgeyiVyzeNRrOTg==,type:bool]
+- ''
 this:
     is:
         a:
             nested:
                 value: ENC[AES256_GCM,data:96iQFcKdmKcocHCnOm7MR78W7uFZPGoZWRyH,iv:AQ3HwSFXhP3Mx4PoLvsyb9fwsYRaQZsV3NRH5dGhrXw=,tag:l6KHQfmm/QbnmPdLvCfocQ==,type:str]
+
+# sops supports unencrypted fields
+# by adding the `_unencrypted` suffix
+# to any key
+somelist_unencrypted:
+- all elements of this list
+- remain in clear text
+- because of the _encrypted suffix in the key
+nested_unencrypted:
+    this:
+        is:
+            all: going to remain in clear text
 sops:
-    mac: ENC[AES256_GCM,data:Rss45wMkMNDFkKj+N5fYw2OCDFAcmF9OPS/0X+FPTUiz/BOwEqFf+158MND4Q8CgYfmaU4wE7KLi1EwLev51+ajhlBA7rmUWsW6/j/we6pDIlO95Lfe/lTkBqiWmM5enIvwFn9zIey6OEkv2Ugi2W9abt3gbMSOxOwTt5oGDnGw=,iv:kpPWC+LdLj/uC+L+0mBqAEYkRcZEvBchdJaActU7DBs=,tag:X1FdKXT3rQugCOswl0eMyg==,type:str]
-    version: 1.0
+    unencrypted_suffix: _unencrypted
     kms:
     -   created_at: '2015-11-25T00:32:57Z'
         enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAgB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyzrMwHaX8rsBh/iNACARCAO/eeScqy8gZpfvDoHilBD+cw+1n6iFsTQmEQJro4QY8p+LUXSLFsnUge8xcADZrIGBup9BBJbdR+qyot
@@ -31,6 +42,11 @@ sops:
     -   created_at: '2015-11-25T00:32:57Z'
         enc: CiBdfsKZbRNf/Li8Tf2SjeSdP76DineB1sbPjV0TV+meTxKnAQEBAgB4XX7CmW0TX/y4vE39ko3knT++g4p3gdbGz41dE1fpnk8AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzonxxlGDduanr16MwCARCAO70FBqnx7K2xaY8++gATYtsLgJfq5aW8lRWK515g5fEDpn/+PbrGSY9YxsFul024+fIev+8r3AKDX7K3
         arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
+    mac: ENC[AES256_GCM,data:OsFv/zk1QFeTn7Cic7HnL8XLDcNyIxrBouk9Ofj2nhxX+weFXtYwTIJxmpaED/UCR1jHRIet5StkCmqe4x7uBQtf8Bhw5GALGYKou4uX6cvct7a0WkHad0HST5KFyJics/5p/NjLGmYk70jiYG3XMSfXj/Xw/uKEl77zZYJXPuI=,iv:/9AYT39rGceDiaRv72kPWIfWv34zCwg2OkuHKjwT4tU=,tag:71XkIyPunZPQOHxxh5hxFw==,type:str]
+    version: 1.6
+    attention: This section contains key material that should only be modified with
+        extra care. See `sops -h`.
+    lastmodified: '2016-02-11T14:00:32Z'
     pgp:
     -   fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
         created_at: '2015-11-25T00:32:57Z'
@@ -66,6 +82,3 @@ sops:
             H6JUTisfwKa2t319jR0cfy81dMxUjwTAdNBOiE0nj+Iz0i3ekBIl/wmtVWpJ
             =dWBE
             -----END PGP MESSAGE-----
-    lastmodified: '2015-11-25T00:32:57Z'
-    attention: This section contains key material that should only be modified with
-        extra care. See `sops -h`.
