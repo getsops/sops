@@ -1077,6 +1077,10 @@ def write_file(tree, path=None, filetype=None):
                     sys.stdout.write(tree['data'].decode('utf-8'))
                 else:
                     fd.write(tree['data'])
+            if path == 'stdout':
+                sys.stdout.write("\n")
+            else:
+                fd.write("\n")
         if 'sops' in tree:
             jsonstr = json.dumps(tree['sops'], sort_keys=True)
             if path == 'stdout':
