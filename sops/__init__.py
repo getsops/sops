@@ -419,6 +419,7 @@ def load_file_into_tree(path, filetype, restore_sops=None):
                 if "version" not in tree['sops']:
                     tree['data'] = data
             except:
+                tree = OrderedDict()
                 valre = b'(.+)^SOPS=({.+})$'
                 res = re.match(valre, data, flags=(re.MULTILINE | re.DOTALL))
                 if res is None:
