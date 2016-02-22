@@ -91,9 +91,13 @@ Remove this text and add your content to the file.
 
 """
 
+DEFAULT_UNENCRYPTED_SUFFIX = '_unencrypted'
+
 NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
 INPUT_VERSION = VERSION
+
+UNENCRYPTED_SUFFIX = DEFAULT_UNENCRYPTED_SUFFIX
 
 
 def main():
@@ -158,6 +162,10 @@ def main():
     argparser.add_argument('--no-latest-check', action='store_true',
                            dest='nolatestcheck',
                            help="skip check for latest version of sops")
+    argparser.add_argument('--unencrypted-suffix', dest='unencrypted_suffix',
+                           help="override unencrypted key suffix "
+                                "(default: {default})"
+                                .format(default=DEFAULT_UNENCRYPTED_SUFFIX))
     argparser.add_argument('-v', '--version', action='version',
                            version='%(prog)s ' + str(VERSION))
 
@@ -201,6 +209,10 @@ def main():
             panic("cannot operate on non-existent file", error_code=100)
         else:
             print("%s doesn't exist, creating it." % args.file)
+
+    if args.unencrypted_suffix:
+        global UNENCRYPTED_SUFFIX
+        UNENCRYPTED_SUFFIX = args.unencrypted_suffix
 
     if args.encrypt:
         # Encrypt mode: encrypt, display and exit
@@ -360,6 +372,12 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
             INPUT_VERSION = tree['sops']['version']
         except:
             None
+        # try to set the unencrypted suffix to the one set in the file
+        try:
+            global UNENCRYPTED_SUFFIX
+            UNENCRYPTED_SUFFIX = tree['sops']['unencrypted_suffix']
+        except:
+            None
     else:
         # load a new tree using template data
         if itype == "yaml":
@@ -430,6 +448,7 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
         tree['sops']['attention'] = 'This section contains key material' + \
             ' that should only be modified with extra care. See `sops -h`.'
         tree['sops']['version'] = VERSION
+        tree['sops']['unencrypted_suffix'] = UNENCRYPTED_SUFFIX
 
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
         # check that we have at least one ARN to work with
@@ -524,6 +543,13 @@ def update_master_keys(tree, key):
     else:
         tree['sops']['version'] = VERSION
 
+    # update unencrypted suffix if it varies
+    if 'unencrypted_suffix' in tree['sops']:
+        if tree['sops']['unencrypted_suffix'] != UNENCRYPTED_SUFFIX:
+            tree['sops']['unencrypted_suffix'] = UNENCRYPTED_SUFFIX
+    else:
+        tree['sops']['unencrypted_suffix'] = UNENCRYPTED_SUFFIX
+
     return tree
 
 
@@ -613,7 +639,7 @@ def remove_master_keys(tree, rm_kms, rm_pgp):
 
 
 def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
-                     isRoot=True, ignoreMac=False):
+                     isRoot=True, ignoreMac=False, unencrypted=False):
     """Walk the branch recursively and decrypt leaves."""
     if isRoot and not ignoreMac:
         digest = hashlib.sha512()
@@ -621,6 +647,7 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
     for k, v in branch.items():
         if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
+        unencrypted_branch = unencrypted or k.endswith(UNENCRYPTED_SUFFIX)
         nstash = dict()
         caad = aad
         if INPUT_VERSION >= 0.9:
@@ -634,15 +661,19 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
             nstash = stash[k]
         if isinstance(v, dict):
             branch[k] = walk_and_decrypt(v, key, aad=caad, stash=nstash,
-                                         digest=digest, isRoot=False)
+                                         digest=digest, isRoot=False,
+                                         unencrypted=unencrypted_branch)
         elif isinstance(v, list):
             branch[k] = walk_list_and_decrypt(v, key, aad=caad, stash=nstash,
-                                              digest=digest)
+                                              digest=digest,
+                                              unencrypted=unencrypted_branch)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = decrypt(v, key, aad=caad, stash=nstash, digest=digest)
+            ev = decrypt(v, key, aad=caad, stash=nstash, digest=digest,
+                         unencrypted=unencrypted_branch)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = decrypt(v, key, aad=caad, stash=nstash, digest=digest)
+            branch[k] = decrypt(v, key, aad=caad, stash=nstash, digest=digest,
+                                unencrypted=unencrypted_branch)
 
     if isRoot and not ignoreMac:
         # compute the hash computed on values with the one stored
@@ -661,7 +692,8 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
     return branch
 
 
-def walk_list_and_decrypt(branch, key, aad=b'', stash=None, digest=None):
+def walk_list_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
+                          unencrypted=False):
     """Walk a list contained in a branch and decrypts its values."""
     nstash = dict()
     kl = []
@@ -671,17 +703,26 @@ def walk_list_and_decrypt(branch, key, aad=b'', stash=None, digest=None):
             nstash = stash[i]
         if isinstance(v, dict):
             kl.append(walk_and_decrypt(v, key, aad=aad, stash=nstash,
-                                       digest=digest, isRoot=False))
+                                       digest=digest, isRoot=False,
+                                       unencrypted=unencrypted))
         elif isinstance(v, list):
             kl.append(walk_list_and_decrypt(v, key, aad=aad, stash=nstash,
-                                            digest=digest))
+                                            digest=digest,
+                                            unencrypted=unencrypted))
         else:
-            kl.append(decrypt(v, key, aad=aad, stash=nstash, digest=digest))
+            kl.append(decrypt(v, key, aad=aad, stash=nstash, digest=digest,
+                              unencrypted=unencrypted))
     return kl
 
 
-def decrypt(value, key, aad=b'', stash=None, digest=None):
+def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
     """Return a decrypted value."""
+    if unencrypted:
+        if digest:
+            bvalue = to_bytes(value)
+            digest.update(bvalue)
+        return value
+
     valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
     # extract fields using a regex
     if INPUT_VERSION >= 0.8:
@@ -741,13 +782,14 @@ def decrypt(value, key, aad=b'', stash=None, digest=None):
 
 
 def walk_and_encrypt(branch, key, aad=b'', stash=None,
-                     isRoot=True, digest=None):
+                     isRoot=True, digest=None, unencrypted=False):
     """Walk the branch recursively and encrypts its leaves."""
     if isRoot:
         digest = hashlib.sha512()
     for k, v in branch.items():
         if k == 'sops' and isRoot:
             continue    # everything under the `sops` key stays in clear
+        unencrypted_branch = unencrypted or k.endswith(UNENCRYPTED_SUFFIX)
         caad = aad + k.encode('utf-8') + b':'
         nstash = dict()
         if stash and k in stash:
@@ -755,15 +797,19 @@ def walk_and_encrypt(branch, key, aad=b'', stash=None,
         if isinstance(v, dict):
             # recursively walk the tree
             branch[k] = walk_and_encrypt(v, key, aad=caad, stash=nstash,
-                                         digest=digest, isRoot=False)
+                                         digest=digest, isRoot=False,
+                                         unencrypted=unencrypted_branch)
         elif isinstance(v, list):
             branch[k] = walk_list_and_encrypt(v, key, aad=caad, stash=nstash,
-                                              digest=digest)
+                                              digest=digest,
+                                              unencrypted=unencrypted_branch)
         elif isinstance(v, ruamel.yaml.scalarstring.PreservedScalarString):
-            ev = encrypt(v, key, aad=caad, stash=nstash, digest=digest)
+            ev = encrypt(v, key, aad=caad, stash=nstash, digest=digest,
+                         unencrypted=unencrypted_branch)
             branch[k] = ruamel.yaml.scalarstring.PreservedScalarString(ev)
         else:
-            branch[k] = encrypt(v, key, aad=caad, stash=nstash, digest=digest)
+            branch[k] = encrypt(v, key, aad=caad, stash=nstash, digest=digest,
+                                unencrypted=unencrypted_branch)
     if isRoot:
         branch['sops']['lastmodified'] = NOW
         # finalize and store the message authentication code in encrypted form
@@ -775,7 +821,8 @@ def walk_and_encrypt(branch, key, aad=b'', stash=None,
     return branch
 
 
-def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None):
+def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None,
+                          unencrypted=False):
     """Walk a list contained in a branch and encrypts its values."""
     nstash = dict()
     kl = []
@@ -784,21 +831,31 @@ def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None):
             nstash = stash[i]
         if isinstance(v, dict):
             kl.append(walk_and_encrypt(v, key, aad=aad, stash=nstash,
-                                       digest=digest, isRoot=False))
+                                       digest=digest, isRoot=False,
+                                       unencrypted=unencrypted))
         elif isinstance(v, list):
             kl.append(walk_list_and_encrypt(v, key, aad=aad, stash=nstash,
-                                            digest=digest))
+                                            digest=digest,
+                                            unencrypted=unencrypted))
         else:
             kl.append(encrypt(v, key, aad=aad, stash=nstash,
-                              digest=digest))
+                              digest=digest, unencrypted=unencrypted))
     return kl
 
 
-def encrypt(value, key, aad=b'', stash=None, digest=None):
+def encrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
     """Return an encrypted string of the value provided."""
     if not value:
         # if the value is empty, return it as is, don't encrypt
         return ""
+
+    # if we don't want to encrypt, then digest return the value
+    if unencrypted:
+        if digest:
+            bvalue = to_bytes(value)
+            digest.update(bvalue)
+        return value
+
     # save the original type
     # the order in which we do this matters. For example, a bool
     # is also an int, but an int isn't a bool, so we test for bool first
@@ -814,10 +871,7 @@ def encrypt(value, key, aad=b'', stash=None, digest=None):
     else:
         valtype = 'bytes'
 
-    if not isinstance(value, bytes):
-        # if not bytes, convert to bytes
-        value = str(value).encode('utf-8')
-
+    value = to_bytes(value)
     if digest:
         digest.update(value)
 
@@ -1140,6 +1194,13 @@ def truncate_tree(tree, path):
         else:
             tree = tree[comp]
     return tree
+
+
+def to_bytes(value):
+    if not isinstance(value, bytes):
+        # if not bytes, convert to bytes
+        return str(value).encode('utf-8')
+    return value
 
 
 def panic(msg, error_code=1):
