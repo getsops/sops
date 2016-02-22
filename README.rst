@@ -790,6 +790,7 @@ Authors
 * Alexis Metaireau <alexis@mozilla.com>
 * Rémy Hubscher <natim@mozilla.com>
 * Todd Wolfson <todd@twolfson.com>
+* Brian Hourigan <bhourigan@mozilla.com>
 
 Credits
 -------
