@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.6
+VERSION = 1.7
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -419,6 +419,7 @@ def load_file_into_tree(path, filetype, restore_sops=None):
                 if "version" not in tree['sops']:
                     tree['data'] = data
             except:
+                tree = OrderedDict()
                 valre = b'(.+)^SOPS=({.+})$'
                 res = re.match(valre, data, flags=(re.MULTILINE | re.DOTALL))
                 if res is None:
@@ -1130,6 +1131,10 @@ def write_file(tree, path=None, filetype=None):
                     sys.stdout.write(tree['data'].decode('utf-8'))
                 else:
                     fd.write(tree['data'])
+            if path == 'stdout':
+                sys.stdout.write("\n")
+            else:
+                fd.write("\n")
         if 'sops' in tree:
             jsonstr = json.dumps(tree['sops'], sort_keys=True)
             if path == 'stdout':
