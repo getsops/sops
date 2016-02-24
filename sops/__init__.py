@@ -1028,9 +1028,9 @@ def get_aws_session_for_entry(entry):
         secretkey = role['Credentials']['SecretAccessKey']
         token = role['Credentials']['SessionToken']
         return (boto3.client('kms', region_name=region,
-                              aws_access_key_id=keyid,
-                              aws_secret_access_key=secretkey,
-                              aws_session_token=token),
+                             aws_access_key_id=keyid,
+                             aws_secret_access_key=secretkey,
+                             aws_session_token=token),
                 "")
     except KeyError:
         return (None, "failed to initialize KMS client")
