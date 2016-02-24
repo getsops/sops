@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.6
+VERSION = 1.7
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
