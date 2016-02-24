@@ -946,6 +946,7 @@ def get_key_from_kms(tree):
     except KeyError:
         return None
     i = -1
+    errors = []
     for entry in kms_tree:
         i += 1
         try:
@@ -955,18 +956,24 @@ def get_key_from_kms(tree):
         if 'arn' not in entry or entry['arn'] == "":
             print("KMS ARN not found, skipping entry %s" % i, file=sys.stderr)
             continue
-        kms = get_aws_session_for_entry(entry)
+        kms, err = get_aws_session_for_entry(entry)
+        if err != "":
+            errors.append("failed to obtain kms %s, error was: %s" %
+                          (entry['arn'], err))
+            continue
         if kms is None:
-            print("failed to initialize AWS KMS client for entry",
-                  file=sys.stderr)
+            errors.append("no kms client could be obtained for entry %s" %
+                          entry['arn'])
             continue
         try:
             kms_response = kms.decrypt(CiphertextBlob=b64decode(enc))
         except Exception as e:
-            print("[warning] skipping kms %s: %s " % (entry['arn'], e),
-                  file=sys.stderr)
+            errors.append("kms %s failed with error: %s " % (entry['arn'], e))
             continue
         return kms_response['Plaintext']
+    print("no KMS client could be accessed, errors:", file=sys.stderr)
+    for err in errors:
+        print("* %s" % err, file=sys.stderr)
     return None
 
 
@@ -975,9 +982,9 @@ def encrypt_key_with_kms(key, entry):
     if 'arn' not in entry or entry['arn'] == "":
         print("KMS ARN not found, skipping entry", file=sys.stderr)
         return entry
-    kms = get_aws_session_for_entry(entry)
-    if kms is None:
-        print("failed to initialize AWS KMS client for entry",
+    kms, err = get_aws_session_for_entry(entry)
+    if kms is None or err != "":
+        print("failed to initialize AWS KMS client for entry: %s" % err,
               file=sys.stderr)
         return entry
     try:
@@ -998,37 +1005,35 @@ def get_aws_session_for_entry(entry):
     # arn:aws:kms:{REGION}:...
     res = re.match('^arn:aws:kms:(.+):([0-9]+):key/(.+)$', entry['arn'])
     if res is None:
-        print("Invalid ARN '%s' in entry" % entry['arn'], file=sys.stderr)
-        return None
+        return (None, "Invalid ARN '%s' in entry" % entry['arn'])
     try:
         region = res.group(1)
     except:
-        print("Unable to find region from ARN '%s' in entry" %
-              entry['arn'], file=sys.stderr)
-        return None
+        return (None, "Unable to find region from ARN '%s' in entry" %
+                      entry['arn'])
     # if there are no role to assume, return the client directly
     if not ('role' in entry):
-        return boto3.client('kms', region_name=region)
+        return (boto3.client('kms', region_name=region), "")
     # otherwise, create a client using temporary tokens that assume the role
     try:
         client = boto3.client('sts')
         role = client.assume_role(RoleArn=entry['role'],
                                   RoleSessionName='sops@'+gethostname())
     except Exception as e:
-        print("Unable to switch roles: %s" % e, file=sys.stderr)
-        return None
+        return (None, "Unable to switch roles: %s" % e)
     try:
         print("Assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
               file=sys.stderr)
         keyid = role['Credentials']['AccessKeyId']
         secretkey = role['Credentials']['SecretAccessKey']
         token = role['Credentials']['SessionToken']
-        return boto3.client('kms', region_name=region,
-                            aws_access_key_id=keyid,
-                            aws_secret_access_key=secretkey,
-                            aws_session_token=token)
+        return (boto3.client('kms', region_name=region,
+                              aws_access_key_id=keyid,
+                              aws_secret_access_key=secretkey,
+                              aws_session_token=token),
+                "")
     except KeyError:
-        return None
+        return (None, "failed to initialize KMS client")
 
 
 def get_key_from_pgp(tree):
