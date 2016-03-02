@@ -378,6 +378,8 @@ But this one will work just fine:
 Examples
 --------
 
+Take a look into the `examples <https://github.com/mozilla/sops/tree/master/examples>`_ folder for detailed use cases of sops in a CI environment. The section below describes specific tips for common use cases.
+
 Creating a new file
 ~~~~~~~~~~~~~~~~~~~
 
