@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.7
+VERSION = 1.8
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -75,6 +75,9 @@ example_number: 1234.5678
 example:
     nested:
         values: delete_me
+example_booleans:
+    - true
+    - false
 """
 
 DEFAULT_JSON = """{
@@ -83,7 +86,8 @@ DEFAULT_JSON = """{
     "example_value1",
     "example_value2"
 ],
-"example_number": 1234.5678
+"example_number": 1234.5678,
+"example_booleans": [true, false]
 }"""
 
 DEFAULT_TEXT = """Welcome to SOPS!
@@ -845,7 +849,7 @@ def walk_list_and_encrypt(branch, key, aad=b'', stash=None, digest=None,
 
 def encrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
     """Return an encrypted string of the value provided."""
-    if not value:
+    if not value and not isinstance(value, bool):
         # if the value is empty, return it as is, don't encrypt
         return ""
 
