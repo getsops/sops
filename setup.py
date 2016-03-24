@@ -20,7 +20,10 @@ setup(
     zip_safe=True,
     long_description=README,
     install_requires=[
-        'ruamel.yaml>=0.10.7', 'boto3>=1.1.3', 'cryptography>=0.9.3'],
+        'ruamel.yaml>=0.10.7',
+        'boto3>=1.1.3',
+        'cryptography>=0.9.3',
+        'setuptools>=11.3'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Topic :: Software Development :: Libraries :: Python Modules",
