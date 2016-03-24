@@ -1,14 +1,50 @@
 sudo: false
-language: python
-python:
-    - "2.6"
-    - "2.7"
-    - "3.4"
-env:
-    - TOX_ENV=py26
-    - TOX_ENV=py27
-    - TOX_ENV=py34
-    - TOX_ENV=flake8
+matrix:
+    include:
+        # run unit tests with various versions of python
+        - os: linux
+          language: python
+          sudo: false
+          python: 2.6
+          env: TOX_ENV=py26
+        - os: linux
+          language: python
+          sudo: false
+          python: 2.7
+          env: TOX_ENV=py27
+        - os: linux
+          language: python
+          sudo: false
+          python: 3.4
+          env: TOX_ENV=py34
+        - os: linux
+          language: python
+          sudo: false
+          python: 3.4
+          env: TOX_ENV=flake8
+        # test on osx el capitan
+        - os: osx
+          sudo: required
+          language: generic
+          osx_image: xcode7.3
+          env: SYSTEM_TEST=1
+        # test on osx yosemite
+        - os: osx
+          sudo: required
+          language: generic
+          osx_image: xcode7.1
+          env: SYSTEM_TEST=1
+        # test with default python on trusty and precise
+        - os: linux
+          sudo: required
+          dist: trusty
+          language: generic
+          env: SYSTEM_TEST=1
+        - os: linux
+          sudo: required
+          dist: precise
+          language: generic
+          env: SYSTEM_TEST=1
 addons:
     apt:
         packages:
@@ -17,9 +53,16 @@ addons:
             - libffi-dev
             - python-pip
             - gnupg
+before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                 ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi libyaml ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo -H easy_install pip       ; fi
 install:
-    - pip install tox
-    - pip install -r requirements.txt
+    - if [[ "$TRAVIS_OS_NAME" == "linux" && ! -z $TOX_ENV ]]; then pip install tox; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [ $SYSTEM_TEST -eq 1 ]; then sudo pip install -r requirements.txt; else pip install -r requirements.txt; fi; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip install --user -r requirements.txt; fi
 script:
-    - tox -e $TOX_ENV
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PYTHONPATH=$HOME/Library/Python/2.7/lib/python/site-packages/:$PYTHONPATH; fi
+    - if [ ! -z $TOX_ENV ]; then tox -e $TOX_ENV; fi
     - make functional-tests-once
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cat /etc/issue; fi

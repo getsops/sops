@@ -11,43 +11,34 @@ SOPS: Secrets OPerationS
 .. sectnum::
 .. contents:: Table of Contents
 
-Up and running in 60 seconds
-----------------------------
+Installation
+------------
 First install some libraries from your package manager:
 
 * RHEL family::
 
 	sudo yum install gcc git libffi-devel libyaml-devel make openssl openssl-devel python-devel python-pip
+	sudo pip install --upgrade sops
 
 * Debian family::
 
 	sudo apt-get install gcc git libffi-dev libssl-dev libyaml-dev make openssl python-dev python-pip
+	sudo pip install --upgrade sops
 
 * MacOS::
 
+Important: MacOS El Capitan forbid installation of python packages into the
+global path, so you have to install them in a user base and modify your
+PYTHONPATH, or use the virtualenv method described further down.
+
 	brew install libffi libyaml
 	sudo easy_install pip
+	pip install --user --upgrade pip sops
+	export PYTHONPATH=$HOME/Library/Python/2.7/lib/:$PYTHONPATH
+	export PATH=$HOME/Library/Python/2.7/bin/:$PATH
 
-	# note: on OSX El Capitan, Apple stopped shipping the OpenSSL headers
-	# the command below is a workaround to install the Cryptography package
-	env LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix openssl)/include" pip install cryptography
-
-Then install `sops` from pip::
-
-	sudo pip install --upgrade sops
-
-Clone the repository, load the test PGP key and open the test files::
-
-	$ git clone https://github.com/mozilla/sops.git
-	$ cd sops
-	$ gpg --import tests/sops_functional_tests_key.asc
-	$ sops example.yaml
-
-This last step will decrypt `example.yaml` using the test private key. To create
-your own secrets files using keys under your control, keep reading.
-
-Install in a virtualenv
-~~~~~~~~~~~~~~~~~~~~~~~
+In a virtualenv
+~~~~~~~~~~~~~~~
 
 Assuming you already have libffi and libyaml installed, the following commands will install sops in a virtualenv:
 
@@ -57,8 +48,20 @@ Assuming you already have libffi and libyaml installed, the following commands w
     $ virtualenv ~/sopsvenv
     $ source ~/sopsvenv/bin/activate
     $ pip install -U sops
-    $ sops -h | grep ^Version
-    Version 1.0
+    $ sops -v
+    sops 1.8
+
+Test with the dev PGP key
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Clone the repository, load the test PGP key and open the test files::
+
+	$ git clone https://github.com/mozilla/sops.git
+	$ cd sops
+	$ gpg --import tests/sops_functional_tests_key.asc
+	$ sops example.yaml
+
+This last step will decrypt `example.yaml` using the test private key. To create
+your own secrets files using keys under your control, keep reading.
 
 Usage
 -----
