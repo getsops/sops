@@ -83,7 +83,7 @@ functional-tests-once:
 		python sops/__init__.py -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 /tmp/testdataenc.$$type || exit 1; \
 	done
 
-pypi: tests functional-tests
+pypi:
 	$(PYTHON) setup.py sdist check upload --sign
 
 clean:
