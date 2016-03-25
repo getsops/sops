@@ -13,7 +13,6 @@ SOPS: Secrets OPerationS
 
 Installation
 ------------
-First install some libraries from your package manager:
 
 * RHEL family::
 
@@ -49,7 +48,7 @@ Assuming you already have libffi and libyaml installed, the following commands w
     $ source ~/sopsvenv/bin/activate
     $ pip install -U sops
     $ sops -v
-    sops 1.8
+    sops 1.9
 
 Test with the dev PGP key
 ~~~~~~~~~~~~~~~~~~~~~~~~~
