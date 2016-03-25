@@ -27,15 +27,15 @@ First install some libraries from your package manager:
 
 * MacOS::
 
-Important: MacOS El Capitan forbid installation of python packages into the
-global path, so you have to install them in a user base and modify your
-PYTHONPATH, or use the virtualenv method described further down.
-
 	brew install libffi libyaml
 	sudo easy_install pip
 	pip install --user --upgrade pip sops
 	export PYTHONPATH=$HOME/Library/Python/2.7/lib/:$PYTHONPATH
 	export PATH=$HOME/Library/Python/2.7/bin/:$PATH
+
+Important: MacOS El Capitan forbid installation of python packages into the
+global path, so you have to install them in a user base and modify your
+PYTHONPATH as described above, or use the virtualenv method below.
 
 In a virtualenv
 ~~~~~~~~~~~~~~~
