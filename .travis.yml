@@ -60,6 +60,7 @@ before_install:
 install:
     - if [[ "$TRAVIS_OS_NAME" == "linux" && ! -z $TOX_ENV ]]; then pip install tox; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [ $SYSTEM_TEST -eq 1 ]; then sudo pip install -r requirements.txt; else pip install -r requirements.txt; fi; fi
+    - env
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip install --user -r requirements.txt; fi
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PYTHONPATH=$HOME/Library/Python/2.7/lib/python/site-packages/:$PYTHONPATH; fi
