@@ -205,14 +205,15 @@ def main():
                                                     kms_arns=kms_arns,
                                                     pgp_fps=pgp_fps)
     if not existing_file:
+        # can't use add/rm keys on new files, they don't yet have keys
         if args.add_kms or args.add_pgp or args.rm_kms or args.rm_pgp:
             panic("cannot add or remove keys on non-existent files, use "
                   "`--kms` and `--pgp` instead.", error_code=49)
-        # encrypt and decrypt modes are not available on non-existent files
+        # encrypt/decrypt methods are not available on new files, because
+        # the file doesn't exist yet.
         if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
-        else:
-            print("%s doesn't exist, creating it." % args.file)
+        print("%s doesn't exist, creating it." % args.file)
 
     if args.unencrypted_suffix:
         global UNENCRYPTED_SUFFIX
@@ -342,11 +343,11 @@ def main():
     sys.exit(0)
 
 
-def detect_filetype(file):
+def detect_filetype(filename):
     """Detect the type of file based on its extension.
     Return a string that describes the format: `bytes`, `yaml`, `json`
     """
-    base, ext = os.path.splitext(file)
+    _, ext = os.path.splitext(filename)
     if (ext == '.yaml') or (ext == '.yml'):
         return 'yaml'
     elif ext == '.json':
@@ -460,19 +461,20 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
             if 'arn' in entry and entry['arn'] != "" and entry['enc'] != "":
                 return tree, need_new_data_key
 
-    # if we're here, no arn was found
+    # if we're here, no data key was found in the kms entries
     if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
         # check that we have at least one fingerprint to work with
         for entry in tree['sops']['pgp']:
             if 'fp' in entry and entry['fp'] != "" and entry['enc'] != "":
                 return tree, need_new_data_key
 
-    # if we're here, no pgp fingerprint was found either
+    # if we're here, no data key was found in the pgp entries either.
+    # we need a new data key
     has_at_least_one_method = False
     need_new_data_key = True
-    if not (kms_arns is None):
+    if kms_arns != "":
         tree, has_at_least_one_method = parse_kms_arn(tree, kms_arns)
-    if not (pgp_fps is None):
+    if pgp_fps != "":
         tree, has_at_least_one_method = parse_pgp_fp(tree, pgp_fps)
     if not has_at_least_one_method:
         panic("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
@@ -909,29 +911,34 @@ def get_key(tree, need_key=False):
     """
     if need_key:
         # if we're here, the tree doesn't have a key yet. generate
-        # one and store it in the tree
+        # one, encrypt it with every KMS and PGP master key configured,
+        # and store them into the sops tree. If one master key is not
+        # available, panic and exit.
         print("please wait while a data encryption key is being generated"
               " and stored securely", file=sys.stderr)
         key = os.urandom(32)
-        has_at_least_one_method = False
         if 'kms' in tree['sops']:
             i = -1
             for entry in tree['sops']['kms']:
                 i += 1
                 updated = encrypt_key_with_kms(key, entry)
+                if updated is None:
+                    panic("Failed to encrypt data key with KMS %s. "
+                          "Verify your AWS credentials and session "
+                          "and try again." % entry['arn'])
                 if 'enc' in updated and updated['enc'] != "":
                     tree['sops']['kms'][i] = updated
-                    has_at_least_one_method = True
         if 'pgp' in tree['sops']:
             i = -1
             for entry in tree['sops']['pgp']:
                 i += 1
                 updated = encrypt_key_with_pgp(key, entry)
+                if updated is None:
+                    panic("Failed to encrypt data key with PGP %s. "
+                          "Make sure you have the public key locally with "
+                          "$ gpg --recv-keys %s" % (entry['fp'], entry['fp']))
                 if 'enc' in updated and updated['enc'] != "":
                     tree['sops']['pgp'][i] = updated
-                    has_at_least_one_method = True
-        if not has_at_least_one_method:
-            panic("No method available to store new data key, aborting", 37)
         return key, tree
     key = get_key_from_kms(tree)
     if not (key is None):
@@ -984,13 +991,13 @@ def get_key_from_kms(tree):
 def encrypt_key_with_kms(key, entry):
     """Encrypt the key using the KMS."""
     if 'arn' not in entry or entry['arn'] == "":
-        print("KMS ARN not found, skipping entry", file=sys.stderr)
-        return entry
+        print("KMS ARN not found", file=sys.stderr)
+        return None
     kms, err = get_aws_session_for_entry(entry)
     if kms is None or err != "":
         print("failed to initialize AWS KMS client for entry: %s" % err,
               file=sys.stderr)
-        return entry
+        return None
     try:
         kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key)
     except Exception as e:
@@ -1017,7 +1024,11 @@ def get_aws_session_for_entry(entry):
                       entry['arn'])
     # if there are no role to assume, return the client directly
     if not ('role' in entry):
-        return (boto3.client('kms', region_name=region), "")
+        try:
+            cli = boto3.client('kms', region_name=region)
+        except:
+            return (None, "Unable to get boto3 client in %s" % region)
+        return (cli, "")
     # otherwise, create a client using temporary tokens that assume the role
     try:
         client = boto3.client('sts')
@@ -1069,8 +1080,8 @@ def get_key_from_pgp(tree):
 def encrypt_key_with_pgp(key, entry):
     """Encrypt the key using the PGP key."""
     if 'fp' not in entry or entry['fp'] == "":
-        print("PGP fingerprint not found, skipping entry", file=sys.stderr)
-        return entry
+        print("PGP fingerprint not found", file=sys.stderr)
+        return None
     fp = entry['fp']
     try:
         p = subprocess.Popen(['gpg', '--no-default-recipient', '--yes',
@@ -1082,6 +1093,8 @@ def encrypt_key_with_pgp(key, entry):
     except Exception as e:
         print("failed to encrypt key using pgp fp %s: %s, skipping it" %
               (fp, e), file=sys.stderr)
+        return None
+    if p.returncode > 0:
         return None
     enc = enc.decode('utf-8')
     entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
