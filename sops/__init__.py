@@ -97,12 +97,17 @@ Remove this text and add your content to the file.
 
 DEFAULT_UNENCRYPTED_SUFFIX = '_unencrypted'
 
+""" the default name of a sops config file to be found in local directories """
+DEFAULT_CONFIG_FILE = '.sops.yaml'
+
+""" the max depth to search for a sops config file backward """
+DEFAULT_CONFIG_FILE_SEARCH_DEPTH = 100
+
 NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
 INPUT_VERSION = VERSION
 
 UNENCRYPTED_SUFFIX = DEFAULT_UNENCRYPTED_SUFFIX
-
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -170,6 +175,10 @@ def main():
                            help="override unencrypted key suffix "
                                 "(default: {default})"
                                 .format(default=DEFAULT_UNENCRYPTED_SUFFIX))
+    argparser.add_argument('--config', dest='config_loc',
+                           help="path to config file, disable recursive search "
+                                "(default: {default})"
+                                .format(default=DEFAULT_CONFIG_FILE))
     argparser.add_argument('-v', '--version', action='version',
                            version='%(prog)s ' + str(VERSION))
 
@@ -203,7 +212,8 @@ def main():
 
     tree, need_key, existing_file = initialize_tree(args.file, itype,
                                                     kms_arns=kms_arns,
-                                                    pgp_fps=pgp_fps)
+                                                    pgp_fps=pgp_fps,
+                                                    configloc=args.config_loc)
     if not existing_file:
         # can't use add/rm keys on new files, they don't yet have keys
         if args.add_kms or args.add_pgp or args.rm_kms or args.rm_pgp:
@@ -355,7 +365,7 @@ def detect_filetype(filename):
     return 'bytes'
 
 
-def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
+def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
     """ Try to load the file from path in a tree, and failing that,
         initialize a new tree using default data
     """
@@ -391,6 +401,11 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
             tree = json.loads(DEFAULT_JSON, object_pairs_hook=OrderedDict)
         else:
             tree['data'] = DEFAULT_TEXT
+        # look for a config file
+        config = find_config_for_file(path, configloc)
+        if config:
+            kms_arns = config.get("kms", None)
+            pgp_fps = config.get("pgp", None)
         tree, need_key = verify_or_create_sops_branch(tree, kms_arns, pgp_fps)
     return tree, need_key, existing_file
 
@@ -437,6 +452,37 @@ def load_file_into_tree(path, filetype, restore_sops=None):
     if restore_sops:
         tree['sops'] = restore_sops.copy()
     return tree
+
+
+def find_config_for_file(filename, configloc):
+    if not filename:
+        return None
+    config = dict()
+    if not configloc:
+        # If a specific location is not specified, try to find a file
+        # by search from the current dir backward, up until we hit a
+        # defined limit of levels.
+        for i in range(DEFAULT_CONFIG_FILE_SEARCH_DEPTH):
+            try:
+                os.stat((i * "../") + DEFAULT_CONFIG_FILE)
+            except:
+                continue
+            # when we find a file, exit the loop
+            configloc = (i * "../") + DEFAULT_CONFIG_FILE
+            break
+    # load the config file as yaml and look for creation rules that
+    # contain a filename_pattern that matches the current filename
+    with open(configloc, "rb") as filedesc:
+        config = ruamel.yaml.load(filedesc, ruamel.yaml.RoundTripLoader)
+    if 'creation_rules' not in config:
+        return None
+    for rule in config["creation_rules"]:
+        if "filename_pattern" not in rule:
+            continue
+        if re.search(rule["filename_pattern"], filename):
+            print("found a default conf for '%s' in '%s'" % (filename,
+                  configloc), file=sys.stderr)
+            return rule
 
 
 def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
