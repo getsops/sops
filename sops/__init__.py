@@ -401,11 +401,13 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
             tree = json.loads(DEFAULT_JSON, object_pairs_hook=OrderedDict)
         else:
             tree['data'] = DEFAULT_TEXT
-        # look for a config file
-        config = find_config_for_file(path, configloc)
-        if config:
-            kms_arns = config.get("kms", None)
-            pgp_fps = config.get("pgp", None)
+        if not kms_arns and not pgp_fps:
+            # if no kms or pgp was provided on the command line or environment
+            # variables, look for a config file to get the values from
+            config = find_config_for_file(path, configloc)
+            if config:
+                kms_arns = config.get("kms", None)
+                pgp_fps = config.get("pgp", None)
         tree, need_key = verify_or_create_sops_branch(tree, kms_arns, pgp_fps)
     return tree, need_key, existing_file
 
