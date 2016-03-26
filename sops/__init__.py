@@ -109,6 +109,7 @@ INPUT_VERSION = VERSION
 
 UNENCRYPTED_SUFFIX = DEFAULT_UNENCRYPTED_SUFFIX
 
+
 def main():
     argparser = argparse.ArgumentParser(
         usage='sops <file>',
@@ -176,8 +177,8 @@ def main():
                                 "(default: {default})"
                                 .format(default=DEFAULT_UNENCRYPTED_SUFFIX))
     argparser.add_argument('--config', dest='config_loc',
-                           help="path to config file, disable recursive search "
-                                "(default: {default})"
+                           help="path to config file, disable recursive search"
+                                " (default: {default})"
                                 .format(default=DEFAULT_CONFIG_FILE))
     argparser.add_argument('-v', '--version', action='version',
                            version='%(prog)s ' + str(VERSION))
@@ -223,7 +224,7 @@ def main():
         # the file doesn't exist yet.
         if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
-        print("%s doesn't exist, creating it." % args.file)
+        print("INFO: %s doesn't exist, creating it." % args.file)
 
     if args.unencrypted_suffix:
         global UNENCRYPTED_SUFFIX
@@ -268,7 +269,7 @@ def main():
         if otype == "bytes":
             otype = "json"
         path = write_file(tree, path=args.file, filetype=otype)
-        print("Data key rotated and file written to %s" % (path),
+        print("INFO: data key rotated and file written to %s" % (path),
               file=sys.stderr)
         sys.exit(0)
 
@@ -292,7 +293,7 @@ def main():
     # is opened on the file
     tmppath = write_file(tree, filetype=otype)
     tmphash = get_file_hash(tmppath)
-    print("temp file created at %s" % tmppath, file=sys.stderr)
+    print("INFO: temp file created at %s" % tmppath, file=sys.stderr)
 
     # open an editor on the file and, if the file is yaml or json,
     # verify that it doesn't contain errors before continuing
@@ -304,7 +305,7 @@ def main():
             valid_syntax = validate_syntax(tmppath, otype)
         except Exception as e:
             try:
-                print("Syntax error: %s\nPress a key to return into "
+                print("ERROR: invalid syntax: %s\nPress a key to return into "
                       "the editor, or ctrl+c to exit without saving." % e,
                       file=sys.stderr)
                 raw_input()
@@ -324,8 +325,8 @@ def main():
             has_master_keys = True
         else:
             try:
-                print("Could not find a valid master key to encrypt the "
-                      "data key with.\nAdd at least one KMS or PGP "
+                print("ERROR: could not find a valid master key to encrypt the"
+                      " data key with.\nAdd at least one KMS or PGP "
                       "master key to the `sops` branch,\nor ctrl+c to "
                       "exit without saving.")
                 raw_input()
@@ -349,7 +350,7 @@ def main():
     if otype == "bytes":
         otype = "json"
     path = write_file(tree, path=args.file, filetype=otype)
-    print("file written to %s" % (path), file=sys.stderr)
+    print("INFO: file written to %s" % (path), file=sys.stderr)
     sys.exit(0)
 
 
@@ -394,7 +395,7 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
         except:
             None
     else:
-        # load a new tree using template data
+        # The file does not exist, create a new tree using DEFAULT data
         if itype == "yaml":
             tree = ruamel.yaml.load(DEFAULT_YAML, ruamel.yaml.RoundTripLoader)
         elif itype == "json":
@@ -579,7 +580,7 @@ def update_master_keys(tree, key):
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
-                print("updating kms entry")
+                print("INFO: updating kms entry", file=sys.stderr)
                 updated = encrypt_key_with_kms(key, entry)
                 tree['sops']['kms'][i] = updated
 
@@ -591,7 +592,7 @@ def update_master_keys(tree, key):
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
-                print("updating pgp entry")
+                print("INFO: updating pgp entry", file=sys.stderr)
                 updated = encrypt_key_with_pgp(key, entry)
                 tree['sops']['pgp'][i] = updated
 
@@ -967,8 +968,8 @@ def get_key(tree, need_key=False):
         # one, encrypt it with every KMS and PGP master key configured,
         # and store them into the sops tree. If one master key is not
         # available, panic and exit.
-        print("please wait while a data encryption key is being generated"
-              " and stored securely", file=sys.stderr)
+        print("INFO: generating and storing data encryption key",
+              file=sys.stderr)
         key = os.urandom(32)
         if 'kms' in tree['sops']:
             i = -1
@@ -1018,7 +1019,8 @@ def get_key_from_kms(tree):
         except KeyError:
             continue
         if 'arn' not in entry or entry['arn'] == "":
-            print("KMS ARN not found, skipping entry %s" % i, file=sys.stderr)
+            print("WARN: KMS ARN not found, skipping entry %s" % i,
+                  file=sys.stderr)
             continue
         kms, err = get_aws_session_for_entry(entry)
         if err != "":
@@ -1035,7 +1037,7 @@ def get_key_from_kms(tree):
             errors.append("kms %s failed with error: %s " % (entry['arn'], e))
             continue
         return kms_response['Plaintext']
-    print("no KMS client could be accessed, errors:", file=sys.stderr)
+    print("WARN: no KMS client could be accessed:", file=sys.stderr)
     for err in errors:
         print("* %s" % err, file=sys.stderr)
     return None
@@ -1044,17 +1046,17 @@ def get_key_from_kms(tree):
 def encrypt_key_with_kms(key, entry):
     """Encrypt the key using the KMS."""
     if 'arn' not in entry or entry['arn'] == "":
-        print("KMS ARN not found", file=sys.stderr)
+        print("ERROR: KMS ARN not found", file=sys.stderr)
         return None
     kms, err = get_aws_session_for_entry(entry)
     if kms is None or err != "":
-        print("failed to initialize AWS KMS client for entry: %s" % err,
+        print("ERROR: failed to initialize AWS KMS client for entry: %s" % err,
               file=sys.stderr)
         return None
     try:
         kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key)
     except Exception as e:
-        print("failed to encrypt key using kms arn %s: %s, skipping it" %
+        print("ERROR: failed to encrypt key using kms arn %s: %s" %
               (entry['arn'], e), file=sys.stderr)
         return None
     entry['enc'] = b64encode(
@@ -1090,7 +1092,7 @@ def get_aws_session_for_entry(entry):
     except Exception as e:
         return (None, "Unable to switch roles: %s" % e)
     try:
-        print("Assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
+        print("INFO: assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
               file=sys.stderr)
         keyid = role['Credentials']['AccessKeyId']
         secretkey = role['Credentials']['SecretAccessKey']
@@ -1122,7 +1124,7 @@ def get_key_from_pgp(tree):
                                  stdin=subprocess.PIPE)
             key = p.communicate(input=enc.encode('utf-8'))[0]
         except Exception as e:
-            print("PGP decryption failed in entry %s with error: %s" %
+            print("INFO: PGP decryption failed in entry %s with error: %s" %
                   (i, e), file=sys.stderr)
             continue
         if len(key) == 32:
@@ -1133,7 +1135,7 @@ def get_key_from_pgp(tree):
 def encrypt_key_with_pgp(key, entry):
     """Encrypt the key using the PGP key."""
     if 'fp' not in entry or entry['fp'] == "":
-        print("PGP fingerprint not found", file=sys.stderr)
+        print("ERROR: PGP fingerprint not found", file=sys.stderr)
         return None
     fp = entry['fp']
     try:
@@ -1144,7 +1146,7 @@ def encrypt_key_with_pgp(key, entry):
                              stdin=subprocess.PIPE)
         enc = p.communicate(input=key)[0]
     except Exception as e:
-        print("failed to encrypt key using pgp fp %s: %s, skipping it" %
+        print("ERROR: failed to encrypt key using pgp fp %s: %s" %
               (fp, e), file=sys.stderr)
         return None
     if p.returncode > 0:
