@@ -280,8 +280,8 @@ KMS and PGP master keys defined in the file.
 
 	sops -r example.yaml
 
-Automating KMS/PGP configuration of new files
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using .sops.yaml conf to select KMS/PGP for new files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is often tedious to specify the `--kms` and `--pgp` parameters for creation
 of all new files. If your secrets are stored under a specific directory, like a
@@ -289,10 +289,11 @@ of all new files. If your secrets are stored under a specific directory, like a
 directory to define which keys are used for which filename.
 
 Let's take an example:
+
 * file named **something.dev.yaml** should use one set of KMS A
 * file named **something.prod.yaml** should use another set of KMS B
 * all other files use a third set of KMS C
-* All live under **mysecretrepo/somethind.{dev,prod}.yaml**
+* All live under **mysecretrepo/something.{dev,prod}.yaml**
 
 Under those circumstances, a configuration file placed at
 **mysecretrepo/.sops.yaml** can drive the two sets of KMS used for the two types
@@ -304,19 +305,19 @@ of files.
 	creation_rules:
 		# upon creation of a file that matches the pattern *.dev.yaml,
 		# KMS set A is used
-		- filename_pattern: \.dev\.yaml$
+		- filename_regex: \.dev\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
 
 		# prod files use KMS set B in the PROD IAM
-		- filename_pattern: \.prod\.yaml$
+		- filename_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
 
 		# Finally, if the rules above have not matched, this one is a 
 		# catchall that will encrypt the file using KMS set C
-		- filename_pattern: .+
-		  kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
+		# The absence of a filename_regex means it will match everything
+		- kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
 
 When creating any file under **mysecretrepo**, whether at the root or under
@@ -324,6 +325,15 @@ a subdirectory, sops will recursively look for a `.sops.yaml` file. If one is
 found, the filename of the file being created is compared with the filename
 patterns of the configuration file. The first pattern that matches is selected,
 and its KMS and PGP keys are used to encrypt the file.
+
+Creating a new file with the right keys is now as simple as
+
+.. code:: bash
+
+	$ sops <newfile>.prod.yaml
+
+Note that the configuration file is ignored when KMS or PGP parameters are
+passed on the sops command line or in environment variables.
 
 Important information on types
 ------------------------------
