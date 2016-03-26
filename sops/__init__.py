@@ -473,18 +473,23 @@ def find_config_for_file(filename, configloc):
             configloc = (i * "../") + DEFAULT_CONFIG_FILE
             break
     # load the config file as yaml and look for creation rules that
-    # contain a filename_pattern that matches the current filename
+    # contain a regex that matches the current filename
     with open(configloc, "rb") as filedesc:
         config = ruamel.yaml.load(filedesc, ruamel.yaml.RoundTripLoader)
     if 'creation_rules' not in config:
         return None
     for rule in config["creation_rules"]:
-        if "filename_pattern" not in rule:
-            continue
-        if re.search(rule["filename_pattern"], filename):
-            print("found a default conf for '%s' in '%s'" % (filename,
-                  configloc), file=sys.stderr)
-            return rule
+        # if the rule contains a filename regex, try to match it
+        # against the current filename to see if the rule applies.
+        #
+        # if no filename_regex is provided, assume the rule is a
+        # catchall and apply it to the file
+        if "filename_regex" in rule:
+            if not re.search(rule["filename_regex"], filename):
+                continue
+        print("INFO found a configuration for '%s' in '%s'" % (filename,
+              configloc), file=sys.stderr)
+        return rule
 
 
 def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
