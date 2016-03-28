@@ -473,10 +473,16 @@ def find_config_for_file(filename, configloc):
             # when we find a file, exit the loop
             configloc = (i * "../") + DEFAULT_CONFIG_FILE
             break
+    if not configloc:
+        # no configuration was found
+        return None
     # load the config file as yaml and look for creation rules that
     # contain a regex that matches the current filename
-    with open(configloc, "rb") as filedesc:
-        config = ruamel.yaml.load(filedesc, ruamel.yaml.RoundTripLoader)
+    try:
+        with open(configloc, "rb") as filedesc:
+            config = ruamel.yaml.load(filedesc, ruamel.yaml.RoundTripLoader)
+    except IOError:
+        panic("no configuration file found at '%s'" % configloc, 61)
     if 'creation_rules' not in config:
         return None
     for rule in config["creation_rules"]:
@@ -526,9 +532,9 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     # we need a new data key
     has_at_least_one_method = False
     need_new_data_key = True
-    if kms_arns != "":
+    if kms_arns:
         tree, has_at_least_one_method = parse_kms_arn(tree, kms_arns)
-    if pgp_fps != "":
+    if pgp_fps:
         tree, has_at_least_one_method = parse_pgp_fp(tree, pgp_fps)
     if not has_at_least_one_method:
         panic("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "

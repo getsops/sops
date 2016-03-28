@@ -292,12 +292,11 @@ Let's take an example:
 
 * file named **something.dev.yaml** should use one set of KMS A
 * file named **something.prod.yaml** should use another set of KMS B
-* all other files use a third set of KMS C
-* All live under **mysecretrepo/something.{dev,prod}.yaml**
+* other files use a third set of KMS C
+* all live under **mysecretrepo/something.{dev,prod}.yaml**
 
-Under those circumstances, a configuration file placed at
-**mysecretrepo/.sops.yaml** can drive the two sets of KMS used for the two types
-of files.
+Under those circumstances, a file placed at **mysecretrepo/.sops.yaml**
+can manage the three sets of configurations for the three types of files:
 
 .. code:: yaml
 
@@ -323,7 +322,7 @@ of files.
 When creating any file under **mysecretrepo**, whether at the root or under
 a subdirectory, sops will recursively look for a `.sops.yaml` file. If one is
 found, the filename of the file being created is compared with the filename
-patterns of the configuration file. The first pattern that matches is selected,
+regexes of the configuration file. The first regex that matches is selected,
 and its KMS and PGP keys are used to encrypt the file.
 
 Creating a new file with the right keys is now as simple as
