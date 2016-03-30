@@ -1181,7 +1181,8 @@ def write_file(tree, path=None, filetype=None):
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
 
-    if not isinstance(tree, dict) and not isinstance(tree, list):
+    if path != 'stdout' and not isinstance(tree, dict) and not isinstance(tree, list):
+        # Write the entire tree to file descriptor
         fd.write(tree.encode('utf-8'))
         fd.close()
         return path
