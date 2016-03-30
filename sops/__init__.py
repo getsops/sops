@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.9
+VERSION = 1.10
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -96,6 +96,12 @@ Remove this text and add your content to the file.
 """
 
 DEFAULT_UNENCRYPTED_SUFFIX = '_unencrypted'
+
+""" the default name of a sops config file to be found in local directories """
+DEFAULT_CONFIG_FILE = '.sops.yaml'
+
+""" the max depth to search for a sops config file backward """
+DEFAULT_CONFIG_FILE_SEARCH_DEPTH = 100
 
 NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
@@ -170,6 +176,10 @@ def main():
                            help="override unencrypted key suffix "
                                 "(default: {default})"
                                 .format(default=DEFAULT_UNENCRYPTED_SUFFIX))
+    argparser.add_argument('--config', dest='config_loc',
+                           help="path to config file, disable recursive search"
+                                " (default: {default})"
+                                .format(default=DEFAULT_CONFIG_FILE))
     argparser.add_argument('-v', '--version', action='version',
                            version='%(prog)s ' + str(VERSION))
 
@@ -203,16 +213,18 @@ def main():
 
     tree, need_key, existing_file = initialize_tree(args.file, itype,
                                                     kms_arns=kms_arns,
-                                                    pgp_fps=pgp_fps)
+                                                    pgp_fps=pgp_fps,
+                                                    configloc=args.config_loc)
     if not existing_file:
+        # can't use add/rm keys on new files, they don't yet have keys
         if args.add_kms or args.add_pgp or args.rm_kms or args.rm_pgp:
             panic("cannot add or remove keys on non-existent files, use "
                   "`--kms` and `--pgp` instead.", error_code=49)
-        # encrypt and decrypt modes are not available on non-existent files
+        # encrypt/decrypt methods are not available on new files, because
+        # the file doesn't exist yet.
         if (args.encrypt or args.decrypt):
             panic("cannot operate on non-existent file", error_code=100)
-        else:
-            print("%s doesn't exist, creating it." % args.file)
+        print("INFO: %s doesn't exist, creating it." % args.file)
 
     if args.unencrypted_suffix:
         global UNENCRYPTED_SUFFIX
@@ -257,7 +269,7 @@ def main():
         if otype == "bytes":
             otype = "json"
         path = write_file(tree, path=args.file, filetype=otype)
-        print("Data key rotated and file written to %s" % (path),
+        print("INFO: data key rotated and file written to %s" % (path),
               file=sys.stderr)
         sys.exit(0)
 
@@ -281,7 +293,7 @@ def main():
     # is opened on the file
     tmppath = write_file(tree, filetype=otype)
     tmphash = get_file_hash(tmppath)
-    print("temp file created at %s" % tmppath, file=sys.stderr)
+    print("INFO: temp file created at %s" % tmppath, file=sys.stderr)
 
     # open an editor on the file and, if the file is yaml or json,
     # verify that it doesn't contain errors before continuing
@@ -293,7 +305,7 @@ def main():
             valid_syntax = validate_syntax(tmppath, otype)
         except Exception as e:
             try:
-                print("Syntax error: %s\nPress a key to return into "
+                print("ERROR: invalid syntax: %s\nPress a key to return into "
                       "the editor, or ctrl+c to exit without saving." % e,
                       file=sys.stderr)
                 raw_input()
@@ -313,8 +325,8 @@ def main():
             has_master_keys = True
         else:
             try:
-                print("Could not find a valid master key to encrypt the "
-                      "data key with.\nAdd at least one KMS or PGP "
+                print("ERROR: could not find a valid master key to encrypt the"
+                      " data key with.\nAdd at least one KMS or PGP "
                       "master key to the `sops` branch,\nor ctrl+c to "
                       "exit without saving.")
                 raw_input()
@@ -338,15 +350,15 @@ def main():
     if otype == "bytes":
         otype = "json"
     path = write_file(tree, path=args.file, filetype=otype)
-    print("file written to %s" % (path), file=sys.stderr)
+    print("INFO: file written to %s" % (path), file=sys.stderr)
     sys.exit(0)
 
 
-def detect_filetype(file):
+def detect_filetype(filename):
     """Detect the type of file based on its extension.
     Return a string that describes the format: `bytes`, `yaml`, `json`
     """
-    base, ext = os.path.splitext(file)
+    _, ext = os.path.splitext(filename)
     if (ext == '.yaml') or (ext == '.yml'):
         return 'yaml'
     elif ext == '.json':
@@ -354,7 +366,7 @@ def detect_filetype(file):
     return 'bytes'
 
 
-def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
+def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
     """ Try to load the file from path in a tree, and failing that,
         initialize a new tree using default data
     """
@@ -383,13 +395,20 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None):
         except:
             None
     else:
-        # load a new tree using template data
+        # The file does not exist, create a new tree using DEFAULT data
         if itype == "yaml":
             tree = ruamel.yaml.load(DEFAULT_YAML, ruamel.yaml.RoundTripLoader)
         elif itype == "json":
             tree = json.loads(DEFAULT_JSON, object_pairs_hook=OrderedDict)
         else:
             tree['data'] = DEFAULT_TEXT
+        if not kms_arns and not pgp_fps:
+            # if no kms or pgp was provided on the command line or environment
+            # variables, look for a config file to get the values from
+            config = find_config_for_file(path, configloc)
+            if config:
+                kms_arns = config.get("kms", None)
+                pgp_fps = config.get("pgp", None)
         tree, need_key = verify_or_create_sops_branch(tree, kms_arns, pgp_fps)
     return tree, need_key, existing_file
 
@@ -438,6 +457,48 @@ def load_file_into_tree(path, filetype, restore_sops=None):
     return tree
 
 
+def find_config_for_file(filename, configloc):
+    if not filename:
+        return None
+    config = dict()
+    if not configloc:
+        # If a specific location is not specified, try to find a file
+        # by search from the current dir backward, up until we hit a
+        # defined limit of levels.
+        for i in range(DEFAULT_CONFIG_FILE_SEARCH_DEPTH):
+            try:
+                os.stat((i * "../") + DEFAULT_CONFIG_FILE)
+            except:
+                continue
+            # when we find a file, exit the loop
+            configloc = (i * "../") + DEFAULT_CONFIG_FILE
+            break
+    if not configloc:
+        # no configuration was found
+        return None
+    # load the config file as yaml and look for creation rules that
+    # contain a regex that matches the current filename
+    try:
+        with open(configloc, "rb") as filedesc:
+            config = ruamel.yaml.load(filedesc, ruamel.yaml.RoundTripLoader)
+    except IOError:
+        panic("no configuration file found at '%s'" % configloc, 61)
+    if 'creation_rules' not in config:
+        return None
+    for rule in config["creation_rules"]:
+        # if the rule contains a filename regex, try to match it
+        # against the current filename to see if the rule applies.
+        #
+        # if no filename_regex is provided, assume the rule is a
+        # catchall and apply it to the file
+        if "filename_regex" in rule:
+            if not re.search(rule["filename_regex"], filename):
+                continue
+        print("INFO found a configuration for '%s' in '%s'" % (filename,
+              configloc), file=sys.stderr)
+        return rule
+
+
 def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     """Verify or create the sops branch in the tree.
 
@@ -460,19 +521,20 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
             if 'arn' in entry and entry['arn'] != "" and entry['enc'] != "":
                 return tree, need_new_data_key
 
-    # if we're here, no arn was found
+    # if we're here, no data key was found in the kms entries
     if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
         # check that we have at least one fingerprint to work with
         for entry in tree['sops']['pgp']:
             if 'fp' in entry and entry['fp'] != "" and entry['enc'] != "":
                 return tree, need_new_data_key
 
-    # if we're here, no pgp fingerprint was found either
+    # if we're here, no data key was found in the pgp entries either.
+    # we need a new data key
     has_at_least_one_method = False
     need_new_data_key = True
-    if not (kms_arns is None):
+    if kms_arns:
         tree, has_at_least_one_method = parse_kms_arn(tree, kms_arns)
-    if not (pgp_fps is None):
+    if pgp_fps:
         tree, has_at_least_one_method = parse_pgp_fp(tree, pgp_fps)
     if not has_at_least_one_method:
         panic("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
@@ -524,7 +586,7 @@ def update_master_keys(tree, key):
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
-                print("updating kms entry")
+                print("INFO: updating kms entry", file=sys.stderr)
                 updated = encrypt_key_with_kms(key, entry)
                 tree['sops']['kms'][i] = updated
 
@@ -536,7 +598,7 @@ def update_master_keys(tree, key):
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
-                print("updating pgp entry")
+                print("INFO: updating pgp entry", file=sys.stderr)
                 updated = encrypt_key_with_pgp(key, entry)
                 tree['sops']['pgp'][i] = updated
 
@@ -909,29 +971,34 @@ def get_key(tree, need_key=False):
     """
     if need_key:
         # if we're here, the tree doesn't have a key yet. generate
-        # one and store it in the tree
-        print("please wait while a data encryption key is being generated"
-              " and stored securely", file=sys.stderr)
+        # one, encrypt it with every KMS and PGP master key configured,
+        # and store them into the sops tree. If one master key is not
+        # available, panic and exit.
+        print("INFO: generating and storing data encryption key",
+              file=sys.stderr)
         key = os.urandom(32)
-        has_at_least_one_method = False
         if 'kms' in tree['sops']:
             i = -1
             for entry in tree['sops']['kms']:
                 i += 1
                 updated = encrypt_key_with_kms(key, entry)
+                if updated is None:
+                    panic("Failed to encrypt data key with KMS %s. "
+                          "Verify your AWS credentials and session "
+                          "and try again." % entry['arn'])
                 if 'enc' in updated and updated['enc'] != "":
                     tree['sops']['kms'][i] = updated
-                    has_at_least_one_method = True
         if 'pgp' in tree['sops']:
             i = -1
             for entry in tree['sops']['pgp']:
                 i += 1
                 updated = encrypt_key_with_pgp(key, entry)
+                if updated is None:
+                    panic("Failed to encrypt data key with PGP %s. "
+                          "Make sure you have the public key locally with "
+                          "$ gpg --recv-keys %s" % (entry['fp'], entry['fp']))
                 if 'enc' in updated and updated['enc'] != "":
                     tree['sops']['pgp'][i] = updated
-                    has_at_least_one_method = True
-        if not has_at_least_one_method:
-            panic("No method available to store new data key, aborting", 37)
         return key, tree
     key = get_key_from_kms(tree)
     if not (key is None):
@@ -958,7 +1025,8 @@ def get_key_from_kms(tree):
         except KeyError:
             continue
         if 'arn' not in entry or entry['arn'] == "":
-            print("KMS ARN not found, skipping entry %s" % i, file=sys.stderr)
+            print("WARN: KMS ARN not found, skipping entry %s" % i,
+                  file=sys.stderr)
             continue
         kms, err = get_aws_session_for_entry(entry)
         if err != "":
@@ -975,7 +1043,7 @@ def get_key_from_kms(tree):
             errors.append("kms %s failed with error: %s " % (entry['arn'], e))
             continue
         return kms_response['Plaintext']
-    print("no KMS client could be accessed, errors:", file=sys.stderr)
+    print("WARN: no KMS client could be accessed:", file=sys.stderr)
     for err in errors:
         print("* %s" % err, file=sys.stderr)
     return None
@@ -984,17 +1052,17 @@ def get_key_from_kms(tree):
 def encrypt_key_with_kms(key, entry):
     """Encrypt the key using the KMS."""
     if 'arn' not in entry or entry['arn'] == "":
-        print("KMS ARN not found, skipping entry", file=sys.stderr)
-        return entry
+        print("ERROR: KMS ARN not found", file=sys.stderr)
+        return None
     kms, err = get_aws_session_for_entry(entry)
     if kms is None or err != "":
-        print("failed to initialize AWS KMS client for entry: %s" % err,
+        print("ERROR: failed to initialize AWS KMS client for entry: %s" % err,
               file=sys.stderr)
-        return entry
+        return None
     try:
         kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key)
     except Exception as e:
-        print("failed to encrypt key using kms arn %s: %s, skipping it" %
+        print("ERROR: failed to encrypt key using kms arn %s: %s" %
               (entry['arn'], e), file=sys.stderr)
         return None
     entry['enc'] = b64encode(
@@ -1017,7 +1085,11 @@ def get_aws_session_for_entry(entry):
                       entry['arn'])
     # if there are no role to assume, return the client directly
     if not ('role' in entry):
-        return (boto3.client('kms', region_name=region), "")
+        try:
+            cli = boto3.client('kms', region_name=region)
+        except:
+            return (None, "Unable to get boto3 client in %s" % region)
+        return (cli, "")
     # otherwise, create a client using temporary tokens that assume the role
     try:
         client = boto3.client('sts')
@@ -1026,7 +1098,7 @@ def get_aws_session_for_entry(entry):
     except Exception as e:
         return (None, "Unable to switch roles: %s" % e)
     try:
-        print("Assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
+        print("INFO: assuming AWS role '%s'" % role['AssumedRoleUser']['Arn'],
               file=sys.stderr)
         keyid = role['Credentials']['AccessKeyId']
         secretkey = role['Credentials']['SecretAccessKey']
@@ -1058,7 +1130,7 @@ def get_key_from_pgp(tree):
                                  stdin=subprocess.PIPE)
             key = p.communicate(input=enc.encode('utf-8'))[0]
         except Exception as e:
-            print("PGP decryption failed in entry %s with error: %s" %
+            print("INFO: PGP decryption failed in entry %s with error: %s" %
                   (i, e), file=sys.stderr)
             continue
         if len(key) == 32:
@@ -1069,8 +1141,8 @@ def get_key_from_pgp(tree):
 def encrypt_key_with_pgp(key, entry):
     """Encrypt the key using the PGP key."""
     if 'fp' not in entry or entry['fp'] == "":
-        print("PGP fingerprint not found, skipping entry", file=sys.stderr)
-        return entry
+        print("ERROR: PGP fingerprint not found", file=sys.stderr)
+        return None
     fp = entry['fp']
     try:
         p = subprocess.Popen(['gpg', '--no-default-recipient', '--yes',
@@ -1080,8 +1152,10 @@ def encrypt_key_with_pgp(key, entry):
                              stdin=subprocess.PIPE)
         enc = p.communicate(input=key)[0]
     except Exception as e:
-        print("failed to encrypt key using pgp fp %s: %s, skipping it" %
+        print("ERROR: failed to encrypt key using pgp fp %s: %s" %
               (fp, e), file=sys.stderr)
+        return None
+    if p.returncode > 0:
         return None
     enc = enc.decode('utf-8')
     entry['enc'] = ruamel.yaml.scalarstring.PreservedScalarString(enc)
