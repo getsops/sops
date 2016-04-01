@@ -26,15 +26,10 @@ Installation
 
 * MacOS::
 
-	brew install libffi libyaml
-	sudo easy_install pip
-	pip install --user --upgrade pip sops
-	export PYTHONPATH=$HOME/Library/Python/2.7/lib/:$PYTHONPATH
-	export PATH=$HOME/Library/Python/2.7/bin/:$PATH
+	brew install libffi libyaml python [1]
+	pip install sops
 
-Important: MacOS El Capitan forbid installation of python packages into the
-global path, so you have to install them in a user base and modify your
-PYTHONPATH as described above, or use the virtualenv method below.
+1. http://docs.python-guide.org/en/latest/starting/install/osx/#doing-it-right
 
 In a virtualenv
 ~~~~~~~~~~~~~~~
