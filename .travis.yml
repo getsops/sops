@@ -55,14 +55,12 @@ addons:
             - gnupg
 before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                 ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi libyaml ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo -H easy_install pip       ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi libyaml python; fi
 install:
     - if [[ "$TRAVIS_OS_NAME" == "linux" && ! -z $TOX_ENV ]]; then pip install tox; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [ $SYSTEM_TEST -eq 1 ]; then sudo pip install -r requirements.txt; else pip install -r requirements.txt; fi; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip install --user -r requirements.txt; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip install -r requirements.txt; fi
 script:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PYTHONPATH=$HOME/Library/Python/2.7/lib/python/site-packages/:$PYTHONPATH; fi
     - if [ ! -z $TOX_ENV ]; then tox -e $TOX_ENV; fi
     - make functional-tests-once
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cat /etc/issue; fi
