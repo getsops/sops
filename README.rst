@@ -24,7 +24,11 @@ Installation
 	sudo apt-get install gcc git libffi-dev libssl-dev libyaml-dev make openssl python-dev python-pip
 	sudo pip install --upgrade sops
 
-* MacOS::
+* MacOS Brew Install::
+
+	brew install sops
+
+* MacOS Manual Install::
 
 	brew install libffi libyaml python [1]
 	pip install sops
