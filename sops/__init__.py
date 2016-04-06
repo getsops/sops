@@ -518,14 +518,16 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
         # check that we have at least one ARN to work with
         for entry in tree['sops']['kms']:
-            if 'arn' in entry and entry['arn'] != "" and entry['enc'] != "":
+            if entry and 'arn' in entry and entry['arn'] != "" and \
+                'enc' in entry and entry['enc'] != "":
                 return tree, need_new_data_key
 
     # if we're here, no data key was found in the kms entries
     if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
         # check that we have at least one fingerprint to work with
         for entry in tree['sops']['pgp']:
-            if 'fp' in entry and entry['fp'] != "" and entry['enc'] != "":
+            if entry and 'fp' in entry and entry['fp'] != "" and \
+                'enc' in entry and entry['enc'] != "":
                 return tree, need_new_data_key
 
     # if we're here, no data key was found in the pgp entries either.
@@ -583,6 +585,8 @@ def update_master_keys(tree, key):
             panic("invalid KMS format in SOPS branch, must be a list")
         i = -1
         for entry in tree['sops']['kms']:
+            if not entry:
+                continue
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
@@ -595,6 +599,8 @@ def update_master_keys(tree, key):
             panic("invalid PGP format in SOPS branch, must be a list")
         i = -1
         for entry in tree['sops']['pgp']:
+            if not entry:
+                continue
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
@@ -625,10 +631,14 @@ def check_master_keys(tree):
     """
     if 'kms' in tree['sops']:
         for entry in tree['sops']['kms']:
+            if not entry:
+                continue
             if 'arn' in entry and entry['arn'] != "":
                 return True
     if 'pgp' in tree['sops']:
         for entry in tree['sops']['pgp']:
+            if not entry:
+                continue
             if 'fp' in entry and entry['fp'] != "":
                 return True
     return False
@@ -649,6 +659,8 @@ def add_new_master_keys(tree, new_kms, new_pgp):
                     continue
                 shouldadd = True
                 for entry in tree['sops']['kms']:
+                    if not entry:
+                        continue
                     if newentry['arn'] == entry['arn']:
                         # arn already present, don't re-add it
                         shouldadd = False
@@ -666,6 +678,8 @@ def add_new_master_keys(tree, new_kms, new_pgp):
                     continue
                 shouldadd = True
                 for entry in tree['sops']['pgp']:
+                    if not entry:
+                        continue
                     if newentry['fp'] == entry['fp']:
                         # arn already present, don't re-add it
                         shouldadd = False
@@ -687,6 +701,8 @@ def remove_master_keys(tree, rm_kms, rm_pgp):
             for rmentry in newtree['sops']['kms']:
                 i = 0
                 for entry in tree['sops']['kms']:
+                    if not entry:
+                        continue
                     if rmentry['arn'] == entry['arn']:
                         del tree['sops']['kms'][i]
                     i += 1
@@ -698,6 +714,8 @@ def remove_master_keys(tree, rm_kms, rm_pgp):
             for rmentry in newtree['sops']['pgp']:
                 i = 0
                 for entry in tree['sops']['pgp']:
+                    if not entry:
+                        continue
                     if rmentry['fp'] == entry['fp']:
                         del tree['sops']['pgp'][i]
                     i += 1
@@ -980,6 +998,8 @@ def get_key(tree, need_key=False):
         if 'kms' in tree['sops']:
             i = -1
             for entry in tree['sops']['kms']:
+                if not entry:
+                    continue
                 i += 1
                 updated = encrypt_key_with_kms(key, entry)
                 if updated is None:
@@ -991,6 +1011,8 @@ def get_key(tree, need_key=False):
         if 'pgp' in tree['sops']:
             i = -1
             for entry in tree['sops']['pgp']:
+                if not entry:
+                    continue
                 i += 1
                 updated = encrypt_key_with_pgp(key, entry)
                 if updated is None:
@@ -1019,6 +1041,8 @@ def get_key_from_kms(tree):
     i = -1
     errors = []
     for entry in kms_tree:
+        if not entry:
+            continue
         i += 1
         try:
             enc = entry['enc']
@@ -1120,6 +1144,8 @@ def get_key_from_pgp(tree):
         return None
     i = -1
     for entry in pgp_tree:
+        if not entry:
+            continue
         i += 1
         try:
             enc = entry['enc']
@@ -1319,6 +1345,8 @@ def check_rotation_needed(tree):
     six_months_ago = datetime.utcnow()-timedelta(days=183)
     if 'kms' in tree['sops']:
         for entry in tree['sops']['kms']:
+            if not entry:
+                continue
             # check if creation date is older than 6 months
             if 'created_at' in entry:
                 d = datetime.strptime(entry['created_at'],
@@ -1328,6 +1356,8 @@ def check_rotation_needed(tree):
 
     if 'pgp' in tree['sops']:
         for entry in tree['sops']['pgp']:
+            if not entry:
+                continue
             # check if creation date is older than 6 months
             if 'created_at' in entry:
                 d = datetime.strptime(entry['created_at'],
