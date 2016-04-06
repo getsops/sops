@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.10
+VERSION = '1.10'
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -610,7 +610,7 @@ def update_master_keys(tree, key):
 
     # update version number if newer than current
     if 'version' in tree['sops']:
-        if tree['sops']['version'] < VERSION:
+        if A_is_newer_than_B(VERSION, tree['sops']['version']):
             tree['sops']['version'] = VERSION
     else:
         tree['sops']['version'] = VERSION
@@ -734,7 +734,7 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
         unencrypted_branch = unencrypted or k.endswith(UNENCRYPTED_SUFFIX)
         nstash = dict()
         caad = aad
-        if INPUT_VERSION >= 0.9:
+        if A_is_newer_than_B(INPUT_VERSION, '0.9'):
             caad = aad + k.encode('utf-8') + b':'
         else:
             caad = carryaad
@@ -809,7 +809,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
 
     valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
     # extract fields using a regex
-    if INPUT_VERSION >= 0.8:
+    if INPUT_VERSION >= '0.8':
         valre += b',type:(.+)'
     valre += b'\]'
     res = re.match(valre, value.encode('utf-8'))
@@ -820,7 +820,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
     iv = b64decode(res.group(2))
     tag = b64decode(res.group(3))
     valtype = 'str'
-    if INPUT_VERSION >= 0.8:
+    if INPUT_VERSION >= '0.8':
         valtype = res.group(4)
     decryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv, tag),
@@ -1328,7 +1328,7 @@ def check_latest_version():
     try:
         client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
         latest = client.package_releases('sops')[0]
-        if VERSION < float(latest):
+        if A_is_newer_than_B(latest, VERSION):
             print("INFO: your version of sops is outdated. Version {latest} "
                   "is available, install it with "
                   "$ pip install 'sops=={latest}'."
@@ -1379,6 +1379,28 @@ def get_file_hash(path):
                 break
             digest.update(data)
     return digest.digest()
+
+
+def A_is_newer_than_B(A, B):
+    # semver comparison of two version strings
+    A_comp = str(A).split('.')
+    B_comp = str(B).split('.')
+    lim = len(A_comp)
+    if len(B_comp) < lim:
+        lim = len(B_comp)
+    is_equal = True
+    # Compare each component of the semver and if
+    # A is greated than B, return true
+    for i in range(0, lim):
+        if int(A_comp[i]) > int(B_comp[i]):
+            return True
+        if int(A_comp[i]) != int(B_comp[i]):
+            is_equal = False
+    # If the versions are equal but A has more components
+    # than B, A is considered newer (eg. 1.1.2 vs 1.1)
+    if is_equal and len(A_comp) > len(B_comp):
+        return True
+    return False
 
 
 if __name__ == '__main__':
