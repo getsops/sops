@@ -24,17 +24,16 @@ Installation
 	sudo apt-get install gcc git libffi-dev libssl-dev libyaml-dev make openssl python-dev python-pip
 	sudo pip install --upgrade sops
 
-* MacOS::
+* MacOS Brew Install::
 
-	brew install libffi libyaml
-	sudo easy_install pip
-	pip install --user --upgrade pip sops
-	export PYTHONPATH=$HOME/Library/Python/2.7/lib/:$PYTHONPATH
-	export PATH=$HOME/Library/Python/2.7/bin/:$PATH
+	brew install sops
 
-Important: MacOS El Capitan forbid installation of python packages into the
-global path, so you have to install them in a user base and modify your
-PYTHONPATH as described above, or use the virtualenv method below.
+* MacOS Manual Install::
+
+	brew install libffi libyaml python [1]
+	pip install sops
+
+1. http://docs.python-guide.org/en/latest/starting/install/osx/#doing-it-right
 
 In a virtualenv
 ~~~~~~~~~~~~~~~
@@ -313,7 +312,7 @@ can manage the three sets of configurations for the three types of files:
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
 
-		# Finally, if the rules above have not matched, this one is a 
+		# Finally, if the rules above have not matched, this one is a
 		# catchall that will encrypt the file using KMS set C
 		# The absence of a filename_regex means it will match everything
 		- kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
@@ -350,14 +349,14 @@ in the same format. The easiest way to achieve this is to conserve the original 
 extension after encrypting a file. For example::
 
 	$ sops -e -i myfile.json
-	
+
 	$ sops -d myfile.json
 
 If you want to change the extension of the file once encrypted, you need to provide
 sops with the `--input-type` flag upon decryption. For example::
 
 	$ sops -e myfile.json > myfile.json.enc
-	
+
 	$ sops -d --input-type json myfile.json.enc
 
 YAML anchors
@@ -592,7 +591,7 @@ By default, `sops` encrypts all the values of a YAML or JSON file and leaves the
 keys in cleartext. In some instances, you may want to exclude some values from
 being encrypted. This can be accomplished by adding the suffix **_unencrypted**
 to any key of a file. When set, all values underneath the key that set the
-**_unencrypted** prefix will be left in cleartext. 
+**_unencrypted** prefix will be left in cleartext.
 
 Note that, while in cleartext, unencrypted content is still added to the
 checksum of the file, and thus cannot be modified outside of sops without
