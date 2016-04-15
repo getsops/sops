@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = 1.10
+VERSION = '1.11'
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -518,14 +518,16 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     if 'kms' in tree['sops'] and isinstance(tree['sops']['kms'], list):
         # check that we have at least one ARN to work with
         for entry in tree['sops']['kms']:
-            if 'arn' in entry and entry['arn'] != "" and entry['enc'] != "":
+            if (entry and 'arn' in entry and entry['arn'] != "" and
+               'enc' in entry and entry['enc'] != ""):
                 return tree, need_new_data_key
 
     # if we're here, no data key was found in the kms entries
     if 'pgp' in tree['sops'] and isinstance(tree['sops']['pgp'], list):
         # check that we have at least one fingerprint to work with
         for entry in tree['sops']['pgp']:
-            if 'fp' in entry and entry['fp'] != "" and entry['enc'] != "":
+            if (entry and 'fp' in entry and entry['fp'] != "" and
+               'enc' in entry and entry['enc'] != ""):
                 return tree, need_new_data_key
 
     # if we're here, no data key was found in the pgp entries either.
@@ -583,6 +585,8 @@ def update_master_keys(tree, key):
             panic("invalid KMS format in SOPS branch, must be a list")
         i = -1
         for entry in tree['sops']['kms']:
+            if not entry:
+                continue
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
@@ -595,6 +599,8 @@ def update_master_keys(tree, key):
             panic("invalid PGP format in SOPS branch, must be a list")
         i = -1
         for entry in tree['sops']['pgp']:
+            if not entry:
+                continue
             i += 1
             # encrypt data key with master key if enc value is empty
             if not ('enc' in entry) or entry['enc'] == "":
@@ -604,7 +610,7 @@ def update_master_keys(tree, key):
 
     # update version number if newer than current
     if 'version' in tree['sops']:
-        if tree['sops']['version'] < VERSION:
+        if A_is_newer_than_B(VERSION, tree['sops']['version']):
             tree['sops']['version'] = VERSION
     else:
         tree['sops']['version'] = VERSION
@@ -625,10 +631,14 @@ def check_master_keys(tree):
     """
     if 'kms' in tree['sops']:
         for entry in tree['sops']['kms']:
+            if not entry:
+                continue
             if 'arn' in entry and entry['arn'] != "":
                 return True
     if 'pgp' in tree['sops']:
         for entry in tree['sops']['pgp']:
+            if not entry:
+                continue
             if 'fp' in entry and entry['fp'] != "":
                 return True
     return False
@@ -649,6 +659,8 @@ def add_new_master_keys(tree, new_kms, new_pgp):
                     continue
                 shouldadd = True
                 for entry in tree['sops']['kms']:
+                    if not entry:
+                        continue
                     if newentry['arn'] == entry['arn']:
                         # arn already present, don't re-add it
                         shouldadd = False
@@ -666,6 +678,8 @@ def add_new_master_keys(tree, new_kms, new_pgp):
                     continue
                 shouldadd = True
                 for entry in tree['sops']['pgp']:
+                    if not entry:
+                        continue
                     if newentry['fp'] == entry['fp']:
                         # arn already present, don't re-add it
                         shouldadd = False
@@ -687,6 +701,8 @@ def remove_master_keys(tree, rm_kms, rm_pgp):
             for rmentry in newtree['sops']['kms']:
                 i = 0
                 for entry in tree['sops']['kms']:
+                    if not entry:
+                        continue
                     if rmentry['arn'] == entry['arn']:
                         del tree['sops']['kms'][i]
                     i += 1
@@ -698,6 +714,8 @@ def remove_master_keys(tree, rm_kms, rm_pgp):
             for rmentry in newtree['sops']['pgp']:
                 i = 0
                 for entry in tree['sops']['pgp']:
+                    if not entry:
+                        continue
                     if rmentry['fp'] == entry['fp']:
                         del tree['sops']['pgp'][i]
                     i += 1
@@ -716,7 +734,7 @@ def walk_and_decrypt(branch, key, aad=b'', stash=None, digest=None,
         unencrypted_branch = unencrypted or k.endswith(UNENCRYPTED_SUFFIX)
         nstash = dict()
         caad = aad
-        if INPUT_VERSION >= 0.9:
+        if A_is_newer_than_B(INPUT_VERSION, '0.9'):
             caad = aad + k.encode('utf-8') + b':'
         else:
             caad = carryaad
@@ -791,7 +809,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
 
     valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
     # extract fields using a regex
-    if INPUT_VERSION >= 0.8:
+    if A_is_newer_than_B(INPUT_VERSION, '0.8'):
         valre += b',type:(.+)'
     valre += b'\]'
     res = re.match(valre, value.encode('utf-8'))
@@ -802,7 +820,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
     iv = b64decode(res.group(2))
     tag = b64decode(res.group(3))
     valtype = 'str'
-    if INPUT_VERSION >= 0.8:
+    if A_is_newer_than_B(INPUT_VERSION, '0.8'):
         valtype = res.group(4)
     decryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv, tag),
@@ -980,6 +998,8 @@ def get_key(tree, need_key=False):
         if 'kms' in tree['sops']:
             i = -1
             for entry in tree['sops']['kms']:
+                if not entry:
+                    continue
                 i += 1
                 updated = encrypt_key_with_kms(key, entry)
                 if updated is None:
@@ -991,6 +1011,8 @@ def get_key(tree, need_key=False):
         if 'pgp' in tree['sops']:
             i = -1
             for entry in tree['sops']['pgp']:
+                if not entry:
+                    continue
                 i += 1
                 updated = encrypt_key_with_pgp(key, entry)
                 if updated is None:
@@ -1019,6 +1041,8 @@ def get_key_from_kms(tree):
     i = -1
     errors = []
     for entry in kms_tree:
+        if not entry:
+            continue
         i += 1
         try:
             enc = entry['enc']
@@ -1120,6 +1144,8 @@ def get_key_from_pgp(tree):
         return None
     i = -1
     for entry in pgp_tree:
+        if not entry:
+            continue
         i += 1
         try:
             enc = entry['enc']
@@ -1177,11 +1203,14 @@ def write_file(tree, path=None, filetype=None):
     if path:
         if path != 'stdout':
             fd = open(path, "wb")
+        else:
+            fd = None
     else:
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
 
-    if not isinstance(tree, dict) and not isinstance(tree, list):
+    if fd and not isinstance(tree, dict) and not isinstance(tree, list):
+        # Write the entire tree to file descriptor
         fd.write(tree.encode('utf-8'))
         fd.close()
         return path
@@ -1299,7 +1328,7 @@ def check_latest_version():
     try:
         client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
         latest = client.package_releases('sops')[0]
-        if VERSION < float(latest):
+        if A_is_newer_than_B(latest, VERSION):
             print("INFO: your version of sops is outdated. Version {latest} "
                   "is available, install it with "
                   "$ pip install 'sops=={latest}'."
@@ -1316,6 +1345,8 @@ def check_rotation_needed(tree):
     six_months_ago = datetime.utcnow()-timedelta(days=183)
     if 'kms' in tree['sops']:
         for entry in tree['sops']['kms']:
+            if not entry:
+                continue
             # check if creation date is older than 6 months
             if 'created_at' in entry:
                 d = datetime.strptime(entry['created_at'],
@@ -1325,6 +1356,8 @@ def check_rotation_needed(tree):
 
     if 'pgp' in tree['sops']:
         for entry in tree['sops']['pgp']:
+            if not entry:
+                continue
             # check if creation date is older than 6 months
             if 'created_at' in entry:
                 d = datetime.strptime(entry['created_at'],
@@ -1346,6 +1379,28 @@ def get_file_hash(path):
                 break
             digest.update(data)
     return digest.digest()
+
+
+def A_is_newer_than_B(A, B):
+    # semver comparison of two version strings
+    A_comp = str(A).split('.')
+    B_comp = str(B).split('.')
+    lim = len(A_comp)
+    if len(B_comp) < lim:
+        lim = len(B_comp)
+    is_equal = True
+    # Compare each component of the semver and if
+    # A is greated than B, return true
+    for i in range(0, lim):
+        if int(A_comp[i]) > int(B_comp[i]):
+            return True
+        if int(A_comp[i]) != int(B_comp[i]):
+            is_equal = False
+    # If the versions are equal but A has more components
+    # than B, A is considered newer (eg. 1.1.2 vs 1.1)
+    if is_equal and len(A_comp) > len(B_comp):
+        return True
+    return False
 
 
 if __name__ == '__main__':

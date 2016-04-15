@@ -409,3 +409,11 @@ class TreeTest(unittest2.TestCase):
         assert ntree == tree["example"]["nested"]["values"]
         ntree = sops.truncate_tree(dict(tree), '["example_array"][1]')
         assert ntree == tree["example_array"][1]
+
+    def test_version_comparison(self):
+        assert sops.A_is_newer_than_B('1.9', '1.8') == True
+        assert sops.A_is_newer_than_B('2.1', '1.8') == True
+        assert sops.A_is_newer_than_B('1.7', '1.8') == False
+        assert sops.A_is_newer_than_B('1.8.2', '1.8') == True
+        assert sops.A_is_newer_than_B('1.7.9', '1.8') == False
+        assert sops.A_is_newer_than_B('1.7', '1.8.1') == False
