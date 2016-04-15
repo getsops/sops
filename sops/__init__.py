@@ -809,7 +809,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
 
     valre = b'^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+)'
     # extract fields using a regex
-    if INPUT_VERSION >= '0.8':
+    if A_is_newer_than_B(INPUT_VERSION,'0.8'):
         valre += b',type:(.+)'
     valre += b'\]'
     res = re.match(valre, value.encode('utf-8'))
@@ -820,7 +820,7 @@ def decrypt(value, key, aad=b'', stash=None, digest=None, unencrypted=False):
     iv = b64decode(res.group(2))
     tag = b64decode(res.group(3))
     valtype = 'str'
-    if INPUT_VERSION >= '0.8':
+    if A_is_newer_than_B(INPUT_VERSION,'0.8'):
         valtype = res.group(4)
     decryptor = Cipher(algorithms.AES(key),
                        modes.GCM(iv, tag),
