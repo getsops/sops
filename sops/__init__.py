@@ -13,6 +13,7 @@ from __future__ import print_function, unicode_literals
 import argparse
 import hashlib
 import os
+import platform
 import re
 import subprocess
 import sys
@@ -169,9 +170,6 @@ def main():
                            dest='ignore_mac',
                            help="ignore Message Authentication Code "
                                 "during decryption")
-    argparser.add_argument('--no-latest-check', action='store_true',
-                           dest='nolatestcheck',
-                           help="skip check for latest version of sops")
     argparser.add_argument('--unencrypted-suffix', dest='unencrypted_suffix',
                            help="override unencrypted key suffix "
                                 "(default: {default})"
@@ -180,13 +178,9 @@ def main():
                            help="path to config file, disable recursive search"
                                 " (default: {default})"
                                 .format(default=DEFAULT_CONFIG_FILE))
-    argparser.add_argument('-v', '--version', action='version',
+    argparser.add_argument('-V', '-v', '--version', action=ShowVersion,
                            version='%(prog)s ' + str(VERSION))
-
     args = argparser.parse_args()
-
-    if not args.nolatestcheck:
-        check_latest_version()
 
     kms_arns = ""
     if 'SOPS_KMS_ARN' in os.environ:
@@ -1331,23 +1325,6 @@ def panic(msg, error_code=1):
     sys.exit(error_code)
 
 
-def check_latest_version():
-    try:
-        import xmlrpclib
-    except ImportError:
-        import xmlrpc.client as xmlrpclib
-    try:
-        client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
-        latest = client.package_releases('sops')[0]
-        if A_is_newer_than_B(latest, VERSION):
-            print("INFO: your version of sops is outdated. Version {latest} "
-                  "is available, install it with "
-                  "$ pip install 'sops=={latest}'."
-                  .format(latest=latest), file=sys.stderr)
-    except:
-        pass
-
-
 def check_rotation_needed(tree):
     """ Browse the master keys and check their creation date to
         display a warning if older than 6 months (it's time to rotate).
@@ -1412,6 +1389,49 @@ def A_is_newer_than_B(A, B):
     if is_equal and len(A_comp) > len(B_comp):
         return True
     return False
+
+
+class ShowVersion(argparse.Action):
+    def __init__(self,
+                 option_strings,
+                 version=None,
+                 dest='==SUPPRESS==',
+                 default='==SUPPRESS==',
+                 help="show program's version number and exit"):
+        super(ShowVersion, self).__init__(
+            option_strings=option_strings,
+            dest=dest,
+            default=default,
+            nargs=0,
+            help=help)
+        self.version = version
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        version = self.version
+        if version is None:
+            version = parser.version
+        formatter = parser._get_formatter()
+        formatter.add_text(version)
+        check_latest_version()
+        parser.exit(message=formatter.format_help())
+
+
+def check_latest_version():
+    try:
+        import xmlrpclib
+    except ImportError:
+        import xmlrpc.client as xmlrpclib
+    try:
+        client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
+        latest = client.package_releases('sops')[0]
+        if A_is_newer_than_B(latest, VERSION):
+            install_str = "pip install sops==" + latest
+            if platform.system() == 'Darwin':
+                install_str = "brew update && brew upgrade sops"
+            print("INFO: your version of sops is outdated."
+                  " Install the latest with " + install_str)
+    except:
+        pass
 
 
 if __name__ == '__main__':
