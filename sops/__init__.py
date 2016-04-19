@@ -38,7 +38,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = '1.11'
+VERSION = '1.12'
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -200,12 +200,13 @@ def main():
     if args.pgpfp:
         pgp_fps = args.pgpfp
 
-    # use input type as output type if not specified
+    # use filename extension as input type if not given on cmdline
     if args.input_type:
         itype = args.input_type
     else:
         itype = detect_filetype(args.file)
 
+    # use input type as output type if not specified
     if args.output_type:
         otype = args.output_type
     else:
@@ -381,7 +382,9 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
         tree = load_file_into_tree(path, itype)
         tree, need_key = verify_or_create_sops_branch(tree,
                                                       kms_arns=kms_arns,
-                                                      pgp_fps=pgp_fps)
+                                                      pgp_fps=pgp_fps,
+                                                      path=path,
+                                                      configloc=configloc)
         # try to set the input version to the one set in the file
         try:
             global INPUT_VERSION
@@ -499,7 +502,8 @@ def find_config_for_file(filename, configloc):
         return rule
 
 
-def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
+def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None,
+                                 path=None, configloc=None):
     """Verify or create the sops branch in the tree.
 
     If the current tree doesn't have a sops branch with either kms or pgp
@@ -534,6 +538,13 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None):
     # we need a new data key
     has_at_least_one_method = False
     need_new_data_key = True
+    if not kms_arns and not pgp_fps:
+        # if no kms or pgp was provided on the command line or environment
+        # variables, look for a config file to get the values from
+        config = find_config_for_file(path, configloc)
+        if config:
+            kms_arns = config.get("kms", None)
+            pgp_fps = config.get("pgp", None)
     if kms_arns:
         tree, has_at_least_one_method = parse_kms_arn(tree, kms_arns)
     if pgp_fps:
