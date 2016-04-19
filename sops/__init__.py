@@ -1243,27 +1243,27 @@ def write_file(tree, path=None, filetype=None):
         else:
             fd.write(jsonstr.encode('utf-8'))
     else:
+        # BINARY format
         if 'data' in tree:
-            try:
-                if path == 'stdout':
-                    sys.stdout.write(tree['data'])
-                else:
-                    fd.write(tree['data'].encode('utf-8'))
-            except:
-                if path == 'stdout':
-                    sys.stdout.write(tree['data'].decode('utf-8'))
-                else:
-                    fd.write(tree['data'])
+            # binary data is stored in json format under a key called "data".
+            # we simply write the content of this key as is to the output file
             if path == 'stdout':
-                sys.stdout.write("\n")
+                if (sys.version_info[0] == 3 and
+                        isinstance(tree['data'], bytes)):
+                    sys.stdout.buffer.write(tree['data'])
+                else:
+                    sys.stdout.write(tree['data'])
             else:
-                fd.write("\n")
+                try:
+                    fd.write(tree['data'].encode('utf-8'))
+                except:
+                    fd.write(tree['data'])
         if 'sops' in tree:
             jsonstr = json.dumps(tree['sops'], sort_keys=True)
             if path == 'stdout':
-                sys.stdout.write("SOPS=%s" % jsonstr)
+                sys.stdout.write("\nSOPS=%s" % jsonstr)
             else:
-                fd.write("SOPS=%s" % jsonstr.encode('utf8'))
+                fd.write("\nSOPS=%s" % jsonstr.encode('utf8'))
     if path != 'stdout':
         fd.close()
     return path

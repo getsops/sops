@@ -34,13 +34,6 @@ nested_unencrypted:
         is:
             all: going to remain in clear text
 sops:
-    kms:
-    -   created_at: '2015-11-25T00:32:57Z'
-        enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAgB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyzrMwHaX8rsBh/iNACARCAO/eeScqy8gZpfvDoHilBD+cw+1n6iFsTQmEQJro4QY8p+LUXSLFsnUge8xcADZrIGBup9BBJbdR+qyot
-        arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
-    -   created_at: '2015-11-25T00:32:57Z'
-        enc: CiBdfsKZbRNf/Li8Tf2SjeSdP76DineB1sbPjV0TV+meTxKnAQEBAgB4XX7CmW0TX/y4vE39ko3knT++g4p3gdbGz41dE1fpnk8AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzonxxlGDduanr16MwCARCAO70FBqnx7K2xaY8++gATYtsLgJfq5aW8lRWK515g5fEDpn/+PbrGSY9YxsFul024+fIev+8r3AKDX7K3
-        arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
     pgp:
     -   fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
         created_at: '2015-11-25T00:32:57Z'
