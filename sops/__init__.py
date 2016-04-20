@@ -455,6 +455,8 @@ def load_file_into_tree(path, filetype, restore_sops=None):
 
 
 def find_config_for_file(filename, configloc):
+    # extract filename from path if needed
+    filename = os.path.basename(filename)
     if not filename:
         return None
     config = dict()
