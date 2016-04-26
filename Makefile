@@ -59,29 +59,29 @@ functional-tests:
 		python3.4 sops/__init__.py -d /tmp/testdata2.7.$$type > /dev/null || exit 1; \
 	done && \
 	for ver in 2.6 2.7 3.4; do \
-		echo "Testing Python$$ver round-trip on binary file" && \
-		dd if=/dev/urandom of=/tmp/testdata-$$ver-randomfile bs=1024 count=1024 2>&1 1>/dev/null && \
-		python$$ver sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata-$$ver-randomfile > /tmp/testdata-$$ver-randomfile.enc && \
-		python$$ver sops/__init__.py -d /tmp/testdata-$$ver-randomfile.enc > /tmp/testdata-$$ver-randomfile.dec && \
-		if [ $$(sha256sum /tmp/testdata-$$ver-randomfile | cut -d ' ' -f 1) != $$(sha256sum /tmp/testdata-$$ver-randomfile.dec | cut -d ' ' -f 1) ]; then \
-			echo "Binary file roundtrip failed, checksum doesn't match"; exit 0; \
-		else \
-			echo "Binary file roundtrip succeeded"; \
-		fi; \
 	done
 
 functional-tests-once:
 	gpg --import tests/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
 	for type in yaml json txt; do \
-		echo "Testing $$type decryption" && \
-		python sops/__init__.py -d example.$$type > /tmp/testdata.$$type && \
-		echo "Testing $$type encryption" && \
+		echo "Testing $$type decryption"; \
+		python sops/__init__.py -d example.$$type > /tmp/testdata.$$type; \
+		echo "Testing $$type encryption" ; \
 		python sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata.$$type > /tmp/testdataenc.$$type; \
-		echo "Testing $$type re-decryption" && \
-		python sops/__init__.py -d /tmp/testdataenc.$$type > /dev/null || exit 1; \
-		echo "Testing removing PGP key to $$type encrypted file" && \
-		python sops/__init__.py -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 /tmp/testdataenc.$$type || exit 1; \
+		echo "Testing $$type re-decryption" ; \
+		python sops/__init__.py -d /tmp/testdataenc.$$type > /dev/null ; \
+		echo "Testing removing PGP key to $$type encrypted file" ; \
+		python sops/__init__.py -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 /tmp/testdataenc.$$type ; \
 	done
+	echo "Testing round-trip on binary file"
+	dd if=/dev/urandom of=/tmp/testdata-randomfile bs=1024 count=1024 2>&1 1>/dev/null
+	python sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata-randomfile > /tmp/testdata-randomfile.enc
+	python sops/__init__.py -d /tmp/testdata-randomfile.enc > /tmp/testdata-randomfile.dec
+	if [ $$(sha256sum /tmp/testdata-randomfile | cut -d ' ' -f 1) != $$(sha256sum /tmp/testdata-randomfile.dec | cut -d ' ' -f 1) ]; then \
+		echo "Binary file roundtrip failed, checksum doesn't match"; exit 0; \
+	else \
+		echo "Binary file roundtrip succeeded"; \
+	fi;
 
 pypi:
 	$(PYTHON) setup.py sdist check upload --sign

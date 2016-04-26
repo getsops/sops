@@ -3,18 +3,6 @@
     "sops": {
         "mac": "ENC[AES256_GCM,data:OQnRHfLfaxsMclFLTsNoog7JvEyMOBcXWQ/qGRmAPQmHW4pM2nzW1n8gdVcSGTA0AHz1Dgi3HW1r9E23z2Kf6K+D1JXSed+krs9BgrMO4Cc0mbPme+dYrCcOOYuKWmwlW6n9X+OiTzJ8tQvOJHGBGjs1+829F+Y2DZ1n5/62cHQ=,iv:gx99cyKW1IfA1q1rKvSRLBauntaAxwIta3Tqq6b8NL4=,tag:eTAYmXIkgHIdn/JKTIqm0w==,type:str]", 
         "version": 1.0, 
-        "kms": [
-            {
-                "arn": "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e", 
-                "created_at": "2015-11-25T15:05:50Z", 
-                "enc": "CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAgB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxJepR1L44IuTqAaAcCARCAO6Z7vbt7t9Qk32TbLhES3u1HLmDgUZm3P3Hnl8lRN0SKJanQGssKcvNA5v5nqoXUDc/M5ylscImL3SoS"
-            }, 
-            {
-                "arn": "arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d", 
-                "created_at": "2015-11-25T15:05:50Z", 
-                "enc": "CiBdfsKZbRNf/Li8Tf2SjeSdP76DineB1sbPjV0TV+meTxKnAQEBAgB4XX7CmW0TX/y4vE39ko3knT++g4p3gdbGz41dE1fpnk8AAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAy/yi0dBkO1p+AE3D0CARCAO7tM7TaoI4OBA0FzIjdo4NEdOWi1oKBKf28jji0z9tvvUZEcaG8PcKH4u73nRMQBL5uo+zjagXfeQJhL"
-            }
-        ], 
         "pgp": [
             {
                 "created_at": "2015-11-25T15:05:50Z", 
