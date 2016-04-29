@@ -8,8 +8,8 @@ SOPS: Secrets OPerationS
 .. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
 	:target: https://travis-ci.org/mozilla/sops
 
-**Questions?** ping "ulfr" in **#security** on [irc.mozilla.org](https://wiki.mozilla.org/IRC)
-(use a web client like [mibbit](https://chat.mibbit.com) ).
+**Questions?** ping "ulfr" in `#security` on `irc.mozilla.org https://wiki.mozilla.org/IRC`_
+(use a web client like `mibbit https://chat.mibbit.com`_ ).
 
 .. sectnum::
 .. contents:: Table of Contents
