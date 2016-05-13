@@ -39,7 +39,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = '1.12'
+VERSION = '1.13'
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -1267,19 +1267,20 @@ def write_file(tree, path=None, filetype=None):
 
 def run_editor(path):
     """Open the text editor on the given file path."""
-    editor = None
+    editorcmd = []
     if 'EDITOR' in os.environ:
-        editor = os.environ['EDITOR']
+        editorcmd = os.environ['EDITOR'].split(' ')
     else:
         process = subprocess.Popen(["which", "vim", "nano"],
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
         for line in process.stdout:
-            editor = line.strip()
+            editorcmd.append(line.strip())
             break
 
-    if editor:
-        subprocess.call([editor, path])
+    if editorcmd:
+        editorcmd.append(path)
+        subprocess.call(editorcmd)
     else:
         panic("Please define your EDITOR environment variable.", 201)
     return
