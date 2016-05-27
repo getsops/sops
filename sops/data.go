@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
 
@@ -35,7 +36,12 @@ func (k KMS) decodeKey() ([]byte, error) {
 		return nil, err
 	}
 
-	svc := kms.New(session.New())
+	sess, err := k.AWSSession()
+	if err != nil {
+		return nil, fmt.Errorf("AWSSession: %v", err)
+	}
+
+	svc := kms.New(sess)
 	params := &kms.DecryptInput{
 		CiphertextBlob: base64Decoded,
 	}
@@ -44,6 +50,16 @@ func (k KMS) decodeKey() ([]byte, error) {
 		return nil, err
 	}
 	return out.Plaintext, nil
+}
+
+func (k KMS) AWSSession() (*session.Session, error) {
+	re := regexp.MustCompile(`^arn:aws:kms:(.+):([0-9]+):key/(.+)$`)
+	matches := re.FindStringSubmatch(k.Arn)
+	if matches == nil {
+		return nil, fmt.Errorf("Could not find valid ARN in %s", k.Arn)
+	}
+
+	return session.New(&aws.Config{Region: aws.String(matches[1])}), nil
 }
 
 func (k KMS) DecodeKey() ([]byte, error) {
