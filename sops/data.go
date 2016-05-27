@@ -182,6 +182,8 @@ func (s *Data) DecryptValue(in, key interface{}, accKey string) interface{} {
 		return s.DecryptString(in, accKey)
 	case map[interface{}]interface{}:
 		return s.DecryptMap(in, accKey)
+	case yaml.MapSlice:
+		return s.DecryptMapSlice(in, accKey)
 	case []interface{}:
 		return s.DecryptSlice(in, accKey)
 	default:
@@ -207,4 +209,12 @@ func (s *Data) DecryptSlice(in []interface{}, accKey string) []interface{} {
 		list[i] = s.DecryptValue(v, nil, accKey)
 	}
 	return list
+}
+
+func (s *Data) DecryptMapSlice(in yaml.MapSlice, accKey string) yaml.MapSlice {
+	out := make(yaml.MapSlice, len(in))
+	for i, v := range in {
+		out[i] = yaml.MapItem{v.Key, s.DecryptValue(v.Value, v.Key, accKey)}
+	}
+	return out
 }

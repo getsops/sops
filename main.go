@@ -29,7 +29,6 @@ func main() {
 	}
 
 	encYamlMap := make(map[interface{}]interface{})
-	decYamlMap := make(map[interface{}]interface{})
 	err = yaml.Unmarshal(fileBytes, encYamlMap)
 	if err != nil {
 		log.Fatal(err)
@@ -45,9 +44,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	decYamlMap = sopsData.DecryptMap(encYamlMap, "")
+	orderedMap := make(yaml.MapSlice, 0)
+	err = yaml.Unmarshal(fileBytes, &orderedMap)
 
-	out, err := yaml.Marshal(decYamlMap)
+	decOrderedMap := sopsData.DecryptMapSlice(orderedMap, "")
+	out, err := yaml.Marshal(decOrderedMap)
 	if err != nil {
 		log.Fatal(err)
 	}
