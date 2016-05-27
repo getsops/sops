@@ -9,6 +9,7 @@ import (
 	"log"
 	"reflect"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -110,7 +111,10 @@ func (s *SopsData) DecryptKMS(val, iv, tag, additionalData []byte) (string, erro
 	return "", errors.New("Decryption failed")
 }
 
-func (s *SopsData) DecryptString(in, key string) string {
+func (s *SopsData) DecryptString(in, accKey string) string {
+	if s.UnencryptedSuffix != "" && strings.HasSuffix(accKey, fmt.Sprintf("%s:", s.UnencryptedSuffix)) {
+		return in
+	}
 	encRegex := regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 	matches := encRegex.FindStringSubmatch(in)
 	if matches == nil {
@@ -132,7 +136,7 @@ func (s *SopsData) DecryptString(in, key string) string {
 		return in
 	}
 
-	out, err := s.DecryptKMS(data, iv, tag, []byte(key))
+	out, err := s.DecryptKMS(data, iv, tag, []byte(accKey))
 	if err != nil {
 		log.Printf("Error decrypting data: %v", err)
 		return in
