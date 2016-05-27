@@ -19,6 +19,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// KMS represents the kms map of the sops data structure
 type KMS struct {
 	CreatedAt   time.Time `yaml:"created_at"`
 	Enc         string
@@ -27,8 +28,6 @@ type KMS struct {
 	Role        string
 	Arn         string
 }
-
-var i = 0
 
 func (k KMS) decodeKey() ([]byte, error) {
 	base64Decoded, err := base64.StdEncoding.DecodeString(k.Enc)
@@ -52,6 +51,7 @@ func (k KMS) decodeKey() ([]byte, error) {
 	return out.Plaintext, nil
 }
 
+// AWSSession builds an *session.Session from k.Arn
 func (k KMS) AWSSession() (*session.Session, error) {
 	re := regexp.MustCompile(`^arn:aws:kms:(.+):([0-9]+):key/(.+)$`)
 	matches := re.FindStringSubmatch(k.Arn)
@@ -62,6 +62,10 @@ func (k KMS) AWSSession() (*session.Session, error) {
 	return session.New(&aws.Config{Region: aws.String(matches[1])}), nil
 }
 
+// DecodeKey attempts to decode k.Enc by calling kms.Decrypt
+//
+// The decoded key is cached, so after this method is called
+// k.Enc should not be altered
 func (k KMS) DecodeKey() ([]byte, error) {
 	if k.decodedKey == nil && k.decodeError == nil {
 		k.decodedKey, k.decodeError = k.decodeKey()
@@ -70,6 +74,7 @@ func (k KMS) DecodeKey() ([]byte, error) {
 	return k.decodedKey, k.decodeError
 }
 
+// Decrypt decrypts a value with our DecodeKey
 func (k KMS) Decrypt(val, iv, tag, additionalData []byte) ([]byte, error) {
 	key, err := k.DecodeKey()
 	if err != nil {
@@ -94,12 +99,14 @@ func (k KMS) Decrypt(val, iv, tag, additionalData []byte) ([]byte, error) {
 	return out, nil
 }
 
+// PGP represents the pgp map of the sops data structure
 type PGP struct {
 	Fp        string
 	CreatedAt time.Time `yaml:"created_at"`
 	Enc       string
 }
 
+// SopsData represents the sops data structure
 type SopsData struct {
 	Mac               string
 	Version           string
@@ -109,12 +116,15 @@ type SopsData struct {
 	UnencryptedSuffix string `yaml:"unencrypted_suffix"`
 }
 
+// NewSopsData builds SopsData given yaml bytes
 func NewSopsData(in []byte) (*SopsData, error) {
 	sops := new(SopsData)
 	err := yaml.Unmarshal(in, sops)
 	return sops, err
 }
 
+// DecryptKMS attempts to decrypt our val with all of our KMS keys
+// returning the first one that succeeds
 func (s *SopsData) DecryptKMS(val, iv, tag, additionalData []byte) (string, error) {
 	for _, kms := range s.KMS {
 		out, err := kms.Decrypt(val, iv, tag, additionalData)
@@ -127,6 +137,7 @@ func (s *SopsData) DecryptKMS(val, iv, tag, additionalData []byte) (string, erro
 	return "", errors.New("Decryption failed")
 }
 
+// DecryptString decrypts a ENC[AES256_GCM,... string
 func (s *SopsData) DecryptString(in, accKey string) string {
 	if s.UnencryptedSuffix != "" && strings.HasSuffix(accKey, fmt.Sprintf("%s:", s.UnencryptedSuffix)) {
 		return in
@@ -161,6 +172,7 @@ func (s *SopsData) DecryptString(in, accKey string) string {
 	return out
 }
 
+// DecryptValue returns a decrypted version of in
 func (s *SopsData) DecryptValue(in, key interface{}, accKey string) interface{} {
 	if key != nil {
 		accKey = fmt.Sprintf("%v%v:", accKey, key)
@@ -178,6 +190,7 @@ func (s *SopsData) DecryptValue(in, key interface{}, accKey string) interface{} 
 	return nil
 }
 
+// DecryptMap walks through all keys and values, decrypting them
 func (s *SopsData) DecryptMap(in map[interface{}]interface{}, accKey string) map[interface{}]interface{} {
 	branch := make(map[interface{}]interface{})
 	for k, v := range in {
@@ -187,6 +200,7 @@ func (s *SopsData) DecryptMap(in map[interface{}]interface{}, accKey string) map
 	return branch
 }
 
+// DecryptSlice iterates over all elements and decrypts them
 func (s *SopsData) DecryptSlice(in []interface{}, accKey string) []interface{} {
 	list := make([]interface{}, len(in))
 	for i, v := range in {
