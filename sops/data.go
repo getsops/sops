@@ -51,7 +51,7 @@ func (k KMS) decodeKey() ([]byte, error) {
 	return out.Plaintext, nil
 }
 
-// AWSSession builds an *session.Session from k.Arn
+// AWSSession builds a *session.Session from k.Arn
 func (k KMS) AWSSession() (*session.Session, error) {
 	re := regexp.MustCompile(`^arn:aws:kms:(.+):([0-9]+):key/(.+)$`)
 	matches := re.FindStringSubmatch(k.Arn)
