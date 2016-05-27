@@ -40,7 +40,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	sopsData, err := sops.NewSopsData(sopsBytes)
+	sopsData, err := sops.NewData(sopsBytes)
 	if err != nil {
 		log.Fatal(err)
 	}

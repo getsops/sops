@@ -106,8 +106,8 @@ type PGP struct {
 	Enc       string
 }
 
-// SopsData represents the sops data structure
-type SopsData struct {
+// Data represents the sops data structure
+type Data struct {
 	Mac               string
 	Version           string
 	KMS               []KMS
@@ -116,16 +116,16 @@ type SopsData struct {
 	UnencryptedSuffix string `yaml:"unencrypted_suffix"`
 }
 
-// NewSopsData builds SopsData given yaml bytes
-func NewSopsData(in []byte) (*SopsData, error) {
-	sops := new(SopsData)
+// NewData builds Data given yaml bytes
+func NewData(in []byte) (*Data, error) {
+	sops := new(Data)
 	err := yaml.Unmarshal(in, sops)
 	return sops, err
 }
 
 // DecryptKMS attempts to decrypt our val with all of our KMS keys
 // returning the first one that succeeds
-func (s *SopsData) DecryptKMS(val, iv, tag, additionalData []byte) (string, error) {
+func (s *Data) DecryptKMS(val, iv, tag, additionalData []byte) (string, error) {
 	for _, kms := range s.KMS {
 		out, err := kms.Decrypt(val, iv, tag, additionalData)
 		if err != nil {
@@ -138,7 +138,7 @@ func (s *SopsData) DecryptKMS(val, iv, tag, additionalData []byte) (string, erro
 }
 
 // DecryptString decrypts a ENC[AES256_GCM,... string
-func (s *SopsData) DecryptString(in, accKey string) string {
+func (s *Data) DecryptString(in, accKey string) string {
 	if s.UnencryptedSuffix != "" && strings.HasSuffix(accKey, fmt.Sprintf("%s:", s.UnencryptedSuffix)) {
 		return in
 	}
@@ -173,7 +173,7 @@ func (s *SopsData) DecryptString(in, accKey string) string {
 }
 
 // DecryptValue returns a decrypted version of in
-func (s *SopsData) DecryptValue(in, key interface{}, accKey string) interface{} {
+func (s *Data) DecryptValue(in, key interface{}, accKey string) interface{} {
 	if key != nil {
 		accKey = fmt.Sprintf("%v%v:", accKey, key)
 	}
@@ -191,7 +191,7 @@ func (s *SopsData) DecryptValue(in, key interface{}, accKey string) interface{} 
 }
 
 // DecryptMap walks through all keys and values, decrypting them
-func (s *SopsData) DecryptMap(in map[interface{}]interface{}, accKey string) map[interface{}]interface{} {
+func (s *Data) DecryptMap(in map[interface{}]interface{}, accKey string) map[interface{}]interface{} {
 	branch := make(map[interface{}]interface{})
 	for k, v := range in {
 		branch[k] = s.DecryptValue(v, k, accKey)
@@ -201,7 +201,7 @@ func (s *SopsData) DecryptMap(in map[interface{}]interface{}, accKey string) map
 }
 
 // DecryptSlice iterates over all elements and decrypts them
-func (s *SopsData) DecryptSlice(in []interface{}, accKey string) []interface{} {
+func (s *Data) DecryptSlice(in []interface{}, accKey string) []interface{} {
 	list := make([]interface{}, len(in))
 	for i, v := range in {
 		list[i] = s.DecryptValue(v, nil, accKey)
