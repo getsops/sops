@@ -2,55 +2,34 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 
-	"github.com/mozilla/sops/sops"
-
-	"gopkg.in/yaml.v2"
+	"gopkg.in/urfave/cli.v1"
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: sops <inFile>")
-		os.Exit(1)
+	app := cli.NewApp()
+	app.Name = "sops"
+	app.Usage = "Secrets management stinks, use some sops!"
+	app.UsageText = "sops <file>"
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "decrypt, d",
+			Usage: "decrypt <file> and print it to stdout",
+		},
 	}
-	fileName := os.Args[1]
-
-	file, err := os.Open(fileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fileBytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	encYamlMap := make(map[interface{}]interface{})
-	err = yaml.Unmarshal(fileBytes, encYamlMap)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	sopsBytes, err := yaml.Marshal(encYamlMap["sops"])
-	if err != nil {
-		log.Fatal(err)
+	app.Action = func(c *cli.Context) error {
+		if c.NArg() != 1 {
+			return cli.NewExitError("error: <file> not specified", 1)
+		}
+		fileName := c.Args()[0]
+		if c.Bool("decrypt") {
+			if err := DecryptFile(fileName); err != nil {
+				return cli.NewExitError(fmt.Sprintf("Error decrypting %s: %v", fileName, err), 1)
+			}
+		}
+		return nil
 	}
 
-	sopsData, err := sops.NewData(sopsBytes)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	orderedMap := make(yaml.MapSlice, 0)
-	err = yaml.Unmarshal(fileBytes, &orderedMap)
-
-	decOrderedMap := sopsData.DecryptMapSlice(orderedMap, "")
-	out, err := yaml.Marshal(decOrderedMap)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Print(string(out))
+	app.Run(os.Args)
 }
