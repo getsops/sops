@@ -1,8 +1,11 @@
-# Go-sops
+# Sops
 A Go decrypter for [sops](https://github.com/mozilla/sops).
 
-## Install
-`go get github.com/mozilla-services/go-sops`
+## Install (while on go-sops branch)
+```
+git clone -b go-sops git@github.com:mozilla/sops $GOPATH/src/github.com/mozilla/sops
+go install github.com/mozilla/sops
+```
 
-## Run
-`go-sops <sops yaml file>`
+## Decrypt
+`sops -d <sops yaml file>`
