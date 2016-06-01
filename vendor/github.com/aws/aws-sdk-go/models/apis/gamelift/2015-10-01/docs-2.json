@@ -1,0 +1,1033 @@
+{
+  "version": "2.0",
+  "operations": {
+    "CreateAlias": "<p>Creates an alias for a fleet. You can use an alias to anonymize your fleet by referencing an alias instead of a specific fleet when you create game sessions. Amazon GameLift supports two types of routing strategies for aliases: simple and terminal. Use a simple alias to point to an active fleet. Use a terminal alias to display a message to incoming traffic instead of routing players to an active fleet. This option is useful when a game server is no longer supported but you want to provide better messaging than a standard 404 error.</p> <p>To create a fleet alias, specify an alias name, routing strategy, and optional description. If successful, a new alias record is returned, including an alias ID, which you can reference when creating a game session. To reassign the alias to another fleet ID, call <a>UpdateAlias</a>.</p>",
+    "CreateBuild": "<p>Initializes a new build record and generates information required to upload a game build to Amazon GameLift. Once the build record has been created and is in an INITIALIZED state, you can upload your game build.</p> <important><p>To create a build, use the CLI command <code>upload-build</code>, which creates a new build record and uploads the build files in one step. (See the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/\">Amazon GameLift Developer Guide</a> for more details on the CLI and the upload process.) Call the <code>CreateBuild</code> action only if you have your own Amazon Simple Storage Service (Amazon S3) client and need to manually upload your build files.</p></important> <p>To create a new build, optionally specify a build name and version. This metadata is stored with other properties in the build record and is displayed in the GameLift console (but not visible to players). If successful, this action returns the newly created build record along with an Amazon S3 storage location and AWS account credentials. Use the location and credentials to upload your game build.</p>",
+    "CreateFleet": "<p>Creates a new fleet to host game servers. A fleet consists of a set of Amazon Elastic Compute Cloud (Amazon EC2) instances of a certain type, which defines the CPU, memory, storage, and networking capacity of each host in the fleet. See <a href=\"https://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for more information. Each instance in the fleet hosts a game server created from the specified game build. Once a fleet is in an ACTIVE state, it can begin hosting game sessions.</p> <p>To create a new fleet, provide a name and the EC2 instance type for the new fleet, and specify the build and server launch path. Builds must be in a READY state before they can be used to build fleets. When configuring the new fleet, you can optionally (1) provide a set of launch parameters to be passed to a game server when activated; (2) limit incoming traffic to a specified range of IP addresses and port numbers; (3) set game session protection for all instances in the fleet, and (4) configure Amazon GameLift to store game session logs by specifying the path to the logs stored in your game server files. If the call is successful, Amazon GameLift performs the following tasks:</p> <ul> <li>Creates a fleet record and sets the state to NEW.</li> <li>Sets the fleet's capacity to 1 \"desired\" and 1 \"active\" EC2 instance count.</li> <li>Creates an EC2 instance and begins the process of initializing the fleet and activating a game server on the instance.</li> <li>Begins writing events to the fleet event log, which can be accessed in the GameLift console.</li> </ul> <p>Once a fleet is created, use the following actions to change certain fleet properties (server launch parameters and log paths cannot be changed):</p> <ul> <li> <a>UpdateFleetAttributes</a> -- Update fleet metadata, including name and description.</li> <li> <a>UpdateFleetCapacity</a> -- Increase or decrease the number of instances you want the fleet to maintain.</li> <li> <a>UpdateFleetPortSettings</a> -- Change the IP addresses and ports that allow access to incoming traffic.</li> </ul>",
+    "CreateGameSession": "<p>Creates a multiplayer game session for players. This action creates a game session record and assigns the new session to an instance in the specified fleet, which activates the server initialization process in your game server. A fleet must be in an ACTIVE state before a game session can be created for it.</p> <p>To create a game session, specify either a fleet ID or an alias ID and indicate the maximum number of players the game session allows. You can also provide a name and a set of properties for your game (optional). If successful, a <a>GameSession</a> object is returned containing session properties, including an IP address. By default, newly created game sessions are set to accept adding any new players to the game session. Use <a>UpdateGameSession</a> to change the creation policy.</p>",
+    "CreatePlayerSession": "<p>Adds a player to a game session and creates a player session record. A game session must be in an ACTIVE state, have a creation policy of ALLOW_ALL, and have an open player slot before players can be added to the session.</p> <p>To create a player session, specify a game session ID and player ID. If successful, the player is added to the game session and a new <a>PlayerSession</a> object is returned. </p>",
+    "CreatePlayerSessions": "<p>Adds a group of players to a game session. Similar to <a>CreatePlayerSession</a>, this action allows you to add multiple players in a single call, which is useful for games that provide party and/or matchmaking features. A game session must be in an ACTIVE state, have a creation policy of ALLOW_ALL, and have an open player slot before players can be added to the session.</p> <p>To create player sessions, specify a game session ID and a list of player IDs. If successful, the players are added to the game session and a set of new <a>PlayerSession</a> objects is returned. </p>",
+    "DeleteAlias": "<p>Deletes an alias. This action removes all record of the alias; game clients attempting to access a game server using the deleted alias receive an error. To delete an alias, specify the alias ID to be deleted.</p>",
+    "DeleteBuild": "<p>Deletes a build. This action permanently deletes the build record and any uploaded build files.</p> <p>To delete a build, specify its ID. Deleting a build does not affect the status of any active fleets, but you can no longer create new fleets for the deleted build.</p>",
+    "DeleteFleet": "<p>Deletes everything related to a fleet. Before deleting a fleet, you must set the fleet's desired capacity to zero. See <a>UpdateFleetCapacity</a>.</p> <p>This action removes the fleet's resources and the fleet record. Once a fleet is deleted, you can no longer use that fleet.</p>",
+    "DeleteScalingPolicy": "<p>Deletes a fleet scaling policy. This action means that the policy is no longer in force and removes all record of it. To delete a scaling policy, specify both the scaling policy name and the fleet ID it is associated with. </p>",
+    "DescribeAlias": "<p>Retrieves properties for a specified alias. To get the alias, specify an alias ID. If successful, an <a>Alias</a> object is returned.</p>",
+    "DescribeBuild": "<p>Retrieves properties for a build. To get a build record, specify a build ID. If successful, an object containing the build properties is returned.</p>",
+    "DescribeEC2InstanceLimits": "<p>Retrieves the following information for the specified EC2 instance type:</p> <ul> <li>maximum number of instances allowed per AWS account (service limit)</li> <li>current usage level for the AWS account </li> </ul> <p>Service limits vary depending on region. Available regions for GameLift can be found in the AWS Management Console for GameLift (see the drop-down list in the upper right corner).</p>",
+    "DescribeFleetAttributes": "<p>Retrieves fleet properties, including metadata, status, and configuration, for one or more fleets. You can request attributes for all fleets, or specify a list of one or more fleet IDs. When requesting all fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetAttributes</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, attribute objects are returned only for fleets that currently exist. </p> <note><p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p></note>",
+    "DescribeFleetCapacity": "<p>Retrieves the current status of fleet capacity for one or more fleets. This information includes the number of instances that have been requested for the fleet and the number currently active. You can request capacity for all fleets, or specify a list of one or more fleet IDs. When requesting all fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetCapacity</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, attribute objects are returned only for fleets that currently exist. </p> <note><p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p></note>",
+    "DescribeFleetEvents": "<p>Retrieves entries from the fleet event log. You can specify a time range to limit the result set. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a collection of event log entries matching the request are returned.</p>",
+    "DescribeFleetPortSettings": "<p>Retrieves the port settings for a fleet. Port settings are used to limit incoming traffic access to game servers in the fleet. To get a fleet's port settings, specify a fleet ID. If successful, an <a>IpPermission</a> object is returned for the requested fleet ID. If the requested fleet has been deleted, the result set will be empty.</p>",
+    "DescribeFleetUtilization": "<p>Retrieves utilization statistics for one or more fleets. You can request utilization data for all fleets, or specify a list of one or more fleet IDs. When requesting all fleets, use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>FleetUtilization</a> object is returned for each requested fleet ID. When specifying a list of fleet IDs, utilization objects are returned only for fleets that currently exist. </p> <note><p>Some API actions may limit the number of fleet IDs allowed in one request. If a request exceeds this limit, the request fails and the error message includes the maximum allowed.</p></note>",
+    "DescribeGameSessionDetails": "<p>Retrieves properties, including the protection policy in force, for one or more game sessions. This action can be used in several ways: (1) provide a <i>GameSessionId</i> to request details for a specific game session; (2) provide either a <i>FleetId</i> or an <i>AliasId</i> to request properties for all game sessions running on a fleet. </p> <p>To get game session record(s), specify just one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSessionDetail</a> object is returned for each session matching the request.</p>",
+    "DescribeGameSessions": "<p>Retrieves properties for one or more game sessions. This action can be used in several ways: (1) provide a <i>GameSessionId</i> to request properties for a specific game session; (2) provide a <i>FleetId</i> or an <i>AliasId</i> to request properties for all game sessions running on a fleet. </p> <p>To get game session record(s), specify just one of the following: game session ID, fleet ID, or alias ID. You can filter this request by game session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>GameSession</a> object is returned for each session matching the request.</p>",
+    "DescribePlayerSessions": "<p>Retrieves properties for one or more player sessions. This action can be used in several ways: (1) provide a <i>PlayerSessionId</i> parameter to request properties for a specific player session; (2) provide a <i>GameSessionId</i> parameter to request properties for all player sessions in the specified game session; (3) provide a <i>PlayerId</i> parameter to request properties for all player sessions of a specified player. </p> <p>To get game session record(s), specify only one of the following: a player session ID, a game session ID, or a player ID. You can filter this request by player session status. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, a <a>PlayerSession</a> object is returned for each session matching the request.</p>",
+    "DescribeScalingPolicies": "<p>Retrieves all scaling policies applied to a fleet. </p> <p>To get a fleet's scaling policies, specify the fleet ID. You can filter this request by policy status, such as to retrieve only active scaling policies. Use the pagination parameters to retrieve results as a set of sequential pages. If successful, set of <a>ScalingPolicy</a> objects is returned for the fleet.</p>",
+    "GetGameSessionLogUrl": "<p>Retrieves the location of stored game session logs for a specified game session. When a game session is terminated, Amazon GameLift automatically stores the logs in Amazon S3. Use this URL to download the logs.</p> <note><p>See the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift\">AWS Service Limits</a> page for maximum log file sizes. Log files that exceed this limit are not saved.</p></note>",
+    "ListAliases": "<p>Retrieves a collection of alias records for this AWS account. You can filter the result set by alias name and/or routing strategy type. Use the pagination parameters to retrieve results in sequential pages. </p> <note><p>Aliases are not listed in any particular order.</p></note>",
+    "ListBuilds": "<p>Retrieves build records for all builds associated with an AWS account. You can filter the result set by build status. Use the pagination parameters to retrieve results in a set of sequential pages. </p> <note><p>Build records are not listed in any particular order.</p></note>",
+    "ListFleets": "<p>Retrieves a collection of fleet records for this AWS account. You can filter the result set by build ID. Use the pagination parameters to retrieve results in sequential pages. </p> <note><p>Fleet records are not listed in any particular order.</p></note>",
+    "PutScalingPolicy": "<p>Creates or updates a scaling policy for a fleet. An active scaling policy prompts GameLift to track a certain metric for a fleet and automatically change the fleet's capacity in specific circumstances. Each scaling policy contains one rule statement. Fleets can have multiple scaling policies in force simultaneously.</p> <p>A scaling policy rule statement has the following structure:</p> <p>If <i>[MetricName]</i> is <i>[ComparisonOperator]</i> <i>[Threshold]</i> for <i>[EvaluationPeriods]</i> minutes, then <i>[ScalingAdjustmentType]</i> to/by <i>[ScalingAdjustment]</i>.</p> <p>For example, this policy: \"If the number of idle instances exceeds 20 for more than 15 minutes, then reduce the fleet capacity by 10 instances\" could be implemented as the following rule statement: </p> <p>If [IdleInstances] is [GreaterThanOrEqualToThreshold] [20] for [15] minutes, then [ChangeInCapacity] by [-10]. </p> <p>To create or update a scaling policy, specify a unique combination of name and fleet ID, and set the rule values. All parameters for this action are required. If successful, the policy name is returned. Scaling policies cannot be suspended or made inactive. To stop enforcing a scaling policy, call <a>DeleteScalingPolicy</a>.</p>",
+    "RequestUploadCredentials": "<p>Retrieves a fresh set of upload credentials and the assigned Amazon S3 storage location for a specific build. Valid credentials are required to upload your game build files to Amazon S3.</p> <important><p>Call this action only if you need credentials for a build created with <a>CreateBuild</a>. This is a rare situation; in most cases, builds are created using the CLI command <code>upload-build</code>, which creates a build record and also uploads build files. </p></important> <p>Upload credentials are returned when you create the build, but they have a limited lifespan. You can get fresh credentials and use them to re-upload game files until the state of that build changes to READY. Once this happens, you must create a brand new build.</p>",
+    "ResolveAlias": "<p>Retrieves the fleet ID that a specified alias is currently pointing to. </p>",
+    "UpdateAlias": "<p>Updates properties for an alias. To update properties, specify the alias ID to be updated and provide the information to be changed. To reassign an alias to another fleet, provide an updated routing strategy. If successful, the updated alias record is returned.</p>",
+    "UpdateBuild": "<p>Updates metadata in a build record, including the build name and version. To update the metadata, specify the build ID to update and provide the new values. If successful, a build object containing the updated metadata is returned. </p>",
+    "UpdateFleetAttributes": "<p>Updates fleet properties, including name and description, for a fleet. To update metadata, specify the fleet ID and the property values you want to change. If successful, the fleet ID for the updated fleet is returned.</p>",
+    "UpdateFleetCapacity": "<p>Updates capacity settings for a fleet. Use this action to specify the number of EC2 instances (hosts) you want this fleet to contain. Before calling this action, you may want to call <a>DescribeEC2InstanceLimits</a> to get the maximum capacity based on the fleet's EC2 instance type.</p> <p>If you're using auto-scaling (see <a>PutScalingPolicy</a>), you may want to specify a minimum and/or maximum capacity. If you don't provide these boundaries, auto-scaling can set capacity anywhere between zero and the <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift\">service limits</a>.</p> <p>To update fleet capacity, specify the fleet ID and the desired number of instances. If successful, Amazon GameLift starts or terminates instances so that the fleet's active instance count matches the desired instance count. You can view a fleet's current capacity information by calling <a>DescribeFleetCapacity</a>. If the desired instance count is higher than the instance type's limit, the \"Limit Exceeded\" exception will occur.</p>",
+    "UpdateFleetPortSettings": "<p>Updates port settings for a fleet. To update settings, specify the fleet ID to be updated and list the permissions you want to update. List the permissions you want to add in <i>InboundPermissionAuthorizations</i>, and permissions you want to remove in <i>InboundPermissionRevocations</i>. Permissions to be removed must match existing fleet permissions. If successful, the fleet ID for the updated fleet is returned.</p>",
+    "UpdateGameSession": "<p>Updates game session properties. This includes the session name, maximum player count, protection policy, which controls whether or not an active game session can be terminated during a scale-down event, and the player session creation policy, which controls whether or not new players can join the session. To update a game session, specify the game session ID and the values you want to change. If successful, an updated <a>GameSession</a> object is returned. </p>"
+  },
+  "service": "<fullname>Amazon GameLift Service</fullname> <p>Welcome to the <i>Amazon GameLift API Reference</i>. Amazon GameLift is a managed Amazon Web Services (AWS) service for developers who need a scalable, server-based solution for multiplayer games. Amazon GameLift provides setup and deployment of game servers, and handles infrastructure scaling and session management. For more information about the GameLift service, including a feature overview, getting started guide, and tutorial, see the accompanying <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/\">Amazon GameLift Developer Guide</a>.</p> <p>This reference describes the low-level service API for GameLift. You can call this API directly or use the <a href=\"https://aws.amazon.com/tools/\">AWS SDK</a> for your preferred language. The AWS SDK includes a set of high-level GameLift actions multiplayer game sessions. Alternatively, you can use the <a href=\"https://aws.amazon.com/cli/\">AWS command-line interface</a> (CLI) tool, which includes commands for GameLift. For administrative actions, you can use the Amazon GameLift console. </p> <p><b>Managing Game and Player Sessions Through GameLift</b></p> <p>Call these actions from your game clients and/or services to create and manage multiplayer game sessions.</p> <ul> <li> <b>Game sessions</b> <ul> <li><a>CreateGameSession</a></li> <li><a>DescribeGameSessions</a></li> <li><a>DescribeGameSessionDetails</a></li> <li><a>UpdateGameSession</a></li> </ul> </li> <li> <b>Player sessions</b> <ul> <li><a>CreatePlayerSession</a></li> <li><a>CreatePlayerSessions</a></li> <li><a>DescribePlayerSessions</a></li> </ul> </li> <li> <b>Other actions:</b> <ul> <li><a>GetGameSessionLogUrl</a></li> </ul> </li> </ul> <p><b>Setting Up Game Servers</b></p> <p>Use these administrative actions to configure GameLift to host your game servers. When configuring GameLift, you'll need to (1) configure a build for your game and provide build files, and (2) set up one or more fleets to host game sessions.</p> <ul> <li> <b>Build actions:</b> <ul> <li><a>ListBuilds</a></li> <li><a>CreateBuild</a></li> <li><a>DescribeBuild</a></li> <li><a>UpdateBuild</a></li> <li><a>DeleteBuild</a></li> <li><a>RequestUploadCredentials</a></li> </ul> </li> <li> <b>Fleet actions:</b> <ul> <li><a>ListFleets</a></li> <li><a>CreateFleet</a></li> <li>Describe fleet actions: <ul> <li><a>DescribeFleetAttributes</a></li> <li><a>DescribeFleetCapacity</a></li> <li><a>DescribeFleetPortSettings</a></li> <li><a>DescribeFleetUtilization</a></li> <li><a>DescribeEC2InstanceLimits</a></li> <li><a>DescribeFleetEvents</a></li> </ul> </li> <li>Update fleet actions: <ul> <li><a>UpdateFleetAttributes</a></li> <li><a>UpdateFleetCapacity</a></li> <li><a>UpdateFleetPortSettings</a></li> </ul> </li> <li><a>DeleteFleet</a></li> </ul> </li> <li> <b>Alias actions:</b> <ul> <li><a>ListAliases</a></li> <li><a>CreateAlias</a></li> <li><a>DescribeAlias</a></li> <li><a>UpdateAlias</a></li> <li><a>DeleteAlias</a></li> <li><a>ResolveAlias</a></li> </ul> </li> <li> <b>Scaling policy actions:</b> <ul> <li><a>PutScalingPolicy</a></li> <li><a>DescribeScalingPolicies</a></li> <li><a>DeleteScalingPolicy</a></li> </ul> </li> </ul>",
+  "shapes": {
+    "Alias": {
+      "base": "<p>Properties describing a fleet alias.</p>",
+      "refs": {
+        "AliasList$member": null,
+        "CreateAliasOutput$Alias": "<p>Object containing the newly created alias record.</p>",
+        "DescribeAliasOutput$Alias": "<p>Object containing the requested alias.</p>",
+        "UpdateAliasOutput$Alias": "<p>Object containing the updated alias configuration.</p>"
+      }
+    },
+    "AliasId": {
+      "base": null,
+      "refs": {
+        "Alias$AliasId": "<p>Unique identifier for a fleet alias.</p>",
+        "CreateGameSessionInput$AliasId": "<p>Unique identifier for a fleet alias. Each request must reference either a fleet ID or alias ID, but not both.</p>",
+        "DeleteAliasInput$AliasId": "<p>Unique identifier for a fleet alias. Specify the alias you want to delete. </p>",
+        "DescribeAliasInput$AliasId": "<p>Unique identifier for a fleet alias. Specify the alias you want to retrieve. </p>",
+        "DescribeGameSessionDetailsInput$AliasId": "<p>Unique identifier for a fleet alias. Specify an alias to retrieve information on all game sessions active on the fleet.</p>",
+        "DescribeGameSessionsInput$AliasId": "<p>Unique identifier for a fleet alias. Specify an alias to retrieve information on all game sessions active on the fleet.</p>",
+        "ResolveAliasInput$AliasId": "<p>Unique identifier for the alias you want to resolve. </p>",
+        "UpdateAliasInput$AliasId": "<p>Unique identifier for a fleet alias. Specify the alias you want to update. </p>"
+      }
+    },
+    "AliasList": {
+      "base": null,
+      "refs": {
+        "ListAliasesOutput$Aliases": "<p>Collection of alias records that match the list request. </p>"
+      }
+    },
+    "AwsCredentials": {
+      "base": "<p>AWS access credentials required to upload game build files to Amazon GameLift. These credentials are generated with <a>CreateBuild</a>, and are valid for a limited time. If they expire before you upload your game build, get a new set by calling <a>RequestUploadCredentials</a>.</p>",
+      "refs": {
+        "CreateBuildOutput$UploadCredentials": "<p>AWS credentials required when uploading a game build to the storage location. These credentials have a limited lifespan and are valid only for the build they were issued for. If you need to get fresh credentials, call <a>RequestUploadCredentials</a>.</p>",
+        "RequestUploadCredentialsOutput$UploadCredentials": "<p>AWS credentials required when uploading a game build to the storage location. These credentials have a limited lifespan and are valid only for the build they were issued for.</p>"
+      }
+    },
+    "Build": {
+      "base": "<p>Properties describing a game build.</p>",
+      "refs": {
+        "BuildList$member": null,
+        "CreateBuildOutput$Build": "<p>Set of properties for the newly created build.</p>",
+        "DescribeBuildOutput$Build": "<p>Set of properties describing the requested build.</p>",
+        "UpdateBuildOutput$Build": "<p>Object containing the updated build record.</p>"
+      }
+    },
+    "BuildId": {
+      "base": null,
+      "refs": {
+        "Build$BuildId": "<p>Unique identifier for a build.</p>",
+        "CreateFleetInput$BuildId": "<p>Unique identifier for the build you want the new fleet to use.</p>",
+        "DeleteBuildInput$BuildId": "<p>Unique identifier for the build you want to delete. </p>",
+        "DescribeBuildInput$BuildId": "<p>Unique identifier for the build you want to retrieve properties for. </p>",
+        "FleetAttributes$BuildId": "<p>Unique identifier for a build.</p>",
+        "ListFleetsInput$BuildId": "<p>Unique identifier of the build to return fleets for. Use this parameter to return only fleets using the specified build. To retrieve all fleets, leave this parameter empty.</p>",
+        "RequestUploadCredentialsInput$BuildId": "<p>Unique identifier for the build you want to get credentials for. </p>",
+        "UpdateBuildInput$BuildId": "<p>Unique identifier for the build you want to update. </p>"
+      }
+    },
+    "BuildList": {
+      "base": null,
+      "refs": {
+        "ListBuildsOutput$Builds": "<p>Collection of build records that match the request. </p>"
+      }
+    },
+    "BuildStatus": {
+      "base": null,
+      "refs": {
+        "Build$Status": "<p>Current status of the build. Possible build states include: <ul><li>INITIALIZED: A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this state. When a build is successfully created, the build state is set to this value. </li><li>READY: The game build has been successfully uploaded. You can now create new fleets for this build.</li><li>FAILED: The game build upload failed. You cannot create new fleets for this build. </li></ul></p>",
+        "ListBuildsInput$Status": "<p>Build state to filter results on. Use this parameter to retrieve builds in a certain state. To retrieve all builds, leave this parameter empty. Possible build states include: <ul><li>INITIALIZED: A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this state. When a build is successfully created, the build state is set to this value. </li><li>READY: The game build has been successfully uploaded. You can now create new fleets for this build.</li><li>FAILED: The game build upload failed. You cannot create new fleets for this build. </li></ul></p>"
+      }
+    },
+    "ComparisonOperatorType": {
+      "base": null,
+      "refs": {
+        "PutScalingPolicyInput$ComparisonOperator": "<p>Comparison operator to use when measuring the metric against the threshold value. </p>",
+        "ScalingPolicy$ComparisonOperator": "<p>Comparison operator to use when measuring a metric against the threshold value. </p>"
+      }
+    },
+    "ConflictException": {
+      "base": "<p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Please resolve the conflict before retrying this request.</p>",
+      "refs": {
+      }
+    },
+    "CreateAliasInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreateAliasOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreateBuildInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreateBuildOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreateFleetInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreateFleetOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreateGameSessionInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreateGameSessionOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreatePlayerSessionInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreatePlayerSessionOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreatePlayerSessionsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "CreatePlayerSessionsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DeleteAliasInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DeleteBuildInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DeleteFleetInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DeleteScalingPolicyInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeAliasInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeAliasOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeBuildInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeBuildOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeEC2InstanceLimitsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeEC2InstanceLimitsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetAttributesInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetAttributesOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetCapacityInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetCapacityOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetEventsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetEventsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetPortSettingsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetPortSettingsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetUtilizationInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFleetUtilizationOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeGameSessionDetailsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeGameSessionDetailsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeGameSessionsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeGameSessionsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribePlayerSessionsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribePlayerSessionsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeScalingPoliciesInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "DescribeScalingPoliciesOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "Double": {
+      "base": null,
+      "refs": {
+        "PutScalingPolicyInput$Threshold": "<p>Metric value used to trigger a scaling event.</p>",
+        "ScalingPolicy$Threshold": "<p>Metric value used to trigger a scaling event.</p>"
+      }
+    },
+    "EC2InstanceCounts": {
+      "base": "<p>Current status of fleet capacity. The number of active instances should match or be in the process of matching the number of desired instances. Pending and terminating counts are non-zero only if fleet capacity is adjusting to an <a>UpdateFleetCapacity</a> request, or if access to resources is temporarily affected.</p>",
+      "refs": {
+        "FleetCapacity$InstanceCounts": "<p>Current status of fleet capacity.</p>"
+      }
+    },
+    "EC2InstanceLimit": {
+      "base": "<p>Maximum number of instances allowed based on the Amazon Elastic Compute Cloud (Amazon EC2) instance type. Instance limits can be retrieved by calling <a>DescribeEC2InstanceLimits</a>.</p>",
+      "refs": {
+        "EC2InstanceLimitList$member": null
+      }
+    },
+    "EC2InstanceLimitList": {
+      "base": null,
+      "refs": {
+        "DescribeEC2InstanceLimitsOutput$EC2InstanceLimits": "<p>Object containing the maximum number of instances for the specified instance type.</p>"
+      }
+    },
+    "EC2InstanceType": {
+      "base": null,
+      "refs": {
+        "CreateFleetInput$EC2InstanceType": "<p>Type of EC2 instances used in the fleet. EC2 instance types define the CPU, memory, storage, and networking capacity of the fleetaposs hosts. Amazon GameLift supports the EC2 instance types listed below. See <a href=\"https://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions of each.</p>",
+        "DescribeEC2InstanceLimitsInput$EC2InstanceType": "<p>Type of EC2 instances used in the fleet. EC2 instance types define the CPU, memory, storage, and networking capacity of the fleetaposs hosts. Amazon GameLift supports the EC2 instance types listed below. See <a href=\"https://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions of each. Leave this parameter blank to retrieve limits for all types.</p>",
+        "EC2InstanceLimit$EC2InstanceType": "<p>Type of EC2 instances used in the fleet. EC2 instance types define the CPU, memory, storage, and networking capacity of the fleetaposs hosts. Amazon GameLift supports the EC2 instance types listed below. See <a href=\"https://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions of each.</p>",
+        "FleetCapacity$InstanceType": "<p>Type of EC2 instances used in the fleet. EC2 instance types define the CPU, memory, storage, and networking capacity of the fleetaposs hosts. Amazon GameLift supports the EC2 instance types listed below. See <a href=\"https://aws.amazon.com/ec2/instance-types/\">Amazon EC2 Instance Types</a> for detailed descriptions of each.</p>"
+      }
+    },
+    "Event": {
+      "base": "<p>Log entry describing an event involving an Amazon GameLift resource (such as a fleet).</p>",
+      "refs": {
+        "EventList$member": null
+      }
+    },
+    "EventCode": {
+      "base": null,
+      "refs": {
+        "Event$EventCode": "<p>Type of event being logged.</p>"
+      }
+    },
+    "EventList": {
+      "base": null,
+      "refs": {
+        "DescribeFleetEventsOutput$Events": "<p>Collection of objects containing event log entries for the specified fleet.</p>"
+      }
+    },
+    "FleetAttributes": {
+      "base": "<p>General properties describing a fleet.</p>",
+      "refs": {
+        "CreateFleetOutput$FleetAttributes": "<p>Properties for the newly created fleet.</p>",
+        "FleetAttributesList$member": null
+      }
+    },
+    "FleetAttributesList": {
+      "base": null,
+      "refs": {
+        "DescribeFleetAttributesOutput$FleetAttributes": "<p>Collection of objects containing attribute metadata for each requested fleet ID. </p>"
+      }
+    },
+    "FleetCapacity": {
+      "base": "<p>Information about the fleet's capacity. Fleet capacity is measured in EC2 instances. By default, new fleets have a capacity of one instance, but can be updated as needed. The maximum number of instances for a fleet is determined by the fleet's instance type.</p>",
+      "refs": {
+        "FleetCapacityList$member": null
+      }
+    },
+    "FleetCapacityExceededException": {
+      "base": "<p>The specified fleet has no available instances to fulfill a request to create a new game session. Such requests should only be retried once the fleet capacity has been increased. </p>",
+      "refs": {
+      }
+    },
+    "FleetCapacityList": {
+      "base": null,
+      "refs": {
+        "DescribeFleetCapacityOutput$FleetCapacity": "<p>Collection of objects containing capacity information for each requested fleet ID. Leave this parameter empty to retrieve capacity information for all fleets.</p>"
+      }
+    },
+    "FleetId": {
+      "base": null,
+      "refs": {
+        "CreateGameSessionInput$FleetId": "<p>Unique identifier for a fleet. Each request must reference either a fleet ID or alias ID, but not both.</p>",
+        "DeleteFleetInput$FleetId": "<p>Unique identifier for the fleet you want to delete.</p>",
+        "DeleteScalingPolicyInput$FleetId": "<p>Unique identifier for a fleet.</p>",
+        "DescribeFleetEventsInput$FleetId": "<p>Unique identifier for the fleet to get event logs for. </p>",
+        "DescribeFleetPortSettingsInput$FleetId": "<p>Unique identifier for the fleet you want to retrieve port settings for. </p>",
+        "DescribeGameSessionDetailsInput$FleetId": "<p>Unique identifier for a fleet. Specify a fleet to retrieve information on all game sessions active on the fleet.</p>",
+        "DescribeGameSessionsInput$FleetId": "<p>Unique identifier for a fleet. Specify a fleet to retrieve information on all game sessions active on the fleet.</p>",
+        "DescribeScalingPoliciesInput$FleetId": "<p>Unique identifier for a fleet. Specify the fleet to retrieve scaling policies for.</p>",
+        "FleetAttributes$FleetId": "<p>Unique identifier for a fleet.</p>",
+        "FleetCapacity$FleetId": "<p>Unique identifier for a fleet.</p>",
+        "FleetIdList$member": null,
+        "FleetUtilization$FleetId": "<p>Unique identifier for a fleet.</p>",
+        "GameSession$FleetId": "<p>Unique identifier for a fleet.</p>",
+        "PlayerSession$FleetId": "<p>Unique identifier for a fleet.</p>",
+        "PutScalingPolicyInput$FleetId": "<p>Unique identity for the fleet to scale with this policy.</p>",
+        "ResolveAliasOutput$FleetId": "<p>Fleet ID associated with the requested alias.</p>",
+        "RoutingStrategy$FleetId": "<p>Unique identifier for a fleet.</p>",
+        "ScalingPolicy$FleetId": "<p>Unique identity for the fleet associated with this scaling policy.</p>",
+        "UpdateFleetAttributesInput$FleetId": "<p>Unique identifier for the fleet you want to update attribute metadata for. </p>",
+        "UpdateFleetAttributesOutput$FleetId": "<p>Unique identifier for the updated fleet.</p>",
+        "UpdateFleetCapacityInput$FleetId": "<p>Unique identifier for the fleet you want to update capacity for. </p>",
+        "UpdateFleetCapacityOutput$FleetId": "<p>Unique identifier for the updated fleet.</p>",
+        "UpdateFleetPortSettingsInput$FleetId": "<p>Unique identifier for the fleet you want to update port settings for. </p>",
+        "UpdateFleetPortSettingsOutput$FleetId": "<p>Unique identifier for the updated fleet.</p>"
+      }
+    },
+    "FleetIdList": {
+      "base": null,
+      "refs": {
+        "DescribeFleetAttributesInput$FleetIds": "<p>Unique identifiers for the fleet(s) that you want to retrieve attributes for. Leave this parameter empty to retrieve attributes for all fleets.</p>",
+        "DescribeFleetCapacityInput$FleetIds": "<p>Unique identifier for the fleet(s) you want to retrieve capacity information for. </p>",
+        "DescribeFleetUtilizationInput$FleetIds": "<p>Unique identifier for the fleet(s) you want to retrieve utilization data for. Leave this parameter empty to retrieve utilization data for all fleets.</p>",
+        "ListFleetsOutput$FleetIds": "<p>Set of fleet IDs matching the list request. You can retrieve additional information about all returned fleets by passing this result set to a call to <a>DescribeFleetAttributes</a>, <a>DescribeFleetCapacity</a>, and <a>DescribeFleetUtilization</a>.</p>"
+      }
+    },
+    "FleetStatus": {
+      "base": null,
+      "refs": {
+        "FleetAttributes$Status": "<p>Current status of the fleet. Possible fleet states include: <ul><li>NEW: A new fleet has been defined and hosts allocated.</li><li>DOWNLOADING/VALIDATING/BUILDING/ACTIVATING: The new fleet is being set up with the game build, and new hosts are being started.</li><li>ACTIVE: Hosts can now accept game sessions.</li><li>ERROR: An error occurred when downloading, validating, building, or activating the fleet.</li><li>DELETING: Hosts are responding to a delete fleet request.</li><li>TERMINATED: The fleet no longer exists.</li></ul></p>"
+      }
+    },
+    "FleetUtilization": {
+      "base": "<p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p>",
+      "refs": {
+        "FleetUtilizationList$member": null
+      }
+    },
+    "FleetUtilizationList": {
+      "base": null,
+      "refs": {
+        "DescribeFleetUtilizationOutput$FleetUtilization": "<p>Collection of objects containing utilization information for each requested fleet ID.</p>"
+      }
+    },
+    "FreeText": {
+      "base": null,
+      "refs": {
+        "Alias$Name": "<p>Descriptive label associated with this alias. Alias names do not need to be unique.</p>",
+        "Alias$Description": "<p>Human-readable description of the alias.</p>",
+        "Build$Name": "<p>Descriptive label associated with this build. Build names do not need to be unique. It can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>",
+        "Build$Version": "<p>Version associated with this build. Version strings do not need to be unique to a build. This value can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>",
+        "RoutingStrategy$Message": "<p>Message text to be used with a terminal routing strategy.</p>"
+      }
+    },
+    "GameProperty": {
+      "base": "<p>Set of key-value pairs containing information your game server requires to set up sessions. This object allows you to pass in any set of data needed for your game. For more information, see the <a href=\"http://docs.aws.amazon.com/gamelift/latest/developerguide/\">Amazon GameLift Developer Guide</a>.</p>",
+      "refs": {
+        "GamePropertyList$member": null
+      }
+    },
+    "GamePropertyKey": {
+      "base": null,
+      "refs": {
+        "GameProperty$Key": null
+      }
+    },
+    "GamePropertyList": {
+      "base": null,
+      "refs": {
+        "CreateGameSessionInput$GameProperties": "<p>Set of properties used to administer a game session. These properties are passed to your game server.</p>",
+        "GameSession$GameProperties": "<p>Set of custom properties for the game session.</p>"
+      }
+    },
+    "GamePropertyValue": {
+      "base": null,
+      "refs": {
+        "GameProperty$Value": null
+      }
+    },
+    "GameSession": {
+      "base": "<p>Properties describing a game session.</p>",
+      "refs": {
+        "CreateGameSessionOutput$GameSession": "<p>Object containing the newly created game session record.</p>",
+        "GameSessionDetail$GameSession": null,
+        "GameSessionList$member": null,
+        "UpdateGameSessionOutput$GameSession": "<p>Object containing the updated game session metadata.</p>"
+      }
+    },
+    "GameSessionDetail": {
+      "base": "<p>A game session's properties and the protection policy currently in force.</p>",
+      "refs": {
+        "GameSessionDetailList$member": null
+      }
+    },
+    "GameSessionDetailList": {
+      "base": null,
+      "refs": {
+        "DescribeGameSessionDetailsOutput$GameSessionDetails": "<p>Collection of objects containing game session properties and the protection policy currently in force for each session matching the request.</p>"
+      }
+    },
+    "GameSessionFullException": {
+      "base": "<p>The game instance is currently full and cannot allow the requested player(s) to join. This exception occurs in response to a <a>CreatePlayerSession</a> request. </p>",
+      "refs": {
+      }
+    },
+    "GameSessionId": {
+      "base": null,
+      "refs": {
+        "CreatePlayerSessionInput$GameSessionId": "<p>Unique identifier for a game session. Specify the game session you want to add a player to.</p>",
+        "CreatePlayerSessionsInput$GameSessionId": "<p>Unique identifier for a game session. </p>",
+        "DescribeGameSessionDetailsInput$GameSessionId": "<p>Unique identifier for a game session. Specify the game session to retrieve information on.</p>",
+        "DescribeGameSessionsInput$GameSessionId": "<p>Unique identifier for a game session. Specify the game session to retrieve information on.</p>",
+        "DescribePlayerSessionsInput$GameSessionId": "<p>Unique identifier for a game session.</p>",
+        "GameSession$GameSessionId": "<p>Unique identifier for a game session.</p>",
+        "GetGameSessionLogUrlInput$GameSessionId": "<p>Unique identifier for a game session. Specify the game session you want to get logs for.</p>",
+        "PlayerSession$GameSessionId": "<p>Unique identifier for a game session.</p>",
+        "UpdateGameSessionInput$GameSessionId": "<p>Unique identifier for a game session. Specify the game session you want to update. </p>"
+      }
+    },
+    "GameSessionList": {
+      "base": null,
+      "refs": {
+        "DescribeGameSessionsOutput$GameSessions": "<p>Collection of objects containing game session properties for each session matching the request.</p>"
+      }
+    },
+    "GameSessionStatus": {
+      "base": null,
+      "refs": {
+        "GameSession$Status": "<p>Current status of the game session. A game session must be in an ACTIVE state to have player sessions.</p>"
+      }
+    },
+    "GetGameSessionLogUrlInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "GetGameSessionLogUrlOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "Integer": {
+      "base": null,
+      "refs": {
+        "PutScalingPolicyInput$ScalingAdjustment": "<p>Amount of adjustment to make, based on the scaling adjustment type.</p>",
+        "ScalingPolicy$ScalingAdjustment": "<p>Amount of adjustment to make, based on the scaling adjustment type.</p>"
+      }
+    },
+    "InternalServiceException": {
+      "base": "<p>The service encountered an unrecoverable internal failure while processing the request. Such requests can be retried by clients, either immediately or after a back-off period.</p>",
+      "refs": {
+      }
+    },
+    "InvalidFleetStatusException": {
+      "base": "<p>The requested operation would cause a conflict with the current state of a resource associated with the request and/or the fleet. Please resolve the conflict before retrying.</p>",
+      "refs": {
+      }
+    },
+    "InvalidGameSessionStatusException": {
+      "base": "<p>The requested operation would cause a conflict with the current state of a resource associated with the request and/or the game instance. Such requests should not be retried by clients without resolving the conflict.</p>",
+      "refs": {
+      }
+    },
+    "InvalidRequestException": {
+      "base": "<p>One or more parameters specified as part of the request are invalid. Please correct the invalid parameters before retrying.</p>",
+      "refs": {
+      }
+    },
+    "IpAddress": {
+      "base": null,
+      "refs": {
+        "GameSession$IpAddress": "<p>IP address of the game session.</p>",
+        "PlayerSession$IpAddress": "<p>Game session IP address. All player sessions reference the game session location. </p>"
+      }
+    },
+    "IpPermission": {
+      "base": "<p>IP addresses and port settings used to limit access by incoming traffic (players) to a fleet. Permissions specify a range of IP addresses and port settings that must be used to gain access to a game server on a fleet machine.</p>",
+      "refs": {
+        "IpPermissionsList$member": null
+      }
+    },
+    "IpPermissionsList": {
+      "base": null,
+      "refs": {
+        "CreateFleetInput$EC2InboundPermissions": "<p>Access limits for incoming traffic. Setting these values limits game server access to incoming traffic using specified IP ranges and port numbers. Some ports in a range may be restricted. You can provide one or more sets of permissions for the fleet.</p>",
+        "DescribeFleetPortSettingsOutput$InboundPermissions": "<p>Object containing port settings for the requested fleet ID.</p>",
+        "UpdateFleetPortSettingsInput$InboundPermissionAuthorizations": "<p>Collection of port settings to be added to the fleet record.</p>",
+        "UpdateFleetPortSettingsInput$InboundPermissionRevocations": "<p>Collection of port settings to be removed from the fleet record.</p>"
+      }
+    },
+    "IpProtocol": {
+      "base": null,
+      "refs": {
+        "IpPermission$Protocol": "<p>Network communication protocol used by the fleet.</p>"
+      }
+    },
+    "LimitExceededException": {
+      "base": "<p>The requested operation would cause the resource to exceed the allowed service limit. Please resolve the issue before retrying.</p>",
+      "refs": {
+      }
+    },
+    "ListAliasesInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "ListAliasesOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "ListBuildsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "ListBuildsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "ListFleetsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "ListFleetsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "MetricName": {
+      "base": null,
+      "refs": {
+        "PutScalingPolicyInput$MetricName": "<p>Name of the Service-defined metric that is used to trigger an adjustment. <ul> <li>ActivatingGameSessions: number of game sessions in the process of being created (game session status = ACTIVATING).</li> <li>ActiveGameSessions: number of game sessions currently running (game session status = ACTIVE).</li> <li>CurrentPlayerSessions: number of active or reserved player sessions (player session status = ACTIVE or RESERVED). </li> <li>AvailablePlayerSessions: number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number includes game sessions that are not currently accepting players (game session PlayerSessionCreationPolicy = DENY_ALL).</li> <li>ActiveInstances: number of instances currently running a game session.</li> <li>IdleInstances: number of instances not currently running a game session.</li> </ul></p>",
+        "ScalingPolicy$MetricName": "<p>Name of the GameLift-defined metric that is used to trigger an adjustment. <ul> <li>ActivatingGameSessions: number of game sessions in the process of being created (game session status = ACTIVATING).</li> <li>ActiveGameSessions: number of game sessions currently running (game session status = ACTIVE).</li> <li>CurrentPlayerSessions: number of active or reserved player sessions (player session status = ACTIVE or RESERVED). </li> <li>AvailablePlayerSessions: number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session's current player session count from its maximum player session count. This number does include game sessions that are not currently accepting players (game session PlayerSessionCreationPolicy = DENY_ALL).</li> <li>ActiveInstances: number of instances currently running a game session.</li> <li>IdleInstances: number of instances not currently running a game session.</li> </ul></p>"
+      }
+    },
+    "NonBlankString": {
+      "base": null,
+      "refs": {
+        "IpPermission$IpRange": "<p>Range of allowed IP addresses. This value must be expressed in <a href=\"https://tools.ietf.org/id/cidr\">CIDR notation</a>. Example: \"<code>000.000.000.000/[subnet mask]</code>\" or optionally the shortened version \"<code>0.0.0.0/[subnet mask]</code>\".</p>"
+      }
+    },
+    "NonEmptyString": {
+      "base": null,
+      "refs": {
+        "AwsCredentials$AccessKeyId": "<p>Access key for an AWS account.</p>",
+        "AwsCredentials$SecretAccessKey": "<p>Secret key for an AWS account.</p>",
+        "AwsCredentials$SessionToken": "<p>Token specific to a build ID.</p>",
+        "ConflictException$Message": null,
+        "Event$Message": "<p>Additional information related to the event.</p>",
+        "FleetCapacityExceededException$Message": null,
+        "GameSessionFullException$Message": null,
+        "InternalServiceException$Message": null,
+        "InvalidFleetStatusException$Message": null,
+        "InvalidGameSessionStatusException$Message": null,
+        "InvalidRequestException$Message": null,
+        "LimitExceededException$Message": null,
+        "ListAliasesInput$Name": "<p>Descriptive label associated with this alias. Alias names do not need to be unique.</p>",
+        "ListAliasesInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>",
+        "ListAliasesOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "ListBuildsInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>",
+        "ListBuildsOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "NotFoundException$Message": null,
+        "S3Location$Bucket": "<p>Amazon S3 bucket identifier.</p>",
+        "S3Location$Key": "<p>Amazon S3 bucket key.</p>",
+        "S3Location$RoleArn": null,
+        "TerminalRoutingStrategyException$Message": null,
+        "UnauthorizedException$Message": null
+      }
+    },
+    "NonZeroAndMaxString": {
+      "base": null,
+      "refs": {
+        "CreateAliasInput$Name": "<p>Descriptive label associated with this alias. Alias names do not need to be unique.</p>",
+        "CreateAliasInput$Description": "<p>Human-readable description of the alias.</p>",
+        "CreateBuildInput$Name": "<p>Descriptive label associated with this build. Build names do not need to be unique. A build name can be changed later using <a>UpdateBuild</a>.</p>",
+        "CreateBuildInput$Version": "<p>Version associated with this build. Version strings do not need to be unique to a build. A build version can be changed later using <a>UpdateBuild</a>.</p>",
+        "CreateFleetInput$Name": "<p>Descriptive label associated with this fleet. Fleet names do not need to be unique.</p>",
+        "CreateFleetInput$Description": "<p>Human-readable description of the fleet.</p>",
+        "CreateFleetInput$ServerLaunchPath": "<p>Path to the launch executable for the game server. A game server is built into a <code>C:\\game</code> drive. This value must be expressed as <code>C:\\game\\[launchpath]</code>. Example: If, when built, your game server files are in a folder called \"MyGame\", your log path should be <code>C:\\game\\MyGame\\server.exe</code>.</p>",
+        "CreateFleetInput$ServerLaunchParameters": "<p>Parameters required to launch your game server. These parameters should be expressed as a string of command-line parameters. Example: \"+sv_port 33435 +start_lobby\".</p>",
+        "CreateGameSessionInput$Name": "<p>Descriptive label associated with this game session. Session names do not need to be unique.</p>",
+        "CreatePlayerSessionInput$PlayerId": "<p>Unique identifier for the player to be added.</p>",
+        "DeleteScalingPolicyInput$Name": "<p>Descriptive label associated with this scaling policy. Policy names do not need to be unique.</p>",
+        "DescribeFleetAttributesInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>",
+        "DescribeFleetAttributesOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "DescribeFleetCapacityInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>",
+        "DescribeFleetCapacityOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "DescribeFleetEventsInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>",
+        "DescribeFleetEventsOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "DescribeFleetUtilizationInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>",
+        "DescribeFleetUtilizationOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "DescribeGameSessionDetailsInput$StatusFilter": "<p>Game session status to filter results on. Possible game session states include ACTIVE, TERMINATED, ACTIVATING and TERMINATING (the last two are transitory). </p>",
+        "DescribeGameSessionDetailsInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>",
+        "DescribeGameSessionDetailsOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "DescribeGameSessionsInput$StatusFilter": "<p>Game session status to filter results on. Possible game session states include ACTIVE, TERMINATED, ACTIVATING and TERMINATING (the last two are transitory). </p>",
+        "DescribeGameSessionsInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>",
+        "DescribeGameSessionsOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "DescribePlayerSessionsInput$PlayerId": "<p>Unique identifier for a player.</p>",
+        "DescribePlayerSessionsInput$PlayerSessionStatusFilter": "<p>Player session status to filter results on. Possible player session states include: <ul><li>RESERVED: The player session request has been received, but the player has not yet connected to the game server and/or been validated. </li><li>ACTIVE: The player has been validated by the game server and is currently connected.</li><li>COMPLETED: The player connection has been dropped.</li><li>TIMEDOUT: A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</li></ul></p>",
+        "DescribePlayerSessionsInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value. If a player session ID is specified, this parameter is ignored.</p>",
+        "DescribePlayerSessionsOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "DescribeScalingPoliciesInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>",
+        "DescribeScalingPoliciesOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "Event$EventId": "<p>Unique identifier for a fleet event.</p>",
+        "Event$ResourceId": "<p>Unique identifier for the resource, such as a fleet ID.</p>",
+        "FleetAttributes$Description": "<p>Human-readable description of the fleet.</p>",
+        "FleetAttributes$Name": "<p>Descriptive label associated with this fleet. Fleet names do not need to be unique.</p>",
+        "FleetAttributes$ServerLaunchPath": "<p>Path to the launch executable for the game server. A game server is built into a <code>C:\\game</code> drive. This value must be expressed as <code>C:\\game\\[launchpath]</code>. Example: If, when built, your game server files are in a folder called \"MyGame\", your log path should be <code>C:\\game\\MyGame\\server.exe</code>.</p>",
+        "FleetAttributes$ServerLaunchParameters": "<p>Parameters required to launch your game server. These parameters should be expressed as a string of command-line parameters. Example: \"+sv_port 33435 +start_lobby\".</p>",
+        "GameSession$Name": "<p>Descriptive label associated with this game session. Session names do not need to be unique.</p>",
+        "GetGameSessionLogUrlOutput$PreSignedUrl": "<p>Location of the requested game session logs, available for download.</p>",
+        "ListFleetsInput$NextToken": "<p>Token indicating the start of the next sequential page of results. Use the token that is returned with a previous call to this action. To specify the start of the result set, do not specify a value.</p>",
+        "ListFleetsOutput$NextToken": "<p>Token indicating where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p> <note><p>If a request has a limit that exactly matches the number of remaining results, a token is returned even though there are no more results to retrieve.</p></note>",
+        "PlayerIdList$member": null,
+        "PlayerSession$PlayerId": "<p>Unique identifier for a player.</p>",
+        "PutScalingPolicyInput$Name": "<p>Descriptive label associated with this scaling policy. Policy names do not need to be unique. A fleet can have only one scaling policy with the same name.</p>",
+        "PutScalingPolicyOutput$Name": "<p>Descriptive label associated with this scaling policy. Policy names do not need to be unique.</p>",
+        "ScalingPolicy$Name": "<p>Descriptive label associated with this scaling policy. Policy names do not need to be unique.</p>",
+        "StringList$member": null,
+        "UpdateAliasInput$Name": "<p>Descriptive label associated with this alias. Alias names do not need to be unique.</p>",
+        "UpdateAliasInput$Description": "<p>Human-readable description of the alias.</p>",
+        "UpdateBuildInput$Name": "<p>Descriptive label associated with this build. Build names do not need to be unique.</p>",
+        "UpdateBuildInput$Version": "<p>Version associated with this build. Version strings do not need to be unique to a build.</p>",
+        "UpdateFleetAttributesInput$Name": "<p>Descriptive label associated with this fleet. Fleet names do not need to be unique.</p>",
+        "UpdateFleetAttributesInput$Description": "<p>Human-readable description of the fleet.</p>",
+        "UpdateGameSessionInput$Name": "<p>Descriptive label associated with this game session. Session names do not need to be unique.</p>"
+      }
+    },
+    "NotFoundException": {
+      "base": "<p>A service resource associated with the request could not be found. Such requests should not be retried by clients.</p>",
+      "refs": {
+      }
+    },
+    "PlayerIdList": {
+      "base": null,
+      "refs": {
+        "CreatePlayerSessionsInput$PlayerIds": "<p>List of unique identifiers for the players to be added.</p>"
+      }
+    },
+    "PlayerSession": {
+      "base": "<p>Properties describing a player session.</p>",
+      "refs": {
+        "CreatePlayerSessionOutput$PlayerSession": "<p>Object containing the newly created player session record.</p>",
+        "PlayerSessionList$member": null
+      }
+    },
+    "PlayerSessionCreationPolicy": {
+      "base": null,
+      "refs": {
+        "GameSession$PlayerSessionCreationPolicy": "<p>Indicates whether or not the game session is accepting new players.</p>",
+        "UpdateGameSessionInput$PlayerSessionCreationPolicy": "<p>Policy determining whether or not the game session accepts new players.</p>"
+      }
+    },
+    "PlayerSessionId": {
+      "base": null,
+      "refs": {
+        "DescribePlayerSessionsInput$PlayerSessionId": "<p>Unique identifier for a player session.</p>",
+        "PlayerSession$PlayerSessionId": "<p>Unique identifier for a player session.</p>"
+      }
+    },
+    "PlayerSessionList": {
+      "base": null,
+      "refs": {
+        "CreatePlayerSessionsOutput$PlayerSessions": "<p>Collection of player session objects created for the added players.</p>",
+        "DescribePlayerSessionsOutput$PlayerSessions": "<p>Collection of objects containing properties for each player session that matches the request.</p>"
+      }
+    },
+    "PlayerSessionStatus": {
+      "base": null,
+      "refs": {
+        "PlayerSession$Status": "<p>Current status of the player session. Possible player session states include: <ul><li>RESERVED: The player session request has been received, but the player has not yet connected to the game server and/or been validated. </li><li>ACTIVE: The player has been validated by the game server and is currently connected.</li><li>COMPLETED: The player connection has been dropped.</li><li>TIMEDOUT: A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</li></ul></p>"
+      }
+    },
+    "PortNumber": {
+      "base": null,
+      "refs": {
+        "IpPermission$FromPort": "<p>Starting value for a range of allowed port numbers. </p>",
+        "IpPermission$ToPort": "<p>Ending value for a range of allowed port numbers. Port numbers are end-inclusive. This value must be higher than <i>FromPort</i>.</p>"
+      }
+    },
+    "PositiveInteger": {
+      "base": null,
+      "refs": {
+        "DescribeFleetAttributesInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>",
+        "DescribeFleetCapacityInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>",
+        "DescribeFleetEventsInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages.</p>",
+        "DescribeFleetUtilizationInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages. This parameter is ignored when the request specifies one or a list of fleet IDs.</p>",
+        "DescribeGameSessionDetailsInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages.</p>",
+        "DescribeGameSessionsInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages.</p>",
+        "DescribePlayerSessionsInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages. If a player session ID is specified, this parameter is ignored.</p>",
+        "DescribeScalingPoliciesInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages.</p>",
+        "ListAliasesInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages.</p>",
+        "ListBuildsInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages.</p>",
+        "ListFleetsInput$Limit": "<p>Maximum number of results to return. You can use this parameter with <i>NextToken</i> to get results as a set of sequential pages.</p>",
+        "PutScalingPolicyInput$EvaluationPeriods": "<p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>",
+        "ScalingPolicy$EvaluationPeriods": "<p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>"
+      }
+    },
+    "PositiveLong": {
+      "base": null,
+      "refs": {
+        "Build$SizeOnDisk": "<p>File size of the uploaded game build, expressed in bytes. When the build state is INITIALIZED, this value is 0.</p>"
+      }
+    },
+    "ProtectionPolicy": {
+      "base": null,
+      "refs": {
+        "CreateFleetInput$NewGameSessionProtectionPolicy": "<p>Game session protection policy to apply to all instances created in this fleet. If this parameter is not set, new instances in this fleet will default to no protection. Protection can be set for individual instances using <a>UpdateGameSession</a>. <ul><li>NoProtection: The game session can be terminated during a scale-down event.</li> <li>FullProtection: If the game session is in an ACTIVE status, it cannot be terminated during a scale-down event.</li></ul></p>",
+        "FleetAttributes$NewGameSessionProtectionPolicy": "<p>Type of game session protection to set for all new instances started in the fleet. <ul><li>NoProtection: The game session can be terminated during a scale-down event.</li> <li>FullProtection: If the game session is in an ACTIVE status, it cannot be terminated during a scale-down event.</li></ul></p>",
+        "GameSessionDetail$ProtectionPolicy": "<p>Current status of protection for the game session. <ul><li>NoProtection: The game session can be terminated during a scale-down event.</li> <li>FullProtection: If the game session is in an ACTIVE status, it cannot be terminated during a scale-down event.</li></ul></p>",
+        "UpdateFleetAttributesInput$NewGameSessionProtectionPolicy": "<p>Game session protection policy to apply to all new instances created in this fleet. Instances that already exist will not be affected. You can set protection for individual instances using <a>UpdateGameSession</a>. <ul><li>NoProtection: The game session can be terminated during a scale-down event.</li> <li>FullProtection: If the game session is in an ACTIVE status, it cannot be terminated during a scale-down event.</li></ul></p>",
+        "UpdateGameSessionInput$ProtectionPolicy": "<p>Game session protection policy to apply to this game session only. <ul><li>NoProtection: The game session can be terminated during a scale-down event.</li> <li>FullProtection: If the game session is in an ACTIVE status, it cannot be terminated during a scale-down event.</li></ul></p>"
+      }
+    },
+    "PutScalingPolicyInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "PutScalingPolicyOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "RequestUploadCredentialsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "RequestUploadCredentialsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "ResolveAliasInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "ResolveAliasOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "RoutingStrategy": {
+      "base": "<p>Routing configuration for a fleet alias. </p>",
+      "refs": {
+        "Alias$RoutingStrategy": null,
+        "CreateAliasInput$RoutingStrategy": "<p>Object specifying the fleet and routing type to use for the alias.</p>",
+        "UpdateAliasInput$RoutingStrategy": "<p>Object specifying the fleet and routing type to use for the alias.</p>"
+      }
+    },
+    "RoutingStrategyType": {
+      "base": null,
+      "refs": {
+        "ListAliasesInput$RoutingStrategyType": "<p>Type of routing to filter results on. Use this parameter to retrieve only aliases of a certain type. To retrieve all aliases, leave this parameter empty. Possible routing types include: <ul><li>SIMPLE: The alias resolves to one specific fleet. Use this type when routing to active fleets.</li><li>TERMINAL: The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</li></ul></p>",
+        "RoutingStrategy$Type": "<p>Type of routing strategy. Possible routing types include: <ul><li>SIMPLE: The alias resolves to one specific fleet. Use this type when routing to active fleets.</li><li>TERMINAL: The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</li></ul></p>"
+      }
+    },
+    "S3Location": {
+      "base": "<p>Location in Amazon Simple Storage Service (Amazon S3) where a build's files are stored. This location is assigned in response to a <a>CreateBuild</a> call, and is always in the same region as the service used to create the build. For more details see the <a href=\"http://aws.amazon.com/documentation/s3/\">Amazon S3 documentation</a>.</p>",
+      "refs": {
+        "CreateBuildInput$StorageLocation": null,
+        "CreateBuildOutput$StorageLocation": "<p>Amazon S3 path and key, identifying where the game build files are stored.</p>",
+        "RequestUploadCredentialsOutput$StorageLocation": "<p>Amazon S3 path and key, identifying where the game build files are stored.</p>"
+      }
+    },
+    "ScalingAdjustmentType": {
+      "base": null,
+      "refs": {
+        "PutScalingPolicyInput$ScalingAdjustmentType": "<p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>): <ul> <li>ChangeInCapacity: add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</li> <li>ExactCapacity: set the instance count to the scaling adjustment value.</li> <li>PercentChangeInCapacity: increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down; for example, a value of \"-10\" scales the fleet down by 10%.</li> </ul></p>",
+        "ScalingPolicy$ScalingAdjustmentType": "<p>Type of adjustment to make to a fleet's instance count (see <a>FleetCapacity</a>): <ul> <li>ChangeInCapacity: add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</li> <li>ExactCapacity: set the instance count to the scaling adjustment value.</li> <li>PercentChangeInCapacity: increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down.</li> </ul></p>"
+      }
+    },
+    "ScalingPolicy": {
+      "base": "<p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p>",
+      "refs": {
+        "ScalingPolicyList$member": null
+      }
+    },
+    "ScalingPolicyList": {
+      "base": null,
+      "refs": {
+        "DescribeScalingPoliciesOutput$ScalingPolicies": "<p>Collection of objects containing the scaling policies matching the request.</p>"
+      }
+    },
+    "ScalingStatusType": {
+      "base": null,
+      "refs": {
+        "DescribeScalingPoliciesInput$StatusFilter": "<p>Game session status to filter results on. A scaling policy is only in force when in an Active state. <ul> <li>ACTIVE: The scaling policy is currently in force.</li> <li>UPDATEREQUESTED: A request to update the scaling policy has been received.</li> <li>UPDATING: A change is being made to the scaling policy.</li> <li>DELETEREQUESTED: A request to delete the scaling policy has been received.</li> <li>DELETING: The scaling policy is being deleted.</li> <li>DELETED: The scaling policy has been deleted.</li> <li>ERROR: An error occurred in creating the policy. It should be removed and recreated.</li> </ul></p>",
+        "ScalingPolicy$Status": "<p>Current status of the scaling policy. The scaling policy is only in force when in an Active state. <ul> <li>ACTIVE: The scaling policy is currently in force.</li> <li>UPDATEREQUESTED: A request to update the scaling policy has been received.</li> <li>UPDATING: A change is being made to the scaling policy.</li> <li>DELETEREQUESTED: A request to delete the scaling policy has been received.</li> <li>DELETING: The scaling policy is being deleted.</li> <li>DELETED: The scaling policy has been deleted.</li> <li>ERROR: An error occurred in creating the policy. It should be removed and recreated.</li> </ul></p>"
+      }
+    },
+    "StringList": {
+      "base": null,
+      "refs": {
+        "CreateFleetInput$LogPaths": "<p>Path to game-session log files generated by your game server. Once a game session has been terminated, Amazon GameLift captures and stores the logs on Amazon S3. Use the GameLift console to access the stored logs.</p>",
+        "FleetAttributes$LogPaths": "<p>Path to game-session log files generated by your game server. Once a game session has been terminated, Amazon GameLift captures and stores the logs on Amazon S3. Use the GameLift console to access the stored logs.</p>"
+      }
+    },
+    "TerminalRoutingStrategyException": {
+      "base": "<p>The service is unable to resolve the routing for a particular alias because it has a terminal <a>RoutingStrategy</a> associated with it. The message returned in this exception is the message defined in the TerminalRoutingStrategy itself. Such requests should only be retried if the routing strategy for the specified alias is modified. </p>",
+      "refs": {
+      }
+    },
+    "Timestamp": {
+      "base": null,
+      "refs": {
+        "Alias$CreationTime": "<p>Time stamp indicating when this object was created. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "Alias$LastUpdatedTime": "<p>Time stamp indicating when this object was last modified. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "Build$CreationTime": "<p>Time stamp indicating when this object was created. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "DescribeFleetEventsInput$StartTime": "<p>Earliest date to retrieve event logs for. If no start time is specified, this call returns entries starting from when the fleet was created to the specified end time. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "DescribeFleetEventsInput$EndTime": "<p>Most recent date to retrieve event logs for. If no end time is specified, this call returns entries from the specified start time up to the present. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "Event$EventTime": "<p>Time stamp indicating when this event occurred. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "FleetAttributes$CreationTime": "<p>Time stamp indicating when this object was created. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "FleetAttributes$TerminationTime": "<p>Time stamp indicating when this fleet was terminated. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "GameSession$CreationTime": "<p>Time stamp indicating when this object was created. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "GameSession$TerminationTime": "<p>Time stamp indicating when this fleet was terminated. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "PlayerSession$CreationTime": "<p>Time stamp indicating when this object was created. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>",
+        "PlayerSession$TerminationTime": "<p>Time stamp indicating when this fleet was terminated. Format is an integer representing the number of seconds since the Unix epoch (Unix time).</p>"
+      }
+    },
+    "UnauthorizedException": {
+      "base": "<p>The client failed authentication. Such requests should not be retried without valid authentication credentials.</p>",
+      "refs": {
+      }
+    },
+    "UpdateAliasInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateAliasOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateBuildInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateBuildOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateFleetAttributesInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateFleetAttributesOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateFleetCapacityInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateFleetCapacityOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateFleetPortSettingsInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateFleetPortSettingsOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateGameSessionInput": {
+      "base": "<p>Represents the input for a request action.</p>",
+      "refs": {
+      }
+    },
+    "UpdateGameSessionOutput": {
+      "base": "<p>Represents the returned data in response to a request action.</p>",
+      "refs": {
+      }
+    },
+    "WholeNumber": {
+      "base": null,
+      "refs": {
+        "CreateGameSessionInput$MaximumPlayerSessionCount": "<p>Maximum number of players that can be connected simultaneously to the game session. </p>",
+        "EC2InstanceCounts$DESIRED": "<p>Ideal number of active instances in the fleet.</p>",
+        "EC2InstanceCounts$MINIMUM": "<p>Minimum value allowed for the fleet's instance count.</p>",
+        "EC2InstanceCounts$MAXIMUM": "<p>Maximum value allowed for the fleet's instance count.</p>",
+        "EC2InstanceCounts$PENDING": "<p>Number of instances in the fleet that are starting but not yet active.</p>",
+        "EC2InstanceCounts$ACTIVE": "<p>Actual number of active instances in the fleet.</p>",
+        "EC2InstanceCounts$IDLE": "<p>Number of active instances in the fleet that are not currently hosting a game session.</p>",
+        "EC2InstanceCounts$TERMINATING": "<p>Number of instances in the fleet that are no longer active but haven't yet been terminated. </p>",
+        "EC2InstanceLimit$CurrentInstances": "<p>Number of instances of the specified type that are currently in use by this AWS account. </p>",
+        "EC2InstanceLimit$InstanceLimit": "<p>Number of instances allowed.</p>",
+        "FleetUtilization$ActiveGameSessionCount": "<p>Number of active game sessions currently being hosted on fleet game servers.</p>",
+        "FleetUtilization$CurrentPlayerSessionCount": "<p>Number of active player sessions currently being hosted on fleet game servers.</p>",
+        "FleetUtilization$MaximumPlayerSessionCount": "<p>Maximum players allowed across all game sessions currently hosted in the fleet.</p>",
+        "GameSession$CurrentPlayerSessionCount": "<p>Number of players currently in the game session.</p>",
+        "GameSession$MaximumPlayerSessionCount": "<p>Maximum number of players allowed in the game session.</p>",
+        "UpdateFleetCapacityInput$DesiredInstances": "<p>Number of EC2 instances you want this fleet to host.</p>",
+        "UpdateFleetCapacityInput$MinSize": "<p>Minimum value allowed for the fleet's instance count. Default if not set is 0.</p>",
+        "UpdateFleetCapacityInput$MaxSize": "<p>Maximum value allowed for the fleet's instance count. Default if not set is 1.</p>",
+        "UpdateGameSessionInput$MaximumPlayerSessionCount": "<p>Maximum number of players that can be simultaneously connected to the game session.</p>"
+      }
+    }
+  }
+}
