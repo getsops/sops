@@ -1,4 +1,4 @@
-package sops
+package sops /* import "gozilla.io/sops/sops" */
 
 import (
 	"crypto/aes"

@@ -1,12 +1,12 @@
-package main
+package main /* import "gozilla.io/sops" */
 
 import (
 	"fmt"
 	"io/ioutil"
 	"os"
 
-	"github.com/mozilla/sops/sops"
 	"gopkg.in/yaml.v2"
+	"gozilla.io/sops/sops"
 )
 
 func DecryptFile(fileName string) error {
