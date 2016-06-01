@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/mozilla/sops/sops"
 	"gopkg.in/yaml.v2"
+	"ulfr.io/sops/sops"
 )
 
 func DecryptFile(fileName string) error {
