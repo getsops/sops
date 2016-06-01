@@ -6,14 +6,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/mozilla-services/go-sops/sops"
+	"github.com/mozilla/sops/sops"
 
 	"gopkg.in/yaml.v2"
 )
 
 func main() {
 	if len(os.Args) != 2 {
-		fmt.Println("Usage: go-sops <inFile>")
+		fmt.Println("Usage: sops <inFile>")
 		os.Exit(1)
 	}
 	fileName := os.Args[1]
