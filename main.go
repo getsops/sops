@@ -1,4 +1,4 @@
-package main /* import "gozilla.io/sops" */
+package main /* import "go.mozilla.org/sops" */
 
 import (
 	"fmt"
