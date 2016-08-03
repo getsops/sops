@@ -1,4 +1,4 @@
-package sops
+package decryptor
 
 import (
 	"crypto/aes"
