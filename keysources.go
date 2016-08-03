@@ -13,13 +13,14 @@ import (
 
 // KeySource provides a way to obtain the symmetric encryption key used by sops
 type KeySource interface {
-	DecryptKey(encryptedKey string) string
-	EncryptKey(key string) string
+	DecryptKeys() (string, error)
+	EncryptKeys(plaintext string) error
 }
 
 type KMS struct {
-	Arn  string
-	Role string
+	Arn          string
+	Role         string
+	EncryptedKey string
 }
 
 type KMSKeySource struct {
@@ -80,25 +81,36 @@ func (k KMS) DecryptKey(encryptedKey string) (string, error) {
 	return string(decrypted.Plaintext), nil
 }
 
-func (ks KMSKeySource) DecryptKey(encryptedKey string) (string, error) {
+func (ks KMSKeySource) DecryptKeys() (string, error) {
 	for _, kms := range ks.KMS {
-		key, err := kms.DecryptKey(encryptedKey)
-		if err != nil {
-			return "", err
+		key, err := kms.DecryptKey(kms.EncryptedKey)
+		if err == nil {
+			return key, nil
 		}
-		return key, nil
 	}
-	return "", fmt.Errorf("Could not decrypt key with KMS")
+	return "", fmt.Errorf("The key could not be decrypted with any KMS entries")
 }
 
-func (ks KMSKeySource) EncryptKey(key string) string {
-	return key
+func (ks KMSKeySource) EncryptKeys(plaintext string) error {
+	for _, k := range ks.KMS {
+		sess, err := k.createSession()
+		if err != nil {
+			return err
+		}
+		service := kms.New(sess)
+		out, err := service.Encrypt(&kms.EncryptInput{Plaintext: []byte(plaintext)})
+		if err != nil {
+			return err
+		}
+		k.EncryptedKey = string(out.CiphertextBlob)
+	}
+	return nil
 }
 
-func (gpg GPGKeySource) DecryptKey(encryptedKey string) string {
-	return encryptedKey
+func (gpg GPGKeySource) DecryptKeys() (string, error) {
+	return "", nil
 }
 
-func (gpg GPGKeySource) EncryptKey(key string) string {
-	return key
+func (gpg GPGKeySource) EncryptKeys(plaintext string) error {
+	return nil
 }
