@@ -178,6 +178,9 @@ def main():
                            help="path to config file, disable recursive search"
                                 " (default: {default})"
                                 .format(default=DEFAULT_CONFIG_FILE))
+    argparser.add_argument('--encryption-context', dest='context',
+                           help="KMS encryption context: "
+                                "key-value pair dict encoded in JSON")
     argparser.add_argument('-V', '-v', '--version', action=ShowVersion,
                            version='%(prog)s ' + str(VERSION))
     args = argparser.parse_args()
@@ -206,10 +209,17 @@ def main():
     else:
         otype = itype
 
+    # encryption context if any
+    if args.context:
+        context = json.loads(args.context)
+    else:
+        context = None
+
     tree, need_key, existing_file = initialize_tree(args.file, itype,
                                                     kms_arns=kms_arns,
                                                     pgp_fps=pgp_fps,
-                                                    configloc=args.config_loc)
+                                                    configloc=args.config_loc,
+                                                    context=context)
     if not existing_file:
         # can't use add/rm keys on new files, they don't yet have keys
         if args.add_kms or args.add_pgp or args.rm_kms or args.rm_pgp:
@@ -361,7 +371,8 @@ def detect_filetype(filename):
     return 'bytes'
 
 
-def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
+def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None,
+                    context=None):
     """ Try to load the file from path in a tree, and failing that,
         initialize a new tree using default data
     """
@@ -378,7 +389,8 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
                                                       kms_arns=kms_arns,
                                                       pgp_fps=pgp_fps,
                                                       path=path,
-                                                      configloc=configloc)
+                                                      configloc=configloc,
+                                                      context=context)
         # try to set the input version to the one set in the file
         try:
             global INPUT_VERSION
@@ -406,7 +418,8 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None):
             if config:
                 kms_arns = config.get("kms", None)
                 pgp_fps = config.get("pgp", None)
-        tree, need_key = verify_or_create_sops_branch(tree, kms_arns, pgp_fps)
+        tree, need_key = verify_or_create_sops_branch(tree, kms_arns, pgp_fps,
+                                                      context=context)
     return tree, need_key, existing_file
 
 
@@ -499,7 +512,7 @@ def find_config_for_file(filename, configloc):
 
 
 def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None,
-                                 path=None, configloc=None):
+                                 path=None, configloc=None, context=None):
     """Verify or create the sops branch in the tree.
 
     If the current tree doesn't have a sops branch with either kms or pgp
@@ -545,6 +558,9 @@ def verify_or_create_sops_branch(tree, kms_arns=None, pgp_fps=None,
         tree, has_at_least_one_method = parse_kms_arn(tree, kms_arns)
     if pgp_fps:
         tree, has_at_least_one_method = parse_pgp_fp(tree, pgp_fps)
+    if context:
+        for entry in tree['sops']['kms']:
+            entry['context'] = context
     if not has_at_least_one_method:
         panic("Error: No KMS ARN or PGP Fingerprint found to encrypt the data "
               "key, read the help (-h) for more information.", 111)
