@@ -1068,8 +1068,10 @@ def get_key_from_kms(tree):
             errors.append("no kms client could be obtained for entry %s" %
                           entry['arn'])
             continue
+        context = entry['context'] if 'context' in entry else {}
         try:
-            kms_response = kms.decrypt(CiphertextBlob=b64decode(enc))
+            kms_response = kms.decrypt(CiphertextBlob=b64decode(enc),
+                                       EncryptionContext=context)
         except Exception as e:
             errors.append("kms %s failed with error: %s " % (entry['arn'], e))
             continue
@@ -1090,8 +1092,10 @@ def encrypt_key_with_kms(key, entry):
         print("ERROR: failed to initialize AWS KMS client for entry: %s" % err,
               file=sys.stderr)
         return None
+    context = entry['context'] if 'context' in entry else {}
     try:
-        kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key)
+        kms_response = kms.encrypt(KeyId=entry['arn'], Plaintext=key,
+                                   EncryptionContext=context)
     except Exception as e:
         print("ERROR: failed to encrypt key using kms arn %s: %s" %
               (entry['arn'], e), file=sys.stderr)
