@@ -270,6 +270,42 @@ appending it to the ARN of the master key, separated by a **+** sign::
 	<KMS ARN>+<ROLE ARN>
 	arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz
 
+AWS KMS Encryption Context
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SOPS has the ability to use AWS KMS key policy and encryption context
+<http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>
+to further fine control access under the same master key.
+Encryption context is a set of key-value pairs. It is not part of ciphertext
+return but is cryptographically bound to the ciphertext. Decryption requires
+exact the same encryption context as the one you passed during encryption.
+You can use KMS key policy (as shown as below) or key grant to control who
+can perform decryption with certain encryption context.
+
+.. code:: json
+
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111122223333:role/RoleForExampleApp"
+      },
+      "Action": "kms:Decrypt",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "kms:EncryptionContext:AppName": "ExampleApp",
+          "kms:EncryptionContext:FilePath": "/var/opt/secrets/"
+        }
+      }
+    }
+
+You can specify encryption context in the `--encryption-context` flag by
+comma separated list of key-value pairs:
+
+	<EncryptionContext Key>:<EncryptionContext Value>,<EncryptionContext Key>:<EncryptionContext Value>
+	Environment:production,Role:web-server
+
+
 Key Rotation
 ~~~~~~~~~~~~
 
