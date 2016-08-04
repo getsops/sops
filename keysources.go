@@ -1,6 +1,7 @@
 package sops
 
 import (
+	"encoding/base64"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -82,27 +83,33 @@ func (k KMS) DecryptKey(encryptedKey string) (string, error) {
 }
 
 func (ks KMSKeySource) DecryptKeys() (string, error) {
+	errors := make([]error, 1)
 	for _, kms := range ks.KMS {
-		key, err := kms.DecryptKey(kms.EncryptedKey)
+		encKey, err := base64.StdEncoding.DecodeString(kms.EncryptedKey)
+		if err != nil {
+			continue
+		}
+		key, err := kms.DecryptKey(string(encKey))
 		if err == nil {
 			return key, nil
 		}
+		errors = append(errors, err)
 	}
-	return "", fmt.Errorf("The key could not be decrypted with any KMS entries")
+	return "", fmt.Errorf("The key could not be decrypted with any KMS entries", errors)
 }
 
 func (ks KMSKeySource) EncryptKeys(plaintext string) error {
-	for _, k := range ks.KMS {
-		sess, err := k.createSession()
+	for i, _ := range ks.KMS {
+		sess, err := ks.KMS[i].createSession()
 		if err != nil {
 			return err
 		}
 		service := kms.New(sess)
-		out, err := service.Encrypt(&kms.EncryptInput{Plaintext: []byte(plaintext)})
+		out, err := service.Encrypt(&kms.EncryptInput{Plaintext: []byte(plaintext), KeyId: &ks.KMS[i].Arn})
 		if err != nil {
 			return err
 		}
-		k.EncryptedKey = string(out.CiphertextBlob)
+		ks.KMS[i].EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
 	}
 	return nil
 }
