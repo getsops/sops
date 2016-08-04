@@ -83,15 +83,21 @@ class TreeTest(unittest2.TestCase):
                 "656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
         pgp_fps = "85D77543B3D624B63CEA9E6DBC17301B491B3F21," + \
                 "C9CAB0AF1165060DB58D6D6B2653B624D620786D"
+        kms_context = "Environment:production,Role:web-server"
         tree = OrderedDict()
         tree, ign = sops.verify_or_create_sops_branch(tree,
                                                       kms_arns=kms_arns,
-                                                      pgp_fps=pgp_fps)
+                                                      pgp_fps=pgp_fps,
+                                                      kms_context=kms_context)
         log.debug("%s", tree)
         assert len(tree['sops']['kms']) == 2
         assert tree['sops']['kms'][0]['arn'] == "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e"
         assert tree['sops']['kms'][0]['role'] == "arn:aws:iam::927034868273:role/sops-dev"
+        assert tree['sops']['kms'][0]['context']['Environment'] == "production"
+        assert tree['sops']['kms'][0]['context']['Role'] == "web-server"
         assert tree['sops']['kms'][1]['arn'] == "arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
+        assert tree['sops']['kms'][1]['context']['Environment'] == "production"
+        assert tree['sops']['kms'][1]['context']['Role'] == "web-server"
         assert len(tree['sops']['pgp']) == 2
         assert tree['sops']['pgp'][0]['fp'] == "85D77543B3D624B63CEA9E6DBC17301B491B3F21"
         assert tree['sops']['pgp'][1]['fp'] == "C9CAB0AF1165060DB58D6D6B2653B624D620786D"
