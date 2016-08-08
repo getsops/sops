@@ -1159,7 +1159,8 @@ def get_key_from_pgp(tree):
         except KeyError:
             continue
         try:
-            p = subprocess.Popen(['gpg', '-d'], stdout=subprocess.PIPE,
+            p = subprocess.Popen(['gpg', '--use-agent', '-d'],
+                                 stdout=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
             key = p.communicate(input=enc.encode('utf-8'))[0]
         except Exception as e:
