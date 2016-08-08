@@ -1,0 +1,15 @@
+name: Martin
+job: Developer
+skill: Elite
+foods:
+    - Apple
+    - Orange
+    - Strawberry
+    - Mango
+languages:
+    perl: Elite
+    python: Elite
+    pascal: Lame
+foo: |
+  bar
+  baz
