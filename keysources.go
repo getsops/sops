@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/sts"
 	"github.com/howeyc/gopass"
+	"go.mozilla.org/sops/gpgagent"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/armor"
 	"io/ioutil"
@@ -175,9 +176,30 @@ func (gpg GPGKeySource) fingerprintMap(ring openpgp.EntityList) map[string]openp
 }
 
 func (gpg GPGKeySource) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]byte, error) {
-	fmt.Print("Enter PGP key passphrase: ")
-	psswd, err := gopass.GetPasswd()
-	return psswd, err
+	conn, err := gpgagent.NewConn()
+	defer conn.Close()
+	if err == gpgagent.ErrNoAgent {
+		fmt.Println("gpg-agent not found, continuing with manual passphrase input...")
+		fmt.Print("Enter PGP key passphrase: ")
+		return gopass.GetPasswd()
+	}
+	if err != nil {
+		return nil, fmt.Errorf("Could not establish connection with gpg-agent: %s", err)
+	}
+	for _, k := range keys {
+		req := gpgagent.PassphraseRequest{
+			CacheKey: k.PublicKey.KeyIdShortString(),
+			Prompt:   "Passphrase",
+			Desc:     fmt.Sprintf("Unlock key %s to decrypt sops's key", k.PublicKey.KeyIdShortString()),
+		}
+		pass, err := conn.GetPassphrase(&req)
+		if err != nil {
+			return nil, fmt.Errorf("gpg-agent passphrase request errored: %s", err)
+		}
+		k.PrivateKey.Decrypt([]byte(pass))
+		return []byte(pass), nil
+	}
+	return nil, fmt.Errorf("No key to unlock")
 }
 
 func (gpg GPGKeySource) DecryptKeys() (string, error) {

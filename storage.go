@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/autrilla/sops/decryptor"
+	"go.mozilla.org/sops/decryptor"
 	"gopkg.in/yaml.v2"
 )
 
