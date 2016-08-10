@@ -26,3 +26,18 @@ func TestKMS(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestGPG(t *testing.T) {
+	ks := GPGKeySource{GPG: []GPG{
+		GPG{Fingerprint: "64FEF099B0544CF975BCD408A014A073E0848B51"},
+	},
+	}
+	f := func(x string) bool {
+		ks.EncryptKeys(x)
+		k, _ := ks.DecryptKeys()
+		return x == k
+	}
+	if err := quick.Check(f, nil); err != nil {
+		t.Error(err)
+	}
+}

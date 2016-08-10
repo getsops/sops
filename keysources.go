@@ -1,15 +1,25 @@
 package sops
 
 import (
+	"bytes"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/sts"
+	"github.com/howeyc/gopass"
+	"go.mozilla.org/sops/gpgagent"
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/armor"
+	"io/ioutil"
 	"os"
+	"os/user"
+	"path"
 	"regexp"
+	"strings"
 )
 
 // KeySource provides a way to obtain the symmetric encryption key used by sops
@@ -28,7 +38,14 @@ type KMSKeySource struct {
 	KMS []KMS
 }
 
-type GPGKeySource struct{}
+type GPG struct {
+	Fingerprint  string
+	EncryptedKey string
+}
+
+type GPGKeySource struct {
+	GPG []GPG
+}
 
 func (k KMS) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
 	hostname, err := os.Hostname()
@@ -114,10 +131,135 @@ func (ks KMSKeySource) EncryptKeys(plaintext string) error {
 	return nil
 }
 
+func (gpg GPGKeySource) gpgHome() string {
+	dir := os.Getenv("GNUPGHOME")
+	if dir == "" {
+		usr, err := user.Current()
+		if err != nil {
+			return "~/.gnupg"
+		}
+		return path.Join(usr.HomeDir, ".gnupg")
+	}
+	return dir
+}
+
+func (gpg GPGKeySource) loadRing(path string) (openpgp.EntityList, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return openpgp.EntityList{}, err
+	}
+	defer f.Close()
+	keyring, err := openpgp.ReadKeyRing(f)
+	if err != nil {
+		return keyring, err
+	}
+	return keyring, nil
+}
+
+func (gpg GPGKeySource) secRing() (openpgp.EntityList, error) {
+	return gpg.loadRing(gpg.gpgHome() + "/secring.gpg")
+}
+
+func (gpg GPGKeySource) pubRing() (openpgp.EntityList, error) {
+	return gpg.loadRing(gpg.gpgHome() + "/pubring.gpg")
+}
+
+func (gpg GPGKeySource) fingerprintMap(ring openpgp.EntityList) map[string]openpgp.Entity {
+	fps := make(map[string]openpgp.Entity)
+	for _, entity := range ring {
+		fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
+		if entity != nil {
+			fps[fp] = *entity
+		}
+	}
+	return fps
+}
+
+func (gpg GPGKeySource) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+	conn, err := gpgagent.NewConn()
+	defer conn.Close()
+	if err == gpgagent.ErrNoAgent {
+		fmt.Println("gpg-agent not found, continuing with manual passphrase input...")
+		fmt.Print("Enter PGP key passphrase: ")
+		return gopass.GetPasswd()
+	}
+	if err != nil {
+		return nil, fmt.Errorf("Could not establish connection with gpg-agent: %s", err)
+	}
+	for _, k := range keys {
+		req := gpgagent.PassphraseRequest{
+			CacheKey: k.PublicKey.KeyIdShortString(),
+			Prompt:   "Passphrase",
+			Desc:     fmt.Sprintf("Unlock key %s to decrypt sops's key", k.PublicKey.KeyIdShortString()),
+		}
+		pass, err := conn.GetPassphrase(&req)
+		if err != nil {
+			return nil, fmt.Errorf("gpg-agent passphrase request errored: %s", err)
+		}
+		k.PrivateKey.Decrypt([]byte(pass))
+		return []byte(pass), nil
+	}
+	return nil, fmt.Errorf("No key to unlock")
+}
+
 func (gpg GPGKeySource) DecryptKeys() (string, error) {
-	return "", nil
+	ring, err := gpg.secRing()
+	if err != nil {
+		return "", fmt.Errorf("Could not load secring: %s", err)
+	}
+	for _, g := range gpg.GPG {
+		block, err := armor.Decode(strings.NewReader(g.EncryptedKey))
+		if err != nil {
+			continue
+		}
+		md, err := openpgp.ReadMessage(block.Body, ring, gpg.passphrasePrompt, nil)
+		if err != nil {
+			continue
+		}
+		if b, err := ioutil.ReadAll(md.UnverifiedBody); err == nil {
+			return string(b), nil
+		}
+	}
+	return "", fmt.Errorf("The key could not be decrypted with any of the GPG entries")
 }
 
 func (gpg GPGKeySource) EncryptKeys(plaintext string) error {
+	ring, err := gpg.pubRing()
+	if err != nil {
+		return err
+	}
+	fingerprints := gpg.fingerprintMap(ring)
+	for i, _ := range gpg.GPG {
+		entity, ok := fingerprints[gpg.GPG[i].Fingerprint]
+		if !ok {
+			return fmt.Errorf("Key with fingerprint %s is not available in keyring.", gpg.GPG[i].Fingerprint)
+		}
+		encbuf := new(bytes.Buffer)
+		armorbuf, err := armor.Encode(encbuf, "PGP MESSAGE", nil)
+		if err != nil {
+			return err
+		}
+		plaintextbuf, err := openpgp.Encrypt(armorbuf, []*openpgp.Entity{&entity}, nil, nil, nil)
+		if err != nil {
+			return err
+		}
+		_, err = plaintextbuf.Write([]byte(plaintext))
+		if err != nil {
+			return err
+		}
+		err = plaintextbuf.Close()
+		if err != nil {
+			return err
+		}
+		err = armorbuf.Close()
+		if err != nil {
+			return err
+		}
+		bytes, err := ioutil.ReadAll(encbuf)
+		if err != nil {
+			return err
+		}
+		gpg.GPG[i].EncryptedKey = string(bytes)
+	}
 	return nil
 }
