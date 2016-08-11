@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strconv"
 )
 
 type EncryptedValue struct {
@@ -34,13 +35,13 @@ func parse(value string) (*EncryptedValue, error) {
 	if err != nil {
 		return nil, errors.New("Error base64-decoding tag")
 	}
-	datatype := matches[3]
+	datatype := matches[4]
 
 	return &EncryptedValue{data, iv, tag, datatype}, nil
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value.
-func Decrypt(value, key string, additionalAuthData []byte) (string, error) {
+func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) {
 	encryptedValue, err := parse(value)
 	if err != nil {
 		return "", err
@@ -60,5 +61,19 @@ func Decrypt(value, key string, additionalAuthData []byte) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
 	}
-	return string(out), nil
+	v := string(out)
+	switch encryptedValue.datatype {
+	case "str":
+		return v, nil
+	case "int":
+		return strconv.ParseInt(v, 10, 64)
+	case "float":
+		return strconv.ParseFloat(v, 64)
+	case "bytes":
+		return v, nil
+	case "bool":
+		return strconv.ParseBool(v)
+	default:
+		return nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
+	}
 }

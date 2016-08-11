@@ -15,7 +15,7 @@ func encrypt(in, additionalAuthData string) string {
 	return ""
 }
 
-func (store *YAMLStore) WalkValue(in interface{}, additionalAuthData string, onLeaves func(string, string) (string, error)) (interface{}, error) {
+func (store *YAMLStore) WalkValue(in interface{}, additionalAuthData string, onLeaves func(string, string) (interface{}, error)) (interface{}, error) {
 	switch in := in.(type) {
 	case string:
 		return onLeaves(in, additionalAuthData)
@@ -28,7 +28,7 @@ func (store *YAMLStore) WalkValue(in interface{}, additionalAuthData string, onL
 	}
 }
 
-func (store *YAMLStore) WalkSlice(in []interface{}, additionalAuthData string, onLeaves func(string, string) (string, error)) ([]interface{}, error) {
+func (store *YAMLStore) WalkSlice(in []interface{}, additionalAuthData string, onLeaves func(string, string) (interface{}, error)) ([]interface{}, error) {
 	for i, v := range in {
 		newV, err := store.WalkValue(v, additionalAuthData, onLeaves)
 		if err != nil {
@@ -39,7 +39,7 @@ func (store *YAMLStore) WalkSlice(in []interface{}, additionalAuthData string, o
 	return in, nil
 }
 
-func (store *YAMLStore) WalkMap(in map[interface{}]interface{}, additionalAuthData string, onLeaves func(string, string) (string, error)) (map[interface{}]interface{}, error) {
+func (store *YAMLStore) WalkMap(in map[interface{}]interface{}, additionalAuthData string, onLeaves func(string, string) (interface{}, error)) (map[interface{}]interface{}, error) {
 	for k, v := range in {
 		newV, err := store.WalkValue(v, additionalAuthData+k.(string)+":", onLeaves)
 		if err != nil {
@@ -57,7 +57,7 @@ func (store *YAMLStore) Load(data, key string) error {
 	sopsBranch := store.Data["sops"]
 	fmt.Println(sopsBranch)
 	delete(store.Data, "sops")
-	_, err := store.WalkValue(store.Data, "", func(in, additionalAuthData string) (string, error) {
+	_, err := store.WalkValue(store.Data, "", func(in, additionalAuthData string) (interface{}, error) {
 		return decryptor.Decrypt(in, key, []byte(additionalAuthData))
 	})
 	if err != nil {

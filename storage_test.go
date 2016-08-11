@@ -9,7 +9,7 @@ import (
 )
 
 func TestDecryptSimpleYAML(t *testing.T) {
-	in := `foo: "ENC[AES256_GCM,data:xPxG,iv:kMAhrJOMitZZP3C71cA1wnp543hHYFd8+Tv01hdEOqc=,tag:PDVgtlbfBU7A33NKugzNBg==,type:bytes]"`
+	in := `foo: "ENC[AES256_GCM,data:3mDI,iv:2OL363jDglmOa+k6qCIh5RGUm+isJNrqP4umqOEb+1s=,tag:bJiC+QHsSQPJFXCX94sRGQ==,type:str]"`
 	key := strings.Repeat("f", 32)
 	expected := "foo"
 	store := yaml.YAMLStore{}
@@ -23,7 +23,7 @@ func TestDecryptSimpleYAML(t *testing.T) {
 }
 
 func TestDecryptNestedYaml(t *testing.T) {
-	in := "foo:\n  - bar: \"ENC[AES256_GCM,data:xPxG,iv:kMAhrJOMitZZP3C71cA1wnp543hHYFd8+Tv01hdEOqc=,tag:PDVgtlbfBU7A33NKugzNBg==,type:bytes]\""
+	in := "foo:\n  - bar: \"ENC[AES256_GCM,data:tFAp,iv:5G6/F6LaoYgIV5je0TBvqLoyyo6IZK7rCjA7T5nuy1k=,tag:4M/t1ZN5ZRWBiMrYdRpBhg==,type:str]\""
 	key := strings.Repeat("f", 32)
 	expected := "foo"
 	store := yaml.YAMLStore{}
