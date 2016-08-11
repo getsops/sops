@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/autrilla/sops/decryptor"
+	"go.mozilla.org/sops/decryptor"
 	"gopkg.in/yaml.v2"
 )
 
 type Store interface {
 	Metadata(in string) (SopsMetadata, error)
 	Decrypt(in, key string) (string, error)
-	Encrypt(in []map[interface{}]interface{}) (string, error)
+	Encrypt(in map[interface{}]interface{}) (string, error)
 }
 
 type YAMLStore struct {
@@ -83,6 +83,10 @@ func (store YAMLStore) Decrypt(in, key string) (string, error) {
 	decoded := store.DecryptMapSlice(encoded, key)
 	out, err := yaml.Marshal(decoded)
 	return string(out), err
+}
+
+func (store YAMLStore) Encrypt(in map[interface{}]interface{}) (string, error) {
+	return "", nil
 }
 
 func (store YAMLStore) Metadata(in string) (SopsMetadata, error) {
@@ -167,4 +171,8 @@ func (store JSONStore) Decrypt(in, key string) (string, error) {
 		return "", err
 	}
 	return string(j), nil
+}
+
+func (store JSONStore) Encrypt(in map[interface{}]interface{}) (string, error) {
+	return "", nil
 }

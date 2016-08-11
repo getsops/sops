@@ -46,6 +46,24 @@ type GPGKeySource struct {
 	GPG []GPG
 }
 
+// NewKMSKeySourceFromString takes a comma-separated string with KMS ARNs and returns a KMSKeySource
+func NewKMSKeySourceFromString(arns string) KMSKeySource {
+	var kmss []KMS
+	arns = strings.Replace(arns, " ", "", -1)
+	for _, s := range strings.Split(arns, ",") {
+		roleIndex := strings.Index(s, "+arn:aws:iam::")
+		k := KMS{}
+		if roleIndex > 0 {
+			k.Arn = s[:roleIndex]
+			k.Role = s[roleIndex+1:]
+		} else {
+			k.Arn = s
+		}
+		kmss = append(kmss, k)
+	}
+	return KMSKeySource{KMS: kmss}
+}
+
 func (k KMS) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -128,6 +146,15 @@ func (ks KMSKeySource) EncryptKeys(plaintext string) error {
 		ks.KMS[i].EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
 	}
 	return nil
+}
+
+// NewPGPKeySourceFromString created a new PGPKeySource from a comma-separated string of PGP fingerprints
+func NewPGPKeySourceFromString(fps string) GPGKeySource {
+	var gpgs []GPG
+	for _, s := range strings.Split(fps, ",") {
+		gpgs = append(gpgs, GPG{Fingerprint: strings.Replace(s, " ", "", -1)})
+	}
+	return GPGKeySource{GPG: gpgs}
 }
 
 func (gpg GPGKeySource) gpgHome() string {
