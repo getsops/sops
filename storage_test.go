@@ -1,6 +1,7 @@
 package sops
 
 import (
+	"go.mozilla.org/sops/yaml"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -8,28 +9,31 @@ import (
 )
 
 func TestDecryptSimpleYAML(t *testing.T) {
-	yaml := `foo: "ENC[AES256_GCM,data:xPxG,iv:kMAhrJOMitZZP3C71cA1wnp543hHYFd8+Tv01hdEOqc=,tag:PDVgtlbfBU7A33NKugzNBg==,type:bytes]"`
+	in := `foo: "ENC[AES256_GCM,data:xPxG,iv:kMAhrJOMitZZP3C71cA1wnp543hHYFd8+Tv01hdEOqc=,tag:PDVgtlbfBU7A33NKugzNBg==,type:bytes]"`
 	key := strings.Repeat("f", 32)
-	expected := "foo: foo\n"
-	decryption, err := YAMLStore{}.Decrypt(yaml, key)
+	expected := "foo"
+	store := yaml.YAMLStore{}
+	err := store.Load(in, key)
 	if err != nil {
-		t.Error("Decryption failed: %s", err)
+		t.Errorf("Decryption failed: %s", err)
 	}
-	if decryption != expected {
-		t.Errorf("Decryption does not match expected result: %q != %q", decryption, expected)
+	if store.Data["foo"] != expected {
+		t.Errorf("Decryption does not match expected result: %q != %q", store.Data["foo"], expected)
 	}
 }
 
 func TestDecryptNestedYaml(t *testing.T) {
-	yaml := "foo:\n  - bar: \"ENC[AES256_GCM,data:xPxG,iv:kMAhrJOMitZZP3C71cA1wnp543hHYFd8+Tv01hdEOqc=,tag:PDVgtlbfBU7A33NKugzNBg==,type:bytes]\""
+	in := "foo:\n  - bar: \"ENC[AES256_GCM,data:xPxG,iv:kMAhrJOMitZZP3C71cA1wnp543hHYFd8+Tv01hdEOqc=,tag:PDVgtlbfBU7A33NKugzNBg==,type:bytes]\""
 	key := strings.Repeat("f", 32)
-	expected := "foo:\n- bar: foo\n"
-	decryption, err := YAMLStore{}.Decrypt(yaml, key)
+	expected := "foo"
+	store := yaml.YAMLStore{}
+	err := store.Load(in, key)
 	if err != nil {
-		t.Error("Decryption failed: %s", err)
+		t.Errorf("Decryption failed: %s", err)
 	}
-	if decryption != expected {
-		t.Errorf("Decryption does not match expected result: %q != %q", decryption, expected)
+	foo := store.Data["foo"].([]interface{})[0].(map[interface{}]interface{})
+	if foo["bar"] != expected {
+		t.Errorf("Decryption does not match expected result: %q != %q", foo["bar"], expected)
 	}
 }
 
@@ -37,13 +41,14 @@ func TestYamlMetadata(t *testing.T) {
 	file, err := os.Open("test_resources/example.yaml")
 	defer file.Close()
 	in, err := ioutil.ReadAll(file)
-	sops, err := YAMLStore{}.Metadata(string(in))
-	expected_version := "1.13"
+	store := yaml.YAMLStore{}
+	sops, err := store.Metadata(string(in))
+	expectedVersion := "1.13"
 	if err != nil {
-		t.Error("yaml parsing threw error: %s", err)
+		t.Errorf("yaml parsing threw error: %s", err)
 	}
-	if sops.Version != expected_version {
-		t.Error("version should be %s, was %s", expected_version, sops.Version)
+	if sops.Version != expectedVersion {
+		t.Errorf("version should be %s, was %s", expectedVersion, sops.Version)
 	}
 }
 
@@ -52,12 +57,12 @@ func TestJsonMetadata(t *testing.T) {
 	defer file.Close()
 	in, err := ioutil.ReadAll(file)
 	sops, err := JSONStore{}.Metadata(string(in))
-	expected_version := "1.13"
+	expectedVersion := "1.13"
 	if err != nil {
-		t.Error("json parsing thew error: %s", err)
+		t.Errorf("json parsing thew error: %s", err)
 	}
-	if sops.Version != expected_version {
-		t.Error("version should be %s, was $s", expected_version, sops.Version)
+	if sops.Version != expectedVersion {
+		t.Errorf("version should be %s, was %s", expectedVersion, sops.Version)
 	}
 }
 
@@ -67,7 +72,7 @@ func TestDecryptSimpleJSON(t *testing.T) {
 	expected := "{\"foo\":\"foo\"}"
 	decryption, err := JSONStore{}.Decrypt(json, key)
 	if err != nil {
-		t.Error("Decryption failed: %s", err)
+		t.Errorf("Decryption failed: %s", err)
 	}
 	if decryption != expected {
 		t.Errorf("Decryption does not match expected result: %q != %q", decryption, expected)

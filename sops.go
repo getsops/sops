@@ -26,6 +26,11 @@ type MasterKey interface {
 	ToString() string
 }
 
+type Store interface {
+	Load(data, key string) error
+	Dump(key string) (string, error)
+}
+
 func (m *Metadata) MasterKeyCount() int {
 	count := 0
 	for _, ks := range m.KeySources {
