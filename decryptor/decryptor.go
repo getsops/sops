@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"regexp"
 )
 
@@ -39,7 +40,7 @@ func parse(value string) (*EncryptedValue, error) {
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value.
-func Decrypt(value, key string) (string, error) {
+func Decrypt(value, key string, additionalAuthData []byte) (string, error) {
 	encryptedValue, err := parse(value)
 	if err != nil {
 		return "", err
@@ -55,9 +56,9 @@ func Decrypt(value, key string) (string, error) {
 	}
 
 	data := append(encryptedValue.data, encryptedValue.tag...)
-	out, err := gcm.Open(nil, encryptedValue.iv, data, nil)
+	out, err := gcm.Open(nil, encryptedValue.iv, data, additionalAuthData)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
 	}
 	return string(out), nil
 }

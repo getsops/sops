@@ -45,7 +45,7 @@ func (store JSONStore) DecryptValue(in interface{}, key string) (interface{}, er
 	case map[string]interface{}:
 		return store.DecryptMap(in, key)
 	case string:
-		k, err := decryptor.Decrypt(in, key)
+		k, err := decryptor.Decrypt(in, key, []byte(""))
 		if err != nil {
 			return nil, fmt.Errorf("Could not decrypt \"%s\"", in)
 		}

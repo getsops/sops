@@ -58,7 +58,7 @@ func (store *YAMLStore) Load(data, key string) error {
 	fmt.Println(sopsBranch)
 	delete(store.Data, "sops")
 	_, err := store.WalkValue(store.Data, "", func(in, additionalAuthData string) (string, error) {
-		return decryptor.Decrypt(in, key)
+		return decryptor.Decrypt(in, key, []byte(additionalAuthData))
 	})
 	if err != nil {
 		return fmt.Errorf("Error walking tree: %s", err)
