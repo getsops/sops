@@ -14,6 +14,10 @@ func (store *YAMLStore) WalkValue(in interface{}, additionalAuthData string, onL
 	switch in := in.(type) {
 	case string:
 		return onLeaves(in, additionalAuthData)
+	case int:
+		return onLeaves(in, additionalAuthData)
+	case bool:
+		return onLeaves(in, additionalAuthData)
 	case map[interface{}]interface{}:
 		return store.WalkMap(in, additionalAuthData, onLeaves)
 	case []interface{}:

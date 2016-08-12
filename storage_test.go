@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 	"testing"
-	"testing/quick"
 )
 
 func TestDecryptSimpleYAML(t *testing.T) {
@@ -42,20 +41,16 @@ func TestDecryptNestedYaml(t *testing.T) {
 
 func TestYamlRoundtrip(t *testing.T) {
 	key := strings.Repeat("f", 32)
-	f := func(tree map[string]map[string]string) bool {
+	f := func(tree map[interface{}]interface{}) bool {
 		store := yaml.YAMLStore{}
 		in, err := goyaml.Marshal(tree)
 		if err != nil {
 			t.Error(err)
 		}
-		tr := make(map[interface{}]interface{})
-		for k, v := range tree {
-			tr[k] = v
-		}
-		store.Data = tr
+		store.Data = tree
 		enc, err := store.Dump(key)
 		if err != nil {
-			t.Error(err)
+			t.Errorf("Error dumping: %s", err)
 		}
 		err = store.Load(enc, key)
 		if err != nil {
@@ -71,8 +66,15 @@ func TestYamlRoundtrip(t *testing.T) {
 		}
 		return true
 	}
-	if err := quick.Check(f, nil); err != nil {
-		t.Errorf("Failed")
+	m := make(map[interface{}]interface{})
+	m1 := make(map[interface{}]interface{})
+	m1["bar"] = "baz"
+	m["foo"] = m1
+	m["baz"] = 2
+	m["bar"] = []interface{}{1, 2, 3}
+	m["foobar"] = false
+	if !f(m) {
+		t.Error(nil)
 	}
 }
 
