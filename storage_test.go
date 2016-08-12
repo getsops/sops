@@ -1,11 +1,14 @@
 package sops
 
 import (
+	"fmt"
 	"go.mozilla.org/sops/yaml"
+	goyaml "gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
+	"testing/quick"
 )
 
 func TestDecryptSimpleYAML(t *testing.T) {
@@ -34,6 +37,42 @@ func TestDecryptNestedYaml(t *testing.T) {
 	foo := store.Data["foo"].([]interface{})[0].(map[interface{}]interface{})
 	if foo["bar"] != expected {
 		t.Errorf("Decryption does not match expected result: %q != %q", foo["bar"], expected)
+	}
+}
+
+func TestYamlRoundtrip(t *testing.T) {
+	key := strings.Repeat("f", 32)
+	f := func(tree map[string]map[string]string) bool {
+		store := yaml.YAMLStore{}
+		in, err := goyaml.Marshal(tree)
+		if err != nil {
+			t.Error(err)
+		}
+		tr := make(map[interface{}]interface{})
+		for k, v := range tree {
+			tr[k] = v
+		}
+		store.Data = tr
+		enc, err := store.Dump(key)
+		if err != nil {
+			t.Error(err)
+		}
+		err = store.Load(enc, key)
+		if err != nil {
+			t.Error(err)
+		}
+		out, err := goyaml.Marshal(store.Data)
+		if err != nil {
+			t.Error(err)
+		}
+		if string(in) != string(out) {
+			fmt.Printf("Expected %q, got %q\n", string(in), string(out))
+			return false
+		}
+		return true
+	}
+	if err := quick.Check(f, nil); err != nil {
+		t.Errorf("Failed")
 	}
 }
 
