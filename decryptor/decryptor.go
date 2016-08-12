@@ -3,6 +3,7 @@ package decryptor
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -66,7 +67,7 @@ func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) 
 	case "str":
 		return v, nil
 	case "int":
-		return strconv.ParseInt(v, 10, 64)
+		return strconv.Atoi(v)
 	case "float":
 		return strconv.ParseFloat(v, 64)
 	case "bytes":
@@ -76,4 +77,46 @@ func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) 
 	default:
 		return nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
 	}
+}
+
+func Encrypt(value interface{}, key string, additionalAuthData []byte) (string, error) {
+	aes, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return "", fmt.Errorf("Could not create AES Cipher: %s", err)
+	}
+	iv := make([]byte, 32)
+	_, err = rand.Read(iv)
+	if err != nil {
+		return "", fmt.Errorf("Could not generate random bytes for IV: %s", err)
+	}
+	gcm, err := cipher.NewGCMWithNonceSize(aes, len(iv))
+	if err != nil {
+		return "", fmt.Errorf("Could not create GCM: %s", err)
+	}
+	var plaintext []byte
+	var t string
+	switch value := value.(type) {
+	case string:
+		t = "str"
+		plaintext = []byte(value)
+	case int:
+		t = "int"
+		plaintext = []byte(strconv.Itoa(value))
+	case float64:
+		t = "float"
+		plaintext = []byte(strconv.FormatFloat(value, 'f', 9, 64))
+	case bool:
+		t = "bool"
+		plaintext = []byte(strconv.FormatBool(value))
+	default:
+		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
+	}
+
+	out := gcm.Seal(nil, iv, plaintext, additionalAuthData)
+	ciphertext := out[:len(out)-16]
+	b64ciphertext := base64.StdEncoding.EncodeToString(ciphertext)
+	tag := out[len(out)-16:]
+	b64tag := base64.StdEncoding.EncodeToString(tag)
+	b64iv := base64.StdEncoding.EncodeToString(iv)
+	return fmt.Sprintf("ENC[AES256_GCM,data:%s,iv:%s,tag:%s,type:%s]", b64ciphertext, b64iv, b64tag, t), nil
 }
