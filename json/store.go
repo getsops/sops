@@ -64,8 +64,18 @@ func (store *JSONStore) Load(data, key string) error {
 	return nil
 }
 
-func (store *JSONStore) Encrypt(in map[interface{}]interface{}) (string, error) {
-	return "", nil
+func (store *JSONStore) Dump(key string) (string, error) {
+	_, err := store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
+		return decryptor.Encrypt(in, key, []byte(additionalAuthData))
+	})
+	if err != nil {
+		return "", fmt.Errorf("Error walking tree: %s", err)
+	}
+	out, err := json.Marshal(store.Data)
+	if err != nil {
+		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+	}
+	return string(out), nil
 }
 
 type SopsMetadata struct {

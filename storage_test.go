@@ -122,3 +122,42 @@ func TestDecryptSimpleJSON(t *testing.T) {
 		t.Errorf("Decryption does not match expected result: %q != %q", store.Data["foo"], expected)
 	}
 }
+
+func TestJsonRoundtrip(t *testing.T) {
+	key := strings.Repeat("f", 32)
+	f := func(tree map[string]interface{}) bool {
+		store := json.JSONStore{}
+		in, err := goyaml.Marshal(tree)
+		if err != nil {
+			t.Error(err)
+		}
+		store.Data = tree
+		enc, err := store.Dump(key)
+		if err != nil {
+			t.Errorf("Error dumping: %s", err)
+		}
+		err = store.Load(enc, key)
+		if err != nil {
+			t.Error(err)
+		}
+		out, err := goyaml.Marshal(store.Data)
+		if err != nil {
+			t.Error(err)
+		}
+		if string(in) != string(out) {
+			fmt.Printf("Expected %q, got %q\n", string(in), string(out))
+			return false
+		}
+		return true
+	}
+	m := make(map[string]interface{})
+	m1 := make(map[string]interface{})
+	m1["bar"] = "baz"
+	m["foo"] = m1
+	m["baz"] = 2
+	m["bar"] = []interface{}{1, 2, 3}
+	m["foobar"] = false
+	if !f(m) {
+		t.Error(nil)
+	}
+}
