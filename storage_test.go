@@ -20,8 +20,8 @@ func TestDecryptSimpleYAML(t *testing.T) {
 	if err != nil {
 		t.Errorf("Decryption failed: %s", err)
 	}
-	if store.Data["foo"] != expected {
-		t.Errorf("Decryption does not match expected result: %q != %q", store.Data["foo"], expected)
+	if store.Data[0].Value != expected {
+		t.Errorf("Decryption does not match expected result: %q != %q", store.Data[0].Value, expected)
 	}
 }
 
@@ -34,15 +34,19 @@ func TestDecryptNestedYaml(t *testing.T) {
 	if err != nil {
 		t.Errorf("Decryption failed: %s", err)
 	}
-	foo := store.Data["foo"].([]interface{})[0].(map[interface{}]interface{})
-	if foo["bar"] != expected {
-		t.Errorf("Decryption does not match expected result: %q != %q", foo["bar"], expected)
+	foo := store.Data[0]
+	if foo.Key != "foo" {
+		t.Errorf("Key does not match: %s != %s", foo.Key, "foo")
+	}
+	bar := foo.Value.([]interface{})[0].(goyaml.MapSlice)[0]
+	if bar.Value != expected {
+		t.Errorf("Decryption does not match expected result: %q != %q", bar.Value, expected)
 	}
 }
 
 func TestYamlRoundtrip(t *testing.T) {
 	key := strings.Repeat("f", 32)
-	f := func(tree map[interface{}]interface{}) bool {
+	f := func(tree goyaml.MapSlice) bool {
 		store := yaml.YAMLStore{}
 		in, err := goyaml.Marshal(tree)
 		if err != nil {
@@ -67,13 +71,13 @@ func TestYamlRoundtrip(t *testing.T) {
 		}
 		return true
 	}
-	m := make(map[interface{}]interface{})
-	m1 := make(map[interface{}]interface{})
-	m1["bar"] = "baz"
-	m["foo"] = m1
-	m["baz"] = 2
-	m["bar"] = []interface{}{1, 2, 3}
-	m["foobar"] = false
+	m := make(goyaml.MapSlice, 0)
+	m1 := make(goyaml.MapSlice, 0)
+	m1 = append(m1, goyaml.MapItem{Key: "bar", Value: "baz"})
+	m = append(m, goyaml.MapItem{Key: "foo", Value: m1})
+	m = append(m, goyaml.MapItem{Key: "baz", Value: 2})
+	m = append(m, goyaml.MapItem{Key: "bar", Value: []interface{}{1, 2, 3}})
+	m = append(m, goyaml.MapItem{Key: "foobar", Value: false})
 	if !f(m) {
 		t.Error(nil)
 	}

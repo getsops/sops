@@ -7,7 +7,7 @@ import (
 )
 
 type YAMLStore struct {
-	Data map[interface{}]interface{}
+	Data yaml.MapSlice
 }
 
 func (store *YAMLStore) WalkValue(in interface{}, additionalAuthData string, onLeaves func(interface{}, string) (interface{}, error)) (interface{}, error) {
@@ -20,6 +20,8 @@ func (store *YAMLStore) WalkValue(in interface{}, additionalAuthData string, onL
 		return onLeaves(in, additionalAuthData)
 	case map[interface{}]interface{}:
 		return store.WalkMap(in, additionalAuthData, onLeaves)
+	case yaml.MapSlice:
+		return store.WalkMapSlice(in, additionalAuthData, onLeaves)
 	case []interface{}:
 		return store.WalkSlice(in, additionalAuthData, onLeaves)
 	default:
@@ -34,6 +36,17 @@ func (store *YAMLStore) WalkSlice(in []interface{}, additionalAuthData string, o
 			return nil, err
 		}
 		in[i] = newV
+	}
+	return in, nil
+}
+
+func (store *YAMLStore) WalkMapSlice(in yaml.MapSlice, additionalAuthData string, onLeaves func(interface{}, string) (interface{}, error)) (yaml.MapSlice, error) {
+	for i, item := range in {
+		newV, err := store.WalkValue(item.Value, additionalAuthData+item.Key.(string)+":", onLeaves)
+		if err != nil {
+			return nil, err
+		}
+		in[i].Value = newV
 	}
 	return in, nil
 }
@@ -53,7 +66,12 @@ func (store *YAMLStore) Load(data, key string) error {
 	if err := yaml.Unmarshal([]byte(data), &store.Data); err != nil {
 		return fmt.Errorf("Error unmarshaling input YAML: %s", err)
 	}
-	delete(store.Data, "sops")
+	for i, v := range store.Data {
+		if v.Key == "sops" {
+			store.Data = append(store.Data[:i], store.Data[i+1:]...)
+			break
+		}
+	}
 	_, err := store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
 		return decryptor.Decrypt(in.(string), key, []byte(additionalAuthData))
 	})
