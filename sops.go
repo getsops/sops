@@ -15,7 +15,7 @@ type Metadata struct {
 
 type KeySource struct {
 	Name string
-	Keys []*MasterKey
+	Keys []MasterKey
 }
 
 type MasterKey interface {
@@ -27,8 +27,12 @@ type MasterKey interface {
 }
 
 type Store interface {
+	LoadUnencrypted(data string) error
 	Load(data, key string) error
 	Dump(key string) (string, error)
+	DumpUnencrypted() (string, error)
+	Metadata() Metadata
+	LoadMetadata(in string) error
 }
 
 func (m *Metadata) MasterKeyCount() int {
@@ -43,7 +47,7 @@ func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 	for _, ks := range m.KeySources {
 		for i, k := range ks.Keys {
 			for _, k2 := range keys {
-				if (*k).ToString() == k2.ToString() {
+				if k.ToString() == k2.ToString() {
 					ks.Keys = append(ks.Keys[:i], ks.Keys[i+1:]...)
 				}
 			}
@@ -54,9 +58,9 @@ func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 func (m *Metadata) UpdateMasterKeys(dataKey string) {
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
-			err := (*k).EncryptIfNeeded(dataKey)
+			err := k.EncryptIfNeeded(dataKey)
 			if err != nil {
-				fmt.Println("[WARNING]: could not encrypt data key with master key ", (*k).ToString())
+				fmt.Println("[WARNING]: could not encrypt data key with master key ", k.ToString())
 			}
 		}
 	}

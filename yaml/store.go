@@ -2,12 +2,17 @@ package yaml
 
 import (
 	"fmt"
+	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/decryptor"
+	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/pgp"
 	"gopkg.in/yaml.v2"
+	"time"
 )
 
 type YAMLStore struct {
-	Data yaml.MapSlice
+	Data     yaml.MapSlice
+	metadata sops.Metadata
 }
 
 func (store *YAMLStore) WalkValue(in interface{}, additionalAuthData string, onLeaves func(interface{}, string) (interface{}, error)) (interface{}, error) {
@@ -62,9 +67,20 @@ func (store *YAMLStore) WalkMap(in map[interface{}]interface{}, additionalAuthDa
 	return in, nil
 }
 
+func (store *YAMLStore) LoadUnencrypted(data string) error {
+	if err := yaml.Unmarshal([]byte(data), &store.Data); err != nil {
+		return fmt.Errorf("Error unmarshaling input YAML: %s", err)
+	}
+	return nil
+}
+
 func (store *YAMLStore) Load(data, key string) error {
 	if err := yaml.Unmarshal([]byte(data), &store.Data); err != nil {
 		return fmt.Errorf("Error unmarshaling input YAML: %s", err)
+	}
+	err := store.LoadMetadata(data)
+	if err != nil {
+		return fmt.Errorf("Could not get metadata from YAML file: %s", err)
 	}
 	for i, v := range store.Data {
 		if v.Key == "sops" {
@@ -72,7 +88,7 @@ func (store *YAMLStore) Load(data, key string) error {
 			break
 		}
 	}
-	_, err := store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
+	_, err = store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
 		return decryptor.Decrypt(in.(string), key, []byte(additionalAuthData))
 	})
 	if err != nil {
@@ -95,6 +111,14 @@ func (store *YAMLStore) Dump(key string) (string, error) {
 	return string(out), nil
 }
 
+func (store *YAMLStore) DumpUnencrypted() (string, error) {
+	out, err := yaml.Marshal(store.Data)
+	if err != nil {
+		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+	}
+	return string(out), nil
+}
+
 type KMS struct {
 	Arn        string `yaml:"arn"`
 	Role       string `yaml:"role"`
@@ -108,29 +132,87 @@ type PGP struct {
 	EncodedKey  string `yaml:"enc"`
 }
 
-type SopsMetadata struct {
-	Mac               string
-	Version           string
-	KMS               []KMS
-	PGP               []PGP
-	LastModifed       string `yaml:"lastmodified"`
-	UnencryptedSuffix string `yaml:"unencrypted_suffix"`
-}
-
-func (store YAMLStore) Metadata(in string) (SopsMetadata, error) {
-	sops := SopsMetadata{}
+func (store *YAMLStore) LoadMetadata(in string) error {
+	data := make(map[interface{}]interface{})
 	encoded := make(map[interface{}]interface{})
 	if err := yaml.Unmarshal([]byte(in), &encoded); err != nil {
-		return sops, fmt.Errorf("Error unmarshalling input yaml: %s", err)
+		return fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
 
 	sopsYaml, err := yaml.Marshal(encoded["sops"])
 	if err != nil {
-		return sops, err
+		return err
 	}
-	err = yaml.Unmarshal(sopsYaml, &sops)
+
+	err = yaml.Unmarshal(sopsYaml, &data)
 	if err != nil {
-		return sops, err
+		return err
 	}
-	return sops, nil
+	store.metadata.MessageAuthenticationCode = data["mac"].(string)
+	lastModified, err := time.Parse("2006-01-02T15:04:05Z", data["lastmodified"].(string))
+	if err != nil {
+		return fmt.Errorf("Could not parse last modified date: %s", err)
+	}
+	store.metadata.LastModified = lastModified
+	store.metadata.UnencryptedSuffix = data["unencrypted_suffix"].(string)
+	store.metadata.Version = data["version"].(string)
+	if k, ok := data["kms"].([]interface{}); ok {
+		ks, err := store.kmsEntries(k)
+		if err == nil {
+			store.metadata.KeySources = append(store.metadata.KeySources, ks)
+		}
+
+	}
+
+	if pgp, ok := data["pgp"].([]interface{}); ok {
+		ks, err := store.pgpEntries(pgp)
+		if err == nil {
+			store.metadata.KeySources = append(store.metadata.KeySources, ks)
+		}
+	}
+	return nil
+}
+
+func (store *YAMLStore) Metadata() sops.Metadata {
+	return store.metadata
+}
+
+func (store *YAMLStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
+	var keys []sops.MasterKey
+	keysource := sops.KeySource{Name: "kms", Keys: keys}
+	for _, v := range in {
+		entry := v.(map[interface{}]interface{})
+		key := &kms.KMSMasterKey{}
+		key.Arn = entry["arn"].(string)
+		key.EncryptedKey = entry["enc"].(string)
+		role, ok := entry["role"].(string)
+		if ok {
+			key.Role = role
+		}
+		creationDate, err := time.Parse("2006-01-02T15:04:05Z", entry["created_at"].(string))
+		if err != nil {
+			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+		}
+		key.CreationDate = creationDate
+		keysource.Keys = append(keysource.Keys, key)
+	}
+	return keysource, nil
+}
+
+func (store *YAMLStore) pgpEntries(in []interface{}) (sops.KeySource, error) {
+	var keys []sops.MasterKey
+	keysource := sops.KeySource{Name: "pgp", Keys: keys}
+	for _, v := range in {
+		entry := v.(map[interface{}]interface{})
+		key := &pgp.GPGMasterKey{}
+		key.Fingerprint = entry["fp"].(string)
+		key.EncryptedKey = entry["enc"].(string)
+		creationDate, err := time.Parse("2006-01-02T15:04:05Z", entry["created_at"].(string))
+		if err != nil {
+			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+		}
+		key.CreationDate = creationDate
+		keysource.Keys = append(keysource.Keys, key)
+	}
+	return keysource, nil
 }

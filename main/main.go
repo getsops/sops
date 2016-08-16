@@ -2,7 +2,12 @@ package main
 
 import (
 	"go.mozilla.org/sops"
+
+	"fmt"
+	"go.mozilla.org/sops/json"
+	"go.mozilla.org/sops/yaml"
 	"gopkg.in/urfave/cli.v1"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -98,10 +103,14 @@ func main() {
 				return cli.NewExitError("Error: cannot operate on non-existent file", 100)
 			}
 		}
+		fileBytes, err := ioutil.ReadFile(file)
+		if err != nil {
+			return cli.NewExitError("Error: could not read file", 2)
+		}
 		if c.Bool("encrypt") {
 
 		} else if c.Bool("decrypt") {
-
+			decrypt(c, file, fileBytes)
 		} else if c.Bool("rotate") {
 
 		} else {
@@ -130,9 +139,45 @@ func runEditor(path string) {
 
 func store(path string) sops.Store {
 	if strings.HasSuffix(path, ".yaml") {
-		return sops.YAMLStore{}
+		return &yaml.YAMLStore{}
 	} else if strings.HasSuffix(path, ".json") {
-		return sops.JSONStore{}
+		return &json.JSONStore{}
 	}
 	panic("Unknown file type for file " + path)
+}
+
+func findKey(keysources []sops.KeySource) (string, error) {
+	for _, ks := range keysources {
+		fmt.Println("Trying keysource: ", ks.Name)
+		for _, k := range ks.Keys {
+			fmt.Println("Trying key: ", k.ToString())
+			key, err := k.Decrypt()
+			if err == nil {
+				return key, nil
+			}
+		}
+	}
+	return "", fmt.Errorf("Could not get master key")
+}
+
+func decrypt(c *cli.Context, file string, fileBytes []byte) error {
+	store := store(file)
+	err := store.LoadMetadata(string(fileBytes))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 3)
+	}
+	key, err := findKey(store.Metadata().KeySources)
+	if err != nil {
+		return cli.NewExitError(err.Error(), 4)
+	}
+	err = store.Load(string(fileBytes), key)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 5)
+	}
+	s, err := store.DumpUnencrypted()
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 6)
+	}
+	fmt.Print(s)
+	return nil
 }

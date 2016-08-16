@@ -3,6 +3,7 @@ package json
 import (
 	"encoding/json"
 	"fmt"
+	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/decryptor"
 )
 
@@ -49,6 +50,10 @@ func (store *JSONStore) WalkMap(in map[string]interface{}, additionalAuthData st
 	return in, nil
 }
 
+func (store *JSONStore) LoadUnencrypted(data string) error {
+	return nil
+}
+
 func (store *JSONStore) Load(data, key string) error {
 	err := json.Unmarshal([]byte(data), &store.Data)
 	if err != nil {
@@ -78,6 +83,14 @@ func (store *JSONStore) Dump(key string) (string, error) {
 	return string(out), nil
 }
 
+func (store *JSONStore) DumpUnencrypted() (string, error) {
+	out, err := json.Marshal(store.Data)
+	if err != nil {
+		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+	}
+	return string(out), nil
+}
+
 type SopsMetadata struct {
 	Mac               string
 	Version           string
@@ -87,22 +100,10 @@ type SopsMetadata struct {
 	UnencryptedSuffix string `yaml:"unencrypted_suffix"`
 }
 
-func (store JSONStore) Metadata(in string) (SopsMetadata, error) {
-	var metadata SopsMetadata
-	var encoded map[string]interface{}
-	err := json.Unmarshal([]byte(in), &encoded)
-	if err != nil {
-		return metadata, err
-	}
+func (store JSONStore) LoadMetadata(in string) error {
+	return nil
+}
 
-	sopsJson, err := json.Marshal(encoded["sops"])
-	if err != nil {
-		return metadata, err
-	}
-
-	err = json.Unmarshal(sopsJson, &metadata)
-	if err != nil {
-		return metadata, err
-	}
-	return metadata, nil
+func (store JSONStore) Metadata() sops.Metadata {
+	return sops.Metadata{}
 }
