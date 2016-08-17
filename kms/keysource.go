@@ -78,6 +78,7 @@ func NewKMSMasterKeyFromArn(arn string) KMSMasterKey {
 	} else {
 		k.Arn = arn
 	}
+	k.CreationDate = time.Now()
 	return k
 }
 

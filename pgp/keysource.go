@@ -109,7 +109,8 @@ func (key *GPGMasterKey) gpgHome() string {
 
 func NewGPGMasterKeyFromFingerprint(fingerprint string) GPGMasterKey {
 	return GPGMasterKey{
-		Fingerprint: strings.Replace(fingerprint, " ", "", -1),
+		Fingerprint:  strings.Replace(fingerprint, " ", "", -1),
+		CreationDate: time.Now(),
 	}
 }
 
