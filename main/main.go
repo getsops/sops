@@ -3,8 +3,11 @@ package main
 import (
 	"go.mozilla.org/sops"
 
+	"crypto/rand"
 	"fmt"
 	"go.mozilla.org/sops/json"
+	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/yaml"
 	"gopkg.in/urfave/cli.v1"
 	"io/ioutil"
@@ -18,16 +21,6 @@ func main() {
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:   "kms, k",
-			Usage:  "comma separated list of KMS ARNs",
-			EnvVar: "SOPS_KMS_ARN",
-		},
-		cli.StringFlag{
-			Name:   "pgp, p",
-			Usage:  "comma separated list of PGP fingerprints",
-			EnvVar: "SOPS_PGP_FP",
-		},
 		cli.BoolFlag{
 			Name:  "decrypt, d",
 			Usage: "decrypt a file and output the result to stdout",
@@ -40,6 +33,17 @@ func main() {
 			Name:  "rotate, r",
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
 		},
+		cli.StringFlag{
+			Name:   "kms, k",
+			Usage:  "comma separated list of KMS ARNs",
+			EnvVar: "SOPS_KMS_ARN",
+		},
+		cli.StringFlag{
+			Name:   "pgp, p",
+			Usage:  "comma separated list of PGP fingerprints",
+			EnvVar: "SOPS_PGP_FP",
+		},
+
 		cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
@@ -108,9 +112,9 @@ func main() {
 			return cli.NewExitError("Error: could not read file", 2)
 		}
 		if c.Bool("encrypt") {
-
+			return encrypt(c, file, fileBytes)
 		} else if c.Bool("decrypt") {
-			decrypt(c, file, fileBytes)
+			return decrypt(c, file, fileBytes)
 		} else if c.Bool("rotate") {
 
 		} else {
@@ -181,5 +185,43 @@ func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 7)
 	}
 	fmt.Print(s)
+	return nil
+}
+
+func encrypt(c *cli.Context, file string, fileBytes []byte) error {
+	store := store(file)
+	err := store.LoadUnencrypted(string(fileBytes))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 4)
+	}
+	var metadata sops.Metadata
+	var kmsKeys []sops.MasterKey
+	if c.String("kms") != "" {
+		for _, k := range kms.KMSMasterKeysFromArnString(c.String("kms")) {
+			kmsKeys = append(kmsKeys, &k)
+		}
+	}
+	metadata.KeySources = append(metadata.KeySources, sops.KeySource{Name: "kms", Keys: kmsKeys})
+
+	var pgpKeys []sops.MasterKey
+	if c.String("pgp") != "" {
+		for _, k := range pgp.GPGMasterKeysFromFingerprintString(c.String("pgp")) {
+			pgpKeys = append(pgpKeys, &k)
+		}
+	}
+	metadata.KeySources = append(metadata.KeySources, sops.KeySource{Name: "pgp", Keys: pgpKeys})
+	key := make([]byte, 32)
+	_, err = rand.Read(key)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not generate random key: %s", err), 8)
+	}
+	for _, ks := range metadata.KeySources {
+		for _, k := range ks.Keys {
+			err = k.Encrypt(string(key))
+		}
+	}
+
+	out, err := store.Dump(string(key))
+	fmt.Println(out)
 	return nil
 }
