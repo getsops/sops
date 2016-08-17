@@ -5,6 +5,12 @@ import (
 	"time"
 )
 
+type Error string
+
+func (e Error) Error() string { return string(e) }
+
+const MacMismatch = Error("MAC mismatch")
+
 type Metadata struct {
 	LastModified              time.Time
 	UnencryptedSuffix         string

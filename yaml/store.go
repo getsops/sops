@@ -12,12 +12,6 @@ import (
 	"time"
 )
 
-type Error string
-
-func (e Error) Error() string { return string(e) }
-
-const MacMismatch = Error("MAC mismatch")
-
 type YAMLStore struct {
 	Data     yaml.MapSlice
 	metadata sops.Metadata
@@ -135,7 +129,7 @@ func (store *YAMLStore) Load(data, key string) error {
 	}
 	macHex := fmt.Sprintf("%X", hash.Sum(nil))
 	if macHex != originalMac.(string) {
-		return MacMismatch
+		return sops.MacMismatch
 	}
 	return nil
 }
@@ -160,19 +154,6 @@ func (store *YAMLStore) DumpUnencrypted() (string, error) {
 		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
 	return string(out), nil
-}
-
-type KMS struct {
-	Arn        string `yaml:"arn"`
-	Role       string `yaml:"role"`
-	CreatedAt  string `yaml:"created_at"`
-	EncodedKey string `yaml:"enc"`
-}
-
-type PGP struct {
-	Fingerprint string `yaml:"fp"`
-	CreatedAt   string `yaml:"created_at"`
-	EncodedKey  string `yaml:"enc"`
 }
 
 func (store *YAMLStore) LoadMetadata(in string) error {

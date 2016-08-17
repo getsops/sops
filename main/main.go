@@ -171,12 +171,14 @@ func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 		return cli.NewExitError(err.Error(), 4)
 	}
 	err = store.Load(string(fileBytes), key)
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 5)
+	if err == sops.MacMismatch && !c.Bool("ignore-mac") {
+		return cli.NewExitError("MAC mismatch", 5)
+	} else if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 6)
 	}
 	s, err := store.DumpUnencrypted()
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 6)
+		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 7)
 	}
 	fmt.Print(s)
 	return nil
