@@ -1,14 +1,22 @@
 package yaml
 
 import (
+	"crypto/sha512"
 	"fmt"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/decryptor"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"gopkg.in/yaml.v2"
+	"strconv"
 	"time"
 )
+
+type Error string
+
+func (e Error) Error() string { return string(e) }
+
+const MacMismatch = Error("MAC mismatch")
 
 type YAMLStore struct {
 	Data     yaml.MapSlice
@@ -74,6 +82,23 @@ func (store *YAMLStore) LoadUnencrypted(data string) error {
 	return nil
 }
 
+func toBytes(in interface{}) ([]byte, error) {
+	switch in := in.(type) {
+	case string:
+		return []byte(in), nil
+	case int:
+		return []byte(strconv.Itoa(in)), nil
+	case float64:
+		return []byte(strconv.FormatFloat(in, 'f', -1, 64)), nil
+	case bool:
+		return []byte(strconv.FormatBool(in)), nil
+	case []byte:
+		return in, nil
+	default:
+		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
+	}
+}
+
 func (store *YAMLStore) Load(data, key string) error {
 	if err := yaml.Unmarshal([]byte(data), &store.Data); err != nil {
 		return fmt.Errorf("Error unmarshaling input YAML: %s", err)
@@ -88,11 +113,29 @@ func (store *YAMLStore) Load(data, key string) error {
 			break
 		}
 	}
+	hash := sha512.New()
 	_, err = store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
-		return decryptor.Decrypt(in.(string), key, []byte(additionalAuthData))
+		v, err := decryptor.Decrypt(in.(string), key, []byte(additionalAuthData))
+		if err != nil {
+			return nil, err
+		}
+		bytes, err := toBytes(v)
+		if err != nil {
+			return nil, err
+		}
+		hash.Write(bytes)
+		return v, err
 	})
 	if err != nil {
 		return fmt.Errorf("Error walking tree: %s", err)
+	}
+	originalMac, err := decryptor.Decrypt(store.metadata.MessageAuthenticationCode, key, []byte(store.metadata.LastModified.Format("2006-01-02T15:04:05Z")))
+	if err != nil {
+		return fmt.Errorf("Error decrypting MAC: %s", err)
+	}
+	macHex := fmt.Sprintf("%X", hash.Sum(nil))
+	if macHex != originalMac.(string) {
+		return MacMismatch
 	}
 	return nil
 }
