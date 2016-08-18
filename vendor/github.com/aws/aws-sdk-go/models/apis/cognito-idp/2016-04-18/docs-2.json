@@ -1,0 +1,980 @@
+{
+  "version": "2.0",
+  "service": "<p>You can create a user pool in Amazon Cognito Identity to manage directories and users. You can authenticate a user to obtain tokens related to user identity and access policies.</p> <p>This API reference provides information about user pools in Amazon Cognito Identity, which is a new capability that is available as a beta.</p>",
+  "operations": {
+    "AddCustomAttributes": "<p>Adds additional user attributes to the user pool schema.</p>",
+    "AdminConfirmSignUp": "<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p>",
+    "AdminDeleteUser": "<p>Deletes a user as an administrator. Works on any user.</p>",
+    "AdminDeleteUserAttributes": "<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p>",
+    "AdminDisableUser": "<p>Disables the specified user as an administrator. Works on any user.</p>",
+    "AdminEnableUser": "<p>Enables the specified user as an administrator. Works on any user.</p>",
+    "AdminGetUser": "<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p>",
+    "AdminResetUserPassword": "<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p>",
+    "AdminSetUserSettings": "<p>Sets all the user settings for a specified user name. Works on any user.</p>",
+    "AdminUpdateUserAttributes": "<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p>",
+    "ChangePassword": "<p>Changes the password for a specified user in a user pool.</p>",
+    "ConfirmForgotPassword": "<p>Allows a user to enter a code provided when they reset their password to update their password.</p>",
+    "ConfirmSignUp": "<p>Confirms registration of a user and handles the existing alias from a previous user.</p>",
+    "CreateUserPool": "<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>",
+    "CreateUserPoolClient": "<p>Creates the user pool client.</p>",
+    "DeleteUser": "<p>Allows a user to delete one's self.</p>",
+    "DeleteUserAttributes": "<p>Deletes the attributes for a user.</p>",
+    "DeleteUserPool": "<p>Deletes the specified Amazon Cognito user pool.</p>",
+    "DeleteUserPoolClient": "<p>Allows the developer to delete the user pool client.</p>",
+    "DescribeUserPool": "<p>Returns the configuration information and metadata of the specified user pool.</p>",
+    "DescribeUserPoolClient": "<p>Client method for returning the configuration information and metadata of the specified user pool client.</p>",
+    "ForgotPassword": "<p>Retrieves the password for the specified client ID or username.</p>",
+    "GetUser": "<p>Gets the user attributes and metadata for a user.</p>",
+    "GetUserAttributeVerificationCode": "<p>Gets the user attribute verification code for the specified attribute name.</p>",
+    "ListUserPoolClients": "<p>Lists the clients that have been created for the specified user pool.</p>",
+    "ListUserPools": "<p>Lists the user pools associated with an AWS account.</p>",
+    "ListUsers": "<p>Lists the users in the Amazon Cognito user pool.</p>",
+    "ResendConfirmationCode": "<p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>",
+    "SetUserSettings": "<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>",
+    "SignUp": "<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>",
+    "UpdateUserAttributes": "<p>Allows a user to update a specific attribute (one at a time).</p>",
+    "UpdateUserPool": "<p>Updates the specified user pool with the specified attributes.</p>",
+    "UpdateUserPoolClient": "<p>Allows the developer to update the specified user pool client and password policy.</p>",
+    "VerifyUserAttribute": "<p>Verifies the specified user attributes in the user pool.</p>"
+  },
+  "shapes": {
+    "AddCustomAttributesRequest": {
+      "base": "<p>Represents the request to add custom attributes.</p>",
+      "refs": {
+      }
+    },
+    "AddCustomAttributesResponse": {
+      "base": "<p>Represents the response from the server for the request to add custom attributes.</p>",
+      "refs": {
+      }
+    },
+    "AdminConfirmSignUpRequest": {
+      "base": "<p>Represents the request to confirm user registration.</p>",
+      "refs": {
+      }
+    },
+    "AdminConfirmSignUpResponse": {
+      "base": "<p>Represents the response from the server for the request to confirm registration.</p>",
+      "refs": {
+      }
+    },
+    "AdminDeleteUserAttributesRequest": {
+      "base": "<p>Represents the request to delete user attributes as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminDeleteUserAttributesResponse": {
+      "base": "<p>Represents the response received from the server for a request to delete user attributes.</p>",
+      "refs": {
+      }
+    },
+    "AdminDeleteUserRequest": {
+      "base": "<p>Represents the request to delete a user as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminDisableUserRequest": {
+      "base": "<p>Represents the request to disable any user as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminDisableUserResponse": {
+      "base": "<p>Represents the response received from the server to disable the user as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminEnableUserRequest": {
+      "base": "<p>Represents the request that enables the user as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminEnableUserResponse": {
+      "base": "<p>Represents the response from the server for the request to enable a user as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminGetUserRequest": {
+      "base": "<p>Represents the request to get the specified user as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminGetUserResponse": {
+      "base": "<p>Represents the response from the server from the request to get the specified user as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminResetUserPasswordRequest": {
+      "base": "<p>Represents the request to reset a user's password as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminResetUserPasswordResponse": {
+      "base": "<p>Represents the response from the server to reset a user password as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminSetUserSettingsRequest": {
+      "base": "<p>Represents the request to set user settings as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminSetUserSettingsResponse": {
+      "base": "<p>Represents the response from the server to set user settings as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminUpdateUserAttributesRequest": {
+      "base": "<p>Represents the request to update the user's attributes as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminUpdateUserAttributesResponse": {
+      "base": "<p>Represents the response from the server for the request to update user attributes as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AliasAttributeType": {
+      "base": null,
+      "refs": {
+        "AliasAttributesListType$member": null
+      }
+    },
+    "AliasAttributesListType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$AliasAttributes": "<p>Attributes supported as an alias for this user pool. Possible values: <b>phone_number</b>, <b>email</b>, or <b>preferred_username</b>.</p>",
+        "UserPoolType$AliasAttributes": "<p>Specifies the attributes that are aliased in a user pool.</p>"
+      }
+    },
+    "AliasExistsException": {
+      "base": "<p>This exception is thrown when a user tries to confirm the account with an email or phone number that has already been supplied as an alias from a different account. This exception tells user that an account with this email or phone already exists.</p>",
+      "refs": {
+      }
+    },
+    "ArnType": {
+      "base": null,
+      "refs": {
+        "LambdaConfigType$PreSignUp": "<p>A pre-registration AWS Lambda trigger.</p>",
+        "LambdaConfigType$CustomMessage": "<p>A custom Message AWS Lambda trigger.</p>",
+        "LambdaConfigType$PostConfirmation": "<p>A post-confirmation AWS Lambda trigger.</p>",
+        "LambdaConfigType$PreAuthentication": "<p>A pre-authentication AWS Lambda trigger.</p>",
+        "LambdaConfigType$PostAuthentication": "<p>A post-authentication AWS Lambda trigger.</p>"
+      }
+    },
+    "AttributeDataType": {
+      "base": null,
+      "refs": {
+        "SchemaAttributeType$AttributeDataType": "<p>The attribute data type.</p>"
+      }
+    },
+    "AttributeListType": {
+      "base": null,
+      "refs": {
+        "AdminGetUserResponse$UserAttributes": "<p>An array of name-value pairs representing user attributes.</p>",
+        "AdminUpdateUserAttributesRequest$UserAttributes": "<p>An array of name-value pairs representing user attributes.</p>",
+        "GetUserResponse$UserAttributes": "<p>An array of name-value pairs representing user attributes.</p>",
+        "SignUpRequest$UserAttributes": "<p>An array of name-value pairs representing user attributes.</p>",
+        "SignUpRequest$ValidationData": "<p>The validation data in the request to register a user.</p>",
+        "UpdateUserAttributesRequest$UserAttributes": "<p>An array of name-value pairs representing user attributes.</p>",
+        "UserType$Attributes": "<p>A container with information about the user type attributes.</p>"
+      }
+    },
+    "AttributeNameListType": {
+      "base": null,
+      "refs": {
+        "AdminDeleteUserAttributesRequest$UserAttributeNames": "<p>An array of strings representing the user attribute names you wish to delete.</p>",
+        "DeleteUserAttributesRequest$UserAttributeNames": "<p>An array of strings representing the user attribute names you wish to delete.</p>"
+      }
+    },
+    "AttributeNameType": {
+      "base": null,
+      "refs": {
+        "AttributeNameListType$member": null,
+        "AttributeType$Name": "<p>The name of the attribute.</p>",
+        "CodeDeliveryDetailsType$AttributeName": "<p>The name of the attribute in the code delivery details type.</p>",
+        "GetUserAttributeVerificationCodeRequest$AttributeName": "<p>The attribute name returned by the server response to get the user attribute verification code.</p>",
+        "MFAOptionType$AttributeName": "<p>The attribute name of the MFA option type.</p>",
+        "SearchedAttributeNamesListType$member": null,
+        "VerifyUserAttributeRequest$AttributeName": "<p>The attribute name in the request to verify user attributes.</p>"
+      }
+    },
+    "AttributeType": {
+      "base": "<p>Specifies whether the attribute is standard or custom.</p>",
+      "refs": {
+        "AttributeListType$member": null
+      }
+    },
+    "AttributeValueType": {
+      "base": null,
+      "refs": {
+        "AttributeType$Value": "<p>The value of the attribute.</p>"
+      }
+    },
+    "BooleanType": {
+      "base": null,
+      "refs": {
+        "AdminGetUserResponse$Enabled": "<p>Indicates that the status is enabled.</p>",
+        "PasswordPolicyType$RequireUppercase": "<p>In the password policy that you have set, refers to whether you have required users to use at least one uppercase letter in their password.</p>",
+        "PasswordPolicyType$RequireLowercase": "<p>In the password policy that you have set, refers to whether you have required users to use at least one lowercase letter in their password.</p>",
+        "PasswordPolicyType$RequireNumbers": "<p>In the password policy that you have set, refers to whether you have required users to use at least one number in their password.</p>",
+        "PasswordPolicyType$RequireSymbols": "<p>In the password policy that you have set, refers to whether you have required users to use at least one symbol in their password.</p>",
+        "SchemaAttributeType$DeveloperOnlyAttribute": "<p>Specifies whether the attribute type is developer only.</p>",
+        "SchemaAttributeType$Mutable": "<p>Specifies whether the attribute can be changed once it has been created.</p>",
+        "SchemaAttributeType$Required": "<p>Specifies whether a user pool attribute is required. If the attribute is required and the user does not provide a value, registration or sign-in will fail.</p>",
+        "SignUpResponse$UserConfirmed": "<p>A response from the server indicating that a user registration has been confirmed.</p>",
+        "UserType$Enabled": "<p>Specifies whether the user is enabled.</p>"
+      }
+    },
+    "ChangePasswordRequest": {
+      "base": "<p>Represents the request to change a user password.</p>",
+      "refs": {
+      }
+    },
+    "ChangePasswordResponse": {
+      "base": "<p>The response from the server to the change password request.</p>",
+      "refs": {
+      }
+    },
+    "ClientIdType": {
+      "base": null,
+      "refs": {
+        "ConfirmForgotPasswordRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "ConfirmSignUpRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "DeleteUserPoolClientRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "DescribeUserPoolClientRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "ForgotPasswordRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "ResendConfirmationCodeRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "SignUpRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "UpdateUserPoolClientRequest$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "UserPoolClientDescription$ClientId": "<p>The ID of the client associated with the user pool.</p>",
+        "UserPoolClientType$ClientId": "<p>The ID of the client associated with the user pool.</p>"
+      }
+    },
+    "ClientNameType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolClientRequest$ClientName": "<p>The client name for the user pool client you would like to create.</p>",
+        "UpdateUserPoolClientRequest$ClientName": "<p>The client name from the update user pool client request.</p>",
+        "UserPoolClientDescription$ClientName": "<p>The client name from the user pool client description.</p>",
+        "UserPoolClientType$ClientName": "<p>The client name from the user pool request of the client type.</p>"
+      }
+    },
+    "ClientSecretType": {
+      "base": null,
+      "refs": {
+        "UserPoolClientType$ClientSecret": "<p>The client secret from the user pool request of the client type.</p>"
+      }
+    },
+    "CodeDeliveryDetailsListType": {
+      "base": null,
+      "refs": {
+        "UpdateUserAttributesResponse$CodeDeliveryDetailsList": "<p>The code delivery details list from the server for the request to update user attributes.</p>"
+      }
+    },
+    "CodeDeliveryDetailsType": {
+      "base": "<p>The type of code delivery details being returned from the server.</p>",
+      "refs": {
+        "CodeDeliveryDetailsListType$member": null,
+        "ForgotPasswordResponse$CodeDeliveryDetails": null,
+        "GetUserAttributeVerificationCodeResponse$CodeDeliveryDetails": "<p>The code delivery details returned by the server response to get the user attribute verification code.</p>",
+        "ResendConfirmationCodeResponse$CodeDeliveryDetails": null,
+        "SignUpResponse$CodeDeliveryDetails": null
+      }
+    },
+    "CodeMismatchException": {
+      "base": "<p>This exception is thrown if the provided code does not match what the server was expecting.</p>",
+      "refs": {
+      }
+    },
+    "ConcurrentModificationException": {
+      "base": "<p>This exception is thrown if two or more modifications are happening concurrently.</p>",
+      "refs": {
+      }
+    },
+    "ConfirmForgotPasswordRequest": {
+      "base": "<p>The request representing the confirmation for a password reset.</p>",
+      "refs": {
+      }
+    },
+    "ConfirmForgotPasswordResponse": {
+      "base": "<p>The response from the server that results from a user's request to retrieve a forgotten password.</p>",
+      "refs": {
+      }
+    },
+    "ConfirmSignUpRequest": {
+      "base": "<p>Represents the request to confirm registration of a user.</p>",
+      "refs": {
+      }
+    },
+    "ConfirmSignUpResponse": {
+      "base": "<p>Represents the response from the server for the registration confirmation.</p>",
+      "refs": {
+      }
+    },
+    "ConfirmationCodeType": {
+      "base": null,
+      "refs": {
+        "ConfirmForgotPasswordRequest$ConfirmationCode": "<p>The confirmation code sent by a user's request to retrieve a forgotten password.</p>",
+        "ConfirmSignUpRequest$ConfirmationCode": "<p>The confirmation code sent by a user's request to confirm registration.</p>",
+        "VerifyUserAttributeRequest$Code": "<p>The verification code in the request to verify user attributes.</p>"
+      }
+    },
+    "CreateUserPoolClientRequest": {
+      "base": "<p>Represents the request to create a user pool client.</p>",
+      "refs": {
+      }
+    },
+    "CreateUserPoolClientResponse": {
+      "base": "<p>Represents the response from the server to create a user pool client.</p>",
+      "refs": {
+      }
+    },
+    "CreateUserPoolRequest": {
+      "base": "<p>Represents the request to create a user pool.</p>",
+      "refs": {
+      }
+    },
+    "CreateUserPoolResponse": {
+      "base": "<p>Represents the response from the server for the request to create a user pool.</p>",
+      "refs": {
+      }
+    },
+    "CustomAttributeNameType": {
+      "base": null,
+      "refs": {
+        "SchemaAttributeType$Name": "<p>A schema attribute of the name type.</p>"
+      }
+    },
+    "CustomAttributesListType": {
+      "base": null,
+      "refs": {
+        "AddCustomAttributesRequest$CustomAttributes": "<p>An array of custom attributes, such as Mutable and Name.</p>"
+      }
+    },
+    "DateType": {
+      "base": null,
+      "refs": {
+        "AdminGetUserResponse$UserCreateDate": "<p>The date the user was created.</p>",
+        "AdminGetUserResponse$UserLastModifiedDate": "<p>The date the user was last modified.</p>",
+        "UserPoolClientType$LastModifiedDate": "<p>The last modified date from the user pool request of the client type.</p>",
+        "UserPoolClientType$CreationDate": "<p>The creation date from the user pool request of the client type.</p>",
+        "UserPoolDescriptionType$LastModifiedDate": "<p>The last modified date in a user pool description.</p>",
+        "UserPoolDescriptionType$CreationDate": "<p>The creation date in a user pool description.</p>",
+        "UserPoolType$LastModifiedDate": "<p>The last modified date of a user pool.</p>",
+        "UserPoolType$CreationDate": "<p>The creation date of a user pool.</p>",
+        "UserType$UserCreateDate": "<p>The creation date of the user.</p>",
+        "UserType$UserLastModifiedDate": "<p>The last modified date of the user.</p>"
+      }
+    },
+    "DeleteUserAttributesRequest": {
+      "base": "<p>Represents the request to delete user attributes.</p>",
+      "refs": {
+      }
+    },
+    "DeleteUserAttributesResponse": {
+      "base": "<p>Represents the response from the server to delete user attributes.</p>",
+      "refs": {
+      }
+    },
+    "DeleteUserPoolClientRequest": {
+      "base": "<p>Represents the request to delete a user pool client.</p>",
+      "refs": {
+      }
+    },
+    "DeleteUserPoolRequest": {
+      "base": "<p>Represents the request to delete a user pool.</p>",
+      "refs": {
+      }
+    },
+    "DeleteUserRequest": {
+      "base": "<p>Represents the request to delete a user.</p>",
+      "refs": {
+      }
+    },
+    "DeliveryMediumType": {
+      "base": null,
+      "refs": {
+        "CodeDeliveryDetailsType$DeliveryMedium": "<p>The delivery medium (email message or phone number).</p>",
+        "MFAOptionType$DeliveryMedium": "<p>The delivery medium (email message or SMS message) to send the MFA code.</p>"
+      }
+    },
+    "DescribeUserPoolClientRequest": {
+      "base": "<p>Represents the request to describe a user pool client.</p>",
+      "refs": {
+      }
+    },
+    "DescribeUserPoolClientResponse": {
+      "base": "<p>Represents the response from the server from a request to describe the user pool client.</p>",
+      "refs": {
+      }
+    },
+    "DescribeUserPoolRequest": {
+      "base": "<p>Represents the request to describe the user pool.</p>",
+      "refs": {
+      }
+    },
+    "DescribeUserPoolResponse": {
+      "base": "<p>Represents the response to describe the user pool.</p>",
+      "refs": {
+      }
+    },
+    "EmailVerificationMessageType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$EmailVerificationMessage": "<p>A string representing the email verification message.</p>",
+        "UpdateUserPoolRequest$EmailVerificationMessage": "<p>The contents of the email verification message.</p>",
+        "UserPoolType$EmailVerificationMessage": "<p>The contents of the email verification message.</p>"
+      }
+    },
+    "EmailVerificationSubjectType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$EmailVerificationSubject": "<p>A string representing the email verification subject.</p>",
+        "UpdateUserPoolRequest$EmailVerificationSubject": "<p>The subject of the email verfication message</p>",
+        "UserPoolType$EmailVerificationSubject": "<p>The subject of the email verification message.</p>"
+      }
+    },
+    "ExpiredCodeException": {
+      "base": "<p>This exception is thrown if a code has expired.</p>",
+      "refs": {
+      }
+    },
+    "ForceAliasCreation": {
+      "base": null,
+      "refs": {
+        "ConfirmSignUpRequest$ForceAliasCreation": "<p>Boolean to be specified to force user confirmation irrespective of existing alias. By default set to False. If this parameter is set to True and the phone number/email used for sign up confirmation already exists as an alias with a different user, the API call will migrate the alias from the previous user to the newly created user being confirmed. If set to False, the API will throw an <b>AliasExistsException</b> error.</p>"
+      }
+    },
+    "ForgotPasswordRequest": {
+      "base": "<p>Represents the request to reset a user's password.</p>",
+      "refs": {
+      }
+    },
+    "ForgotPasswordResponse": {
+      "base": "<p>Respresents the response from the server regarding the request to reset a password.</p>",
+      "refs": {
+      }
+    },
+    "GenerateSecret": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolClientRequest$GenerateSecret": "<p> Boolean to specify whether you want to generate a secret for the user pool client being created.</p>"
+      }
+    },
+    "GetUserAttributeVerificationCodeRequest": {
+      "base": "<p>Represents the request to get user attribute verification.</p>",
+      "refs": {
+      }
+    },
+    "GetUserAttributeVerificationCodeResponse": {
+      "base": "<p>The verification code response returned by the server response to get the user attribute verification code.</p>",
+      "refs": {
+      }
+    },
+    "GetUserRequest": {
+      "base": "<p>Represents the request to get information about the user.</p>",
+      "refs": {
+      }
+    },
+    "GetUserResponse": {
+      "base": "<p>Represents the response from the server from the request to get information about the user.</p>",
+      "refs": {
+      }
+    },
+    "IntegerType": {
+      "base": null,
+      "refs": {
+        "UserPoolType$EstimatedNumberOfUsers": "<p>A number estimating the size of the user pool.</p>"
+      }
+    },
+    "InternalErrorException": {
+      "base": "<p>This exception is thrown when Amazon Cognito encounters an internal error.</p>",
+      "refs": {
+      }
+    },
+    "InvalidLambdaResponseException": {
+      "base": "<p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>",
+      "refs": {
+      }
+    },
+    "InvalidParameterException": {
+      "base": "<p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>",
+      "refs": {
+      }
+    },
+    "InvalidPasswordException": {
+      "base": "<p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>",
+      "refs": {
+      }
+    },
+    "LambdaConfigType": {
+      "base": "<p>Specifies the type of configuration for AWS Lambda triggers.</p>",
+      "refs": {
+        "CreateUserPoolRequest$LambdaConfig": "<p>The Lambda trigger configuration information for the new user pool.</p>",
+        "UpdateUserPoolRequest$LambdaConfig": "<p>The AWS Lambda configuration information from the request to update the user pool.</p>",
+        "UserPoolDescriptionType$LambdaConfig": "<p>The AWS Lambda configuration information in a user pool description.</p>",
+        "UserPoolType$LambdaConfig": "<p>A container describing the AWS Lambda triggers associated with a user pool.</p>"
+      }
+    },
+    "LimitExceededException": {
+      "base": "<p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>",
+      "refs": {
+      }
+    },
+    "ListUserPoolClientsRequest": {
+      "base": "<p>Represents the request to list the user pool clients.</p>",
+      "refs": {
+      }
+    },
+    "ListUserPoolClientsResponse": {
+      "base": "<p>Represents the response from the server that lists user pool clients.</p>",
+      "refs": {
+      }
+    },
+    "ListUserPoolsRequest": {
+      "base": "<p>Represents the request to list user pools.</p>",
+      "refs": {
+      }
+    },
+    "ListUserPoolsResponse": {
+      "base": "<p>Represents the response to list user pools.</p>",
+      "refs": {
+      }
+    },
+    "ListUsersRequest": {
+      "base": "<p>Represents the request to list users.</p>",
+      "refs": {
+      }
+    },
+    "ListUsersResponse": {
+      "base": "<p>The response from the request to list users.</p>",
+      "refs": {
+      }
+    },
+    "MFAOptionListType": {
+      "base": null,
+      "refs": {
+        "AdminGetUserResponse$MFAOptions": "<p>Specifies the options for MFA (e.g., email or phone number).</p>",
+        "AdminSetUserSettingsRequest$MFAOptions": "<p>Specifies the options for MFA (e.g., email or phone number).</p>",
+        "GetUserResponse$MFAOptions": "<p>Specifies the options for MFA (e.g., email or phone number).</p>",
+        "SetUserSettingsRequest$MFAOptions": "<p>Specifies the options for MFA (e.g., email or phone number).</p>"
+      }
+    },
+    "MFAOptionType": {
+      "base": "<p>Specifies the different settings for multi-factor authentication (MFA).</p>",
+      "refs": {
+        "MFAOptionListType$member": null
+      }
+    },
+    "MessageType": {
+      "base": null,
+      "refs": {
+        "AliasExistsException$message": "<p>The message sent to the user when an alias exists.</p>",
+        "CodeMismatchException$message": "<p>The message provided when the code mismatch exception is thrown.</p>",
+        "ConcurrentModificationException$message": "<p>The message provided when the concurrent exception is thrown.</p>",
+        "ExpiredCodeException$message": "<p>The message returned when the expired code exception is thrown.</p>",
+        "InternalErrorException$message": "<p>The message returned when Amazon Cognito throws an internal error exception.</p>",
+        "InvalidLambdaResponseException$message": "<p>The message returned when the Amazon Cognito service throws an invalid AWS Lambda response exception.</p>",
+        "InvalidParameterException$message": "<p>The message returned when the Amazon Cognito service throws an invalid parameter exception.</p>",
+        "InvalidPasswordException$message": "<p>The message returned when the Amazon Cognito service throws an invalid user password exception.</p>",
+        "LimitExceededException$message": "<p>The message returned when Amazon Cognito throws a limit exceeded exception.</p>",
+        "NotAuthorizedException$message": "<p>The message returned when the Amazon Cognito service returns a not authorized exception.</p>",
+        "ResourceNotFoundException$message": "<p>The message returned when the Amazon Cognito service returns a resource not found exception.</p>",
+        "TooManyFailedAttemptsException$message": "<p>The message returned when the Amazon Cognito service returns a too many failed attempts exception.</p>",
+        "TooManyRequestsException$message": "<p>The message returned when the Amazon Cognito service returns a too many requests exception.</p>",
+        "UnexpectedLambdaException$message": "<p>The message returned when the Amazon Cognito service returns an unexpected AWS Lambda exception.</p>",
+        "UserLambdaValidationException$message": "<p>The message returned when the Amazon Cognito service returns a user validation exception with the AWS Lambda service.</p>",
+        "UsernameExistsException$message": "<p>The message returned when Amazon Cognito throws a user name exists exception.</p>"
+      }
+    },
+    "NotAuthorizedException": {
+      "base": "<p>This exception gets thrown when a user is not authorized.</p>",
+      "refs": {
+      }
+    },
+    "NumberAttributeConstraintsType": {
+      "base": "<p>The minimum and maximum value of an attribute that is of the number data type.</p>",
+      "refs": {
+        "SchemaAttributeType$NumberAttributeConstraints": "<p>Specifies the constraints for an attribute of the number type.</p>"
+      }
+    },
+    "PaginationKey": {
+      "base": null,
+      "refs": {
+        "ListUserPoolClientsRequest$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListUserPoolClientsResponse$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"
+      }
+    },
+    "PaginationKeyType": {
+      "base": null,
+      "refs": {
+        "ListUserPoolsRequest$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListUserPoolsResponse$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"
+      }
+    },
+    "PasswordPolicyMinLengthType": {
+      "base": null,
+      "refs": {
+        "PasswordPolicyType$MinimumLength": "<p>The minimum length of the password policy that you have set. Cannot be less than 6.</p>"
+      }
+    },
+    "PasswordPolicyType": {
+      "base": "<p>The password policy type.</p>",
+      "refs": {
+        "UserPoolPolicyType$PasswordPolicy": "<p>A container with information about the user pool password policy.</p>"
+      }
+    },
+    "PasswordType": {
+      "base": null,
+      "refs": {
+        "ChangePasswordRequest$PreviousPassword": "<p>The old password in the change password request.</p>",
+        "ChangePasswordRequest$ProposedPassword": "<p>The new password in the change password request.</p>",
+        "ConfirmForgotPasswordRequest$Password": "<p>The password sent by sent by a user's request to retrieve a forgotten password.</p>",
+        "SignUpRequest$Password": "<p>The password of the user you wish to register.</p>"
+      }
+    },
+    "QueryLimit": {
+      "base": null,
+      "refs": {
+        "ListUserPoolClientsRequest$MaxResults": "<p>The maximum number of results you want the request to return when listing the user pool clients.</p>"
+      }
+    },
+    "QueryLimitType": {
+      "base": null,
+      "refs": {
+        "ListUserPoolsRequest$MaxResults": "<p>The maximum number of results you want the request to return when listing the user pools.</p>",
+        "ListUsersRequest$Limit": "<p>The limit of the request to list users.</p>"
+      }
+    },
+    "ResendConfirmationCodeRequest": {
+      "base": "<p>Represents the request to resend the confirmation code.</p>",
+      "refs": {
+      }
+    },
+    "ResendConfirmationCodeResponse": {
+      "base": "<p>The response from the server when the Amazon Cognito service makes the request to resend a confirmation code.</p>",
+      "refs": {
+      }
+    },
+    "ResourceNotFoundException": {
+      "base": "<p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>",
+      "refs": {
+      }
+    },
+    "SchemaAttributeType": {
+      "base": "<p>Contains information about the schema attribute.</p>",
+      "refs": {
+        "CustomAttributesListType$member": null,
+        "SchemaAttributesListType$member": null
+      }
+    },
+    "SchemaAttributesListType": {
+      "base": null,
+      "refs": {
+        "UserPoolType$SchemaAttributes": "<p>A container with the schema attributes of a user pool.</p>"
+      }
+    },
+    "SearchPaginationTokenType": {
+      "base": null,
+      "refs": {
+        "ListUsersRequest$PaginationToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListUsersResponse$PaginationToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"
+      }
+    },
+    "SearchedAttributeNamesListType": {
+      "base": null,
+      "refs": {
+        "ListUsersRequest$AttributesToGet": "<p>The attributes to get from the request to list users.</p>"
+      }
+    },
+    "SecretHashType": {
+      "base": null,
+      "refs": {
+        "ConfirmForgotPasswordRequest$SecretHash": "<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>",
+        "ConfirmSignUpRequest$SecretHash": "<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>",
+        "ForgotPasswordRequest$SecretHash": "<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>",
+        "ResendConfirmationCodeRequest$SecretHash": "<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>",
+        "SignUpRequest$SecretHash": "<p>A keyed-hash message authentication code (HMAC) calculated using the secret key of a user pool client and username plus the client ID in the message.</p>"
+      }
+    },
+    "SetUserSettingsRequest": {
+      "base": "<p>Represents the request to set user settings.</p>",
+      "refs": {
+      }
+    },
+    "SetUserSettingsResponse": {
+      "base": "<p>The response from the server for a set user settings request.</p>",
+      "refs": {
+      }
+    },
+    "SignUpRequest": {
+      "base": "<p>Represents the request to register a user.</p>",
+      "refs": {
+      }
+    },
+    "SignUpResponse": {
+      "base": "<p>The response from the server for a registration request.</p>",
+      "refs": {
+      }
+    },
+    "SmsVerificationMessageType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$SmsVerificationMessage": "<p>A string representing the SMS verification message.</p>",
+        "CreateUserPoolRequest$SmsAuthenticationMessage": "<p>A string representing the SMS authentication message.</p>",
+        "UpdateUserPoolRequest$SmsVerificationMessage": "<p>A container with information about the SMS verification message.</p>",
+        "UpdateUserPoolRequest$SmsAuthenticationMessage": "<p>The contents of the SMS authentication message.</p>",
+        "UserPoolType$SmsVerificationMessage": "<p>The contents of the SMS verification message.</p>",
+        "UserPoolType$SmsAuthenticationMessage": "<p>The contents of the SMS authentication message.</p>"
+      }
+    },
+    "StatusType": {
+      "base": null,
+      "refs": {
+        "UserPoolDescriptionType$Status": "<p>The user pool status in a user pool description.</p>",
+        "UserPoolType$Status": "<p>The status of a user pool.</p>"
+      }
+    },
+    "StringAttributeConstraintsType": {
+      "base": "<p>The type of constraints associated with an attribute of the string type.</p>",
+      "refs": {
+        "SchemaAttributeType$StringAttributeConstraints": "<p>Specifies the constraints for an attribute of the string type.</p>"
+      }
+    },
+    "StringType": {
+      "base": null,
+      "refs": {
+        "CodeDeliveryDetailsType$Destination": "<p>The destination for the code delivery details.</p>",
+        "NumberAttributeConstraintsType$MinValue": "<p>The minimum value of an attribute that is of the number data type.</p>",
+        "NumberAttributeConstraintsType$MaxValue": "<p>The maximum value of an attribute that is of the number data type.</p>",
+        "StringAttributeConstraintsType$MinLength": "<p>The minimum length of an attribute value of the string type.</p>",
+        "StringAttributeConstraintsType$MaxLength": "<p>The maximum length of an attribute value of the string type.</p>"
+      }
+    },
+    "TokenModelType": {
+      "base": null,
+      "refs": {
+        "ChangePasswordRequest$AccessToken": "<p>The access token in the change password request.</p>",
+        "DeleteUserAttributesRequest$AccessToken": "<p>The access token used in the request to delete user attributes.</p>",
+        "DeleteUserRequest$AccessToken": "<p>The access token from a request to delete a user.</p>",
+        "GetUserAttributeVerificationCodeRequest$AccessToken": "<p>The access token returned by the server response to get the user attribute verification code.</p>",
+        "GetUserRequest$AccessToken": "<p>The access token returned by the server response to get information about the user.</p>",
+        "SetUserSettingsRequest$AccessToken": "<p>The access token for the set user settings request.</p>",
+        "UpdateUserAttributesRequest$AccessToken": "<p>The access token for the request to update user attributes.</p>",
+        "VerifyUserAttributeRequest$AccessToken": "<p>Represents the access token of the request to verify user attributes.</p>"
+      }
+    },
+    "TooManyFailedAttemptsException": {
+      "base": "<p>This exception gets thrown when the user has made too many failed attempts for a given action (e.g., sign in).</p>",
+      "refs": {
+      }
+    },
+    "TooManyRequestsException": {
+      "base": "<p>This exception gets thrown when the user has made too many requests for a given operation.</p>",
+      "refs": {
+      }
+    },
+    "UnexpectedLambdaException": {
+      "base": "<p>This exception gets thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserAttributesRequest": {
+      "base": "<p>Represents the request to update user attributes.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserAttributesResponse": {
+      "base": "<p>Represents the response from the server for the request to update user attributes.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserPoolClientRequest": {
+      "base": "<p>Represents the request to update the user pool client.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserPoolClientResponse": {
+      "base": "<p>Represents the response from the server to the request to update the user pool client.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserPoolRequest": {
+      "base": "<p>Represents the request to update the user pool.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserPoolResponse": {
+      "base": "<p>Represents the response from the server when you make a request to update the user pool.</p>",
+      "refs": {
+      }
+    },
+    "UserLambdaValidationException": {
+      "base": "<p>This exception gets thrown when the Amazon Cognito service encounters a user validation exception with the AWS Lambda service.</p>",
+      "refs": {
+      }
+    },
+    "UserPoolClientDescription": {
+      "base": "<p>The description of the user poool client.</p>",
+      "refs": {
+        "UserPoolClientListType$member": null
+      }
+    },
+    "UserPoolClientListType": {
+      "base": null,
+      "refs": {
+        "ListUserPoolClientsResponse$UserPoolClients": "<p>The user pool clients in the response that lists user pool clients.</p>"
+      }
+    },
+    "UserPoolClientType": {
+      "base": "<p>A user pool of the client type.</p>",
+      "refs": {
+        "CreateUserPoolClientResponse$UserPoolClient": "<p>The user pool client that was just created.</p>",
+        "DescribeUserPoolClientResponse$UserPoolClient": "<p>The user pool client from a server response to describe the user pool client.</p>",
+        "UpdateUserPoolClientResponse$UserPoolClient": "<p>The user pool client value from the response from the server when an update user pool client request is made.</p>"
+      }
+    },
+    "UserPoolDescriptionType": {
+      "base": "<p>A user pool description.</p>",
+      "refs": {
+        "UserPoolListType$member": null
+      }
+    },
+    "UserPoolIdType": {
+      "base": null,
+      "refs": {
+        "AddCustomAttributesRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to add custom attributes.</p>",
+        "AdminConfirmSignUpRequest$UserPoolId": "<p>The user pool ID for which you want to confirm user registration.</p>",
+        "AdminDeleteUserAttributesRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to delete user attributes.</p>",
+        "AdminDeleteUserRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to delete the user.</p>",
+        "AdminDisableUserRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to disable the user.</p>",
+        "AdminEnableUserRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to enable the user.</p>",
+        "AdminGetUserRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to get information about the user.</p>",
+        "AdminResetUserPasswordRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to reset the user's password.</p>",
+        "AdminSetUserSettingsRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to set the user's settings, such as MFA options.</p>",
+        "AdminUpdateUserAttributesRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to update user attributes.</p>",
+        "CreateUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to create a user pool client.</p>",
+        "DeleteUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to delete the client.</p>",
+        "DeleteUserPoolRequest$UserPoolId": "<p>The user pool ID for the user pool you want to delete.</p>",
+        "DescribeUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool you want to describe.</p>",
+        "DescribeUserPoolRequest$UserPoolId": "<p>The user pool ID for the user pool you want to describe.</p>",
+        "ListUserPoolClientsRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to list user pool clients.</p>",
+        "ListUsersRequest$UserPoolId": "<p>The user pool ID for which you want to list users.</p>",
+        "UpdateUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to update the user pool client.</p>",
+        "UpdateUserPoolRequest$UserPoolId": "<p>The user pool ID for the user pool you want to update.</p>",
+        "UserPoolClientDescription$UserPoolId": "<p>The user pool ID for the user pool where you want to describe the user pool client.</p>",
+        "UserPoolClientType$UserPoolId": "<p>The user pool ID for the user pool client.</p>",
+        "UserPoolDescriptionType$Id": "<p>The ID in a user pool description.</p>",
+        "UserPoolType$Id": "<p>The ID of the user pool.</p>"
+      }
+    },
+    "UserPoolListType": {
+      "base": null,
+      "refs": {
+        "ListUserPoolsResponse$UserPools": "<p>The user pools from the response to list users.</p>"
+      }
+    },
+    "UserPoolMfaType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$MfaConfiguration": "<p>Specifies MFA configuration details.</p>",
+        "UpdateUserPoolRequest$MfaConfiguration": "<p>Can be one of the following values:</p> <ul> <li><code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</li> <li><code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</li> <li><code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</li> </ul>",
+        "UserPoolType$MfaConfiguration": "<p>Can be one of the following values:</p> <ul> <li><code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</li> <li><code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</li> <li><code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</li> </ul>"
+      }
+    },
+    "UserPoolNameType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$PoolName": "<p>A string used to name the user pool.</p>",
+        "UserPoolDescriptionType$Name": "<p>The name in a user pool description.</p>",
+        "UserPoolType$Name": "<p>The name of the user pool.</p>"
+      }
+    },
+    "UserPoolPolicyType": {
+      "base": "<p>The type of policy in a user pool.</p>",
+      "refs": {
+        "CreateUserPoolRequest$Policies": "<p>The policies associated with the new user pool.</p>",
+        "UpdateUserPoolRequest$Policies": "<p>A container with the policies you wish to update in a user pool.</p>",
+        "UserPoolType$Policies": "<p>A container describing the policies associated with a user pool.</p>"
+      }
+    },
+    "UserPoolType": {
+      "base": "<p>A container with information about the user pool type.</p>",
+      "refs": {
+        "CreateUserPoolResponse$UserPool": "<p>A container for the user pool details.</p>",
+        "DescribeUserPoolResponse$UserPool": "<p>The container of metadata returned by the server to describe the pool.</p>"
+      }
+    },
+    "UserStatusType": {
+      "base": null,
+      "refs": {
+        "AdminGetUserResponse$UserStatus": "<p>The user status. Can be one of the following:</p> <ul> <li>UNCONFIRMED - User has been created but not confirmed.</li> <li>CONFIRMED - User has been confirmed.</li> <li>ARCHIVED - User is no longer active.</li> <li>COMPROMISED - User is disabled due to a potential security threat.</li> <li>UNKNOWN - User status is not known.</li> </ul>",
+        "ListUsersRequest$UserStatus": "<p>The user status. Can be one of the following:</p> <ul> <li>UNCONFIRMED - User has been created but not confirmed.</li> <li>CONFIRMED - User has been confirmed.</li> <li>ARCHIVED - User is no longer active.</li> <li>COMPROMISED - User is disabled due to a potential security threat.</li> <li>UNKNOWN - User status is not known.</li> </ul>",
+        "UserType$UserStatus": "<p>The user status. Can be one of the following:</p> <ul> <li>UNCONFIRMED - User has been created but not confirmed.</li> <li>CONFIRMED - User has been confirmed.</li> <li>ARCHIVED - User is no longer active.</li> <li>COMPROMISED - User is disabled due to a potential security threat.</li> <li>UNKNOWN - User status is not known.</li> </ul>"
+      }
+    },
+    "UserType": {
+      "base": "<p>The user type.</p>",
+      "refs": {
+        "UsersListType$member": null
+      }
+    },
+    "UsernameExistsException": {
+      "base": "<p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>",
+      "refs": {
+      }
+    },
+    "UsernameType": {
+      "base": null,
+      "refs": {
+        "AdminConfirmSignUpRequest$Username": "<p>The user name for which you want to confirm user registration.</p>",
+        "AdminDeleteUserAttributesRequest$Username": "<p>The user name of the user from which you would like to delete attributes.</p>",
+        "AdminDeleteUserRequest$Username": "<p>The user name of the user you wish to delete.</p>",
+        "AdminDisableUserRequest$Username": "<p>The user name of the user you wish to disable.</p>",
+        "AdminEnableUserRequest$Username": "<p>The user name of the user you wish to ebable.</p>",
+        "AdminGetUserRequest$Username": "<p>The user name of the user you wish to retrieve.</p>",
+        "AdminGetUserResponse$Username": "<p>The user name of the user about whom you are receiving information.</p>",
+        "AdminResetUserPasswordRequest$Username": "<p>The user name of the user whose password you wish to reset.</p>",
+        "AdminSetUserSettingsRequest$Username": "<p>The user name of the user for whom you wish to set user settings.</p>",
+        "AdminUpdateUserAttributesRequest$Username": "<p>The user name of the user for whom you want to update user attributes.</p>",
+        "ConfirmForgotPasswordRequest$Username": "<p>The user name of the user for whom you want to enter a code to retrieve a forgotten password.</p>",
+        "ConfirmSignUpRequest$Username": "<p>The user name of the user whose registration you wish to confirm.</p>",
+        "ForgotPasswordRequest$Username": "<p>The user name of the user for whom you want to enter a code to retrieve a forgotten password.</p>",
+        "GetUserResponse$Username": "<p>The user name of the user you wish to retrieve from the get user request.</p>",
+        "ResendConfirmationCodeRequest$Username": "<p>The user name of the user to whom you wish to resend a confirmation code.</p>",
+        "SignUpRequest$Username": "<p>The user name of the user you wish to register.</p>",
+        "UserType$Username": "<p>The user name of the user you wish to describe.</p>"
+      }
+    },
+    "UsersListType": {
+      "base": null,
+      "refs": {
+        "ListUsersResponse$Users": "<p>The users returned in the request to list users.</p>"
+      }
+    },
+    "VerifiedAttributeType": {
+      "base": null,
+      "refs": {
+        "VerifiedAttributesListType$member": null
+      }
+    },
+    "VerifiedAttributesListType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$AutoVerifiedAttributes": "<p>The attributes to be auto-verified. Possible values: <b>email</b>, <b>phone_number</b>.</p>",
+        "UpdateUserPoolRequest$AutoVerifiedAttributes": "<p>The attributes that are automatically verified when the Amazon Cognito service makes a request to update user pools.</p>",
+        "UserPoolType$AutoVerifiedAttributes": "<p>Specifies the attributes that are auto-verified in a user pool.</p>"
+      }
+    },
+    "VerifyUserAttributeRequest": {
+      "base": "<p>Represents the request to verify user attributes.</p>",
+      "refs": {
+      }
+    },
+    "VerifyUserAttributeResponse": {
+      "base": "<p>A container representing the response from the server from the request to verify user attributes.</p>",
+      "refs": {
+      }
+    }
+  }
+}

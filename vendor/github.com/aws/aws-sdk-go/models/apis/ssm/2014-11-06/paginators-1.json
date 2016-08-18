@@ -1,0 +1,28 @@
+{
+  "pagination": {
+    "ListAssociations": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults",
+      "result_key": "Associations"
+    },
+    "ListCommandInvocations": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults",
+      "result_key": "CommandInvocations"
+    },
+    "ListCommands": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults",
+      "result_key": "Commands"
+    },
+    "ListDocuments": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults",
+      "result_key": "DocumentIdentifiers"
+    }
+  }
+}
