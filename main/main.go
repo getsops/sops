@@ -87,6 +87,7 @@ func main() {
 		cli.StringFlag{
 			Name:  "unencrypted-suffix",
 			Usage: "override the unencrypted key suffix. default: unencrypted_",
+			Value: sops.DefaultUnencryptedSuffix,
 		},
 		cli.StringFlag{
 			Name:  "config",
@@ -175,9 +176,10 @@ func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 		return cli.NewExitError(err.Error(), 4)
 	}
 	err = store.Load(string(fileBytes), key)
+	fmt.Println(err == sops.MacMismatch)
 	if err == sops.MacMismatch && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch", 5)
-	} else if err != nil {
+	} else if err != sops.MacMismatch {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 6)
 	}
 	s, err := store.DumpUnencrypted()
@@ -195,6 +197,8 @@ func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 4)
 	}
 	var metadata sops.Metadata
+	metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
+	metadata.Version = "2.0.0"
 	var kmsKeys []sops.MasterKey
 	if c.String("kms") != "" {
 		for _, k := range kms.KMSMasterKeysFromArnString(c.String("kms")) {
@@ -221,6 +225,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 		}
 	}
 
+	store.SetMetadata(metadata)
 	out, err := store.Dump(string(key))
 	fmt.Println(out)
 	return nil

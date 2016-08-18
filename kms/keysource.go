@@ -127,3 +127,14 @@ func (k KMSMasterKey) createSession() (*session.Session, error) {
 	}
 	return sess, nil
 }
+
+func (k KMSMasterKey) ToMap() map[string]string {
+	out := make(map[string]string)
+	out["arn"] = k.Arn
+	if k.Role != "" {
+		out["role"] = k.Role
+	}
+	out["created_at"] = k.CreationDate.Format("2006-01-02T15:04:05Z")
+	out["enc"] = k.EncryptedKey
+	return out
+}

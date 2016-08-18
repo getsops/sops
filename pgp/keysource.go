@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/howeyc/gopass"
+	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/gpgagent"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/armor"
@@ -186,4 +187,12 @@ func (key *GPGMasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([
 		return []byte(pass), nil
 	}
 	return nil, fmt.Errorf("No key to unlock")
+}
+
+func (key GPGMasterKey) ToMap() map[string]string {
+	out := make(map[string]string)
+	out["fp"] = key.Fingerprint
+	out["created_at"] = key.CreationDate.Format(sops.DateFormat)
+	out["enc"] = key.EncryptedKey
+	return out
 }

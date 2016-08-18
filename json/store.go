@@ -8,7 +8,8 @@ import (
 )
 
 type JSONStore struct {
-	Data map[string]interface{}
+	Data     map[string]interface{}
+	metadata sops.Metadata
 }
 
 func (store *JSONStore) WalkValue(in interface{}, additionalAuthData string, onLeaves func(interface{}, string) (interface{}, error)) (interface{}, error) {
@@ -106,4 +107,8 @@ func (store JSONStore) LoadMetadata(in string) error {
 
 func (store JSONStore) Metadata() sops.Metadata {
 	return sops.Metadata{}
+}
+
+func (store *JSONStore) SetMetadata(metadata sops.Metadata) {
+	store.metadata = metadata
 }

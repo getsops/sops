@@ -3,11 +3,12 @@ package yaml
 import (
 	"crypto/sha512"
 	"fmt"
+	"github.com/autrilla/yaml"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/decryptor"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
-	"gopkg.in/yaml.v2"
+	"os"
 	"strconv"
 	"time"
 )
@@ -123,7 +124,7 @@ func (store *YAMLStore) Load(data, key string) error {
 	if err != nil {
 		return fmt.Errorf("Error walking tree: %s", err)
 	}
-	originalMac, err := decryptor.Decrypt(store.metadata.MessageAuthenticationCode, key, []byte(store.metadata.LastModified.Format("2006-01-02T15:04:05Z")))
+	originalMac, err := decryptor.Decrypt(store.metadata.MessageAuthenticationCode, key, []byte(store.metadata.LastModified.Format(sops.DateFormat)))
 	if err != nil {
 		return fmt.Errorf("Error decrypting MAC: %s", err)
 	}
@@ -135,12 +136,30 @@ func (store *YAMLStore) Load(data, key string) error {
 }
 
 func (store *YAMLStore) Dump(key string) (string, error) {
+	hash := sha512.New()
 	_, err := store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
-		return decryptor.Encrypt(in, key, []byte(additionalAuthData))
+		v, err := decryptor.Encrypt(in, key, []byte(additionalAuthData))
+		if err != nil {
+			return nil, err
+		}
+		bytes, err := toBytes(in)
+		if err != nil {
+			return nil, err
+		}
+		hash.Write(bytes)
+		return v, err
 	})
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
+
+	mac := fmt.Sprintf("%X", hash.Sum(nil))
+	os.Stderr.WriteString(mac)
+	store.metadata.MessageAuthenticationCode, err = decryptor.Encrypt(mac, key, []byte(store.metadata.LastModified.Format(sops.DateFormat)))
+	if err != nil {
+		return "", fmt.Errorf("Error encrypting MAC: %s", err)
+	}
+	store.Data = append(store.Data, yaml.MapItem{Key: "sops", Value: store.metadata.ToMap()})
 	out, err := yaml.Marshal(store.Data)
 	if err != nil {
 		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
@@ -173,7 +192,7 @@ func (store *YAMLStore) LoadMetadata(in string) error {
 		return err
 	}
 	store.metadata.MessageAuthenticationCode = data["mac"].(string)
-	lastModified, err := time.Parse("2006-01-02T15:04:05Z", data["lastmodified"].(string))
+	lastModified, err := time.Parse(sops.DateFormat, data["lastmodified"].(string))
 	if err != nil {
 		return fmt.Errorf("Could not parse last modified date: %s", err)
 	}
@@ -213,7 +232,7 @@ func (store *YAMLStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
 		if ok {
 			key.Role = role
 		}
-		creationDate, err := time.Parse("2006-01-02T15:04:05Z", entry["created_at"].(string))
+		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
 		if err != nil {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
@@ -231,7 +250,7 @@ func (store *YAMLStore) pgpEntries(in []interface{}) (sops.KeySource, error) {
 		key := &pgp.GPGMasterKey{}
 		key.Fingerprint = entry["fp"].(string)
 		key.EncryptedKey = entry["enc"].(string)
-		creationDate, err := time.Parse("2006-01-02T15:04:05Z", entry["created_at"].(string))
+		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
 		if err != nil {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
@@ -239,4 +258,8 @@ func (store *YAMLStore) pgpEntries(in []interface{}) (sops.KeySource, error) {
 		keysource.Keys = append(keysource.Keys, key)
 	}
 	return keysource, nil
+}
+
+func (store *YAMLStore) SetMetadata(metadata sops.Metadata) {
+	store.metadata = metadata
 }

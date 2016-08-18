@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+const DateFormat = "2006-01-02T15:04:05Z"
+
+const DefaultUnencryptedSuffix = "_unencrypted"
+
 type Error string
 
 func (e Error) Error() string { return string(e) }
@@ -30,6 +34,7 @@ type MasterKey interface {
 	Decrypt() (string, error)
 	NeedsRotation() bool
 	ToString() string
+	ToMap() map[string]string
 }
 
 type Store interface {
@@ -39,6 +44,7 @@ type Store interface {
 	DumpUnencrypted() (string, error)
 	Metadata() Metadata
 	LoadMetadata(in string) error
+	SetMetadata(Metadata)
 }
 
 func (m *Metadata) MasterKeyCount() int {
@@ -70,4 +76,20 @@ func (m *Metadata) UpdateMasterKeys(dataKey string) {
 			}
 		}
 	}
+}
+
+func (m *Metadata) ToMap() map[string]interface{} {
+	out := make(map[string]interface{})
+	out["lastmodified"] = m.LastModified.Format("2006-01-02T15:04:05Z")
+	out["unencrypted_suffix"] = m.UnencryptedSuffix
+	out["mac"] = m.MessageAuthenticationCode
+	out["version"] = m.Version
+	for _, ks := range m.KeySources {
+		keys := make([]map[string]string, 0)
+		for _, k := range ks.Keys {
+			keys = append(keys, k.ToMap())
+		}
+		out[ks.Name] = keys
+	}
+	return out
 }
