@@ -61,7 +61,7 @@ func (key *KMSMasterKey) Decrypt() (string, error) {
 }
 
 func (key *KMSMasterKey) NeedsRotation() bool {
-	return time.Since(key.CreationDate).Hours() > float64(24*30*6)
+	return time.Since(key.CreationDate) > (time.Hour * 24 * 30 * 6)
 }
 
 func (key *KMSMasterKey) ToString() string {
