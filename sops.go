@@ -1,7 +1,11 @@
 package sops
 
 import (
+	"crypto/sha512"
 	"fmt"
+	"go.mozilla.org/sops/decryptor"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -14,6 +18,93 @@ type Error string
 func (e Error) Error() string { return string(e) }
 
 const MacMismatch = Error("MAC mismatch")
+
+type TreeItem struct {
+	Key   string
+	Value interface{}
+}
+
+type TreeBranch []TreeItem
+
+func (tree TreeBranch) WalkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
+	switch in := in.(type) {
+	case string:
+		return onLeaves(in, path)
+	case int:
+		return onLeaves(in, path)
+	case bool:
+		return onLeaves(in, path)
+	case TreeBranch:
+		return tree.WalkBranch(in, path, onLeaves)
+	case []interface{}:
+		return tree.WalkSlice(in, path, onLeaves)
+	default:
+		return nil, fmt.Errorf("Cannot walk value, unknown type: %T", in)
+	}
+}
+
+func (tree TreeBranch) WalkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
+	for i, v := range in {
+		newV, err := tree.WalkValue(v, path, onLeaves)
+		if err != nil {
+			return nil, err
+		}
+		in[i] = newV
+	}
+	return in, nil
+}
+
+func (tree TreeBranch) WalkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
+	for i, item := range in {
+		newV, err := tree.WalkValue(item.Value, append(path, item.Key), onLeaves)
+		if err != nil {
+			return nil, err
+		}
+		in[i].Value = newV
+	}
+	return in, nil
+}
+
+func (tree TreeBranch) Encrypt(key string) (string, error) {
+	hash := sha512.New()
+	_, err := tree.WalkBranch(tree, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
+		v, err := decryptor.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
+		if err != nil {
+			return nil, fmt.Errorf("Could not encrypt value: %s", err)
+		}
+		bytes, err := toBytes(in)
+		if err != nil {
+			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+		}
+		hash.Write(bytes)
+		return v, err
+	})
+	if err != nil {
+		return "", fmt.Errorf("Error walking tree: %s", err)
+	}
+	return fmt.Sprintf("%X", hash.Sum(nil)), nil
+}
+
+func (tree TreeBranch) Decrypt(key string) (string, error) {
+	hash := sha512.New()
+	_, err := tree.WalkBranch(tree, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
+		v, err := decryptor.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
+		if err != nil {
+			return nil, fmt.Errorf("Could not encrypt value: %s", err)
+		}
+		bytes, err := toBytes(v)
+		if err != nil {
+			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+		}
+		hash.Write(bytes)
+		return v, err
+	})
+	if err != nil {
+		return "", fmt.Errorf("Error walking tree: %s", err)
+	}
+	return fmt.Sprintf("%X", hash.Sum(nil)), nil
+
+}
 
 type Metadata struct {
 	LastModified              time.Time
@@ -38,13 +129,10 @@ type MasterKey interface {
 }
 
 type Store interface {
-	LoadUnencrypted(data string) error
-	Load(data, key string) error
-	Dump(key string) (string, error)
-	DumpUnencrypted() (string, error)
-	Metadata() Metadata
-	LoadMetadata(in string) error
-	SetMetadata(Metadata)
+	Load(in string) (TreeBranch, error)
+	LoadMetadata(in string) (Metadata, error)
+	Dump(TreeBranch) (string, error)
+	DumpWithMetadata(TreeBranch, Metadata) (string, error)
 }
 
 func (m *Metadata) MasterKeyCount() int {
@@ -92,4 +180,21 @@ func (m *Metadata) ToMap() map[string]interface{} {
 		out[ks.Name] = keys
 	}
 	return out
+}
+
+func toBytes(in interface{}) ([]byte, error) {
+	switch in := in.(type) {
+	case string:
+		return []byte(in), nil
+	case int:
+		return []byte(strconv.Itoa(in)), nil
+	case float64:
+		return []byte(strconv.FormatFloat(in, 'f', -1, 64)), nil
+	case bool:
+		return []byte(strconv.FormatBool(in)), nil
+	case []byte:
+		return in, nil
+	default:
+		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
+	}
 }

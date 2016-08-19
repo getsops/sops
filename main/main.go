@@ -5,7 +5,6 @@ import (
 
 	"crypto/rand"
 	"fmt"
-	"go.mozilla.org/sops/json"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/yaml"
@@ -146,7 +145,7 @@ func store(path string) sops.Store {
 	if strings.HasSuffix(path, ".yaml") {
 		return &yaml.YAMLStore{}
 	} else if strings.HasSuffix(path, ".json") {
-		return &json.JSONStore{}
+		// return &json.JSONStore{}
 	}
 	panic("Unknown file type for file " + path)
 }
@@ -167,32 +166,36 @@ func findKey(keysources []sops.KeySource) (string, error) {
 
 func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 	store := store(file)
-	err := store.LoadMetadata(string(fileBytes))
+	metadata, err := store.LoadMetadata(string(fileBytes))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 3)
 	}
-	key, err := findKey(store.Metadata().KeySources)
+	key, err := findKey(metadata.KeySources)
 	if err != nil {
 		return cli.NewExitError(err.Error(), 4)
 	}
-	err = store.Load(string(fileBytes), key)
-	fmt.Println(err == sops.MacMismatch)
-	if err == sops.MacMismatch && !c.Bool("ignore-mac") {
-		return cli.NewExitError("MAC mismatch", 5)
-	} else if err != sops.MacMismatch {
+	tree, err := store.Load(string(fileBytes))
+	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 6)
 	}
-	s, err := store.DumpUnencrypted()
+	mac, err := tree.Decrypt(key)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
+	}
+	if metadata.MessageAuthenticationCode != mac && !c.Bool("ignore-mac") {
+		return cli.NewExitError("MAC mismatch.", 9)
+	}
+	out, err := store.Dump(tree)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 7)
 	}
-	fmt.Print(s)
+	fmt.Print(string(out))
 	return nil
 }
 
 func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 	store := store(file)
-	err := store.LoadUnencrypted(string(fileBytes))
+	tree, err := store.Load(string(fileBytes))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 4)
 	}
@@ -225,8 +228,9 @@ func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 		}
 	}
 
-	store.SetMetadata(metadata)
-	out, err := store.Dump(string(key))
+	mac, err := tree.Encrypt(string(key))
+	metadata.MessageAuthenticationCode = mac
+	out, err := store.DumpWithMetadata(tree, metadata)
 	fmt.Println(out)
 	return nil
 }
