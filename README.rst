@@ -275,12 +275,9 @@ AWS KMS Encryption Context
 
 SOPS has the ability to use AWS KMS key policy and encryption context
 <http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>
-to further fine control access under the same master key.
-Encryption context is a set of key-value pairs. It is not part of ciphertext
-return but is cryptographically bound to the ciphertext. Decryption requires
-exact the same encryption context as the one you passed during encryption.
-You can use KMS key policy (as shown as below) or key grant to control who
-can perform decryption with certain encryption context.
+to refine the access control of a given KMS master key.
+Encryption contexts can be used in conjunction with KMS Key Policies to define
+roles that can only access a given context. An example policy is shown below:
 
 .. code:: json
 
@@ -299,11 +296,13 @@ can perform decryption with certain encryption context.
       }
     }
 
-You can specify encryption context in the `--encryption-context` flag by
-comma separated list of key-value pairs:
+When creating a new file, you can specify encryption context in the
+`--encryption-context` flag by comma separated list of key-value pairs:
 
 	<EncryptionContext Key>:<EncryptionContext Value>,<EncryptionContext Key>:<EncryptionContext Value>
-	Environment:production,Role:web-server
+	eg.Environment:production,Role:web-server
+
+The encryption context will be stored in the file metadata and not need to be provided at decryption.
 
 
 Key Rotation
