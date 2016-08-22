@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/decryptor"
+	"go.mozilla.org/sops/aes"
 )
 
 type JSONStore struct {
@@ -62,7 +62,7 @@ func (store *JSONStore) Load(data, key string) error {
 	}
 
 	_, err = store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
-		return decryptor.Decrypt(in.(string), key, []byte(additionalAuthData))
+		return aes.Decrypt(in.(string), key, []byte(additionalAuthData))
 	})
 	if err != nil {
 		return fmt.Errorf("Error walking tree: %s", err)
@@ -72,7 +72,7 @@ func (store *JSONStore) Load(data, key string) error {
 
 func (store *JSONStore) Dump(key string) (string, error) {
 	_, err := store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
-		return decryptor.Encrypt(in, key, []byte(additionalAuthData))
+		return aes.Encrypt(in, key, []byte(additionalAuthData))
 	})
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)

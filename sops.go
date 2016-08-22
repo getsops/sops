@@ -3,7 +3,7 @@ package sops
 import (
 	"crypto/sha512"
 	"fmt"
-	"go.mozilla.org/sops/decryptor"
+	"go.mozilla.org/sops/aes"
 	"strconv"
 	"strings"
 	"time"
@@ -68,7 +68,7 @@ func (tree TreeBranch) WalkBranch(in TreeBranch, path []string, onLeaves func(in
 func (tree TreeBranch) Encrypt(key string) (string, error) {
 	hash := sha512.New()
 	_, err := tree.WalkBranch(tree, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		v, err := decryptor.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
+		v, err := aes.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
 		if err != nil {
 			return nil, fmt.Errorf("Could not encrypt value: %s", err)
 		}
@@ -88,7 +88,7 @@ func (tree TreeBranch) Encrypt(key string) (string, error) {
 func (tree TreeBranch) Decrypt(key string) (string, error) {
 	hash := sha512.New()
 	_, err := tree.WalkBranch(tree, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		v, err := decryptor.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
+		v, err := aes.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
 		if err != nil {
 			return nil, fmt.Errorf("Could not encrypt value: %s", err)
 		}

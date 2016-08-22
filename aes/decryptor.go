@@ -1,7 +1,7 @@
-package decryptor
+package aes
 
 import (
-	"crypto/aes"
+	cryptoaes "crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
@@ -22,7 +22,7 @@ func parse(value string) (*EncryptedValue, error) {
 	re := regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 	matches := re.FindStringSubmatch(value)
 	if matches == nil {
-		return nil, errors.New("Input string does not match sops' data format")
+		return nil, fmt.Errorf("Input string %s does not match sops' data format", value)
 	}
 	data, err := base64.StdEncoding.DecodeString(matches[1])
 	if err != nil {
@@ -47,7 +47,7 @@ func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) 
 	if err != nil {
 		return "", err
 	}
-	aes, err := aes.NewCipher([]byte(key))
+	aes, err := cryptoaes.NewCipher([]byte(key))
 	if err != nil {
 		return "", err
 	}
@@ -80,7 +80,7 @@ func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) 
 }
 
 func Encrypt(value interface{}, key string, additionalAuthData []byte) (string, error) {
-	aes, err := aes.NewCipher([]byte(key))
+	aes, err := cryptoaes.NewCipher([]byte(key))
 	if err != nil {
 		return "", fmt.Errorf("Could not create AES Cipher: %s", err)
 	}

@@ -1,4 +1,4 @@
-package decryptor
+package aes
 
 import (
 	"fmt"
