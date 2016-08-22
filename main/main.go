@@ -9,6 +9,7 @@ import (
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/yaml"
 	"gopkg.in/urfave/cli.v1"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -97,7 +98,6 @@ func main() {
 		if c.NArg() < 1 {
 			return cli.NewExitError("Error: no file specified", 1)
 		}
-
 		file := c.Args()[0]
 		if _, err := os.Stat(file); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" {
@@ -108,15 +108,27 @@ func main() {
 			}
 		}
 		fileBytes, err := ioutil.ReadFile(file)
+
+		var output *os.File
+		if c.Bool("in-place") {
+			var err error
+			output, err = os.Create(file)
+			if err != nil {
+				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), 10)
+			}
+			defer output.Close()
+		} else {
+			output = os.Stdout
+		}
 		if err != nil {
 			return cli.NewExitError("Error: could not read file", 2)
 		}
 		if c.Bool("encrypt") {
-			return encrypt(c, file, fileBytes)
+			return encrypt(c, file, fileBytes, output)
 		} else if c.Bool("decrypt") {
-			return decrypt(c, file, fileBytes)
+			return decrypt(c, file, fileBytes, output)
 		} else if c.Bool("rotate") {
-			return rotate(c, file, fileBytes)
+			return rotate(c, file, fileBytes, output)
 		} else {
 
 		}
@@ -162,7 +174,7 @@ func findKey(keysources []sops.KeySource) (string, error) {
 	return "", fmt.Errorf("Could not get master key")
 }
 
-func decrypt(c *cli.Context, file string, fileBytes []byte) error {
+func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
 	metadata, err := store.LoadMetadata(string(fileBytes))
 	if err != nil {
@@ -188,11 +200,14 @@ func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 7)
 	}
-	fmt.Print(string(out))
+	_, err = output.Write([]byte(out))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), 9)
+	}
 	return nil
 }
 
-func encrypt(c *cli.Context, file string, fileBytes []byte) error {
+func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
 	branch, err := store.Load(string(fileBytes))
 	if err != nil {
@@ -230,11 +245,14 @@ func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 	mac, err := tree.Encrypt(string(key))
 	metadata.MessageAuthenticationCode = mac
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
-	fmt.Println(out)
+	_, err = output.Write([]byte(out))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), 9)
+	}
 	return nil
 }
 
-func rotate(c *cli.Context, file string, fileBytes []byte) error {
+func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
 	metadata, err := store.LoadMetadata(string(fileBytes))
 	if err != nil {
@@ -271,6 +289,10 @@ func rotate(c *cli.Context, file string, fileBytes []byte) error {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), 8)
 	}
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
-	fmt.Println(out)
+
+	_, err = output.Write([]byte(out))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), 9)
+	}
 	return nil
 }
