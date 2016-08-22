@@ -26,6 +26,11 @@ type TreeItem struct {
 
 type TreeBranch []TreeItem
 
+type Tree struct {
+	Branch   TreeBranch
+	Metadata Metadata
+}
+
 func (tree TreeBranch) WalkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
 	switch in := in.(type) {
 	case string:
@@ -65,19 +70,22 @@ func (tree TreeBranch) WalkBranch(in TreeBranch, path []string, onLeaves func(in
 	return in, nil
 }
 
-func (tree TreeBranch) Encrypt(key string) (string, error) {
+func (tree Tree) Encrypt(key string) (string, error) {
 	hash := sha512.New()
-	_, err := tree.WalkBranch(tree, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		v, err := aes.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
-		if err != nil {
-			return nil, fmt.Errorf("Could not encrypt value: %s", err)
-		}
+	_, err := tree.Branch.WalkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		bytes, err := toBytes(in)
+		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
+			var err error
+			in, err = aes.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
+			if err != nil {
+				return nil, fmt.Errorf("Could not encrypt value: %s", err)
+			}
+		}
 		if err != nil {
 			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
 		}
 		hash.Write(bytes)
-		return v, err
+		return in, err
 	})
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
@@ -85,12 +93,18 @@ func (tree TreeBranch) Encrypt(key string) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
-func (tree TreeBranch) Decrypt(key string) (string, error) {
+func (tree Tree) Decrypt(key string) (string, error) {
 	hash := sha512.New()
-	_, err := tree.WalkBranch(tree, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		v, err := aes.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
-		if err != nil {
-			return nil, fmt.Errorf("Could not encrypt value: %s", err)
+	_, err := tree.Branch.WalkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
+		var v interface{}
+		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
+			var err error
+			v, err = aes.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
+			if err != nil {
+				return nil, fmt.Errorf("Could not decrypt value: %s", err)
+			}
+		} else {
+			v = in
 		}
 		bytes, err := toBytes(v)
 		if err != nil {

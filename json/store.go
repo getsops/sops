@@ -4,111 +4,123 @@ import (
 	"encoding/json"
 	"fmt"
 	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/pgp"
+	"time"
 )
 
 type JSONStore struct {
-	Data     map[string]interface{}
-	metadata sops.Metadata
 }
 
-func (store *JSONStore) WalkValue(in interface{}, additionalAuthData string, onLeaves func(interface{}, string) (interface{}, error)) (interface{}, error) {
-	switch in := in.(type) {
-	case string:
-		return onLeaves(in, additionalAuthData)
-	case int:
-		return onLeaves(in, additionalAuthData)
-	case bool:
-		return onLeaves(in, additionalAuthData)
-	case map[string]interface{}:
-		return store.WalkMap(in, additionalAuthData, onLeaves)
-	case []interface{}:
-		return store.WalkSlice(in, additionalAuthData, onLeaves)
-	default:
-		return nil, fmt.Errorf("Cannot walk value, unknown type: %T", in)
+func (store JSONStore) Load(in string) (sops.TreeBranch, error) {
+	var branch sops.TreeBranch
+	err := json.Unmarshal([]byte(in), branch)
+	if err != nil {
+		return branch, fmt.Errorf("Could not unmarshal input data: %s", err)
 	}
-}
-
-func (store *JSONStore) WalkSlice(in []interface{}, additionalAuthData string, onLeaves func(interface{}, string) (interface{}, error)) ([]interface{}, error) {
-	for i, v := range in {
-		newV, err := store.WalkValue(v, additionalAuthData, onLeaves)
-		if err != nil {
-			return nil, err
+	for i, item := range branch {
+		if item.Key == "sops" {
+			branch = append(branch[:i], branch[i+1:]...)
 		}
-		in[i] = newV
 	}
-	return in, nil
+	return branch, nil
 }
 
-func (store *JSONStore) WalkMap(in map[string]interface{}, additionalAuthData string, onLeaves func(interface{}, string) (interface{}, error)) (map[string]interface{}, error) {
-	for k, v := range in {
-		newV, err := store.WalkValue(v, additionalAuthData+k+":", onLeaves)
-		if err != nil {
-			return nil, err
-		}
-		in[k] = newV
-	}
-	return in, nil
-}
-
-func (store *JSONStore) LoadUnencrypted(data string) error {
-	return nil
-}
-
-func (store *JSONStore) Load(data, key string) error {
-	err := json.Unmarshal([]byte(data), &store.Data)
+func (store JSONStore) Dump(tree sops.TreeBranch) (string, error) {
+	out, err := json.Marshal(tree)
 	if err != nil {
-		return fmt.Errorf("Could not unmarshal input data: %s", err)
-	}
-
-	_, err = store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
-		return aes.Decrypt(in.(string), key, []byte(additionalAuthData))
-	})
-	if err != nil {
-		return fmt.Errorf("Error walking tree: %s", err)
-	}
-	return nil
-}
-
-func (store *JSONStore) Dump(key string) (string, error) {
-	_, err := store.WalkValue(store.Data, "", func(in interface{}, additionalAuthData string) (interface{}, error) {
-		return aes.Encrypt(in, key, []byte(additionalAuthData))
-	})
-	if err != nil {
-		return "", fmt.Errorf("Error walking tree: %s", err)
-	}
-	out, err := json.Marshal(store.Data)
-	if err != nil {
-		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+		return "", fmt.Errorf("Error marshaling to json: %s", err)
 	}
 	return string(out), nil
 }
 
-func (store *JSONStore) DumpUnencrypted() (string, error) {
-	out, err := json.Marshal(store.Data)
+func (store JSONStore) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
+	tree = append(tree, sops.TreeItem{Key: "sops", Value: metadata.ToMap()})
+	out, err := json.Marshal(tree)
 	if err != nil {
-		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+		return "", fmt.Errorf("Error marshaling to json: %s", err)
 	}
 	return string(out), nil
 }
 
-type SopsMetadata struct {
-	Mac               string
-	Version           string
-	KMS               []map[string]string
-	PGP               []map[string]string
-	LastModifed       string `yaml:"lastmodified"`
-	UnencryptedSuffix string `yaml:"unencrypted_suffix"`
+func (store JSONStore) LoadMetadata(in string) (sops.Metadata, error) {
+	var metadata sops.Metadata
+	data := make(map[interface{}]interface{})
+	encoded := make(map[interface{}]interface{})
+	if err := json.Unmarshal([]byte(in), &encoded); err != nil {
+		return metadata, fmt.Errorf("Error unmarshalling input json: %s", err)
+	}
+
+	sopsJSON, err := json.Marshal(encoded["sops"])
+	if err != nil {
+		return metadata, err
+	}
+
+	err = json.Unmarshal(sopsJSON, &data)
+	if err != nil {
+		return metadata, err
+	}
+	metadata.MessageAuthenticationCode = data["mac"].(string)
+	lastModified, err := time.Parse(sops.DateFormat, data["lastmodified"].(string))
+	if err != nil {
+		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
+	}
+	metadata.LastModified = lastModified
+	metadata.UnencryptedSuffix = data["unencrypted_suffix"].(string)
+	metadata.Version = data["version"].(string)
+	if k, ok := data["kms"].([]interface{}); ok {
+		ks, err := store.kmsEntries(k)
+		if err == nil {
+			metadata.KeySources = append(metadata.KeySources, ks)
+		}
+
+	}
+
+	if pgp, ok := data["pgp"].([]interface{}); ok {
+		ks, err := store.pgpEntries(pgp)
+		if err == nil {
+			metadata.KeySources = append(metadata.KeySources, ks)
+		}
+	}
+	return metadata, nil
 }
 
-func (store JSONStore) LoadMetadata(in string) error {
-	return nil
+func (store JSONStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
+	var keys []sops.MasterKey
+	keysource := sops.KeySource{Name: "kms", Keys: keys}
+	for _, v := range in {
+		entry := v.(map[interface{}]interface{})
+		key := &kms.KMSMasterKey{}
+		key.Arn = entry["arn"].(string)
+		key.EncryptedKey = entry["enc"].(string)
+		role, ok := entry["role"].(string)
+		if ok {
+			key.Role = role
+		}
+		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
+		if err != nil {
+			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+		}
+		key.CreationDate = creationDate
+		keysource.Keys = append(keysource.Keys, key)
+	}
+	return keysource, nil
 }
 
-func (store JSONStore) Metadata() sops.Metadata {
-	return sops.Metadata{}
-}
-
-func (store *JSONStore) SetMetadata(metadata sops.Metadata) {
-	store.metadata = metadata
+func (store JSONStore) pgpEntries(in []interface{}) (sops.KeySource, error) {
+	var keys []sops.MasterKey
+	keysource := sops.KeySource{Name: "pgp", Keys: keys}
+	for _, v := range in {
+		entry := v.(map[interface{}]interface{})
+		key := &pgp.GPGMasterKey{}
+		key.Fingerprint = entry["fp"].(string)
+		key.EncryptedKey = entry["enc"].(string)
+		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
+		if err != nil {
+			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+		}
+		key.CreationDate = creationDate
+		keysource.Keys = append(keysource.Keys, key)
+	}
+	return keysource, nil
 }

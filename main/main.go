@@ -174,10 +174,11 @@ func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 	if err != nil {
 		return cli.NewExitError(err.Error(), 4)
 	}
-	tree, err := store.Load(string(fileBytes))
+	branch, err := store.Load(string(fileBytes))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 6)
 	}
+	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	mac, err := tree.Decrypt(key)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
@@ -185,7 +186,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 	if metadata.MessageAuthenticationCode != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
-	out, err := store.Dump(tree)
+	out, err := store.Dump(tree.Branch)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 7)
 	}
@@ -195,7 +196,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte) error {
 
 func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 	store := store(file)
-	tree, err := store.Load(string(fileBytes))
+	branch, err := store.Load(string(fileBytes))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 4)
 	}
@@ -227,10 +228,10 @@ func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 			err = k.Encrypt(string(key))
 		}
 	}
-
+	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	mac, err := tree.Encrypt(string(key))
 	metadata.MessageAuthenticationCode = mac
-	out, err := store.DumpWithMetadata(tree, metadata)
+	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 	fmt.Println(out)
 	return nil
 }
