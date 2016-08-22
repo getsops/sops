@@ -270,6 +270,41 @@ appending it to the ARN of the master key, separated by a **+** sign::
 	<KMS ARN>+<ROLE ARN>
 	arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz
 
+AWS KMS Encryption Context
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SOPS has the ability to use AWS KMS key policy and encryption context
+<http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>
+to refine the access control of a given KMS master key.
+Encryption contexts can be used in conjunction with KMS Key Policies to define
+roles that can only access a given context. An example policy is shown below:
+
+.. code:: json
+
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111122223333:role/RoleForExampleApp"
+      },
+      "Action": "kms:Decrypt",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "kms:EncryptionContext:AppName": "ExampleApp",
+          "kms:EncryptionContext:FilePath": "/var/opt/secrets/"
+        }
+      }
+    }
+
+When creating a new file, you can specify encryption context in the
+`--encryption-context` flag by comma separated list of key-value pairs:
+
+	<EncryptionContext Key>:<EncryptionContext Value>,<EncryptionContext Key>:<EncryptionContext Value>
+	eg.Environment:production,Role:web-server
+
+The encryption context will be stored in the file metadata and not need to be provided at decryption.
+
+
 Key Rotation
 ~~~~~~~~~~~~
 
