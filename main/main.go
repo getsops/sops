@@ -116,7 +116,7 @@ func main() {
 		} else if c.Bool("decrypt") {
 			return decrypt(c, file, fileBytes)
 		} else if c.Bool("rotate") {
-
+			return rotate(c, file, fileBytes)
 		} else {
 
 		}
@@ -152,9 +152,7 @@ func store(path string) sops.Store {
 
 func findKey(keysources []sops.KeySource) (string, error) {
 	for _, ks := range keysources {
-		fmt.Println("Trying keysource: ", ks.Name)
 		for _, k := range ks.Keys {
-			fmt.Println("Trying key: ", k.ToString())
 			key, err := k.Decrypt()
 			if err == nil {
 				return key, nil
@@ -231,6 +229,47 @@ func encrypt(c *cli.Context, file string, fileBytes []byte) error {
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	mac, err := tree.Encrypt(string(key))
 	metadata.MessageAuthenticationCode = mac
+	out, err := store.DumpWithMetadata(tree.Branch, metadata)
+	fmt.Println(out)
+	return nil
+}
+
+func rotate(c *cli.Context, file string, fileBytes []byte) error {
+	store := store(file)
+	metadata, err := store.LoadMetadata(string(fileBytes))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 3)
+	}
+	key, err := findKey(metadata.KeySources)
+	if err != nil {
+		return cli.NewExitError(err.Error(), 4)
+	}
+	branch, err := store.Load(string(fileBytes))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 6)
+	}
+	tree := sops.Tree{Branch: branch, Metadata: metadata}
+	mac, err := tree.Decrypt(key)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
+	}
+	if metadata.MessageAuthenticationCode != mac && !c.Bool("ignore-mac") {
+		return cli.NewExitError("MAC mismatch.", 9)
+	}
+	newKey := make([]byte, 32)
+	_, err = rand.Read(newKey)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not generate random key: %s", err), 8)
+	}
+	for _, ks := range metadata.KeySources {
+		for _, k := range ks.Keys {
+			k.Encrypt(string(newKey))
+		}
+	}
+	_, err = tree.Encrypt(string(newKey))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), 8)
+	}
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 	fmt.Println(out)
 	return nil
