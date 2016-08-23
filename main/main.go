@@ -5,6 +5,7 @@ import (
 
 	"crypto/rand"
 	"fmt"
+	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/yaml"
@@ -193,7 +194,8 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
 	}
-	if metadata.MessageAuthenticationCode != mac && !c.Bool("ignore-mac") {
+	originalMac, err := aes.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(sops.DateFormat)))
+	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
 	out, err := store.Dump(tree.Branch)
@@ -271,7 +273,8 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
 	}
-	if metadata.MessageAuthenticationCode != mac && !c.Bool("ignore-mac") {
+	originalMac, err := aes.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(sops.DateFormat)))
+	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
 	newKey := make([]byte, 32)
