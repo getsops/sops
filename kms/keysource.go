@@ -84,6 +84,9 @@ func NewKMSMasterKeyFromArn(arn string) KMSMasterKey {
 
 func KMSMasterKeysFromArnString(arn string) []KMSMasterKey {
 	var keys []KMSMasterKey
+	if arn == "" {
+		return keys
+	}
 	for _, s := range strings.Split(arn, ",") {
 		keys = append(keys, NewKMSMasterKeyFromArn(s))
 	}

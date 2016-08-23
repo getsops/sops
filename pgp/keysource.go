@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/howeyc/gopass"
 	gpgagent "go.mozilla.org/gopgagent"
-	"go.mozilla.org/sops"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/armor"
 	"io/ioutil"
@@ -16,6 +15,8 @@ import (
 	"strings"
 	"time"
 )
+
+const DateFormat = "2006-01-02T15:04:05Z"
 
 type GPGMasterKey struct {
 	Fingerprint  string
@@ -117,6 +118,9 @@ func NewGPGMasterKeyFromFingerprint(fingerprint string) GPGMasterKey {
 
 func GPGMasterKeysFromFingerprintString(fingerprint string) []GPGMasterKey {
 	var keys []GPGMasterKey
+	if fingerprint == "" {
+		return keys
+	}
 	for _, s := range strings.Split(fingerprint, ",") {
 		keys = append(keys, NewGPGMasterKeyFromFingerprint(s))
 	}
@@ -192,7 +196,7 @@ func (key *GPGMasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([
 func (key GPGMasterKey) ToMap() map[string]string {
 	out := make(map[string]string)
 	out["fp"] = key.Fingerprint
-	out["created_at"] = key.CreationDate.Format(sops.DateFormat)
+	out["created_at"] = key.CreationDate.Format(DateFormat)
 	out["enc"] = key.EncryptedKey
 	return out
 }

@@ -4,6 +4,8 @@ import (
 	"crypto/sha512"
 	"fmt"
 	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/pgp"
 	"strconv"
 	"strings"
 	"time"
@@ -156,9 +158,8 @@ func (m *Metadata) MasterKeyCount() int {
 	}
 	return count
 }
-
 func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
-	for _, ks := range m.KeySources {
+	for j, ks := range m.KeySources {
 		for i, k := range ks.Keys {
 			for _, k2 := range keys {
 				if k.ToString() == k2.ToString() {
@@ -166,6 +167,7 @@ func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 				}
 			}
 		}
+		m.KeySources[j] = ks
 	}
 }
 
@@ -178,6 +180,49 @@ func (m *Metadata) UpdateMasterKeys(dataKey string) {
 			}
 		}
 	}
+}
+
+func (metadata *Metadata) AddPGPMasterKeys(pgpFps string) {
+	for i, ks := range metadata.KeySources {
+		if ks.Name == "pgp" {
+			var keys []MasterKey
+			for _, k := range pgp.GPGMasterKeysFromFingerprintString(pgpFps) {
+				keys = append(keys, &k)
+				fmt.Println("Keys to add:", keys)
+			}
+			ks.Keys = append(ks.Keys, keys...)
+			metadata.KeySources[i] = ks
+		}
+	}
+}
+
+func (metadata *Metadata) AddKMSMasterKeys(kmsArns string) {
+	for i, ks := range metadata.KeySources {
+		if ks.Name == "kms" {
+			var keys []MasterKey
+			for _, k := range kms.KMSMasterKeysFromArnString(kmsArns) {
+				keys = append(keys, &k)
+			}
+			ks.Keys = append(ks.Keys, keys...)
+			metadata.KeySources[i] = ks
+		}
+	}
+}
+
+func (metadata *Metadata) RemovePGPMasterKeys(pgpFps string) {
+	var keys []MasterKey
+	for _, k := range pgp.GPGMasterKeysFromFingerprintString(pgpFps) {
+		keys = append(keys, &k)
+	}
+	metadata.RemoveMasterKeys(keys)
+}
+
+func (metadata *Metadata) RemoveKMSMasterKeys(arns string) {
+	var keys []MasterKey
+	for _, k := range kms.KMSMasterKeysFromArnString(arns) {
+		keys = append(keys, &k)
+	}
+	metadata.RemoveMasterKeys(keys)
 }
 
 func (m *Metadata) ToMap() map[string]interface{} {

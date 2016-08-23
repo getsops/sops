@@ -9,10 +9,10 @@ import (
 	"time"
 )
 
-type YAMLStore struct {
+type Store struct {
 }
 
-func (store YAMLStore) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
+func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	branch := make(sops.TreeBranch, 0)
 	for _, item := range in {
 		branch = append(branch, sops.TreeItem{
@@ -23,7 +23,7 @@ func (store YAMLStore) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	return branch
 }
 
-func (store YAMLStore) Load(in string) (sops.TreeBranch, error) {
+func (store Store) Load(in string) (sops.TreeBranch, error) {
 	var data yaml.MapSlice
 	if err := yaml.Unmarshal([]byte(in), &data); err != nil {
 		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
@@ -36,7 +36,7 @@ func (store YAMLStore) Load(in string) (sops.TreeBranch, error) {
 	return store.mapSliceToTreeBranch(data), nil
 }
 
-func (store YAMLStore) yamlValueToTreeValue(in interface{}) interface{} {
+func (store Store) yamlValueToTreeValue(in interface{}) interface{} {
 	switch in := in.(type) {
 	case map[interface{}]interface{}:
 		return store.yamlMapToTreeBranch(in)
@@ -49,14 +49,14 @@ func (store YAMLStore) yamlValueToTreeValue(in interface{}) interface{} {
 	}
 }
 
-func (store *YAMLStore) yamlSliceToTreeValue(in []interface{}) []interface{} {
+func (store *Store) yamlSliceToTreeValue(in []interface{}) []interface{} {
 	for i, v := range in {
 		in[i] = store.yamlValueToTreeValue(v)
 	}
 	return in
 }
 
-func (store *YAMLStore) yamlMapToTreeBranch(in map[interface{}]interface{}) sops.TreeBranch {
+func (store *Store) yamlMapToTreeBranch(in map[interface{}]interface{}) sops.TreeBranch {
 	branch := make(sops.TreeBranch, 0)
 	for k, v := range in {
 		branch = append(branch, sops.TreeItem{
@@ -67,7 +67,7 @@ func (store *YAMLStore) yamlMapToTreeBranch(in map[interface{}]interface{}) sops
 	return branch
 }
 
-func (store YAMLStore) treeValueToYamlValue(in interface{}) interface{} {
+func (store Store) treeValueToYamlValue(in interface{}) interface{} {
 	switch in := in.(type) {
 	case sops.TreeBranch:
 		return store.treeBranchToYamlMap(in)
@@ -76,7 +76,7 @@ func (store YAMLStore) treeValueToYamlValue(in interface{}) interface{} {
 	}
 }
 
-func (store YAMLStore) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
+func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	branch := make(yaml.MapSlice, 0)
 	for _, item := range in {
 		branch = append(branch, yaml.MapItem{
@@ -87,7 +87,7 @@ func (store YAMLStore) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
-func (store YAMLStore) Dump(tree sops.TreeBranch) (string, error) {
+func (store Store) Dump(tree sops.TreeBranch) (string, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	out, err := yaml.Marshal(yamlMap)
 	if err != nil {
@@ -96,7 +96,7 @@ func (store YAMLStore) Dump(tree sops.TreeBranch) (string, error) {
 	return string(out), nil
 }
 
-func (store YAMLStore) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
+func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: metadata.ToMap()})
 	out, err := yaml.Marshal(yamlMap)
@@ -106,7 +106,7 @@ func (store YAMLStore) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Meta
 	return string(out), nil
 }
 
-func (store *YAMLStore) LoadMetadata(in string) (sops.Metadata, error) {
+func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
 	var metadata sops.Metadata
 	data := make(map[interface{}]interface{})
 	encoded := make(map[interface{}]interface{})
@@ -148,7 +148,7 @@ func (store *YAMLStore) LoadMetadata(in string) (sops.Metadata, error) {
 	return metadata, nil
 }
 
-func (store *YAMLStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
+func (store *Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 	var keys []sops.MasterKey
 	keysource := sops.KeySource{Name: "kms", Keys: keys}
 	for _, v := range in {
@@ -170,7 +170,7 @@ func (store *YAMLStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
 	return keysource, nil
 }
 
-func (store *YAMLStore) pgpEntries(in []interface{}) (sops.KeySource, error) {
+func (store *Store) pgpEntries(in []interface{}) (sops.KeySource, error) {
 	var keys []sops.MasterKey
 	keysource := sops.KeySource{Name: "pgp", Keys: keys}
 	for _, v := range in {
