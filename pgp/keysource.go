@@ -110,7 +110,7 @@ func (key *GPGMasterKey) gpgHome() string {
 func NewGPGMasterKeyFromFingerprint(fingerprint string) GPGMasterKey {
 	return GPGMasterKey{
 		Fingerprint:  strings.Replace(fingerprint, " ", "", -1),
-		CreationDate: time.Now(),
+		CreationDate: time.Now().UTC(),
 	}
 }
 
@@ -194,7 +194,7 @@ func (key *GPGMasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([
 func (key GPGMasterKey) ToMap() map[string]string {
 	out := make(map[string]string)
 	out["fp"] = key.Fingerprint
-	out["created_at"] = key.CreationDate.Format(time.RFC3339)
+	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out
 }

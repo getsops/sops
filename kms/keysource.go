@@ -78,7 +78,7 @@ func NewKMSMasterKeyFromArn(arn string) KMSMasterKey {
 	} else {
 		k.Arn = arn
 	}
-	k.CreationDate = time.Now()
+	k.CreationDate = time.Now().UTC()
 	return k
 }
 
@@ -137,7 +137,7 @@ func (k KMSMasterKey) ToMap() map[string]string {
 	if k.Role != "" {
 		out["role"] = k.Role
 	}
-	out["created_at"] = k.CreationDate.Format(time.RFC3339)
+	out["created_at"] = k.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = k.EncryptedKey
 	return out
 }
