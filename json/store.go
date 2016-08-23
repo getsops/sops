@@ -57,7 +57,9 @@ func (store JSONStore) LoadMetadata(in string) (sops.Metadata, error) {
 	}
 	metadata.LastModified = lastModified
 	metadata.UnencryptedSuffix = data["unencrypted_suffix"].(string)
-	metadata.Version = data["version"].(string)
+	if metadata.Version, ok = data["version"].(string); !ok {
+		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
+	}
 	if k, ok := data["kms"].([]interface{}); ok {
 		ks, err := store.kmsEntries(k)
 		if err == nil {

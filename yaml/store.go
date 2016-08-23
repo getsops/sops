@@ -6,6 +6,7 @@ import (
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"strconv"
 	"time"
 )
 
@@ -108,6 +109,7 @@ func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata
 
 func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
 	var metadata sops.Metadata
+	var ok bool
 	data := make(map[interface{}]interface{})
 	err := yaml.Unmarshal([]byte(in), &data)
 	if err != nil {
@@ -121,7 +123,9 @@ func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
 	}
 	metadata.LastModified = lastModified
 	metadata.UnencryptedSuffix = data["unencrypted_suffix"].(string)
-	metadata.Version = data["version"].(string)
+	if metadata.Version, ok = data["version"].(string); !ok {
+		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
+	}
 	if k, ok := data["kms"].([]interface{}); ok {
 		ks, err := store.kmsEntries(k)
 		if err == nil {
