@@ -18,9 +18,10 @@ type EncryptedValue struct {
 	datatype string
 }
 
+var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
+
 func parse(value string) (*EncryptedValue, error) {
-	re := regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
-	matches := re.FindStringSubmatch(value)
+	matches := encre.FindStringSubmatch(value)
 	if matches == nil {
 		return nil, fmt.Errorf("Input string %s does not match sops' data format", value)
 	}
