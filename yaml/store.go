@@ -144,7 +144,7 @@ func (store *Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 	keysource := sops.KeySource{Name: "kms", Keys: keys}
 	for _, v := range in {
 		entry := v.(map[interface{}]interface{})
-		key := &kms.KMSMasterKey{}
+		key := &kms.MasterKey{}
 		key.Arn = entry["arn"].(string)
 		key.EncryptedKey = entry["enc"].(string)
 		role, ok := entry["role"].(string)
@@ -166,7 +166,7 @@ func (store *Store) pgpEntries(in []interface{}) (sops.KeySource, error) {
 	keysource := sops.KeySource{Name: "pgp", Keys: keys}
 	for _, v := range in {
 		entry := v.(map[interface{}]interface{})
-		key := &pgp.GPGMasterKey{}
+		key := &pgp.MasterKey{}
 		key.Fingerprint = entry["fp"].(string)
 		key.EncryptedKey = entry["enc"].(string)
 		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))

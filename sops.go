@@ -184,7 +184,7 @@ func (metadata *Metadata) AddPGPMasterKeys(pgpFps string) {
 	for i, ks := range metadata.KeySources {
 		if ks.Name == "pgp" {
 			var keys []MasterKey
-			for _, k := range pgp.GPGMasterKeysFromFingerprintString(pgpFps) {
+			for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
 				keys = append(keys, &k)
 				fmt.Println("Keys to add:", keys)
 			}
@@ -198,7 +198,7 @@ func (metadata *Metadata) AddKMSMasterKeys(kmsArns string) {
 	for i, ks := range metadata.KeySources {
 		if ks.Name == "kms" {
 			var keys []MasterKey
-			for _, k := range kms.KMSMasterKeysFromArnString(kmsArns) {
+			for _, k := range kms.MasterKeysFromArnString(kmsArns) {
 				keys = append(keys, &k)
 			}
 			ks.Keys = append(ks.Keys, keys...)
@@ -209,7 +209,7 @@ func (metadata *Metadata) AddKMSMasterKeys(kmsArns string) {
 
 func (metadata *Metadata) RemovePGPMasterKeys(pgpFps string) {
 	var keys []MasterKey
-	for _, k := range pgp.GPGMasterKeysFromFingerprintString(pgpFps) {
+	for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
 		keys = append(keys, &k)
 	}
 	metadata.RemoveMasterKeys(keys)
@@ -217,7 +217,7 @@ func (metadata *Metadata) RemovePGPMasterKeys(pgpFps string) {
 
 func (metadata *Metadata) RemoveKMSMasterKeys(arns string) {
 	var keys []MasterKey
-	for _, k := range kms.KMSMasterKeysFromArnString(arns) {
+	for _, k := range kms.MasterKeysFromArnString(arns) {
 		keys = append(keys, &k)
 	}
 	metadata.RemoveMasterKeys(keys)

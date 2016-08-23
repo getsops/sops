@@ -8,7 +8,7 @@ import (
 
 func TestKMS(t *testing.T) {
 	// TODO: make this not terrible and mock KMS with a reverseable operation on the key, or something. Good luck running the tests on a machine that's not mine!
-	k := KMSMasterKey{Arn: "arn:aws:kms:us-east-1:927034868273:key/e9fc75db-05e9-44c1-9c35-633922bac347", Role: "", EncryptedKey: ""}
+	k := MasterKey{Arn: "arn:aws:kms:us-east-1:927034868273:key/e9fc75db-05e9-44c1-9c35-633922bac347", Role: "", EncryptedKey: ""}
 	f := func(x string) bool {
 		err := k.Encrypt(x)
 		if err != nil {
@@ -34,7 +34,7 @@ func TestKMS(t *testing.T) {
 
 func TestKMSKeySourceFromString(t *testing.T) {
 	s := "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e+arn:aws:iam::927034868273:role/sops-dev, arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
-	ks := KMSMasterKeysFromArnString(s)
+	ks := MasterKeysFromArnString(s)
 	k1 := ks[0]
 	k2 := ks[1]
 	expectedArn1 := "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e"

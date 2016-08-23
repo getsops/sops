@@ -14,14 +14,14 @@ import (
 	"time"
 )
 
-type KMSMasterKey struct {
+type MasterKey struct {
 	Arn          string
 	Role         string
 	EncryptedKey string
 	CreationDate time.Time
 }
 
-func (key *KMSMasterKey) Encrypt(dataKey []byte) error {
+func (key *MasterKey) Encrypt(dataKey []byte) error {
 	sess, err := key.createSession()
 	if err != nil {
 		return err
@@ -35,14 +35,14 @@ func (key *KMSMasterKey) Encrypt(dataKey []byte) error {
 	return nil
 }
 
-func (key *KMSMasterKey) EncryptIfNeeded(dataKey []byte) error {
+func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
 	}
 	return nil
 }
 
-func (key *KMSMasterKey) Decrypt() ([]byte, error) {
+func (key *MasterKey) Decrypt() ([]byte, error) {
 	k, err := base64.StdEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
@@ -60,16 +60,16 @@ func (key *KMSMasterKey) Decrypt() ([]byte, error) {
 	return decrypted.Plaintext, nil
 }
 
-func (key *KMSMasterKey) NeedsRotation() bool {
+func (key *MasterKey) NeedsRotation() bool {
 	return time.Since(key.CreationDate) > (time.Hour * 24 * 30 * 6)
 }
 
-func (key *KMSMasterKey) ToString() string {
+func (key *MasterKey) ToString() string {
 	return key.Arn
 }
 
-func NewKMSMasterKeyFromArn(arn string) KMSMasterKey {
-	k := KMSMasterKey{}
+func NewMasterKeyFromArn(arn string) MasterKey {
+	k := MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	roleIndex := strings.Index(arn, "+arn:aws:iam::")
 	if roleIndex > 0 {
@@ -82,18 +82,18 @@ func NewKMSMasterKeyFromArn(arn string) KMSMasterKey {
 	return k
 }
 
-func KMSMasterKeysFromArnString(arn string) []KMSMasterKey {
-	var keys []KMSMasterKey
+func MasterKeysFromArnString(arn string) []MasterKey {
+	var keys []MasterKey
 	if arn == "" {
 		return keys
 	}
 	for _, s := range strings.Split(arn, ",") {
-		keys = append(keys, NewKMSMasterKeyFromArn(s))
+		keys = append(keys, NewMasterKeyFromArn(s))
 	}
 	return keys
 }
 
-func (k KMSMasterKey) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
+func (k MasterKey) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return nil, err
@@ -114,7 +114,7 @@ func (k KMSMasterKey) createStsSession(config aws.Config, sess *session.Session)
 	return sess, nil
 }
 
-func (k KMSMasterKey) createSession() (*session.Session, error) {
+func (k MasterKey) createSession() (*session.Session, error) {
 	re := regexp.MustCompile(`^arn:aws:kms:(.+):([0-9]+):key/(.+)$`)
 	matches := re.FindStringSubmatch(k.Arn)
 	if matches == nil {
@@ -131,7 +131,7 @@ func (k KMSMasterKey) createSession() (*session.Session, error) {
 	return sess, nil
 }
 
-func (k KMSMasterKey) ToMap() map[string]string {
+func (k MasterKey) ToMap() map[string]string {
 	out := make(map[string]string)
 	out["arn"] = k.Arn
 	if k.Role != "" {

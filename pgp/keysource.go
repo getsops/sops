@@ -16,13 +16,13 @@ import (
 	"time"
 )
 
-type GPGMasterKey struct {
+type MasterKey struct {
 	Fingerprint  string
 	EncryptedKey string
 	CreationDate time.Time
 }
 
-func (key *GPGMasterKey) Encrypt(dataKey []byte) error {
+func (key *MasterKey) Encrypt(dataKey []byte) error {
 	ring, err := key.pubRing()
 	if err != nil {
 		return err
@@ -61,14 +61,14 @@ func (key *GPGMasterKey) Encrypt(dataKey []byte) error {
 	return nil
 }
 
-func (key *GPGMasterKey) EncryptIfNeeded(dataKey []byte) error {
+func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
 	}
 	return nil
 }
 
-func (key *GPGMasterKey) Decrypt() ([]byte, error) {
+func (key *MasterKey) Decrypt() ([]byte, error) {
 	ring, err := key.secRing()
 	if err != nil {
 		return nil, fmt.Errorf("Could not load secring: %s", err)
@@ -87,15 +87,15 @@ func (key *GPGMasterKey) Decrypt() ([]byte, error) {
 	return nil, fmt.Errorf("The key could not be decrypted with any of the GPG entries")
 }
 
-func (key *GPGMasterKey) NeedsRotation() bool {
+func (key *MasterKey) NeedsRotation() bool {
 	return time.Since(key.CreationDate).Hours() > 24*30*6
 }
 
-func (key *GPGMasterKey) ToString() string {
+func (key *MasterKey) ToString() string {
 	return key.Fingerprint
 }
 
-func (key *GPGMasterKey) gpgHome() string {
+func (key *MasterKey) gpgHome() string {
 	dir := os.Getenv("GNUPGHOME")
 	if dir == "" {
 		usr, err := user.Current()
@@ -107,25 +107,25 @@ func (key *GPGMasterKey) gpgHome() string {
 	return dir
 }
 
-func NewGPGMasterKeyFromFingerprint(fingerprint string) GPGMasterKey {
-	return GPGMasterKey{
+func NewMasterKeyFromFingerprint(fingerprint string) MasterKey {
+	return MasterKey{
 		Fingerprint:  strings.Replace(fingerprint, " ", "", -1),
 		CreationDate: time.Now().UTC(),
 	}
 }
 
-func GPGMasterKeysFromFingerprintString(fingerprint string) []GPGMasterKey {
-	var keys []GPGMasterKey
+func MasterKeysFromFingerprintString(fingerprint string) []MasterKey {
+	var keys []MasterKey
 	if fingerprint == "" {
 		return keys
 	}
 	for _, s := range strings.Split(fingerprint, ",") {
-		keys = append(keys, NewGPGMasterKeyFromFingerprint(s))
+		keys = append(keys, NewMasterKeyFromFingerprint(s))
 	}
 	return keys
 }
 
-func (key *GPGMasterKey) loadRing(path string) (openpgp.EntityList, error) {
+func (key *MasterKey) loadRing(path string) (openpgp.EntityList, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return openpgp.EntityList{}, err
@@ -138,15 +138,15 @@ func (key *GPGMasterKey) loadRing(path string) (openpgp.EntityList, error) {
 	return keyring, nil
 }
 
-func (key *GPGMasterKey) secRing() (openpgp.EntityList, error) {
+func (key *MasterKey) secRing() (openpgp.EntityList, error) {
 	return key.loadRing(key.gpgHome() + "/secring.gpg")
 }
 
-func (key *GPGMasterKey) pubRing() (openpgp.EntityList, error) {
+func (key *MasterKey) pubRing() (openpgp.EntityList, error) {
 	return key.loadRing(key.gpgHome() + "/pubring.gpg")
 }
 
-func (key *GPGMasterKey) fingerprintMap(ring openpgp.EntityList) map[string]openpgp.Entity {
+func (key *MasterKey) fingerprintMap(ring openpgp.EntityList) map[string]openpgp.Entity {
 	fps := make(map[string]openpgp.Entity)
 	for _, entity := range ring {
 		fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
@@ -157,7 +157,7 @@ func (key *GPGMasterKey) fingerprintMap(ring openpgp.EntityList) map[string]open
 	return fps
 }
 
-func (key *GPGMasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+func (key *MasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 	conn, err := gpgagent.NewConn()
 	if err == gpgagent.ErrNoAgent {
 		fmt.Println("gpg-agent not found, continuing with manual passphrase input...")
@@ -191,7 +191,7 @@ func (key *GPGMasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([
 	return nil, fmt.Errorf("No key to unlock")
 }
 
-func (key GPGMasterKey) ToMap() map[string]string {
+func (key MasterKey) ToMap() map[string]string {
 	out := make(map[string]string)
 	out["fp"] = key.Fingerprint
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)

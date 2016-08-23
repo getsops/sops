@@ -221,7 +221,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	metadata.Version = "2.0.0"
 	var kmsKeys []sops.MasterKey
 	if c.String("kms") != "" {
-		for _, k := range kms.KMSMasterKeysFromArnString(c.String("kms")) {
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms")) {
 			kmsKeys = append(kmsKeys, &k)
 		}
 	}
@@ -229,7 +229,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 
 	var pgpKeys []sops.MasterKey
 	if c.String("pgp") != "" {
-		for _, k := range pgp.GPGMasterKeysFromFingerprintString(c.String("pgp")) {
+		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, &k)
 		}
 	}
