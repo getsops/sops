@@ -155,7 +155,7 @@ func runEditor(path string) {
 
 func store(path string) sops.Store {
 	if strings.HasSuffix(path, ".yaml") {
-		return &yaml.YAMLStore{}
+		return &yaml.Store{}
 	} else if strings.HasSuffix(path, ".json") {
 		// return &json.JSONStore{}
 	}
@@ -288,6 +288,13 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), 8)
 	}
+	fmt.Println(metadata.KeySources)
+	metadata.AddKMSMasterKeys(c.String("add-kms"))
+	metadata.AddPGPMasterKeys(c.String("add-pgp"))
+	metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
+	metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
+	metadata.UpdateMasterKeys(string(newKey))
+	fmt.Println(metadata.KeySources)
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 
 	_, err = output.Write([]byte(out))

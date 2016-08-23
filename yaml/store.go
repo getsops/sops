@@ -109,20 +109,11 @@ func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata
 func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
 	var metadata sops.Metadata
 	data := make(map[interface{}]interface{})
-	encoded := make(map[interface{}]interface{})
-	if err := yaml.Unmarshal([]byte(in), &encoded); err != nil {
+	err := yaml.Unmarshal([]byte(in), &data)
+	if err != nil {
 		return metadata, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
-
-	sopsYaml, err := yaml.Marshal(encoded["sops"])
-	if err != nil {
-		return metadata, err
-	}
-
-	err = yaml.Unmarshal(sopsYaml, &data)
-	if err != nil {
-		return metadata, err
-	}
+	data = data["sops"].(map[interface{}]interface{})
 	metadata.MessageAuthenticationCode = data["mac"].(string)
 	lastModified, err := time.Parse(sops.DateFormat, data["lastmodified"].(string))
 	if err != nil {

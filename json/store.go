@@ -45,21 +45,11 @@ func (store JSONStore) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Meta
 
 func (store JSONStore) LoadMetadata(in string) (sops.Metadata, error) {
 	var metadata sops.Metadata
-	data := make(map[interface{}]interface{})
-	encoded := make(map[interface{}]interface{})
-	if err := json.Unmarshal([]byte(in), &encoded); err != nil {
+	data := make(map[string]interface{})
+	if err := json.Unmarshal([]byte(in), &data); err != nil {
 		return metadata, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
-
-	sopsJSON, err := json.Marshal(encoded["sops"])
-	if err != nil {
-		return metadata, err
-	}
-
-	err = json.Unmarshal(sopsJSON, &data)
-	if err != nil {
-		return metadata, err
-	}
+	data = data["sops"].(map[string]interface{})
 	metadata.MessageAuthenticationCode = data["mac"].(string)
 	lastModified, err := time.Parse(sops.DateFormat, data["lastmodified"].(string))
 	if err != nil {
