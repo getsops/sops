@@ -137,7 +137,7 @@ func (k KMSMasterKey) ToMap() map[string]string {
 	if k.Role != "" {
 		out["role"] = k.Role
 	}
-	out["created_at"] = k.CreationDate.Format("2006-01-02T15:04:05Z")
+	out["created_at"] = k.CreationDate.Format(time.RFC3339)
 	out["enc"] = k.EncryptedKey
 	return out
 }

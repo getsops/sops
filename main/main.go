@@ -15,6 +15,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -194,7 +195,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
 	}
-	originalMac, err := aes.Decrypt([]byte(metadata.MessageAuthenticationCode), key, []byte(metadata.LastModified.Format(sops.DateFormat)))
+	originalMac, err := aes.Decrypt([]byte(metadata.MessageAuthenticationCode), key, []byte(metadata.LastModified.Format(time.RFC3339)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
@@ -273,7 +274,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
 	}
-	originalMac, err := aes.Decrypt([]byte(metadata.MessageAuthenticationCode), key, []byte(metadata.LastModified.Format(sops.DateFormat)))
+	originalMac, err := aes.Decrypt([]byte(metadata.MessageAuthenticationCode), key, []byte(metadata.LastModified.Format(time.RFC3339)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}

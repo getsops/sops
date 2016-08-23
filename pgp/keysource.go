@@ -16,8 +16,6 @@ import (
 	"time"
 )
 
-const DateFormat = "2006-01-02T15:04:05Z"
-
 type GPGMasterKey struct {
 	Fingerprint  string
 	EncryptedKey string
@@ -196,7 +194,7 @@ func (key *GPGMasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([
 func (key GPGMasterKey) ToMap() map[string]string {
 	out := make(map[string]string)
 	out["fp"] = key.Fingerprint
-	out["created_at"] = key.CreationDate.Format(DateFormat)
+	out["created_at"] = key.CreationDate.Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out
 }

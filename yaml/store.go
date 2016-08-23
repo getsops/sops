@@ -115,7 +115,7 @@ func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
 	}
 	data = data["sops"].(map[interface{}]interface{})
 	metadata.MessageAuthenticationCode = data["mac"].(string)
-	lastModified, err := time.Parse(sops.DateFormat, data["lastmodified"].(string))
+	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
 	if err != nil {
 		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
 	}
@@ -151,7 +151,7 @@ func (store *Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 		if ok {
 			key.Role = role
 		}
-		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
+		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
 		if err != nil {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
@@ -169,7 +169,7 @@ func (store *Store) pgpEntries(in []interface{}) (sops.KeySource, error) {
 		key := &pgp.GPGMasterKey{}
 		key.Fingerprint = entry["fp"].(string)
 		key.EncryptedKey = entry["enc"].(string)
-		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
+		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
 		if err != nil {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
