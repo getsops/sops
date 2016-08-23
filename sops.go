@@ -99,7 +99,7 @@ func (tree Tree) Decrypt(key []byte) (string, error) {
 		var v interface{}
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
-			v, err = aes.Decrypt([]byte(in.(string)), key, []byte(strings.Join(path, ":")+":"))
+			v, err = aes.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
 			if err != nil {
 				return nil, fmt.Errorf("Could not decrypt value: %s", err)
 			}

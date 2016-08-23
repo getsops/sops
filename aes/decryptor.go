@@ -19,20 +19,20 @@ type EncryptedValue struct {
 
 var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 
-func parse(value []byte) (*EncryptedValue, error) {
-	matches := encre.FindSubmatch(value)
+func parse(value string) (*EncryptedValue, error) {
+	matches := encre.FindStringSubmatch(value)
 	if matches == nil {
 		return nil, fmt.Errorf("Input string %s does not match sops' data format", value)
 	}
-	data, err := base64.StdEncoding.DecodeString(string(matches[1]))
+	data, err := base64.StdEncoding.DecodeString(matches[1])
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding data: %s", err)
 	}
-	iv, err := base64.StdEncoding.DecodeString(string(matches[2]))
+	iv, err := base64.StdEncoding.DecodeString(matches[2])
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding iv: %s", err)
 	}
-	tag, err := base64.StdEncoding.DecodeString(string(matches[3]))
+	tag, err := base64.StdEncoding.DecodeString(matches[3])
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding tag: %s", err)
 	}
@@ -42,17 +42,17 @@ func parse(value []byte) (*EncryptedValue, error) {
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value.
-func Decrypt(value, key []byte, additionalAuthData []byte) (interface{}, error) {
+func Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error) {
 	encryptedValue, err := parse(value)
 	if err != nil {
 		return "", err
 	}
-	aes, err := cryptoaes.NewCipher([]byte(key))
+	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {
 		return "", err
 	}
 
-	gcm, err := cipher.NewGCMWithNonceSize(aes, len(encryptedValue.iv))
+	gcm, err := cipher.NewGCMWithNonceSize(aescipher, len(encryptedValue.iv))
 	if err != nil {
 		return "", err
 	}
@@ -80,7 +80,7 @@ func Decrypt(value, key []byte, additionalAuthData []byte) (interface{}, error) 
 }
 
 func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
-	aes, err := cryptoaes.NewCipher([]byte(key))
+	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {
 		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)
 	}
@@ -89,7 +89,7 @@ func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, 
 	if err != nil {
 		return "", fmt.Errorf("Could not generate random bytes for IV: %s", err)
 	}
-	gcm, err := cipher.NewGCMWithNonceSize(aes, len(iv))
+	gcm, err := cipher.NewGCMWithNonceSize(aescipher, len(iv))
 	if err != nil {
 		return "", fmt.Errorf("Could not create GCM: %s", err)
 	}
@@ -111,7 +111,6 @@ func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, 
 	default:
 		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
 	}
-
 	out := gcm.Seal(nil, iv, plaintext, additionalAuthData)
 	return fmt.Sprintf("ENC[AES256_GCM,data:%s,iv:%s,tag:%s,type:%s]",
 		base64.StdEncoding.EncodeToString(out[:len(out)-cryptoaes.BlockSize]),
