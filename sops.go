@@ -72,7 +72,7 @@ func (tree TreeBranch) WalkBranch(in TreeBranch, path []string, onLeaves func(in
 	return in, nil
 }
 
-func (tree Tree) Encrypt(key string) (string, error) {
+func (tree Tree) Encrypt(key []byte) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.WalkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		bytes, err := toBytes(in)
@@ -95,13 +95,13 @@ func (tree Tree) Encrypt(key string) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
-func (tree Tree) Decrypt(key string) (string, error) {
+func (tree Tree) Decrypt(key []byte) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.WalkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		var v interface{}
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
-			v, err = aes.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
+			v, err = aes.Decrypt([]byte(in.(string)), key, []byte(strings.Join(path, ":")+":"))
 			if err != nil {
 				return nil, fmt.Errorf("Could not decrypt value: %s", err)
 			}
@@ -136,9 +136,9 @@ type KeySource struct {
 }
 
 type MasterKey interface {
-	Encrypt(dataKey string) error
-	EncryptIfNeeded(dataKey string) error
-	Decrypt() (string, error)
+	Encrypt(dataKey []byte) error
+	EncryptIfNeeded(dataKey []byte) error
+	Decrypt() ([]byte, error)
 	NeedsRotation() bool
 	ToString() string
 	ToMap() map[string]string
@@ -171,7 +171,7 @@ func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 	}
 }
 
-func (m *Metadata) UpdateMasterKeys(dataKey string) {
+func (m *Metadata) UpdateMasterKeys(dataKey []byte) {
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
 			err := k.EncryptIfNeeded(dataKey)

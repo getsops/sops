@@ -163,7 +163,7 @@ func store(path string) sops.Store {
 	panic("Unknown file type for file " + path)
 }
 
-func findKey(keysources []sops.KeySource) (string, error) {
+func findKey(keysources []sops.KeySource) ([]byte, error) {
 	for _, ks := range keysources {
 		for _, k := range ks.Keys {
 			key, err := k.Decrypt()
@@ -172,7 +172,7 @@ func findKey(keysources []sops.KeySource) (string, error) {
 			}
 		}
 	}
-	return "", fmt.Errorf("Could not get master key")
+	return nil, fmt.Errorf("Could not get master key")
 }
 
 func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
@@ -194,7 +194,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
 	}
-	originalMac, err := aes.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(sops.DateFormat)))
+	originalMac, err := aes.Decrypt([]byte(metadata.MessageAuthenticationCode), key, []byte(metadata.LastModified.Format(sops.DateFormat)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
@@ -240,11 +240,11 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	for _, ks := range metadata.KeySources {
 		for _, k := range ks.Keys {
-			err = k.Encrypt(string(key))
+			err = k.Encrypt(key)
 		}
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
-	mac, err := tree.Encrypt(string(key))
+	mac, err := tree.Encrypt(key)
 	metadata.MessageAuthenticationCode = mac
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 	_, err = output.Write([]byte(out))
@@ -273,7 +273,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
 	}
-	originalMac, err := aes.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(sops.DateFormat)))
+	originalMac, err := aes.Decrypt([]byte(metadata.MessageAuthenticationCode), key, []byte(metadata.LastModified.Format(sops.DateFormat)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
@@ -284,10 +284,10 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	}
 	for _, ks := range metadata.KeySources {
 		for _, k := range ks.Keys {
-			k.Encrypt(string(newKey))
+			k.Encrypt(newKey)
 		}
 	}
-	_, err = tree.Encrypt(string(newKey))
+	_, err = tree.Encrypt(newKey)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), 8)
 	}
@@ -296,7 +296,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	metadata.AddPGPMasterKeys(c.String("add-pgp"))
 	metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
-	metadata.UpdateMasterKeys(string(newKey))
+	metadata.UpdateMasterKeys(newKey)
 	fmt.Println(metadata.KeySources)
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 

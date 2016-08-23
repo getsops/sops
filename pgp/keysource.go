@@ -24,7 +24,7 @@ type GPGMasterKey struct {
 	CreationDate time.Time
 }
 
-func (key *GPGMasterKey) Encrypt(dataKey string) error {
+func (key *GPGMasterKey) Encrypt(dataKey []byte) error {
 	ring, err := key.pubRing()
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func (key *GPGMasterKey) Encrypt(dataKey string) error {
 	if err != nil {
 		return err
 	}
-	_, err = plaintextbuf.Write([]byte(dataKey))
+	_, err = plaintextbuf.Write(dataKey)
 	if err != nil {
 		return err
 	}
@@ -63,30 +63,30 @@ func (key *GPGMasterKey) Encrypt(dataKey string) error {
 	return nil
 }
 
-func (key *GPGMasterKey) EncryptIfNeeded(dataKey string) error {
+func (key *GPGMasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
 	}
 	return nil
 }
 
-func (key *GPGMasterKey) Decrypt() (string, error) {
+func (key *GPGMasterKey) Decrypt() ([]byte, error) {
 	ring, err := key.secRing()
 	if err != nil {
-		return "", fmt.Errorf("Could not load secring: %s", err)
+		return nil, fmt.Errorf("Could not load secring: %s", err)
 	}
 	block, err := armor.Decode(strings.NewReader(key.EncryptedKey))
 	if err != nil {
-		return "", fmt.Errorf("Armor decoding failed: %s", err)
+		return nil, fmt.Errorf("Armor decoding failed: %s", err)
 	}
 	md, err := openpgp.ReadMessage(block.Body, ring, key.passphrasePrompt, nil)
 	if err != nil {
-		return "", fmt.Errorf("Reading PGP message failed: %s", err)
+		return nil, fmt.Errorf("Reading PGP message failed: %s", err)
 	}
 	if b, err := ioutil.ReadAll(md.UnverifiedBody); err == nil {
-		return string(b), nil
+		return b, nil
 	}
-	return "", fmt.Errorf("The key could not be decrypted with any of the GPG entries")
+	return nil, fmt.Errorf("The key could not be decrypted with any of the GPG entries")
 }
 
 func (key *GPGMasterKey) NeedsRotation() bool {

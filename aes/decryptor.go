@@ -19,30 +19,30 @@ type EncryptedValue struct {
 
 var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 
-func parse(value string) (*EncryptedValue, error) {
-	matches := encre.FindStringSubmatch(value)
+func parse(value []byte) (*EncryptedValue, error) {
+	matches := encre.FindSubmatch(value)
 	if matches == nil {
 		return nil, fmt.Errorf("Input string %s does not match sops' data format", value)
 	}
-	data, err := base64.StdEncoding.DecodeString(matches[1])
+	data, err := base64.StdEncoding.DecodeString(string(matches[1]))
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding data: %s", err)
 	}
-	iv, err := base64.StdEncoding.DecodeString(matches[2])
+	iv, err := base64.StdEncoding.DecodeString(string(matches[2]))
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding iv: %s", err)
 	}
-	tag, err := base64.StdEncoding.DecodeString(matches[3])
+	tag, err := base64.StdEncoding.DecodeString(string(matches[3]))
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding tag: %s", err)
 	}
-	datatype := matches[4]
+	datatype := string(matches[4])
 
 	return &EncryptedValue{data, iv, tag, datatype}, nil
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value.
-func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) {
+func Decrypt(value, key []byte, additionalAuthData []byte) (interface{}, error) {
 	encryptedValue, err := parse(value)
 	if err != nil {
 		return "", err
@@ -79,7 +79,7 @@ func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) 
 	}
 }
 
-func Encrypt(value interface{}, key string, additionalAuthData []byte) (string, error) {
+func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
 	aes, err := cryptoaes.NewCipher([]byte(key))
 	if err != nil {
 		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)

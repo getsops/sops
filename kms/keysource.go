@@ -21,13 +21,13 @@ type KMSMasterKey struct {
 	CreationDate time.Time
 }
 
-func (key *KMSMasterKey) Encrypt(dataKey string) error {
+func (key *KMSMasterKey) Encrypt(dataKey []byte) error {
 	sess, err := key.createSession()
 	if err != nil {
 		return err
 	}
 	service := kms.New(sess)
-	out, err := service.Encrypt(&kms.EncryptInput{Plaintext: []byte(dataKey), KeyId: &key.Arn})
+	out, err := service.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn})
 	if err != nil {
 		return err
 	}
@@ -35,29 +35,29 @@ func (key *KMSMasterKey) Encrypt(dataKey string) error {
 	return nil
 }
 
-func (key *KMSMasterKey) EncryptIfNeeded(dataKey string) error {
+func (key *KMSMasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
 	}
 	return nil
 }
 
-func (key *KMSMasterKey) Decrypt() (string, error) {
+func (key *KMSMasterKey) Decrypt() ([]byte, error) {
 	k, err := base64.StdEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
-		return "", fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
+		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
 	}
 	sess, err := key.createSession()
 	if err != nil {
-		return "", fmt.Errorf("Error creating AWS session: %v", err)
+		return nil, fmt.Errorf("Error creating AWS session: %v", err)
 	}
 
 	service := kms.New(sess)
 	decrypted, err := service.Decrypt(&kms.DecryptInput{CiphertextBlob: k})
 	if err != nil {
-		return "", fmt.Errorf("Error decrypting key: %v", err)
+		return nil, fmt.Errorf("Error decrypting key: %v", err)
 	}
-	return string(decrypted.Plaintext), nil
+	return decrypted.Plaintext, nil
 }
 
 func (key *KMSMasterKey) NeedsRotation() bool {
