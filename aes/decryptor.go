@@ -5,7 +5,6 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -27,15 +26,15 @@ func parse(value string) (*EncryptedValue, error) {
 	}
 	data, err := base64.StdEncoding.DecodeString(matches[1])
 	if err != nil {
-		return nil, errors.New("Error base64-decoding data")
+		return nil, fmt.Errorf("Error base64-decoding data: %s", err)
 	}
 	iv, err := base64.StdEncoding.DecodeString(matches[2])
 	if err != nil {
-		return nil, errors.New("Error base64-decoding iv")
+		return nil, fmt.Errorf("Error base64-decoding iv: %s", err)
 	}
 	tag, err := base64.StdEncoding.DecodeString(matches[3])
 	if err != nil {
-		return nil, errors.New("Error base64-decoding tag")
+		return nil, fmt.Errorf("Error base64-decoding tag: %s", err)
 	}
 	datatype := matches[4]
 
@@ -59,22 +58,22 @@ func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) 
 	}
 
 	data := append(encryptedValue.data, encryptedValue.tag...)
-	out, err := gcm.Open(nil, encryptedValue.iv, data, additionalAuthData)
+	decryptedBytes, err := gcm.Open(nil, encryptedValue.iv, data, additionalAuthData)
 	if err != nil {
 		return "", fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
 	}
-	v := string(out)
+	decryptedValue := string(decryptedBytes)
 	switch encryptedValue.datatype {
 	case "str":
-		return v, nil
+		return decryptedValue, nil
 	case "int":
-		return strconv.Atoi(v)
+		return strconv.Atoi(decryptedValue)
 	case "float":
-		return strconv.ParseFloat(v, 64)
+		return strconv.ParseFloat(decryptedValue, 64)
 	case "bytes":
-		return v, nil
+		return decryptedValue, nil
 	case "bool":
-		return strconv.ParseBool(v)
+		return strconv.ParseBool(decryptedValue)
 	default:
 		return nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
 	}
@@ -83,7 +82,7 @@ func Decrypt(value, key string, additionalAuthData []byte) (interface{}, error) 
 func Encrypt(value interface{}, key string, additionalAuthData []byte) (string, error) {
 	aes, err := cryptoaes.NewCipher([]byte(key))
 	if err != nil {
-		return "", fmt.Errorf("Could not create AES Cipher: %s", err)
+		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)
 	}
 	iv := make([]byte, 32)
 	_, err = rand.Read(iv)
@@ -114,10 +113,9 @@ func Encrypt(value interface{}, key string, additionalAuthData []byte) (string, 
 	}
 
 	out := gcm.Seal(nil, iv, plaintext, additionalAuthData)
-	ciphertext := out[:len(out)-16]
-	b64ciphertext := base64.StdEncoding.EncodeToString(ciphertext)
-	tag := out[len(out)-16:]
-	b64tag := base64.StdEncoding.EncodeToString(tag)
-	b64iv := base64.StdEncoding.EncodeToString(iv)
-	return fmt.Sprintf("ENC[AES256_GCM,data:%s,iv:%s,tag:%s,type:%s]", b64ciphertext, b64iv, b64tag, t), nil
+	return fmt.Sprintf("ENC[AES256_GCM,data:%s,iv:%s,tag:%s,type:%s]",
+		base64.StdEncoding.EncodeToString(out[:len(out)-cryptoaes.BlockSize]),
+		base64.StdEncoding.EncodeToString(iv),
+		base64.StdEncoding.EncodeToString(out[len(out)-cryptoaes.BlockSize:]),
+		t), nil
 }
