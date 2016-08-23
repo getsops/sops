@@ -1,6 +1,7 @@
 package aes
 
 import (
+	"crypto/rand"
 	"fmt"
 	"strings"
 	"testing"
@@ -20,7 +21,7 @@ func TestDecrypt(t *testing.T) {
 	}
 }
 
-func TestDecryptInvalidAac(t *testing.T) {
+func TestDecryptInvalidAad(t *testing.T) {
 	message := `ENC[AES256_GCM,data:oYyi,iv:MyIDYbT718JRr11QtBkcj3Dwm4k1aCGZBVeZf0EyV8o=,tag:t5z2Z023Up0kxwCgw1gNxg==,type:str]`
 	_, err := Decrypt(message, strings.Repeat("f", 32), []byte(""))
 	if err == nil {
@@ -29,17 +30,18 @@ func TestDecryptInvalidAac(t *testing.T) {
 }
 
 func TestRoundtripString(t *testing.T) {
-	key := strings.Repeat("f", 32)
-	f := func(x string) bool {
+	f := func(x string, aad []byte) bool {
+		key := make([]byte, 32)
+		rand.Read(key)
 		if x == "" {
 			return true
 		}
-		s, err := Encrypt(x, key, []byte(""))
+		s, err := Encrypt(x, string(key), aad)
 		if err != nil {
 			fmt.Println(err)
 			return false
 		}
-		d, err := Decrypt(s, key, []byte(""))
+		d, err := Decrypt(s, string(key), aad)
 		if err != nil {
 			return false
 		}
