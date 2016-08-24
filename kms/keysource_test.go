@@ -1,6 +1,7 @@
 package kms
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 	"testing/quick"
@@ -9,7 +10,7 @@ import (
 func TestKMS(t *testing.T) {
 	// TODO: make this not terrible and mock KMS with a reverseable operation on the key, or something. Good luck running the tests on a machine that's not mine!
 	k := MasterKey{Arn: "arn:aws:kms:us-east-1:927034868273:key/e9fc75db-05e9-44c1-9c35-633922bac347", Role: "", EncryptedKey: ""}
-	f := func(x string) bool {
+	f := func(x []byte) bool {
 		err := k.Encrypt(x)
 		if err != nil {
 			fmt.Println(err)
@@ -18,10 +19,10 @@ func TestKMS(t *testing.T) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if x == "" {
-			return true // we can't encrypt an empty string
+		if x == nil || len(x) == 0 {
+			return true // we can't encrypt 0 bytes
 		}
-		return v == x
+		return bytes.Equal(v, x)
 	}
 	config := quick.Config{}
 	if testing.Short() {

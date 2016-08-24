@@ -1,16 +1,20 @@
 package pgp
 
 import (
+	"bytes"
 	"testing"
 	"testing/quick"
 )
 
 func TestGPG(t *testing.T) {
 	key := NewMasterKeyFromFingerprint("64FEF099B0544CF975BCD408A014A073E0848B51")
-	f := func(x string) bool {
+	f := func(x []byte) bool {
+		if x == nil || len(x) == 0 {
+			return true
+		}
 		key.Encrypt(x)
 		k, _ := key.Decrypt()
-		return x == k
+		return bytes.Equal(x, k)
 	}
 	if err := quick.Check(f, nil); err != nil {
 		t.Error(err)
