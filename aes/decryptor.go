@@ -17,6 +17,8 @@ type encryptedValue struct {
 	datatype string
 }
 
+const nonceSize int = 32
+
 var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 
 func parse(value string) (*encryptedValue, error) {
@@ -85,12 +87,12 @@ func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, 
 	if err != nil {
 		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)
 	}
-	iv := make([]byte, 32)
+	iv := make([]byte, nonceSize)
 	_, err = rand.Read(iv)
 	if err != nil {
 		return "", fmt.Errorf("Could not generate random bytes for IV: %s", err)
 	}
-	gcm, err := cipher.NewGCMWithNonceSize(aescipher, len(iv))
+	gcm, err := cipher.NewGCMWithNonceSize(aescipher, nonceSize)
 	if err != nil {
 		return "", fmt.Errorf("Could not create GCM: %s", err)
 	}
