@@ -97,19 +97,19 @@ func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, 
 		return "", fmt.Errorf("Could not create GCM: %s", err)
 	}
 	var plaintext []byte
-	var t string
+	var encryptedType string
 	switch value := value.(type) {
 	case string:
-		t = "str"
+		encryptedType = "str"
 		plaintext = []byte(value)
 	case int:
-		t = "int"
+		encryptedType = "int"
 		plaintext = []byte(strconv.Itoa(value))
 	case float64:
-		t = "float"
+		encryptedType = "float"
 		plaintext = []byte(strconv.FormatFloat(value, 'f', 9, 64))
 	case bool:
-		t = "bool"
+		encryptedType = "bool"
 		plaintext = []byte(strconv.FormatBool(value))
 	default:
 		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
@@ -119,5 +119,5 @@ func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, 
 		base64.StdEncoding.EncodeToString(out[:len(out)-cryptoaes.BlockSize]),
 		base64.StdEncoding.EncodeToString(iv),
 		base64.StdEncoding.EncodeToString(out[len(out)-cryptoaes.BlockSize:]),
-		t), nil
+		encryptedType), nil
 }
