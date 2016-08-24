@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// Store handles storage of YAML data
 type Store struct {
 }
 
@@ -24,6 +25,7 @@ func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	return branch
 }
 
+// Load takes a YAML document as input and unmarshals it into a sops tree, returning the tree
 func (store Store) Load(in string) (sops.TreeBranch, error) {
 	var data yaml.MapSlice
 	if err := yaml.Unmarshal([]byte(in), &data); err != nil {
@@ -88,6 +90,7 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
+// Dump takes a sops tree branch and marshals it into a yaml document
 func (store Store) Dump(tree sops.TreeBranch) (string, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	out, err := yaml.Marshal(yamlMap)
@@ -97,6 +100,7 @@ func (store Store) Dump(tree sops.TreeBranch) (string, error) {
 	return string(out), nil
 }
 
+// DumpWithMetadata takes a sops tree branch and metadata and marshals them into a yaml document
 func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: metadata.ToMap()})
@@ -107,6 +111,7 @@ func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata
 	return string(out), nil
 }
 
+// LoadMetadata takes a yaml document as a string and extracts sops' metadata from it
 func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
 	var metadata sops.Metadata
 	var ok bool

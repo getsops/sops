@@ -16,12 +16,14 @@ import (
 	"time"
 )
 
+// MasterKey is a PGP key used to securely store sops' data key by encrypting it and decrypting it
 type MasterKey struct {
 	Fingerprint  string
 	EncryptedKey string
 	CreationDate time.Time
 }
 
+// Encrypt encrypts the data key with the PGP key with the same fingerprint as the MasterKey. It looks for PGP public keys in $PGPHOME/pubring.gpg.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	ring, err := key.pubRing()
 	if err != nil {
@@ -61,6 +63,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	return nil
 }
 
+// EncryptIfNeeded encrypts the data key with PGP only if it's needed, that is, if it hasn't been encrypted already
 func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
@@ -68,6 +71,7 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	return nil
 }
 
+// Decrypt uses PGP to obtain the data key from the EncryptedKey store in the MasterKey and returns it
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	ring, err := key.secRing()
 	if err != nil {
@@ -87,10 +91,12 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	return nil, fmt.Errorf("The key could not be decrypted with any of the GPG entries")
 }
 
+// NeedsRotation returns whether the data key needs to be rotated or not
 func (key *MasterKey) NeedsRotation() bool {
 	return time.Since(key.CreationDate).Hours() > 24*30*6
 }
 
+// ToString returns the string representation of the key, i.e. its fingerprint
 func (key *MasterKey) ToString() string {
 	return key.Fingerprint
 }
@@ -107,6 +113,7 @@ func (key *MasterKey) gpgHome() string {
 	return dir
 }
 
+// NewMasterKeyFromFingerprint takes a PGP fingerprint and returns a new MasterKey with that fingerprint
 func NewMasterKeyFromFingerprint(fingerprint string) MasterKey {
 	return MasterKey{
 		Fingerprint:  strings.Replace(fingerprint, " ", "", -1),
@@ -114,6 +121,7 @@ func NewMasterKeyFromFingerprint(fingerprint string) MasterKey {
 	}
 }
 
+// MasterKeysFromFingerprintString takes a comma separated list of PGP fingerprints and returns a slice of new MasterKeys with those fingerprints
 func MasterKeysFromFingerprintString(fingerprint string) []MasterKey {
 	var keys []MasterKey
 	if fingerprint == "" {
@@ -191,6 +199,7 @@ func (key *MasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]by
 	return nil, fmt.Errorf("No key to unlock")
 }
 
+// ToMap converts the MasterKey into a map for serialization purposes
 func (key MasterKey) ToMap() map[string]string {
 	out := make(map[string]string)
 	out["fp"] = key.Fingerprint

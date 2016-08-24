@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-type EncryptedValue struct {
+type encryptedValue struct {
 	data     []byte
 	iv       []byte
 	tag      []byte
@@ -19,7 +19,7 @@ type EncryptedValue struct {
 
 var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 
-func parse(value string) (*EncryptedValue, error) {
+func parse(value string) (*encryptedValue, error) {
 	matches := encre.FindStringSubmatch(value)
 	if matches == nil {
 		return nil, fmt.Errorf("Input string %s does not match sops' data format", value)
@@ -38,7 +38,7 @@ func parse(value string) (*EncryptedValue, error) {
 	}
 	datatype := string(matches[4])
 
-	return &EncryptedValue{data, iv, tag, datatype}, nil
+	return &encryptedValue{data, iv, tag, datatype}, nil
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value.
@@ -79,6 +79,7 @@ func Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, 
 	}
 }
 
+// Encrypt takes one of (string, int, float, bool) and encrypts it with the provided key and additional auth data, returning a sops-format encrypted string.
 func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
 	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {

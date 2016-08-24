@@ -14,6 +14,7 @@ import (
 	"time"
 )
 
+// MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
 	Arn          string
 	Role         string
@@ -21,6 +22,7 @@ type MasterKey struct {
 	CreationDate time.Time
 }
 
+// Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	sess, err := key.createSession()
 	if err != nil {
@@ -35,6 +37,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	return nil
 }
 
+// EncryptIfNeeded encrypts the provided sops' data ket and encrypts it if it hasn't been encrypted yet
 func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
@@ -42,6 +45,7 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	return nil
 }
 
+// Decrypt decrypts the EncryptedKey field with AWS KMS and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	k, err := base64.StdEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
@@ -60,14 +64,17 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	return decrypted.Plaintext, nil
 }
 
+// NeedsRotation returns whether the data key needs to be rotated or not.
 func (key *MasterKey) NeedsRotation() bool {
 	return time.Since(key.CreationDate) > (time.Hour * 24 * 30 * 6)
 }
 
+// ToString converts the key to a string representation
 func (key *MasterKey) ToString() string {
 	return key.Arn
 }
 
+// NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN
 func NewMasterKeyFromArn(arn string) MasterKey {
 	k := MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
@@ -82,6 +89,7 @@ func NewMasterKeyFromArn(arn string) MasterKey {
 	return k
 }
 
+// MasterKeysFromArnString takes a comma separated list of AWS KMS ARNs and returns a slice of new MasterKeys for those ARNs
 func MasterKeysFromArnString(arn string) []MasterKey {
 	var keys []MasterKey
 	if arn == "" {
@@ -93,7 +101,7 @@ func MasterKeysFromArnString(arn string) []MasterKey {
 	return keys
 }
 
-func (k MasterKey) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
+func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		return nil, err
@@ -101,7 +109,7 @@ func (k MasterKey) createStsSession(config aws.Config, sess *session.Session) (*
 	stsService := sts.New(sess)
 	name := "sops@" + hostname
 	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
-		RoleArn: &k.Role, RoleSessionName: &name})
+		RoleArn: &key.Role, RoleSessionName: &name})
 	if err != nil {
 		return nil, err
 	}
@@ -114,30 +122,31 @@ func (k MasterKey) createStsSession(config aws.Config, sess *session.Session) (*
 	return sess, nil
 }
 
-func (k MasterKey) createSession() (*session.Session, error) {
+func (key MasterKey) createSession() (*session.Session, error) {
 	re := regexp.MustCompile(`^arn:aws:kms:(.+):([0-9]+):key/(.+)$`)
-	matches := re.FindStringSubmatch(k.Arn)
+	matches := re.FindStringSubmatch(key.Arn)
 	if matches == nil {
-		return nil, fmt.Errorf("No valid ARN found in %s", k.Arn)
+		return nil, fmt.Errorf("No valid ARN found in %s", key.Arn)
 	}
 	config := aws.Config{Region: aws.String(matches[1])}
 	sess, err := session.NewSession(&config)
 	if err != nil {
 		return nil, err
 	}
-	if k.Role != "" {
-		return k.createStsSession(config, sess)
+	if key.Role != "" {
+		return key.createStsSession(config, sess)
 	}
 	return sess, nil
 }
 
-func (k MasterKey) ToMap() map[string]string {
+// ToMap converts the MasterKey to a map for serialization purposes
+func (key MasterKey) ToMap() map[string]string {
 	out := make(map[string]string)
-	out["arn"] = k.Arn
-	if k.Role != "" {
-		out["role"] = k.Role
+	out["arn"] = key.Arn
+	if key.Role != "" {
+		out["role"] = key.Role
 	}
-	out["created_at"] = k.CreationDate.UTC().Format(time.RFC3339)
-	out["enc"] = k.EncryptedKey
+	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
+	out["enc"] = key.EncryptedKey
 	return out
 }

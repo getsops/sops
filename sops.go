@@ -11,27 +11,32 @@ import (
 	"time"
 )
 
+// DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
 const DefaultUnencryptedSuffix = "_unencrypted"
 
-type Error string
+type sopsError string
 
-func (e Error) Error() string { return string(e) }
+func (e sopsError) Error() string { return string(e) }
 
-const MacMismatch = Error("MAC mismatch")
+// MacMismatch occurs when the computed MAC does not match the expected ones
+const MacMismatch = sopsError("MAC mismatch")
 
+// TreeItem is an item inside sops's tree
 type TreeItem struct {
 	Key   string
 	Value interface{}
 }
 
+// TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
 type TreeBranch []TreeItem
 
+// Tree is the data structure used by sops to represent documents internally
 type Tree struct {
 	Branch   TreeBranch
 	Metadata Metadata
 }
 
-func (tree TreeBranch) WalkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
+func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
 	switch in := in.(type) {
 	case string:
 		return onLeaves(in, path)
@@ -40,17 +45,17 @@ func (tree TreeBranch) WalkValue(in interface{}, path []string, onLeaves func(in
 	case bool:
 		return onLeaves(in, path)
 	case TreeBranch:
-		return tree.WalkBranch(in, path, onLeaves)
+		return tree.walkBranch(in, path, onLeaves)
 	case []interface{}:
-		return tree.WalkSlice(in, path, onLeaves)
+		return tree.walkSlice(in, path, onLeaves)
 	default:
 		return nil, fmt.Errorf("Cannot walk value, unknown type: %T", in)
 	}
 }
 
-func (tree TreeBranch) WalkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
+func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
 	for i, v := range in {
-		newV, err := tree.WalkValue(v, path, onLeaves)
+		newV, err := tree.walkValue(v, path, onLeaves)
 		if err != nil {
 			return nil, err
 		}
@@ -59,9 +64,9 @@ func (tree TreeBranch) WalkSlice(in []interface{}, path []string, onLeaves func(
 	return in, nil
 }
 
-func (tree TreeBranch) WalkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
+func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
 	for i, item := range in {
-		newV, err := tree.WalkValue(item.Value, append(path, item.Key), onLeaves)
+		newV, err := tree.walkValue(item.Value, append(path, item.Key), onLeaves)
 		if err != nil {
 			return nil, err
 		}
@@ -70,9 +75,10 @@ func (tree TreeBranch) WalkBranch(in TreeBranch, path []string, onLeaves func(in
 	return in, nil
 }
 
+// Encrypt walks over the tree and encrypts all values, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte) (string, error) {
 	hash := sha512.New()
-	_, err := tree.Branch.WalkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
+	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		bytes, err := toBytes(in)
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
@@ -93,9 +99,10 @@ func (tree Tree) Encrypt(key []byte) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
+// Decrypt walks over the tree and decrypts all values, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte) (string, error) {
 	hash := sha512.New()
-	_, err := tree.Branch.WalkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
+	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		var v interface{}
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
@@ -120,6 +127,7 @@ func (tree Tree) Decrypt(key []byte) (string, error) {
 
 }
 
+// Metadata holds information about a file encrypted by sops
 type Metadata struct {
 	LastModified              time.Time
 	UnencryptedSuffix         string
@@ -128,11 +136,13 @@ type Metadata struct {
 	KeySources                []KeySource
 }
 
+// KeySource is a collection of MasterKeys with a Name.
 type KeySource struct {
 	Name string
 	Keys []MasterKey
 }
 
+// MasterKey provides a way of securing the key used to encrypt the Tree by encrypting and decrypting said key.
 type MasterKey interface {
 	Encrypt(dataKey []byte) error
 	EncryptIfNeeded(dataKey []byte) error
@@ -142,6 +152,7 @@ type MasterKey interface {
 	ToMap() map[string]string
 }
 
+// Store provides a way to load and save the sops tree along with metadata
 type Store interface {
 	Load(in string) (TreeBranch, error)
 	LoadMetadata(in string) (Metadata, error)
@@ -149,6 +160,7 @@ type Store interface {
 	DumpWithMetadata(TreeBranch, Metadata) (string, error)
 }
 
+// MasterKeyCount returns the number of master keys available
 func (m *Metadata) MasterKeyCount() int {
 	count := 0
 	for _, ks := range m.KeySources {
@@ -156,6 +168,8 @@ func (m *Metadata) MasterKeyCount() int {
 	}
 	return count
 }
+
+// RemoveMasterKeys removes all of the provided keys from the metadata's KeySources, if they exist there.
 func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 	for j, ks := range m.KeySources {
 		for i, k := range ks.Keys {
@@ -169,6 +183,7 @@ func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 	}
 }
 
+// UpdateMasterKeys encrypts the data key with all master keys if it's needed
 func (m *Metadata) UpdateMasterKeys(dataKey []byte) {
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
@@ -180,8 +195,9 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) {
 	}
 }
 
-func (metadata *Metadata) AddPGPMasterKeys(pgpFps string) {
-	for i, ks := range metadata.KeySources {
+// AddPGPMasterKeys parses the input comma separated string of GPG fingerprints, generates a PGP MasterKey for each fingerprint, and adds the keys to the PGP KeySource
+func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
+	for i, ks := range m.KeySources {
 		if ks.Name == "pgp" {
 			var keys []MasterKey
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
@@ -189,48 +205,52 @@ func (metadata *Metadata) AddPGPMasterKeys(pgpFps string) {
 				fmt.Println("Keys to add:", keys)
 			}
 			ks.Keys = append(ks.Keys, keys...)
-			metadata.KeySources[i] = ks
+			m.KeySources[i] = ks
 		}
 	}
 }
 
-func (metadata *Metadata) AddKMSMasterKeys(kmsArns string) {
-	for i, ks := range metadata.KeySources {
+// AddKMSMasterKeys parses the input comma separated string of AWS KMS ARNs, generates a KMS MasterKey for each ARN, and then adds the keys to the KMS KeySource
+func (m *Metadata) AddKMSMasterKeys(kmsArns string) {
+	for i, ks := range m.KeySources {
 		if ks.Name == "kms" {
 			var keys []MasterKey
 			for _, k := range kms.MasterKeysFromArnString(kmsArns) {
 				keys = append(keys, &k)
 			}
 			ks.Keys = append(ks.Keys, keys...)
-			metadata.KeySources[i] = ks
+			m.KeySources[i] = ks
 		}
 	}
 }
 
-func (metadata *Metadata) RemovePGPMasterKeys(pgpFps string) {
+// RemovePGPMasterKeys takes a comma separated string of PGP fingerprints and removes the keys corresponding to those fingerprints from the metadata's KeySources
+func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
 	var keys []MasterKey
 	for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
 		keys = append(keys, &k)
 	}
-	metadata.RemoveMasterKeys(keys)
+	m.RemoveMasterKeys(keys)
 }
 
-func (metadata *Metadata) RemoveKMSMasterKeys(arns string) {
+// RemoveKMSMasterKeys takes a comma separated string of AWS KMS ARNs and removes the keys corresponding to those ARNs from the metadata's KeySources
+func (m *Metadata) RemoveKMSMasterKeys(arns string) {
 	var keys []MasterKey
 	for _, k := range kms.MasterKeysFromArnString(arns) {
 		keys = append(keys, &k)
 	}
-	metadata.RemoveMasterKeys(keys)
+	m.RemoveMasterKeys(keys)
 }
 
+// ToMap converts the Metadata to a map for serialization purposes
 func (m *Metadata) ToMap() map[string]interface{} {
 	out := make(map[string]interface{})
-	out["lastmodified"] = m.LastModified.Format("2006-01-02T15:04:05Z")
+	out["lastmodified"] = m.LastModified.Format(time.RFC3339)
 	out["unencrypted_suffix"] = m.UnencryptedSuffix
 	out["mac"] = m.MessageAuthenticationCode
 	out["version"] = m.Version
 	for _, ks := range m.KeySources {
-		keys := make([]map[string]string, 0)
+		var keys []map[string]string
 		for _, k := range ks.Keys {
 			keys = append(keys, k.ToMap())
 		}

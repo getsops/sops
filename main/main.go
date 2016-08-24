@@ -131,8 +131,6 @@ func main() {
 			return decrypt(c, file, fileBytes, output)
 		} else if c.Bool("rotate") {
 			return rotate(c, file, fileBytes, output)
-		} else {
-
 		}
 		return nil
 	}

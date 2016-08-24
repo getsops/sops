@@ -6,13 +6,16 @@ import (
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"strconv"
 	"time"
 )
 
-type JSONStore struct {
+// Store handles storage of JSON data. It's not finished yet, and therefore you should not use it.
+type Store struct {
 }
 
-func (store JSONStore) Load(in string) (sops.TreeBranch, error) {
+// Load takes an input json string and returns a sops tree branch
+func (store Store) Load(in string) (sops.TreeBranch, error) {
 	var branch sops.TreeBranch
 	err := json.Unmarshal([]byte(in), branch)
 	if err != nil {
@@ -26,7 +29,8 @@ func (store JSONStore) Load(in string) (sops.TreeBranch, error) {
 	return branch, nil
 }
 
-func (store JSONStore) Dump(tree sops.TreeBranch) (string, error) {
+// Dump performs the opposite operation to Load, it takes a sops tree branch and returns a json formatted string
+func (store Store) Dump(tree sops.TreeBranch) (string, error) {
 	out, err := json.Marshal(tree)
 	if err != nil {
 		return "", fmt.Errorf("Error marshaling to json: %s", err)
@@ -34,7 +38,8 @@ func (store JSONStore) Dump(tree sops.TreeBranch) (string, error) {
 	return string(out), nil
 }
 
-func (store JSONStore) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
+// DumpWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
+func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
 	tree = append(tree, sops.TreeItem{Key: "sops", Value: metadata.ToMap()})
 	out, err := json.Marshal(tree)
 	if err != nil {
@@ -43,7 +48,9 @@ func (store JSONStore) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Meta
 	return string(out), nil
 }
 
-func (store JSONStore) LoadMetadata(in string) (sops.Metadata, error) {
+// LoadMetadata takes a json string and extracts sops' metadata from it
+func (store Store) LoadMetadata(in string) (sops.Metadata, error) {
+	var ok bool
 	var metadata sops.Metadata
 	data := make(map[string]interface{})
 	if err := json.Unmarshal([]byte(in), &data); err != nil {
@@ -51,7 +58,7 @@ func (store JSONStore) LoadMetadata(in string) (sops.Metadata, error) {
 	}
 	data = data["sops"].(map[string]interface{})
 	metadata.MessageAuthenticationCode = data["mac"].(string)
-	lastModified, err := time.Parse(sops.DateFormat, data["lastmodified"].(string))
+	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
 	if err != nil {
 		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
 	}
@@ -77,7 +84,7 @@ func (store JSONStore) LoadMetadata(in string) (sops.Metadata, error) {
 	return metadata, nil
 }
 
-func (store JSONStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
+func (store Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 	var keys []sops.MasterKey
 	keysource := sops.KeySource{Name: "kms", Keys: keys}
 	for _, v := range in {
@@ -89,7 +96,7 @@ func (store JSONStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
 		if ok {
 			key.Role = role
 		}
-		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
+		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
 		if err != nil {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
@@ -99,7 +106,7 @@ func (store JSONStore) kmsEntries(in []interface{}) (sops.KeySource, error) {
 	return keysource, nil
 }
 
-func (store JSONStore) pgpEntries(in []interface{}) (sops.KeySource, error) {
+func (store Store) pgpEntries(in []interface{}) (sops.KeySource, error) {
 	var keys []sops.MasterKey
 	keysource := sops.KeySource{Name: "pgp", Keys: keys}
 	for _, v := range in {
@@ -107,7 +114,7 @@ func (store JSONStore) pgpEntries(in []interface{}) (sops.KeySource, error) {
 		key := &pgp.MasterKey{}
 		key.Fingerprint = entry["fp"].(string)
 		key.EncryptedKey = entry["enc"].(string)
-		creationDate, err := time.Parse(sops.DateFormat, entry["created_at"].(string))
+		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
 		if err != nil {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
