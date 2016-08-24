@@ -14,7 +14,28 @@ import (
 
 const opCancelKeyDeletion = "CancelKeyDeletion"
 
-// CancelKeyDeletionRequest generates a request for the CancelKeyDeletion operation.
+// CancelKeyDeletionRequest generates a "aws/request.Request" representing the
+// client's request for the CancelKeyDeletion operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CancelKeyDeletion method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CancelKeyDeletionRequest method.
+//    req, resp := client.CancelKeyDeletionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) CancelKeyDeletionRequest(input *CancelKeyDeletionInput) (req *request.Request, output *CancelKeyDeletionOutput) {
 	op := &request.Operation{
 		Name:       opCancelKeyDeletion,
@@ -47,7 +68,28 @@ func (c *KMS) CancelKeyDeletion(input *CancelKeyDeletionInput) (*CancelKeyDeleti
 
 const opCreateAlias = "CreateAlias"
 
-// CreateAliasRequest generates a request for the CreateAlias operation.
+// CreateAliasRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAlias operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateAlias method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateAliasRequest method.
+//    req, resp := client.CreateAliasRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) CreateAliasRequest(input *CreateAliasInput) (req *request.Request, output *CreateAliasOutput) {
 	op := &request.Operation{
 		Name:       opCreateAlias,
@@ -87,7 +129,28 @@ func (c *KMS) CreateAlias(input *CreateAliasInput) (*CreateAliasOutput, error) {
 
 const opCreateGrant = "CreateGrant"
 
-// CreateGrantRequest generates a request for the CreateGrant operation.
+// CreateGrantRequest generates a "aws/request.Request" representing the
+// client's request for the CreateGrant operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateGrant method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateGrantRequest method.
+//    req, resp := client.CreateGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) CreateGrantRequest(input *CreateGrantInput) (req *request.Request, output *CreateGrantOutput) {
 	op := &request.Operation{
 		Name:       opCreateGrant,
@@ -118,7 +181,28 @@ func (c *KMS) CreateGrant(input *CreateGrantInput) (*CreateGrantOutput, error) {
 
 const opCreateKey = "CreateKey"
 
-// CreateKeyRequest generates a request for the CreateKey operation.
+// CreateKeyRequest generates a "aws/request.Request" representing the
+// client's request for the CreateKey operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateKey method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateKeyRequest method.
+//    req, resp := client.CreateKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) CreateKeyRequest(input *CreateKeyInput) (req *request.Request, output *CreateKeyOutput) {
 	op := &request.Operation{
 		Name:       opCreateKey,
@@ -155,7 +239,28 @@ func (c *KMS) CreateKey(input *CreateKeyInput) (*CreateKeyOutput, error) {
 
 const opDecrypt = "Decrypt"
 
-// DecryptRequest generates a request for the Decrypt operation.
+// DecryptRequest generates a "aws/request.Request" representing the
+// client's request for the Decrypt operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the Decrypt method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DecryptRequest method.
+//    req, resp := client.DecryptRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) DecryptRequest(input *DecryptInput) (req *request.Request, output *DecryptOutput) {
 	op := &request.Operation{
 		Name:       opDecrypt,
@@ -198,7 +303,28 @@ func (c *KMS) Decrypt(input *DecryptInput) (*DecryptOutput, error) {
 
 const opDeleteAlias = "DeleteAlias"
 
-// DeleteAliasRequest generates a request for the DeleteAlias operation.
+// DeleteAliasRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAlias operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteAlias method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteAliasRequest method.
+//    req, resp := client.DeleteAliasRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) DeleteAliasRequest(input *DeleteAliasInput) (req *request.Request, output *DeleteAliasOutput) {
 	op := &request.Operation{
 		Name:       opDeleteAlias,
@@ -227,7 +353,28 @@ func (c *KMS) DeleteAlias(input *DeleteAliasInput) (*DeleteAliasOutput, error) {
 
 const opDescribeKey = "DescribeKey"
 
-// DescribeKeyRequest generates a request for the DescribeKey operation.
+// DescribeKeyRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeKey operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeKey method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeKeyRequest method.
+//    req, resp := client.DescribeKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) DescribeKeyRequest(input *DescribeKeyInput) (req *request.Request, output *DescribeKeyOutput) {
 	op := &request.Operation{
 		Name:       opDescribeKey,
@@ -254,7 +401,28 @@ func (c *KMS) DescribeKey(input *DescribeKeyInput) (*DescribeKeyOutput, error) {
 
 const opDisableKey = "DisableKey"
 
-// DisableKeyRequest generates a request for the DisableKey operation.
+// DisableKeyRequest generates a "aws/request.Request" representing the
+// client's request for the DisableKey operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisableKey method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DisableKeyRequest method.
+//    req, resp := client.DisableKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) DisableKeyRequest(input *DisableKeyInput) (req *request.Request, output *DisableKeyOutput) {
 	op := &request.Operation{
 		Name:       opDisableKey,
@@ -287,7 +455,28 @@ func (c *KMS) DisableKey(input *DisableKeyInput) (*DisableKeyOutput, error) {
 
 const opDisableKeyRotation = "DisableKeyRotation"
 
-// DisableKeyRotationRequest generates a request for the DisableKeyRotation operation.
+// DisableKeyRotationRequest generates a "aws/request.Request" representing the
+// client's request for the DisableKeyRotation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisableKeyRotation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DisableKeyRotationRequest method.
+//    req, resp := client.DisableKeyRotationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) DisableKeyRotationRequest(input *DisableKeyRotationInput) (req *request.Request, output *DisableKeyRotationOutput) {
 	op := &request.Operation{
 		Name:       opDisableKeyRotation,
@@ -316,7 +505,28 @@ func (c *KMS) DisableKeyRotation(input *DisableKeyRotationInput) (*DisableKeyRot
 
 const opEnableKey = "EnableKey"
 
-// EnableKeyRequest generates a request for the EnableKey operation.
+// EnableKeyRequest generates a "aws/request.Request" representing the
+// client's request for the EnableKey operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the EnableKey method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the EnableKeyRequest method.
+//    req, resp := client.EnableKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) EnableKeyRequest(input *EnableKeyInput) (req *request.Request, output *EnableKeyOutput) {
 	op := &request.Operation{
 		Name:       opEnableKey,
@@ -345,7 +555,28 @@ func (c *KMS) EnableKey(input *EnableKeyInput) (*EnableKeyOutput, error) {
 
 const opEnableKeyRotation = "EnableKeyRotation"
 
-// EnableKeyRotationRequest generates a request for the EnableKeyRotation operation.
+// EnableKeyRotationRequest generates a "aws/request.Request" representing the
+// client's request for the EnableKeyRotation operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the EnableKeyRotation method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the EnableKeyRotationRequest method.
+//    req, resp := client.EnableKeyRotationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) EnableKeyRotationRequest(input *EnableKeyRotationInput) (req *request.Request, output *EnableKeyRotationOutput) {
 	op := &request.Operation{
 		Name:       opEnableKeyRotation,
@@ -374,7 +605,28 @@ func (c *KMS) EnableKeyRotation(input *EnableKeyRotationInput) (*EnableKeyRotati
 
 const opEncrypt = "Encrypt"
 
-// EncryptRequest generates a request for the Encrypt operation.
+// EncryptRequest generates a "aws/request.Request" representing the
+// client's request for the Encrypt operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the Encrypt method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the EncryptRequest method.
+//    req, resp := client.EncryptRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) EncryptRequest(input *EncryptInput) (req *request.Request, output *EncryptOutput) {
 	op := &request.Operation{
 		Name:       opEncrypt,
@@ -420,7 +672,28 @@ func (c *KMS) Encrypt(input *EncryptInput) (*EncryptOutput, error) {
 
 const opGenerateDataKey = "GenerateDataKey"
 
-// GenerateDataKeyRequest generates a request for the GenerateDataKey operation.
+// GenerateDataKeyRequest generates a "aws/request.Request" representing the
+// client's request for the GenerateDataKey operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GenerateDataKey method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GenerateDataKeyRequest method.
+//    req, resp := client.GenerateDataKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) GenerateDataKeyRequest(input *GenerateDataKeyInput) (req *request.Request, output *GenerateDataKeyOutput) {
 	op := &request.Operation{
 		Name:       opGenerateDataKey,
@@ -478,7 +751,28 @@ func (c *KMS) GenerateDataKey(input *GenerateDataKeyInput) (*GenerateDataKeyOutp
 
 const opGenerateDataKeyWithoutPlaintext = "GenerateDataKeyWithoutPlaintext"
 
-// GenerateDataKeyWithoutPlaintextRequest generates a request for the GenerateDataKeyWithoutPlaintext operation.
+// GenerateDataKeyWithoutPlaintextRequest generates a "aws/request.Request" representing the
+// client's request for the GenerateDataKeyWithoutPlaintext operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GenerateDataKeyWithoutPlaintext method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GenerateDataKeyWithoutPlaintextRequest method.
+//    req, resp := client.GenerateDataKeyWithoutPlaintextRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) GenerateDataKeyWithoutPlaintextRequest(input *GenerateDataKeyWithoutPlaintextInput) (req *request.Request, output *GenerateDataKeyWithoutPlaintextOutput) {
 	op := &request.Operation{
 		Name:       opGenerateDataKeyWithoutPlaintext,
@@ -509,7 +803,28 @@ func (c *KMS) GenerateDataKeyWithoutPlaintext(input *GenerateDataKeyWithoutPlain
 
 const opGenerateRandom = "GenerateRandom"
 
-// GenerateRandomRequest generates a request for the GenerateRandom operation.
+// GenerateRandomRequest generates a "aws/request.Request" representing the
+// client's request for the GenerateRandom operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GenerateRandom method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GenerateRandomRequest method.
+//    req, resp := client.GenerateRandomRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) GenerateRandomRequest(input *GenerateRandomInput) (req *request.Request, output *GenerateRandomOutput) {
 	op := &request.Operation{
 		Name:       opGenerateRandom,
@@ -536,7 +851,28 @@ func (c *KMS) GenerateRandom(input *GenerateRandomInput) (*GenerateRandomOutput,
 
 const opGetKeyPolicy = "GetKeyPolicy"
 
-// GetKeyPolicyRequest generates a request for the GetKeyPolicy operation.
+// GetKeyPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the GetKeyPolicy operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetKeyPolicy method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetKeyPolicyRequest method.
+//    req, resp := client.GetKeyPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) GetKeyPolicyRequest(input *GetKeyPolicyInput) (req *request.Request, output *GetKeyPolicyOutput) {
 	op := &request.Operation{
 		Name:       opGetKeyPolicy,
@@ -563,7 +899,28 @@ func (c *KMS) GetKeyPolicy(input *GetKeyPolicyInput) (*GetKeyPolicyOutput, error
 
 const opGetKeyRotationStatus = "GetKeyRotationStatus"
 
-// GetKeyRotationStatusRequest generates a request for the GetKeyRotationStatus operation.
+// GetKeyRotationStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetKeyRotationStatus operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetKeyRotationStatus method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetKeyRotationStatusRequest method.
+//    req, resp := client.GetKeyRotationStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) GetKeyRotationStatusRequest(input *GetKeyRotationStatusInput) (req *request.Request, output *GetKeyRotationStatusOutput) {
 	op := &request.Operation{
 		Name:       opGetKeyRotationStatus,
@@ -591,7 +948,28 @@ func (c *KMS) GetKeyRotationStatus(input *GetKeyRotationStatusInput) (*GetKeyRot
 
 const opListAliases = "ListAliases"
 
-// ListAliasesRequest generates a request for the ListAliases operation.
+// ListAliasesRequest generates a "aws/request.Request" representing the
+// client's request for the ListAliases operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListAliases method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListAliasesRequest method.
+//    req, resp := client.ListAliasesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) ListAliasesRequest(input *ListAliasesInput) (req *request.Request, output *ListAliasesOutput) {
 	op := &request.Operation{
 		Name:       opListAliases,
@@ -622,6 +1000,23 @@ func (c *KMS) ListAliases(input *ListAliasesInput) (*ListAliasesOutput, error) {
 	return out, err
 }
 
+// ListAliasesPages iterates over the pages of a ListAliases operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAliases method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAliases operation.
+//    pageNum := 0
+//    err := client.ListAliasesPages(params,
+//        func(page *ListAliasesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *KMS) ListAliasesPages(input *ListAliasesInput, fn func(p *ListAliasesOutput, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListAliasesRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -632,7 +1027,28 @@ func (c *KMS) ListAliasesPages(input *ListAliasesInput, fn func(p *ListAliasesOu
 
 const opListGrants = "ListGrants"
 
-// ListGrantsRequest generates a request for the ListGrants operation.
+// ListGrantsRequest generates a "aws/request.Request" representing the
+// client's request for the ListGrants operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListGrants method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListGrantsRequest method.
+//    req, resp := client.ListGrantsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) ListGrantsRequest(input *ListGrantsInput) (req *request.Request, output *ListGrantsResponse) {
 	op := &request.Operation{
 		Name:       opListGrants,
@@ -663,6 +1079,23 @@ func (c *KMS) ListGrants(input *ListGrantsInput) (*ListGrantsResponse, error) {
 	return out, err
 }
 
+// ListGrantsPages iterates over the pages of a ListGrants operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListGrants method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListGrants operation.
+//    pageNum := 0
+//    err := client.ListGrantsPages(params,
+//        func(page *ListGrantsResponse, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *KMS) ListGrantsPages(input *ListGrantsInput, fn func(p *ListGrantsResponse, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListGrantsRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -673,7 +1106,28 @@ func (c *KMS) ListGrantsPages(input *ListGrantsInput, fn func(p *ListGrantsRespo
 
 const opListKeyPolicies = "ListKeyPolicies"
 
-// ListKeyPoliciesRequest generates a request for the ListKeyPolicies operation.
+// ListKeyPoliciesRequest generates a "aws/request.Request" representing the
+// client's request for the ListKeyPolicies operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListKeyPolicies method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListKeyPoliciesRequest method.
+//    req, resp := client.ListKeyPoliciesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) ListKeyPoliciesRequest(input *ListKeyPoliciesInput) (req *request.Request, output *ListKeyPoliciesOutput) {
 	op := &request.Operation{
 		Name:       opListKeyPolicies,
@@ -704,6 +1158,23 @@ func (c *KMS) ListKeyPolicies(input *ListKeyPoliciesInput) (*ListKeyPoliciesOutp
 	return out, err
 }
 
+// ListKeyPoliciesPages iterates over the pages of a ListKeyPolicies operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListKeyPolicies method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListKeyPolicies operation.
+//    pageNum := 0
+//    err := client.ListKeyPoliciesPages(params,
+//        func(page *ListKeyPoliciesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *KMS) ListKeyPoliciesPages(input *ListKeyPoliciesInput, fn func(p *ListKeyPoliciesOutput, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListKeyPoliciesRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -714,7 +1185,28 @@ func (c *KMS) ListKeyPoliciesPages(input *ListKeyPoliciesInput, fn func(p *ListK
 
 const opListKeys = "ListKeys"
 
-// ListKeysRequest generates a request for the ListKeys operation.
+// ListKeysRequest generates a "aws/request.Request" representing the
+// client's request for the ListKeys operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListKeys method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListKeysRequest method.
+//    req, resp := client.ListKeysRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) ListKeysRequest(input *ListKeysInput) (req *request.Request, output *ListKeysOutput) {
 	op := &request.Operation{
 		Name:       opListKeys,
@@ -745,6 +1237,23 @@ func (c *KMS) ListKeys(input *ListKeysInput) (*ListKeysOutput, error) {
 	return out, err
 }
 
+// ListKeysPages iterates over the pages of a ListKeys operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListKeys method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListKeys operation.
+//    pageNum := 0
+//    err := client.ListKeysPages(params,
+//        func(page *ListKeysOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
 func (c *KMS) ListKeysPages(input *ListKeysInput, fn func(p *ListKeysOutput, lastPage bool) (shouldContinue bool)) error {
 	page, _ := c.ListKeysRequest(input)
 	page.Handlers.Build.PushBack(request.MakeAddToUserAgentFreeFormHandler("Paginator"))
@@ -755,7 +1264,28 @@ func (c *KMS) ListKeysPages(input *ListKeysInput, fn func(p *ListKeysOutput, las
 
 const opListRetirableGrants = "ListRetirableGrants"
 
-// ListRetirableGrantsRequest generates a request for the ListRetirableGrants operation.
+// ListRetirableGrantsRequest generates a "aws/request.Request" representing the
+// client's request for the ListRetirableGrants operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListRetirableGrants method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListRetirableGrantsRequest method.
+//    req, resp := client.ListRetirableGrantsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) ListRetirableGrantsRequest(input *ListRetirableGrantsInput) (req *request.Request, output *ListGrantsResponse) {
 	op := &request.Operation{
 		Name:       opListRetirableGrants,
@@ -786,7 +1316,28 @@ func (c *KMS) ListRetirableGrants(input *ListRetirableGrantsInput) (*ListGrantsR
 
 const opPutKeyPolicy = "PutKeyPolicy"
 
-// PutKeyPolicyRequest generates a request for the PutKeyPolicy operation.
+// PutKeyPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the PutKeyPolicy operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutKeyPolicy method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the PutKeyPolicyRequest method.
+//    req, resp := client.PutKeyPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) PutKeyPolicyRequest(input *PutKeyPolicyInput) (req *request.Request, output *PutKeyPolicyOutput) {
 	op := &request.Operation{
 		Name:       opPutKeyPolicy,
@@ -818,7 +1369,28 @@ func (c *KMS) PutKeyPolicy(input *PutKeyPolicyInput) (*PutKeyPolicyOutput, error
 
 const opReEncrypt = "ReEncrypt"
 
-// ReEncryptRequest generates a request for the ReEncrypt operation.
+// ReEncryptRequest generates a "aws/request.Request" representing the
+// client's request for the ReEncrypt operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ReEncrypt method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ReEncryptRequest method.
+//    req, resp := client.ReEncryptRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) ReEncryptRequest(input *ReEncryptInput) (req *request.Request, output *ReEncryptOutput) {
 	op := &request.Operation{
 		Name:       opReEncrypt,
@@ -856,7 +1428,28 @@ func (c *KMS) ReEncrypt(input *ReEncryptInput) (*ReEncryptOutput, error) {
 
 const opRetireGrant = "RetireGrant"
 
-// RetireGrantRequest generates a request for the RetireGrant operation.
+// RetireGrantRequest generates a "aws/request.Request" representing the
+// client's request for the RetireGrant operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RetireGrant method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RetireGrantRequest method.
+//    req, resp := client.RetireGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) RetireGrantRequest(input *RetireGrantInput) (req *request.Request, output *RetireGrantOutput) {
 	op := &request.Operation{
 		Name:       opRetireGrant,
@@ -898,7 +1491,28 @@ func (c *KMS) RetireGrant(input *RetireGrantInput) (*RetireGrantOutput, error) {
 
 const opRevokeGrant = "RevokeGrant"
 
-// RevokeGrantRequest generates a request for the RevokeGrant operation.
+// RevokeGrantRequest generates a "aws/request.Request" representing the
+// client's request for the RevokeGrant operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RevokeGrant method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RevokeGrantRequest method.
+//    req, resp := client.RevokeGrantRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) RevokeGrantRequest(input *RevokeGrantInput) (req *request.Request, output *RevokeGrantOutput) {
 	op := &request.Operation{
 		Name:       opRevokeGrant,
@@ -928,7 +1542,28 @@ func (c *KMS) RevokeGrant(input *RevokeGrantInput) (*RevokeGrantOutput, error) {
 
 const opScheduleKeyDeletion = "ScheduleKeyDeletion"
 
-// ScheduleKeyDeletionRequest generates a request for the ScheduleKeyDeletion operation.
+// ScheduleKeyDeletionRequest generates a "aws/request.Request" representing the
+// client's request for the ScheduleKeyDeletion operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ScheduleKeyDeletion method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ScheduleKeyDeletionRequest method.
+//    req, resp := client.ScheduleKeyDeletionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) ScheduleKeyDeletionRequest(input *ScheduleKeyDeletionInput) (req *request.Request, output *ScheduleKeyDeletionOutput) {
 	op := &request.Operation{
 		Name:       opScheduleKeyDeletion,
@@ -970,7 +1605,28 @@ func (c *KMS) ScheduleKeyDeletion(input *ScheduleKeyDeletionInput) (*ScheduleKey
 
 const opUpdateAlias = "UpdateAlias"
 
-// UpdateAliasRequest generates a request for the UpdateAlias operation.
+// UpdateAliasRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAlias operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateAlias method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateAliasRequest method.
+//    req, resp := client.UpdateAliasRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) UpdateAliasRequest(input *UpdateAliasInput) (req *request.Request, output *UpdateAliasOutput) {
 	op := &request.Operation{
 		Name:       opUpdateAlias,
@@ -1011,7 +1667,28 @@ func (c *KMS) UpdateAlias(input *UpdateAliasInput) (*UpdateAliasOutput, error) {
 
 const opUpdateKeyDescription = "UpdateKeyDescription"
 
-// UpdateKeyDescriptionRequest generates a request for the UpdateKeyDescription operation.
+// UpdateKeyDescriptionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateKeyDescription operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateKeyDescription method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateKeyDescriptionRequest method.
+//    req, resp := client.UpdateKeyDescriptionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
 func (c *KMS) UpdateKeyDescriptionRequest(input *UpdateKeyDescriptionInput) (req *request.Request, output *UpdateKeyDescriptionOutput) {
 	op := &request.Operation{
 		Name:       opUpdateKeyDescription,

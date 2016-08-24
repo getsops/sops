@@ -26,7 +26,7 @@ AUTHOR(S):
    {{end}}{{if .VisibleCommands}}
 COMMANDS:{{range .VisibleCategories}}{{if .Name}}
    {{.Name}}:{{end}}{{range .VisibleCommands}}
-     {{.Name}}{{with .ShortName}}, {{.}}{{end}}{{"\t"}}{{.Usage}}{{end}}
+     {{join .Names ", "}}{{"\t"}}{{.Usage}}{{end}}
 {{end}}{{end}}{{if .VisibleFlags}}
 GLOBAL OPTIONS:
    {{range .VisibleFlags}}{{.}}
@@ -67,7 +67,7 @@ USAGE:
 
 COMMANDS:{{range .VisibleCategories}}{{if .Name}}
    {{.Name}}:{{end}}{{range .VisibleCommands}}
-     {{.Name}}{{with .ShortName}}, {{.}}{{end}}{{"\t"}}{{.Usage}}{{end}}
+     {{join .Names ", "}}{{"\t"}}{{.Usage}}{{end}}
 {{end}}{{if .VisibleFlags}}
 OPTIONS:
    {{range .VisibleFlags}}{{.}}
@@ -117,8 +117,9 @@ var HelpPrinter helpPrinter = printHelp
 var VersionPrinter = printVersion
 
 // ShowAppHelp is an action that displays the help.
-func ShowAppHelp(c *Context) {
+func ShowAppHelp(c *Context) error {
 	HelpPrinter(c.App.Writer, AppHelpTemplate, c.App)
+	return nil
 }
 
 // DefaultAppComplete prints the list of subcommands as the default app completion method
@@ -191,7 +192,7 @@ func printHelp(out io.Writer, templ string, data interface{}) {
 		"join": strings.Join,
 	}
 
-	w := tabwriter.NewWriter(out, 0, 8, 1, '\t', 0)
+	w := tabwriter.NewWriter(out, 1, 8, 2, ' ', 0)
 	t := template.Must(template.New("help").Funcs(funcMap).Parse(templ))
 	err := t.Execute(w, data)
 	if err != nil {
