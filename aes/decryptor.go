@@ -19,6 +19,8 @@ type encryptedValue struct {
 
 const nonceSize int = 32
 
+type Cipher struct{}
+
 var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 
 func parse(value string) (*encryptedValue, error) {
@@ -44,7 +46,7 @@ func parse(value string) (*encryptedValue, error) {
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value.
-func Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error) {
+func (c Cipher) Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error) {
 	encryptedValue, err := parse(value)
 	if err != nil {
 		return "", err
@@ -82,7 +84,7 @@ func Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, 
 }
 
 // Encrypt takes one of (string, int, float, bool) and encrypts it with the provided key and additional auth data, returning a sops-format encrypted string.
-func Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
+func (c Cipher) Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
 	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {
 		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)

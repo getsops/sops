@@ -3,7 +3,6 @@ package sops
 import (
 	"crypto/sha512"
 	"fmt"
-	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"strconv"
@@ -20,6 +19,12 @@ func (e sopsError) Error() string { return string(e) }
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
 const MacMismatch = sopsError("MAC mismatch")
+
+// DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
+type DataKeyCipher interface {
+	Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error)
+	Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error)
+}
 
 // TreeItem is an item inside sops's tree
 type TreeItem struct {
@@ -75,14 +80,14 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 	return in, nil
 }
 
-// Encrypt walks over the tree and encrypts all values, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
-func (tree Tree) Encrypt(key []byte) (string, error) {
+// Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
+func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		bytes, err := toBytes(in)
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
-			in, err = aes.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
+			in, err = cipher.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
 			if err != nil {
 				return nil, fmt.Errorf("Could not encrypt value: %s", err)
 			}
@@ -99,14 +104,14 @@ func (tree Tree) Encrypt(key []byte) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
-// Decrypt walks over the tree and decrypts all values, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
-func (tree Tree) Decrypt(key []byte) (string, error) {
+// Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
+func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		var v interface{}
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
-			v, err = aes.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
+			v, err = cipher.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
 			if err != nil {
 				return nil, fmt.Errorf("Could not decrypt value: %s", err)
 			}

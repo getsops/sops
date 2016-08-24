@@ -205,11 +205,12 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
-	mac, err := tree.Decrypt(key)
+	cipher := aes.Cipher{}
+	mac, err := tree.Decrypt(key, cipher)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
 	}
-	originalMac, err := aes.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
+	originalMac, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
@@ -259,7 +260,8 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 		}
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
-	mac, err := tree.Encrypt(key)
+	cipher := aes.Cipher{}
+	mac, err := tree.Encrypt(key, cipher)
 	metadata.MessageAuthenticationCode = mac
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 	_, err = output.Write([]byte(out))
@@ -284,11 +286,12 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
-	mac, err := tree.Decrypt(key)
+	cipher := aes.Cipher{}
+	mac, err := tree.Decrypt(key, cipher)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
 	}
-	originalMac, err := aes.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
+	originalMac, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
 	}
@@ -302,7 +305,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 			k.Encrypt(newKey)
 		}
 	}
-	_, err = tree.Encrypt(newKey)
+	_, err = tree.Encrypt(newKey, cipher)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
