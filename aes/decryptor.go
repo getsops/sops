@@ -19,6 +19,7 @@ type encryptedValue struct {
 
 const nonceSize int = 32
 
+// Cipher encrypts and decrypts data keys with AES GCM 256
 type Cipher struct{}
 
 var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
