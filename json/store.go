@@ -56,7 +56,9 @@ func (store Store) LoadMetadata(in string) (sops.Metadata, error) {
 	if err := json.Unmarshal([]byte(in), &data); err != nil {
 		return metadata, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
-	data = data["sops"].(map[string]interface{})
+	if data, ok = data["sops"].(map[string]interface{}); !ok {
+		return metadata, fmt.Errorf("sops metadata not found in input json")
+	}
 	metadata.MessageAuthenticationCode = data["mac"].(string)
 	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
 	if err != nil {

@@ -120,7 +120,9 @@ func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
 	if err != nil {
 		return metadata, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
-	data = data["sops"].(map[interface{}]interface{})
+	if data, ok = data["sops"].(map[interface{}]interface{}); !ok {
+		return metadata, fmt.Errorf("sops metadata not found in input yaml")
+	}
 	metadata.MessageAuthenticationCode = data["mac"].(string)
 	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
 	if err != nil {
