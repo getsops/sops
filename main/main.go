@@ -18,6 +18,23 @@ import (
 	"time"
 )
 
+const (
+	exitCouldNotReadInputFile               int = 2
+	exitCouldNotWriteOutputFile             int = 3
+	exitErrorDumpingTree                    int = 4
+	exitErrorEncryptingTree                 int = 23
+	exitErrorDecryptingTree                 int = 23
+	exitCannotChangeKeysFromNonExistentFile int = 49
+	exitMacMismatch                         int = 51
+	exitConfigFileNotFound                  int = 61
+	exitKeyboardInterrupt                   int = 85
+	exitNoFileSpecified                     int = 100
+	exitCouldNotRetrieveKey                 int = 128
+	exitNoEncryptionKeyFound                int = 111
+	exitFileHasNotBeenModified              int = 200
+	exitNoEditorFound                       int = 201
+)
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "sops"
@@ -45,7 +62,6 @@ func main() {
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
 		},
-
 		cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
@@ -98,7 +114,7 @@ func main() {
 	}
 	app.Action = func(c *cli.Context) error {
 		if c.NArg() < 1 {
-			return cli.NewExitError("Error: no file specified", 1)
+			return cli.NewExitError("Error: no file specified", exitNoFileSpecified)
 		}
 		file := c.Args()[0]
 		if _, err := os.Stat(file); os.IsNotExist(err) {
@@ -106,7 +122,7 @@ func main() {
 				return cli.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", 49)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
-				return cli.NewExitError("Error: cannot operate on non-existent file", 100)
+				return cli.NewExitError("Error: cannot operate on non-existent file", exitNoFileSpecified)
 			}
 		}
 		fileBytes, err := ioutil.ReadFile(file)
@@ -116,14 +132,14 @@ func main() {
 			var err error
 			output, err = os.Create(file)
 			if err != nil {
-				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), 10)
+				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), exitCouldNotWriteOutputFile)
 			}
 			defer output.Close()
 		} else {
 			output = os.Stdout
 		}
 		if err != nil {
-			return cli.NewExitError("Error: could not read file", 2)
+			return cli.NewExitError("Error: could not read file", exitCouldNotReadInputFile)
 		}
 		if c.Bool("encrypt") {
 			return encrypt(c, file, fileBytes, output)
@@ -178,20 +194,20 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	store := store(file)
 	metadata, err := store.LoadMetadata(string(fileBytes))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 3)
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	key, err := findKey(metadata.KeySources)
 	if err != nil {
-		return cli.NewExitError(err.Error(), 4)
+		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	branch, err := store.Load(string(fileBytes))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 6)
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	mac, err := tree.Decrypt(key)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), 8)
+		return cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
 	}
 	originalMac, err := aes.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
@@ -199,11 +215,11 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	out, err := store.Dump(tree.Branch)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), 7)
+		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), exitErrorDumpingTree)
 	}
 	_, err = output.Write([]byte(out))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), 9)
+		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), exitCouldNotWriteOutputFile)
 	}
 	return nil
 }
@@ -212,7 +228,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	store := store(file)
 	branch, err := store.Load(string(fileBytes))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 4)
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	var metadata sops.Metadata
 	metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
@@ -235,7 +251,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	key := make([]byte, 32)
 	_, err = rand.Read(key)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not generate random key: %s", err), 8)
+		return cli.NewExitError(fmt.Sprintf("Could not generate random key: %s", err), exitCouldNotRetrieveKey)
 	}
 	for _, ks := range metadata.KeySources {
 		for _, k := range ks.Keys {
@@ -248,7 +264,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 	_, err = output.Write([]byte(out))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), 9)
+		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), exitCouldNotWriteOutputFile)
 	}
 	return nil
 }
@@ -257,7 +273,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	store := store(file)
 	metadata, err := store.LoadMetadata(string(fileBytes))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 3)
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	key, err := findKey(metadata.KeySources)
 	if err != nil {
@@ -265,7 +281,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	}
 	branch, err := store.Load(string(fileBytes))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), 6)
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	mac, err := tree.Decrypt(key)
@@ -279,7 +295,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	newKey := make([]byte, 32)
 	_, err = rand.Read(newKey)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not generate random key: %s", err), 8)
+		return cli.NewExitError(fmt.Sprintf("Could not generate random key: %s", err), exitCouldNotRetrieveKey)
 	}
 	for _, ks := range metadata.KeySources {
 		for _, k := range ks.Keys {
@@ -288,7 +304,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	}
 	_, err = tree.Encrypt(newKey)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), 8)
+		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
 	fmt.Println(metadata.KeySources)
 	metadata.AddKMSMasterKeys(c.String("add-kms"))
@@ -301,7 +317,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 
 	_, err = output.Write([]byte(out))
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), 9)
+		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), exitCouldNotWriteOutputFile)
 	}
 	return nil
 }
