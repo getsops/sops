@@ -12,7 +12,7 @@ func TestDecrypt(t *testing.T) {
 	expected := "foo"
 	key := []byte(strings.Repeat("f", 32))
 	message := `ENC[AES256_GCM,data:oYyi,iv:MyIDYbT718JRr11QtBkcj3Dwm4k1aCGZBVeZf0EyV8o=,tag:t5z2Z023Up0kxwCgw1gNxg==,type:str]`
-	decryption, err := Decrypt(message, key, []byte("bar:"))
+	decryption, err := Cipher{}.Decrypt(message, key, []byte("bar:"))
 	if err != nil {
 		t.Errorf("%s", err)
 	}
@@ -23,7 +23,7 @@ func TestDecrypt(t *testing.T) {
 
 func TestDecryptInvalidAad(t *testing.T) {
 	message := `ENC[AES256_GCM,data:oYyi,iv:MyIDYbT718JRr11QtBkcj3Dwm4k1aCGZBVeZf0EyV8o=,tag:t5z2Z023Up0kxwCgw1gNxg==,type:str]`
-	_, err := Decrypt(message, []byte(strings.Repeat("f", 32)), []byte(""))
+	_, err := Cipher{}.Decrypt(message, []byte(strings.Repeat("f", 32)), []byte(""))
 	if err == nil {
 		t.Errorf("Decrypting with an invalid AAC should fail")
 	}
@@ -36,12 +36,12 @@ func TestRoundtripString(t *testing.T) {
 		if x == "" {
 			return true
 		}
-		s, err := Encrypt(x, key, aad)
+		s, err := Cipher{}.Encrypt(x, key, aad)
 		if err != nil {
 			fmt.Println(err)
 			return false
 		}
-		d, err := Decrypt(s, key, aad)
+		d, err := Cipher{}.Decrypt(s, key, aad)
 		if err != nil {
 			return false
 		}
@@ -55,12 +55,12 @@ func TestRoundtripString(t *testing.T) {
 func TestRoundtripFloat(t *testing.T) {
 	key := []byte(strings.Repeat("f", 32))
 	f := func(x float64) bool {
-		s, err := Encrypt(x, key, []byte(""))
+		s, err := Cipher{}.Encrypt(x, key, []byte(""))
 		if err != nil {
 			fmt.Println(err)
 			return false
 		}
-		d, err := Decrypt(s, key, []byte(""))
+		d, err := Cipher{}.Decrypt(s, key, []byte(""))
 		if err != nil {
 			return false
 		}
@@ -74,12 +74,12 @@ func TestRoundtripFloat(t *testing.T) {
 func TestRoundtripInt(t *testing.T) {
 	key := []byte(strings.Repeat("f", 32))
 	f := func(x int) bool {
-		s, err := Encrypt(x, key, []byte(""))
+		s, err := Cipher{}.Encrypt(x, key, []byte(""))
 		if err != nil {
 			fmt.Println(err)
 			return false
 		}
-		d, err := Decrypt(s, key, []byte(""))
+		d, err := Cipher{}.Decrypt(s, key, []byte(""))
 		if err != nil {
 			return false
 		}
@@ -93,12 +93,12 @@ func TestRoundtripInt(t *testing.T) {
 func TestRoundtripBool(t *testing.T) {
 	key := []byte(strings.Repeat("f", 32))
 	f := func(x bool) bool {
-		s, err := Encrypt(x, key, []byte(""))
+		s, err := Cipher{}.Encrypt(x, key, []byte(""))
 		if err != nil {
 			fmt.Println(err)
 			return false
 		}
-		d, err := Decrypt(s, key, []byte(""))
+		d, err := Cipher{}.Decrypt(s, key, []byte(""))
 		if err != nil {
 			return false
 		}

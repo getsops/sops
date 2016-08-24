@@ -2,6 +2,7 @@ package sops
 
 import (
 	"bytes"
+	"go.mozilla.org/sops/aes"
 	"reflect"
 	"testing"
 )
@@ -20,14 +21,15 @@ func TestUnencryptedSuffix(t *testing.T) {
 			Value: "bar",
 		},
 	}
-	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32))
+	cipher := aes.Cipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
 	if err != nil {
 		t.Errorf("Encrypting the tree failed: %s", err)
 	}
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branch, expected)
 	}
-	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32))
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
 	if err != nil {
 		t.Errorf("Decrypting the tree failed: %s", err)
 	}
