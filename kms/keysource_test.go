@@ -3,12 +3,25 @@ package kms
 import (
 	"bytes"
 	"fmt"
+	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/stretchr/testify/mock"
 	"testing"
 	"testing/quick"
 )
 
 func TestKMS(t *testing.T) {
 	// TODO: make this not terrible and mock KMS with a reverseable operation on the key, or something. Good luck running the tests on a machine that's not mine!
+	mockKMS := &MockKMSAPI{}
+	defer mockKMS.AssertExpectations(t)
+	kmsSvc = mockKMS
+	encryptOutput := &kms.EncryptOutput{}
+	decryptOutput := &kms.DecryptOutput{}
+	mockKMS.On("Encrypt", mock.AnythingOfType("*kms.EncryptInput")).Return(encryptOutput, nil).Run(func(args mock.Arguments) {
+		encryptOutput.CiphertextBlob = args.Get(0).(*kms.EncryptInput).Plaintext
+	})
+	mockKMS.On("Decrypt", mock.AnythingOfType("*kms.DecryptInput")).Return(decryptOutput, nil).Run(func(args mock.Arguments) {
+		decryptOutput.Plaintext = args.Get(0).(*kms.DecryptInput).CiphertextBlob
+	})
 	k := MasterKey{Arn: "arn:aws:kms:us-east-1:927034868273:key/e9fc75db-05e9-44c1-9c35-633922bac347", Role: "", EncryptedKey: ""}
 	f := func(x []byte) bool {
 		err := k.Encrypt(x)

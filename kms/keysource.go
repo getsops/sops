@@ -7,12 +7,15 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
 	"github.com/aws/aws-sdk-go/service/sts"
 	"os"
 	"regexp"
 	"strings"
 	"time"
 )
+
+var kmsSvc kmsiface.KMSAPI
 
 // MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -24,12 +27,15 @@ type MasterKey struct {
 
 // Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	sess, err := key.createSession()
-	if err != nil {
-		return err
+	if kmsSvc == nil {
+
+		sess, err := key.createSession()
+		if err != nil {
+			return err
+		}
+		kmsSvc = kms.New(sess)
 	}
-	service := kms.New(sess)
-	out, err := service.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn})
+	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn})
 	if err != nil {
 		return err
 	}
@@ -51,13 +57,14 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
 	}
-	sess, err := key.createSession()
-	if err != nil {
-		return nil, fmt.Errorf("Error creating AWS session: %v", err)
+	if kmsSvc == nil {
+		sess, err := key.createSession()
+		if err != nil {
+			return nil, fmt.Errorf("Error creating AWS session: %v", err)
+		}
+		kmsSvc = kms.New(sess)
 	}
-
-	service := kms.New(sess)
-	decrypted, err := service.Decrypt(&kms.DecryptInput{CiphertextBlob: k})
+	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k})
 	if err != nil {
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
 	}
