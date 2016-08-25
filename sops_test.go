@@ -37,3 +37,121 @@ func TestUnencryptedSuffix(t *testing.T) {
 		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branch, expected)
 	}
 }
+
+type MockCipher struct{}
+
+func (m MockCipher) Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
+	return "a", nil
+}
+
+func (m MockCipher) Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error) {
+	return "a", nil
+}
+
+func TestEncrypt(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: "bar",
+		},
+		TreeItem{
+			Key: "baz",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "bar",
+					Value: 5,
+				},
+			},
+		},
+		TreeItem{
+			Key:   "bar",
+			Value: false,
+		},
+		TreeItem{
+			Key:   "foobar",
+			Value: 2.12,
+		},
+	}
+	expected := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: "a",
+		},
+		TreeItem{
+			Key: "baz",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "bar",
+					Value: "a",
+				},
+			},
+		},
+		TreeItem{
+			Key:   "bar",
+			Value: "a",
+		},
+		TreeItem{
+			Key:   "foobar",
+			Value: "a",
+		},
+	}
+	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
+	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{})
+	if !reflect.DeepEqual(tree.Branch, expected) {
+		t.Errorf("%s does not equal expected tree: %s", tree.Branch, expected)
+	}
+}
+
+func TestDecrypt(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: "bar",
+		},
+		TreeItem{
+			Key: "baz",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "bar",
+					Value: "5",
+				},
+			},
+		},
+		TreeItem{
+			Key:   "bar",
+			Value: "false",
+		},
+		TreeItem{
+			Key:   "foobar",
+			Value: "2.12",
+		},
+	}
+	expected := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: "a",
+		},
+		TreeItem{
+			Key: "baz",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "bar",
+					Value: "a",
+				},
+			},
+		},
+		TreeItem{
+			Key:   "bar",
+			Value: "a",
+		},
+		TreeItem{
+			Key:   "foobar",
+			Value: "a",
+		},
+	}
+	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
+	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{})
+	if !reflect.DeepEqual(tree.Branch, expected) {
+		t.Errorf("%s does not equal expected tree: %s", tree.Branch, expected)
+	}
+}

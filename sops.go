@@ -49,6 +49,8 @@ func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in
 		return onLeaves(in, path)
 	case bool:
 		return onLeaves(in, path)
+	case float64:
+		return onLeaves(in, path)
 	case TreeBranch:
 		return tree.walkBranch(in, path, onLeaves)
 	case []interface{}:
