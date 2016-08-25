@@ -6,7 +6,14 @@ before_intall:
   - go get -t -v ./...
 
 script:
-  - go test -coverprofile=coverage.txt -covermode=atomic
-
+  - touch coverage.txt
+  - go test -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+  - go test ./aes -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+  - go test ./cmd/sops -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+  - go test ./json -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+  - go test ./yaml -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+  - go test ./pgp -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+  - go test ./kms -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+  
 after_success:
   - bash <(curl -s https://codecov.io/bash)
