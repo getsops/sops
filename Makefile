@@ -22,12 +22,15 @@ vet:
 	$(GO) vet $(PROJECT)
 
 test:
-	$(GO) test .
-	$(GO) test ./aes
-	$(GO) test ./json
-	$(GO) test ./kms
-	$(GO) test ./yaml
-	$(GO) test ./pgp
+	touch coverage.txt
+	$(GO) test -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test ./aes -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test ./cmd/sops -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test ./json -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test ./yaml -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
+	$(GO) test ./pgp -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test ./kms -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 
 showcoverage: test
 	$(GO) tool cover -html=coverage.out

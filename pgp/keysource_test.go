@@ -7,7 +7,7 @@ import (
 )
 
 func TestGPG(t *testing.T) {
-	key := NewMasterKeyFromFingerprint("64FEF099B0544CF975BCD408A014A073E0848B51")
+	key := NewMasterKeyFromFingerprint("1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A")
 	f := func(x []byte) bool {
 		if x == nil || len(x) == 0 {
 			return true
