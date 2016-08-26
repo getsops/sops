@@ -235,20 +235,35 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
 	metadata.Version = "2.0.0"
 	var kmsKeys []sops.MasterKey
+	var pgpKeys []sops.MasterKey
+
 	if c.String("kms") != "" {
 		for _, k := range kms.MasterKeysFromArnString(c.String("kms")) {
 			kmsKeys = append(kmsKeys, &k)
 		}
 	}
-	metadata.KeySources = append(metadata.KeySources, sops.KeySource{Name: "kms", Keys: kmsKeys})
-
-	var pgpKeys []sops.MasterKey
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, &k)
 		}
 	}
-	metadata.KeySources = append(metadata.KeySources, sops.KeySource{Name: "pgp", Keys: pgpKeys})
+
+	if c.String("kms") == "" && c.String("pgp") == "" {
+		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, nil)
+		if err == nil {
+			for _, k := range pgp.MasterKeysFromFingerprintString(pgpString) {
+				pgpKeys = append(pgpKeys, &k)
+			}
+			for _, k := range kms.MasterKeysFromArnString(kmsString) {
+				kmsKeys = append(kmsKeys, &k)
+			}
+		}
+	}
+	kmsKs := sops.KeySource{Name: "kms", Keys: kmsKeys}
+	pgpKs := sops.KeySource{Name: "pgp", Keys: pgpKeys}
+	metadata.KeySources = append(metadata.KeySources, kmsKs)
+	metadata.KeySources = append(metadata.KeySources, pgpKs)
+
 	key := make([]byte, 32)
 	_, err = rand.Read(key)
 	if err != nil {
