@@ -74,6 +74,12 @@ func (store Store) treeValueToYamlValue(in interface{}) interface{} {
 	switch in := in.(type) {
 	case sops.TreeBranch:
 		return store.treeBranchToYamlMap(in)
+	case []interface{}:
+		var out []interface{}
+		for _, v := range in {
+			out = append(out, store.treeValueToYamlValue(v))
+		}
+		return out
 	default:
 		return in
 	}
