@@ -22,6 +22,7 @@ const (
 	exitCouldNotReadInputFile               int = 2
 	exitCouldNotWriteOutputFile             int = 3
 	exitErrorDumpingTree                    int = 4
+	exitErrorReadingConfig                  int = 5
 	exitErrorEncryptingTree                 int = 23
 	exitErrorDecryptingTree                 int = 23
 	exitCannotChangeKeysFromNonExistentFile int = 49
@@ -249,7 +250,14 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 
 	if c.String("kms") == "" && c.String("pgp") == "" {
-		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, nil)
+		var confBytes []byte
+		if c.String("config") != "" {
+			confBytes, err = ioutil.ReadFile(c.String("config"))
+			if err != nil {
+				return cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
+			}
+		}
+		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, confBytes)
 		if err == nil {
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpString) {
 				pgpKeys = append(pgpKeys, &k)
