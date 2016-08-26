@@ -302,7 +302,11 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	cipher := aes.Cipher{}
 	mac, err := tree.Encrypt(key, cipher)
-	metadata.MessageAuthenticationCode = mac
+	encryptedMac, err := cipher.Encrypt(mac, key, []byte(metadata.LastModified.Format(time.RFC3339)))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
+	}
+	metadata.MessageAuthenticationCode = encryptedMac
 	out, err := store.DumpWithMetadata(tree.Branch, metadata)
 	_, err = output.Write([]byte(out))
 	if err != nil {
