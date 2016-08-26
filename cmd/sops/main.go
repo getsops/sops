@@ -214,7 +214,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	originalMac, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
-		return cli.NewExitError("MAC mismatch.", 9)
+		return cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", originalMac, mac), 9)
 	}
 	if c.String("extract") != "" {
 		v, err := tree.Branch.Truncate(c.String("extract"))

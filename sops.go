@@ -307,7 +307,7 @@ func ToBytes(in interface{}) ([]byte, error) {
 	case float64:
 		return []byte(strconv.FormatFloat(in, 'f', -1, 64)), nil
 	case bool:
-		return []byte(strconv.FormatBool(in)), nil
+		return []byte(strings.Title(strconv.FormatBool(in))), nil
 	case []byte:
 		return in, nil
 	default:
