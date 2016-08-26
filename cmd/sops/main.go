@@ -29,6 +29,7 @@ const (
 	exitMacMismatch                         int = 51
 	exitConfigFileNotFound                  int = 61
 	exitKeyboardInterrupt                   int = 85
+	exitInvalidTreePathFormat               int = 91
 	exitNoFileSpecified                     int = 100
 	exitCouldNotRetrieveKey                 int = 128
 	exitNoEncryptionKeyFound                int = 111
@@ -214,6 +215,22 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	originalMac, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
 	if originalMac != mac && !c.Bool("ignore-mac") {
 		return cli.NewExitError("MAC mismatch.", 9)
+	}
+	if c.String("extract") != "" {
+		v, err := tree.Branch.Truncate(c.String("extract"))
+		if err != nil {
+			return cli.NewExitError(err.Error(), exitInvalidTreePathFormat)
+		}
+		if newBranch, ok := v.(sops.TreeBranch); ok {
+			tree.Branch = newBranch
+		} else {
+			bytes, err := sops.ToBytes(v)
+			if err != nil {
+				return cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), exitErrorDumpingTree)
+			}
+			output.Write(bytes)
+			return nil
+		}
 	}
 	out, err := store.Dump(tree.Branch)
 	if err != nil {

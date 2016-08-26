@@ -2,6 +2,7 @@ package sops
 
 import (
 	"bytes"
+	"github.com/stretchr/testify/assert"
 	"go.mozilla.org/sops/aes"
 	"reflect"
 	"testing"
@@ -154,4 +155,31 @@ func TestDecrypt(t *testing.T) {
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("%s does not equal expected tree: %s", tree.Branch, expected)
 	}
+}
+
+func TestTruncateTree(t *testing.T) {
+	tree := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: 2,
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "foobar",
+					Value: []int{
+						1,
+						2,
+						3,
+						4,
+					},
+				},
+			},
+		},
+	}
+	expected := 3
+	result, err := tree.Truncate(`["bar"]["foobar"][2]`)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, expected, result)
 }

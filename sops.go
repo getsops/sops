@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -39,6 +40,36 @@ type TreeBranch []TreeItem
 type Tree struct {
 	Branch   TreeBranch
 	Metadata Metadata
+}
+
+// Truncate truncates the tree following Python dictionary access syntax, for example, ["foo"][2].
+func (tree TreeBranch) Truncate(path string) (interface{}, error) {
+	components := strings.Split(path, "[")
+	var current interface{} = tree
+	for _, component := range components {
+		if component == "" {
+			continue
+		}
+		if component[len(component)-1] != ']' {
+			return nil, fmt.Errorf("Invalid tree path format string: %s", path)
+		}
+		component = component[:len(component)-1]
+		component = strings.Replace(component, `"`, "", 2)
+		component = strings.Replace(component, `'`, "", 2)
+		i, err := strconv.Atoi(component)
+		if err != nil {
+			for _, item := range current.(TreeBranch) {
+				if item.Key == component {
+					current = item.Value
+					break
+				}
+			}
+		} else {
+			v := reflect.ValueOf(current)
+			current = v.Index(i).Interface()
+		}
+	}
+	return current, nil
 }
 
 func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
@@ -86,7 +117,7 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		bytes, err := toBytes(in)
+		bytes, err := ToBytes(in)
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
 			in, err = cipher.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
@@ -120,7 +151,7 @@ func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher) (string, error) {
 		} else {
 			v = in
 		}
-		bytes, err := toBytes(v)
+		bytes, err := ToBytes(v)
 		if err != nil {
 			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
 		}
@@ -266,7 +297,8 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	return out
 }
 
-func toBytes(in interface{}) ([]byte, error) {
+// ToBytes converts a string, int, float or bool to a byte representation.
+func ToBytes(in interface{}) ([]byte, error) {
 	switch in := in.(type) {
 	case string:
 		return []byte(in), nil
