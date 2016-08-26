@@ -1,9 +1,2 @@
-*.pyc
-.cache/
-__pycache__/
-*.egg-info/
-*.egg
-.tox/
-.venv/
-.coverage
-dist
+target
+Cargo.lock

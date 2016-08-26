@@ -1,66 +1,12 @@
-sudo: false
-matrix:
-    include:
-        # run unit tests with various versions of python
-        - os: linux
-          language: python
-          sudo: false
-          python: 2.6
-          env: TOX_ENV=py26
-        - os: linux
-          language: python
-          sudo: false
-          python: 2.7
-          env: TOX_ENV=py27
-        - os: linux
-          language: python
-          sudo: false
-          python: 3.4
-          env: TOX_ENV=py34
-        - os: linux
-          language: python
-          sudo: false
-          python: 3.4
-          env: TOX_ENV=flake8
-        # test on osx el capitan
-        - os: osx
-          sudo: required
-          language: generic
-          osx_image: xcode7.3
-          env: SYSTEM_TEST=1
-        # test on osx yosemite
-        - os: osx
-          sudo: required
-          language: generic
-          osx_image: xcode7.1
-          env: SYSTEM_TEST=1
-        # test with default python on trusty and precise
-        - os: linux
-          sudo: required
-          dist: trusty
-          language: generic
-          env: SYSTEM_TEST=1
-        - os: linux
-          sudo: required
-          dist: precise
-          language: generic
-          env: SYSTEM_TEST=1
-addons:
-    apt:
-        packages:
-            - libyaml-dev
-            - python-dev
-            - libffi-dev
-            - python-pip
-            - gnupg
-before_install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                 ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi libyaml python; fi
-install:
-    - if [[ "$TRAVIS_OS_NAME" == "linux" && ! -z $TOX_ENV ]]; then pip install tox; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [ $SYSTEM_TEST -eq 1 ]; then sudo pip install -r requirements.txt; else pip install -r requirements.txt; fi; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip install -r requirements.txt; fi
+language: go
+go:
+  - tip
+go_import_path: go.mozilla.org/sops/
+before_intall:
+  - go get -t -v ./...
+
 script:
-    - if [ ! -z $TOX_ENV ]; then tox -e $TOX_ENV; fi
-    - make functional-tests-once
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cat /etc/issue; fi
+  - make test
+  
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
