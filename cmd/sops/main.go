@@ -185,36 +185,36 @@ func store(path string) sops.Store {
 	panic("Unknown file type for file " + path)
 }
 
-func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree, error) {
-	var tree sops.Tree
+func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (tree sops.Tree, stash map[string][]interface{}, err error) {
 	metadata, err := store.UnmarshalMetadata(fileBytes)
 	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	key, err := metadata.GetDataKey()
 	if err != nil {
-		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
+		return tree, nil, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	branch, err := store.Unmarshal(fileBytes)
 	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	tree = sops.Tree{Branch: branch, Metadata: metadata}
 	cipher := aes.Cipher{}
-	mac, err := tree.Decrypt(key, cipher)
+	stash = make(map[string][]interface{})
+	mac, err := tree.Decrypt(key, cipher, stash)
 	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
 	}
-	originalMac, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
+	originalMac, _, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, metadata.LastModified.Format(time.RFC3339))
 	if originalMac != mac && !ignoreMac {
-		return tree, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", originalMac, mac), 9)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", originalMac, mac), 9)
 	}
-	return tree, nil
+	return tree, stash, nil
 }
 
 func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
-	tree, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
+	tree, _, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
 	if err != nil {
 		return err
 	}
@@ -296,8 +296,8 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
-	mac, err := tree.Encrypt(key, cipher)
-	encryptedMac, err := cipher.Encrypt(mac, key, []byte(metadata.LastModified.Format(time.RFC3339)))
+	mac, err := tree.Encrypt(key, cipher, nil)
+	encryptedMac, err := cipher.Encrypt(mac, key, metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
 	}
@@ -312,7 +312,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 
 func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
-	tree, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
+	tree, _, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
 	if err != nil {
 		return err
 	}
@@ -321,7 +321,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
-	_, err = tree.Encrypt(newKey, cipher)
+	_, err = tree.Encrypt(newKey, cipher, nil)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
@@ -340,7 +340,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 }
 
 func edit(c *cli.Context, file string, fileBytes []byte) error {
-	tree, err := decryptFile(store(file), fileBytes, c.Bool("ignore-mac"))
+	tree, stash, err := decryptFile(store(file), fileBytes, c.Bool("ignore-mac"))
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
@@ -376,12 +376,13 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 		return cli.NewExitError(fmt.Sprintf("Could not retrieve data key: %s", err), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
-	mac, err := tree.Encrypt(key, cipher)
+	mac, err := tree.Encrypt(key, cipher, stash)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt tree: %s", err), exitErrorEncryptingTree)
 	}
-	encryptedMac, err := cipher.Encrypt(mac, key, []byte(tree.Metadata.LastModified.Format(time.RFC3339)))
+	encryptedMac, err := cipher.Encrypt(mac, key, tree.Metadata.LastModified.Format(time.RFC3339), stash)
 	if err != nil {
+
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
 	}
 	tree.Metadata.MessageAuthenticationCode = encryptedMac

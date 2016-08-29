@@ -27,8 +27,8 @@ const MetadataNotFound = sopsError("sops metadata not found")
 
 // DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
 type DataKeyCipher interface {
-	Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error)
-	Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error)
+	Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error)
+	Decrypt(value string, key []byte, path string) (plaintext interface{}, stashValue interface{}, err error)
 }
 
 // TreeItem is an item inside sops's tree
@@ -118,13 +118,17 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 }
 
 // Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
-func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher) (string, error) {
+func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		bytes, err := ToBytes(in)
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
-			in, err = cipher.Encrypt(in, key, []byte(strings.Join(path, ":")+":"))
+			pathString := strings.Join(path, ":") + ":"
+			// Pop from the left of the stash
+			stashValue, newStash := stash[pathString][0], stash[pathString][1:len(stash[pathString])]
+			stash[pathString] = newStash
+			in, err = cipher.Encrypt(in, key, pathString, stashValue)
 			if err != nil {
 				return nil, fmt.Errorf("Could not encrypt value: %s", err)
 			}
@@ -142,16 +146,19 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher) (string, error) {
 }
 
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
-func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher) (string, error) {
+func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		var v interface{}
 		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
 			var err error
-			v, err = cipher.Decrypt(in.(string), key, []byte(strings.Join(path, ":")+":"))
+			var stashValue interface{}
+			pathString := strings.Join(path, ":") + ":"
+			v, stashValue, err = cipher.Decrypt(in.(string), key, pathString)
 			if err != nil {
 				return nil, fmt.Errorf("Could not decrypt value: %s", err)
 			}
+			stash[pathString] = append(stash[pathString], stashValue)
 		} else {
 			v = in
 		}
