@@ -3,6 +3,8 @@ package main
 import (
 	"go.mozilla.org/sops"
 
+	"bytes"
+	"crypto/md5"
 	"fmt"
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/kms"
@@ -339,6 +341,20 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	return nil
 }
 
+func hashFile(filePath string) ([]byte, error) {
+	var result []byte
+	file, err := os.Open(filePath)
+	if err != nil {
+		return result, err
+	}
+	defer file.Close()
+	hash := md5.New()
+	if _, err := io.Copy(hash, file); err != nil {
+		return result, err
+	}
+	return hash.Sum(result), nil
+}
+
 func edit(c *cli.Context, file string, fileBytes []byte) error {
 	tree, stash, err := decryptFile(store(file), fileBytes, c.Bool("ignore-mac"))
 	tmpdir, err := ioutil.TempDir("", "")
@@ -358,9 +374,20 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
 	}
+	origHash, err := hashFile(tmpfile.Name())
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+	}
 	err = runEditor(tmpfile.Name())
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+	}
+	newHash, err := hashFile(tmpfile.Name())
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+	}
+	if bytes.Equal(newHash, origHash) {
+		return cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
 	}
 	edited, err := ioutil.ReadFile(tmpfile.Name())
 	if err != nil {
