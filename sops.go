@@ -137,6 +137,19 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
+// FindKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it.
+func (metadata Metadata) FindKey() ([]byte, error) {
+	for _, ks := range metadata.KeySources {
+		for _, k := range ks.Keys {
+			key, err := k.Decrypt()
+			if err == nil {
+				return key, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("Could not get master key")
+}
+
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	hash := sha512.New()

@@ -180,25 +180,13 @@ func store(path string) sops.Store {
 	panic("Unknown file type for file " + path)
 }
 
-func findKey(keysources []sops.KeySource) ([]byte, error) {
-	for _, ks := range keysources {
-		for _, k := range ks.Keys {
-			key, err := k.Decrypt()
-			if err == nil {
-				return key, nil
-			}
-		}
-	}
-	return nil, fmt.Errorf("Could not get master key")
-}
-
 func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree, error) {
 	var tree sops.Tree
 	metadata, err := store.LoadMetadata(string(fileBytes))
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
-	key, err := findKey(metadata.KeySources)
+	key, err := metadata.FindKey()
 	if err != nil {
 		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
