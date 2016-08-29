@@ -3,6 +3,7 @@ package main
 import (
 	"go.mozilla.org/sops"
 
+	"bufio"
 	"bytes"
 	"crypto/md5"
 	"fmt"
@@ -378,26 +379,32 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
 	}
-	err = runEditor(tmpfile.Name())
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+	invalidSyntax := true
+	for invalidSyntax || tree.Metadata.MasterKeyCount() == 0 {
+		err = runEditor(tmpfile.Name())
+		if err != nil {
+			return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+		}
+		newHash, err := hashFile(tmpfile.Name())
+		if err != nil {
+			return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+		}
+		if bytes.Equal(newHash, origHash) {
+			return cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
+		}
+		edited, err := ioutil.ReadFile(tmpfile.Name())
+		if err != nil {
+			return cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
+		}
+		newBranch, err := store(file).Unmarshal(edited)
+		if err != nil {
+			fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
+			bufio.NewReader(os.Stdin).ReadByte()
+			continue
+		}
+		tree.Branch = newBranch
+		invalidSyntax = false
 	}
-	newHash, err := hashFile(tmpfile.Name())
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
-	}
-	if bytes.Equal(newHash, origHash) {
-		return cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
-	}
-	edited, err := ioutil.ReadFile(tmpfile.Name())
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
-	}
-	newBranch, err := store(file).Unmarshal(edited)
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not load tree: %s", err), exitCouldNotReadInputFile)
-	}
-	tree.Branch = newBranch
 	key, err := tree.Metadata.GetDataKey()
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not retrieve data key: %s", err), exitCouldNotRetrieveKey)
