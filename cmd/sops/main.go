@@ -182,7 +182,7 @@ func store(path string) sops.Store {
 
 func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree, error) {
 	var tree sops.Tree
-	metadata, err := store.LoadMetadata(string(fileBytes))
+	metadata, err := store.LoadMetadata(fileBytes)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
@@ -190,7 +190,7 @@ func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree,
 	if err != nil {
 		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
-	branch, err := store.Load(string(fileBytes))
+	branch, err := store.Load(fileBytes)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
@@ -256,7 +256,7 @@ func generateKey(tree *sops.Tree) ([]byte, error) {
 
 func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
-	branch, err := store.Load(string(fileBytes))
+	branch, err := store.Load(fileBytes)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}

@@ -26,9 +26,9 @@ func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 }
 
 // Load takes a YAML document as input and unmarshals it into a sops tree, returning the tree
-func (store Store) Load(in string) (sops.TreeBranch, error) {
+func (store Store) Load(in []byte) (sops.TreeBranch, error) {
 	var data yaml.MapSlice
-	if err := yaml.Unmarshal([]byte(in), &data); err != nil {
+	if err := yaml.Unmarshal(in, &data); err != nil {
 		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 	}
 	for i, item := range data {
@@ -97,32 +97,32 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 }
 
 // Dump takes a sops tree branch and marshals it into a yaml document
-func (store Store) Dump(tree sops.TreeBranch) (string, error) {
+func (store Store) Dump(tree sops.TreeBranch) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	out, err := yaml.Marshal(yamlMap)
 	if err != nil {
-		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
-	return string(out), nil
+	return out, nil
 }
 
 // DumpWithMetadata takes a sops tree branch and metadata and marshals them into a yaml document
-func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
+func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: metadata.ToMap()})
 	out, err := yaml.Marshal(yamlMap)
 	if err != nil {
-		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
-	return string(out), nil
+	return out, nil
 }
 
 // LoadMetadata takes a yaml document as a string and extracts sops' metadata from it
-func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
+func (store *Store) LoadMetadata(in []byte) (sops.Metadata, error) {
 	var metadata sops.Metadata
 	var ok bool
 	data := make(map[interface{}]interface{})
-	err := yaml.Unmarshal([]byte(in), &data)
+	err := yaml.Unmarshal(in, &data)
 	if err != nil {
 		return metadata, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}

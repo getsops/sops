@@ -15,9 +15,9 @@ type Store struct {
 }
 
 // Load takes an input json string and returns a sops tree branch
-func (store Store) Load(in string) (sops.TreeBranch, error) {
+func (store Store) Load(in []byte) (sops.TreeBranch, error) {
 	var branch sops.TreeBranch
-	err := json.Unmarshal([]byte(in), branch)
+	err := json.Unmarshal(in, branch)
 	if err != nil {
 		return branch, fmt.Errorf("Could not unmarshal input data: %s", err)
 	}
@@ -30,30 +30,30 @@ func (store Store) Load(in string) (sops.TreeBranch, error) {
 }
 
 // Dump performs the opposite operation to Load, it takes a sops tree branch and returns a json formatted string
-func (store Store) Dump(tree sops.TreeBranch) (string, error) {
+func (store Store) Dump(tree sops.TreeBranch) ([]byte, error) {
 	out, err := json.Marshal(tree)
 	if err != nil {
-		return "", fmt.Errorf("Error marshaling to json: %s", err)
+		return nil, fmt.Errorf("Error marshaling to json: %s", err)
 	}
-	return string(out), nil
+	return out, nil
 }
 
 // DumpWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
-func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
+func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
 	tree = append(tree, sops.TreeItem{Key: "sops", Value: metadata.ToMap()})
 	out, err := json.Marshal(tree)
 	if err != nil {
-		return "", fmt.Errorf("Error marshaling to json: %s", err)
+		return nil, fmt.Errorf("Error marshaling to json: %s", err)
 	}
-	return string(out), nil
+	return out, nil
 }
 
 // LoadMetadata takes a json string and extracts sops' metadata from it
-func (store Store) LoadMetadata(in string) (sops.Metadata, error) {
+func (store Store) LoadMetadata(in []byte) (sops.Metadata, error) {
 	var ok bool
 	var metadata sops.Metadata
 	data := make(map[string]interface{})
-	if err := json.Unmarshal([]byte(in), &data); err != nil {
+	if err := json.Unmarshal(in, &data); err != nil {
 		return metadata, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
 	if data, ok = data["sops"].(map[string]interface{}); !ok {
