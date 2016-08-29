@@ -21,6 +21,9 @@ func (e sopsError) Error() string { return string(e) }
 // MacMismatch occurs when the computed MAC does not match the expected ones
 const MacMismatch = sopsError("MAC mismatch")
 
+// MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
+const MetadataNotFound = sopsError("sops metadata not found")
+
 // DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
 type DataKeyCipher interface {
 	Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error)
