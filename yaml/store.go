@@ -25,10 +25,10 @@ func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	return branch
 }
 
-// Load takes a YAML document as input and unmarshals it into a sops tree, returning the tree
-func (store Store) Load(in string) (sops.TreeBranch, error) {
+// Unmarshal takes a YAML document as input and unmarshals it into a sops tree, returning the tree
+func (store Store) Unmarshal(in []byte) (sops.TreeBranch, error) {
 	var data yaml.MapSlice
-	if err := yaml.Unmarshal([]byte(in), &data); err != nil {
+	if err := yaml.Unmarshal(in, &data); err != nil {
 		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 	}
 	for i, item := range data {
@@ -74,6 +74,12 @@ func (store Store) treeValueToYamlValue(in interface{}) interface{} {
 	switch in := in.(type) {
 	case sops.TreeBranch:
 		return store.treeBranchToYamlMap(in)
+	case []interface{}:
+		var out []interface{}
+		for _, v := range in {
+			out = append(out, store.treeValueToYamlValue(v))
+		}
+		return out
 	default:
 		return in
 	}
@@ -90,38 +96,38 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
-// Dump takes a sops tree branch and marshals it into a yaml document
-func (store Store) Dump(tree sops.TreeBranch) (string, error) {
+// Marshal takes a sops tree branch and marshals it into a yaml document
+func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	out, err := yaml.Marshal(yamlMap)
 	if err != nil {
-		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
-	return string(out), nil
+	return out, nil
 }
 
-// DumpWithMetadata takes a sops tree branch and metadata and marshals them into a yaml document
-func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) (string, error) {
+// MarshalWithMetadata takes a sops tree branch and metadata and marshals them into a yaml document
+func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: metadata.ToMap()})
 	out, err := yaml.Marshal(yamlMap)
 	if err != nil {
-		return "", fmt.Errorf("Error marshaling to yaml: %s", err)
+		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
-	return string(out), nil
+	return out, nil
 }
 
-// LoadMetadata takes a yaml document as a string and extracts sops' metadata from it
-func (store *Store) LoadMetadata(in string) (sops.Metadata, error) {
+// UnmarshalMetadata takes a yaml document as a string and extracts sops' metadata from it
+func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	var metadata sops.Metadata
 	var ok bool
 	data := make(map[interface{}]interface{})
-	err := yaml.Unmarshal([]byte(in), &data)
+	err := yaml.Unmarshal(in, &data)
 	if err != nil {
 		return metadata, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
 	if data, ok = data["sops"].(map[interface{}]interface{}); !ok {
-		return metadata, fmt.Errorf("sops metadata not found in input yaml")
+		return metadata, sops.MetadataNotFound
 	}
 	metadata.MessageAuthenticationCode = data["mac"].(string)
 	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))

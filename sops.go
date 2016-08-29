@@ -1,6 +1,7 @@
 package sops
 
 import (
+	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
 	"go.mozilla.org/sops/kms"
@@ -20,6 +21,9 @@ func (e sopsError) Error() string { return string(e) }
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
 const MacMismatch = sopsError("MAC mismatch")
+
+// MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
+const MetadataNotFound = sopsError("sops metadata not found")
 
 // DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
 type DataKeyCipher interface {
@@ -165,6 +169,21 @@ func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher) (string, error) {
 
 }
 
+// GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
+func (tree Tree) GenerateDataKey() ([]byte, error) {
+	newKey := make([]byte, 32)
+	_, err := rand.Read(newKey)
+	if err != nil {
+		return nil, fmt.Errorf("Could not generate random key: %s", err)
+	}
+	for _, ks := range tree.Metadata.KeySources {
+		for _, k := range ks.Keys {
+			k.Encrypt(newKey)
+		}
+	}
+	return newKey, nil
+}
+
 // Metadata holds information about a file encrypted by sops
 type Metadata struct {
 	LastModified              time.Time
@@ -192,10 +211,10 @@ type MasterKey interface {
 
 // Store provides a way to load and save the sops tree along with metadata
 type Store interface {
-	Load(in string) (TreeBranch, error)
-	LoadMetadata(in string) (Metadata, error)
-	Dump(TreeBranch) (string, error)
-	DumpWithMetadata(TreeBranch, Metadata) (string, error)
+	Unmarshal(in []byte) (TreeBranch, error)
+	UnmarshalMetadata(in []byte) (Metadata, error)
+	Marshal(TreeBranch) ([]byte, error)
+	MarshalWithMetadata(TreeBranch, Metadata) ([]byte, error)
 }
 
 // MasterKeyCount returns the number of master keys available
@@ -297,6 +316,19 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	return out
 }
 
+// GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it.
+func (m Metadata) GetDataKey() ([]byte, error) {
+	for _, ks := range m.KeySources {
+		for _, k := range ks.Keys {
+			key, err := k.Decrypt()
+			if err == nil {
+				return key, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("Could not get master key")
+}
+
 // ToBytes converts a string, int, float or bool to a byte representation.
 func ToBytes(in interface{}) ([]byte, error) {
 	switch in := in.(type) {
@@ -307,7 +339,7 @@ func ToBytes(in interface{}) ([]byte, error) {
 	case float64:
 		return []byte(strconv.FormatFloat(in, 'f', -1, 64)), nil
 	case bool:
-		return []byte(strconv.FormatBool(in)), nil
+		return []byte(strings.Title(strconv.FormatBool(in))), nil
 	case []byte:
 		return in, nil
 	default:
