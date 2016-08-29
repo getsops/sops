@@ -208,10 +208,10 @@ type MasterKey interface {
 
 // Store provides a way to load and save the sops tree along with metadata
 type Store interface {
-	Load(in []byte) (TreeBranch, error)
-	LoadMetadata(in []byte) (Metadata, error)
-	Dump(TreeBranch) ([]byte, error)
-	DumpWithMetadata(TreeBranch, Metadata) ([]byte, error)
+	Unmarshal(in []byte) (TreeBranch, error)
+	UnmarshalMetadata(in []byte) (Metadata, error)
+	Marshal(TreeBranch) ([]byte, error)
+	MarshalWithMetadata(TreeBranch, Metadata) ([]byte, error)
 }
 
 // MasterKeyCount returns the number of master keys available

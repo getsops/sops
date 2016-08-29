@@ -14,8 +14,8 @@ import (
 type Store struct {
 }
 
-// Load takes an input json string and returns a sops tree branch
-func (store Store) Load(in []byte) (sops.TreeBranch, error) {
+// Unmarshal takes an input json string and returns a sops tree branch
+func (store Store) Unmarshal(in []byte) (sops.TreeBranch, error) {
 	var branch sops.TreeBranch
 	err := json.Unmarshal(in, branch)
 	if err != nil {
@@ -29,8 +29,8 @@ func (store Store) Load(in []byte) (sops.TreeBranch, error) {
 	return branch, nil
 }
 
-// Dump performs the opposite operation to Load, it takes a sops tree branch and returns a json formatted string
-func (store Store) Dump(tree sops.TreeBranch) ([]byte, error) {
+// Marshal takes a sops tree branch and returns a json formatted string
+func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 	out, err := json.Marshal(tree)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
@@ -38,8 +38,8 @@ func (store Store) Dump(tree sops.TreeBranch) ([]byte, error) {
 	return out, nil
 }
 
-// DumpWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
-func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
+// MarshalWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
+func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
 	tree = append(tree, sops.TreeItem{Key: "sops", Value: metadata.ToMap()})
 	out, err := json.Marshal(tree)
 	if err != nil {
@@ -48,8 +48,8 @@ func (store Store) DumpWithMetadata(tree sops.TreeBranch, metadata sops.Metadata
 	return out, nil
 }
 
-// LoadMetadata takes a json string and extracts sops' metadata from it
-func (store Store) LoadMetadata(in []byte) (sops.Metadata, error) {
+// UnmarshalMetadata takes a json string and extracts sops' metadata from it
+func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	var ok bool
 	var metadata sops.Metadata
 	data := make(map[string]interface{})

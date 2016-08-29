@@ -182,7 +182,7 @@ func store(path string) sops.Store {
 
 func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree, error) {
 	var tree sops.Tree
-	metadata, err := store.LoadMetadata(fileBytes)
+	metadata, err := store.UnmarshalMetadata(fileBytes)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
@@ -190,7 +190,7 @@ func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree,
 	if err != nil {
 		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
-	branch, err := store.Load(fileBytes)
+	branch, err := store.Unmarshal(fileBytes)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
@@ -229,7 +229,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 			return nil
 		}
 	}
-	out, err := store.Dump(tree.Branch)
+	out, err := store.Marshal(tree.Branch)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), exitErrorDumpingTree)
 	}
@@ -256,7 +256,7 @@ func generateKey(tree *sops.Tree) ([]byte, error) {
 
 func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
-	branch, err := store.Load(fileBytes)
+	branch, err := store.Unmarshal(fileBytes)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
@@ -311,7 +311,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
 	}
 	metadata.MessageAuthenticationCode = encryptedMac
-	out, err := store.DumpWithMetadata(tree.Branch, metadata)
+	out, err := store.MarshalWithMetadata(tree.Branch, metadata)
 	_, err = output.Write([]byte(out))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), exitCouldNotWriteOutputFile)
@@ -339,7 +339,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
 	tree.Metadata.UpdateMasterKeys(newKey)
-	out, err := store.DumpWithMetadata(tree.Branch, tree.Metadata)
+	out, err := store.MarshalWithMetadata(tree.Branch, tree.Metadata)
 
 	_, err = output.Write([]byte(out))
 	if err != nil {
