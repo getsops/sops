@@ -126,8 +126,12 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 			var err error
 			pathString := strings.Join(path, ":") + ":"
 			// Pop from the left of the stash
-			stashValue, newStash := stash[pathString][0], stash[pathString][1:len(stash[pathString])]
-			stash[pathString] = newStash
+			var stashValue interface{}
+			if len(stash[pathString]) > 0 {
+				var newStash []interface{}
+				stashValue, newStash = stash[pathString][0], stash[pathString][1:len(stash[pathString])]
+				stash[pathString] = newStash
+			}
 			in, err = cipher.Encrypt(in, key, pathString, stashValue)
 			if err != nil {
 				return nil, fmt.Errorf("Could not encrypt value: %s", err)
