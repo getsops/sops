@@ -367,7 +367,12 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
 	}
-	out, err := store(file).Marshal(tree.Branch)
+	var out []byte
+	if c.Bool("show-master-keys") {
+		out, err = store(file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+	} else {
+		out, err = store(file).Marshal(tree.Branch)
+	}
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
 	}
@@ -401,6 +406,15 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 			fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
 			bufio.NewReader(os.Stdin).ReadByte()
 			continue
+		}
+		if c.Bool("show-master-keys") {
+			metadata, err := store(file).UnmarshalMetadata(edited)
+			if err != nil {
+				fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
+				bufio.NewReader(os.Stdin).ReadByte()
+				continue
+			}
+			tree.Metadata = metadata
 		}
 		tree.Branch = newBranch
 		invalidSyntax = false
