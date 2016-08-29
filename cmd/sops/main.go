@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 	"time"
 )
@@ -149,12 +150,12 @@ func main() {
 		} else if c.Bool("rotate") {
 			return rotate(c, file, fileBytes, output)
 		}
-		return nil
+		return edit(c, file, fileBytes)
 	}
 	app.Run(os.Args)
 }
 
-func runEditor(path string) {
+func runEditor(path string) error {
 	editor := os.Getenv("EDITOR")
 	var cmd *exec.Cmd
 	if editor == "" {
@@ -167,7 +168,12 @@ func runEditor(path string) {
 	} else {
 		cmd = exec.Command(editor, path)
 	}
-	cmd.Run()
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	return err
 }
 
 func store(path string) sops.Store {
@@ -329,6 +335,67 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	_, err = output.Write([]byte(out))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), exitCouldNotWriteOutputFile)
+	}
+	return nil
+}
+
+func edit(c *cli.Context, file string, fileBytes []byte) error {
+	tree, err := decryptFile(store(file), fileBytes, c.Bool("ignore-mac"))
+	tmpdir, err := ioutil.TempDir("", "")
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
+	}
+	defer os.RemoveAll(tmpdir)
+	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(file)))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
+	}
+	out, err := store(file).Marshal(tree.Branch)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+	}
+	_, err = tmpfile.Write(out)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
+	}
+	err = runEditor(tmpfile.Name())
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+	}
+	edited, err := ioutil.ReadFile(tmpfile.Name())
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
+	}
+	newBranch, err := store(file).Unmarshal(edited)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not load tree: %s", err), exitCouldNotReadInputFile)
+	}
+	tree.Branch = newBranch
+	key, err := tree.Metadata.GetDataKey()
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not retrieve data key: %s", err), exitCouldNotRetrieveKey)
+	}
+	cipher := aes.Cipher{}
+	mac, err := tree.Encrypt(key, cipher)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt tree: %s", err), exitErrorEncryptingTree)
+	}
+	encryptedMac, err := cipher.Encrypt(mac, key, []byte(tree.Metadata.LastModified.Format(time.RFC3339)))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
+	}
+	tree.Metadata.MessageAuthenticationCode = encryptedMac
+	out, err = store(file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+	}
+	output, err := os.Create(file)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), exitCouldNotWriteOutputFile)
+	}
+	_, err = output.Write(out)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
 	}
 	return nil
 }
