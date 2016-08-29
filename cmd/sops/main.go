@@ -3,7 +3,6 @@ package main
 import (
 	"go.mozilla.org/sops"
 
-	"crypto/rand"
 	"fmt"
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/kms"
@@ -186,7 +185,7 @@ func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree,
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
-	key, err := metadata.FindKey()
+	key, err := metadata.GetDataKey()
 	if err != nil {
 		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
@@ -240,20 +239,6 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	return nil
 }
 
-func generateKey(tree *sops.Tree) ([]byte, error) {
-	newKey := make([]byte, 32)
-	_, err := rand.Read(newKey)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not generate random key: %s", err), exitCouldNotRetrieveKey)
-	}
-	for _, ks := range tree.Metadata.KeySources {
-		for _, k := range ks.Keys {
-			k.Encrypt(newKey)
-		}
-	}
-	return newKey, nil
-}
-
 func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
 	branch, err := store.Unmarshal(fileBytes)
@@ -300,9 +285,9 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	metadata.KeySources = append(metadata.KeySources, kmsKs)
 	metadata.KeySources = append(metadata.KeySources, pgpKs)
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
-	key, err := generateKey(&tree)
+	key, err := tree.GenerateDataKey()
 	if err != nil {
-		return err
+		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
 	mac, err := tree.Encrypt(key, cipher)
@@ -325,9 +310,9 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return err
 	}
-	newKey, err := generateKey(&tree)
+	newKey, err := tree.GenerateDataKey()
 	if err != nil {
-		return err
+		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
 	_, err = tree.Encrypt(newKey, cipher)

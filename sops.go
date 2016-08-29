@@ -1,6 +1,7 @@
 package sops
 
 import (
+	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
 	"go.mozilla.org/sops/kms"
@@ -140,19 +141,6 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
-// FindKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it.
-func (metadata Metadata) FindKey() ([]byte, error) {
-	for _, ks := range metadata.KeySources {
-		for _, k := range ks.Keys {
-			key, err := k.Decrypt()
-			if err == nil {
-				return key, nil
-			}
-		}
-	}
-	return nil, fmt.Errorf("Could not get master key")
-}
-
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	hash := sha512.New()
@@ -179,6 +167,21 @@ func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher) (string, error) {
 	}
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 
+}
+
+// GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
+func (tree Tree) GenerateDataKey() ([]byte, error) {
+	newKey := make([]byte, 32)
+	_, err := rand.Read(newKey)
+	if err != nil {
+		return nil, fmt.Errorf("Could not generate random key: %s", err)
+	}
+	for _, ks := range tree.Metadata.KeySources {
+		for _, k := range ks.Keys {
+			k.Encrypt(newKey)
+		}
+	}
+	return newKey, nil
 }
 
 // Metadata holds information about a file encrypted by sops
@@ -311,6 +314,19 @@ func (m *Metadata) ToMap() map[string]interface{} {
 		out[ks.Name] = keys
 	}
 	return out
+}
+
+// GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it.
+func (m Metadata) GetDataKey() ([]byte, error) {
+	for _, ks := range m.KeySources {
+		for _, k := range ks.Keys {
+			key, err := k.Decrypt()
+			if err == nil {
+				return key, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("Could not get master key")
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
