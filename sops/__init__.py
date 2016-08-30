@@ -112,7 +112,7 @@ INPUT_VERSION = VERSION
 
 UNENCRYPTED_SUFFIX = DEFAULT_UNENCRYPTED_SUFFIX
 
-GPG_EXEC = 'gpg'
+GPG_EXEC = None
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -201,8 +201,7 @@ def main():
         pgp_fps = args.pgpfp
     
     # check if the user has specified a custom GPG program.     
-    if 'SOPS_GPG_EXEC' in os.environ:
-        GPG_EXEC = os.environ['SOPS_GPG_EXEC']
+    GPG_EXEC = os.environ.get('SOPS_GPG_EXEC', 'gpg')
 
     # use filename extension as input type if not given on cmdline
     if args.input_type:
