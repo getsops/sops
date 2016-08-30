@@ -144,7 +144,7 @@ func main() {
 			output = os.Stdout
 		}
 		if err != nil {
-			return cli.NewExitError("Error: could not read file", exitCouldNotReadInputFile)
+			fileBytes = nil
 		}
 		if c.Bool("encrypt") {
 			return encrypt(c, file, fileBytes, output)
@@ -248,15 +248,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	return nil
 }
 
-func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
-	store := store(file)
-	branch, err := store.Unmarshal(fileBytes)
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
-	}
-	var metadata sops.Metadata
-	metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
-	metadata.Version = "2.0.0"
+func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 	var kmsKeys []sops.MasterKey
 	var pgpKeys []sops.MasterKey
 
@@ -270,13 +262,13 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 			pgpKeys = append(pgpKeys, &k)
 		}
 	}
-
+	var err error
 	if c.String("kms") == "" && c.String("pgp") == "" {
 		var confBytes []byte
 		if c.String("config") != "" {
 			confBytes, err = ioutil.ReadFile(c.String("config"))
 			if err != nil {
-				return cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
+				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
 			}
 		}
 		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, confBytes)
@@ -291,8 +283,23 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	kmsKs := sops.KeySource{Name: "kms", Keys: kmsKeys}
 	pgpKs := sops.KeySource{Name: "pgp", Keys: pgpKeys}
-	metadata.KeySources = append(metadata.KeySources, kmsKs)
-	metadata.KeySources = append(metadata.KeySources, pgpKs)
+	return []sops.KeySource{kmsKs, pgpKs}, nil
+}
+
+func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
+	store := store(file)
+	branch, err := store.Unmarshal(fileBytes)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
+	}
+	var metadata sops.Metadata
+	metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
+	metadata.Version = "2.0.0"
+	ks, err := getKeysources(c, file)
+	if err != nil {
+		return err
+	}
+	metadata.KeySources = ks
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	key, err := tree.GenerateDataKey()
 	if err != nil {
@@ -356,8 +363,62 @@ func hashFile(filePath string) ([]byte, error) {
 	return hash.Sum(result), nil
 }
 
+const exampleYaml = `
+# Welcome to SOPS. This is the default template.
+# Remove these lines and add your data.
+# Don't modify the 'sops' section, it contains key material.
+example_key: example_value
+example_array:
+    - example_value1
+    - example_value2
+example_multiline: |
+    this is a
+    multiline
+    entry
+example_number: 1234.5678
+example:
+    nested:
+        values: delete_me
+example_booleans:
+    - true
+    - false
+`
+
+func loadExample(c *cli.Context, file string) (sops.Tree, error) {
+	var in []byte
+	var tree sops.Tree
+	if strings.HasSuffix(file, ".yaml") {
+		in = []byte(exampleYaml)
+	}
+	branch, _ := store(file).Unmarshal(in)
+	tree.Branch = branch
+	ks, err := getKeysources(c, file)
+	if err != nil {
+		return tree, err
+	}
+	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
+	tree.Metadata.Version = "2.0.0"
+	tree.Metadata.KeySources = ks
+	key, err := tree.GenerateDataKey()
+	if err != nil {
+		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
+	}
+	tree.Metadata.UpdateMasterKeys(key)
+	return tree, nil
+}
+
 func edit(c *cli.Context, file string, fileBytes []byte) error {
-	tree, stash, err := decryptFile(store(file), fileBytes, c.Bool("ignore-mac"))
+	var tree sops.Tree
+	var stash map[string][]interface{}
+	var err error
+	if fileBytes == nil {
+		tree, err = loadExample(c, file)
+	} else {
+		tree, stash, err = decryptFile(store(file), fileBytes, c.Bool("ignore-mac"))
+	}
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not load file: %s", err), exitCouldNotReadInputFile)
+	}
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
