@@ -114,6 +114,7 @@ UNENCRYPTED_SUFFIX = DEFAULT_UNENCRYPTED_SUFFIX
 
 GPG_EXEC = None
 
+
 def main():
     argparser = argparse.ArgumentParser(
         usage='sops <file>',
@@ -199,8 +200,8 @@ def main():
         pgp_fps = os.environ['SOPS_PGP_FP']
     if args.pgpfp:
         pgp_fps = args.pgpfp
-    
-    # check if the user has specified a custom GPG program.     
+
+    # check if the user has specified a custom GPG program.
     global GPG_EXEC
     GPG_EXEC = os.environ.get('SOPS_GPG_EXEC', 'gpg')
 
