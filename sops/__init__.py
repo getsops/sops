@@ -56,6 +56,8 @@ The -p and -k flags are ignored if the document already contains master
 keys. To add/remove master keys in existing documents, open then with -s
 and edit the `sops` branch directly.
 
+You can change which GPG binary is used by setting $SOPS_GPG_EXEC in env.
+
 By default, editing is done in vim, and will use the $EDITOR env if set.
 
 Version {version} - See the Readme at github.com/mozilla/sops
@@ -109,6 +111,8 @@ NOW = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 INPUT_VERSION = VERSION
 
 UNENCRYPTED_SUFFIX = DEFAULT_UNENCRYPTED_SUFFIX
+
+GPG_EXEC = None
 
 
 def main():
@@ -196,6 +200,10 @@ def main():
         pgp_fps = os.environ['SOPS_PGP_FP']
     if args.pgpfp:
         pgp_fps = args.pgpfp
+
+    # check if the user has specified a custom GPG program.
+    global GPG_EXEC
+    GPG_EXEC = os.environ.get('SOPS_GPG_EXEC', 'gpg')
 
     # use filename extension as input type if not given on cmdline
     if args.input_type:
@@ -1191,7 +1199,7 @@ def get_key_from_pgp(tree):
         except KeyError:
             continue
         try:
-            p = subprocess.Popen(['gpg', '--use-agent', '-d'],
+            p = subprocess.Popen([GPG_EXEC, '--use-agent', '-d'],
                                  stdout=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
             key = p.communicate(input=enc.encode('utf-8'))[0]
@@ -1211,7 +1219,7 @@ def encrypt_key_with_pgp(key, entry):
         return None
     fp = entry['fp']
     try:
-        p = subprocess.Popen(['gpg', '--no-default-recipient', '--yes',
+        p = subprocess.Popen([GPG_EXEC, '--no-default-recipient', '--yes',
                               '--encrypt', '-a', '-r', fp, '--trusted-key',
                               fp[-16:], '--no-encrypt-to'],
                              stdout=subprocess.PIPE,

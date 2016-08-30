@@ -378,6 +378,19 @@ Creating a new file with the right keys is now as simple as
 Note that the configuration file is ignored when KMS or PGP parameters are
 passed on the sops command line or in environment variables.
 
+Specify a different GPG executable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` checks for the `SOPS_GPG_EXEC` environment variable. If specified, 
+it will attempt to use the executable set there instead of the default 
+of `gpg`.
+
+Example: place the following in your `~/.bashrc`
+
+.. code:: bash
+
+	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
+	
 Important information on types
 ------------------------------
 
