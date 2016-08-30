@@ -201,6 +201,7 @@ def main():
         pgp_fps = args.pgpfp
     
     # check if the user has specified a custom GPG program.     
+    global GPG_EXEC
     GPG_EXEC = os.environ.get('SOPS_GPG_EXEC', 'gpg')
 
     # use filename extension as input type if not given on cmdline
