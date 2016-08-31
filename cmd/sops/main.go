@@ -175,8 +175,7 @@ func runEditor(path string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	err := cmd.Run()
-	return err
+	return cmd.Run()
 }
 
 func store(path string) sops.Store {
@@ -292,14 +291,15 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
-	var metadata sops.Metadata
-	metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
-	metadata.Version = "2.0.0"
 	ks, err := getKeysources(c, file)
 	if err != nil {
 		return err
 	}
-	metadata.KeySources = ks
+	metadata := sops.Metadata{
+		UnencryptedSuffix: c.String("unencrypted-suffix"),
+		Version:           "2.0.0",
+		KeySources:        ks,
+	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	key, err := tree.GenerateDataKey()
 	if err != nil {
@@ -445,8 +445,7 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
 	}
-	invalidSyntax := true
-	for invalidSyntax || tree.Metadata.MasterKeyCount() == 0 {
+	for {
 		err = runEditor(tmpfile.Name())
 		if err != nil {
 			return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
@@ -478,7 +477,12 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 			tree.Metadata = metadata
 		}
 		tree.Branch = newBranch
-		invalidSyntax = false
+		if tree.Metadata.MasterKeyCount() == 0 {
+			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
+			bufio.NewReader(os.Stdin).ReadByte()
+			continue
+		}
+		break
 	}
 	key, err := tree.Metadata.GetDataKey()
 	if err != nil {
