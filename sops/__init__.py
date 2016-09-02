@@ -325,7 +325,7 @@ def main():
         tmppath = write_file(tree, filetype=otype)
         tmphash = get_file_hash(tmppath)
         print("INFO: temp file created at %s" % tmppath, file=sys.stderr)
-    
+
         # open an editor on the file and, if the file is yaml or json,
         # verify that it doesn't contain errors before continuing
         valid_syntax = False
@@ -336,15 +336,16 @@ def main():
                 valid_syntax = validate_syntax(tmppath, otype)
             except Exception as e:
                 try:
-                    print("ERROR: invalid syntax: %s\nPress a key to return into "
-                          "the editor, or ctrl+c to exit without saving." % e,
+                    print("ERROR: invalid syntax: %s\nPress a key to return "
+                          "into the editor, or ctrl+c to exit without "
+                          "saving." % e,
                           file=sys.stderr)
                     raw_input()
                 except KeyboardInterrupt:
                     os.remove(tmppath)
                     panic("ctrl+c captured, exiting without saving", 85)
                 continue
-    
+
             if args.show_master_keys:
                 # use the sops data from the file
                 tree = load_file_into_tree(tmppath, otype)
@@ -356,15 +357,15 @@ def main():
                 has_master_keys = True
             else:
                 try:
-                    print("ERROR: could not find a valid master key to encrypt the"
-                          " data key with.\nAdd at least one KMS or PGP "
+                    print("ERROR: could not find a valid master key to encrypt "
+                          "the data key with.\nAdd at least one KMS or PGP "
                           "master key to the `sops` branch,\nor ctrl+c to "
                           "exit without saving.")
                     raw_input()
                 except KeyboardInterrupt:
                     os.remove(tmppath)
                     panic("ctrl+c captured, exiting without saving", 85)
-    
+
         # verify if file has been modified, and if not, just exit
         if tmphash == get_file_hash(tmppath):
             os.remove(tmppath)
