@@ -357,8 +357,8 @@ def main():
                 has_master_keys = True
             else:
                 try:
-                    print("ERROR: could not find a valid master key to encrypt "
-                          "the data key with.\nAdd at least one KMS or PGP "
+                    print("ERROR: could not find a valid master key to encrypt"
+                          " the data key with.\nAdd at least one KMS or PGP "
                           "master key to the `sops` branch,\nor ctrl+c to "
                           "exit without saving.")
                     raw_input()
