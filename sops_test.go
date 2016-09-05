@@ -23,14 +23,14 @@ func TestUnencryptedSuffix(t *testing.T) {
 		},
 	}
 	cipher := aes.Cipher{}
-	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher, nil)
 	if err != nil {
 		t.Errorf("Encrypting the tree failed: %s", err)
 	}
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branch, expected)
 	}
-	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher, nil)
 	if err != nil {
 		t.Errorf("Decrypting the tree failed: %s", err)
 	}
@@ -41,12 +41,12 @@ func TestUnencryptedSuffix(t *testing.T) {
 
 type MockCipher struct{}
 
-func (m MockCipher) Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
+func (m MockCipher) Encrypt(value interface{}, key []byte, path string, stashValue interface{}) (string, error) {
 	return "a", nil
 }
 
-func (m MockCipher) Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error) {
-	return "a", nil
+func (m MockCipher) Decrypt(value string, key []byte, path string) (interface{}, interface{}, error) {
+	return "a", nil, nil
 }
 
 func TestEncrypt(t *testing.T) {
@@ -97,7 +97,7 @@ func TestEncrypt(t *testing.T) {
 		},
 	}
 	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
-	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{})
+	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{}, make(map[string][]interface{}))
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("%s does not equal expected tree: %s", tree.Branch, expected)
 	}
@@ -151,7 +151,7 @@ func TestDecrypt(t *testing.T) {
 		},
 	}
 	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
-	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{})
+	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{}, make(map[string][]interface{}))
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("%s does not equal expected tree: %s", tree.Branch, expected)
 	}

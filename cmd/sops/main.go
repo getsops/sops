@@ -3,6 +3,9 @@ package main
 import (
 	"go.mozilla.org/sops"
 
+	"bufio"
+	"bytes"
+	"crypto/md5"
 	"fmt"
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/json"
@@ -14,6 +17,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 	"time"
 )
@@ -141,7 +145,7 @@ func main() {
 			output = os.Stdout
 		}
 		if err != nil {
-			return cli.NewExitError("Error: could not read file", exitCouldNotReadInputFile)
+			fileBytes = nil
 		}
 		if c.Bool("encrypt") {
 			return encrypt(c, file, fileBytes, output)
@@ -150,12 +154,12 @@ func main() {
 		} else if c.Bool("rotate") {
 			return rotate(c, file, fileBytes, output)
 		}
-		return nil
+		return edit(c, file, fileBytes)
 	}
 	app.Run(os.Args)
 }
 
-func runEditor(path string) {
+func runEditor(path string) error {
 	editor := os.Getenv("EDITOR")
 	var cmd *exec.Cmd
 	if editor == "" {
@@ -168,7 +172,11 @@ func runEditor(path string) {
 	} else {
 		cmd = exec.Command(editor, path)
 	}
-	cmd.Run()
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 func store(path string) sops.Store {
@@ -180,36 +188,36 @@ func store(path string) sops.Store {
 	panic("Unknown file type for file " + path)
 }
 
-func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (sops.Tree, error) {
-	var tree sops.Tree
+func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (tree sops.Tree, stash map[string][]interface{}, err error) {
 	metadata, err := store.UnmarshalMetadata(fileBytes)
 	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	key, err := metadata.GetDataKey()
 	if err != nil {
-		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
+		return tree, nil, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	branch, err := store.Unmarshal(fileBytes)
 	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
 	}
 	tree = sops.Tree{Branch: branch, Metadata: metadata}
 	cipher := aes.Cipher{}
-	mac, err := tree.Decrypt(key, cipher)
+	stash = make(map[string][]interface{})
+	mac, err := tree.Decrypt(key, cipher, stash)
 	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
 	}
-	originalMac, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, []byte(metadata.LastModified.Format(time.RFC3339)))
+	originalMac, _, err := cipher.Decrypt(metadata.MessageAuthenticationCode, key, metadata.LastModified.Format(time.RFC3339))
 	if originalMac != mac && !ignoreMac {
-		return tree, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", originalMac, mac), 9)
+		return tree, nil, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", originalMac, mac), 9)
 	}
-	return tree, nil
+	return tree, stash, nil
 }
 
 func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
-	tree, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
+	tree, _, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
 	if err != nil {
 		return err
 	}
@@ -240,15 +248,7 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	return nil
 }
 
-func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
-	store := store(file)
-	branch, err := store.Unmarshal(fileBytes)
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
-	}
-	var metadata sops.Metadata
-	metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
-	metadata.Version = "2.0.0"
+func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 	var kmsKeys []sops.MasterKey
 	var pgpKeys []sops.MasterKey
 
@@ -262,13 +262,13 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 			pgpKeys = append(pgpKeys, &k)
 		}
 	}
-
+	var err error
 	if c.String("kms") == "" && c.String("pgp") == "" {
 		var confBytes []byte
 		if c.String("config") != "" {
 			confBytes, err = ioutil.ReadFile(c.String("config"))
 			if err != nil {
-				return cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
+				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
 			}
 		}
 		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, confBytes)
@@ -283,16 +283,32 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	kmsKs := sops.KeySource{Name: "kms", Keys: kmsKeys}
 	pgpKs := sops.KeySource{Name: "pgp", Keys: pgpKeys}
-	metadata.KeySources = append(metadata.KeySources, kmsKs)
-	metadata.KeySources = append(metadata.KeySources, pgpKs)
+	return []sops.KeySource{kmsKs, pgpKs}, nil
+}
+
+func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
+	store := store(file)
+	branch, err := store.Unmarshal(fileBytes)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
+	}
+	ks, err := getKeysources(c, file)
+	if err != nil {
+		return err
+	}
+	metadata := sops.Metadata{
+		UnencryptedSuffix: c.String("unencrypted-suffix"),
+		Version:           "2.0.0",
+		KeySources:        ks,
+	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 	key, err := tree.GenerateDataKey()
 	if err != nil {
 		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
-	mac, err := tree.Encrypt(key, cipher)
-	encryptedMac, err := cipher.Encrypt(mac, key, []byte(metadata.LastModified.Format(time.RFC3339)))
+	mac, err := tree.Encrypt(key, cipher, nil)
+	encryptedMac, err := cipher.Encrypt(mac, key, metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
 	}
@@ -307,7 +323,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 
 func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) error {
 	store := store(file)
-	tree, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
+	tree, _, err := decryptFile(store, fileBytes, c.Bool("ignore-mac"))
 	if err != nil {
 		return err
 	}
@@ -316,7 +332,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
-	_, err = tree.Encrypt(newKey, cipher)
+	_, err = tree.Encrypt(newKey, cipher, nil)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
@@ -330,6 +346,171 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	_, err = output.Write([]byte(out))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), exitCouldNotWriteOutputFile)
+	}
+	return nil
+}
+
+func hashFile(filePath string) ([]byte, error) {
+	var result []byte
+	file, err := os.Open(filePath)
+	if err != nil {
+		return result, err
+	}
+	defer file.Close()
+	hash := md5.New()
+	if _, err := io.Copy(hash, file); err != nil {
+		return result, err
+	}
+	return hash.Sum(result), nil
+}
+
+const exampleYaml = `
+# Welcome to SOPS. This is the default template.
+# Remove these lines and add your data.
+# Don't modify the 'sops' section, it contains key material.
+example_key: example_value
+example_array:
+    - example_value1
+    - example_value2
+example_multiline: |
+    this is a
+    multiline
+    entry
+example_number: 1234.5678
+example:
+    nested:
+        values: delete_me
+example_booleans:
+    - true
+    - false
+`
+
+func loadExample(c *cli.Context, file string) (sops.Tree, error) {
+	var in []byte
+	var tree sops.Tree
+	if strings.HasSuffix(file, ".yaml") {
+		in = []byte(exampleYaml)
+	}
+	branch, _ := store(file).Unmarshal(in)
+	tree.Branch = branch
+	ks, err := getKeysources(c, file)
+	if err != nil {
+		return tree, err
+	}
+	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
+	tree.Metadata.Version = "2.0.0"
+	tree.Metadata.KeySources = ks
+	key, err := tree.GenerateDataKey()
+	if err != nil {
+		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
+	}
+	tree.Metadata.UpdateMasterKeys(key)
+	return tree, nil
+}
+
+func edit(c *cli.Context, file string, fileBytes []byte) error {
+	var tree sops.Tree
+	var stash map[string][]interface{}
+	var err error
+	if fileBytes == nil {
+		tree, err = loadExample(c, file)
+	} else {
+		tree, stash, err = decryptFile(store(file), fileBytes, c.Bool("ignore-mac"))
+	}
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not load file: %s", err), exitCouldNotReadInputFile)
+	}
+	tmpdir, err := ioutil.TempDir("", "")
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
+	}
+	defer os.RemoveAll(tmpdir)
+	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(file)))
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
+	}
+	var out []byte
+	if c.Bool("show-master-keys") {
+		out, err = store(file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+	} else {
+		out, err = store(file).Marshal(tree.Branch)
+	}
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+	}
+	_, err = tmpfile.Write(out)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
+	}
+	origHash, err := hashFile(tmpfile.Name())
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+	}
+	for {
+		err = runEditor(tmpfile.Name())
+		if err != nil {
+			return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+		}
+		newHash, err := hashFile(tmpfile.Name())
+		if err != nil {
+			return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+		}
+		if bytes.Equal(newHash, origHash) {
+			return cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
+		}
+		edited, err := ioutil.ReadFile(tmpfile.Name())
+		if err != nil {
+			return cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
+		}
+		newBranch, err := store(file).Unmarshal(edited)
+		if err != nil {
+			fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
+			bufio.NewReader(os.Stdin).ReadByte()
+			continue
+		}
+		if c.Bool("show-master-keys") {
+			metadata, err := store(file).UnmarshalMetadata(edited)
+			if err != nil {
+				fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
+				bufio.NewReader(os.Stdin).ReadByte()
+				continue
+			}
+			tree.Metadata = metadata
+		}
+		tree.Branch = newBranch
+		if tree.Metadata.MasterKeyCount() == 0 {
+			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
+			bufio.NewReader(os.Stdin).ReadByte()
+			continue
+		}
+		break
+	}
+	key, err := tree.Metadata.GetDataKey()
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not retrieve data key: %s", err), exitCouldNotRetrieveKey)
+	}
+	cipher := aes.Cipher{}
+	mac, err := tree.Encrypt(key, cipher, stash)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt tree: %s", err), exitErrorEncryptingTree)
+	}
+	encryptedMac, err := cipher.Encrypt(mac, key, tree.Metadata.LastModified.Format(time.RFC3339), stash)
+	if err != nil {
+
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
+	}
+	tree.Metadata.MessageAuthenticationCode = encryptedMac
+	out, err = store(file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+	}
+	output, err := os.Create(file)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), exitCouldNotWriteOutputFile)
+	}
+	_, err = output.Write(out)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
 	}
 	return nil
 }

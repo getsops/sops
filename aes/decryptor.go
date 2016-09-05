@@ -19,6 +19,11 @@ type encryptedValue struct {
 
 const nonceSize int = 32
 
+type stashData struct {
+	iv        []byte
+	plaintext interface{}
+}
+
 // Cipher encrypts and decrypts data keys with AES GCM 256
 type Cipher struct{}
 
@@ -46,54 +51,67 @@ func parse(value string) (*encryptedValue, error) {
 	return &encryptedValue{data, iv, tag, datatype}, nil
 }
 
-// Decrypt takes a sops-format value string and a key and returns the decrypted value.
-func (c Cipher) Decrypt(value string, key []byte, additionalAuthData []byte) (interface{}, error) {
+// Decrypt takes a sops-format value string and a key and returns the decrypted value and a stash value
+func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, stash interface{}, err error) {
 	encryptedValue, err := parse(value)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	gcm, err := cipher.NewGCMWithNonceSize(aescipher, len(encryptedValue.iv))
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
-
+	stashValue := stashData{iv: encryptedValue.iv}
 	data := append(encryptedValue.data, encryptedValue.tag...)
-	decryptedBytes, err := gcm.Open(nil, encryptedValue.iv, data, additionalAuthData)
+	decryptedBytes, err := gcm.Open(nil, encryptedValue.iv, data, []byte(path))
 	if err != nil {
-		return "", fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
+		return "", nil, fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
 	}
 	decryptedValue := string(decryptedBytes)
 	switch encryptedValue.datatype {
 	case "str":
-		return decryptedValue, nil
+		stashValue.plaintext = decryptedValue
+		return decryptedValue, stashValue, nil
 	case "int":
-		return strconv.Atoi(decryptedValue)
+		plaintext, err = strconv.Atoi(decryptedValue)
+		stashValue.plaintext = plaintext
+		return plaintext, stashValue, err
 	case "float":
-		return strconv.ParseFloat(decryptedValue, 64)
+		plaintext, err = strconv.ParseFloat(decryptedValue, 64)
+		stashValue.plaintext = plaintext
+		return plaintext, stashValue, err
 	case "bytes":
-		return decryptedValue, nil
+		stashValue.plaintext = decryptedBytes
+		return decryptedBytes, stashValue, nil
 	case "bool":
-		return strconv.ParseBool(decryptedValue)
+		plaintext, err = strconv.ParseBool(decryptedValue)
+		stashValue.plaintext = plaintext
+		return plaintext, stashValue, err
 	default:
-		return nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
+		return nil, nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
 	}
 }
 
 // Encrypt takes one of (string, int, float, bool) and encrypts it with the provided key and additional auth data, returning a sops-format encrypted string.
-func (c Cipher) Encrypt(value interface{}, key []byte, additionalAuthData []byte) (string, error) {
+func (c Cipher) Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error) {
 	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {
 		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)
 	}
-	iv := make([]byte, nonceSize)
-	_, err = rand.Read(iv)
-	if err != nil {
-		return "", fmt.Errorf("Could not generate random bytes for IV: %s", err)
+	var iv []byte
+	if stash, ok := stash.(stashData); !ok || stash.plaintext != value {
+		iv = make([]byte, nonceSize)
+		_, err = rand.Read(iv)
+		if err != nil {
+			return "", fmt.Errorf("Could not generate random bytes for IV: %s", err)
+		}
+	} else {
+		iv = stash.iv
 	}
 	gcm, err := cipher.NewGCMWithNonceSize(aescipher, nonceSize)
 	if err != nil {
@@ -117,7 +135,7 @@ func (c Cipher) Encrypt(value interface{}, key []byte, additionalAuthData []byte
 	default:
 		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
 	}
-	out := gcm.Seal(nil, iv, plaintext, additionalAuthData)
+	out := gcm.Seal(nil, iv, plaintext, []byte(path))
 	return fmt.Sprintf("ENC[AES256_GCM,data:%s,iv:%s,tag:%s,type:%s]",
 		base64.StdEncoding.EncodeToString(out[:len(out)-cryptoaes.BlockSize]),
 		base64.StdEncoding.EncodeToString(iv),
