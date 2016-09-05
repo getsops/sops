@@ -5,6 +5,7 @@ import (
 
 	"fmt"
 	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/json"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/yaml"
@@ -174,7 +175,7 @@ func store(path string) sops.Store {
 	if strings.HasSuffix(path, ".yaml") {
 		return &yaml.Store{}
 	} else if strings.HasSuffix(path, ".json") {
-		// return &json.JSONStore{}
+		return &json.Store{}
 	}
 	panic("Unknown file type for file " + path)
 }
