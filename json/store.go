@@ -12,8 +12,47 @@ import (
 	"time"
 )
 
-// Store handles storage of JSON data. It's not finished yet, and therefore you should not use it.
+// Store handles storage of JSON data.
 type Store struct {
+}
+
+// BinaryStore handles storage of binary data in a JSON envelope.
+type BinaryStore struct {
+	store Store
+}
+
+// Marshal takes a sops tree branch and returns a json formatted string
+func (store BinaryStore) Marshal(tree sops.TreeBranch) ([]byte, error) {
+	for _, item := range tree {
+		if item.Key == "data" {
+			return []byte(item.Value.(string)), nil
+		}
+	}
+	return nil, fmt.Errorf("No binary data found in tree")
+}
+
+// MarshalWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
+func (store BinaryStore) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
+	return store.store.MarshalWithMetadata(tree, metadata)
+}
+
+// Unmarshal takes an input byte slice and returns a sops tree branch
+func (store BinaryStore) Unmarshal(in []byte) (sops.TreeBranch, error) {
+	branch, err := store.store.Unmarshal(in)
+	if err != nil {
+		return sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "data",
+				Value: string(in),
+			},
+		}, nil
+	}
+	return branch, nil
+}
+
+// UnmarshalMetadata takes a binary format sops file and extracts sops' metadata from it
+func (store BinaryStore) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
+	return store.store.UnmarshalMetadata(in)
 }
 
 func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error) {

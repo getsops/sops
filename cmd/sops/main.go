@@ -185,7 +185,7 @@ func store(path string) sops.Store {
 	} else if strings.HasSuffix(path, ".json") {
 		return &json.Store{}
 	}
-	panic("Unknown file type for file " + path)
+	return &json.BinaryStore{}
 }
 
 func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (tree sops.Tree, stash map[string][]interface{}, err error) {
@@ -397,6 +397,11 @@ const exampleJson = `
 }
 `
 
+const exampleBinary = `
+Welcome to SOPS!
+Remove this text and add your content to the file.
+`
+
 func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	var in []byte
 	var tree sops.Tree
@@ -404,6 +409,8 @@ func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 		in = []byte(exampleYaml)
 	} else if strings.HasSuffix(file, ".json") {
 		in = []byte(exampleJson)
+	} else {
+		in = []byte(exampleBinary)
 	}
 	branch, _ := store(file).Unmarshal(in)
 	tree.Branch = branch
