@@ -596,30 +596,30 @@ them.
 	$ sops -d ~/git/svc/sops/example.yaml -t '["an_array"][1]'
 	secretuser2
 
-Insert a sub-part into a document tree
+Set a sub-part in a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`sops` can insert to a specific part of a YAML or JSON document, by provided
-the path and value in the `--insert` command line flag. This is useful to
-insert specific values, like keys, without needing an editor.
+`sops` can set a specific part of a YAML or JSON document, by providing
+the path and value in the `--set` command line flag. This is useful to
+set specific values, like keys, without needing an editor.
 
 .. code:: bash
 
-	$ sops ~/git/svc/sops/example.yaml --insert '["app2"]["key"]' '"app2keystringvalue"'
+	$ sops ~/git/svc/sops/example.yaml --set '["app2"]["key"]' '"app2keystringvalue"'
 
 The tree path syntax uses regular python dictionary syntax, without the
-variable name. Insert to keys by naming them, and array elements by
+variable name. Set to keys by naming them, and array elements by
 numbering them.
 
 .. code:: bash
 
-	$ sops ~/git/svc/sops/example.yaml --insert '["an_array"][1]' '"secretuser2"'
+	$ sops ~/git/svc/sops/example.yaml --set '["an_array"][1]' '"secretuser2"'
 
 The value must be formatted as json.
 
 .. code:: bash
 
-	$ sops ~/git/svc/sops/example.yaml --insert '["an_array"][1]' '{"uid1":null,"uid2":1000,"uid3":["bob"]}'
+	$ sops ~/git/svc/sops/example.yaml --set '["an_array"][1]' '{"uid1":null,"uid2":1000,"uid3":["bob"]}'
 
 Using sops as a library in a python script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
