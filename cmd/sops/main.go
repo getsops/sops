@@ -385,11 +385,25 @@ example_booleans:
     - false
 `
 
+const exampleJson = `
+{
+"example_key": "example_value",
+"example_array": [
+    "example_value1",
+    "example_value2"
+],
+"example_number": 1234.5678,
+"example_booleans": [true, false]
+}
+`
+
 func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	var in []byte
 	var tree sops.Tree
 	if strings.HasSuffix(file, ".yaml") {
 		in = []byte(exampleYaml)
+	} else if strings.HasSuffix(file, ".json") {
+		in = []byte(exampleJson)
 	}
 	branch, _ := store(file).Unmarshal(in)
 	tree.Branch = branch
