@@ -145,11 +145,11 @@ def main():
                            help="extract a specific key or branch from the "
                                 "input JSON or YAML document. (decrypt mode "
                                 "only). ex: --extract '[\"somekey\"][0]'")
-    argparser.add_argument('--insert', dest='insert', nargs=2,
-                           help="insert a specific key or branch into the "
+    argparser.add_argument('--set', dest='set', nargs=2,
+                           help="set a specific key or branch in the "
                                 "input JSON or YAML document. value must be "
                                 "a json encoded string. (edit mode only)."
-                                "ex: --insert '[\"somekey\"][0]' "
+                                "ex: --set '[\"somekey\"][0]' "
                                 "'{\"somevalue\":true}'")
     argparser.add_argument('--input-type', dest='input_type',
                            help="input type (yaml, json, ...), "
@@ -307,15 +307,15 @@ def main():
     if not args.show_master_keys:
         tree.pop('sops', None)
 
-    if args.insert:
-        # extract args for --insert
-        insert_path, json_value = args.insert
+    if args.set:
+        # extract args for --set
+        set_path, json_value = args.set
         value = json.loads(json_value)
-        # find insert location
-        parent = truncate_tree(tree, insert_path.rsplit('[', 1)[0])
-        # find insert key
-        key = tree_path_comp(insert_path.rsplit('[', 1)[1], insert_path)
-        # insert value
+        # find set location
+        parent = truncate_tree(tree, set_path.rsplit('[', 1)[0])
+        # find set key
+        key = tree_path_comp(set_path.rsplit('[', 1)[1], set_path)
+        # set value
         parent[key] = value
         # restore sops from stash
         tree['sops'] = stash['sops']
