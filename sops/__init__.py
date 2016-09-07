@@ -314,9 +314,9 @@ def main():
         # find set location
         parent = truncate_tree(tree, set_path.rsplit('[', 1)[0])
         # find set key
-        key = tree_path_comp(set_path.rsplit('[', 1)[1], set_path)
+        set_key = tree_path_comp(set_path.rsplit('[', 1)[1], set_path)
         # set value
-        parent[key] = value
+        parent[set_key] = value
         # restore sops from stash
         tree['sops'] = stash['sops']
     else:
@@ -376,7 +376,8 @@ def main():
     tree = add_new_master_keys(tree, args.add_kms, args.add_pgp)
     tree = remove_master_keys(tree, args.rm_kms, args.rm_pgp)
     tree = update_master_keys(tree, key)
-    os.remove(tmppath)
+    if not args.set:
+        os.remove(tmppath)
 
     # always store encrypted binary files in a json enveloppe
     if otype == "bytes":
