@@ -1,5 +1,5 @@
 setuptools>=18.8.1
-cryptography==1.2.1
+cryptography==1.4
 boto3>=1.1.3
 ruamel.yaml==0.11.7
 ordereddict>=1.1
