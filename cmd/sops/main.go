@@ -185,7 +185,7 @@ func store(path string) sops.Store {
 	} else if strings.HasSuffix(path, ".json") {
 		return &json.Store{}
 	}
-	panic("Unknown file type for file " + path)
+	return &json.BinaryStore{}
 }
 
 func decryptFile(store sops.Store, fileBytes []byte, ignoreMac bool) (tree sops.Tree, stash map[string][]interface{}, err error) {
@@ -364,34 +364,47 @@ func hashFile(filePath string) ([]byte, error) {
 	return hash.Sum(result), nil
 }
 
-const exampleYaml = `
-# Welcome to SOPS. This is the default template.
-# Remove these lines and add your data.
-# Don't modify the 'sops' section, it contains key material.
-example_key: example_value
-example_array:
-    - example_value1
-    - example_value2
-example_multiline: |
-    this is a
-    multiline
-    entry
-example_number: 1234.5678
-example:
-    nested:
-        values: delete_me
-example_booleans:
-    - true
-    - false
-`
+var exampleTree = sops.TreeBranch{
+	sops.TreeItem{
+		Key:   "hello",
+		Value: `Welcome to SOPS! Edit this file as you please!`,
+	},
+	sops.TreeItem{
+		Key:   "example_key",
+		Value: "example_value",
+	},
+	sops.TreeItem{
+		Key: "example_array",
+		Value: []interface{}{
+			"example_value1",
+			"example_value2",
+		},
+	},
+	sops.TreeItem{
+		Key:   "example_number",
+		Value: 1234.56789,
+	},
+	sops.TreeItem{
+		Key:   "example_booleans",
+		Value: []interface{}{true, false},
+	},
+}
 
 func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	var in []byte
 	var tree sops.Tree
-	if strings.HasSuffix(file, ".yaml") {
-		in = []byte(exampleYaml)
+	fileStore := store(file)
+	if _, ok := fileStore.(*json.BinaryStore); ok {
+		// Get the value under the first key
+		in = []byte(exampleTree[0].Value.(string))
+	} else {
+		var err error
+		in, err = fileStore.Marshal(exampleTree)
+		if err != nil {
+			return tree, err
+		}
 	}
-	branch, _ := store(file).Unmarshal(in)
+	branch, _ := fileStore.Unmarshal(in)
 	tree.Branch = branch
 	ks, err := getKeysources(c, file)
 	if err != nil {

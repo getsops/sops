@@ -80,6 +80,8 @@ func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in
 	switch in := in.(type) {
 	case string:
 		return onLeaves(in, path)
+	case []byte:
+		return onLeaves(string(in), path)
 	case int:
 		return onLeaves(in, path)
 	case bool:
