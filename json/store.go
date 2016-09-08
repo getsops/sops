@@ -173,7 +173,11 @@ func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
 	}
 	metadata.LastModified = lastModified
-	metadata.UnencryptedSuffix = data["unencrypted_suffix"].(string)
+	unencryptedSuffix, ok := data["unencrypted_suffix"].(string)
+	if !ok {
+		unencryptedSuffix = sops.DefaultUnencryptedSuffix
+	}
+	metadata.UnencryptedSuffix = unencryptedSuffix
 	if metadata.Version, ok = data["version"].(string); !ok {
 		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
 	}
