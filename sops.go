@@ -122,7 +122,13 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		bytes, err := ToBytes(in)
-		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
+		unencrypted := false
+		for _, v := range path {
+			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
+				unencrypted = true
+			}
+		}
+		if !unencrypted {
 			var err error
 			pathString := strings.Join(path, ":") + ":"
 			// Pop from the left of the stash
@@ -154,7 +160,13 @@ func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		var v interface{}
-		if !strings.HasSuffix(path[len(path)-1], tree.Metadata.UnencryptedSuffix) {
+		unencrypted := false
+		for _, v := range path {
+			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
+				unencrypted = true
+			}
+		}
+		if !unencrypted {
 			var err error
 			var stashValue interface{}
 			pathString := strings.Join(path, ":") + ":"

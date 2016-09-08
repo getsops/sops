@@ -14,12 +14,30 @@ func TestUnencryptedSuffix(t *testing.T) {
 			Key:   "foo_unencrypted",
 			Value: "bar",
 		},
+		TreeItem{
+			Key: "bar_unencrypted",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
 	}
 	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: "_unencrypted"}}
 	expected := TreeBranch{
 		TreeItem{
 			Key:   "foo_unencrypted",
 			Value: "bar",
+		},
+		TreeItem{
+			Key: "bar_unencrypted",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
 		},
 	}
 	cipher := aes.Cipher{}
