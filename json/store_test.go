@@ -165,6 +165,32 @@ func TestDecodeJSONWithArray(t *testing.T) {
 	assert.Equal(t, expected, branch)
 }
 
+func TestDecodeJSONArrayOfObjects(t *testing.T) {
+	in := `{"foo": [{"bar": "foo"}, {"foo": "bar"}]}`
+	expected := sops.TreeBranch{
+		sops.TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				sops.TreeBranch{
+					sops.TreeItem{
+						Key:   "bar",
+						Value: "foo",
+					},
+				},
+				sops.TreeBranch{
+					sops.TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	branch, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.Nil(t, err)
+	assert.Equal(t, expected, branch)
+}
+
 func TestEncodeSimpleJSON(t *testing.T) {
 	branch := sops.TreeBranch{
 		sops.TreeItem{
