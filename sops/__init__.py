@@ -39,7 +39,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = '1.13'
+VERSION = '1.14'
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -145,6 +145,12 @@ def main():
                            help="extract a specific key or branch from the "
                                 "input JSON or YAML document. (decrypt mode "
                                 "only). ex: --extract '[\"somekey\"][0]'")
+    argparser.add_argument('--set', dest='set', nargs=2,
+                           help="set a specific key or branch in the "
+                                "input JSON or YAML document. value must be "
+                                "a json encoded string. (edit mode only)."
+                                "ex: --set '[\"somekey\"][0]' "
+                                "'{\"somevalue\":true}'")
     argparser.add_argument('--input-type', dest='input_type',
                            help="input type (yaml, json, ...), "
                                 "if undef, use file extension")
@@ -301,62 +307,77 @@ def main():
     if not args.show_master_keys:
         tree.pop('sops', None)
 
-    # the decrypted tree is written to a tempfile and an editor
-    # is opened on the file
-    tmppath = write_file(tree, filetype=otype)
-    tmphash = get_file_hash(tmppath)
-    print("INFO: temp file created at %s" % tmppath, file=sys.stderr)
+    if args.set:
+        # extract args for --set
+        set_path, json_value = args.set
+        value = json.loads(json_value)
+        # find set location
+        parent = truncate_tree(tree, set_path.rsplit('[', 1)[0])
+        # find set key
+        set_key = tree_path_comp(set_path.rsplit('[', 1)[1], set_path)
+        # set value
+        parent[set_key] = value
+        # restore sops from stash
+        tree['sops'] = stash['sops']
+    else:
+        # the decrypted tree is written to a tempfile and an editor
+        # is opened on the file
+        tmppath = write_file(tree, filetype=otype)
+        tmphash = get_file_hash(tmppath)
+        print("INFO: temp file created at %s" % tmppath, file=sys.stderr)
 
-    # open an editor on the file and, if the file is yaml or json,
-    # verify that it doesn't contain errors before continuing
-    valid_syntax = False
-    has_master_keys = False
-    while not valid_syntax or not has_master_keys:
-        run_editor(tmppath)
-        try:
-            valid_syntax = validate_syntax(tmppath, otype)
-        except Exception as e:
+        # open an editor on the file and, if the file is yaml or json,
+        # verify that it doesn't contain errors before continuing
+        valid_syntax = False
+        has_master_keys = False
+        while not valid_syntax or not has_master_keys:
+            run_editor(tmppath)
             try:
-                print("ERROR: invalid syntax: %s\nPress a key to return into "
-                      "the editor, or ctrl+c to exit without saving." % e,
-                      file=sys.stderr)
-                raw_input()
-            except KeyboardInterrupt:
-                os.remove(tmppath)
-                panic("ctrl+c captured, exiting without saving", 85)
-            continue
+                valid_syntax = validate_syntax(tmppath, otype)
+            except Exception as e:
+                try:
+                    print("ERROR: invalid syntax: %s\nPress a key to return "
+                          "into the editor, or ctrl+c to exit without "
+                          "saving." % e,
+                          file=sys.stderr)
+                    raw_input()
+                except KeyboardInterrupt:
+                    os.remove(tmppath)
+                    panic("ctrl+c captured, exiting without saving", 85)
+                continue
 
-        if args.show_master_keys:
-            # use the sops data from the file
-            tree = load_file_into_tree(tmppath, otype)
-        else:
-            # sops branch was removed for editing, restoring it
-            tree = load_file_into_tree(tmppath, otype,
-                                       restore_sops=stash['sops'])
-        if check_master_keys(tree):
-            has_master_keys = True
-        else:
-            try:
-                print("ERROR: could not find a valid master key to encrypt the"
-                      " data key with.\nAdd at least one KMS or PGP "
-                      "master key to the `sops` branch,\nor ctrl+c to "
-                      "exit without saving.")
-                raw_input()
-            except KeyboardInterrupt:
-                os.remove(tmppath)
-                panic("ctrl+c captured, exiting without saving", 85)
+            if args.show_master_keys:
+                # use the sops data from the file
+                tree = load_file_into_tree(tmppath, otype)
+            else:
+                # sops branch was removed for editing, restoring it
+                tree = load_file_into_tree(tmppath, otype,
+                                           restore_sops=stash['sops'])
+            if check_master_keys(tree):
+                has_master_keys = True
+            else:
+                try:
+                    print("ERROR: could not find a valid master key to encrypt"
+                          " the data key with.\nAdd at least one KMS or PGP "
+                          "master key to the `sops` branch,\nor ctrl+c to "
+                          "exit without saving.")
+                    raw_input()
+                except KeyboardInterrupt:
+                    os.remove(tmppath)
+                    panic("ctrl+c captured, exiting without saving", 85)
 
-    # verify if file has been modified, and if not, just exit
-    if tmphash == get_file_hash(tmppath):
-        os.remove(tmppath)
-        panic("%s has not been modified, exit without writing" % args.file,
-              error_code=200)
+        # verify if file has been modified, and if not, just exit
+        if tmphash == get_file_hash(tmppath):
+            os.remove(tmppath)
+            panic("%s has not been modified, exit without writing" % args.file,
+                  error_code=200)
 
     tree = walk_and_encrypt(tree, key, stash=stash)
     tree = add_new_master_keys(tree, args.add_kms, args.add_pgp)
     tree = remove_master_keys(tree, args.rm_kms, args.rm_pgp)
     tree = update_master_keys(tree, key)
-    os.remove(tmppath)
+    if not args.set:
+        os.remove(tmppath)
 
     # always store encrypted binary files in a json enveloppe
     if otype == "bytes":
@@ -1345,16 +1366,21 @@ def truncate_tree(tree, path):
     for comp in comps:
         if comp == "":
             continue
-        if comp[len(comp)-1] != "]":
-            panic("invalid tree path format: tree"+path, 91)
-        comp = comp[0:len(comp)-1]
-        comp = comp.replace('"', '', 2)
-        comp = comp.replace("'", "", 2)
-        if re.search(b'^\d+$', comp.encode('utf-8')):
-            tree = tree[int(comp)]
-        else:
-            tree = tree[comp]
+        comp = tree_path_comp(comp, path)
+        tree = tree[comp]
     return tree
+
+
+def tree_path_comp(comp, path):
+    if comp[len(comp)-1] != "]":
+        panic("invalid tree path format: tree"+path, 91)
+    comp = comp[0:len(comp)-1]
+    comp = comp.replace('"', '', 2)
+    comp = comp.replace("'", "", 2)
+    if re.search(b'^\d+$', comp.encode('utf-8')):
+        return int(comp)
+    else:
+        return comp
 
 
 def to_bytes(value):
