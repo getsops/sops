@@ -64,9 +64,15 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 		}
 		if delim, ok := t.(json.Delim); ok && delim.String() == "]" {
 			return slice, nil
+		} else if ok && delim.String() == "{" {
+			item, err := store.treeBranchFromJSONDecoder(dec)
+			if err != nil {
+				return slice, err
+			}
+			slice = append(slice, item)
+		} else {
+			slice = append(slice, t)
 		}
-
-		slice = append(slice, t)
 	}
 }
 
