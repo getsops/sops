@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.14
+----
+
+* [medium] Support AWS KMS Encryption Contexts
+* [minor] Support insertion in encrypted documents via --set
+* [minor] Read location of gpg binary from SOPS_GPG_EXEC env variables
+
 1.13
 ----
 
