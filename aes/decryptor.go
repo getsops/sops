@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 type encryptedValue struct {
@@ -128,10 +129,12 @@ func (c Cipher) Encrypt(value interface{}, key []byte, path string, stash interf
 		plaintext = []byte(strconv.Itoa(value))
 	case float64:
 		encryptedType = "float"
-		plaintext = []byte(strconv.FormatFloat(value, 'f', 9, 64))
+		// The Python version encodes floats without padding 0s after the decimal point.
+		plaintext = []byte(strconv.FormatFloat(value, 'f', -1, 64))
 	case bool:
 		encryptedType = "bool"
-		plaintext = []byte(strconv.FormatBool(value))
+		// The Python version encodes booleans with Titlecase
+		plaintext = []byte(strings.Title(strconv.FormatBool(value)))
 	default:
 		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
 	}
