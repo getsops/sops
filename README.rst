@@ -576,7 +576,7 @@ values, like keys, without needing an extra parser.
 
 .. code:: bash
 
-	$ sops -d ~/git/svc/sops/example.yaml -t '["app2"]["key"]'
+	$ sops -d ~/git/svc/sops/example.yaml --extract '["app2"]["key"]'
 	-----BEGIN RSA PRIVATE KEY-----
 	MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
 	ImcbNkqAKnELzFAPSBeEMhrBN0PyOC9lYlMCAwEAAQJBALXD4sjuBn1E7Y9aGiMz
@@ -593,7 +593,7 @@ them.
 
 .. code:: bash
 
-	$ sops -d ~/git/svc/sops/example.yaml -t '["an_array"][1]'
+	$ sops -d ~/git/svc/sops/example.yaml --extract '["an_array"][1]'
 	secretuser2
 
 Set a sub-part in a document tree
