@@ -10,7 +10,7 @@ GOLINT 		:= golint
 all: test vet generate install
 
 install:
-	$(GO) install github.com/mozilla-services/autograph
+	$(GO) install go.mozilla.org/sops/cmd/sops
 
 tag: all
 	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
