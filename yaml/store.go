@@ -164,7 +164,11 @@ func (store *Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 	var keys []sops.MasterKey
 	keysource := sops.KeySource{Name: "kms", Keys: keys}
 	for _, v := range in {
-		entry := v.(map[interface{}]interface{})
+		entry, ok := v.(map[interface{}]interface{})
+		if !ok {
+			fmt.Println("KMS entry has invalid format, skipping...")
+			continue
+		}
 		key := &kms.MasterKey{}
 		key.Arn = entry["arn"].(string)
 		key.EncryptedKey = entry["enc"].(string)
@@ -186,7 +190,11 @@ func (store *Store) pgpEntries(in []interface{}) (sops.KeySource, error) {
 	var keys []sops.MasterKey
 	keysource := sops.KeySource{Name: "pgp", Keys: keys}
 	for _, v := range in {
-		entry := v.(map[interface{}]interface{})
+		entry, ok := v.(map[interface{}]interface{})
+		if !ok {
+			fmt.Println("PGP entry has invalid format, skipping...")
+			continue
+		}
 		key := &pgp.MasterKey{}
 		key.Fingerprint = entry["fp"].(string)
 		key.EncryptedKey = entry["enc"].(string)
