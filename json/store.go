@@ -150,7 +150,7 @@ func (store Store) encodeTree(tree sops.TreeBranch, pad string) ([]byte, error) 
 		if err != nil {
 			return nil, fmt.Errorf("Error encoding value %s: %s", v, err)
 		}
-		out += pad + "\t" + `"` + item.Key + `": ` + string(v)
+		out += pad + "\t" + `"` + item.Key.(string) + `": ` + string(v)
 		if i != len(tree)-1 {
 			out += ",\n"
 		}

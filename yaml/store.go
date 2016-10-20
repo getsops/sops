@@ -2,10 +2,10 @@ package yaml
 
 import (
 	"fmt"
-	"github.com/autrilla/yaml"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/yaml.v2"
 	"strconv"
 	"time"
 )
@@ -18,7 +18,7 @@ func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	branch := make(sops.TreeBranch, 0)
 	for _, item := range in {
 		branch = append(branch, sops.TreeItem{
-			Key:   item.Key.(string),
+			Key:   item.Key,
 			Value: store.yamlValueToTreeValue(item.Value),
 		})
 	}
@@ -28,7 +28,7 @@ func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 // Unmarshal takes a YAML document as input and unmarshals it into a sops tree, returning the tree
 func (store Store) Unmarshal(in []byte) (sops.TreeBranch, error) {
 	var data yaml.MapSlice
-	if err := yaml.Unmarshal(in, &data); err != nil {
+	if err := (yaml.CommentUnmarshaler{}).Unmarshal(in, &data); err != nil {
 		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 	}
 	for i, item := range data {
