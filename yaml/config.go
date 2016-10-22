@@ -2,11 +2,12 @@ package yaml
 
 import (
 	"fmt"
-	"github.com/autrilla/yaml"
 	"io/ioutil"
 	"os"
 	"path"
 	"regexp"
+
+	"go.mozilla.org/yaml.v2"
 )
 
 type fileSystem interface {

@@ -99,7 +99,7 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 // Marshal takes a sops tree branch and marshals it into a yaml document
 func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
-	out, err := yaml.Marshal(yamlMap)
+	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
@@ -110,7 +110,7 @@ func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: metadata.ToMap()})
-	out, err := yaml.Marshal(yamlMap)
+	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
