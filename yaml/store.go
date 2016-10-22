@@ -2,12 +2,13 @@ package yaml
 
 import (
 	"fmt"
-	"github.com/autrilla/yaml"
+	"strconv"
+	"time"
+
+	"github.com/mozilla-services/yaml"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
-	"strconv"
-	"time"
 )
 
 // Store handles storage of YAML data
