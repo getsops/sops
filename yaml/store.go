@@ -17,10 +17,20 @@ type Store struct {
 func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	branch := make(sops.TreeBranch, 0)
 	for _, item := range in {
-		branch = append(branch, sops.TreeItem{
-			Key:   item.Key,
-			Value: store.yamlValueToTreeValue(item.Value),
-		})
+		if comment, ok := item.Key.(yaml.Comment); ok {
+			// Convert the yaml comment to a generic sops comment
+			branch = append(branch, sops.TreeItem{
+				Key: sops.Comment{
+					Value: comment.Value,
+				},
+				Value: nil,
+			})
+		} else {
+			branch = append(branch, sops.TreeItem{
+				Key:   item.Key,
+				Value: store.yamlValueToTreeValue(item.Value),
+			})
+		}
 	}
 	return branch
 }
@@ -47,6 +57,8 @@ func (store Store) yamlValueToTreeValue(in interface{}) interface{} {
 		return store.mapSliceToTreeBranch(in)
 	case []interface{}:
 		return store.yamlSliceToTreeValue(in)
+	case yaml.Comment:
+		return sops.Comment{Value: in.Value}
 	default:
 		return in
 	}
@@ -88,10 +100,17 @@ func (store Store) treeValueToYamlValue(in interface{}) interface{} {
 func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	branch := make(yaml.MapSlice, 0)
 	for _, item := range in {
-		branch = append(branch, yaml.MapItem{
-			Key:   item.Key,
-			Value: store.treeValueToYamlValue(item.Value),
-		})
+		if comment, ok := item.Key.(sops.Comment); ok {
+			branch = append(branch, yaml.MapItem{
+				Key:   yaml.Comment{Value: comment.Value},
+				Value: nil,
+			})
+		} else {
+			branch = append(branch, yaml.MapItem{
+				Key:   item.Key,
+				Value: store.treeValueToYamlValue(item.Value),
+			})
+		}
 	}
 	return branch
 }

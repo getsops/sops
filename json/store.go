@@ -138,6 +138,14 @@ func (store Store) encodeValue(v interface{}, pad string) ([]byte, error) {
 	switch v := v.(type) {
 	case sops.TreeBranch:
 		return store.encodeTree(v, pad+"\t")
+	case []interface{}:
+		// Remove all comments
+		for i, value := range v {
+			if _, ok := value.(sops.Comment); ok {
+				v = append(v[:i], v[i+1:]...)
+			}
+		}
+		fallthrough
 	default:
 		return json.Marshal(v)
 	}
@@ -146,6 +154,9 @@ func (store Store) encodeValue(v interface{}, pad string) ([]byte, error) {
 func (store Store) encodeTree(tree sops.TreeBranch, pad string) ([]byte, error) {
 	out := pad + "{\n"
 	for i, item := range tree {
+		if _, ok := item.Key.(sops.Comment); ok {
+			continue
+		}
 		v, err := store.encodeValue(item.Value, pad)
 		if err != nil {
 			return nil, fmt.Errorf("Error encoding value %s: %s", v, err)

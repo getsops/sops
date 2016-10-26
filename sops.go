@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
-	"go.mozilla.org/yaml.v2"
 	"reflect"
 	"strconv"
 	"strings"
@@ -30,6 +29,11 @@ const MetadataNotFound = sopsError("sops metadata not found")
 type DataKeyCipher interface {
 	Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error)
 	Decrypt(value string, key []byte, path string) (plaintext interface{}, stashValue interface{}, err error)
+}
+
+// Comment represents a comment in the sops tree for the file formats that actually support them.
+type Comment struct {
+	Value string
 }
 
 // TreeItem is an item inside sops's tree
@@ -100,7 +104,7 @@ func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in
 
 func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
 	for i, v := range in {
-		if _, ok := v.(yaml.Comment); ok {
+		if _, ok := v.(Comment); ok {
 			continue
 		}
 		newV, err := tree.walkValue(v, path, onLeaves)
@@ -114,7 +118,7 @@ func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(
 
 func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
 	for i, item := range in {
-		if _, ok := item.Key.(yaml.Comment); ok {
+		if _, ok := item.Key.(Comment); ok {
 			continue
 		}
 		newV, err := tree.walkValue(item.Value, append(path, item.Key.(string)), onLeaves)
