@@ -2,10 +2,10 @@ package yaml
 
 import (
 	"fmt"
+	"github.com/mozilla-services/yaml.v2"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
-	"go.mozilla.org/yaml.v2"
 	"strconv"
 	"time"
 )
