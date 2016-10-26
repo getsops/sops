@@ -2,13 +2,12 @@ package yaml
 
 import (
 	"fmt"
-	"strconv"
-	"time"
-
-	"github.com/mozilla-services/yaml"
+	"github.com/mozilla-services/yaml.v2"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"strconv"
+	"time"
 )
 
 // Store handles storage of YAML data
@@ -18,10 +17,20 @@ type Store struct {
 func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	branch := make(sops.TreeBranch, 0)
 	for _, item := range in {
-		branch = append(branch, sops.TreeItem{
-			Key:   item.Key.(string),
-			Value: store.yamlValueToTreeValue(item.Value),
-		})
+		if comment, ok := item.Key.(yaml.Comment); ok {
+			// Convert the yaml comment to a generic sops comment
+			branch = append(branch, sops.TreeItem{
+				Key: sops.Comment{
+					Value: comment.Value,
+				},
+				Value: nil,
+			})
+		} else {
+			branch = append(branch, sops.TreeItem{
+				Key:   item.Key,
+				Value: store.yamlValueToTreeValue(item.Value),
+			})
+		}
 	}
 	return branch
 }
@@ -29,7 +38,7 @@ func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 // Unmarshal takes a YAML document as input and unmarshals it into a sops tree, returning the tree
 func (store Store) Unmarshal(in []byte) (sops.TreeBranch, error) {
 	var data yaml.MapSlice
-	if err := yaml.Unmarshal(in, &data); err != nil {
+	if err := (yaml.CommentUnmarshaler{}).Unmarshal(in, &data); err != nil {
 		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 	}
 	for i, item := range data {
@@ -48,6 +57,8 @@ func (store Store) yamlValueToTreeValue(in interface{}) interface{} {
 		return store.mapSliceToTreeBranch(in)
 	case []interface{}:
 		return store.yamlSliceToTreeValue(in)
+	case yaml.Comment:
+		return sops.Comment{Value: in.Value}
 	default:
 		return in
 	}
@@ -89,10 +100,17 @@ func (store Store) treeValueToYamlValue(in interface{}) interface{} {
 func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	branch := make(yaml.MapSlice, 0)
 	for _, item := range in {
-		branch = append(branch, yaml.MapItem{
-			Key:   item.Key,
-			Value: store.treeValueToYamlValue(item.Value),
-		})
+		if comment, ok := item.Key.(sops.Comment); ok {
+			branch = append(branch, yaml.MapItem{
+				Key:   yaml.Comment{Value: comment.Value},
+				Value: nil,
+			})
+		} else {
+			branch = append(branch, yaml.MapItem{
+				Key:   item.Key,
+				Value: store.treeValueToYamlValue(item.Value),
+			})
+		}
 	}
 	return branch
 }
@@ -100,7 +118,7 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 // Marshal takes a sops tree branch and marshals it into a yaml document
 func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
-	out, err := yaml.Marshal(yamlMap)
+	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}
@@ -111,7 +129,7 @@ func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
 	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: metadata.ToMap()})
-	out, err := yaml.Marshal(yamlMap)
+	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 	}

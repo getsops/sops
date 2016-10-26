@@ -31,9 +31,14 @@ type DataKeyCipher interface {
 	Decrypt(value string, key []byte, path string) (plaintext interface{}, stashValue interface{}, err error)
 }
 
+// Comment represents a comment in the sops tree for the file formats that actually support them.
+type Comment struct {
+	Value string
+}
+
 // TreeItem is an item inside sops's tree
 type TreeItem struct {
-	Key   string
+	Key   interface{}
 	Value interface{}
 }
 
@@ -99,6 +104,9 @@ func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in
 
 func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
 	for i, v := range in {
+		if _, ok := v.(Comment); ok {
+			continue
+		}
 		newV, err := tree.walkValue(v, path, onLeaves)
 		if err != nil {
 			return nil, err
@@ -110,7 +118,10 @@ func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(
 
 func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
 	for i, item := range in {
-		newV, err := tree.walkValue(item.Value, append(path, item.Key), onLeaves)
+		if _, ok := item.Key.(Comment); ok {
+			continue
+		}
+		newV, err := tree.walkValue(item.Value, append(path, item.Key.(string)), onLeaves)
 		if err != nil {
 			return nil, err
 		}

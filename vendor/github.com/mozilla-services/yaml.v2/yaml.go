@@ -42,6 +42,28 @@ type Marshaler interface {
 	MarshalYAML() (interface{}, error)
 }
 
+type CommentUnmarshaler struct{}
+
+func (u CommentUnmarshaler) Unmarshal(in []byte, out interface{}) (err error) {
+	defer handleErr(&err)
+	d := newDecoder()
+	p := newParser(in)
+	p.parser.parse_comments = true
+	defer p.destroy()
+	node := p.parse()
+	if node != nil {
+		v := reflect.ValueOf(out)
+		if v.Kind() == reflect.Ptr && !v.IsNil() {
+			v = v.Elem()
+		}
+		d.unmarshal(node, v)
+	}
+	if len(d.terrors) > 0 {
+		return &TypeError{d.terrors}
+	}
+	return nil
+}
+
 // Unmarshal decodes the first document found within the in byte slice
 // and assigns decoded values into the out value.
 //
@@ -93,6 +115,23 @@ func Unmarshal(in []byte, out interface{}) (err error) {
 		return &TypeError{d.terrors}
 	}
 	return nil
+}
+
+type YAMLMarshaler struct {
+	Indent int
+}
+
+func (m *YAMLMarshaler) Marshal(in interface{}) (out []byte, err error) {
+	defer handleErr(&err)
+	if m.Indent == 0 {
+		m.Indent = 2
+	}
+	e := newEncoderWithIndent(m.Indent)
+	defer e.destroy()
+	e.marshal("", reflect.ValueOf(in))
+	e.finish()
+	out = e.out
+	return
 }
 
 // Marshal serializes the value provided into a YAML document. The structure
