@@ -94,9 +94,7 @@ separated, in the **SOPS_PGP_FP** env variable.
 Note: you can use both PGP and KMS simultaneously.
 
 Then simply call `sops` with a file path as argument. It will handle the
-encryption/decryption transparently and open the cleartext file in an editor.
-Editing will happen in whatever $EDITOR is set to, or, if it's not set, in vim.
-Keep in mind that sops will wait for the editor to exit, and then try to reencrypt the file. Some GUI editors (atom, sublime) spawn a child process and then exit immediately. They usually have an option to wait for the main editor window to be closed before exiting. See [#127](https://github.com/mozilla/sops/issues/127) for more information.
+encryption/decryption transparently and open the cleartext file in an editor
 
 .. code:: bash
 
@@ -104,6 +102,14 @@ Keep in mind that sops will wait for the editor to exit, and then try to reencry
 	mynewtestfile.yaml doesn't exist, creating it.
 	please wait while an encryption key is being generated and stored in a secure fashion
 	file written to mynewtestfile.yaml
+
+.
+Editing will happen in whatever $EDITOR is set to, or, if it's not set, in vim.
+Keep in mind that sops will wait for the editor to exit, and then try to reencrypt
+the file. Some GUI editors (atom, sublime) spawn a child process and then exit
+immediately. They usually have an option to wait for the main editor window to be
+closed before exiting. See [#127](https://github.com/mozilla/sops/issues/127) for
+more information.
 
 The resulting encrypted file looks like this:
 
