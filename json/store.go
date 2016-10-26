@@ -145,7 +145,7 @@ func (store Store) encodeValue(v interface{}, pad string) ([]byte, error) {
 				v = append(v[:i], v[i+1:]...)
 			}
 		}
-		fallthrough
+		return json.Marshal(v)
 	default:
 		return json.Marshal(v)
 	}
