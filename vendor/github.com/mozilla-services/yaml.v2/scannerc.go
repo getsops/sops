@@ -683,9 +683,11 @@ func yaml_parser_fetch_next_token(parser *yaml_parser_t) bool {
 		return false
 	}
 
-	// Check the indentation level against the current column.
-	if !yaml_parser_unroll_indent(parser, parser.mark.column) {
-		return false
+	// Check the indentation level against the current column, only if the current token is not a comment
+	if parser.buffer[parser.buffer_pos] != '#' {
+		if !yaml_parser_unroll_indent(parser, parser.mark.column) {
+			return false
+		}
 	}
 
 	// Ensure that the buffer contains at least 4 characters.  4 is the length
@@ -792,6 +794,11 @@ func yaml_parser_fetch_next_token(parser *yaml_parser_t) bool {
 	// Is it a double-quoted scalar?
 	if parser.buffer[parser.buffer_pos] == '"' {
 		return yaml_parser_fetch_flow_scalar(parser, false)
+	}
+
+	// Is it a comment?
+	if parser.buffer[parser.buffer_pos] == '#' {
+		return yaml_parser_fetch_comment(parser)
 	}
 
 	// Is it a plain scalar?
@@ -968,7 +975,6 @@ func yaml_parser_unroll_indent(parser *yaml_parser_t, column int) bool {
 	if parser.flow_level > 0 {
 		return true
 	}
-
 	// Loop through the indentation levels in the stack.
 	for parser.indent > column {
 		// Create a token and append it to the queue.
@@ -1430,6 +1436,29 @@ func yaml_parser_fetch_plain_scalar(parser *yaml_parser_t) bool {
 	return true
 }
 
+func yaml_parser_fetch_comment(parser *yaml_parser_t) bool {
+	start_mark := parser.mark
+	var comment []byte
+	skip(parser)
+	for !is_breakz(parser.buffer, parser.buffer_pos) {
+		comment = read(parser, comment)
+		if parser.unread < 1 && !yaml_parser_update_buffer(parser, 1) {
+			return false
+		}
+	}
+	token := yaml_token_t{
+		typ:        yaml_COMMENT_TOKEN,
+		start_mark: start_mark,
+		end_mark:   parser.mark,
+		value:      comment,
+		style:      yaml_PLAIN_SCALAR_STYLE,
+	}
+	if parser.parse_comments {
+		yaml_insert_token(parser, -1, &token)
+	}
+	return true
+}
+
 // Eat whitespaces and comments until the next token is found.
 func yaml_parser_scan_to_next_token(parser *yaml_parser_t) bool {
 
@@ -1456,16 +1485,6 @@ func yaml_parser_scan_to_next_token(parser *yaml_parser_t) bool {
 			skip(parser)
 			if parser.unread < 1 && !yaml_parser_update_buffer(parser, 1) {
 				return false
-			}
-		}
-
-		// Eat a comment until a line break.
-		if parser.buffer[parser.buffer_pos] == '#' {
-			for !is_breakz(parser.buffer, parser.buffer_pos) {
-				skip(parser)
-				if parser.unread < 1 && !yaml_parser_update_buffer(parser, 1) {
-					return false
-				}
 			}
 		}
 

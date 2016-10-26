@@ -7,10 +7,6 @@
 	],
 	"Deps": [
 		{
-			"ImportPath": "github.com/autrilla/yaml",
-			"Rev": "8ac3c7b2b592354bed79f33de3e3c83e573b9129"
-		},
-		{
 			"ImportPath": "github.com/aws/aws-sdk-go/aws",
 			"Comment": "v1.3.0-1-g00e2bf9",
 			"Rev": "00e2bf9d1518c2b7d8a97eb05b5d2a9afd1dd34e"
@@ -158,6 +154,10 @@
 			"ImportPath": "github.com/jmespath/go-jmespath",
 			"Comment": "0.2.2-14-gbd40a43",
 			"Rev": "bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d"
+		},
+		{
+			"ImportPath": "github.com/mozilla-services/yaml.v2",
+			"Rev": "2e2d479b8b66e65ce5a8f49afd77931628fd8f8f"
 		},
 		{
 			"ImportPath": "github.com/pmezard/go-difflib/difflib",
