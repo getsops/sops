@@ -18,6 +18,9 @@ tag: all
 lint:
 	$(GOLINT) $(PROJECT)
 
+vendor:
+	godep save ./...
+
 vet:
 	$(GO) vet $(PROJECT)
 
@@ -38,4 +41,4 @@ showcoverage: test
 generate:
 	$(GO) generate
 
-.PHONY: all test generate clean autograph
+.PHONY: all test generate clean vendor
