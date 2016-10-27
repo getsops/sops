@@ -41,6 +41,8 @@ const (
 	exitNoEditorFound                       int = 201
 )
 
+const version = "2.0"
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "sops"
@@ -298,7 +300,7 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	metadata := sops.Metadata{
 		UnencryptedSuffix: c.String("unencrypted-suffix"),
-		Version:           "2.0.0",
+		Version:           version,
 		KeySources:        ks,
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
@@ -411,7 +413,7 @@ func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 		return tree, err
 	}
 	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
-	tree.Metadata.Version = "2.0.0"
+	tree.Metadata.Version = version
 	tree.Metadata.KeySources = ks
 	key, err := tree.GenerateDataKey()
 	if err != nil {
@@ -491,6 +493,7 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 			tree.Metadata = metadata
 		}
 		tree.Branch = newBranch
+		tree.Metadata.Version = version
 		if tree.Metadata.MasterKeyCount() == 0 {
 			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
 			bufio.NewReader(os.Stdin).ReadByte()
