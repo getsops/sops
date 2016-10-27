@@ -1,4 +1,4 @@
-package kms
+package kms //import "go.mozilla.org/sops/kms"
 
 import (
 	"encoding/base64"

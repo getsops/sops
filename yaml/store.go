@@ -1,4 +1,4 @@
-package yaml
+package yaml //import "go.mozilla.org/sops/yaml"
 
 import (
 	"fmt"

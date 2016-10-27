@@ -1,4 +1,4 @@
-package aes
+package aes //import "go.mozilla.org/sops/aes"
 
 import (
 	cryptoaes "crypto/aes"

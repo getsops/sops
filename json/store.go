@@ -1,4 +1,4 @@
-package json
+package json //import "go.mozilla.org/sops/json"
 
 import (
 	"bytes"
