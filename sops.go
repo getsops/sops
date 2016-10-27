@@ -214,7 +214,10 @@ func (tree Tree) GenerateDataKey() ([]byte, error) {
 	}
 	for _, ks := range tree.Metadata.KeySources {
 		for _, k := range ks.Keys {
-			k.Encrypt(newKey)
+			err := k.Encrypt(newKey)
+			if err != nil {
+				fmt.Printf("[WARNING]: Failed to encrypt new data key with master key: %s\n", err)
+			}
 		}
 	}
 	return newKey, nil
