@@ -1,11 +1,15 @@
 {
-	"ImportPath": "go.mozilla.org/sops",
-	"GoVersion": "go1.6",
-	"GodepVersion": "v74",
+	"ImportPath": "github.com/mozilla/sops",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v58",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
+		{
+			"ImportPath": "github.com/autrilla/yaml",
+			"Rev": "796e49e7743194a8348a72bb32772a6b95b51126"
+		},
 		{
 			"ImportPath": "github.com/aws/aws-sdk-go/aws",
 			"Comment": "v1.3.0-1-g00e2bf9",
@@ -183,6 +187,30 @@
 			"Rev": "da4f24003cbec8ef26fdd0761e40eab273a02832"
 		},
 		{
+			"ImportPath": "go.mozilla.org/sops",
+			"Rev": "09eafbcd3537287e2f3f66f641528357067e8b95"
+		},
+		{
+			"ImportPath": "go.mozilla.org/sops/aes",
+			"Rev": "09eafbcd3537287e2f3f66f641528357067e8b95"
+		},
+		{
+			"ImportPath": "go.mozilla.org/sops/json",
+			"Rev": "09eafbcd3537287e2f3f66f641528357067e8b95"
+		},
+		{
+			"ImportPath": "go.mozilla.org/sops/kms",
+			"Rev": "09eafbcd3537287e2f3f66f641528357067e8b95"
+		},
+		{
+			"ImportPath": "go.mozilla.org/sops/pgp",
+			"Rev": "09eafbcd3537287e2f3f66f641528357067e8b95"
+		},
+		{
+			"ImportPath": "go.mozilla.org/sops/yaml",
+			"Rev": "09eafbcd3537287e2f3f66f641528357067e8b95"
+		},
+		{
 			"ImportPath": "golang.org/x/crypto/cast5",
 			"Rev": "e0d166c33c321d0ff863f459a5882096e334f508"
 		},
@@ -213,6 +241,10 @@
 		{
 			"ImportPath": "golang.org/x/crypto/ssh/terminal",
 			"Rev": "e0d166c33c321d0ff863f459a5882096e334f508"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "c200b10b5d5e122be351b67af224adc6128af5bf"
 		},
 		{
 			"ImportPath": "gopkg.in/urfave/cli.v1",
