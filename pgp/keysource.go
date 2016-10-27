@@ -1,4 +1,4 @@
-package pgp
+package pgp //import "go.mozilla.org/sops/pgp"
 
 import (
 	"bytes"

@@ -1,4 +1,4 @@
-package sops
+package sops //import "go.mozilla.org/sops"
 
 import (
 	"crypto/rand"

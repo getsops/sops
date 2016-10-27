@@ -1,4 +1,4 @@
-package main
+package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
 	"go.mozilla.org/sops"
