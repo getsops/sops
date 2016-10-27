@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/stretchr/testify/mock"
+	"go.mozilla.org/sops/kms/mocks"
 	"testing"
 	"testing/quick"
 )
 
 func TestKMS(t *testing.T) {
 	// TODO: make this not terrible and mock KMS with a reverseable operation on the key, or something. Good luck running the tests on a machine that's not mine!
-	mockKMS := &MockKMSAPI{}
+	mockKMS := &mocks.KMSAPI{}
 	defer mockKMS.AssertExpectations(t)
 	kmsSvc = mockKMS
 	encryptOutput := &kms.EncryptOutput{}

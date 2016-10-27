@@ -7,7 +7,7 @@ import (
 	"path"
 	"regexp"
 
-	"github.com/mozilla-services/yaml.v2"
+	"github.com/mozilla-services/yaml"
 )
 
 type fileSystem interface {
