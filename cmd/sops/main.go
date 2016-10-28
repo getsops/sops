@@ -42,7 +42,7 @@ const (
 	exitNoEditorFound                       int = 201
 )
 
-const version = "2.0"
+const version = "2.0-beta"
 
 func main() {
 	app := cli.NewApp()
