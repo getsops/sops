@@ -4,16 +4,17 @@ import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
-	"github.com/howeyc/gopass"
-	gpgagent "go.mozilla.org/gopgagent"
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
 	"io/ioutil"
 	"os"
 	"os/user"
 	"path"
 	"strings"
 	"time"
+
+	"github.com/howeyc/gopass"
+	gpgagent "go.mozilla.org/gopgagent"
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/armor"
 )
 
 // MasterKey is a PGP key used to securely store sops' data key by encrypting it and decrypting it
@@ -114,16 +115,16 @@ func (key *MasterKey) gpgHome() string {
 }
 
 // NewMasterKeyFromFingerprint takes a PGP fingerprint and returns a new MasterKey with that fingerprint
-func NewMasterKeyFromFingerprint(fingerprint string) MasterKey {
-	return MasterKey{
+func NewMasterKeyFromFingerprint(fingerprint string) *MasterKey {
+	return &MasterKey{
 		Fingerprint:  strings.Replace(fingerprint, " ", "", -1),
 		CreationDate: time.Now().UTC(),
 	}
 }
 
 // MasterKeysFromFingerprintString takes a comma separated list of PGP fingerprints and returns a slice of new MasterKeys with those fingerprints
-func MasterKeysFromFingerprintString(fingerprint string) []MasterKey {
-	var keys []MasterKey
+func MasterKeysFromFingerprintString(fingerprint string) []*MasterKey {
+	var keys []*MasterKey
 	if fingerprint == "" {
 		return keys
 	}

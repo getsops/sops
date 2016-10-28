@@ -307,14 +307,12 @@ func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 
 	if c.String("kms") != "" {
 		for _, k := range kms.MasterKeysFromArnString(c.String("kms")) {
-			v := k
-			kmsKeys = append(kmsKeys, &v)
+			kmsKeys = append(kmsKeys, k)
 		}
 	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
-			v := k
-			pgpKeys = append(pgpKeys, &v)
+			pgpKeys = append(pgpKeys, k)
 		}
 	}
 	var err error
@@ -329,12 +327,10 @@ func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, confBytes)
 		if err == nil {
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpString) {
-				v := k
-				pgpKeys = append(pgpKeys, &v)
+				pgpKeys = append(pgpKeys, k)
 			}
 			for _, k := range kms.MasterKeysFromArnString(kmsString) {
-				v := k
-				kmsKeys = append(kmsKeys, &v)
+				kmsKeys = append(kmsKeys, k)
 			}
 		}
 	}
