@@ -33,9 +33,6 @@ func TestRoundtripString(t *testing.T) {
 	f := func(x, aad string) bool {
 		key := make([]byte, 32)
 		rand.Read(key)
-		if x == "" {
-			return true
-		}
 		s, err := Cipher{}.Encrypt(x, key, aad, nil)
 		if err != nil {
 			fmt.Println(err)
