@@ -7,12 +7,6 @@ import (
 	"bytes"
 	"crypto/md5"
 	"fmt"
-	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/json"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
-	"go.mozilla.org/sops/yaml"
-	"gopkg.in/urfave/cli.v1"
 	"io"
 	"io/ioutil"
 	"os"
@@ -20,6 +14,13 @@ import (
 	"path"
 	"strings"
 	"time"
+
+	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/json"
+	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/yaml"
+	"gopkg.in/urfave/cli.v1"
 )
 
 const (
@@ -47,6 +48,9 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
+	app.Version = version
+	app.Authors = []string{"Julien Vehent", "Adrian Utrilla"}
+	app.EnableBashCompletion = true
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
 			Name:  "decrypt, d",
