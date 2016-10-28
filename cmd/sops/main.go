@@ -54,27 +54,29 @@ func main() {
 		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
 		{Name: "Adrian Utrilla", Email: "adrianutrilla@gmail.com"},
 	}
-	app.UsageText = `sops supports AWS KMS and PGP encryption:
+	app.UsageText = `sops is an editor of encrypted files that supports AWS KMS and PGP
 
-* To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
-  in the -k flag or in the SOPS_KMS_ARN environment variable.
-  (you need valid credentials in ~/.aws/credentials or in your env)
+   To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
+   in the -k flag or in the SOPS_KMS_ARN environment variable.
+   (you need valid credentials in ~/.aws/credentials or in your env)
 
-* To encrypt or decrypt using PGP, specify the PGP fingerprint in the
-  -p flag or in the SOPS_PGP_FP environment variable.
+   To encrypt or decrypt using PGP, specify the PGP fingerprint in the
+   -p flag or in the SOPS_PGP_FP environment variable.
 
-To use multiple KMS or PGP keys, separate them by commas. For example:
-    $ sops -p "10F2...0A, 85D...B3F21" file.yaml
+   To use multiple KMS or PGP keys, separate them by commas. For example:
+       $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-The -p and -k flags are ignored if the document already contains master
-keys. To add/remove master keys in existing documents, open then with -s
-and edit the 'sops' branch directly.
+   The -p and -k flags are only used to encrypt new documents. Editing or
+   decrypting existing documents can be done with "sops file" or
+   "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
+   documents are used then. To manage master keys in existing documents, use
+   the "add-{kms,pgp}" and "rm-{kms,pgp}" flags.
 
-You can change which GPG binary is used by setting SOPS_GPG_EXEC in env.
+   To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
-By default, editing is done in vim, and will use the $EDITOR env if set.
+   To select a different editor than the default (vim), set EDITOR.
 
-For more information, see the README at github.com/mozilla/sops`
+   For more information, see the README at github.com/mozilla/sops`
 	app.EnableBashCompletion = true
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
