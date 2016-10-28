@@ -3,16 +3,17 @@ package kms //import "go.mozilla.org/sops/kms"
 import (
 	"encoding/base64"
 	"fmt"
+	"os"
+	"regexp"
+	"strings"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
 	"github.com/aws/aws-sdk-go/service/sts"
-	"os"
-	"regexp"
-	"strings"
-	"time"
 )
 
 var kmsSvc kmsiface.KMSAPI
@@ -82,8 +83,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN
-func NewMasterKeyFromArn(arn string) MasterKey {
-	k := MasterKey{}
+func NewMasterKeyFromArn(arn string) *MasterKey {
+	k := &MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	roleIndex := strings.Index(arn, "+arn:aws:iam::")
 	if roleIndex > 0 {
@@ -97,8 +98,8 @@ func NewMasterKeyFromArn(arn string) MasterKey {
 }
 
 // MasterKeysFromArnString takes a comma separated list of AWS KMS ARNs and returns a slice of new MasterKeys for those ARNs
-func MasterKeysFromArnString(arn string) []MasterKey {
-	var keys []MasterKey
+func MasterKeysFromArnString(arn string) []*MasterKey {
+	var keys []*MasterKey
 	if arn == "" {
 		return keys
 	}
