@@ -5,7 +5,7 @@ SOPS: Secrets OPerationS
 formats and encrypts with AWS KMS and PGP (via GnuPG).
 Watch `the demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_.
 
-.. image:: http://i.imgur.com/IL6dlhm.gif
+.. image:: https://i.imgur.com/X0TM5NI.gif
 
 .. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
 	:target: https://travis-ci.org/mozilla/sops
