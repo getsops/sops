@@ -54,6 +54,9 @@ func parse(value string) (*encryptedValue, error) {
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value and a stash value
 func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, stash interface{}, err error) {
+	if value == "" {
+		return "", nil, nil
+	}
 	encryptedValue, err := parse(value)
 	if err != nil {
 		return "", nil, err
@@ -100,6 +103,9 @@ func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interf
 
 // Encrypt takes one of (string, int, float, bool) and encrypts it with the provided key and additional auth data, returning a sops-format encrypted string.
 func (c Cipher) Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error) {
+	if value == "" {
+		return "", nil
+	}
 	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {
 		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)
