@@ -12,8 +12,15 @@ func TestGPG(t *testing.T) {
 		if x == nil || len(x) == 0 {
 			return true
 		}
-		key.Encrypt(x)
-		k, _ := key.Decrypt()
+		if err := key.Encrypt(x); err != nil {
+			t.Errorf("Failed to encrypt: %#v err: %v", x, err)
+			return false
+		}
+		k, err := key.Decrypt()
+		if err != nil {
+			t.Errorf("Failed to decrypt: %#v err: %v", x, err)
+			return false
+		}
 		return bytes.Equal(x, k)
 	}
 	if err := quick.Check(f, nil); err != nil {
