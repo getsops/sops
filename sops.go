@@ -4,12 +4,13 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
+
+	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/pgp"
 )
 
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
@@ -297,7 +298,8 @@ func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
 		if ks.Name == "pgp" {
 			var keys []MasterKey
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
-				keys = append(keys, &k)
+				v := k
+				keys = append(keys, &v)
 				fmt.Println("Keys to add:", keys)
 			}
 			ks.Keys = append(ks.Keys, keys...)
@@ -312,7 +314,8 @@ func (m *Metadata) AddKMSMasterKeys(kmsArns string) {
 		if ks.Name == "kms" {
 			var keys []MasterKey
 			for _, k := range kms.MasterKeysFromArnString(kmsArns) {
-				keys = append(keys, &k)
+				v := k
+				keys = append(keys, &v)
 			}
 			ks.Keys = append(ks.Keys, keys...)
 			m.KeySources[i] = ks
@@ -324,7 +327,8 @@ func (m *Metadata) AddKMSMasterKeys(kmsArns string) {
 func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
 	var keys []MasterKey
 	for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
-		keys = append(keys, &k)
+		v := k
+		keys = append(keys, &v)
 	}
 	m.RemoveMasterKeys(keys)
 }
@@ -333,7 +337,8 @@ func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
 func (m *Metadata) RemoveKMSMasterKeys(arns string) {
 	var keys []MasterKey
 	for _, k := range kms.MasterKeysFromArnString(arns) {
-		keys = append(keys, &k)
+		v := k
+		keys = append(keys, &v)
 	}
 	m.RemoveMasterKeys(keys)
 }
