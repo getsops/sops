@@ -1,7 +1,9 @@
 SOPS: Secrets OPerationS
 ========================
 
-**sop** is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP (via GnuPG). Watch `the demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_.
+**sops** is an editor of encrypted files that supports YAML, JSON and BINARY
+formats and encrypts with AWS KMS and PGP (via GnuPG).
+Watch `the demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_.
 
 .. image:: http://i.imgur.com/IL6dlhm.gif
 
@@ -17,40 +19,11 @@ SOPS: Secrets OPerationS
 Installation
 ------------
 
-* RHEL family::
+```bash
+$ go get -u go.mozilla.org/sops/cmd/sops
+```
 
-	sudo yum install gcc git libffi-devel libyaml-devel make openssl openssl-devel python-devel python-pip
-	sudo pip install --upgrade sops
-
-* Debian family::
-
-	sudo apt-get install gcc git libffi-dev libssl-dev libyaml-dev make openssl python-dev python-pip
-	sudo pip install --upgrade sops
-
-* MacOS Brew Install::
-
-	brew install sops
-
-* MacOS Manual Install::
-
-	brew install libffi libyaml python [1]
-	pip install sops
-
-1. http://docs.python-guide.org/en/latest/starting/install/osx/#doing-it-right
-
-In a virtualenv
-~~~~~~~~~~~~~~~
-
-Assuming you already have libffi and libyaml installed, the following commands will install sops in a virtualenv:
-
-.. code:: bash
-
-    $ sudo pip install virtualenv --upgrade
-    $ virtualenv ~/sopsvenv
-    $ source ~/sopsvenv/bin/activate
-    $ pip install -U sops
-    $ sops -v
-    sops 1.9
+(requires Go >= 1.6)
 
 Test with the dev PGP key
 ~~~~~~~~~~~~~~~~~~~~~~~~~
