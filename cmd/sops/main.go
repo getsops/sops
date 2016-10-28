@@ -307,12 +307,14 @@ func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 
 	if c.String("kms") != "" {
 		for _, k := range kms.MasterKeysFromArnString(c.String("kms")) {
-			kmsKeys = append(kmsKeys, &k)
+			v := k
+			kmsKeys = append(kmsKeys, &v)
 		}
 	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
-			pgpKeys = append(pgpKeys, &k)
+			v := k
+			pgpKeys = append(pgpKeys, &v)
 		}
 	}
 	var err error
