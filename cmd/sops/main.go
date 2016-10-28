@@ -48,11 +48,33 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
+	app.ArgsUsage = "sops [options] file"
 	app.Version = version
 	app.Authors = []cli.Author{
 		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
 		{Name: "Adrian Utrilla", Email: "adrianutrilla@gmail.com"},
 	}
+	app.UsageText = `sops supports AWS KMS and PGP encryption:
+
+* To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
+  in the -k flag or in the SOPS_KMS_ARN environment variable.
+  (you need valid credentials in ~/.aws/credentials or in your env)
+
+* To encrypt or decrypt using PGP, specify the PGP fingerprint in the
+  -p flag or in the SOPS_PGP_FP environment variable.
+
+To use multiple KMS or PGP keys, separate them by commas. For example:
+    $ sops -p "10F2...0A, 85D...B3F21" file.yaml
+
+The -p and -k flags are ignored if the document already contains master
+keys. To add/remove master keys in existing documents, open then with -s
+and edit the 'sops' branch directly.
+
+You can change which GPG binary is used by setting SOPS_GPG_EXEC in env.
+
+By default, editing is done in vim, and will use the $EDITOR env if set.
+
+For more information, see the README at github.com/mozilla/sops`
 	app.EnableBashCompletion = true
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
