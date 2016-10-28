@@ -49,7 +49,10 @@ func main() {
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
 	app.Version = version
-	app.Authors = []string{"Julien Vehent", "Adrian Utrilla"}
+	app.Authors = []cli.Author{
+		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
+		{Name: "Adrian Utrilla", Email: "adrianutrilla@gmail.com"},
+	}
 	app.EnableBashCompletion = true
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
