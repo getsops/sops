@@ -308,11 +308,11 @@ func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
 }
 
 // AddKMSMasterKeys parses the input comma separated string of AWS KMS ARNs, generates a KMS MasterKey for each ARN, and then adds the keys to the KMS KeySource
-func (m *Metadata) AddKMSMasterKeys(kmsArns string) {
+func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) {
 	for i, ks := range m.KeySources {
 		if ks.Name == "kms" {
 			var keys []MasterKey
-			for _, k := range kms.MasterKeysFromArnString(kmsArns) {
+			for _, k := range kms.MasterKeysFromArnString(kmsArns, context) {
 				keys = append(keys, k)
 			}
 			ks.Keys = append(ks.Keys, keys...)
@@ -333,7 +333,7 @@ func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
 // RemoveKMSMasterKeys takes a comma separated string of AWS KMS ARNs and removes the keys corresponding to those ARNs from the metadata's KeySources
 func (m *Metadata) RemoveKMSMasterKeys(arns string) {
 	var keys []MasterKey
-	for _, k := range kms.MasterKeysFromArnString(arns) {
+	for _, k := range kms.MasterKeysFromArnString(arns, nil) {
 		keys = append(keys, k)
 	}
 	m.RemoveMasterKeys(keys)

@@ -20,10 +20,11 @@ var kmsSvc kmsiface.KMSAPI
 
 // MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
-	Arn          string
-	Role         string
-	EncryptedKey string
-	CreationDate time.Time
+	Arn               string
+	Role              string
+	EncryptedKey      string
+	CreationDate      time.Time
+	EncryptionContext map[string]*string
 }
 
 // Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
@@ -36,7 +37,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		}
 		kmsSvc = kms.New(sess)
 	}
-	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn})
+	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		return err
 	}
@@ -44,7 +45,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	return nil
 }
 
-// EncryptIfNeeded encrypts the provided sops' data ket and encrypts it if it hasn't been encrypted yet
+// EncryptIfNeeded encrypts the provided sops' data key and encrypts it if it hasn't been encrypted yet
 func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
@@ -65,7 +66,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		}
 		kmsSvc = kms.New(sess)
 	}
-	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k})
+	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
 	}
@@ -83,7 +84,7 @@ func (key *MasterKey) ToString() string {
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN
-func NewMasterKeyFromArn(arn string) *MasterKey {
+func NewMasterKeyFromArn(arn string, context map[string]*string) *MasterKey {
 	k := &MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	roleIndex := strings.Index(arn, "+arn:aws:iam::")
@@ -93,18 +94,19 @@ func NewMasterKeyFromArn(arn string) *MasterKey {
 	} else {
 		k.Arn = arn
 	}
+	k.EncryptionContext = context
 	k.CreationDate = time.Now().UTC()
 	return k
 }
 
 // MasterKeysFromArnString takes a comma separated list of AWS KMS ARNs and returns a slice of new MasterKeys for those ARNs
-func MasterKeysFromArnString(arn string) []*MasterKey {
+func MasterKeysFromArnString(arn string, context map[string]*string) []*MasterKey {
 	var keys []*MasterKey
 	if arn == "" {
 		return keys
 	}
 	for _, s := range strings.Split(arn, ",") {
-		keys = append(keys, NewMasterKeyFromArn(s))
+		keys = append(keys, NewMasterKeyFromArn(s, context))
 	}
 	return keys
 }
@@ -156,5 +158,22 @@ func (key MasterKey) ToMap() map[string]string {
 	}
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
+	if key.EncryptionContext != nil {
+		var outContexts []string
+		for k, v := range key.EncryptionContext {
+			outContexts = append(outContexts, k+":"+*v)
+		}
+		out["context"] = strings.Join(outContexts, ",")
+	}
+	return out
+}
+
+// ParseKMSContext takes a comma-separated list of KMS context key:value pairs and returns a map
+func ParseKMSContext(in string) map[string]*string {
+	out := make(map[string]*string)
+	for _, kv := range strings.Split(in, ",") {
+		kv := strings.Split(kv, ":")
+		out[kv[0]] = &kv[1]
+	}
 	return out
 }

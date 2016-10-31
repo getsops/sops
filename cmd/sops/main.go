@@ -150,6 +150,10 @@ func main() {
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
 		},
+		cli.StringFlag{
+			Name:  "encryption-context",
+			Usage: "comma separated list of KMS encryption context key:value pairs",
+		},
 	}
 	app.Action = func(c *cli.Context) error {
 		if c.NArg() < 1 {
@@ -304,9 +308,9 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 	var kmsKeys []sops.MasterKey
 	var pgpKeys []sops.MasterKey
-
+	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("kms") != "" {
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms")) {
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}
@@ -329,7 +333,7 @@ func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpString) {
 				pgpKeys = append(pgpKeys, k)
 			}
-			for _, k := range kms.MasterKeysFromArnString(kmsString) {
+			for _, k := range kms.MasterKeysFromArnString(kmsString, kmsEncryptionContext) {
 				kmsKeys = append(kmsKeys, k)
 			}
 		}
@@ -387,7 +391,8 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
-	tree.Metadata.AddKMSMasterKeys(c.String("add-kms"))
+	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
+	tree.Metadata.AddKMSMasterKeys(c.String("add-kms"), kmsEncryptionContext)
 	tree.Metadata.AddPGPMasterKeys(c.String("add-pgp"))
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
