@@ -391,9 +391,13 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
-	_, err = tree.Encrypt(newKey, cipher, nil)
+	mac, err := tree.Encrypt(newKey, cipher, nil)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
+	}
+	encryptedMac, err := cipher.Encrypt(mac, newKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
 	}
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
@@ -404,6 +408,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
 	tree.Metadata.UpdateMasterKeys(newKey)
+	tree.Metadata.MessageAuthenticationCode = encryptedMac
 	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
 
 	_, err = output.Write([]byte(out))
