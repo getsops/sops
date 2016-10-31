@@ -299,7 +299,7 @@ func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
 			var keys []MasterKey
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
 				keys = append(keys, k)
-				fmt.Println("Keys to add:", keys)
+				fmt.Printf("Adding new PGP master key: %X\n", k.Fingerprint)
 			}
 			ks.Keys = append(ks.Keys, keys...)
 			m.KeySources[i] = ks
@@ -314,6 +314,7 @@ func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) 
 			var keys []MasterKey
 			for _, k := range kms.MasterKeysFromArnString(kmsArns, context) {
 				keys = append(keys, k)
+				fmt.Printf("Adding new KMS master key: %s\n", k.Arn)
 			}
 			ks.Keys = append(ks.Keys, keys...)
 			m.KeySources[i] = ks
