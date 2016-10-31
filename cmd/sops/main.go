@@ -24,22 +24,23 @@ import (
 )
 
 const (
-	exitCouldNotReadInputFile               int = 2
-	exitCouldNotWriteOutputFile             int = 3
-	exitErrorDumpingTree                    int = 4
-	exitErrorReadingConfig                  int = 5
-	exitErrorEncryptingTree                 int = 23
-	exitErrorDecryptingTree                 int = 23
-	exitCannotChangeKeysFromNonExistentFile int = 49
-	exitMacMismatch                         int = 51
-	exitConfigFileNotFound                  int = 61
-	exitKeyboardInterrupt                   int = 85
-	exitInvalidTreePathFormat               int = 91
-	exitNoFileSpecified                     int = 100
-	exitCouldNotRetrieveKey                 int = 128
-	exitNoEncryptionKeyFound                int = 111
-	exitFileHasNotBeenModified              int = 200
-	exitNoEditorFound                       int = 201
+	exitCouldNotReadInputFile                  int = 2
+	exitCouldNotWriteOutputFile                int = 3
+	exitErrorDumpingTree                       int = 4
+	exitErrorReadingConfig                     int = 5
+	exitErrorInvalidKMSEncryptionContextFormat int = 6
+	exitErrorEncryptingTree                    int = 23
+	exitErrorDecryptingTree                    int = 23
+	exitCannotChangeKeysFromNonExistentFile    int = 49
+	exitMacMismatch                            int = 51
+	exitConfigFileNotFound                     int = 61
+	exitKeyboardInterrupt                      int = 85
+	exitInvalidTreePathFormat                  int = 91
+	exitNoFileSpecified                        int = 100
+	exitCouldNotRetrieveKey                    int = 128
+	exitNoEncryptionKeyFound                   int = 111
+	exitFileHasNotBeenModified                 int = 200
+	exitNoEditorFound                          int = 201
 )
 
 const version = "2.0-beta"
@@ -149,6 +150,10 @@ func main() {
 		cli.StringFlag{
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
+		},
+		cli.StringFlag{
+			Name:  "encryption-context",
+			Usage: "comma separated list of KMS encryption context key:value pairs",
 		},
 	}
 	app.Action = func(c *cli.Context) error {
@@ -304,9 +309,12 @@ func decrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 	var kmsKeys []sops.MasterKey
 	var pgpKeys []sops.MasterKey
-
+	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
+	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
+		return nil, cli.NewExitError("Invalid KMS encryption context format", exitErrorInvalidKMSEncryptionContextFormat)
+	}
 	if c.String("kms") != "" {
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms")) {
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}
@@ -329,7 +337,7 @@ func getKeysources(c *cli.Context, file string) ([]sops.KeySource, error) {
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpString) {
 				pgpKeys = append(pgpKeys, k)
 			}
-			for _, k := range kms.MasterKeysFromArnString(kmsString) {
+			for _, k := range kms.MasterKeysFromArnString(kmsString, kmsEncryptionContext) {
 				kmsKeys = append(kmsKeys, k)
 			}
 		}
@@ -387,7 +395,11 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
-	tree.Metadata.AddKMSMasterKeys(c.String("add-kms"))
+	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
+	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
+		return cli.NewExitError("Invalid KMS encryption context format", exitErrorInvalidKMSEncryptionContextFormat)
+	}
+	tree.Metadata.AddKMSMasterKeys(c.String("add-kms"), kmsEncryptionContext)
 	tree.Metadata.AddPGPMasterKeys(c.String("add-pgp"))
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))

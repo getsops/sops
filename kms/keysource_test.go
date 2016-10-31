@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.mozilla.org/sops/kms/mocks"
 	"testing"
 	"testing/quick"
+	"time"
 )
 
 func TestKMS(t *testing.T) {
-	// TODO: make this not terrible and mock KMS with a reverseable operation on the key, or something. Good luck running the tests on a machine that's not mine!
 	mockKMS := &mocks.KMSAPI{}
 	defer mockKMS.AssertExpectations(t)
 	kmsSvc = mockKMS
@@ -33,9 +34,6 @@ func TestKMS(t *testing.T) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if x == nil || len(x) == 0 {
-			return true // we can't encrypt 0 bytes
-		}
 		return bytes.Equal(v, x)
 	}
 	config := quick.Config{}
@@ -49,7 +47,7 @@ func TestKMS(t *testing.T) {
 
 func TestKMSKeySourceFromString(t *testing.T) {
 	s := "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e+arn:aws:iam::927034868273:role/sops-dev, arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
-	ks := MasterKeysFromArnString(s)
+	ks := MasterKeysFromArnString(s, nil)
 	k1 := ks[0]
 	k2 := ks[1]
 	expectedArn1 := "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e"
@@ -68,4 +66,40 @@ func TestKMSKeySourceFromString(t *testing.T) {
 	if k2.Role != expectedRole2 {
 		t.Errorf("Role mismatch. Expected empty role, found %s.", k2.Role)
 	}
+}
+
+func TestParseEncryptionContext(t *testing.T) {
+	value1 := "value1"
+	value2 := "value2"
+	assert.Equal(t, ParseKMSContext("key1:value1,key2:value2"), map[string]*string{
+		"key1": &value1,
+		"key2": &value2,
+	})
+	assert.Equal(t, ParseKMSContext("key1:value1"), map[string]*string{
+		"key1": &value1,
+	})
+	assert.Nil(t, ParseKMSContext("key1,key2:value2"))
+	assert.Nil(t, ParseKMSContext("key1"))
+}
+
+func TestKeyToMap(t *testing.T) {
+	value1 := "value1"
+	value2 := "value2"
+	key := MasterKey{
+		CreationDate: time.Date(2016, time.October, 31, 10, 0, 0, 0, time.UTC),
+		Arn:          "foo",
+		Role:         "bar",
+		EncryptedKey: "this is encrypted",
+		EncryptionContext: map[string]*string{
+			"key1": &value1,
+			"key2": &value2,
+		},
+	}
+	assert.Equal(t, map[string]string{
+		"arn":        "foo",
+		"role":       "bar",
+		"enc":        "this is encrypted",
+		"created_at": "2016-10-31T10:00:00Z",
+		"context":    "key1:value1,key2:value2",
+	}, key.ToMap())
 }

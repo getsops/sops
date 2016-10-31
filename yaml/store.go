@@ -200,6 +200,7 @@ func (store *Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
 		key.CreationDate = creationDate
+		key.EncryptionContext = kms.ParseKMSContext(entry["context"].(string))
 		keysource.Keys = append(keysource.Keys, key)
 	}
 	return keysource, nil
