@@ -170,9 +170,15 @@ func (key MasterKey) ToMap() map[string]string {
 
 // ParseKMSContext takes a comma-separated list of KMS context key:value pairs and returns a map
 func ParseKMSContext(in string) map[string]*string {
+	if in == "" {
+		return nil
+	}
 	out := make(map[string]*string)
 	for _, kv := range strings.Split(in, ",") {
 		kv := strings.Split(kv, ":")
+		if len(kv) != 2 {
+			return nil
+		}
 		out[kv[0]] = &kv[1]
 	}
 	return out
