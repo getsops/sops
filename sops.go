@@ -207,21 +207,13 @@ func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 }
 
 // GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
-func (tree Tree) GenerateDataKey() ([]byte, error) {
+func (tree Tree) GenerateDataKey() ([]byte, []error) {
 	newKey := make([]byte, 32)
 	_, err := rand.Read(newKey)
 	if err != nil {
-		return nil, fmt.Errorf("Could not generate random key: %s", err)
+		return nil, []error{fmt.Errorf("Could not generate random key: %s", err)}
 	}
-	for _, ks := range tree.Metadata.KeySources {
-		for _, k := range ks.Keys {
-			err := k.Encrypt(newKey)
-			if err != nil {
-				fmt.Printf("[WARNING]: Failed to encrypt new data key with master key: %s\n", err)
-			}
-		}
-	}
-	return newKey, nil
+	return newKey, tree.Metadata.UpdateMasterKeys(newKey)
 }
 
 // Metadata holds information about a file encrypted by sops
@@ -280,16 +272,30 @@ func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 	}
 }
 
-// UpdateMasterKeys encrypts the data key with all master keys if it's needed
-func (m *Metadata) UpdateMasterKeys(dataKey []byte) {
+// UpdateMasterKeysIfNeeded encrypts the data key with all master keys if it's needed
+func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
 			err := k.EncryptIfNeeded(dataKey)
 			if err != nil {
-				fmt.Println("[WARNING]: could not encrypt data key with master key ", k.ToString())
+				errs = append(errs, err)
 			}
 		}
 	}
+	return
+}
+
+// UpdateMasterKeys encrypts the data key with all master keys
+func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
+	for _, ks := range m.KeySources {
+		for _, k := range ks.Keys {
+			err := k.Encrypt(dataKey)
+			if err != nil {
+				errs = append(errs, err)
+			}
+		}
+	}
+	return
 }
 
 // AddPGPMasterKeys parses the input comma separated string of GPG fingerprints, generates a PGP MasterKey for each fingerprint, and adds the keys to the PGP KeySource
