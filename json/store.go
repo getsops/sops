@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
 	"io"
 	"strconv"
 	"time"
+
+	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/pgp"
 )
 
 // Store handles storage of JSON data.
@@ -274,7 +275,9 @@ func (store Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 		if err != nil {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
-		key.EncryptionContext = kms.ParseKMSContext(entry["context"].(string))
+		if _, ok := entry["context"]; ok {
+			key.EncryptionContext = kms.ParseKMSContext(entry["context"].(string))
+		}
 		key.CreationDate = creationDate
 		keysource.Keys = append(keysource.Keys, key)
 	}

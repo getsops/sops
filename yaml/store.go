@@ -2,12 +2,13 @@ package yaml //import "go.mozilla.org/sops/yaml"
 
 import (
 	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/mozilla-services/yaml"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
-	"strconv"
-	"time"
 )
 
 // Store handles storage of YAML data
@@ -200,7 +201,9 @@ func (store *Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
 		key.CreationDate = creationDate
-		key.EncryptionContext = kms.ParseKMSContext(entry["context"].(string))
+		if _, ok := entry["context"]; ok {
+			key.EncryptionContext = kms.ParseKMSContext(entry["context"].(string))
+		}
 		keysource.Keys = append(keysource.Keys, key)
 	}
 	return keysource, nil
