@@ -395,7 +395,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
-	encryptedMac, err := cipher.Encrypt(mac, newKey, metadata.LastModified.Format(time.RFC3339), nil)
+	encryptedMac, err := cipher.Encrypt(mac, newKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
 	}
@@ -408,7 +408,7 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
 	tree.Metadata.UpdateMasterKeys(newKey)
-	metadata.MessageAuthenticationCode = encryptedMac
+	tree.Metadata.MessageAuthenticationCode = encryptedMac
 	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
 
 	_, err = output.Write([]byte(out))
