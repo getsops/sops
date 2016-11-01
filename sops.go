@@ -278,7 +278,7 @@ func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
 		for _, k := range ks.Keys {
 			err := k.EncryptIfNeeded(dataKey)
 			if err != nil {
-				errs = append(errs, err)
+				errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", k.ToString(), err))
 			}
 		}
 	}
@@ -291,7 +291,7 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 		for _, k := range ks.Keys {
 			err := k.Encrypt(dataKey)
 			if err != nil {
-				errs = append(errs, err)
+				errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", k.ToString(), err))
 			}
 		}
 	}

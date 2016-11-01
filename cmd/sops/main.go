@@ -29,10 +29,13 @@ const (
 	exitErrorDumpingTree                       int = 4
 	exitErrorReadingConfig                     int = 5
 	exitErrorInvalidKMSEncryptionContextFormat int = 6
+	exitErrorEncryptingMac                     int = 21
 	exitErrorEncryptingTree                    int = 23
-	exitErrorDecryptingTree                    int = 23
+	exitErrorDecryptingMac                     int = 24
+	exitErrorDecryptingTree                    int = 25
 	exitCannotChangeKeysFromNonExistentFile    int = 49
 	exitMacMismatch                            int = 51
+	exitMacNotFound                            int = 52
 	exitConfigFileNotFound                     int = 61
 	exitKeyboardInterrupt                      int = 85
 	exitInvalidTreePathFormat                  int = 91
@@ -368,9 +371,12 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	cipher := aes.Cipher{}
 	mac, err := tree.Encrypt(key, cipher, nil)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt tree: %s", err), exitErrorEncryptingTree)
+	}
 	encryptedMac, err := cipher.Encrypt(mac, key, metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
 	}
 	metadata.MessageAuthenticationCode = encryptedMac
 	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, metadata)
@@ -393,11 +399,11 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	cipher := aes.Cipher{}
 	mac, err := tree.Encrypt(newKey, cipher, nil)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt tree: %s", err), exitErrorEncryptingTree)
 	}
 	encryptedMac, err := cipher.Encrypt(mac, newKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
 	}
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
@@ -581,8 +587,7 @@ func edit(c *cli.Context, file string, fileBytes []byte) error {
 	}
 	encryptedMac, err := cipher.Encrypt(mac, key, tree.Metadata.LastModified.Format(time.RFC3339), stash)
 	if err != nil {
-
-		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingTree)
+		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
 	}
 	tree.Metadata.MessageAuthenticationCode = encryptedMac
 	out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)

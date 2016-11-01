@@ -16,7 +16,10 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 )
 
+// this needs to be a global var for unit tests to work (mockKMS redefines
+// it in keysource_test.go)
 var kmsSvc kmsiface.KMSAPI
+var isMocked bool
 
 // MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -29,17 +32,18 @@ type MasterKey struct {
 
 // Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	if kmsSvc == nil {
-
+	// isMocked is set by unit test to indicate that the KMS service
+	// has already been initialized. it's ugly, but it works.
+	if kmsSvc == nil || !isMocked {
 		sess, err := key.createSession()
 		if err != nil {
-			return err
+			return fmt.Errorf("Failed to create session: %v", err)
 		}
 		kmsSvc = kms.New(sess)
 	}
 	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
 	if err != nil {
-		return err
+		return fmt.Errorf("Failed to call KMS encryption service: %v", err)
 	}
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
 	return nil
@@ -59,7 +63,9 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
 	}
-	if kmsSvc == nil {
+	// isMocked is set by unit test to indicate that the KMS service
+	// has already been initialized. it's ugly, but it works.
+	if kmsSvc == nil || !isMocked {
 		sess, err := key.createSession()
 		if err != nil {
 			return nil, fmt.Errorf("Error creating AWS session: %v", err)
@@ -121,13 +127,13 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
 		RoleArn: &key.Role, RoleSessionName: &name})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to assume role %q: %v", key.Role, err)
 	}
 	config.Credentials = credentials.NewStaticCredentials(*out.Credentials.AccessKeyId,
 		*out.Credentials.SecretAccessKey, *out.Credentials.SessionToken)
 	sess, err = session.NewSession(&config)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to create new aws session: %v", err)
 	}
 	return sess, nil
 }
@@ -136,7 +142,7 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	re := regexp.MustCompile(`^arn:aws:kms:(.+):([0-9]+):key/(.+)$`)
 	matches := re.FindStringSubmatch(key.Arn)
 	if matches == nil {
-		return nil, fmt.Errorf("No valid ARN found in %s", key.Arn)
+		return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 	}
 	config := aws.Config{Region: aws.String(matches[1])}
 	sess, err := session.NewSession(&config)
