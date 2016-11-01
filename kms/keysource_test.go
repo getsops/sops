@@ -3,19 +3,21 @@ package kms
 import (
 	"bytes"
 	"fmt"
+	"testing"
+	"testing/quick"
+	"time"
+
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.mozilla.org/sops/kms/mocks"
-	"testing"
-	"testing/quick"
-	"time"
 )
 
 func TestKMS(t *testing.T) {
 	mockKMS := &mocks.KMSAPI{}
 	defer mockKMS.AssertExpectations(t)
 	kmsSvc = mockKMS
+	isMocked = true
 	encryptOutput := &kms.EncryptOutput{}
 	decryptOutput := &kms.DecryptOutput{}
 	mockKMS.On("Encrypt", mock.AnythingOfType("*kms.EncryptInput")).Return(encryptOutput, nil).Run(func(args mock.Arguments) {
