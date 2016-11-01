@@ -380,6 +380,9 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 	}
 	metadata.MessageAuthenticationCode = encryptedMac
 	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, metadata)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+	}
 	_, err = output.Write([]byte(out))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not write to output stream: %s", err), exitCouldNotWriteOutputFile)
@@ -419,6 +422,9 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	}
 	tree.Metadata.MessageAuthenticationCode = encryptedMac
 	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+	}
 
 	_, err = output.Write([]byte(out))
 	if err != nil {
