@@ -177,7 +177,7 @@ func main() {
 		var output *os.File
 		if c.Bool("in-place") {
 			var err error
-			output, err = os.Create(file)
+			output, err = os.OpenFile(file, os.O_RDWR, 0660)
 			if err != nil {
 				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), exitCouldNotWriteOutputFile)
 			}
