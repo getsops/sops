@@ -12,11 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
-	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
 	"github.com/aws/aws-sdk-go/service/sts"
 )
-
-var kmsSvc kmsiface.KMSAPI
 
 // MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -29,17 +26,14 @@ type MasterKey struct {
 
 // Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	if kmsSvc == nil {
-
-		sess, err := key.createSession()
-		if err != nil {
-			return err
-		}
-		kmsSvc = kms.New(sess)
+	sess, err := key.createSession()
+	if err != nil {
+		return fmt.Errorf("Failed to create session: %v", err)
 	}
+	kmsSvc := kms.New(sess)
 	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
 	if err != nil {
-		return err
+		return fmt.Errorf("Failed to call KMS encryption service: %v", err)
 	}
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
 	return nil
@@ -59,13 +53,11 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
 	}
-	if kmsSvc == nil {
-		sess, err := key.createSession()
-		if err != nil {
-			return nil, fmt.Errorf("Error creating AWS session: %v", err)
-		}
-		kmsSvc = kms.New(sess)
+	sess, err := key.createSession()
+	if err != nil {
+		return nil, fmt.Errorf("Error creating AWS session: %v", err)
 	}
+	kmsSvc := kms.New(sess)
 	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
@@ -121,13 +113,13 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
 		RoleArn: &key.Role, RoleSessionName: &name})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to assume role %q: %v", key.Role, err)
 	}
 	config.Credentials = credentials.NewStaticCredentials(*out.Credentials.AccessKeyId,
 		*out.Credentials.SecretAccessKey, *out.Credentials.SessionToken)
 	sess, err = session.NewSession(&config)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to create new aws session: %v", err)
 	}
 	return sess, nil
 }
@@ -136,7 +128,7 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	re := regexp.MustCompile(`^arn:aws:kms:(.+):([0-9]+):key/(.+)$`)
 	matches := re.FindStringSubmatch(key.Arn)
 	if matches == nil {
-		return nil, fmt.Errorf("No valid ARN found in %s", key.Arn)
+		return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 	}
 	config := aws.Config{Region: aws.String(matches[1])}
 	sess, err := session.NewSession(&config)
