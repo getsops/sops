@@ -12,8 +12,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
 	"github.com/aws/aws-sdk-go/service/sts"
 )
+
+// this needs to be a global var for unit tests to work (mockKMS redefines
+// it in keysource_test.go)
+var kmsSvc kmsiface.KMSAPI
+var isMocked bool
 
 // MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -26,11 +32,15 @@ type MasterKey struct {
 
 // Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	sess, err := key.createSession()
-	if err != nil {
-		return fmt.Errorf("Failed to create session: %v", err)
+	// isMocked is set by unit test to indicate that the KMS service
+	// has already been initialized. it's ugly, but it works.
+	if kmsSvc == nil || !isMocked {
+		sess, err := key.createSession()
+		if err != nil {
+			return fmt.Errorf("Failed to create session: %v", err)
+		}
+		kmsSvc = kms.New(sess)
 	}
-	kmsSvc := kms.New(sess)
 	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		return fmt.Errorf("Failed to call KMS encryption service: %v", err)
@@ -53,11 +63,15 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
 	}
-	sess, err := key.createSession()
-	if err != nil {
-		return nil, fmt.Errorf("Error creating AWS session: %v", err)
+	// isMocked is set by unit test to indicate that the KMS service
+	// has already been initialized. it's ugly, but it works.
+	if kmsSvc == nil || !isMocked {
+		sess, err := key.createSession()
+		if err != nil {
+			return nil, fmt.Errorf("Error creating AWS session: %v", err)
+		}
+		kmsSvc = kms.New(sess)
 	}
-	kmsSvc := kms.New(sess)
 	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
