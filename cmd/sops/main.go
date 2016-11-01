@@ -365,9 +365,9 @@ func encrypt(c *cli.Context, file string, fileBytes []byte, output io.Writer) er
 		KeySources:        ks,
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
-	key, err := tree.GenerateDataKey()
-	if err != nil {
-		return cli.NewExitError(fmt.Sprintf("Could not generate data key: %s", err), exitCouldNotRetrieveKey)
+	key, errs := tree.GenerateDataKey()
+	if len(errs) > 0 {
+		return cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
 	mac, err := tree.Encrypt(key, cipher, nil)
@@ -392,9 +392,9 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	if err != nil {
 		return err
 	}
-	newKey, err := tree.GenerateDataKey()
-	if err != nil {
-		return cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
+	newKey, errs := tree.GenerateDataKey()
+	if len(errs) > 0 {
+		return cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
 	}
 	cipher := aes.Cipher{}
 	mac, err := tree.Encrypt(newKey, cipher, nil)
@@ -413,7 +413,10 @@ func rotate(c *cli.Context, file string, fileBytes []byte, output io.Writer) err
 	tree.Metadata.AddPGPMasterKeys(c.String("add-pgp"))
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
-	tree.Metadata.UpdateMasterKeys(newKey)
+	errs = tree.Metadata.UpdateMasterKeysIfNeeded(newKey)
+	if len(errs) > 0 {
+		return cli.NewExitError(fmt.Sprintf("One or more keys could not be updated:\n%s", errs), exitErrorEncryptingTree)
+	}
 	tree.Metadata.MessageAuthenticationCode = encryptedMac
 	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
 
@@ -487,9 +490,9 @@ func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
 	tree.Metadata.Version = version
 	tree.Metadata.KeySources = ks
-	key, err := tree.GenerateDataKey()
-	if err != nil {
-		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
+	key, errs := tree.GenerateDataKey()
+	if len(errs) > 0 {
+		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
 	}
 	tree.Metadata.UpdateMasterKeys(key)
 	return tree, nil
