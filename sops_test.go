@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/stretchr/testify/assert"
 	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/kms"
 	"reflect"
 	"testing"
 )
@@ -200,4 +201,37 @@ func TestTruncateTree(t *testing.T) {
 	result, err := tree.Truncate(`["bar"]["foobar"][2]`)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expected, result)
+}
+
+func TestRemoveMasterKeys(t *testing.T) {
+	m := Metadata{
+		KeySources: []KeySource{
+			KeySource{
+				Name: "kms",
+				Keys: []MasterKey{
+					&kms.MasterKey{
+						Arn: "foo",
+					}, &kms.MasterKey{
+						Arn: "bar",
+					},
+					&kms.MasterKey{
+						Arn: "foobar",
+					},
+				},
+			},
+		},
+	}
+	m.RemoveMasterKeys([]MasterKey{
+		&kms.MasterKey{
+			Arn: "bar",
+		},
+		&kms.MasterKey{
+			Arn: "foobar",
+		},
+	})
+	assert.Equal(t, []MasterKey{
+		&kms.MasterKey{
+			Arn: "foo",
+		},
+	}, m.KeySources[0].Keys)
 }
