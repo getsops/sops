@@ -261,14 +261,20 @@ func (m *Metadata) MasterKeyCount() int {
 // RemoveMasterKeys removes all of the provided keys from the metadata's KeySources, if they exist there.
 func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 	for j, ks := range m.KeySources {
-		for i, k := range ks.Keys {
-			for _, k2 := range keys {
-				if k.ToString() == k2.ToString() {
-					ks.Keys = append(ks.Keys[:i], ks.Keys[i+1:]...)
+		var newKeys []MasterKey
+		for _, k := range ks.Keys {
+			matchFound := false
+			for _, keyToRemove := range keys {
+				if k.ToString() == keyToRemove.ToString() {
+					matchFound = true
+					break
 				}
 			}
+			if !matchFound {
+				newKeys = append(newKeys, k)
+			}
 		}
-		m.KeySources[j] = ks
+		m.KeySources[j].Keys = newKeys
 	}
 }
 
