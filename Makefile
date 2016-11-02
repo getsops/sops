@@ -1,94 +1,44 @@
-VIRTUALENV = virtualenv
-VENV := $(shell echo $${VIRTUAL_ENV-.venv})
-PYTHON = $(VENV)/bin/python
-DEV_STAMP = $(VENV)/.dev_env_installed.stamp
-INSTALL_STAMP = $(VENV)/.install.stamp
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-.IGNORE: clean
-.PHONY: all install dev-requirements
+PROJECT		:= go.mozilla.org/sops
+GO 		:= GO15VENDOREXPERIMENT=1 go
+GOGETTER	:= GOPATH=$(shell pwd)/.tmpdeps go get -d
+GOLINT 		:= golint
 
+all: test vet generate install
 
-all: build
+install:
+	$(GO) install go.mozilla.org/sops/cmd/sops
 
-build:
-	python setup.py build
+tag: all
+	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
 
-install: $(INSTALL_STAMP)
+lint:
+	$(GOLINT) $(PROJECT)
 
-$(INSTALL_STAMP): $(PYTHON) setup.py
-	$(VENV)/bin/pip install -U pip
-	$(VENV)/bin/pip install -Ue .
-	touch $(INSTALL_STAMP)
+vendor:
+	godep save ./...
 
-dev-requirements: $(INSTALL_STAMP) $(DEV_STAMP)
-$(DEV_STAMP): $(PYTHON) dev-requirements.txt
-	$(VENV)/bin/pip install tox
-	$(VENV)/bin/pip install -Ur dev-requirements.txt
-	touch $(DEV_STAMP)
+vet:
+	$(GO) vet $(PROJECT)
 
-virtualenv: $(PYTHON)
-$(PYTHON):
-	virtualenv $(VENV)
+test:
+	touch coverage.txt
+	$(GO) test -coverprofile=coverage_tmp.txt -covermode=atomic $(PROJECT) && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test $(PROJECT)/aes -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test $(PROJECT)/cmd/sops -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test $(PROJECT)/json -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test $(PROJECT)/yaml -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
+	$(GO) test $(PROJECT)/pgp -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test $(PROJECT)/kms -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 
-tests: dev-requirements
-	$(VENV)/bin/tox
+showcoverage: test
+	$(GO) tool cover -html=coverage.out
 
-tests-once: install dev-requirements
-	$(VENV)/bin/py.test --cov-report term-missing --cov sops tests/
+generate:
+	$(GO) generate
 
-functional-tests:
-	gpg --import tests/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
-	for type in yaml json txt; do \
-		for ver in 2.6 2.7 3.4; do \
-			echo "Testing Python$$ver $$type decryption" && \
-			python$$ver sops/__init__.py -d example.$$type > /tmp/testdata.$$type && \
-			echo "Testing Python$$ver $$type encryption" && \
-			python$$ver sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata.$$type > /tmp/testdata$$ver.$$type; \
-		done && \
-		echo "Testing Python2.6 decryption of a 2.7 $$type file" && \
-		python2.6 sops/__init__.py -d /tmp/testdata2.7.$$type > /dev/null && \
-		echo "Testing Python2.6 decryption of a 3.4 $$type file" && \
-		python2.6 sops/__init__.py -d /tmp/testdata3.4.$$type > /dev/null && \
-		echo "Testing Python2.7 decryption of a 2.6 $$type file" && \
-		python2.7 sops/__init__.py -d /tmp/testdata2.6.$$type > /dev/null && \
-		echo "Testing Python2.7 decryption of a 3.4 $$type file" && \
-		python2.7 sops/__init__.py -d /tmp/testdata3.4.$$type > /dev/null && \
-		echo "Testing Python3.4 decryption of a 2.6 $$type file" && \
-		python3.4 sops/__init__.py -d /tmp/testdata2.6.$$type > /dev/null && \
-		echo "Testing Python3.4 decryption of a 2.7 $$type file" && \
-		python3.4 sops/__init__.py -d /tmp/testdata2.7.$$type > /dev/null || exit 1; \
-	done && \
-	for ver in 2.6 2.7 3.4; do \
-	done
-
-functional-tests-once:
-	gpg --import tests/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
-	for type in yaml json txt; do \
-		echo "Testing $$type decryption"; \
-		python sops/__init__.py -d example.$$type > /tmp/testdata.$$type; \
-		echo "Testing $$type encryption" ; \
-		python sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata.$$type > /tmp/testdataenc.$$type; \
-		echo "Testing $$type re-decryption" ; \
-		python sops/__init__.py -d /tmp/testdataenc.$$type > /dev/null ; \
-		echo "Testing removing PGP key to $$type encrypted file" ; \
-		python sops/__init__.py -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 /tmp/testdataenc.$$type ; \
-	done
-	echo "Testing round-trip on binary file"
-	dd if=/dev/urandom of=/tmp/testdata-randomfile bs=1024 count=1024 2>&1 1>/dev/null
-	python sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata-randomfile > /tmp/testdata-randomfile.enc
-	python sops/__init__.py -d /tmp/testdata-randomfile.enc > /tmp/testdata-randomfile.dec
-	if [ $$(sha256sum /tmp/testdata-randomfile | cut -d ' ' -f 1) != $$(sha256sum /tmp/testdata-randomfile.dec | cut -d ' ' -f 1) ]; then \
-		echo "Binary file roundtrip failed, checksum doesn't match"; exit 0; \
-	else \
-		echo "Binary file roundtrip succeeded"; \
-	fi;
-
-pypi:
-	$(PYTHON) setup.py sdist check upload --sign
-
-clean:
-	rm -rf *.pyc sops/*.pyc
-	rm -rf __pycache__ sops/__pycache__
-	rm -rf build/ dist/
-	rm -fr .tox/ .venv/
-	rm -fr .coverage
+.PHONY: all test generate clean vendor

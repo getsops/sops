@@ -1,7 +1,0 @@
-mock
-unittest2
-pytest
-pytest-cache
-pytest-capturelog
-pytest-cover
-pytest-sugar

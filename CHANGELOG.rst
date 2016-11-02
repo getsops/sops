@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0
+---
+
+* [major] rewrite in Go
+
 1.14
 ----
 

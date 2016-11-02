@@ -1,68 +1,28 @@
 SOPS: Secrets OPerationS
 ========================
 
-**sop** is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP (via GnuPG). Watch `the demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_.
+**sops** is an editor of encrypted files that supports YAML, JSON and BINARY
+formats and encrypts with AWS KMS and PGP (via GnuPG).
+Watch `the demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_.
 
-.. image:: http://i.imgur.com/IL6dlhm.gif
+.. image:: https://i.imgur.com/X0TM5NI.gif
 
 .. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
 	:target: https://travis-ci.org/mozilla/sops
+
+Install **sops** with:
+
+.. code:: bash
+
+	$ go get -u go.mozilla.org/sops/cmd/sops
+
+(requires Go >= 1.6)
 
 **Questions?** ping "ulfr" in `#security` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
 (use a web client like `mibbit <https://chat.mibbit.com>`_ ).
 
 .. sectnum::
 .. contents:: Table of Contents
-
-Installation
-------------
-
-* RHEL family::
-
-	sudo yum install gcc git libffi-devel libyaml-devel make openssl openssl-devel python-devel python-pip
-	sudo pip install --upgrade sops
-
-* Debian family::
-
-	sudo apt-get install gcc git libffi-dev libssl-dev libyaml-dev make openssl python-dev python-pip
-	sudo pip install --upgrade sops
-
-* MacOS Brew Install::
-
-	brew install sops
-
-* MacOS Manual Install::
-
-	brew install libffi libyaml python [1]
-	pip install sops
-
-1. http://docs.python-guide.org/en/latest/starting/install/osx/#doing-it-right
-
-In a virtualenv
-~~~~~~~~~~~~~~~
-
-Assuming you already have libffi and libyaml installed, the following commands will install sops in a virtualenv:
-
-.. code:: bash
-
-    $ sudo pip install virtualenv --upgrade
-    $ virtualenv ~/sopsvenv
-    $ source ~/sopsvenv/bin/activate
-    $ pip install -U sops
-    $ sops -v
-    sops 1.9
-
-Test with the dev PGP key
-~~~~~~~~~~~~~~~~~~~~~~~~~
-Clone the repository, load the test PGP key and open the test files::
-
-	$ git clone https://github.com/mozilla/sops.git
-	$ cd sops
-	$ gpg --import tests/sops_functional_tests_key.asc
-	$ sops example.yaml
-
-This last step will decrypt `example.yaml` using the test private key. To create
-your own secrets files using keys under your control, keep reading.
 
 Usage
 -----
@@ -167,6 +127,19 @@ Given that, the only command a `sops` user needs is:
 `<file>` will be opened, decrypted, passed to a text editor (vim by default),
 encrypted if modified, and saved back to its original location. All of these
 steps, apart from the actual editing, are transparent to the user.
+
+Test with the dev PGP key
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to test **sops** without having to do a bunch of setup, you can use
+the example files and pgp key provided with the repository::
+
+	$ git clone https://github.com/mozilla/sops.git
+	$ cd sops
+	$ gpg --import tests/sops_functional_tests_key.asc
+	$ sops example.yaml
+
+This last step will decrypt `example.yaml` using the test private key.
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,0 +1,8 @@
+[package]
+name = "validation"
+version = "0.1.0"
+authors = ["Adrian Utrilla <adrianutrilla@gmail.com>"]
+
+[dependencies]
+serde_json = "0.8.0"
+yaml-rust = "0.3.3"
