@@ -379,7 +379,7 @@ func (m Metadata) GetDataKey() ([]byte, error) {
 			}
 		}
 	}
-	return nil, fmt.Errorf("Could not get master key")
+	return nil, fmt.Errorf("Could not get data key")
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
