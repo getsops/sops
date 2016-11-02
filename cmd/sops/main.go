@@ -254,7 +254,7 @@ func main() {
 		if err != nil {
 			return err
 		}
-
+		// We open the file *after* the operations on the tree have been executed to avoid truncating it when there's errors
 		var outputFile *os.File
 		if c.Bool("in-place") || isEditMode {
 			var err error
