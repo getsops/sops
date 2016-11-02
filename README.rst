@@ -54,15 +54,22 @@ separated, in the **SOPS_PGP_FP** env variable.
 Note: you can use both PGP and KMS simultaneously.
 
 Then simply call `sops` with a file path as argument. It will handle the
-encryption/decryption transparently and open the cleartext file in an editor.
+encryption/decryption transparently and open the cleartext file in an editor
 
 .. code:: bash
 
 	$ sops mynewtestfile.yaml
 	mynewtestfile.yaml doesn't exist, creating it.
 	please wait while an encryption key is being generated and stored in a secure fashion
-	[... editing happens in vim, or whatever $EDITOR is set to ...]
 	file written to mynewtestfile.yaml
+
+.
+Editing will happen in whatever $EDITOR is set to, or, if it's not set, in vim.
+Keep in mind that sops will wait for the editor to exit, and then try to reencrypt
+the file. Some GUI editors (atom, sublime) spawn a child process and then exit
+immediately. They usually have an option to wait for the main editor window to be
+closed before exiting. See [#127](https://github.com/mozilla/sops/issues/127) for
+more information.
 
 The resulting encrypted file looks like this:
 
@@ -243,6 +250,48 @@ appending it to the ARN of the master key, separated by a **+** sign::
 	<KMS ARN>+<ROLE ARN>
 	arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz
 
+AWS KMS Encryption Context
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SOPS has the ability to use AWS KMS key policy and encryption context
+<http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>
+to refine the access control of a given KMS master key.
+
+When creating a new file, you can specify encryption context in the
+`--encryption-context` flag by comma separated list of key-value pairs:
+
+When creating a new file, you can specify encryption context in the
+`--encryption-context` flag by comma separated list of key-value pairs:
+
+.. code:: bash
+
+	$ sops --encryption-context Environment:production,Role:web-server test.dev.yaml
+
+The format of the Encrypt Context string is `<EncryptionContext Key>:<EncryptionContext Value>,<EncryptionContext Key>:<EncryptionContext Value>,...`
+
+The encryption context will be stored in the file metadata and does
+not need to be provided at decryption.
+
+Encryption contexts can be used in conjunction with KMS Key Policies to define
+roles that can only access a given context. An example policy is shown below:
+
+.. code:: json
+
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111122223333:role/RoleForExampleApp"
+      },
+      "Action": "kms:Decrypt",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "kms:EncryptionContext:AppName": "ExampleApp",
+          "kms:EncryptionContext:FilePath": "/var/opt/secrets/"
+        }
+      }
+    }
+
 Key Rotation
 ~~~~~~~~~~~~
 
@@ -309,6 +358,19 @@ Creating a new file with the right keys is now as simple as
 Note that the configuration file is ignored when KMS or PGP parameters are
 passed on the sops command line or in environment variables.
 
+Specify a different GPG executable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` checks for the `SOPS_GPG_EXEC` environment variable. If specified, 
+it will attempt to use the executable set there instead of the default 
+of `gpg`.
+
+Example: place the following in your `~/.bashrc`
+
+.. code:: bash
+
+	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
+	
 Important information on types
 ------------------------------
 
@@ -494,7 +556,7 @@ values, like keys, without needing an extra parser.
 
 .. code:: bash
 
-	$ sops -d ~/git/svc/sops/example.yaml -t '["app2"]["key"]'
+	$ sops -d ~/git/svc/sops/example.yaml --extract '["app2"]["key"]'
 	-----BEGIN RSA PRIVATE KEY-----
 	MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
 	ImcbNkqAKnELzFAPSBeEMhrBN0PyOC9lYlMCAwEAAQJBALXD4sjuBn1E7Y9aGiMz
@@ -511,8 +573,33 @@ them.
 
 .. code:: bash
 
-	$ sops -d ~/git/svc/sops/example.yaml -t '["an_array"][1]'
+	$ sops -d ~/git/svc/sops/example.yaml --extract '["an_array"][1]'
 	secretuser2
+
+Set a sub-part in a document tree
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`sops` can set a specific part of a YAML or JSON document, by providing
+the path and value in the `--set` command line flag. This is useful to
+set specific values, like keys, without needing an editor.
+
+.. code:: bash
+
+	$ sops ~/git/svc/sops/example.yaml --set '["app2"]["key"]' '"app2keystringvalue"'
+
+The tree path syntax uses regular python dictionary syntax, without the
+variable name. Set to keys by naming them, and array elements by
+numbering them.
+
+.. code:: bash
+
+	$ sops ~/git/svc/sops/example.yaml --set '["an_array"][1]' '"secretuser2"'
+
+The value must be formatted as json.
+
+.. code:: bash
+
+	$ sops ~/git/svc/sops/example.yaml --set '["an_array"][1]' '{"uid1":null,"uid2":1000,"uid3":["bob"]}'
 
 Using sops as a library in a python script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

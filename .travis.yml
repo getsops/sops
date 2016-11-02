@@ -2,9 +2,8 @@ language: go
 go:
   - tip
 go_import_path: go.mozilla.org/sops/
-before_intall:
+before_install:
   - go get -t -v ./...
-
 script:
   - make test
   
