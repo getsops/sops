@@ -207,32 +207,45 @@ func main() {
 				return cli.NewExitError("Error: cannot operate on non-existent file", exitNoFileSpecified)
 			}
 		}
-		fileBytes, err := ioutil.ReadFile(fileName)
-		if err != nil {
-			return err
-		}
 
 		inputStore := inputStore(c, fileName)
 		outputStore := outputStore(c, fileName)
 
-		tree, err := loadPlainFile(c, inputStore, fileName, fileBytes)
+		fileBytes, readFileErr := ioutil.ReadFile(fileName)
+		plainTree, loadPlainFileErr := loadPlainFile(c, inputStore, fileName, fileBytes)
+		encryptedTree, loadEncryptedFileErr := loadEncryptedFile(c, inputStore, fileBytes)
 
 		var output []byte
+		var err error
 		if c.Bool("encrypt") {
-			output, err = encrypt(c, tree, outputStore)
-		}
-
-		tree, err = loadEncryptedFile(c, inputStore, fileBytes)
-		if err != nil {
-			return err
+			if readFileErr != nil {
+				return readFileErr
+			}
+			if loadPlainFileErr != nil {
+				return loadPlainFileErr
+			}
+			output, err = encrypt(c, plainTree, outputStore)
 		}
 
 		if c.Bool("decrypt") {
-			output, err = decrypt(c, tree, outputStore)
+			if readFileErr != nil {
+				return readFileErr
+			}
+			if loadEncryptedFileErr != nil {
+				return loadEncryptedFileErr
+			}
+			output, err = decrypt(c, encryptedTree, outputStore)
 		}
 		if c.Bool("rotate") {
-			output, err = rotate(c, tree, outputStore)
+			if readFileErr != nil {
+				return readFileErr
+			}
+			if loadEncryptedFileErr != nil {
+				return loadEncryptedFileErr
+			}
+			output, err = rotate(c, encryptedTree, outputStore)
 		}
+
 		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate")
 		if isEditMode {
 			output, err = edit(c, fileName, fileBytes)
