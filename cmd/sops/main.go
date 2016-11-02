@@ -211,6 +211,9 @@ func main() {
 		inputStore := inputStore(c, fileName)
 		outputStore := outputStore(c, fileName)
 
+		// Instead of checking for errors after each operation here, we
+		// just continue and let each command decide which errors can
+		// be handled and which can't.
 		fileBytes, readFileErr := ioutil.ReadFile(fileName)
 		plainTree, loadPlainFileErr := loadPlainFile(c, inputStore, fileName, fileBytes)
 		encryptedTree, loadEncryptedFileErr := loadEncryptedFile(c, inputStore, fileBytes)
@@ -254,7 +257,8 @@ func main() {
 		if err != nil {
 			return err
 		}
-		// We open the file *after* the operations on the tree have been executed to avoid truncating it when there's errors
+		// We open the file *after* the operations on the tree have been
+		// executed to avoid truncating it when there's errors
 		var outputFile *os.File
 		if c.Bool("in-place") || isEditMode {
 			var err error
