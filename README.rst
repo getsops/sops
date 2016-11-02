@@ -21,6 +21,8 @@ Install **sops** with:
 **Questions?** ping "ulfr" in `#security` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
 (use a web client like `mibbit <https://chat.mibbit.com>`_ ).
 
+**What happened to Python Sops?** We rewrote Sops in Go to solve a number of deployment issues, but the Python branch still exists under `python-sops`. You can still `pip install sops`, but we strongly recommend you use the Go version instead.
+
 .. sectnum::
 .. contents:: Table of Contents
 
@@ -895,8 +897,8 @@ Backward compatibility
 ----------------------
 
 `sops` will remain backward compatible on the major version, meaning that all
-improvements brought to the 1.X branch (current) will maintain the file format
-introduced in **1.0**.
+improvements brought to the 1.X and 2.X branches (current) will maintain the
+file format introduced in **1.0**.
 
 License
 -------
@@ -904,13 +906,24 @@ Mozilla Public License Version 2.0
 
 Authors
 -------
-* Julien Vehent <jvehent@mozilla.com> (lead & maintainer)
 
-* Daniel Thornton <dthornton@mozilla.com>
-* Alexis Metaireau <alexis@mozilla.com>
-* Rémy Hubscher <natim@mozilla.com>
-* Todd Wolfson <todd@twolfson.com>
-* Brian Hourigan <bhourigan@mozilla.com>
+By commit count:
+
+* Julien Vehent
+* Adrian Utrilla
+* Jeremiah Orem
+* Rémy HUBSCHER
+* Daniel Thorn
+* Dick Tang
+* Alexis Métaireau
+* Brian Hourigan
+* Todd Wolfson
+* Chris Kolosiwsky
+* Boris Kourtoukov
+* Elliot Murphy
+* Ivan Malopinsky
+* Jonathan Barratt
+
 
 Credits
 -------
