@@ -15,6 +15,9 @@ import (
 	"strings"
 	"time"
 
+	encodingjson "encoding/json"
+	"reflect"
+
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/json"
 	"go.mozilla.org/sops/kms"
@@ -29,6 +32,7 @@ const (
 	exitErrorDumpingTree                       int = 4
 	exitErrorReadingConfig                     int = 5
 	exitErrorInvalidKMSEncryptionContextFormat int = 6
+	exitErrorInvalidSetFormat                  int = 7
 	exitErrorEncryptingMac                     int = 21
 	exitErrorEncryptingTree                    int = 23
 	exitErrorDecryptingMac                     int = 24
@@ -191,6 +195,10 @@ func main() {
 		cli.StringFlag{
 			Name:  "encryption-context",
 			Usage: "comma separated list of KMS encryption context key:value pairs",
+		},
+		cli.StringFlag{
+			Name:  "set",
+			Usage: `set a specific key or branch in the input JSON or YAML document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 		},
 	}
 
@@ -538,6 +546,49 @@ func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	return tree, nil
 }
 
+func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
+	var valueToInsert interface{}
+	err := encodingjson.Unmarshal([]byte(jsonValue), &valueToInsert)
+	if err != nil {
+		return nil, cli.NewExitError("Value for --set is not valid JSON", exitErrorInvalidSetFormat)
+	}
+	// Check if decoding it as json we find a single value
+	// and not a map or slice, in which case we can't marshal
+	// it to a sops.TreeBranch
+	kind := reflect.ValueOf(valueToInsert).Kind()
+	if kind == reflect.Map || kind == reflect.Slice {
+		var err error
+		valueToInsert, err = (&json.Store{}).Unmarshal([]byte(jsonValue))
+		if err != nil {
+			return nil, cli.NewExitError("Invalid --set value format", exitErrorInvalidSetFormat)
+		}
+	}
+	return valueToInsert, nil
+}
+
+func extractSetArguments(set string) (path string, key string, valueToInsert interface{}, err error) {
+	// Set is a string with the format "python-dict-index json-value"
+	// Since python-dict-index has to end with ], we split at "] " to get the two parts
+	pathValuePair := strings.SplitAfterN(set, "] ", 2)
+	if len(pathValuePair) < 2 {
+		return "", "", nil, cli.NewExitError("Invalid --set format", exitErrorInvalidSetFormat)
+	}
+	fullPath := strings.TrimRight(pathValuePair[0], " ")
+	jsonValue := pathValuePair[1]
+	valueToInsert, err = jsonValueToTreeInsertableValue(jsonValue)
+	splitPath := strings.Split(fullPath, "[")
+
+	// The path is the full path except the last entry
+	path = strings.Join(splitPath[0:len(splitPath)-1], "")
+
+	// The key is the last entry in the full path
+	key, err = sops.TrimTreePathComponent(splitPath[len(splitPath)-1])
+	if err != nil {
+		return "", "", nil, cli.NewExitError("Invalid --set path format", exitErrorInvalidSetFormat)
+	}
+	return path, key, valueToInsert, nil
+}
+
 func edit(c *cli.Context, file string, fileBytes []byte) ([]byte, error) {
 	var tree sops.Tree
 	var stash map[string][]interface{}
@@ -557,77 +608,93 @@ func edit(c *cli.Context, file string, fileBytes []byte) ([]byte, error) {
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not load file: %s", err), exitCouldNotReadInputFile)
 	}
-	tmpdir, err := ioutil.TempDir("", "")
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
-	}
-	defer os.RemoveAll(tmpdir)
-	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(file)))
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
-	}
-	var out []byte
-	if c.Bool("show-master-keys") {
-		out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
-	} else {
-		out, err = outputStore(c, file).Marshal(tree.Branch)
-	}
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-	}
-	_, err = tmpfile.Write(out)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
-	}
-	origHash, err := hashFile(tmpfile.Name())
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
-	}
-	for {
-		err = runEditor(tmpfile.Name())
+	if c.String("set") != "" {
+		path, key, value, err := extractSetArguments(c.String("set"))
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+			return nil, err
 		}
-		newHash, err := hashFile(tmpfile.Name())
+		parent, err := tree.Branch.Truncate(path)
+		if err != nil {
+			return nil, cli.NewExitError("Could not truncate tree to the provided path", exitErrorInvalidSetFormat)
+		}
+		branch := parent.(sops.TreeBranch)
+		err = branch.ReplaceValue(key, value)
+		if err != nil {
+			return nil, cli.NewExitError("Key not found in tree", exitErrorInvalidSetFormat)
+		}
+	} else {
+		tmpdir, err := ioutil.TempDir("", "")
+		if err != nil {
+			return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
+		}
+		defer os.RemoveAll(tmpdir)
+		tmpfile, err := os.Create(path.Join(tmpdir, path.Base(file)))
+		if err != nil {
+			return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
+		}
+		var out []byte
+		if c.Bool("show-master-keys") {
+			out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+		} else {
+			out, err = outputStore(c, file).Marshal(tree.Branch)
+		}
+		if err != nil {
+			return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+		}
+		_, err = tmpfile.Write(out)
+		if err != nil {
+			return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
+		}
+		origHash, err := hashFile(tmpfile.Name())
 		if err != nil {
 			return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
 		}
-		if bytes.Equal(newHash, origHash) {
-			return nil, cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
-		}
-		edited, err := ioutil.ReadFile(tmpfile.Name())
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
-		}
-		newBranch, err := inputStore(c, file).Unmarshal(edited)
-		if err != nil {
-			fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
-			bufio.NewReader(os.Stdin).ReadByte()
-			continue
-		}
-		if c.Bool("show-master-keys") {
-			metadata, err := inputStore(c, file).UnmarshalMetadata(edited)
+		for {
+			err = runEditor(tmpfile.Name())
 			if err != nil {
-				fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
+				return nil, cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+			}
+			newHash, err := hashFile(tmpfile.Name())
+			if err != nil {
+				return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+			}
+			if bytes.Equal(newHash, origHash) {
+				return nil, cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
+			}
+			edited, err := ioutil.ReadFile(tmpfile.Name())
+			if err != nil {
+				return nil, cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
+			}
+			newBranch, err := inputStore(c, file).Unmarshal(edited)
+			if err != nil {
+				fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
 				bufio.NewReader(os.Stdin).ReadByte()
 				continue
 			}
-			tree.Metadata = metadata
+			if c.Bool("show-master-keys") {
+				metadata, err := inputStore(c, file).UnmarshalMetadata(edited)
+				if err != nil {
+					fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
+					bufio.NewReader(os.Stdin).ReadByte()
+					continue
+				}
+				tree.Metadata = metadata
+			}
+			tree.Branch = newBranch
+			tree.Metadata.Version = version
+			if tree.Metadata.MasterKeyCount() == 0 {
+				fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
+				bufio.NewReader(os.Stdin).ReadByte()
+				continue
+			}
+			break
 		}
-		tree.Branch = newBranch
-		tree.Metadata.Version = version
-		if tree.Metadata.MasterKeyCount() == 0 {
-			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
-			continue
-		}
-		break
 	}
 	tree, err = encryptTree(tree, stash)
 	if err != nil {
 		return nil, err
 	}
-	out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
 	}
