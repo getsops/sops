@@ -46,10 +46,38 @@ type TreeItem struct {
 // TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
 type TreeBranch []TreeItem
 
+// ReplaceValue replaces the value under the provided key with the newValue provided.
+// Returns an error if the key was not found.
+func (branch TreeBranch) ReplaceValue(key interface{}, newValue interface{}) error {
+	replaced := false
+	for i, kv := range branch {
+		if kv.Key == key {
+			branch[i].Value = newValue
+			replaced = true
+			break
+		}
+	}
+	if !replaced {
+		return fmt.Errorf("Key not found")
+	}
+	return nil
+}
+
 // Tree is the data structure used by sops to represent documents internally
 type Tree struct {
 	Branch   TreeBranch
 	Metadata Metadata
+}
+
+// TrimTreePathComponent trimps a tree path component so that it's a valid tree key
+func TrimTreePathComponent(component string) (string, error) {
+	if component[len(component)-1] != ']' {
+		return "", fmt.Errorf("Invalid component")
+	}
+	component = component[:len(component)-1]
+	component = strings.Replace(component, `"`, "", 2)
+	component = strings.Replace(component, `'`, "", 2)
+	return component, nil
 }
 
 // Truncate truncates the tree following Python dictionary access syntax, for example, ["foo"][2].
@@ -60,12 +88,10 @@ func (tree TreeBranch) Truncate(path string) (interface{}, error) {
 		if component == "" {
 			continue
 		}
-		if component[len(component)-1] != ']' {
+		component, err := TrimTreePathComponent(component)
+		if err != nil {
 			return nil, fmt.Errorf("Invalid tree path format string: %s", path)
 		}
-		component = component[:len(component)-1]
-		component = strings.Replace(component, `"`, "", 2)
-		component = strings.Replace(component, `'`, "", 2)
 		i, err := strconv.Atoi(component)
 		if err != nil {
 			for _, item := range current.(TreeBranch) {
