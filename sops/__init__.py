@@ -1278,10 +1278,13 @@ def write_file(tree, path=None, filetype=None):
         fd = tempfile.NamedTemporaryFile(suffix="."+filetype, delete=False)
         path = fd.name
 
-    if fd and not isinstance(tree, dict) and not isinstance(tree, list):
-        # Write the entire tree to file descriptor
-        fd.write(tree.encode('utf-8'))
-        fd.close()
+    if not isinstance(tree, dict) and not isinstance(tree, list):
+        if path == 'stdout':
+            sys.stdout.write(tree.encode('utf-8'))
+        else:
+            # Write the entire tree to file descriptor
+            fd.write(tree.encode('utf-8'))
+            fd.close()
         return path
 
     if filetype == "yaml":
