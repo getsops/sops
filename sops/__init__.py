@@ -39,7 +39,7 @@ else:
 if sys.version_info[0] == 3:
     raw_input = input
 
-VERSION = '1.14'
+VERSION = '1.15'
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
@@ -1487,6 +1487,9 @@ class ShowVersion(argparse.Action):
 
 
 def check_latest_version():
+    print("INFO: You're using Sops 1 written in Python."
+          " Sops 2 was rewritten in Go. Consider installing it with:"
+          " $ go get -u go.mozilla.org/sops/cmd/sops")
     try:
         import xmlrpclib
     except ImportError:
@@ -1495,11 +1498,12 @@ def check_latest_version():
         client = xmlrpclib.ServerProxy('https://pypi.python.org/pypi')
         latest = client.package_releases('sops')[0]
         if A_is_newer_than_B(latest, VERSION):
-            install_str = "pip install sops==" + latest
             if platform.system() == 'Darwin':
-                install_str = "brew update && brew upgrade sops"
-            print("INFO: your version of sops is outdated."
-                  " Install the latest with " + install_str)
+                print("INFO: to update to sops " + latest + ", use:"
+                      " $ brew update && brew upgrade sops")
+            else:
+                print("INFO: to update to sops " + latest + ", use:"
+                      " $ pip install sops=="+latest)
     except:
         pass
 
