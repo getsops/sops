@@ -25,7 +25,7 @@ func printVersion(c *cli.Context) {
 	if outdated {
 		out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u go.mozilla.org/sops/cmd/sops`\n", upstreamVersion)
 	} else {
-		out += " (latest)"
+		out += " (latest)\n"
 	}
 	fmt.Fprintf(c.App.Writer, "%s", out)
 }
