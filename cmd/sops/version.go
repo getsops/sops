@@ -13,17 +13,19 @@ import (
 const version = "2.0.0"
 
 func printVersion(c *cli.Context) {
-	out := fmt.Sprintf("%s %s\n", c.App.Name, c.App.Version)
+	out := fmt.Sprintf("%s %s", c.App.Name, c.App.Version)
 	upstreamVersion, err := retrieveLatestVersionFromUpstream()
 	if err != nil {
-		out += fmt.Sprintf("[warning] failed to retrieve latest version from upstream: %v\n", err)
+		out += fmt.Sprintf("\n[warning] failed to retrieve latest version from upstream: %v\n", err)
 	}
 	outdated, err := AIsNewerThanB(upstreamVersion, version)
 	if err != nil {
-		out += fmt.Sprintf("[warning] failed to compare current version with latest: %v\n", err)
+		out += fmt.Sprintf("\n[warning] failed to compare current version with latest: %v\n", err)
 	}
 	if outdated {
-		out += fmt.Sprintf("[info] sops %s is available, update with `go get -u go.mozilla.org/sops/cmd/sops`\n", upstreamVersion)
+		out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u go.mozilla.org/sops/cmd/sops`\n", upstreamVersion)
+	} else {
+		out += " (latest)"
 	}
 	fmt.Fprintf(c.App.Writer, "%s", out)
 }
