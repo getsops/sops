@@ -48,9 +48,8 @@ const (
 	exitNoEncryptionKeyFound                   int = 111
 	exitFileHasNotBeenModified                 int = 200
 	exitNoEditorFound                          int = 201
+	exitFailedToCompareVersions                int = 202
 )
-
-const version = "2.0-beta"
 
 func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes []byte) (tree sops.Tree, err error) {
 	branch, err := store.Unmarshal(fileBytes)
@@ -87,6 +86,7 @@ func loadEncryptedFile(c *cli.Context, store sops.Store, fileBytes []byte) (tree
 }
 
 func main() {
+	cli.VersionPrinter = printVersion
 	app := cli.NewApp()
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
@@ -681,7 +681,13 @@ func edit(c *cli.Context, file string, fileBytes []byte) ([]byte, error) {
 				tree.Metadata = metadata
 			}
 			tree.Branch = newBranch
-			tree.Metadata.Version = version
+			needVersionUpdated, err := A_is_newer_than_B(version, tree.Metadata.Version)
+			if err != nil {
+				return nil, cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", tree.Metadata.Version, version, err), exitFailedToCompareVersions)
+			}
+			if needVersionUpdated {
+				tree.Metadata.Version = version
+			}
 			if tree.Metadata.MasterKeyCount() == 0 {
 				fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
 				bufio.NewReader(os.Stdin).ReadByte()
