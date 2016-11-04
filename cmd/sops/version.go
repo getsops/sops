@@ -18,7 +18,7 @@ func printVersion(c *cli.Context) {
 	if err != nil {
 		out += fmt.Sprintf("[warning] failed to retrieve latest version from upstream: %v\n", err)
 	}
-	outdated, err := A_is_newer_than_B(upstreamVersion, version)
+	outdated, err := AIsNewerThanB(upstreamVersion, version)
 	if err != nil {
 		out += fmt.Sprintf("[warning] failed to compare current version with latest: %v\n", err)
 	}
@@ -28,9 +28,9 @@ func printVersion(c *cli.Context) {
 	fmt.Fprintf(c.App.Writer, "%s", out)
 }
 
-// A_is_newer_than_B takes 2 semver strings are returns true
+// AIsNewerThanB takes 2 semver strings are returns true
 // is the A is newer than B, false otherwise
-func A_is_newer_than_B(A, B string) (bool, error) {
+func AIsNewerThanB(A, B string) (bool, error) {
 	vA, err := semver.Make(A)
 	if err != nil {
 		return false, err

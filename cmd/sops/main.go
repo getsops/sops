@@ -681,7 +681,7 @@ func edit(c *cli.Context, file string, fileBytes []byte) ([]byte, error) {
 				tree.Metadata = metadata
 			}
 			tree.Branch = newBranch
-			needVersionUpdated, err := A_is_newer_than_B(version, tree.Metadata.Version)
+			needVersionUpdated, err := AIsNewerThanB(version, tree.Metadata.Version)
 			if err != nil {
 				return nil, cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", tree.Metadata.Version, version, err), exitFailedToCompareVersions)
 			}
