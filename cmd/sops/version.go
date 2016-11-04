@@ -56,7 +56,7 @@ func retrieveLatestVersionFromUpstream() (string, error) {
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if len(line) > 20 && line[0:17] == `const version = "` {
+		if strings.HasPrefix(line, `const version = "`) {
 			comps := strings.Split(line, `"`)
 			if len(comps) < 2 {
 				return "", fmt.Errorf("Failed to parse version from upstream source")
