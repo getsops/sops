@@ -18,6 +18,17 @@ Install **sops** with:
 
 (requires Go >= 1.6)
 
+If you don't have Go installed, set it up with:
+
+.. code:: bash
+
+	$ {apt,yum,brew} install golang
+	$ echo 'GOPATH=~/go' >> ~/.bashrc
+	$ source ~/.bashrc
+	$ mkdir $GOPATH
+
+Or whatever variation of the above fits your system and shell.
+
 **Questions?** ping "ulfr" in `#security` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
 (use a web client like `mibbit <https://chat.mibbit.com>`_ ).
 
