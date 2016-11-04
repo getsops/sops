@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "CaUaJLLnql96d2JGRgCpYsKomxw=",
+			"path": "github.com/neelance/astrewrite",
+			"revision": "99348263ae862cc230986ce88deaddbf7edcc034",
+			"revisionTime": "2016-05-11T09:36:45Z"
+		}
+	],
+	"rootPath": "github.com/gopherjs/gopherjs/compiler"
+}

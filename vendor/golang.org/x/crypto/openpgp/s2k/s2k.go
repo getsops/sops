@@ -4,7 +4,7 @@
 
 // Package s2k implements the various OpenPGP string-to-key transforms as
 // specified in RFC 4800 section 3.7.1.
-package s2k
+package s2k // import "golang.org/x/crypto/openpgp/s2k"
 
 import (
 	"crypto"

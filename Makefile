@@ -19,7 +19,7 @@ lint:
 	$(GOLINT) $(PROJECT)
 
 vendor:
-	godep save ./...
+	govend -u
 
 vet:
 	$(GO) vet $(PROJECT)

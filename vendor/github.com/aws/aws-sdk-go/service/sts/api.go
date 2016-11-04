@@ -1094,6 +1094,48 @@ func (s *AssumeRoleInput) Validate() error {
 	return nil
 }
 
+// SetDurationSeconds sets the DurationSeconds field's value.
+func (s *AssumeRoleInput) SetDurationSeconds(v int64) *AssumeRoleInput {
+	s.DurationSeconds = &v
+	return s
+}
+
+// SetExternalId sets the ExternalId field's value.
+func (s *AssumeRoleInput) SetExternalId(v string) *AssumeRoleInput {
+	s.ExternalId = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *AssumeRoleInput) SetPolicy(v string) *AssumeRoleInput {
+	s.Policy = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *AssumeRoleInput) SetRoleArn(v string) *AssumeRoleInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetRoleSessionName sets the RoleSessionName field's value.
+func (s *AssumeRoleInput) SetRoleSessionName(v string) *AssumeRoleInput {
+	s.RoleSessionName = &v
+	return s
+}
+
+// SetSerialNumber sets the SerialNumber field's value.
+func (s *AssumeRoleInput) SetSerialNumber(v string) *AssumeRoleInput {
+	s.SerialNumber = &v
+	return s
+}
+
+// SetTokenCode sets the TokenCode field's value.
+func (s *AssumeRoleInput) SetTokenCode(v string) *AssumeRoleInput {
+	s.TokenCode = &v
+	return s
+}
+
 // Contains the response to a successful AssumeRole request, including temporary
 // AWS credentials that can be used to make AWS requests.
 type AssumeRoleOutput struct {
@@ -1129,6 +1171,24 @@ func (s AssumeRoleOutput) String() string {
 // GoString returns the string representation
 func (s AssumeRoleOutput) GoString() string {
 	return s.String()
+}
+
+// SetAssumedRoleUser sets the AssumedRoleUser field's value.
+func (s *AssumeRoleOutput) SetAssumedRoleUser(v *AssumedRoleUser) *AssumeRoleOutput {
+	s.AssumedRoleUser = v
+	return s
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *AssumeRoleOutput) SetCredentials(v *Credentials) *AssumeRoleOutput {
+	s.Credentials = v
+	return s
+}
+
+// SetPackedPolicySize sets the PackedPolicySize field's value.
+func (s *AssumeRoleOutput) SetPackedPolicySize(v int64) *AssumeRoleOutput {
+	s.PackedPolicySize = &v
+	return s
 }
 
 type AssumeRoleWithSAMLInput struct {
@@ -1239,6 +1299,36 @@ func (s *AssumeRoleWithSAMLInput) Validate() error {
 	return nil
 }
 
+// SetDurationSeconds sets the DurationSeconds field's value.
+func (s *AssumeRoleWithSAMLInput) SetDurationSeconds(v int64) *AssumeRoleWithSAMLInput {
+	s.DurationSeconds = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *AssumeRoleWithSAMLInput) SetPolicy(v string) *AssumeRoleWithSAMLInput {
+	s.Policy = &v
+	return s
+}
+
+// SetPrincipalArn sets the PrincipalArn field's value.
+func (s *AssumeRoleWithSAMLInput) SetPrincipalArn(v string) *AssumeRoleWithSAMLInput {
+	s.PrincipalArn = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *AssumeRoleWithSAMLInput) SetRoleArn(v string) *AssumeRoleWithSAMLInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSAMLAssertion sets the SAMLAssertion field's value.
+func (s *AssumeRoleWithSAMLInput) SetSAMLAssertion(v string) *AssumeRoleWithSAMLInput {
+	s.SAMLAssertion = &v
+	return s
+}
+
 // Contains the response to a successful AssumeRoleWithSAML request, including
 // temporary AWS credentials that can be used to make AWS requests.
 type AssumeRoleWithSAMLOutput struct {
@@ -1302,6 +1392,54 @@ func (s AssumeRoleWithSAMLOutput) String() string {
 // GoString returns the string representation
 func (s AssumeRoleWithSAMLOutput) GoString() string {
 	return s.String()
+}
+
+// SetAssumedRoleUser sets the AssumedRoleUser field's value.
+func (s *AssumeRoleWithSAMLOutput) SetAssumedRoleUser(v *AssumedRoleUser) *AssumeRoleWithSAMLOutput {
+	s.AssumedRoleUser = v
+	return s
+}
+
+// SetAudience sets the Audience field's value.
+func (s *AssumeRoleWithSAMLOutput) SetAudience(v string) *AssumeRoleWithSAMLOutput {
+	s.Audience = &v
+	return s
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *AssumeRoleWithSAMLOutput) SetCredentials(v *Credentials) *AssumeRoleWithSAMLOutput {
+	s.Credentials = v
+	return s
+}
+
+// SetIssuer sets the Issuer field's value.
+func (s *AssumeRoleWithSAMLOutput) SetIssuer(v string) *AssumeRoleWithSAMLOutput {
+	s.Issuer = &v
+	return s
+}
+
+// SetNameQualifier sets the NameQualifier field's value.
+func (s *AssumeRoleWithSAMLOutput) SetNameQualifier(v string) *AssumeRoleWithSAMLOutput {
+	s.NameQualifier = &v
+	return s
+}
+
+// SetPackedPolicySize sets the PackedPolicySize field's value.
+func (s *AssumeRoleWithSAMLOutput) SetPackedPolicySize(v int64) *AssumeRoleWithSAMLOutput {
+	s.PackedPolicySize = &v
+	return s
+}
+
+// SetSubject sets the Subject field's value.
+func (s *AssumeRoleWithSAMLOutput) SetSubject(v string) *AssumeRoleWithSAMLOutput {
+	s.Subject = &v
+	return s
+}
+
+// SetSubjectType sets the SubjectType field's value.
+func (s *AssumeRoleWithSAMLOutput) SetSubjectType(v string) *AssumeRoleWithSAMLOutput {
+	s.SubjectType = &v
+	return s
 }
 
 type AssumeRoleWithWebIdentityInput struct {
@@ -1429,6 +1567,42 @@ func (s *AssumeRoleWithWebIdentityInput) Validate() error {
 	return nil
 }
 
+// SetDurationSeconds sets the DurationSeconds field's value.
+func (s *AssumeRoleWithWebIdentityInput) SetDurationSeconds(v int64) *AssumeRoleWithWebIdentityInput {
+	s.DurationSeconds = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *AssumeRoleWithWebIdentityInput) SetPolicy(v string) *AssumeRoleWithWebIdentityInput {
+	s.Policy = &v
+	return s
+}
+
+// SetProviderId sets the ProviderId field's value.
+func (s *AssumeRoleWithWebIdentityInput) SetProviderId(v string) *AssumeRoleWithWebIdentityInput {
+	s.ProviderId = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *AssumeRoleWithWebIdentityInput) SetRoleArn(v string) *AssumeRoleWithWebIdentityInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetRoleSessionName sets the RoleSessionName field's value.
+func (s *AssumeRoleWithWebIdentityInput) SetRoleSessionName(v string) *AssumeRoleWithWebIdentityInput {
+	s.RoleSessionName = &v
+	return s
+}
+
+// SetWebIdentityToken sets the WebIdentityToken field's value.
+func (s *AssumeRoleWithWebIdentityInput) SetWebIdentityToken(v string) *AssumeRoleWithWebIdentityInput {
+	s.WebIdentityToken = &v
+	return s
+}
+
 // Contains the response to a successful AssumeRoleWithWebIdentity request,
 // including temporary AWS credentials that can be used to make AWS requests.
 type AssumeRoleWithWebIdentityOutput struct {
@@ -1485,6 +1659,42 @@ func (s AssumeRoleWithWebIdentityOutput) GoString() string {
 	return s.String()
 }
 
+// SetAssumedRoleUser sets the AssumedRoleUser field's value.
+func (s *AssumeRoleWithWebIdentityOutput) SetAssumedRoleUser(v *AssumedRoleUser) *AssumeRoleWithWebIdentityOutput {
+	s.AssumedRoleUser = v
+	return s
+}
+
+// SetAudience sets the Audience field's value.
+func (s *AssumeRoleWithWebIdentityOutput) SetAudience(v string) *AssumeRoleWithWebIdentityOutput {
+	s.Audience = &v
+	return s
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *AssumeRoleWithWebIdentityOutput) SetCredentials(v *Credentials) *AssumeRoleWithWebIdentityOutput {
+	s.Credentials = v
+	return s
+}
+
+// SetPackedPolicySize sets the PackedPolicySize field's value.
+func (s *AssumeRoleWithWebIdentityOutput) SetPackedPolicySize(v int64) *AssumeRoleWithWebIdentityOutput {
+	s.PackedPolicySize = &v
+	return s
+}
+
+// SetProvider sets the Provider field's value.
+func (s *AssumeRoleWithWebIdentityOutput) SetProvider(v string) *AssumeRoleWithWebIdentityOutput {
+	s.Provider = &v
+	return s
+}
+
+// SetSubjectFromWebIdentityToken sets the SubjectFromWebIdentityToken field's value.
+func (s *AssumeRoleWithWebIdentityOutput) SetSubjectFromWebIdentityToken(v string) *AssumeRoleWithWebIdentityOutput {
+	s.SubjectFromWebIdentityToken = &v
+	return s
+}
+
 // The identifiers for the temporary security credentials that the operation
 // returns.
 type AssumedRoleUser struct {
@@ -1514,6 +1724,18 @@ func (s AssumedRoleUser) String() string {
 // GoString returns the string representation
 func (s AssumedRoleUser) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *AssumedRoleUser) SetArn(v string) *AssumedRoleUser {
+	s.Arn = &v
+	return s
+}
+
+// SetAssumedRoleId sets the AssumedRoleId field's value.
+func (s *AssumedRoleUser) SetAssumedRoleId(v string) *AssumedRoleUser {
+	s.AssumedRoleId = &v
+	return s
 }
 
 // AWS credentials for API authentication.
@@ -1551,6 +1773,30 @@ func (s Credentials) GoString() string {
 	return s.String()
 }
 
+// SetAccessKeyId sets the AccessKeyId field's value.
+func (s *Credentials) SetAccessKeyId(v string) *Credentials {
+	s.AccessKeyId = &v
+	return s
+}
+
+// SetExpiration sets the Expiration field's value.
+func (s *Credentials) SetExpiration(v time.Time) *Credentials {
+	s.Expiration = &v
+	return s
+}
+
+// SetSecretAccessKey sets the SecretAccessKey field's value.
+func (s *Credentials) SetSecretAccessKey(v string) *Credentials {
+	s.SecretAccessKey = &v
+	return s
+}
+
+// SetSessionToken sets the SessionToken field's value.
+func (s *Credentials) SetSessionToken(v string) *Credentials {
+	s.SessionToken = &v
+	return s
+}
+
 type DecodeAuthorizationMessageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1586,6 +1832,12 @@ func (s *DecodeAuthorizationMessageInput) Validate() error {
 	return nil
 }
 
+// SetEncodedMessage sets the EncodedMessage field's value.
+func (s *DecodeAuthorizationMessageInput) SetEncodedMessage(v string) *DecodeAuthorizationMessageInput {
+	s.EncodedMessage = &v
+	return s
+}
+
 // A document that contains additional information about the authorization status
 // of a request from an encoded message that is returned in response to an AWS
 // request.
@@ -1604,6 +1856,12 @@ func (s DecodeAuthorizationMessageOutput) String() string {
 // GoString returns the string representation
 func (s DecodeAuthorizationMessageOutput) GoString() string {
 	return s.String()
+}
+
+// SetDecodedMessage sets the DecodedMessage field's value.
+func (s *DecodeAuthorizationMessageOutput) SetDecodedMessage(v string) *DecodeAuthorizationMessageOutput {
+	s.DecodedMessage = &v
+	return s
 }
 
 // Identifiers for the federated user that is associated with the credentials.
@@ -1633,6 +1891,18 @@ func (s FederatedUser) String() string {
 // GoString returns the string representation
 func (s FederatedUser) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *FederatedUser) SetArn(v string) *FederatedUser {
+	s.Arn = &v
+	return s
+}
+
+// SetFederatedUserId sets the FederatedUserId field's value.
+func (s *FederatedUser) SetFederatedUserId(v string) *FederatedUser {
+	s.FederatedUserId = &v
+	return s
 }
 
 type GetCallerIdentityInput struct {
@@ -1676,6 +1946,24 @@ func (s GetCallerIdentityOutput) String() string {
 // GoString returns the string representation
 func (s GetCallerIdentityOutput) GoString() string {
 	return s.String()
+}
+
+// SetAccount sets the Account field's value.
+func (s *GetCallerIdentityOutput) SetAccount(v string) *GetCallerIdentityOutput {
+	s.Account = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetCallerIdentityOutput) SetArn(v string) *GetCallerIdentityOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *GetCallerIdentityOutput) SetUserId(v string) *GetCallerIdentityOutput {
+	s.UserId = &v
+	return s
 }
 
 type GetFederationTokenInput struct {
@@ -1767,6 +2055,24 @@ func (s *GetFederationTokenInput) Validate() error {
 	return nil
 }
 
+// SetDurationSeconds sets the DurationSeconds field's value.
+func (s *GetFederationTokenInput) SetDurationSeconds(v int64) *GetFederationTokenInput {
+	s.DurationSeconds = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetFederationTokenInput) SetName(v string) *GetFederationTokenInput {
+	s.Name = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *GetFederationTokenInput) SetPolicy(v string) *GetFederationTokenInput {
+	s.Policy = &v
+	return s
+}
+
 // Contains the response to a successful GetFederationToken request, including
 // temporary AWS credentials that can be used to make AWS requests.
 type GetFederationTokenOutput struct {
@@ -1801,6 +2107,24 @@ func (s GetFederationTokenOutput) String() string {
 // GoString returns the string representation
 func (s GetFederationTokenOutput) GoString() string {
 	return s.String()
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *GetFederationTokenOutput) SetCredentials(v *Credentials) *GetFederationTokenOutput {
+	s.Credentials = v
+	return s
+}
+
+// SetFederatedUser sets the FederatedUser field's value.
+func (s *GetFederationTokenOutput) SetFederatedUser(v *FederatedUser) *GetFederationTokenOutput {
+	s.FederatedUser = v
+	return s
+}
+
+// SetPackedPolicySize sets the PackedPolicySize field's value.
+func (s *GetFederationTokenOutput) SetPackedPolicySize(v int64) *GetFederationTokenOutput {
+	s.PackedPolicySize = &v
+	return s
 }
 
 type GetSessionTokenInput struct {
@@ -1868,6 +2192,24 @@ func (s *GetSessionTokenInput) Validate() error {
 	return nil
 }
 
+// SetDurationSeconds sets the DurationSeconds field's value.
+func (s *GetSessionTokenInput) SetDurationSeconds(v int64) *GetSessionTokenInput {
+	s.DurationSeconds = &v
+	return s
+}
+
+// SetSerialNumber sets the SerialNumber field's value.
+func (s *GetSessionTokenInput) SetSerialNumber(v string) *GetSessionTokenInput {
+	s.SerialNumber = &v
+	return s
+}
+
+// SetTokenCode sets the TokenCode field's value.
+func (s *GetSessionTokenInput) SetTokenCode(v string) *GetSessionTokenInput {
+	s.TokenCode = &v
+	return s
+}
+
 // Contains the response to a successful GetSessionToken request, including
 // temporary AWS credentials that can be used to make AWS requests.
 type GetSessionTokenOutput struct {
@@ -1891,4 +2233,10 @@ func (s GetSessionTokenOutput) String() string {
 // GoString returns the string representation
 func (s GetSessionTokenOutput) GoString() string {
 	return s.String()
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *GetSessionTokenOutput) SetCredentials(v *Credentials) *GetSessionTokenOutput {
+	s.Credentials = v
+	return s
 }
