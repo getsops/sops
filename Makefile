@@ -4,7 +4,6 @@
 
 PROJECT		:= go.mozilla.org/sops
 GO 		:= GO15VENDOREXPERIMENT=1 go
-GOGETTER	:= GOPATH=$(shell pwd)/.tmpdeps go get -d
 GOLINT 		:= golint
 
 all: test vet generate install
@@ -19,7 +18,7 @@ lint:
 	$(GOLINT) $(PROJECT)
 
 vendor:
-	godep save ./...
+	govend -u
 
 vet:
 	$(GO) vet $(PROJECT)

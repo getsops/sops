@@ -19,7 +19,7 @@ limitations under the License.
 // Forked from https://camlistore.googlesource.com/camlistore/+/master/pkg/misc/gpgagent/
 
 // Package gpgagent interacts with the local GPG Agent.
-package gopgagent
+package gopgagent /* import "go.mozilla.org/gopgagent" */
 
 import (
 	"bufio"

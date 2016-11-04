@@ -1,11 +1,10 @@
 language: go
 go:
+  - 1.6
+  - 1.7
   - tip
 go_import_path: go.mozilla.org/sops/
-before_install:
-  - go get -t -v ./...
 script:
-  - make test
-  
+  - make
 after_success:
   - bash <(curl -s https://codecov.io/bash)
