@@ -33,6 +33,12 @@ func printVersion(c *cli.Context) {
 // AIsNewerThanB takes 2 semver strings are returns true
 // is the A is newer than B, false otherwise
 func AIsNewerThanB(A, B string) (bool, error) {
+	if strings.HasPrefix(B, "1.") {
+		// sops 1.0 doesn't use the semver format, which will
+		// fail the call to `make` below. Since we now we're
+		// more recent than 1.X anyway, return true right away
+		return true, nil
+	}
 	vA, err := semver.Make(A)
 	if err != nil {
 		return false, err
