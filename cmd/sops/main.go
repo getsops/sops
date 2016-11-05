@@ -427,6 +427,7 @@ func encryptTree(tree sops.Tree, stash map[string][]interface{}) (sops.Tree, err
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
+	tree.Metadata.LastModified = time.Now().UTC()
 	encryptedMac, err := cipher.Encrypt(computedMac, key, tree.Metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
