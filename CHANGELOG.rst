@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0
----
+2.0.0
+-----
 
 * [major] rewrite in Go
 
