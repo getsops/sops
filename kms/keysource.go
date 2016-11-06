@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -169,6 +170,7 @@ func (key MasterKey) ToMap() map[string]string {
 		for k, v := range key.EncryptionContext {
 			outContexts = append(outContexts, k+":"+*v)
 		}
+		sort.Strings(outContexts)
 		out["context"] = strings.Join(outContexts, ",")
 	}
 	return out
