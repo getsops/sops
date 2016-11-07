@@ -326,7 +326,7 @@ func outputStore(context *cli.Context, path string) sops.Store {
 }
 
 func defaultStore(path string) sops.Store {
-	if strings.HasSuffix(path, ".yaml") {
+	if strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml") {
 		return &yaml.Store{}
 	} else if strings.HasSuffix(path, ".json") {
 		return &json.Store{}
