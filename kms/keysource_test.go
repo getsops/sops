@@ -87,6 +87,7 @@ func TestParseEncryptionContext(t *testing.T) {
 func TestKeyToMap(t *testing.T) {
 	value1 := "value1"
 	value2 := "value2"
+	value3 := "value3"
 	key := MasterKey{
 		CreationDate: time.Date(2016, time.October, 31, 10, 0, 0, 0, time.UTC),
 		Arn:          "foo",
@@ -95,6 +96,7 @@ func TestKeyToMap(t *testing.T) {
 		EncryptionContext: map[string]*string{
 			"key1": &value1,
 			"key2": &value2,
+			"AAA_this_key_should_be_first": &value3,
 		},
 	}
 	assert.Equal(t, map[string]string{
@@ -102,6 +104,6 @@ func TestKeyToMap(t *testing.T) {
 		"role":       "bar",
 		"enc":        "this is encrypted",
 		"created_at": "2016-10-31T10:00:00Z",
-		"context":    "key1:value1,key2:value2",
+		"context":    "AAA_this_key_should_be_first:value3,key1:value1,key2:value2",
 	}, key.ToMap())
 }
