@@ -135,49 +135,72 @@ func (store Store) treeBranchFromJSONDecoder(dec *json.Decoder) (sops.TreeBranch
 	}
 }
 
-func (store Store) encodeValue(v interface{}, pad string) ([]byte, error) {
+func (store Store) encodeValue(v interface{}) ([]byte, error) {
 	switch v := v.(type) {
 	case sops.TreeBranch:
-		return store.encodeTree(v, pad+"\t")
+		return store.encodeTree(v)
 	case []interface{}:
-		// Remove all comments
-		for i, value := range v {
-			if _, ok := value.(sops.Comment); ok {
-				v = append(v[:i], v[i+1:]...)
-			}
-		}
-		return json.Marshal(v)
+		return store.encodeArray(v)
 	default:
 		return json.Marshal(v)
 	}
 }
 
-func (store Store) encodeTree(tree sops.TreeBranch, pad string) ([]byte, error) {
-	out := pad + "{\n"
+func (store Store) encodeArray(array []interface{}) ([]byte, error) {
+	out := "["
+	for i, item := range array {
+		if _, ok := item.(sops.Comment); ok {
+			continue
+		}
+		v, err := store.encodeValue(item)
+		if err != nil {
+			return nil, err
+		}
+		out += string(v)
+		if i != len(array)-1 {
+			out += ","
+		}
+	}
+	out += "]"
+	return []byte(out), nil
+}
+
+func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
+	out := "{"
 	for i, item := range tree {
 		if _, ok := item.Key.(sops.Comment); ok {
 			continue
 		}
-		v, err := store.encodeValue(item.Value, pad)
+		v, err := store.encodeValue(item.Value)
 		if err != nil {
 			return nil, fmt.Errorf("Error encoding value %s: %s", v, err)
 		}
-		out += pad + "\t" + `"` + item.Key.(string) + `": ` + string(v)
+		out += `"` + item.Key.(string) + `": ` + string(v)
 		if i != len(tree)-1 {
-			out += ",\n"
+			out += ","
 		}
 	}
-	return []byte(out + "\n" + pad + "}"), nil
+	return []byte(out + "}"), nil
 }
 
 func (store Store) jsonFromTreeBranch(branch sops.TreeBranch) ([]byte, error) {
-	return store.encodeTree(branch, "")
+	out, err := store.encodeTree(branch)
+	if err != nil {
+		return nil, err
+	}
+	return store.reindentJSON(out)
 }
 
 func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 	dec := json.NewDecoder(bytes.NewReader(in))
 	dec.Token()
 	return store.treeBranchFromJSONDecoder(dec)
+}
+
+func (store Store) reindentJSON(in []byte) ([]byte, error) {
+	var out bytes.Buffer
+	err := json.Indent(&out, in, "", "\t")
+	return out.Bytes(), err
 }
 
 // Unmarshal takes an input json string and returns a sops tree branch

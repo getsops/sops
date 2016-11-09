@@ -211,3 +211,36 @@ func TestEncodeSimpleJSON(t *testing.T) {
 	expected, _ := Store{}.treeBranchFromJSON(out)
 	assert.Equal(t, expected, branch)
 }
+
+func TestEncodeJSONArrayOfObjects(t *testing.T) {
+	branch := sops.TreeBranch{
+		sops.TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				sops.TreeBranch{
+					sops.TreeItem{
+						Key:   "foo",
+						Value: 3,
+					},
+					sops.TreeItem{
+						Key:   "bar",
+						Value: false,
+					},
+				},
+				2,
+			},
+		},
+	}
+	expected := `{
+	"foo": [
+		{
+			"foo": 3,
+			"bar": false
+		},
+		2
+	]
+}`
+	out, err := Store{}.Marshal(branch)
+	assert.Nil(t, err)
+	assert.Equal(t, expected, string(out))
+}
