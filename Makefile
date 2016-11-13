@@ -6,7 +6,7 @@ PROJECT		:= go.mozilla.org/sops
 GO 		:= GO15VENDOREXPERIMENT=1 go
 GOLINT 		:= golint
 
-all: test vet generate install
+all: test vet generate install functional-tests
 
 install:
 	$(GO) install go.mozilla.org/sops/cmd/sops
@@ -40,4 +40,8 @@ showcoverage: test
 generate:
 	$(GO) generate
 
-.PHONY: all test generate clean vendor
+functional-tests:
+	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
+	cd functional-tests && cargo test
+
+.PHONY: all test generate clean vendor functional-tests
