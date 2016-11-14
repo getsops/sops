@@ -13,78 +13,13 @@ mod tests {
     use std::io::Write;
     use tempdir::TempDir;
     use std::process::Command;
-    use std::collections::BTreeMap;
+    use serde_yaml::Value;
     const SOPS_BINARY_PATH: &'static str = "./sops";
-
-    // Boring code to use a single value enum instead of one for each json and yaml
-    
-    #[derive(PartialOrd, Ord, Eq, PartialEq, Debug)]
-    enum Value {
-        String(String),
-        Mapping(BTreeMap<Value, Value>),
-        Sequence(Vec<Value>),
-        Null,
-    }
-
-    impl From<serde_yaml::Value> for Value {
-        fn from(val: serde_yaml::Value) -> Value {
-            match val {
-                serde_yaml::Value::String(s) => Value::String(s),
-                serde_yaml::Value::Mapping(m) => {
-                    let mut map: BTreeMap<Value, Value> = BTreeMap::new();
-                    for (key, value) in m {
-                        map.insert(key.into(), value.into());
-                    }
-                    Value::Mapping(map)
-                }
-                serde_yaml::Value::Null => Value::Null,
-                serde_yaml::Value::Sequence(in_vec) => {
-                    let mut vec: Vec<Value> = Vec::new();
-                    for v in in_vec {
-                        vec.push(v.into());
-                    }
-                    Value::Sequence(vec)
-                }
-                _ => unreachable!("{:?}", val),
-            }
-        }
-    }
-
-    impl From<serde_json::Value> for Value {
-        fn from(val: serde_json::Value) -> Value {
-            match val {
-                serde_json::Value::String(s) => Value::String(s),
-                serde_json::Value::Object(m) => {
-                    let mut map: BTreeMap<Value, Value> = BTreeMap::new();
-                    for (key, value) in m {
-                        map.insert(key.as_str().into(), value.into());
-                    }
-                    Value::Mapping(map)
-                }
-                serde_json::Value::Null => Value::Null,
-                serde_json::Value::Array(in_vec) => {
-                    let mut vec: Vec<Value> = Vec::new();
-                    for v in in_vec {
-                        vec.push(v.into());
-                    }
-                    Value::Sequence(vec)
-                }
-                _ => unreachable!("{:?}", val),
-            }
-        }
-    }
-
-    impl<'a> From<&'a str> for Value {
-        fn from(val: &'a str) -> Value {
-            Value::String(val.to_owned())
-        }
-    }
 
     macro_rules! assert_encrypted {
         ($object:expr, $key:expr) => {
-            let key : Value = $key.into();
-            assert!($object.get(&key).is_some());
-            match *$object.get(&key).unwrap() {
+            assert!($object.get(&$key).is_some());
+            match *$object.get(&$key).unwrap() {
                 Value::String(ref s) => {
                    assert!(s.starts_with("ENC["), "Value is not encrypted");
                 }
@@ -121,14 +56,14 @@ mod tests {
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
         let json = &String::from_utf8_lossy(&output.stdout);
-        let data: serde_json::Value = serde_json::from_str(json)
+        let data: Value = serde_json::from_str(json)
             .expect("Error parsing sops's JSON output");
         match data.into() {
             Value::Mapping(m) => {
-                assert!(m.get(&"sops".into()).is_some(),
+                assert!(m.get(&Value::String("sops".to_owned())).is_some(),
                         "sops metadata branch not found");
-                assert_encrypted!(&m, "foo");
-                assert_encrypted!(&m, "bar");
+                assert_encrypted!(&m, Value::String("foo".to_owned()));
+                assert_encrypted!(&m, Value::String("bar".to_owned()));
             }
             _ => panic!("sops's JSON output is not an object"),
         }
@@ -146,14 +81,13 @@ bar: baz");
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
         let json = &String::from_utf8_lossy(&output.stdout);
-        let data: serde_yaml::Value = serde_yaml::from_str(&json)
-            .expect("Error parsing sops's JSON output");
+        let data: Value = serde_yaml::from_str(&json).expect("Error parsing sops's JSON output");
         match data.into() {
             Value::Mapping(m) => {
-                assert!(m.get(&"sops".into()).is_some(),
+                assert!(m.get(&Value::String("sops".to_owned())).is_some(),
                         "sops metadata branch not found");
-                assert_encrypted!(&m, "foo");
-                assert_encrypted!(&m, "bar");
+                assert_encrypted!(&m, Value::String("foo".to_owned()));
+                assert_encrypted!(&m, Value::String("bar".to_owned()));
             }
             _ => panic!("sops's YAML output is not a mapping"),
         }
