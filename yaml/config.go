@@ -65,7 +65,7 @@ func (f *configFile) load(bytes []byte) error {
 // MasterKeyStringsForFile returns a comma separated string of KMS ARNs and a comma separated list of PGP fingerprints. If the config bytes are left empty, the function will look for the config file by itself.
 func MasterKeyStringsForFile(filepath string, confBytes []byte) (kms, pgp string, err error) {
 	if confBytes == nil {
-		confPath, err := FindConfigFile(filepath)
+		confPath, err := FindConfigFile(".")
 		if err != nil {
 			return "", "", err
 		}
