@@ -39,7 +39,7 @@ func (store BinaryStore) MarshalWithMetadata(tree sops.TreeBranch, metadata sops
 
 // MarshalValue is unusable for BinaryStore
 func (store BinaryStore) MarshalValue(v interface{}) ([]byte, error) {
-	panic("BinaryStore can not marshal a single value")
+	return nil, fmt.Errorf("Binary files are not structured and extracting a single value is not possible")
 }
 
 // Unmarshal takes an input byte slice and returns a sops tree branch
