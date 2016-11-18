@@ -37,6 +37,11 @@ func (store BinaryStore) MarshalWithMetadata(tree sops.TreeBranch, metadata sops
 	return store.store.MarshalWithMetadata(tree, metadata)
 }
 
+// MarshalValue is unusable for BinaryStore
+func (store BinaryStore) MarshalValue(v interface{}) ([]byte, error) {
+	panic("BinaryStore can not marshal a single value")
+}
+
 // Unmarshal takes an input byte slice and returns a sops tree branch
 func (store BinaryStore) Unmarshal(in []byte) (sops.TreeBranch, error) {
 	branch, err := store.store.Unmarshal(in)
@@ -234,6 +239,15 @@ func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metad
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
 	}
 	return out, nil
+}
+
+// MarshalValue takes any value and returns a json formatted string
+func (store Store) MarshalValue(v interface{}) ([]byte, error) {
+	s, err := store.encodeValue(v)
+	if err != nil {
+		return nil, err
+	}
+	return store.reindentJSON(s)
 }
 
 // UnmarshalMetadata takes a json string and extracts sops' metadata from it

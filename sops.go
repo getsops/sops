@@ -273,6 +273,7 @@ type Store interface {
 	UnmarshalMetadata(in []byte) (Metadata, error)
 	Marshal(TreeBranch) ([]byte, error)
 	MarshalWithMetadata(TreeBranch, Metadata) ([]byte, error)
+	MarshalValue(interface{}) ([]byte, error)
 }
 
 // MasterKeyCount returns the number of master keys available
