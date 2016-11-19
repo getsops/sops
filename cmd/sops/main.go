@@ -354,6 +354,9 @@ func decryptTree(tree sops.Tree, ignoreMac bool) (sops.Tree, map[string][]interf
 
 func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, error) {
 	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"))
+	if err != nil {
+		return nil, err
+	}
 	if c.String("extract") != "" {
 		v, err := tree.Branch.Truncate(c.String("extract"))
 		if err != nil {
