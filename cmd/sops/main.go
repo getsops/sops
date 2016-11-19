@@ -365,7 +365,7 @@ func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, er
 		if newBranch, ok := v.(sops.TreeBranch); ok {
 			tree.Branch = newBranch
 		} else {
-			bytes, err := sops.ToBytes(v)
+			bytes, err := outputStore.MarshalValue(v)
 			if err != nil {
 				return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), exitErrorDumpingTree)
 			}
