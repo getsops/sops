@@ -288,7 +288,7 @@ func runEditor(path string) error {
 	editor := os.Getenv("EDITOR")
 	var cmd *exec.Cmd
 	if editor == "" {
-		cmd := exec.Command("which", "vim", "nano")
+		cmd = exec.Command("which", "vim", "nano")
 		out, err := cmd.Output()
 		if err != nil {
 			panic("Could not find any editors")
