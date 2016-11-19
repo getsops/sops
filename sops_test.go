@@ -235,3 +235,73 @@ func TestRemoveMasterKeys(t *testing.T) {
 		},
 	}, m.KeySources[0].Keys)
 }
+
+
+func TestInsertOrReplaceValue(t *testing.T) {
+	tree := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: 2,
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "foobar",
+					Value: []int{
+						1,
+						2,
+						3,
+						4,
+					},
+				},
+			},
+		},
+	}
+	tree = tree.InsertOrReplaceValue("foo", 57)
+	assert.Equal(t, tree, TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: 57,
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "foobar",
+					Value: []int{
+						1,
+						2,
+						3,
+						4,
+					},
+				},
+			},
+		},
+	})
+	tree = tree.InsertOrReplaceValue("foobar", 100)
+	assert.Equal(t, tree, TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: 57,
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "foobar",
+					Value: []int{
+						1,
+						2,
+						3,
+						4,
+					},
+				},
+			},
+		},
+		TreeItem{
+			Key: "foobar",
+			Value: 100,
+		},
+	})
+}
