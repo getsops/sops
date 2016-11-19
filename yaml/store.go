@@ -137,6 +137,13 @@ func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metad
 	return out, nil
 }
 
+// MarshalInterface takes any value and marshals it into a yaml document
+func (store Store) MarshalValue(v interface{}) ([]byte, error) {
+	v = store.treeValueToYamlValue(v)
+	return (&yaml.YAMLMarshaler{Indent: 4}).Marshal(v)
+}
+
+
 // UnmarshalMetadata takes a yaml document as a string and extracts sops' metadata from it
 func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	var metadata sops.Metadata

@@ -288,7 +288,7 @@ func runEditor(path string) error {
 	editor := os.Getenv("EDITOR")
 	var cmd *exec.Cmd
 	if editor == "" {
-		cmd := exec.Command("which", "vim", "nano")
+		cmd = exec.Command("which", "vim", "nano")
 		out, err := cmd.Output()
 		if err != nil {
 			panic("Could not find any editors")
@@ -354,6 +354,9 @@ func decryptTree(tree sops.Tree, ignoreMac bool) (sops.Tree, map[string][]interf
 
 func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, error) {
 	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"))
+	if err != nil {
+		return nil, err
+	}
 	if c.String("extract") != "" {
 		v, err := tree.Branch.Truncate(c.String("extract"))
 		if err != nil {
@@ -362,7 +365,7 @@ func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, er
 		if newBranch, ok := v.(sops.TreeBranch); ok {
 			tree.Branch = newBranch
 		} else {
-			bytes, err := sops.ToBytes(v)
+			bytes, err := outputStore.MarshalValue(v)
 			if err != nil {
 				return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), exitErrorDumpingTree)
 			}

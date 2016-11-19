@@ -273,6 +273,7 @@ type Store interface {
 	UnmarshalMetadata(in []byte) (Metadata, error)
 	Marshal(TreeBranch) ([]byte, error)
 	MarshalWithMetadata(TreeBranch, Metadata) ([]byte, error)
+	MarshalValue(interface{}) ([]byte, error)
 }
 
 // MasterKeyCount returns the number of master keys available
@@ -397,15 +398,23 @@ func (m *Metadata) ToMap() map[string]interface{} {
 
 // GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it.
 func (m Metadata) GetDataKey() ([]byte, error) {
+	errMsg := "Could not decrypt the data key with any of the master keys:\n"
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
 			key, err := k.Decrypt()
 			if err == nil {
 				return key, nil
 			}
+			keyType := "Unknown"
+			if _, ok := k.(*pgp.MasterKey); ok {
+				keyType = "GPG"
+			} else if _, ok := k.(*kms.MasterKey); ok {
+				keyType = "KMS"
+			}
+			errMsg += fmt.Sprintf("\t[%s]: %s:\t%s\n", keyType, k.ToString(), err)
 		}
 	}
-	return nil, fmt.Errorf("Could not get data key")
+	return nil, fmt.Errorf(errMsg)
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
