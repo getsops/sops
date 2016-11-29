@@ -622,10 +622,7 @@ func edit(c *cli.Context, file string, fileBytes []byte) ([]byte, error) {
 			return nil, cli.NewExitError("Could not truncate tree to the provided path", exitErrorInvalidSetFormat)
 		}
 		branch := parent.(sops.TreeBranch)
-		err = branch.ReplaceValue(key, value)
-		if err != nil {
-			return nil, cli.NewExitError("Key not found in tree", exitErrorInvalidSetFormat)
-		}
+		tree.Branch = branch.InsertOrReplaceValue(key, value)
 	} else {
 		tmpdir, err := ioutil.TempDir("", "")
 		if err != nil {

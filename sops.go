@@ -46,9 +46,9 @@ type TreeItem struct {
 // TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
 type TreeBranch []TreeItem
 
-// ReplaceValue replaces the value under the provided key with the newValue provided.
-// Returns an error if the key was not found.
-func (branch TreeBranch) ReplaceValue(key interface{}, newValue interface{}) error {
+// InsertOrReplaceValue replaces the value under the provided key with the newValue provided,
+// or inserts a new key-value if it didn't exist already.
+func (branch TreeBranch) InsertOrReplaceValue(key interface{}, newValue interface{}) (TreeBranch) {
 	replaced := false
 	for i, kv := range branch {
 		if kv.Key == key {
@@ -58,9 +58,9 @@ func (branch TreeBranch) ReplaceValue(key interface{}, newValue interface{}) err
 		}
 	}
 	if !replaced {
-		return fmt.Errorf("Key not found")
+		return append(branch, TreeItem{Key: key, Value: newValue})
 	}
-	return nil
+	return branch
 }
 
 // Tree is the data structure used by sops to represent documents internally
