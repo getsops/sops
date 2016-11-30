@@ -88,4 +88,7 @@ else
 		-o tmppkg/sops-$$(git describe --abbrev=0 --tags).dmg tmpdmg
 endif
 
+download-index:
+	bash make_download_page.sh
+
 .PHONY: all test generate clean vendor functional-tests

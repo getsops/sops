@@ -25,4 +25,7 @@ after_success:
         mkdir dist
         mv *.deb *.rpm dist/
         aws s3 sync dist/ s3://go.mozilla.org/sops/dist/ --acl public-read
+        make download-index
+        mv index.html dist/
+        aws s3 sync dist/ s3://go.mozilla.org/sops/dist/ --acl public-read
       fi
