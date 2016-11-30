@@ -7,7 +7,7 @@ addons:
     packages:
       - rpm
       - ruby
-      - awscli
+      - python3
 
 before_install:
   - gem install fpm || sudo gem install fpm
@@ -21,6 +21,8 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
   - |
       if [ ! -z "$TRAVIS_TAG" ]; then
+        pip install --user awscli
+        export PATH=$PATH:$HOME/.local/bin
         make deb-pkg rpm-pkg
         mkdir dist
         mv *.deb *.rpm dist/
