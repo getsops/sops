@@ -2,8 +2,8 @@ SOPS: Secrets OPerationS
 ========================
 
 **sops** is an editor of encrypted files that supports YAML, JSON and BINARY
-formats and encrypts with AWS KMS and PGP (via GnuPG).
-Watch `the demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_.
+formats and encrypts with AWS KMS and PGP.
+(`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
 
