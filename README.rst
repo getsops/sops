@@ -18,6 +18,8 @@ Install **sops** with:
 
 (requires Go >= 1.6)
 
+Or `**download packages from here** <https://go.mozilla.org/sops/dist/>`_.
+
 If you don't have Go installed, set it up with:
 
 .. code:: bash

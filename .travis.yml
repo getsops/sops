@@ -1,13 +1,33 @@
 language: go
-go:
-  - 1.6
-  - 1.7
-  - tip
+go: 1.7.3
 go_import_path: go.mozilla.org/sops/
+
+addons:
+  apt:
+    packages:
+      - rpm
+      - ruby
+      - python3
+
 before_install:
+  - gem install fpm || sudo gem install fpm
   - curl https://sh.rustup.rs -sSf | sh -s -- -y
   - source ~/.cargo/env
+
 script:
-  - make
+  - make test
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - |
+      if [ ! -z "$TRAVIS_TAG" ]; then
+        pip install --user awscli
+        export PATH=$PATH:$HOME/.local/bin
+        make deb-pkg rpm-pkg
+        mkdir dist
+        mv *.deb *.rpm dist/
+        aws s3 sync dist/ s3://go.mozilla.org/sops/dist/ --acl public-read
+        make download-index
+        mv index.html dist/
+        aws s3 sync dist/ s3://go.mozilla.org/sops/dist/ --acl public-read
+      fi

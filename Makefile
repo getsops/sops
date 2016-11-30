@@ -44,4 +44,51 @@ functional-tests:
 	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
 	cd functional-tests && cargo test
 
+deb-pkg: install
+	rm -rf tmppkg
+	mkdir -p tmppkg/usr/local/bin
+	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
+	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
+		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
+		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
+		--url https://go.mozilla.org/sops \
+		--architecture x86_64 \
+		-v "$$(git describe --abbrev=0 --tags)" \
+		-s dir -t deb .
+
+rpm-pkg: install
+	rm -rf tmppkg
+	mkdir -p tmppkg/usr/local/bin
+	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
+	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
+		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
+		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
+		--url https://go.mozilla.org/sops \
+		--architecture x86_64 \
+		-v "$$(git describe --abbrev=0 --tags)" \
+		-s dir -t rpm .
+
+dmg-pkg: install
+ifneq ($(OS),darwin)
+		echo 'you must be on MacOS and set OS=darwin on the make command line to build an OSX package'
+else
+	rm -rf tmppkg
+	mkdir -p tmppkg/usr/local/bin
+	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
+	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
+		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
+		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
+		--url https://go.mozilla.org/sops \
+		--architecture x86_64 \
+		-v "$$(git describe --abbrev=0 --tags)" \
+		-s dir -t osxpkg \
+		--osxpkg-identifier-prefix org.mozilla.sops \
+		-p tmppkg/sops-$$(git describe --abbrev=0 --tags).pkg .
+	hdiutil makehybrid -hfs -hfs-volume-name "Mozilla Sops" \
+		-o tmppkg/sops-$$(git describe --abbrev=0 --tags).dmg tmpdmg
+endif
+
+download-index:
+	bash make_download_page.sh
+
 .PHONY: all test generate clean vendor functional-tests
