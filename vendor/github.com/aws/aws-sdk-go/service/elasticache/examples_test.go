@@ -113,6 +113,7 @@ func ExampleElastiCache_CreateCacheCluster() {
 	params := &elasticache.CreateCacheClusterInput{
 		CacheClusterId:          aws.String("String"), // Required
 		AZMode:                  aws.String("AZMode"),
+		AuthToken:               aws.String("String"),
 		AutoMinorVersionUpgrade: aws.Bool(true),
 		CacheNodeType:           aws.String("String"),
 		CacheParameterGroupName: aws.String("String"),
@@ -260,6 +261,7 @@ func ExampleElastiCache_CreateReplicationGroup() {
 	params := &elasticache.CreateReplicationGroupInput{
 		ReplicationGroupDescription: aws.String("String"), // Required
 		ReplicationGroupId:          aws.String("String"), // Required
+		AuthToken:                   aws.String("String"),
 		AutoMinorVersionUpgrade:     aws.Bool(true),
 		AutomaticFailoverEnabled:    aws.Bool(true),
 		CacheNodeType:               aws.String("String"),

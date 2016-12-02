@@ -95,6 +95,10 @@ type Route53API interface {
 
 	CreateTrafficPolicyVersion(*route53.CreateTrafficPolicyVersionInput) (*route53.CreateTrafficPolicyVersionOutput, error)
 
+	CreateVPCAssociationAuthorizationRequest(*route53.CreateVPCAssociationAuthorizationInput) (*request.Request, *route53.CreateVPCAssociationAuthorizationOutput)
+
+	CreateVPCAssociationAuthorization(*route53.CreateVPCAssociationAuthorizationInput) (*route53.CreateVPCAssociationAuthorizationOutput, error)
+
 	DeleteHealthCheckRequest(*route53.DeleteHealthCheckInput) (*request.Request, *route53.DeleteHealthCheckOutput)
 
 	DeleteHealthCheck(*route53.DeleteHealthCheckInput) (*route53.DeleteHealthCheckOutput, error)
@@ -115,6 +119,10 @@ type Route53API interface {
 
 	DeleteTrafficPolicyInstance(*route53.DeleteTrafficPolicyInstanceInput) (*route53.DeleteTrafficPolicyInstanceOutput, error)
 
+	DeleteVPCAssociationAuthorizationRequest(*route53.DeleteVPCAssociationAuthorizationInput) (*request.Request, *route53.DeleteVPCAssociationAuthorizationOutput)
+
+	DeleteVPCAssociationAuthorization(*route53.DeleteVPCAssociationAuthorizationInput) (*route53.DeleteVPCAssociationAuthorizationOutput, error)
+
 	DisassociateVPCFromHostedZoneRequest(*route53.DisassociateVPCFromHostedZoneInput) (*request.Request, *route53.DisassociateVPCFromHostedZoneOutput)
 
 	DisassociateVPCFromHostedZone(*route53.DisassociateVPCFromHostedZoneInput) (*route53.DisassociateVPCFromHostedZoneOutput, error)
@@ -122,10 +130,6 @@ type Route53API interface {
 	GetChangeRequest(*route53.GetChangeInput) (*request.Request, *route53.GetChangeOutput)
 
 	GetChange(*route53.GetChangeInput) (*route53.GetChangeOutput, error)
-
-	GetChangeDetailsRequest(*route53.GetChangeDetailsInput) (*request.Request, *route53.GetChangeDetailsOutput)
-
-	GetChangeDetails(*route53.GetChangeDetailsInput) (*route53.GetChangeDetailsOutput, error)
 
 	GetCheckerIpRangesRequest(*route53.GetCheckerIpRangesInput) (*request.Request, *route53.GetCheckerIpRangesOutput)
 
@@ -174,14 +178,6 @@ type Route53API interface {
 	GetTrafficPolicyInstanceCountRequest(*route53.GetTrafficPolicyInstanceCountInput) (*request.Request, *route53.GetTrafficPolicyInstanceCountOutput)
 
 	GetTrafficPolicyInstanceCount(*route53.GetTrafficPolicyInstanceCountInput) (*route53.GetTrafficPolicyInstanceCountOutput, error)
-
-	ListChangeBatchesByHostedZoneRequest(*route53.ListChangeBatchesByHostedZoneInput) (*request.Request, *route53.ListChangeBatchesByHostedZoneOutput)
-
-	ListChangeBatchesByHostedZone(*route53.ListChangeBatchesByHostedZoneInput) (*route53.ListChangeBatchesByHostedZoneOutput, error)
-
-	ListChangeBatchesByRRSetRequest(*route53.ListChangeBatchesByRRSetInput) (*request.Request, *route53.ListChangeBatchesByRRSetOutput)
-
-	ListChangeBatchesByRRSet(*route53.ListChangeBatchesByRRSetInput) (*route53.ListChangeBatchesByRRSetOutput, error)
 
 	ListGeoLocationsRequest(*route53.ListGeoLocationsInput) (*request.Request, *route53.ListGeoLocationsOutput)
 
@@ -240,6 +236,10 @@ type Route53API interface {
 	ListTrafficPolicyVersionsRequest(*route53.ListTrafficPolicyVersionsInput) (*request.Request, *route53.ListTrafficPolicyVersionsOutput)
 
 	ListTrafficPolicyVersions(*route53.ListTrafficPolicyVersionsInput) (*route53.ListTrafficPolicyVersionsOutput, error)
+
+	ListVPCAssociationAuthorizationsRequest(*route53.ListVPCAssociationAuthorizationsInput) (*request.Request, *route53.ListVPCAssociationAuthorizationsOutput)
+
+	ListVPCAssociationAuthorizations(*route53.ListVPCAssociationAuthorizationsInput) (*route53.ListVPCAssociationAuthorizationsOutput, error)
 
 	TestDNSAnswerRequest(*route53.TestDNSAnswerInput) (*request.Request, *route53.TestDNSAnswerOutput)
 

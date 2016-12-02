@@ -87,6 +87,10 @@ type LambdaAPI interface {
 
 	DeleteFunction(*lambda.DeleteFunctionInput) (*lambda.DeleteFunctionOutput, error)
 
+	GetAccountSettingsRequest(*lambda.GetAccountSettingsInput) (*request.Request, *lambda.GetAccountSettingsOutput)
+
+	GetAccountSettings(*lambda.GetAccountSettingsInput) (*lambda.GetAccountSettingsOutput, error)
+
 	GetAliasRequest(*lambda.GetAliasInput) (*request.Request, *lambda.AliasConfiguration)
 
 	GetAlias(*lambda.GetAliasInput) (*lambda.AliasConfiguration, error)

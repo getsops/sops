@@ -382,18 +382,21 @@ func (c *GameLift) CreateGameSessionRequest(input *CreateGameSessionInput) (req 
 // CreateGameSession API operation for Amazon GameLift.
 //
 // Creates a multiplayer game session for players. This action creates a game
-// session record and assigns the new session to an instance in the specified
-// fleet, which initializes a new server process to host the game session. A
-// fleet must be in an ACTIVE status before a game session can be created in
-// it.
+// session record and assigns an available server process in the specified fleet
+// to host the game session. A fleet must be in an ACTIVE status before a game
+// session can be created in it.
 //
-// To create a game session, specify either a fleet ID or an alias ID and indicate
-// the maximum number of players the game session allows. You can also provide
-// a name and a set of properties for your game (optional). If successful, a
-// GameSession object is returned containing session properties, including an
-// IP address. By default, newly created game sessions are set to accept adding
-// any new players to the game session. Use UpdateGameSession to change the
+// To create a game session, specify either fleet ID or alias ID, and indicate
+// a maximum number of players to allow in the game session. You can also provide
+// a name and game-specific properties for this game session. If successful,
+// a GameSession object is returned containing session properties, including
+// an IP address. By default, newly created game sessions allow new players
+// to join. Use UpdateGameSession to change the game sessions player session
 // creation policy.
+//
+// When creating a game session on a fleet with a resource limit creation policy,
+// the request should include a creator ID. If none is provided, GameLift does
+// not evaluate the fleet's resource limit creation policy.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1883,12 +1886,14 @@ func (c *GameLift) DescribeInstancesRequest(input *DescribeInstancesInput) (req 
 
 // DescribeInstances API operation for Amazon GameLift.
 //
-// Retrieves information about instances in a fleet.
+// Retrieves information about a fleet's instances, including instance IDs.
+// Use this action to get details on all instances in the fleet or get details
+// on one specific instance.
 //
-// To get information on a specific instance, specify both a fleet ID and instance
-// ID. To get information for all instances in a fleet, specify a fleet ID only.
-// Use the pagination parameters to retrieve results as a set of sequential
-// pages. If successful, an Instance object is returned for each result.
+// To get a specific instance, specify fleet ID and instance ID. To get all
+// instances in a fleet, specify a fleet ID only. Use the pagination parameters
+// to retrieve results as a set of sequential pages. If successful, an Instance
+// object is returned for each result.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2248,6 +2253,98 @@ func (c *GameLift) GetGameSessionLogUrlRequest(input *GetGameSessionLogUrlInput)
 //
 func (c *GameLift) GetGameSessionLogUrl(input *GetGameSessionLogUrlInput) (*GetGameSessionLogUrlOutput, error) {
 	req, out := c.GetGameSessionLogUrlRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opGetInstanceAccess = "GetInstanceAccess"
+
+// GetInstanceAccessRequest generates a "aws/request.Request" representing the
+// client's request for the GetInstanceAccess operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See GetInstanceAccess for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the GetInstanceAccess method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the GetInstanceAccessRequest method.
+//    req, resp := client.GetInstanceAccessRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *GameLift) GetInstanceAccessRequest(input *GetInstanceAccessInput) (req *request.Request, output *GetInstanceAccessOutput) {
+	op := &request.Operation{
+		Name:       opGetInstanceAccess,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInstanceAccessInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &GetInstanceAccessOutput{}
+	req.Data = output
+	return
+}
+
+// GetInstanceAccess API operation for Amazon GameLift.
+//
+// Requests remote access to a fleet instance. Remote access is useful for debugging,
+// gathering benchmarking data, or watching activity in real time.
+//
+// Access requires credentials that match the operating system of the instance.
+// For a Windows instance, GameLift returns a username and password as strings
+// for use with a Windows Remote Desktop client. For a Linux instance, GameLift
+// returns a username and RSA private key, also as strings, for use with an
+// SSH client. The private key must be saved in the proper format to a .pem
+// file before using. If you're making this request using the AWS CLI, saving
+// the secret can be handled as part of the GetInstanceAccess request (see the
+// example later in this topic). For more information on remote access, see
+// Remotely Accessing an Instance (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-remote-access.html).
+//
+// To request access to a specific instance, specify the IDs of the instance
+// and the fleet it belongs to. If successful, an InstanceAccess object is returned
+// containing the instance's IP address and a set of credentials.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation GetInstanceAccess for usage and error information.
+//
+// Returned Error Codes:
+//   * UnauthorizedException
+//   The client failed authentication. Clients should not retry such requests.
+//
+//   * InvalidRequestException
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * NotFoundException
+//   A service resource associated with the request could not be found. Clients
+//   should not retry such requests.
+//
+//   * InternalServiceException
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+func (c *GameLift) GetInstanceAccess(input *GetInstanceAccessInput) (*GetInstanceAccessOutput, error) {
+	req, out := c.GetInstanceAccessRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -2635,7 +2732,7 @@ func (c *GameLift) RequestUploadCredentialsRequest(input *RequestUploadCredentia
 // location for a specific build. Valid credentials are required to upload your
 // game build files to Amazon S3.
 //
-// Call this action only if you need credentials for a build created with CreateBuild.
+// Call this action only if you need credentials for a build created withCreateBuild.
 // This is a rare situation; in most cases, builds are created using the CLI
 // command upload-build, which creates a build record and also uploads build
 // files.
@@ -3538,14 +3635,14 @@ type Alias struct {
 	AliasId *string `type:"string"`
 
 	// Time stamp indicating when this data object was created. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Human-readable description of an alias.
 	Description *string `type:"string"`
 
 	// Time stamp indicating when this data object was last modified. Format is
-	// a number expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// a number expressed in Unix time as milliseconds (ex: "1469498468.057").
 	LastUpdatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Descriptive label associated with an alias. Alias names do not need to be
@@ -3655,7 +3752,7 @@ type Build struct {
 	BuildId *string `type:"string"`
 
 	// Time stamp indicating when this data object was created. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Descriptive label associated with a build. Build names do not need to be
@@ -3840,7 +3937,7 @@ type CreateBuildInput struct {
 	_ struct{} `type:"structure"`
 
 	// Descriptive label associated with a build. Build names do not need to be
-	// unique. A build name can be changed later using UpdateBuild.
+	// unique. A build name can be changed later usingUpdateBuild.
 	Name *string `min:"1" type:"string"`
 
 	// Operating system that the game server binaries are built to run on. This
@@ -3854,7 +3951,7 @@ type CreateBuildInput struct {
 	StorageLocation *S3Location `type:"structure"`
 
 	// Version associated with this build. Version strings do not need to be unique
-	// to a build. A build version can be changed later using UpdateBuild.
+	// to a build. A build version can be changed later usingUpdateBuild.
 	Version *string `min:"1" type:"string"`
 }
 
@@ -3925,7 +4022,7 @@ type CreateBuildOutput struct {
 
 	// AWS credentials required when uploading a game build to the storage location.
 	// These credentials have a limited lifespan and are valid only for the build
-	// they were issued for. If you need to get fresh credentials, call RequestUploadCredentials.
+	// they were issued for. If you need to get fresh credentials, callRequestUploadCredentials.
 	UploadCredentials *AwsCredentials `type:"structure"`
 }
 
@@ -3992,8 +4089,8 @@ type CreateFleetInput struct {
 	// in addition to game session logs; see more on game session logs in the Amazon
 	// GameLift Developer Guide (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code).
 	// If no default log path for a fleet is specified, GameLift will automatically
-	// upload logs stored on each instance at C:\game\logs. Use the GameLift console
-	// to access stored logs.
+	// upload logs stored on each instance at C:\game\logs (for Windows) or /local/game/logs
+	// (for Linux). Use the GameLift console to access stored logs.
 	LogPaths []*string `type:"list"`
 
 	// Descriptive label associated with a fleet. Fleet names do not need to be
@@ -4217,7 +4314,7 @@ type CreateGameSessionInput struct {
 	// ID in the following format: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet
 	// ID>/<custom ID string>". For example, this full game session ID: "arn:aws:gamelift:us-west-2::gamesession/fleet-2ec2aae5-c2c7-43ca-b19d-8249fe5fddf2/my-game-session"
 	// includes the custom ID string "my-game-session". If this parameter is not
-	// set, GameLift creates a game session ID in the same format with an auto-generated
+	// set, GameLift creates a game session ID in the same format with an autogenerated
 	// ID string.
 	GameSessionId *string `min:"1" type:"string"`
 
@@ -4347,7 +4444,7 @@ type CreatePlayerSessionInput struct {
 	// Unique identifier for the game session to add a player to. Game session ID
 	// format is as follows: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet
 	// ID>/<ID string>". The value of <ID string> is either a custom ID string (if
-	// one was specified when the game session was created) an auto-generated string.
+	// one was specified when the game session was created) an autogenerated string.
 	//
 	// GameSessionId is a required field
 	GameSessionId *string `min:"1" type:"string" required:"true"`
@@ -4433,7 +4530,7 @@ type CreatePlayerSessionsInput struct {
 	// Unique identifier for the game session to add players to. Game session ID
 	// format is as follows: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet
 	// ID>/<ID string>". The value of <ID string> is either a custom ID string (if
-	// one was specified when the game session was created) an auto-generated string.
+	// one was specified when the game session was created) an autogenerated string.
 	//
 	// GameSessionId is a required field
 	GameSessionId *string `min:"1" type:"string" required:"true"`
@@ -5134,7 +5231,7 @@ type DescribeFleetEventsInput struct {
 
 	// Most recent date to retrieve event logs for. If no end time is specified,
 	// this call returns entries from the specified start time up to the present.
-	// Format is a number expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// Format is a number expressed in Unix time as milliseconds (ex: "1469498468.057").
 	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Unique identifier for the fleet to get event logs for.
@@ -5154,7 +5251,7 @@ type DescribeFleetEventsInput struct {
 	// Earliest date to retrieve event logs for. If no start time is specified,
 	// this call returns entries starting from when the fleet was created to the
 	// specified end time. Format is a number expressed in Unix time as milliseconds
-	// (ex: "1469498468.057".
+	// (ex: "1469498468.057").
 	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 }
 
@@ -5431,7 +5528,7 @@ type DescribeGameSessionDetailsInput struct {
 	// Unique identifier for the game session to retrieve information on. Game session
 	// ID format is as follows: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet
 	// ID>/<ID string>". The value of <ID string> is either a custom ID string (if
-	// one was specified when the game session was created) an auto-generated string.
+	// one was specified when the game session was created) an autogenerated string.
 	GameSessionId *string `min:"1" type:"string"`
 
 	// Maximum number of results to return. Use this parameter with NextToken to
@@ -5567,7 +5664,7 @@ type DescribeGameSessionsInput struct {
 	// Unique identifier for the game session to retrieve information on. Game session
 	// ID format is as follows: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet
 	// ID>/<ID string>". The value of <ID string> is either a custom ID string (if
-	// one was specified when the game session was created) an auto-generated string.
+	// one was specified when the game session was created) an autogenerated string.
 	GameSessionId *string `min:"1" type:"string"`
 
 	// Maximum number of results to return. Use this parameter with NextToken to
@@ -5803,10 +5900,10 @@ func (s *DescribeInstancesOutput) SetNextToken(v string) *DescribeInstancesOutpu
 type DescribePlayerSessionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Unique identifier for the game session to get player sessions for.Game session
+	// Unique identifier for the game session to get player sessions for. Game session
 	// ID format is as follows: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet
 	// ID>/<ID string>". The value of <ID string> is either a custom ID string (if
-	// one was specified when the game session was created) an auto-generated string.
+	// one was specified when the game session was created) an autogenerated string.
 	GameSessionId *string `min:"1" type:"string"`
 
 	// Maximum number of results to return. Use this parameter with NextToken to
@@ -6271,8 +6368,9 @@ func (s *EC2InstanceLimit) SetInstanceLimit(v int64) *EC2InstanceLimit {
 	return s
 }
 
-// Log entry describing an event involving an Amazon GameLift resource (such
-// as a fleet).
+// Log entry describing an event involving Amazon GameLift resources (such as
+// a fleet). In addition to tracking activity, event codes and messages can
+// provide additional information for troubleshooting and debugging problems.
 type Event struct {
 	_ struct{} `type:"structure"`
 
@@ -6283,7 +6381,7 @@ type Event struct {
 	EventId *string `min:"1" type:"string"`
 
 	// Time stamp indicating when this event occurred. Format is a number expressed
-	// in Unix time as milliseconds (ex: "1469498468.057".
+	// in Unix time as milliseconds (ex: "1469498468.057").
 	EventTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Additional information related to the event.
@@ -6341,7 +6439,7 @@ type FleetAttributes struct {
 	BuildId *string `type:"string"`
 
 	// Time stamp indicating when this data object was created. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Human-readable description of the fleet.
@@ -6355,8 +6453,9 @@ type FleetAttributes struct {
 	// in addition to game session logs; see more on game session logs in the Amazon
 	// GameLift Developer Guide (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code).
 	// If no default log path for a fleet is specified, GameLift will automatically
-	// upload logs stored on each instance at C:\game\logs. Use the GameLift console
-	// to access stored logs.
+	// upload logs that are stored on each instance at C:\game\logs (for Windows)
+	// or /local/game/logs (for Linux). Use the GameLift console to access stored
+	// logs.
 	LogPaths []*string `type:"list"`
 
 	// Descriptive label associated with a fleet. Fleet names do not need to be
@@ -6414,7 +6513,7 @@ type FleetAttributes struct {
 	Status *string `type:"string" enum:"FleetStatus"`
 
 	// Time stamp indicating when this data object was terminated. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	TerminationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 }
 
@@ -6681,12 +6780,12 @@ type GameSession struct {
 	_ struct{} `type:"structure"`
 
 	// Time stamp indicating when this data object was created. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Player ID of the person or entity that created the game session. This ID
 	// is used to enforce a resource protection policy (if one exists) that limits
-	// the number of concurrent active game sessions one player can have.
+	// the number of concurrent active game sessions for a single player.
 	CreatorId *string `min:"1" type:"string"`
 
 	// Number of players currently in the game session.
@@ -6701,7 +6800,7 @@ type GameSession struct {
 	// Unique identifier for a game session. Game session ID format is as follows:
 	// "arn:aws:gamelift:<region>::gamesession/fleet-<fleet ID>/<ID string>". The
 	// value of <ID string> is either a custom ID string (if one was specified when
-	// the game session was created) an auto-generated string.
+	// the game session was created) an autogenerated string.
 	GameSessionId *string `min:"1" type:"string"`
 
 	// IP address of the game session. To connect to a GameLift server process,
@@ -6727,7 +6826,7 @@ type GameSession struct {
 	Status *string `type:"string" enum:"GameSessionStatus"`
 
 	// Time stamp indicating when this data object was terminated. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	TerminationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 }
 
@@ -6865,7 +6964,7 @@ type GetGameSessionLogUrlInput struct {
 	// Unique identifier for the game session to get logs for. Game session ID format
 	// is as follows: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet ID>/<ID
 	// string>". The value of <ID string> is either a custom ID string (if one was
-	// specified when the game session was created) an auto-generated string.
+	// specified when the game session was created) an autogenerated string.
 	//
 	// GameSessionId is a required field
 	GameSessionId *string `min:"1" type:"string" required:"true"`
@@ -6927,8 +7026,88 @@ func (s *GetGameSessionLogUrlOutput) SetPreSignedUrl(v string) *GetGameSessionLo
 	return s
 }
 
-// Properties describing an instance of a virtual computing resource that is
-// hosting game servers. Fleets contain zero or more instances.
+type GetInstanceAccessInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for a fleet. Specify the fleet that contain the instance
+	// you want access to. The fleet can be in any of the following statuses: ACTIVATING,
+	// ACTIVE, or ERROR. Fleets with an ERROR status can be accessed for a few hours
+	// before being deleted.
+	//
+	// FleetId is a required field
+	FleetId *string `type:"string" required:"true"`
+
+	// Unique identifier for an instance. Specify the instance you want to get access
+	// to. You can access an instance in any status.
+	//
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetInstanceAccessInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInstanceAccessInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetInstanceAccessInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetInstanceAccessInput"}
+	if s.FleetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FleetId"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFleetId sets the FleetId field's value.
+func (s *GetInstanceAccessInput) SetFleetId(v string) *GetInstanceAccessInput {
+	s.FleetId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetInstanceAccessInput) SetInstanceId(v string) *GetInstanceAccessInput {
+	s.InstanceId = &v
+	return s
+}
+
+type GetInstanceAccessOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Object containing connection information for a fleet instance, including
+	// IP address and access credentials.
+	InstanceAccess *InstanceAccess `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetInstanceAccessOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetInstanceAccessOutput) GoString() string {
+	return s.String()
+}
+
+// SetInstanceAccess sets the InstanceAccess field's value.
+func (s *GetInstanceAccessOutput) SetInstanceAccess(v *InstanceAccess) *GetInstanceAccessOutput {
+	s.InstanceAccess = v
+	return s
+}
+
+// Properties that describe an instance of a virtual computing resource that
+// hosts one or more game servers. A fleet contains zero or more instances.
 type Instance struct {
 	_ struct{} `type:"structure"`
 
@@ -6945,7 +7124,7 @@ type Instance struct {
 	// IP address assigned to the instance.
 	IpAddress *string `type:"string"`
 
-	// Operating system being used on this instance.
+	// Operating system that is running on this instance.
 	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
 
 	// Current status of the instance. Possible statuses include the following:
@@ -7016,6 +7195,103 @@ func (s *Instance) SetStatus(v string) *Instance {
 // SetType sets the Type field's value.
 func (s *Instance) SetType(v string) *Instance {
 	s.Type = &v
+	return s
+}
+
+// Information required to remotely connect to a fleet instance. Access is requested
+// by calling GetInstanceAccess.
+type InstanceAccess struct {
+	_ struct{} `type:"structure"`
+
+	// Credentials required to access the instance.
+	Credentials *InstanceCredentials `type:"structure"`
+
+	// Unique identifier for the fleet containing the instance being accessed.
+	FleetId *string `type:"string"`
+
+	// Unique identifier for the instance being accessed.
+	InstanceId *string `type:"string"`
+
+	// IP address assigned to the instance.
+	IpAddress *string `type:"string"`
+
+	// Operating system that is running on the instance.
+	OperatingSystem *string `type:"string" enum:"OperatingSystem"`
+}
+
+// String returns the string representation
+func (s InstanceAccess) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceAccess) GoString() string {
+	return s.String()
+}
+
+// SetCredentials sets the Credentials field's value.
+func (s *InstanceAccess) SetCredentials(v *InstanceCredentials) *InstanceAccess {
+	s.Credentials = v
+	return s
+}
+
+// SetFleetId sets the FleetId field's value.
+func (s *InstanceAccess) SetFleetId(v string) *InstanceAccess {
+	s.FleetId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *InstanceAccess) SetInstanceId(v string) *InstanceAccess {
+	s.InstanceId = &v
+	return s
+}
+
+// SetIpAddress sets the IpAddress field's value.
+func (s *InstanceAccess) SetIpAddress(v string) *InstanceAccess {
+	s.IpAddress = &v
+	return s
+}
+
+// SetOperatingSystem sets the OperatingSystem field's value.
+func (s *InstanceAccess) SetOperatingSystem(v string) *InstanceAccess {
+	s.OperatingSystem = &v
+	return s
+}
+
+// Set of credentials required to remotely access a fleet instance. Access credentials
+// are requested by calling GetInstanceAccess and returned in an InstanceAccess
+// object.
+type InstanceCredentials struct {
+	_ struct{} `type:"structure"`
+
+	// Secret string. For Windows instances, the secret is a password. For Linux
+	// instances, it is a private key.
+	Secret *string `min:"1" type:"string"`
+
+	// User login string.
+	UserName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s InstanceCredentials) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceCredentials) GoString() string {
+	return s.String()
+}
+
+// SetSecret sets the Secret field's value.
+func (s *InstanceCredentials) SetSecret(v string) *InstanceCredentials {
+	s.Secret = &v
+	return s
+}
+
+// SetUserName sets the UserName field's value.
+func (s *InstanceCredentials) SetUserName(v string) *InstanceCredentials {
+	s.UserName = &v
 	return s
 }
 
@@ -7444,7 +7720,7 @@ type PlayerSession struct {
 	_ struct{} `type:"structure"`
 
 	// Time stamp indicating when this data object was created. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Unique identifier for a fleet.
@@ -7484,7 +7760,7 @@ type PlayerSession struct {
 	Status *string `type:"string" enum:"PlayerSessionStatus"`
 
 	// Time stamp indicating when this data object was terminated. Format is a number
-	// expressed in Unix time as milliseconds (ex: "1469498468.057".
+	// expressed in Unix time as milliseconds (ex: "1469498468.057").
 	TerminationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 }
 
@@ -7904,11 +8180,11 @@ func (s *ResolveAliasOutput) SetFleetId(v string) *ResolveAliasOutput {
 type ResourceCreationLimitPolicy struct {
 	_ struct{} `type:"structure"`
 
-	// Maximum number of game sessions an individual can create during the policy
-	// period.
+	// Maximum number of game sessions that an individual can create during the
+	// policy period.
 	NewGameSessionsPerCreator *int64 `type:"integer"`
 
-	// Time span used to evaluate the resource creation limit policy.
+	// Time span used in evaluating the resource creation limit policy.
 	PolicyPeriodInMinutes *int64 `type:"integer"`
 }
 
@@ -8456,9 +8732,12 @@ type ServerProcess struct {
 	// ConcurrentExecutions is a required field
 	ConcurrentExecutions *int64 `min:"1" type:"integer" required:"true"`
 
-	// Location in the game build of the server executable. All game builds are
-	// installed on instances at the root C:\game\..., so an executable file located
-	// at MyGame\latest\server.exe has a launch path of "C:\game\MyGame\latest\server.exe".
+	// Location of the server executable in a game build. All game builds are installed
+	// on instances at the root : for Windows instances C:\game, and for Linux instances
+	// /local/game. A Windows game build with an executable file located at MyGame\latest\server.exe
+	// must have a launch path of "C:\game\MyGame\latest\server.exe". A Linux game
+	// build with an executable file located at MyGame/latest/server.exe must have
+	// a launch path of "/local/game/MyGame/latest/server.exe".
 	//
 	// LaunchPath is a required field
 	LaunchPath *string `min:"1" type:"string" required:"true"`
@@ -9021,7 +9300,7 @@ type UpdateGameSessionInput struct {
 	// Unique identifier for the game session to update. Game session ID format
 	// is as follows: "arn:aws:gamelift:<region>::gamesession/fleet-<fleet ID>/<ID
 	// string>". The value of <ID string> is either a custom ID string (if one was
-	// specified when the game session was created) an auto-generated string.
+	// specified when the game session was created) an autogenerated string.
 	//
 	// GameSessionId is a required field
 	GameSessionId *string `min:"1" type:"string" required:"true"`
@@ -9383,6 +9662,27 @@ const (
 
 	// EventCodeFleetNewGameSessionProtectionPolicyUpdated is a EventCode enum value
 	EventCodeFleetNewGameSessionProtectionPolicyUpdated = "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED"
+
+	// EventCodeServerProcessInvalidPath is a EventCode enum value
+	EventCodeServerProcessInvalidPath = "SERVER_PROCESS_INVALID_PATH"
+
+	// EventCodeServerProcessSdkInitializationTimeout is a EventCode enum value
+	EventCodeServerProcessSdkInitializationTimeout = "SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT"
+
+	// EventCodeServerProcessProcessReadyTimeout is a EventCode enum value
+	EventCodeServerProcessProcessReadyTimeout = "SERVER_PROCESS_PROCESS_READY_TIMEOUT"
+
+	// EventCodeServerProcessCrashed is a EventCode enum value
+	EventCodeServerProcessCrashed = "SERVER_PROCESS_CRASHED"
+
+	// EventCodeServerProcessTerminatedUnhealthy is a EventCode enum value
+	EventCodeServerProcessTerminatedUnhealthy = "SERVER_PROCESS_TERMINATED_UNHEALTHY"
+
+	// EventCodeServerProcessForceTerminated is a EventCode enum value
+	EventCodeServerProcessForceTerminated = "SERVER_PROCESS_FORCE_TERMINATED"
+
+	// EventCodeServerProcessProcessExitTimeout is a EventCode enum value
+	EventCodeServerProcessProcessExitTimeout = "SERVER_PROCESS_PROCESS_EXIT_TIMEOUT"
 )
 
 const (

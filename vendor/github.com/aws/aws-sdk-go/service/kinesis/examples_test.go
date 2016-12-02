@@ -121,6 +121,29 @@ func ExampleKinesis_DeleteStream() {
 	fmt.Println(resp)
 }
 
+func ExampleKinesis_DescribeLimits() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := kinesis.New(sess)
+
+	var params *kinesis.DescribeLimitsInput
+	resp, err := svc.DescribeLimits(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleKinesis_DescribeStream() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -473,6 +496,33 @@ func ExampleKinesis_SplitShard() {
 		StreamName:         aws.String("StreamName"), // Required
 	}
 	resp, err := svc.SplitShard(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleKinesis_UpdateShardCount() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := kinesis.New(sess)
+
+	params := &kinesis.UpdateShardCountInput{
+		ScalingType:      aws.String("ScalingType"), // Required
+		StreamName:       aws.String("StreamName"),  // Required
+		TargetShardCount: aws.Int64(1),              // Required
+	}
+	resp, err := svc.UpdateShardCount(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

@@ -371,8 +371,9 @@ func ExampleSQS_ReceiveMessage() {
 			aws.String("MessageAttributeName"), // Required
 			// More values...
 		},
-		VisibilityTimeout: aws.Int64(1),
-		WaitTimeSeconds:   aws.Int64(1),
+		ReceiveRequestAttemptId: aws.String("String"),
+		VisibilityTimeout:       aws.Int64(1),
+		WaitTimeSeconds:         aws.Int64(1),
 	}
 	resp, err := svc.ReceiveMessage(params)
 
@@ -442,6 +443,8 @@ func ExampleSQS_SendMessage() {
 			},
 			// More values...
 		},
+		MessageDeduplicationId: aws.String("String"),
+		MessageGroupId:         aws.String("String"),
 	}
 	resp, err := svc.SendMessage(params)
 
@@ -487,6 +490,8 @@ func ExampleSQS_SendMessageBatch() {
 					},
 					// More values...
 				},
+				MessageDeduplicationId: aws.String("String"),
+				MessageGroupId:         aws.String("String"),
 			},
 			// More values...
 		},

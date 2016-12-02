@@ -593,6 +593,32 @@ func ExampleCloudFormation_ListExports() {
 	fmt.Println(resp)
 }
 
+func ExampleCloudFormation_ListImports() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := cloudformation.New(sess)
+
+	params := &cloudformation.ListImportsInput{
+		ExportName: aws.String("ExportName"), // Required
+		NextToken:  aws.String("NextToken"),
+	}
+	resp, err := svc.ListImports(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleCloudFormation_ListStackResources() {
 	sess, err := session.NewSession()
 	if err != nil {

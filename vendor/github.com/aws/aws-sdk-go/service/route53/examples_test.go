@@ -339,6 +339,35 @@ func ExampleRoute53_CreateTrafficPolicyVersion() {
 	fmt.Println(resp)
 }
 
+func ExampleRoute53_CreateVPCAssociationAuthorization() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := route53.New(sess)
+
+	params := &route53.CreateVPCAssociationAuthorizationInput{
+		HostedZoneId: aws.String("ResourceId"), // Required
+		VPC: &route53.VPC{ // Required
+			VPCId:     aws.String("VPCId"),
+			VPCRegion: aws.String("VPCRegion"),
+		},
+	}
+	resp, err := svc.CreateVPCAssociationAuthorization(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleRoute53_DeleteHealthCheck() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -465,6 +494,35 @@ func ExampleRoute53_DeleteTrafficPolicyInstance() {
 	fmt.Println(resp)
 }
 
+func ExampleRoute53_DeleteVPCAssociationAuthorization() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := route53.New(sess)
+
+	params := &route53.DeleteVPCAssociationAuthorizationInput{
+		HostedZoneId: aws.String("ResourceId"), // Required
+		VPC: &route53.VPC{ // Required
+			VPCId:     aws.String("VPCId"),
+			VPCRegion: aws.String("VPCRegion"),
+		},
+	}
+	resp, err := svc.DeleteVPCAssociationAuthorization(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleRoute53_DisassociateVPCFromHostedZone() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -508,31 +566,6 @@ func ExampleRoute53_GetChange() {
 		Id: aws.String("ResourceId"), // Required
 	}
 	resp, err := svc.GetChange(params)
-
-	if err != nil {
-		// Print the error, cast err to awserr.Error to get the Code and
-		// Message from an error.
-		fmt.Println(err.Error())
-		return
-	}
-
-	// Pretty-print the response data.
-	fmt.Println(resp)
-}
-
-func ExampleRoute53_GetChangeDetails() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := route53.New(sess)
-
-	params := &route53.GetChangeDetailsInput{
-		Id: aws.String("ResourceId"), // Required
-	}
-	resp, err := svc.GetChangeDetails(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -828,67 +861,6 @@ func ExampleRoute53_GetTrafficPolicyInstanceCount() {
 
 	var params *route53.GetTrafficPolicyInstanceCountInput
 	resp, err := svc.GetTrafficPolicyInstanceCount(params)
-
-	if err != nil {
-		// Print the error, cast err to awserr.Error to get the Code and
-		// Message from an error.
-		fmt.Println(err.Error())
-		return
-	}
-
-	// Pretty-print the response data.
-	fmt.Println(resp)
-}
-
-func ExampleRoute53_ListChangeBatchesByHostedZone() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := route53.New(sess)
-
-	params := &route53.ListChangeBatchesByHostedZoneInput{
-		EndDate:      aws.String("Date"),       // Required
-		HostedZoneId: aws.String("ResourceId"), // Required
-		StartDate:    aws.String("Date"),       // Required
-		Marker:       aws.String("PageMarker"),
-		MaxItems:     aws.String("PageMaxItems"),
-	}
-	resp, err := svc.ListChangeBatchesByHostedZone(params)
-
-	if err != nil {
-		// Print the error, cast err to awserr.Error to get the Code and
-		// Message from an error.
-		fmt.Println(err.Error())
-		return
-	}
-
-	// Pretty-print the response data.
-	fmt.Println(resp)
-}
-
-func ExampleRoute53_ListChangeBatchesByRRSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
-
-	svc := route53.New(sess)
-
-	params := &route53.ListChangeBatchesByRRSetInput{
-		EndDate:       aws.String("Date"),       // Required
-		HostedZoneId:  aws.String("ResourceId"), // Required
-		Name:          aws.String("DNSName"),    // Required
-		StartDate:     aws.String("Date"),       // Required
-		Type:          aws.String("RRType"),     // Required
-		Marker:        aws.String("PageMarker"),
-		MaxItems:      aws.String("PageMaxItems"),
-		SetIdentifier: aws.String("ResourceRecordSetIdentifier"),
-	}
-	resp, err := svc.ListChangeBatchesByRRSet(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -1246,6 +1218,33 @@ func ExampleRoute53_ListTrafficPolicyVersions() {
 		TrafficPolicyVersionMarker: aws.String("TrafficPolicyVersionMarker"),
 	}
 	resp, err := svc.ListTrafficPolicyVersions(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleRoute53_ListVPCAssociationAuthorizations() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := route53.New(sess)
+
+	params := &route53.ListVPCAssociationAuthorizationsInput{
+		HostedZoneId: aws.String("ResourceId"), // Required
+		MaxResults:   aws.String("MaxResults"),
+		NextToken:    aws.String("PaginationToken"),
+	}
+	resp, err := svc.ListVPCAssociationAuthorizations(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

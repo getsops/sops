@@ -217,6 +217,10 @@ func (c *DirectConnect) AllocatePublicVirtualInterfaceRequest(input *AllocatePub
 // has been completed, the virtual interface will be in 'Confirming' state,
 // and will not be available for handling traffic.
 //
+// When creating an IPv6 public virtual interface (addressFamily is 'ipv6'),
+// the customer and amazon address fields should be left blank to use auto-assigned
+// IPv6 space. Custom IPv6 Addresses are currently not supported.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -453,6 +457,87 @@ func (c *DirectConnect) ConfirmPublicVirtualInterfaceRequest(input *ConfirmPubli
 //
 func (c *DirectConnect) ConfirmPublicVirtualInterface(input *ConfirmPublicVirtualInterfaceInput) (*ConfirmPublicVirtualInterfaceOutput, error) {
 	req, out := c.ConfirmPublicVirtualInterfaceRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreateBGPPeer = "CreateBGPPeer"
+
+// CreateBGPPeerRequest generates a "aws/request.Request" representing the
+// client's request for the CreateBGPPeer operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CreateBGPPeer for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateBGPPeer method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateBGPPeerRequest method.
+//    req, resp := client.CreateBGPPeerRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *DirectConnect) CreateBGPPeerRequest(input *CreateBGPPeerInput) (req *request.Request, output *CreateBGPPeerOutput) {
+	op := &request.Operation{
+		Name:       opCreateBGPPeer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateBGPPeerInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateBGPPeerOutput{}
+	req.Data = output
+	return
+}
+
+// CreateBGPPeer API operation for AWS Direct Connect.
+//
+// Creates a new BGP peer on a specified virtual interface. The BGP peer cannot
+// be in the same address family (IPv4/IPv6) of an existing BGP peer on the
+// virtual interface.
+//
+// You must create a BGP peer for the corresponding address family in order
+// to access AWS resources that also use that address family.
+//
+// When creating a IPv6 BGP peer, the Amazon address and customer address fields
+// must be left blank. IPv6 addresses are automatically assigned from Amazon's
+// pool of IPv6 addresses; you cannot specify custom IPv6 addresses.
+//
+// For a public virtual interface, the Autonomous System Number (ASN) must be
+// private or already whitelisted for the virtual interface.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Direct Connect's
+// API operation CreateBGPPeer for usage and error information.
+//
+// Returned Error Codes:
+//   * ServerException
+//   A server-side error occurred during the API call. The error message will
+//   contain additional details about the cause.
+//
+//   * ClientException
+//   The API was called with invalid parameters. The error message will contain
+//   additional details about the cause.
+//
+func (c *DirectConnect) CreateBGPPeer(input *CreateBGPPeerInput) (*CreateBGPPeerOutput, error) {
+	req, out := c.CreateBGPPeerRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -742,6 +827,10 @@ func (c *DirectConnect) CreatePublicVirtualInterfaceRequest(input *CreatePublicV
 // sending traffic to public services of AWS such as Amazon Simple Storage Service
 // (Amazon S3).
 //
+// When creating an IPv6 public virtual interface (addressFamily is 'ipv6'),
+// the customer and amazon address fields should be left blank to use auto-assigned
+// IPv6 space. Custom IPv6 Addresses are currently not supported.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -760,6 +849,77 @@ func (c *DirectConnect) CreatePublicVirtualInterfaceRequest(input *CreatePublicV
 //
 func (c *DirectConnect) CreatePublicVirtualInterface(input *CreatePublicVirtualInterfaceInput) (*VirtualInterface, error) {
 	req, out := c.CreatePublicVirtualInterfaceRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeleteBGPPeer = "DeleteBGPPeer"
+
+// DeleteBGPPeerRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteBGPPeer operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DeleteBGPPeer for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteBGPPeer method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteBGPPeerRequest method.
+//    req, resp := client.DeleteBGPPeerRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *DirectConnect) DeleteBGPPeerRequest(input *DeleteBGPPeerInput) (req *request.Request, output *DeleteBGPPeerOutput) {
+	op := &request.Operation{
+		Name:       opDeleteBGPPeer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteBGPPeerInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteBGPPeerOutput{}
+	req.Data = output
+	return
+}
+
+// DeleteBGPPeer API operation for AWS Direct Connect.
+//
+// Deletes a BGP peer on the specified virtual interface that matches the specified
+// customer address and ASN. You cannot delete the last BGP peer from a virtual
+// interface.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Direct Connect's
+// API operation DeleteBGPPeer for usage and error information.
+//
+// Returned Error Codes:
+//   * ServerException
+//   A server-side error occurred during the API call. The error message will
+//   contain additional details about the cause.
+//
+//   * ClientException
+//   The API was called with invalid parameters. The error message will contain
+//   additional details about the cause.
+//
+func (c *DirectConnect) DeleteBGPPeer(input *DeleteBGPPeerInput) (*DeleteBGPPeerOutput, error) {
+	req, out := c.DeleteBGPPeerRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -2059,6 +2219,113 @@ func (s *AllocatePublicVirtualInterfaceInput) SetOwnerAccount(v string) *Allocat
 	return s
 }
 
+// A structure containing information about a BGP peer.
+type BGPPeer struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates the address family for the BGP peer.
+	//
+	//    * ipv4: IPv4 address family
+	//
+	//    * ipv6: IPv6 address family
+	AddressFamily *string `locationName:"addressFamily" type:"string" enum:"AddressFamily"`
+
+	// IP address assigned to the Amazon interface.
+	//
+	// Example: 192.168.1.1/30 or 2001:db8::1/125
+	AmazonAddress *string `locationName:"amazonAddress" type:"string"`
+
+	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
+	//
+	// Example: 65000
+	Asn *int64 `locationName:"asn" type:"integer"`
+
+	// Authentication key for BGP configuration.
+	//
+	// Example: asdf34example
+	AuthKey *string `locationName:"authKey" type:"string"`
+
+	// The state of the BGP peer.
+	//
+	//    * Verifying: The BGP peering addresses or ASN require validation before
+	//    the BGP peer can be created. This state only applies to BGP peers on a
+	//    public virtual interface.
+	//
+	//    * Pending: The BGP peer has been created, and is in this state until it
+	//    is ready to be established.
+	//
+	//    * Available: The BGP peer can be established.
+	//
+	//    * Deleting: The BGP peer is in the process of being deleted.
+	//
+	//    * Deleted: The BGP peer has been deleted and cannot be established.
+	BgpPeerState *string `locationName:"bgpPeerState" type:"string" enum:"BGPPeerState"`
+
+	// The Up/Down state of the BGP peer.
+	//
+	//    * Up: The BGP peer is established.
+	//
+	//    * Down: The BGP peer is down.
+	BgpStatus *string `locationName:"bgpStatus" type:"string" enum:"BGPStatus"`
+
+	// IP address assigned to the customer interface.
+	//
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
+	CustomerAddress *string `locationName:"customerAddress" type:"string"`
+}
+
+// String returns the string representation
+func (s BGPPeer) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BGPPeer) GoString() string {
+	return s.String()
+}
+
+// SetAddressFamily sets the AddressFamily field's value.
+func (s *BGPPeer) SetAddressFamily(v string) *BGPPeer {
+	s.AddressFamily = &v
+	return s
+}
+
+// SetAmazonAddress sets the AmazonAddress field's value.
+func (s *BGPPeer) SetAmazonAddress(v string) *BGPPeer {
+	s.AmazonAddress = &v
+	return s
+}
+
+// SetAsn sets the Asn field's value.
+func (s *BGPPeer) SetAsn(v int64) *BGPPeer {
+	s.Asn = &v
+	return s
+}
+
+// SetAuthKey sets the AuthKey field's value.
+func (s *BGPPeer) SetAuthKey(v string) *BGPPeer {
+	s.AuthKey = &v
+	return s
+}
+
+// SetBgpPeerState sets the BgpPeerState field's value.
+func (s *BGPPeer) SetBgpPeerState(v string) *BGPPeer {
+	s.BgpPeerState = &v
+	return s
+}
+
+// SetBgpStatus sets the BgpStatus field's value.
+func (s *BGPPeer) SetBgpStatus(v string) *BGPPeer {
+	s.BgpStatus = &v
+	return s
+}
+
+// SetCustomerAddress sets the CustomerAddress field's value.
+func (s *BGPPeer) SetCustomerAddress(v string) *BGPPeer {
+	s.CustomerAddress = &v
+	return s
+}
+
 // Container for the parameters to the ConfirmConnection operation.
 type ConfirmConnectionInput struct {
 	_ struct{} `type:"structure"`
@@ -2528,6 +2795,70 @@ func (s *Connections) SetConnections(v []*Connection) *Connections {
 	return s
 }
 
+// Container for the parameters to the CreateBGPPeer operation.
+type CreateBGPPeerInput struct {
+	_ struct{} `type:"structure"`
+
+	// Detailed information for the BGP peer to be created.
+	//
+	// Default: None
+	NewBGPPeer *NewBGPPeer `locationName:"newBGPPeer" type:"structure"`
+
+	// The ID of the virtual interface on which the BGP peer will be provisioned.
+	//
+	// Example: dxvif-456abc78
+	//
+	// Default: None
+	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateBGPPeerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateBGPPeerInput) GoString() string {
+	return s.String()
+}
+
+// SetNewBGPPeer sets the NewBGPPeer field's value.
+func (s *CreateBGPPeerInput) SetNewBGPPeer(v *NewBGPPeer) *CreateBGPPeerInput {
+	s.NewBGPPeer = v
+	return s
+}
+
+// SetVirtualInterfaceId sets the VirtualInterfaceId field's value.
+func (s *CreateBGPPeerInput) SetVirtualInterfaceId(v string) *CreateBGPPeerInput {
+	s.VirtualInterfaceId = &v
+	return s
+}
+
+// The response received when CreateBGPPeer is called.
+type CreateBGPPeerOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect
+	// location and the customer.
+	VirtualInterface *VirtualInterface `locationName:"virtualInterface" type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateBGPPeerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateBGPPeerOutput) GoString() string {
+	return s.String()
+}
+
+// SetVirtualInterface sets the VirtualInterface field's value.
+func (s *CreateBGPPeerOutput) SetVirtualInterface(v *VirtualInterface) *CreateBGPPeerOutput {
+	s.VirtualInterface = v
+	return s
+}
+
 // Container for the parameters to the CreateConnection operation.
 type CreateConnectionInput struct {
 	_ struct{} `type:"structure"`
@@ -2813,6 +3144,81 @@ func (s *CreatePublicVirtualInterfaceInput) SetConnectionId(v string) *CreatePub
 // SetNewPublicVirtualInterface sets the NewPublicVirtualInterface field's value.
 func (s *CreatePublicVirtualInterfaceInput) SetNewPublicVirtualInterface(v *NewPublicVirtualInterface) *CreatePublicVirtualInterfaceInput {
 	s.NewPublicVirtualInterface = v
+	return s
+}
+
+// Container for the parameters to the DeleteBGPPeer operation.
+type DeleteBGPPeerInput struct {
+	_ struct{} `type:"structure"`
+
+	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
+	//
+	// Example: 65000
+	Asn *int64 `locationName:"asn" type:"integer"`
+
+	// IP address assigned to the customer interface.
+	//
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
+	CustomerAddress *string `locationName:"customerAddress" type:"string"`
+
+	// The ID of the virtual interface from which the BGP peer will be deleted.
+	//
+	// Example: dxvif-456abc78
+	//
+	// Default: None
+	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteBGPPeerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBGPPeerInput) GoString() string {
+	return s.String()
+}
+
+// SetAsn sets the Asn field's value.
+func (s *DeleteBGPPeerInput) SetAsn(v int64) *DeleteBGPPeerInput {
+	s.Asn = &v
+	return s
+}
+
+// SetCustomerAddress sets the CustomerAddress field's value.
+func (s *DeleteBGPPeerInput) SetCustomerAddress(v string) *DeleteBGPPeerInput {
+	s.CustomerAddress = &v
+	return s
+}
+
+// SetVirtualInterfaceId sets the VirtualInterfaceId field's value.
+func (s *DeleteBGPPeerInput) SetVirtualInterfaceId(v string) *DeleteBGPPeerInput {
+	s.VirtualInterfaceId = &v
+	return s
+}
+
+// The response received when DeleteBGPPeer is called.
+type DeleteBGPPeerOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect
+	// location and the customer.
+	VirtualInterface *VirtualInterface `locationName:"virtualInterface" type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBGPPeerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBGPPeerOutput) GoString() string {
+	return s.String()
+}
+
+// SetVirtualInterface sets the VirtualInterface field's value.
+func (s *DeleteBGPPeerOutput) SetVirtualInterface(v *VirtualInterface) *DeleteBGPPeerOutput {
+	s.VirtualInterface = v
 	return s
 }
 
@@ -3740,13 +4146,92 @@ func (s *Location) SetLocationName(v string) *Location {
 	return s
 }
 
+// A structure containing information about a new BGP peer.
+type NewBGPPeer struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates the address family for the BGP peer.
+	//
+	//    * ipv4: IPv4 address family
+	//
+	//    * ipv6: IPv6 address family
+	AddressFamily *string `locationName:"addressFamily" type:"string" enum:"AddressFamily"`
+
+	// IP address assigned to the Amazon interface.
+	//
+	// Example: 192.168.1.1/30 or 2001:db8::1/125
+	AmazonAddress *string `locationName:"amazonAddress" type:"string"`
+
+	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
+	//
+	// Example: 65000
+	Asn *int64 `locationName:"asn" type:"integer"`
+
+	// Authentication key for BGP configuration.
+	//
+	// Example: asdf34example
+	AuthKey *string `locationName:"authKey" type:"string"`
+
+	// IP address assigned to the customer interface.
+	//
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
+	CustomerAddress *string `locationName:"customerAddress" type:"string"`
+}
+
+// String returns the string representation
+func (s NewBGPPeer) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NewBGPPeer) GoString() string {
+	return s.String()
+}
+
+// SetAddressFamily sets the AddressFamily field's value.
+func (s *NewBGPPeer) SetAddressFamily(v string) *NewBGPPeer {
+	s.AddressFamily = &v
+	return s
+}
+
+// SetAmazonAddress sets the AmazonAddress field's value.
+func (s *NewBGPPeer) SetAmazonAddress(v string) *NewBGPPeer {
+	s.AmazonAddress = &v
+	return s
+}
+
+// SetAsn sets the Asn field's value.
+func (s *NewBGPPeer) SetAsn(v int64) *NewBGPPeer {
+	s.Asn = &v
+	return s
+}
+
+// SetAuthKey sets the AuthKey field's value.
+func (s *NewBGPPeer) SetAuthKey(v string) *NewBGPPeer {
+	s.AuthKey = &v
+	return s
+}
+
+// SetCustomerAddress sets the CustomerAddress field's value.
+func (s *NewBGPPeer) SetCustomerAddress(v string) *NewBGPPeer {
+	s.CustomerAddress = &v
+	return s
+}
+
 // A structure containing information about a new private virtual interface.
 type NewPrivateVirtualInterface struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the address family for the BGP peer.
+	//
+	//    * ipv4: IPv4 address family
+	//
+	//    * ipv6: IPv6 address family
+	AddressFamily *string `locationName:"addressFamily" type:"string" enum:"AddressFamily"`
+
 	// IP address assigned to the Amazon interface.
 	//
-	// Example: 192.168.1.1/30
+	// Example: 192.168.1.1/30 or 2001:db8::1/125
 	AmazonAddress *string `locationName:"amazonAddress" type:"string"`
 
 	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
@@ -3763,7 +4248,7 @@ type NewPrivateVirtualInterface struct {
 
 	// IP address assigned to the customer interface.
 	//
-	// Example: 192.168.1.2/30
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
 	CustomerAddress *string `locationName:"customerAddress" type:"string"`
 
 	// The ID of the virtual private gateway to a VPC. This only applies to private
@@ -3821,6 +4306,12 @@ func (s *NewPrivateVirtualInterface) Validate() error {
 	return nil
 }
 
+// SetAddressFamily sets the AddressFamily field's value.
+func (s *NewPrivateVirtualInterface) SetAddressFamily(v string) *NewPrivateVirtualInterface {
+	s.AddressFamily = &v
+	return s
+}
+
 // SetAmazonAddress sets the AmazonAddress field's value.
 func (s *NewPrivateVirtualInterface) SetAmazonAddress(v string) *NewPrivateVirtualInterface {
 	s.AmazonAddress = &v
@@ -3868,9 +4359,16 @@ func (s *NewPrivateVirtualInterface) SetVlan(v int64) *NewPrivateVirtualInterfac
 type NewPrivateVirtualInterfaceAllocation struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the address family for the BGP peer.
+	//
+	//    * ipv4: IPv4 address family
+	//
+	//    * ipv6: IPv6 address family
+	AddressFamily *string `locationName:"addressFamily" type:"string" enum:"AddressFamily"`
+
 	// IP address assigned to the Amazon interface.
 	//
-	// Example: 192.168.1.1/30
+	// Example: 192.168.1.1/30 or 2001:db8::1/125
 	AmazonAddress *string `locationName:"amazonAddress" type:"string"`
 
 	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
@@ -3887,7 +4385,7 @@ type NewPrivateVirtualInterfaceAllocation struct {
 
 	// IP address assigned to the customer interface.
 	//
-	// Example: 192.168.1.2/30
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
 	CustomerAddress *string `locationName:"customerAddress" type:"string"`
 
 	// The name of the virtual interface assigned by the customer.
@@ -3934,6 +4432,12 @@ func (s *NewPrivateVirtualInterfaceAllocation) Validate() error {
 	return nil
 }
 
+// SetAddressFamily sets the AddressFamily field's value.
+func (s *NewPrivateVirtualInterfaceAllocation) SetAddressFamily(v string) *NewPrivateVirtualInterfaceAllocation {
+	s.AddressFamily = &v
+	return s
+}
+
 // SetAmazonAddress sets the AmazonAddress field's value.
 func (s *NewPrivateVirtualInterfaceAllocation) SetAmazonAddress(v string) *NewPrivateVirtualInterfaceAllocation {
 	s.AmazonAddress = &v
@@ -3974,12 +4478,17 @@ func (s *NewPrivateVirtualInterfaceAllocation) SetVlan(v int64) *NewPrivateVirtu
 type NewPublicVirtualInterface struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the address family for the BGP peer.
+	//
+	//    * ipv4: IPv4 address family
+	//
+	//    * ipv6: IPv6 address family
+	AddressFamily *string `locationName:"addressFamily" type:"string" enum:"AddressFamily"`
+
 	// IP address assigned to the Amazon interface.
 	//
-	// Example: 192.168.1.1/30
-	//
-	// AmazonAddress is a required field
-	AmazonAddress *string `locationName:"amazonAddress" type:"string" required:"true"`
+	// Example: 192.168.1.1/30 or 2001:db8::1/125
+	AmazonAddress *string `locationName:"amazonAddress" type:"string"`
 
 	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
 	//
@@ -3995,16 +4504,12 @@ type NewPublicVirtualInterface struct {
 
 	// IP address assigned to the customer interface.
 	//
-	// Example: 192.168.1.2/30
-	//
-	// CustomerAddress is a required field
-	CustomerAddress *string `locationName:"customerAddress" type:"string" required:"true"`
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
+	CustomerAddress *string `locationName:"customerAddress" type:"string"`
 
 	// A list of routes to be advertised to the AWS network in this region (public
 	// virtual interface).
-	//
-	// RouteFilterPrefixes is a required field
-	RouteFilterPrefixes []*RouteFilterPrefix `locationName:"routeFilterPrefixes" type:"list" required:"true"`
+	RouteFilterPrefixes []*RouteFilterPrefix `locationName:"routeFilterPrefixes" type:"list"`
 
 	// The name of the virtual interface assigned by the customer.
 	//
@@ -4034,17 +4539,8 @@ func (s NewPublicVirtualInterface) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *NewPublicVirtualInterface) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "NewPublicVirtualInterface"}
-	if s.AmazonAddress == nil {
-		invalidParams.Add(request.NewErrParamRequired("AmazonAddress"))
-	}
 	if s.Asn == nil {
 		invalidParams.Add(request.NewErrParamRequired("Asn"))
-	}
-	if s.CustomerAddress == nil {
-		invalidParams.Add(request.NewErrParamRequired("CustomerAddress"))
-	}
-	if s.RouteFilterPrefixes == nil {
-		invalidParams.Add(request.NewErrParamRequired("RouteFilterPrefixes"))
 	}
 	if s.VirtualInterfaceName == nil {
 		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceName"))
@@ -4057,6 +4553,12 @@ func (s *NewPublicVirtualInterface) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAddressFamily sets the AddressFamily field's value.
+func (s *NewPublicVirtualInterface) SetAddressFamily(v string) *NewPublicVirtualInterface {
+	s.AddressFamily = &v
+	return s
 }
 
 // SetAmazonAddress sets the AmazonAddress field's value.
@@ -4106,12 +4608,17 @@ func (s *NewPublicVirtualInterface) SetVlan(v int64) *NewPublicVirtualInterface 
 type NewPublicVirtualInterfaceAllocation struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the address family for the BGP peer.
+	//
+	//    * ipv4: IPv4 address family
+	//
+	//    * ipv6: IPv6 address family
+	AddressFamily *string `locationName:"addressFamily" type:"string" enum:"AddressFamily"`
+
 	// IP address assigned to the Amazon interface.
 	//
-	// Example: 192.168.1.1/30
-	//
-	// AmazonAddress is a required field
-	AmazonAddress *string `locationName:"amazonAddress" type:"string" required:"true"`
+	// Example: 192.168.1.1/30 or 2001:db8::1/125
+	AmazonAddress *string `locationName:"amazonAddress" type:"string"`
 
 	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
 	//
@@ -4127,16 +4634,12 @@ type NewPublicVirtualInterfaceAllocation struct {
 
 	// IP address assigned to the customer interface.
 	//
-	// Example: 192.168.1.2/30
-	//
-	// CustomerAddress is a required field
-	CustomerAddress *string `locationName:"customerAddress" type:"string" required:"true"`
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
+	CustomerAddress *string `locationName:"customerAddress" type:"string"`
 
 	// A list of routes to be advertised to the AWS network in this region (public
 	// virtual interface).
-	//
-	// RouteFilterPrefixes is a required field
-	RouteFilterPrefixes []*RouteFilterPrefix `locationName:"routeFilterPrefixes" type:"list" required:"true"`
+	RouteFilterPrefixes []*RouteFilterPrefix `locationName:"routeFilterPrefixes" type:"list"`
 
 	// The name of the virtual interface assigned by the customer.
 	//
@@ -4166,17 +4669,8 @@ func (s NewPublicVirtualInterfaceAllocation) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *NewPublicVirtualInterfaceAllocation) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "NewPublicVirtualInterfaceAllocation"}
-	if s.AmazonAddress == nil {
-		invalidParams.Add(request.NewErrParamRequired("AmazonAddress"))
-	}
 	if s.Asn == nil {
 		invalidParams.Add(request.NewErrParamRequired("Asn"))
-	}
-	if s.CustomerAddress == nil {
-		invalidParams.Add(request.NewErrParamRequired("CustomerAddress"))
-	}
-	if s.RouteFilterPrefixes == nil {
-		invalidParams.Add(request.NewErrParamRequired("RouteFilterPrefixes"))
 	}
 	if s.VirtualInterfaceName == nil {
 		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceName"))
@@ -4189,6 +4683,12 @@ func (s *NewPublicVirtualInterfaceAllocation) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAddressFamily sets the AddressFamily field's value.
+func (s *NewPublicVirtualInterfaceAllocation) SetAddressFamily(v string) *NewPublicVirtualInterfaceAllocation {
+	s.AddressFamily = &v
+	return s
 }
 
 // SetAmazonAddress sets the AmazonAddress field's value.
@@ -4274,7 +4774,9 @@ type RouteFilterPrefix struct {
 	// CIDR notation for the advertised route. Multiple routes are separated by
 	// commas.
 	//
-	// Example: 10.10.10.0/24,10.10.11.0/24
+	// IPv6 CIDRs must be at least a /64 or shorter
+	//
+	// Example: 10.10.10.0/24,10.10.11.0/24,2001:db8::/64
 	Cidr *string `locationName:"cidr" type:"string"`
 }
 
@@ -4550,9 +5052,16 @@ func (s *VirtualGateway) SetVirtualGatewayState(v string) *VirtualGateway {
 type VirtualInterface struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the address family for the BGP peer.
+	//
+	//    * ipv4: IPv4 address family
+	//
+	//    * ipv6: IPv6 address family
+	AddressFamily *string `locationName:"addressFamily" type:"string" enum:"AddressFamily"`
+
 	// IP address assigned to the Amazon interface.
 	//
-	// Example: 192.168.1.1/30
+	// Example: 192.168.1.1/30 or 2001:db8::1/125
 	AmazonAddress *string `locationName:"amazonAddress" type:"string"`
 
 	// Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.
@@ -4565,6 +5074,9 @@ type VirtualInterface struct {
 	// Example: asdf34example
 	AuthKey *string `locationName:"authKey" type:"string"`
 
+	// A list of the BGP peers configured on this virtual interface.
+	BgpPeers []*BGPPeer `locationName:"bgpPeers" type:"list"`
+
 	// ID of the connection.
 	//
 	// Example: dxcon-fg5678gh
@@ -4574,7 +5086,7 @@ type VirtualInterface struct {
 
 	// IP address assigned to the customer interface.
 	//
-	// Example: 192.168.1.2/30
+	// Example: 192.168.1.2/30 or 2001:db8::2/125
 	CustomerAddress *string `locationName:"customerAddress" type:"string"`
 
 	// Information for generating the customer router configuration.
@@ -4664,6 +5176,12 @@ func (s VirtualInterface) GoString() string {
 	return s.String()
 }
 
+// SetAddressFamily sets the AddressFamily field's value.
+func (s *VirtualInterface) SetAddressFamily(v string) *VirtualInterface {
+	s.AddressFamily = &v
+	return s
+}
+
 // SetAmazonAddress sets the AmazonAddress field's value.
 func (s *VirtualInterface) SetAmazonAddress(v string) *VirtualInterface {
 	s.AmazonAddress = &v
@@ -4679,6 +5197,12 @@ func (s *VirtualInterface) SetAsn(v int64) *VirtualInterface {
 // SetAuthKey sets the AuthKey field's value.
 func (s *VirtualInterface) SetAuthKey(v string) *VirtualInterface {
 	s.AuthKey = &v
+	return s
+}
+
+// SetBgpPeers sets the BgpPeers field's value.
+func (s *VirtualInterface) SetBgpPeers(v []*BGPPeer) *VirtualInterface {
+	s.BgpPeers = v
 	return s
 }
 
@@ -4753,6 +5277,63 @@ func (s *VirtualInterface) SetVlan(v int64) *VirtualInterface {
 	s.Vlan = &v
 	return s
 }
+
+// Indicates the address family for the BGP peer.
+//
+//    * ipv4: IPv4 address family
+//
+//    * ipv6: IPv6 address family
+const (
+	// AddressFamilyIpv4 is a AddressFamily enum value
+	AddressFamilyIpv4 = "ipv4"
+
+	// AddressFamilyIpv6 is a AddressFamily enum value
+	AddressFamilyIpv6 = "ipv6"
+)
+
+// The state of the BGP peer.
+//
+//    * Verifying: The BGP peering addresses or ASN require validation before
+//    the BGP peer can be created. This state only applies to BGP peers on a
+//    public virtual interface.
+//
+//    * Pending: The BGP peer has been created, and is in this state until it
+//    is ready to be established.
+//
+//    * Available: The BGP peer can be established.
+//
+//    * Deleting: The BGP peer is in the process of being deleted.
+//
+//    * Deleted: The BGP peer has been deleted and cannot be established.
+const (
+	// BGPPeerStateVerifying is a BGPPeerState enum value
+	BGPPeerStateVerifying = "verifying"
+
+	// BGPPeerStatePending is a BGPPeerState enum value
+	BGPPeerStatePending = "pending"
+
+	// BGPPeerStateAvailable is a BGPPeerState enum value
+	BGPPeerStateAvailable = "available"
+
+	// BGPPeerStateDeleting is a BGPPeerState enum value
+	BGPPeerStateDeleting = "deleting"
+
+	// BGPPeerStateDeleted is a BGPPeerState enum value
+	BGPPeerStateDeleted = "deleted"
+)
+
+// The Up/Down state of the BGP peer.
+//
+//    * Up: The BGP peer is established.
+//
+//    * Down: The BGP peer is down.
+const (
+	// BGPStatusUp is a BGPStatus enum value
+	BGPStatusUp = "up"
+
+	// BGPStatusDown is a BGPStatus enum value
+	BGPStatusDown = "down"
+)
 
 // State of the connection.
 //

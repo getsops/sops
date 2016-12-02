@@ -83,6 +83,10 @@ type DirectConnectAPI interface {
 
 	ConfirmPublicVirtualInterface(*directconnect.ConfirmPublicVirtualInterfaceInput) (*directconnect.ConfirmPublicVirtualInterfaceOutput, error)
 
+	CreateBGPPeerRequest(*directconnect.CreateBGPPeerInput) (*request.Request, *directconnect.CreateBGPPeerOutput)
+
+	CreateBGPPeer(*directconnect.CreateBGPPeerInput) (*directconnect.CreateBGPPeerOutput, error)
+
 	CreateConnectionRequest(*directconnect.CreateConnectionInput) (*request.Request, *directconnect.Connection)
 
 	CreateConnection(*directconnect.CreateConnectionInput) (*directconnect.Connection, error)
@@ -98,6 +102,10 @@ type DirectConnectAPI interface {
 	CreatePublicVirtualInterfaceRequest(*directconnect.CreatePublicVirtualInterfaceInput) (*request.Request, *directconnect.VirtualInterface)
 
 	CreatePublicVirtualInterface(*directconnect.CreatePublicVirtualInterfaceInput) (*directconnect.VirtualInterface, error)
+
+	DeleteBGPPeerRequest(*directconnect.DeleteBGPPeerInput) (*request.Request, *directconnect.DeleteBGPPeerOutput)
+
+	DeleteBGPPeer(*directconnect.DeleteBGPPeerInput) (*directconnect.DeleteBGPPeerOutput, error)
 
 	DeleteConnectionRequest(*directconnect.DeleteConnectionInput) (*request.Request, *directconnect.Connection)
 

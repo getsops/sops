@@ -555,12 +555,13 @@
     },
     "DescribeMetricFiltersRequest":{
       "type":"structure",
-      "required":["logGroupName"],
       "members":{
         "logGroupName":{"shape":"LogGroupName"},
         "filterNamePrefix":{"shape":"FilterName"},
         "nextToken":{"shape":"NextToken"},
-        "limit":{"shape":"DescribeLimit"}
+        "limit":{"shape":"DescribeLimit"},
+        "metricName":{"shape":"MetricName"},
+        "metricNamespace":{"shape":"MetricNamespace"}
       }
     },
     "DescribeMetricFiltersResponse":{
@@ -861,7 +862,8 @@
         "filterName":{"shape":"FilterName"},
         "filterPattern":{"shape":"FilterPattern"},
         "metricTransformations":{"shape":"MetricTransformations"},
-        "creationTime":{"shape":"Timestamp"}
+        "creationTime":{"shape":"Timestamp"},
+        "logGroupName":{"shape":"LogGroupName"}
       }
     },
     "MetricFilterMatchRecord":{

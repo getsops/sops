@@ -397,9 +397,11 @@ func ExampleCloudWatchLogs_DescribeMetricFilters() {
 	svc := cloudwatchlogs.New(sess)
 
 	params := &cloudwatchlogs.DescribeMetricFiltersInput{
-		LogGroupName:     aws.String("LogGroupName"), // Required
 		FilterNamePrefix: aws.String("FilterName"),
 		Limit:            aws.Int64(1),
+		LogGroupName:     aws.String("LogGroupName"),
+		MetricName:       aws.String("MetricName"),
+		MetricNamespace:  aws.String("MetricNamespace"),
 		NextToken:        aws.String("NextToken"),
 	}
 	resp, err := svc.DescribeMetricFilters(params)

@@ -108,6 +108,14 @@ func decodePayload(v interface{}, r io.Reader) error {
 }
 
 func TestGetCertificate(t *testing.T) {
+	testGetCertificate(t, false)
+}
+
+func TestGetCertificate_trailingDot(t *testing.T) {
+	testGetCertificate(t, true)
+}
+
+func testGetCertificate(t *testing.T, trailingDot bool) {
 	const domain = "example.org"
 	man := &Manager{Prompt: AcceptTOS}
 	defer man.stopRenew()
@@ -167,6 +175,9 @@ func TestGetCertificate(t *testing.T) {
 			if err != nil {
 				t.Fatalf("new-cert: CSR: %v", err)
 			}
+			if csr.Subject.CommonName != domain {
+				t.Errorf("CommonName in CSR = %q; want %q", csr.Subject.CommonName, domain)
+			}
 			der, err := dummyCert(csr.PublicKey, domain)
 			if err != nil {
 				t.Fatalf("new-cert: dummyCert: %v", err)
@@ -201,11 +212,14 @@ func TestGetCertificate(t *testing.T) {
 	// simulate tls.Config.GetCertificate
 	var tlscert *tls.Certificate
 	done := make(chan struct{})
-	go func() {
-		hello := &tls.ClientHelloInfo{ServerName: domain}
+	go func(serverName string) {
+		if trailingDot {
+			serverName += "."
+		}
+		hello := &tls.ClientHelloInfo{ServerName: serverName}
 		tlscert, err = man.GetCertificate(hello)
 		close(done)
-	}()
+	}(domain)
 	select {
 	case <-time.After(time.Minute):
 		t.Fatal("man.GetCertificate took too long to return")

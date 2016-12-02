@@ -1255,7 +1255,8 @@
         "NotificationTopicArn":{"shape":"String"},
         "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
         "SnapshotRetentionLimit":{"shape":"IntegerOptional"},
-        "SnapshotWindow":{"shape":"String"}
+        "SnapshotWindow":{"shape":"String"},
+        "AuthToken":{"shape":"String"}
       }
     },
     "CreateCacheClusterResult":{
@@ -1350,7 +1351,8 @@
         "NotificationTopicArn":{"shape":"String"},
         "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
         "SnapshotRetentionLimit":{"shape":"IntegerOptional"},
-        "SnapshotWindow":{"shape":"String"}
+        "SnapshotWindow":{"shape":"String"},
+        "AuthToken":{"shape":"String"}
       }
     },
     "CreateReplicationGroupResult":{

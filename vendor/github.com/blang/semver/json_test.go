@@ -42,4 +42,8 @@ func TestJSONUnmarshal(t *testing.T) {
 	if err := json.Unmarshal([]byte(badVersionString), &v); err == nil {
 		t.Fatal("expected JSON unmarshal error, got nil")
 	}
+
+	if err := json.Unmarshal([]byte("3.1"), &v); err == nil {
+		t.Fatal("expected JSON unmarshal error, got nil")
+	}
 }

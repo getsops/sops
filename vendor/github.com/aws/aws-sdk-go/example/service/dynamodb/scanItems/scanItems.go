@@ -24,7 +24,7 @@ func main() {
 		exitWithError(fmt.Errorf("failed to load config, %v", err))
 	}
 
-	// Create the config specifiing the Region for the DynamoDB table.
+	// Create the config specifying the Region for the DynamoDB table.
 	// If Config.Region is not set the region must come from the shared
 	// config or AWS_REGION environment variable.
 	awscfg := &aws.Config{}

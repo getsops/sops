@@ -11,6 +11,81 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 )
 
+const opCancelCluster = "CancelCluster"
+
+// CancelClusterRequest generates a "aws/request.Request" representing the
+// client's request for the CancelCluster operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CancelCluster for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CancelCluster method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CancelClusterRequest method.
+//    req, resp := client.CancelClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *Snowball) CancelClusterRequest(input *CancelClusterInput) (req *request.Request, output *CancelClusterOutput) {
+	op := &request.Operation{
+		Name:       opCancelCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelClusterInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CancelClusterOutput{}
+	req.Data = output
+	return
+}
+
+// CancelCluster API operation for Amazon Import/Export Snowball.
+//
+// Cancels a cluster job. You can only cancel a cluster job while it's in the
+// AwaitingQuorum status. You'll have at least an hour after creating a cluster
+// job to cancel it.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Import/Export Snowball's
+// API operation CancelCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * KMSRequestFailedException
+//   The provided AWS Key Management Service key lacks the permissions to perform
+//   the specified CreateJob or UpdateJob action.
+//
+//   * InvalidJobStateException
+//   The action can't be performed because the job's current state doesn't allow
+//   that action to be performed.
+//
+//   * InvalidResourceException
+//   The specified resource can't be found. Check the information you provided
+//   in your last request, and try again.
+//
+func (c *Snowball) CancelCluster(input *CancelClusterInput) (*CancelClusterOutput, error) {
+	req, out := c.CancelClusterRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opCancelJob = "CancelJob"
 
 // CancelJobRequest generates a "aws/request.Request" representing the
@@ -56,10 +131,10 @@ func (c *Snowball) CancelJobRequest(input *CancelJobInput) (req *request.Request
 
 // CancelJob API operation for Amazon Import/Export Snowball.
 //
-// Cancels the specified job. Note that you can only cancel a job before its
-// JobState value changes to PreparingAppliance. Requesting the ListJobs or
-// DescribeJob action will return a job's JobState as part of the response element
-// data returned.
+// Cancels the specified job. You can only cancel a job before its JobState
+// value changes to PreparingAppliance. Requesting the ListJobs or DescribeJob
+// action will return a job's JobState as part of the response element data
+// returned.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -161,6 +236,82 @@ func (c *Snowball) CreateAddress(input *CreateAddressInput) (*CreateAddressOutpu
 	return out, err
 }
 
+const opCreateCluster = "CreateCluster"
+
+// CreateClusterRequest generates a "aws/request.Request" representing the
+// client's request for the CreateCluster operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CreateCluster for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateCluster method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateClusterRequest method.
+//    req, resp := client.CreateClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *Snowball) CreateClusterRequest(input *CreateClusterInput) (req *request.Request, output *CreateClusterOutput) {
+	op := &request.Operation{
+		Name:       opCreateCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateClusterInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateClusterOutput{}
+	req.Data = output
+	return
+}
+
+// CreateCluster API operation for Amazon Import/Export Snowball.
+//
+// Creates an empty cluster. Each cluster supports five nodes. You use the CreateJob
+// action separately to create the jobs for each of these nodes. The cluster
+// does not ship until these five node jobs have been created.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Import/Export Snowball's
+// API operation CreateCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidResourceException
+//   The specified resource can't be found. Check the information you provided
+//   in your last request, and try again.
+//
+//   * KMSRequestFailedException
+//   The provided AWS Key Management Service key lacks the permissions to perform
+//   the specified CreateJob or UpdateJob action.
+//
+//   * InvalidInputCombinationException
+//   Job or cluster creation failed. One ore more inputs were invalid. Confirm
+//   that the CreateClusterRequest$SnowballType value supports your CreateJobRequest$JobType,
+//   and try again.
+//
+func (c *Snowball) CreateCluster(input *CreateClusterInput) (*CreateClusterOutput, error) {
+	req, out := c.CreateClusterRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opCreateJob = "CreateJob"
 
 // CreateJobRequest generates a "aws/request.Request" representing the
@@ -207,9 +358,10 @@ func (c *Snowball) CreateJobRequest(input *CreateJobInput) (req *request.Request
 // CreateJob API operation for Amazon Import/Export Snowball.
 //
 // Creates a job to import or export data between Amazon S3 and your on-premises
-// data center. Note that your AWS account must have the right trust policies
-// and permissions in place to create a job for Snowball. For more information,
-// see api-reference-policies.
+// data center. Your AWS account must have the right trust policies and permissions
+// in place to create a job for Snowball. If you're creating a job for a node
+// in a cluster, you only need to provide the clusterId value; the other job
+// attributes are inherited from the cluster. .
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -226,6 +378,17 @@ func (c *Snowball) CreateJobRequest(input *CreateJobInput) (req *request.Request
 //   * KMSRequestFailedException
 //   The provided AWS Key Management Service key lacks the permissions to perform
 //   the specified CreateJob or UpdateJob action.
+//
+//   * InvalidInputCombinationException
+//   Job or cluster creation failed. One ore more inputs were invalid. Confirm
+//   that the CreateClusterRequest$SnowballType value supports your CreateJobRequest$JobType,
+//   and try again.
+//
+//   * ClusterLimitExceededException
+//   Job creation failed. Currently, clusters support five nodes. If you have
+//   less than five nodes for your cluster and you have more nodes to create for
+//   this cluster, try again and create jobs until your cluster has exactly five
+//   notes.
 //
 func (c *Snowball) CreateJob(input *CreateJobInput) (*CreateJobOutput, error) {
 	req, out := c.CreateJobRequest(input)
@@ -397,6 +560,72 @@ func (c *Snowball) DescribeAddressesPages(input *DescribeAddressesInput, fn func
 	})
 }
 
+const opDescribeCluster = "DescribeCluster"
+
+// DescribeClusterRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeCluster operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DescribeCluster for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeCluster method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeClusterRequest method.
+//    req, resp := client.DescribeClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *Snowball) DescribeClusterRequest(input *DescribeClusterInput) (req *request.Request, output *DescribeClusterOutput) {
+	op := &request.Operation{
+		Name:       opDescribeCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeClusterInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeClusterOutput{}
+	req.Data = output
+	return
+}
+
+// DescribeCluster API operation for Amazon Import/Export Snowball.
+//
+// Returns information about a specific cluster including shipping information,
+// cluster status, and other important metadata.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Import/Export Snowball's
+// API operation DescribeCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidResourceException
+//   The specified resource can't be found. Check the information you provided
+//   in your last request, and try again.
+//
+func (c *Snowball) DescribeCluster(input *DescribeClusterInput) (*DescribeClusterOutput, error) {
+	req, out := c.DescribeClusterRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeJob = "DescribeJob"
 
 // DescribeJobRequest generates a "aws/request.Request" representing the
@@ -443,7 +672,7 @@ func (c *Snowball) DescribeJobRequest(input *DescribeJobInput) (req *request.Req
 // DescribeJob API operation for Amazon Import/Export Snowball.
 //
 // Returns information about a specific job including shipping information,
-// job status, and other important metadata.
+// job status, and other important metadata. .
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -524,8 +753,8 @@ func (c *Snowball) GetJobManifestRequest(input *GetJobManifestInput) (req *reque
 // separately helps prevent unauthorized parties from gaining access to the
 // Snowball associated with that job.
 //
-// Note that the credentials of a given job, including its manifest file and
-// unlock code, expire 90 days after the job is created.
+// The credentials of a given job, including its manifest file and unlock code,
+// expire 90 days after the job is created.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -678,9 +907,8 @@ func (c *Snowball) GetSnowballUsageRequest(input *GetSnowballUsageInput) (req *r
 // Returns information about the Snowball service limit for your account, and
 // also the number of Snowballs your account has in use.
 //
-// Note that the default service limit for the number of Snowballs that you
-// can have at one time is 1. If you want to increase your service limit, contact
-// AWS Support.
+// The default service limit for the number of Snowballs that you can have at
+// one time is 1. If you want to increase your service limit, contact AWS Support.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -690,6 +918,134 @@ func (c *Snowball) GetSnowballUsageRequest(input *GetSnowballUsageInput) (req *r
 // API operation GetSnowballUsage for usage and error information.
 func (c *Snowball) GetSnowballUsage(input *GetSnowballUsageInput) (*GetSnowballUsageOutput, error) {
 	req, out := c.GetSnowballUsageRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListClusterJobs = "ListClusterJobs"
+
+// ListClusterJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListClusterJobs operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListClusterJobs for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListClusterJobs method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListClusterJobsRequest method.
+//    req, resp := client.ListClusterJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *Snowball) ListClusterJobsRequest(input *ListClusterJobsInput) (req *request.Request, output *ListClusterJobsOutput) {
+	op := &request.Operation{
+		Name:       opListClusterJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListClusterJobsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListClusterJobsOutput{}
+	req.Data = output
+	return
+}
+
+// ListClusterJobs API operation for Amazon Import/Export Snowball.
+//
+// Returns an array of JobListEntry objects of the specified length. Each JobListEntry
+// object is for a job in the specified cluster and contains a job's state,
+// a job's ID, and other information.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Import/Export Snowball's
+// API operation ListClusterJobs for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidResourceException
+//   The specified resource can't be found. Check the information you provided
+//   in your last request, and try again.
+//
+func (c *Snowball) ListClusterJobs(input *ListClusterJobsInput) (*ListClusterJobsOutput, error) {
+	req, out := c.ListClusterJobsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListClusters = "ListClusters"
+
+// ListClustersRequest generates a "aws/request.Request" representing the
+// client's request for the ListClusters operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListClusters for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListClusters method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListClustersRequest method.
+//    req, resp := client.ListClustersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *Snowball) ListClustersRequest(input *ListClustersInput) (req *request.Request, output *ListClustersOutput) {
+	op := &request.Operation{
+		Name:       opListClusters,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListClustersInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListClustersOutput{}
+	req.Data = output
+	return
+}
+
+// ListClusters API operation for Amazon Import/Export Snowball.
+//
+// Returns an array of ClusterListEntry objects of the specified length. Each
+// ClusterListEntry object contains a cluster's state, a cluster's ID, and other
+// important status information.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Import/Export Snowball's
+// API operation ListClusters for usage and error information.
+func (c *Snowball) ListClusters(input *ListClustersInput) (*ListClustersOutput, error) {
+	req, out := c.ListClustersRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -788,6 +1144,87 @@ func (c *Snowball) ListJobsPages(input *ListJobsInput, fn func(p *ListJobsOutput
 	})
 }
 
+const opUpdateCluster = "UpdateCluster"
+
+// UpdateClusterRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCluster operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See UpdateCluster for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateCluster method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateClusterRequest method.
+//    req, resp := client.UpdateClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *Snowball) UpdateClusterRequest(input *UpdateClusterInput) (req *request.Request, output *UpdateClusterOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateClusterInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateClusterOutput{}
+	req.Data = output
+	return
+}
+
+// UpdateCluster API operation for Amazon Import/Export Snowball.
+//
+// While a cluster's ClusterState value is in the AwaitingQuorum state, you
+// can update some of the information associated with a cluster. Once the cluster
+// changes to a different job state, usually 60 minutes after the cluster being
+// created, this action is no longer available.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Import/Export Snowball's
+// API operation UpdateCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidResourceException
+//   The specified resource can't be found. Check the information you provided
+//   in your last request, and try again.
+//
+//   * InvalidJobStateException
+//   The action can't be performed because the job's current state doesn't allow
+//   that action to be performed.
+//
+//   * KMSRequestFailedException
+//   The provided AWS Key Management Service key lacks the permissions to perform
+//   the specified CreateJob or UpdateJob action.
+//
+//   * InvalidInputCombinationException
+//   Job or cluster creation failed. One ore more inputs were invalid. Confirm
+//   that the CreateClusterRequest$SnowballType value supports your CreateJobRequest$JobType,
+//   and try again.
+//
+func (c *Snowball) UpdateCluster(input *UpdateClusterInput) (*UpdateClusterOutput, error) {
+	req, out := c.UpdateClusterRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opUpdateJob = "UpdateJob"
 
 // UpdateJobRequest generates a "aws/request.Request" representing the
@@ -857,6 +1294,17 @@ func (c *Snowball) UpdateJobRequest(input *UpdateJobInput) (req *request.Request
 //   The provided AWS Key Management Service key lacks the permissions to perform
 //   the specified CreateJob or UpdateJob action.
 //
+//   * InvalidInputCombinationException
+//   Job or cluster creation failed. One ore more inputs were invalid. Confirm
+//   that the CreateClusterRequest$SnowballType value supports your CreateJobRequest$JobType,
+//   and try again.
+//
+//   * ClusterLimitExceededException
+//   Job creation failed. Currently, clusters support five nodes. If you have
+//   less than five nodes for your cluster and you have more nodes to create for
+//   this cluster, try again and create jobs until your cluster has exactly five
+//   notes.
+//
 func (c *Snowball) UpdateJob(input *UpdateJobInput) (*UpdateJobOutput, error) {
 	req, out := c.UpdateJobRequest(input)
 	err := req.Send()
@@ -883,7 +1331,7 @@ type Address struct {
 	// The country in an address that a Snowball is to be delivered to.
 	Country *string `min:"1" type:"string"`
 
-	// A landmark listed in an address that a Snowball is to be delivered to.
+	// The landmark identifying the address that the appliance will be shipped to.
 	Landmark *string `min:"1" type:"string"`
 
 	// The name of a person to receive a Snowball at an address.
@@ -896,8 +1344,7 @@ type Address struct {
 	// The postal code in an address that a Snowball is to be delivered to.
 	PostalCode *string `min:"1" type:"string"`
 
-	// The prefecture or district in an address that a Snowball is to be delivered
-	// to.
+	// The prefecture or district that the appliance will be shipped to.
 	PrefectureOrDistrict *string `min:"1" type:"string"`
 
 	// The state or province in an address that a Snowball is to be delivered to.
@@ -1050,10 +1497,66 @@ func (s *Address) SetStreet3(v string) *Address {
 	return s
 }
 
+type CancelClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The 39-character ID for the cluster that you want to cancel, for example
+	// CID123e4567-e89b-12d3-a456-426655440000.
+	//
+	// ClusterId is a required field
+	ClusterId *string `min:"39" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelClusterInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+	if s.ClusterId != nil && len(*s.ClusterId) < 39 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterId", 39))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *CancelClusterInput) SetClusterId(v string) *CancelClusterInput {
+	s.ClusterId = &v
+	return s
+}
+
+type CancelClusterOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelClusterOutput) GoString() string {
+	return s.String()
+}
+
 type CancelJobInput struct {
 	_ struct{} `type:"structure"`
 
-	// The 39 character job ID for the job that you want to cancel, for example
+	// The 39-character job ID for the job that you want to cancel, for example
 	// JID123e4567-e89b-12d3-a456-426655440000.
 	//
 	// JobId is a required field
@@ -1104,6 +1607,205 @@ func (s CancelJobOutput) String() string {
 // GoString returns the string representation
 func (s CancelJobOutput) GoString() string {
 	return s.String()
+}
+
+// Contains a cluster's state, a cluster's ID, and other important information.
+type ClusterListEntry struct {
+	_ struct{} `type:"structure"`
+
+	// The 39-character ID for the cluster that you want to list, for example CID123e4567-e89b-12d3-a456-426655440000.
+	ClusterId *string `min:"1" type:"string"`
+
+	// The current state of this cluster. For information about the state of a specific
+	// node, see JobListEntry$JobState.
+	ClusterState *string `type:"string" enum:"ClusterState"`
+
+	// The creation date for this cluster.
+	CreationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Defines an optional description of the cluster, for example Environmental
+	// Data Cluster-01.
+	Description *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ClusterListEntry) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClusterListEntry) GoString() string {
+	return s.String()
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *ClusterListEntry) SetClusterId(v string) *ClusterListEntry {
+	s.ClusterId = &v
+	return s
+}
+
+// SetClusterState sets the ClusterState field's value.
+func (s *ClusterListEntry) SetClusterState(v string) *ClusterListEntry {
+	s.ClusterState = &v
+	return s
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *ClusterListEntry) SetCreationDate(v time.Time) *ClusterListEntry {
+	s.CreationDate = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ClusterListEntry) SetDescription(v string) *ClusterListEntry {
+	s.Description = &v
+	return s
+}
+
+// Contains metadata about a specific cluster.
+type ClusterMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The automatically generated ID for a specific address.
+	AddressId *string `min:"40" type:"string"`
+
+	// The automatically generated ID for a cluster.
+	ClusterId *string `min:"1" type:"string"`
+
+	// The current status of the cluster.
+	ClusterState *string `type:"string" enum:"ClusterState"`
+
+	// The creation date for this cluster.
+	CreationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The optional description of the cluster.
+	Description *string `min:"1" type:"string"`
+
+	// The type of job for this cluster. Currently, the only job type supported
+	// for clusters is LOCAL_USE.
+	JobType *string `type:"string" enum:"JobType"`
+
+	// The KmsKeyARN Amazon Resource Name (ARN) associated with this cluster. This
+	// ARN was created using the CreateKey (http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html)
+	// API action in AWS Key Management Service (AWS KMS).
+	KmsKeyARN *string `type:"string"`
+
+	// The Amazon Simple Notification Service (Amazon SNS) notification settings
+	// for this cluster.
+	Notification *Notification `type:"structure"`
+
+	// The arrays of JobResource objects that can include updated S3Resource objects
+	// or LambdaResource objects.
+	Resources *JobResource `type:"structure"`
+
+	// The role ARN associated with this cluster. This ARN was created using the
+	// CreateRole (http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
+	// API action in AWS Identity and Access Management (IAM).
+	RoleARN *string `type:"string"`
+
+	// The shipping speed for each node in this cluster. This speed doesn't dictate
+	// how soon you'll get each Snowball Edge appliance, rather it represents how
+	// quickly each appliance moves to its destination while in transit. Regional
+	// shipping speeds are as follows:
+	//
+	//    * In Australia, you have access to express shipping. Typically, appliances
+	//    shipped express are delivered in about a day.
+	//
+	//    * In the European Union (EU), you have access to express shipping. Typically,
+	//    Snowball Edges shipped express are delivered in about a day. In addition,
+	//    most countries in the EU have access to standard shipping, which typically
+	//    takes less than a week, one way.
+	//
+	//    * In India, Snowball Edges are delivered in one to seven days.
+	//
+	//    * In the US, you have access to one-day shipping and two-day shipping.
+	ShippingOption *string `type:"string" enum:"ShippingOption"`
+
+	// The type of AWS Snowball appliance to use for this cluster. Currently, the
+	// only supported appliance type for cluster jobs is EDGE.
+	SnowballType *string `type:"string" enum:"Type"`
+}
+
+// String returns the string representation
+func (s ClusterMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClusterMetadata) GoString() string {
+	return s.String()
+}
+
+// SetAddressId sets the AddressId field's value.
+func (s *ClusterMetadata) SetAddressId(v string) *ClusterMetadata {
+	s.AddressId = &v
+	return s
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *ClusterMetadata) SetClusterId(v string) *ClusterMetadata {
+	s.ClusterId = &v
+	return s
+}
+
+// SetClusterState sets the ClusterState field's value.
+func (s *ClusterMetadata) SetClusterState(v string) *ClusterMetadata {
+	s.ClusterState = &v
+	return s
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *ClusterMetadata) SetCreationDate(v time.Time) *ClusterMetadata {
+	s.CreationDate = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ClusterMetadata) SetDescription(v string) *ClusterMetadata {
+	s.Description = &v
+	return s
+}
+
+// SetJobType sets the JobType field's value.
+func (s *ClusterMetadata) SetJobType(v string) *ClusterMetadata {
+	s.JobType = &v
+	return s
+}
+
+// SetKmsKeyARN sets the KmsKeyARN field's value.
+func (s *ClusterMetadata) SetKmsKeyARN(v string) *ClusterMetadata {
+	s.KmsKeyARN = &v
+	return s
+}
+
+// SetNotification sets the Notification field's value.
+func (s *ClusterMetadata) SetNotification(v *Notification) *ClusterMetadata {
+	s.Notification = v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *ClusterMetadata) SetResources(v *JobResource) *ClusterMetadata {
+	s.Resources = v
+	return s
+}
+
+// SetRoleARN sets the RoleARN field's value.
+func (s *ClusterMetadata) SetRoleARN(v string) *ClusterMetadata {
+	s.RoleARN = &v
+	return s
+}
+
+// SetShippingOption sets the ShippingOption field's value.
+func (s *ClusterMetadata) SetShippingOption(v string) *ClusterMetadata {
+	s.ShippingOption = &v
+	return s
+}
+
+// SetSnowballType sets the SnowballType field's value.
+func (s *ClusterMetadata) SetSnowballType(v string) *ClusterMetadata {
+	s.SnowballType = &v
+	return s
 }
 
 type CreateAddressInput struct {
@@ -1174,92 +1876,84 @@ func (s *CreateAddressOutput) SetAddressId(v string) *CreateAddressOutput {
 	return s
 }
 
-type CreateJobInput struct {
+type CreateClusterInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID for the address that you want the Snowball shipped to.
+	// The ID for the address that you want the cluster shipped to.>
 	//
 	// AddressId is a required field
 	AddressId *string `min:"40" type:"string" required:"true"`
 
-	// Defines an optional description of this specific job, for example Important
-	// Photos 2016-08-11.
+	// An optional description of this specific cluster, for example Environmental
+	// Data Cluster-01.
 	Description *string `min:"1" type:"string"`
 
-	// Defines the type of job that you're creating.
+	// The type of job for this cluster. Currently, the only job type supported
+	// for clusters is LOCAL_USE.
 	//
 	// JobType is a required field
 	JobType *string `type:"string" required:"true" enum:"JobType"`
 
-	// The KmsKeyARN that you want to associate with this job. KmsKeyARNs are created
-	// using the CreateKey (http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html)
-	// AWS Key Management Service (KMS) API action.
+	// The KmsKeyARN value that you want to associate with this cluster. KmsKeyARN
+	// values are created by using the CreateKey (http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html)
+	// API action in AWS Key Management Service (AWS KMS).
 	KmsKeyARN *string `type:"string"`
 
-	// Defines the Amazon Simple Notification Service (Amazon SNS) notification
-	// settings for this job.
+	// The Amazon Simple Notification Service (Amazon SNS) notification settings
+	// for this cluster.
 	Notification *Notification `type:"structure"`
 
-	// Defines the Amazon S3 buckets associated with this job.
-	//
-	// With IMPORT jobs, you specify the bucket or buckets that your transferred
-	// data will be imported into.
-	//
-	// With EXPORT jobs, you specify the bucket or buckets that your transferred
-	// data will be exported from. Optionally, you can also specify a KeyRange value.
-	// If you choose to export a range, you define the length of the range by providing
-	// either an inclusive BeginMarker value, an inclusive EndMarker value, or both.
-	// Ranges are UTF-8 binary sorted.
+	// The resources associated with the cluster job. These resources include Amazon
+	// S3 buckets and optional AWS Lambda functions written in the Python language.
 	//
 	// Resources is a required field
 	Resources *JobResource `type:"structure" required:"true"`
 
-	// The RoleARN that you want to associate with this job. RoleArns are created
-	// using the CreateRole (http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
-	// AWS Identity and Access Management (IAM) API action.
+	// The RoleARN that you want to associate with this cluster. RoleArn values
+	// are created by using the CreateRole (http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
+	// API action in AWS Identity and Access Management (IAM).
 	//
 	// RoleARN is a required field
 	RoleARN *string `type:"string" required:"true"`
 
-	// The shipping speed for this job. Note that this speed does not dictate how
-	// soon you'll get the Snowball, rather it represents how quickly the Snowball
-	// moves to its destination while in transit. Regional shipping speeds are as
-	// follows:
+	// The shipping speed for each node in this cluster. This speed doesn't dictate
+	// how soon you'll get each Snowball Edge appliance, rather it represents how
+	// quickly each appliance moves to its destination while in transit. Regional
+	// shipping speeds are as follows:
 	//
-	//    * In Australia, you have access to express shipping. Typically, Snowballs
+	//    * In Australia, you have access to express shipping. Typically, appliances
 	//    shipped express are delivered in about a day.
 	//
 	//    * In the European Union (EU), you have access to express shipping. Typically,
-	//    Snowballs shipped express are delivered in about a day. In addition, most
-	//    countries in the EU have access to standard shipping, which typically
+	//    Snowball Edges shipped express are delivered in about a day. In addition,
+	//    most countries in the EU have access to standard shipping, which typically
 	//    takes less than a week, one way.
 	//
-	//    * In India, Snowballs are delivered in one to seven days.
+	//    * In India, Snowball Edges are delivered in one to seven days.
 	//
 	//    * In the US, you have access to one-day shipping and two-day shipping.
 	//
 	// ShippingOption is a required field
 	ShippingOption *string `type:"string" required:"true" enum:"ShippingOption"`
 
-	// If your job is being created in one of the US regions, you have the option
-	// of specifying what size Snowball you'd like for this job. In all other regions,
-	// Snowballs come with 80 TB in storage capacity.
-	SnowballCapacityPreference *string `type:"string" enum:"Capacity"`
+	// The type of AWS Snowball appliance to use for this cluster. Currently, the
+	// only supported appliance type for cluster jobs is EDGE.
+	SnowballType *string `type:"string" enum:"Type"`
 }
 
 // String returns the string representation
-func (s CreateJobInput) String() string {
+func (s CreateClusterInput) String() string {
 	return awsutil.Prettify(s)
 }
 
 // GoString returns the string representation
-func (s CreateJobInput) GoString() string {
+func (s CreateClusterInput) GoString() string {
 	return s.String()
 }
 
 // Validate inspects the fields of the type to determine if they are valid.
-func (s *CreateJobInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "CreateJobInput"}
+func (s *CreateClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateClusterInput"}
 	if s.AddressId == nil {
 		invalidParams.Add(request.NewErrParamRequired("AddressId"))
 	}
@@ -1294,8 +1988,196 @@ func (s *CreateJobInput) Validate() error {
 }
 
 // SetAddressId sets the AddressId field's value.
+func (s *CreateClusterInput) SetAddressId(v string) *CreateClusterInput {
+	s.AddressId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateClusterInput) SetDescription(v string) *CreateClusterInput {
+	s.Description = &v
+	return s
+}
+
+// SetJobType sets the JobType field's value.
+func (s *CreateClusterInput) SetJobType(v string) *CreateClusterInput {
+	s.JobType = &v
+	return s
+}
+
+// SetKmsKeyARN sets the KmsKeyARN field's value.
+func (s *CreateClusterInput) SetKmsKeyARN(v string) *CreateClusterInput {
+	s.KmsKeyARN = &v
+	return s
+}
+
+// SetNotification sets the Notification field's value.
+func (s *CreateClusterInput) SetNotification(v *Notification) *CreateClusterInput {
+	s.Notification = v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *CreateClusterInput) SetResources(v *JobResource) *CreateClusterInput {
+	s.Resources = v
+	return s
+}
+
+// SetRoleARN sets the RoleARN field's value.
+func (s *CreateClusterInput) SetRoleARN(v string) *CreateClusterInput {
+	s.RoleARN = &v
+	return s
+}
+
+// SetShippingOption sets the ShippingOption field's value.
+func (s *CreateClusterInput) SetShippingOption(v string) *CreateClusterInput {
+	s.ShippingOption = &v
+	return s
+}
+
+// SetSnowballType sets the SnowballType field's value.
+func (s *CreateClusterInput) SetSnowballType(v string) *CreateClusterInput {
+	s.SnowballType = &v
+	return s
+}
+
+type CreateClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The automatically generated ID for a cluster.
+	ClusterId *string `min:"39" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *CreateClusterOutput) SetClusterId(v string) *CreateClusterOutput {
+	s.ClusterId = &v
+	return s
+}
+
+type CreateJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID for the address that you want the Snowball shipped to.
+	AddressId *string `min:"40" type:"string"`
+
+	// The ID of a cluster. If you're creating a job for a node in a cluster, you
+	// need to provide only this clusterId value. The other job attributes are inherited
+	// from the cluster.
+	ClusterId *string `min:"39" type:"string"`
+
+	// Defines an optional description of this specific job, for example Important
+	// Photos 2016-08-11.
+	Description *string `min:"1" type:"string"`
+
+	// Defines the type of job that you're creating.
+	JobType *string `type:"string" enum:"JobType"`
+
+	// The KmsKeyARN that you want to associate with this job. KmsKeyARNs are created
+	// using the CreateKey (http://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html)
+	// AWS Key Management Service (KMS) API action.
+	KmsKeyARN *string `type:"string"`
+
+	// Defines the Amazon Simple Notification Service (Amazon SNS) notification
+	// settings for this job.
+	Notification *Notification `type:"structure"`
+
+	// Defines the Amazon S3 buckets associated with this job.
+	//
+	// With IMPORT jobs, you specify the bucket or buckets that your transferred
+	// data will be imported into.
+	//
+	// With EXPORT jobs, you specify the bucket or buckets that your transferred
+	// data will be exported from. Optionally, you can also specify a KeyRange value.
+	// If you choose to export a range, you define the length of the range by providing
+	// either an inclusive BeginMarker value, an inclusive EndMarker value, or both.
+	// Ranges are UTF-8 binary sorted.
+	Resources *JobResource `type:"structure"`
+
+	// The RoleARN that you want to associate with this job. RoleArns are created
+	// using the CreateRole (http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
+	// AWS Identity and Access Management (IAM) API action.
+	RoleARN *string `type:"string"`
+
+	// The shipping speed for this job. This speed doesn't dictate how soon you'll
+	// get the Snowball, rather it represents how quickly the Snowball moves to
+	// its destination while in transit. Regional shipping speeds are as follows:
+	//
+	//    * In Australia, you have access to express shipping. Typically, Snowballs
+	//    shipped express are delivered in about a day.
+	//
+	//    * In the European Union (EU), you have access to express shipping. Typically,
+	//    Snowballs shipped express are delivered in about a day. In addition, most
+	//    countries in the EU have access to standard shipping, which typically
+	//    takes less than a week, one way.
+	//
+	//    * In India, Snowballs are delivered in one to seven days.
+	//
+	//    * In the US, you have access to one-day shipping and two-day shipping.
+	ShippingOption *string `type:"string" enum:"ShippingOption"`
+
+	// If your job is being created in one of the US regions, you have the option
+	// of specifying what size Snowball you'd like for this job. In all other regions,
+	// Snowballs come with 80 TB in storage capacity.
+	SnowballCapacityPreference *string `type:"string" enum:"Capacity"`
+
+	// The type of AWS Snowball appliance to use for this job. Currently, the only
+	// supported appliance type for cluster jobs is EDGE.
+	SnowballType *string `type:"string" enum:"Type"`
+}
+
+// String returns the string representation
+func (s CreateJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateJobInput"}
+	if s.AddressId != nil && len(*s.AddressId) < 40 {
+		invalidParams.Add(request.NewErrParamMinLen("AddressId", 40))
+	}
+	if s.ClusterId != nil && len(*s.ClusterId) < 39 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterId", 39))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Resources != nil {
+		if err := s.Resources.Validate(); err != nil {
+			invalidParams.AddNested("Resources", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddressId sets the AddressId field's value.
 func (s *CreateJobInput) SetAddressId(v string) *CreateJobInput {
 	s.AddressId = &v
+	return s
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *CreateJobInput) SetClusterId(v string) *CreateJobInput {
+	s.ClusterId = &v
 	return s
 }
 
@@ -1347,6 +2229,12 @@ func (s *CreateJobInput) SetSnowballCapacityPreference(v string) *CreateJobInput
 	return s
 }
 
+// SetSnowballType sets the SnowballType field's value.
+func (s *CreateJobInput) SetSnowballType(v string) *CreateJobInput {
+	s.SnowballType = &v
+	return s
+}
+
 type CreateJobOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1371,8 +2259,8 @@ func (s *CreateJobOutput) SetJobId(v string) *CreateJobOutput {
 }
 
 // Defines the real-time status of a Snowball's data transfer while the appliance
-// is at AWS. Note that this data is only available while a job has a JobState
-// value of InProgress, for both import and export jobs.
+// is at AWS. This data is only available while a job has a JobState value of
+// InProgress, for both import and export jobs.
 type DataTransfer struct {
 	_ struct{} `type:"structure"`
 
@@ -1573,6 +2461,71 @@ func (s *DescribeAddressesOutput) SetNextToken(v string) *DescribeAddressesOutpu
 	return s
 }
 
+type DescribeClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The automatically generated ID for a cluster.
+	//
+	// ClusterId is a required field
+	ClusterId *string `min:"39" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeClusterInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+	if s.ClusterId != nil && len(*s.ClusterId) < 39 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterId", 39))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *DescribeClusterInput) SetClusterId(v string) *DescribeClusterInput {
+	s.ClusterId = &v
+	return s
+}
+
+type DescribeClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about a specific cluster, including shipping information, cluster
+	// status, and other important metadata.
+	ClusterMetadata *ClusterMetadata `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetClusterMetadata sets the ClusterMetadata field's value.
+func (s *DescribeClusterOutput) SetClusterMetadata(v *ClusterMetadata) *DescribeClusterOutput {
+	s.ClusterMetadata = v
+	return s
+}
+
 type DescribeJobInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1645,6 +2598,31 @@ func (s *DescribeJobOutput) SetJobMetadata(v *JobMetadata) *DescribeJobOutput {
 // SetSubJobMetadata sets the SubJobMetadata field's value.
 func (s *DescribeJobOutput) SetSubJobMetadata(v []*JobMetadata) *DescribeJobOutput {
 	s.SubJobMetadata = v
+	return s
+}
+
+// The container for the EventTriggerDefinition$EventResourceARN.
+type EventTriggerDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for any local Amazon S3 resource that is an
+	// AWS Lambda function's event trigger associated with this job.
+	EventResourceARN *string `type:"string"`
+}
+
+// String returns the string representation
+func (s EventTriggerDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EventTriggerDefinition) GoString() string {
+	return s.String()
+}
+
+// SetEventResourceARN sets the EventResourceARN field's value.
+func (s *EventTriggerDefinition) SetEventResourceARN(v string) *EventTriggerDefinition {
+	s.EventResourceARN = &v
 	return s
 }
 
@@ -1832,6 +2810,13 @@ func (s *GetSnowballUsageOutput) SetSnowballsInUse(v int64) *GetSnowballUsageOut
 type JobListEntry struct {
 	_ struct{} `type:"structure"`
 
+	// The creation date for this job.
+	CreationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The optional description of this specific job, for example Important Photos
+	// 2016-08-11.
+	Description *string `min:"1" type:"string"`
+
 	// A value that indicates that this job is a master job. A master job represents
 	// a successful request to create an export job. Master jobs aren't associated
 	// with any Snowballs. Instead, each master job will have at least one job part,
@@ -1845,6 +2830,12 @@ type JobListEntry struct {
 
 	// The current state of this job.
 	JobState *string `type:"string" enum:"JobState"`
+
+	// The type of job.
+	JobType *string `type:"string" enum:"JobType"`
+
+	// The type of appliance used with this job.
+	SnowballType *string `type:"string" enum:"Type"`
 }
 
 // String returns the string representation
@@ -1855,6 +2846,18 @@ func (s JobListEntry) String() string {
 // GoString returns the string representation
 func (s JobListEntry) GoString() string {
 	return s.String()
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *JobListEntry) SetCreationDate(v time.Time) *JobListEntry {
+	s.CreationDate = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *JobListEntry) SetDescription(v string) *JobListEntry {
+	s.Description = &v
+	return s
 }
 
 // SetIsMaster sets the IsMaster field's value.
@@ -1872,6 +2875,18 @@ func (s *JobListEntry) SetJobId(v string) *JobListEntry {
 // SetJobState sets the JobState field's value.
 func (s *JobListEntry) SetJobState(v string) *JobListEntry {
 	s.JobState = &v
+	return s
+}
+
+// SetJobType sets the JobType field's value.
+func (s *JobListEntry) SetJobType(v string) *JobListEntry {
+	s.JobType = &v
+	return s
+}
+
+// SetSnowballType sets the SnowballType field's value.
+func (s *JobListEntry) SetSnowballType(v string) *JobListEntry {
+	s.SnowballType = &v
 	return s
 }
 
@@ -1945,12 +2960,15 @@ type JobMetadata struct {
 	// The ID for the address that you want the Snowball shipped to.
 	AddressId *string `min:"40" type:"string"`
 
+	// The 39-character ID for the cluster, for example CID123e4567-e89b-12d3-a456-426655440000.
+	ClusterId *string `min:"1" type:"string"`
+
 	// The creation date for this job.
 	CreationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// A value that defines the real-time status of a Snowball's data transfer while
-	// the appliance is at AWS. Note that this data is only available while a job
-	// has a JobState value of InProgress, for both import and export jobs.
+	// the appliance is at AWS. This data is only available while a job has a JobState
+	// value of InProgress, for both import and export jobs.
 	DataTransferProgress *DataTransfer `type:"structure"`
 
 	// The description of the job, provided at job creation.
@@ -1965,7 +2983,7 @@ type JobMetadata struct {
 	// for your job part is being delivered to you.
 	JobLogInfo *JobLogs `type:"structure"`
 
-	// The current state of the jobs.
+	// The current status of the jobs.
 	JobState *string `type:"string" enum:"JobState"`
 
 	// The type of job.
@@ -1998,6 +3016,9 @@ type JobMetadata struct {
 	// In US regions, you can choose between 50 TB and 80 TB Snowballs. All other
 	// regions use 80 TB capacity Snowballs.
 	SnowballCapacityPreference *string `type:"string" enum:"Capacity"`
+
+	// The type of appliance used with this job.
+	SnowballType *string `type:"string" enum:"Type"`
 }
 
 // String returns the string representation
@@ -2013,6 +3034,12 @@ func (s JobMetadata) GoString() string {
 // SetAddressId sets the AddressId field's value.
 func (s *JobMetadata) SetAddressId(v string) *JobMetadata {
 	s.AddressId = &v
+	return s
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *JobMetadata) SetClusterId(v string) *JobMetadata {
+	s.ClusterId = &v
 	return s
 }
 
@@ -2094,11 +3121,20 @@ func (s *JobMetadata) SetSnowballCapacityPreference(v string) *JobMetadata {
 	return s
 }
 
+// SetSnowballType sets the SnowballType field's value.
+func (s *JobMetadata) SetSnowballType(v string) *JobMetadata {
+	s.SnowballType = &v
+	return s
+}
+
 // Contains an array of S3Resource objects. Each S3Resource object represents
 // an Amazon S3 bucket that your transferred data will be exported from or imported
 // into.
 type JobResource struct {
 	_ struct{} `type:"structure"`
+
+	// The Python-language Lambda functions for this job.
+	LambdaResources []*LambdaResource `type:"list"`
 
 	// An array of S3Resource objects.
 	S3Resources []*S3Resource `type:"list"`
@@ -2132,6 +3168,12 @@ func (s *JobResource) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetLambdaResources sets the LambdaResources field's value.
+func (s *JobResource) SetLambdaResources(v []*LambdaResource) *JobResource {
+	s.LambdaResources = v
+	return s
 }
 
 // SetS3Resources sets the S3Resources field's value.
@@ -2191,6 +3233,222 @@ func (s *KeyRange) SetBeginMarker(v string) *KeyRange {
 // SetEndMarker sets the EndMarker field's value.
 func (s *KeyRange) SetEndMarker(v string) *KeyRange {
 	s.EndMarker = &v
+	return s
+}
+
+// Identifies
+type LambdaResource struct {
+	_ struct{} `type:"structure"`
+
+	// The array of ARNs for S3Resource objects to trigger the LambdaResource objects
+	// associated with this job.
+	EventTriggers []*EventTriggerDefinition `type:"list"`
+
+	// An Amazon Resource Name (ARN) that represents an AWS Lambda function to be
+	// triggered by PUT object actions on the associated local Amazon S3 resource.
+	LambdaArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s LambdaResource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LambdaResource) GoString() string {
+	return s.String()
+}
+
+// SetEventTriggers sets the EventTriggers field's value.
+func (s *LambdaResource) SetEventTriggers(v []*EventTriggerDefinition) *LambdaResource {
+	s.EventTriggers = v
+	return s
+}
+
+// SetLambdaArn sets the LambdaArn field's value.
+func (s *LambdaResource) SetLambdaArn(v string) *LambdaResource {
+	s.LambdaArn = &v
+	return s
+}
+
+type ListClusterJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The 39-character ID for the cluster that you want to list, for example CID123e4567-e89b-12d3-a456-426655440000.
+	//
+	// ClusterId is a required field
+	ClusterId *string `min:"39" type:"string" required:"true"`
+
+	// The number of JobListEntry objects to return.
+	MaxResults *int64 `type:"integer"`
+
+	// HTTP requests are stateless. To identify what object comes "next" in the
+	// list of JobListEntry objects, you have the option of specifying NextToken
+	// as the starting point for your returned list.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListClusterJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListClusterJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListClusterJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListClusterJobsInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+	if s.ClusterId != nil && len(*s.ClusterId) < 39 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterId", 39))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *ListClusterJobsInput) SetClusterId(v string) *ListClusterJobsInput {
+	s.ClusterId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListClusterJobsInput) SetMaxResults(v int64) *ListClusterJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListClusterJobsInput) SetNextToken(v string) *ListClusterJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListClusterJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Each JobListEntry object contains a job's state, a job's ID, and a value
+	// that indicates whether the job is a job part, in the case of export jobs.
+	JobListEntries []*JobListEntry `type:"list"`
+
+	// HTTP requests are stateless. If you use the automatically generated NextToken
+	// value in your next ListClusterJobsResult call, your list of returned jobs
+	// will start from this point in the array.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListClusterJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListClusterJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobListEntries sets the JobListEntries field's value.
+func (s *ListClusterJobsOutput) SetJobListEntries(v []*JobListEntry) *ListClusterJobsOutput {
+	s.JobListEntries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListClusterJobsOutput) SetNextToken(v string) *ListClusterJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListClustersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The number of ClusterListEntry objects to return.
+	MaxResults *int64 `type:"integer"`
+
+	// HTTP requests are stateless. To identify what object comes "next" in the
+	// list of ClusterListEntry objects, you have the option of specifying NextToken
+	// as the starting point for your returned list.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListClustersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListClustersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListClustersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListClustersInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListClustersInput) SetMaxResults(v int64) *ListClustersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListClustersInput) SetNextToken(v string) *ListClustersInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListClustersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Each ClusterListEntry object contains a cluster's state, a cluster's ID,
+	// and other important status information.
+	ClusterListEntries []*ClusterListEntry `type:"list"`
+
+	// HTTP requests are stateless. If you use the automatically generated NextToken
+	// value in your next ClusterListEntry call, your list of returned clusters
+	// will start from this point in the array.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListClustersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListClustersOutput) GoString() string {
+	return s.String()
+}
+
+// SetClusterListEntries sets the ClusterListEntries field's value.
+func (s *ListClustersOutput) SetClusterListEntries(v []*ClusterListEntry) *ListClustersOutput {
+	s.ClusterListEntries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListClustersOutput) SetNextToken(v string) *ListClustersOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -2298,8 +3556,8 @@ type Notification struct {
 	// Amazon Resource Names (ARNs) for topics by using the CreateTopic (http://docs.aws.amazon.com/sns/latest/api/API_CreateTopic.html)
 	// Amazon SNS API action.
 	//
-	// Note that you can subscribe email addresses to an Amazon SNS topic through
-	// the AWS Management Console, or by using the Subscribe (http://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)
+	// You can subscribe email addresses to an Amazon SNS topic through the AWS
+	// Management Console, or by using the Subscribe (http://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)
 	// AWS Simple Notification Service (SNS) API action.
 	SnsTopicARN *string `type:"string"`
 }
@@ -2438,10 +3696,10 @@ type ShippingDetails struct {
 	// for a particular job.
 	OutboundShipment *Shipment `type:"structure"`
 
-	// The shipping speed for a particular job. Note that this speed does not dictate
-	// how soon you'll get the Snowball from the job's creation date. This speed
-	// represents how quickly it moves to its destination while in transit. Regional
-	// shipping speeds are as follows:
+	// The shipping speed for a particular job. This speed doesn't dictate how soon
+	// you'll get the Snowball from the job's creation date. This speed represents
+	// how quickly it moves to its destination while in transit. Regional shipping
+	// speeds are as follows:
 	//
 	//    * In Australia, you have access to express shipping. Typically, Snowballs
 	//    shipped express are delivered in about a day.
@@ -2486,6 +3744,129 @@ func (s *ShippingDetails) SetShippingOption(v string) *ShippingDetails {
 	return s
 }
 
+type UpdateClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the updated Address object.
+	AddressId *string `min:"40" type:"string"`
+
+	// The cluster ID of the cluster that you want to update, for example CID123e4567-e89b-12d3-a456-426655440000.
+	//
+	// ClusterId is a required field
+	ClusterId *string `min:"39" type:"string" required:"true"`
+
+	// The updated description of this cluster.
+	Description *string `min:"1" type:"string"`
+
+	// The new or updated Notification object.
+	Notification *Notification `type:"structure"`
+
+	// The updated arrays of JobResource objects that can include updated S3Resource
+	// objects or LambdaResource objects.
+	Resources *JobResource `type:"structure"`
+
+	// The new role Amazon Resource Name (ARN) that you want to associate with this
+	// cluster. To create a role ARN, use the CreateRole (http://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html)
+	// API action in AWS Identity and Access Management (IAM).
+	RoleARN *string `type:"string"`
+
+	// The updated shipping option value of this cluster's ShippingDetails object.
+	ShippingOption *string `type:"string" enum:"ShippingOption"`
+}
+
+// String returns the string representation
+func (s UpdateClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateClusterInput"}
+	if s.AddressId != nil && len(*s.AddressId) < 40 {
+		invalidParams.Add(request.NewErrParamMinLen("AddressId", 40))
+	}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+	if s.ClusterId != nil && len(*s.ClusterId) < 39 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterId", 39))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Resources != nil {
+		if err := s.Resources.Validate(); err != nil {
+			invalidParams.AddNested("Resources", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddressId sets the AddressId field's value.
+func (s *UpdateClusterInput) SetAddressId(v string) *UpdateClusterInput {
+	s.AddressId = &v
+	return s
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *UpdateClusterInput) SetClusterId(v string) *UpdateClusterInput {
+	s.ClusterId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateClusterInput) SetDescription(v string) *UpdateClusterInput {
+	s.Description = &v
+	return s
+}
+
+// SetNotification sets the Notification field's value.
+func (s *UpdateClusterInput) SetNotification(v *Notification) *UpdateClusterInput {
+	s.Notification = v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *UpdateClusterInput) SetResources(v *JobResource) *UpdateClusterInput {
+	s.Resources = v
+	return s
+}
+
+// SetRoleARN sets the RoleARN field's value.
+func (s *UpdateClusterInput) SetRoleARN(v string) *UpdateClusterInput {
+	s.RoleARN = &v
+	return s
+}
+
+// SetShippingOption sets the ShippingOption field's value.
+func (s *UpdateClusterInput) SetShippingOption(v string) *UpdateClusterInput {
+	s.ShippingOption = &v
+	return s
+}
+
+type UpdateClusterOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateClusterOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateJobInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2516,7 +3897,7 @@ type UpdateJobInput struct {
 	ShippingOption *string `type:"string" enum:"ShippingOption"`
 
 	// The updated SnowballCapacityPreference of this job's JobMetadata object.
-	// Note that the 50 TB Snowballs are only available in the US regions.
+	// The 50 TB Snowballs are only available in the US regions.
 	SnowballCapacityPreference *string `type:"string" enum:"Capacity"`
 }
 
@@ -2626,8 +4007,28 @@ const (
 	// CapacityT80 is a Capacity enum value
 	CapacityT80 = "T80"
 
+	// CapacityT100 is a Capacity enum value
+	CapacityT100 = "T100"
+
 	// CapacityNoPreference is a Capacity enum value
 	CapacityNoPreference = "NoPreference"
+)
+
+const (
+	// ClusterStateAwaitingQuorum is a ClusterState enum value
+	ClusterStateAwaitingQuorum = "AwaitingQuorum"
+
+	// ClusterStatePending is a ClusterState enum value
+	ClusterStatePending = "Pending"
+
+	// ClusterStateInUse is a ClusterState enum value
+	ClusterStateInUse = "InUse"
+
+	// ClusterStateComplete is a ClusterState enum value
+	ClusterStateComplete = "Complete"
+
+	// ClusterStateCancelled is a ClusterState enum value
+	ClusterStateCancelled = "Cancelled"
 )
 
 const (
@@ -2674,6 +4075,9 @@ const (
 
 	// JobTypeExport is a JobType enum value
 	JobTypeExport = "EXPORT"
+
+	// JobTypeLocalUse is a JobType enum value
+	JobTypeLocalUse = "LOCAL_USE"
 )
 
 const (
@@ -2688,4 +4092,12 @@ const (
 
 	// ShippingOptionStandard is a ShippingOption enum value
 	ShippingOptionStandard = "STANDARD"
+)
+
+const (
+	// TypeStandard is a Type enum value
+	TypeStandard = "STANDARD"
+
+	// TypeEdge is a Type enum value
+	TypeEdge = "EDGE"
 )

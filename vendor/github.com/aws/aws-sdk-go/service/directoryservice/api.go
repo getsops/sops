@@ -62,6 +62,11 @@ func (c *DirectoryService) AddIpRoutesRequest(input *AddIpRoutesInput) (req *req
 // address block. You can also use AddIpRoutes to facilitate routing traffic
 // that uses public IP ranges from your Microsoft AD on AWS to a peer VPC.
 //
+// Before you call AddIpRoutes, ensure that all of the required permissions
+// have been explicitly granted through a policy. For details about what permissions
+// are required to run the AddIpRoutes operation, see AWS Directory Service
+// API Permissions: Actions, Resources, and Conditions Reference (http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -144,7 +149,7 @@ func (c *DirectoryService) AddTagsToResourceRequest(input *AddTagsToResourceInpu
 // AddTagsToResource API operation for AWS Directory Service.
 //
 // Adds or overwrites one or more tags for the specified Amazon Directory Services
-// directory. Each directory can have a maximum of 10 tags. Each tag consists
+// directory. Each directory can have a maximum of 50 tags. Each tag consists
 // of a key and optional value. Tag keys must be unique to each resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -172,6 +177,79 @@ func (c *DirectoryService) AddTagsToResourceRequest(input *AddTagsToResourceInpu
 //
 func (c *DirectoryService) AddTagsToResource(input *AddTagsToResourceInput) (*AddTagsToResourceOutput, error) {
 	req, out := c.AddTagsToResourceRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCancelSchemaExtension = "CancelSchemaExtension"
+
+// CancelSchemaExtensionRequest generates a "aws/request.Request" representing the
+// client's request for the CancelSchemaExtension operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CancelSchemaExtension for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CancelSchemaExtension method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CancelSchemaExtensionRequest method.
+//    req, resp := client.CancelSchemaExtensionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *DirectoryService) CancelSchemaExtensionRequest(input *CancelSchemaExtensionInput) (req *request.Request, output *CancelSchemaExtensionOutput) {
+	op := &request.Operation{
+		Name:       opCancelSchemaExtension,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelSchemaExtensionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CancelSchemaExtensionOutput{}
+	req.Data = output
+	return
+}
+
+// CancelSchemaExtension API operation for AWS Directory Service.
+//
+// Cancels an in-progress schema extension to a Microsoft AD directory. Once
+// a schema extension has started replicating to all domain controllers, the
+// task can no longer be canceled. A schema extension can be canceled during
+// any of the following states; Initializing, CreatingSnapshot, and UpdatingSchema.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation CancelSchemaExtension for usage and error information.
+//
+// Returned Error Codes:
+//   * EntityDoesNotExistException
+//   The specified entity could not be found.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+func (c *DirectoryService) CancelSchemaExtension(input *CancelSchemaExtensionInput) (*CancelSchemaExtensionOutput, error) {
+	req, out := c.CancelSchemaExtensionRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -222,6 +300,11 @@ func (c *DirectoryService) ConnectDirectoryRequest(input *ConnectDirectoryInput)
 // ConnectDirectory API operation for AWS Directory Service.
 //
 // Creates an AD Connector to connect to an on-premises directory.
+//
+// Before you call ConnectDirectory, ensure that all of the required permissions
+// have been explicitly granted through a policy. For details about what permissions
+// are required to run the ConnectDirectory operation, see AWS Directory Service
+// API Permissions: Actions, Resources, and Conditions Reference (http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -549,6 +632,11 @@ func (c *DirectoryService) CreateDirectoryRequest(input *CreateDirectoryInput) (
 //
 // Creates a Simple AD directory.
 //
+// Before you call CreateDirectory, ensure that all of the required permissions
+// have been explicitly granted through a policy. For details about what permissions
+// are required to run the CreateDirectory operation, see AWS Directory Service
+// API Permissions: Actions, Resources, and Conditions Reference (http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html).
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -623,6 +711,11 @@ func (c *DirectoryService) CreateMicrosoftADRequest(input *CreateMicrosoftADInpu
 // CreateMicrosoftAD API operation for AWS Directory Service.
 //
 // Creates a Microsoft AD in the AWS cloud.
+//
+// Before you call CreateMicrosoftAD, ensure that all of the required permissions
+// have been explicitly granted through a policy. For details about what permissions
+// are required to run the CreateMicrosoftAD operation, see AWS Directory Service
+// API Permissions: Actions, Resources, and Conditions Reference (http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -946,6 +1039,11 @@ func (c *DirectoryService) DeleteDirectoryRequest(input *DeleteDirectoryInput) (
 // DeleteDirectory API operation for AWS Directory Service.
 //
 // Deletes an AWS Directory Service directory.
+//
+// Before you call DeleteDirectory, ensure that all of the required permissions
+// have been explicitly granted through a policy. For details about what permissions
+// are required to run the DeleteDirectory operation, see AWS Directory Service
+// API Permissions: Actions, Resources, and Conditions Reference (http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2120,6 +2218,79 @@ func (c *DirectoryService) ListIpRoutes(input *ListIpRoutesInput) (*ListIpRoutes
 	return out, err
 }
 
+const opListSchemaExtensions = "ListSchemaExtensions"
+
+// ListSchemaExtensionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSchemaExtensions operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListSchemaExtensions for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListSchemaExtensions method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListSchemaExtensionsRequest method.
+//    req, resp := client.ListSchemaExtensionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *DirectoryService) ListSchemaExtensionsRequest(input *ListSchemaExtensionsInput) (req *request.Request, output *ListSchemaExtensionsOutput) {
+	op := &request.Operation{
+		Name:       opListSchemaExtensions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListSchemaExtensionsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListSchemaExtensionsOutput{}
+	req.Data = output
+	return
+}
+
+// ListSchemaExtensions API operation for AWS Directory Service.
+//
+// Lists all schema extensions applied to a Microsoft AD Directory.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation ListSchemaExtensions for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidNextTokenException
+//   The NextToken value is not valid.
+//
+//   * EntityDoesNotExistException
+//   The specified entity could not be found.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+func (c *DirectoryService) ListSchemaExtensions(input *ListSchemaExtensionsInput) (*ListSchemaExtensionsOutput, error) {
+	req, out := c.ListSchemaExtensionsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -2500,6 +2671,87 @@ func (c *DirectoryService) RestoreFromSnapshotRequest(input *RestoreFromSnapshot
 //
 func (c *DirectoryService) RestoreFromSnapshot(input *RestoreFromSnapshotInput) (*RestoreFromSnapshotOutput, error) {
 	req, out := c.RestoreFromSnapshotRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opStartSchemaExtension = "StartSchemaExtension"
+
+// StartSchemaExtensionRequest generates a "aws/request.Request" representing the
+// client's request for the StartSchemaExtension operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See StartSchemaExtension for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the StartSchemaExtension method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the StartSchemaExtensionRequest method.
+//    req, resp := client.StartSchemaExtensionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *DirectoryService) StartSchemaExtensionRequest(input *StartSchemaExtensionInput) (req *request.Request, output *StartSchemaExtensionOutput) {
+	op := &request.Operation{
+		Name:       opStartSchemaExtension,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartSchemaExtensionInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &StartSchemaExtensionOutput{}
+	req.Data = output
+	return
+}
+
+// StartSchemaExtension API operation for AWS Directory Service.
+//
+// Applies a schema extension to a Microsoft AD directory.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation StartSchemaExtension for usage and error information.
+//
+// Returned Error Codes:
+//   * DirectoryUnavailableException
+//   The specified directory is unavailable or could not be found.
+//
+//   * EntityDoesNotExistException
+//   The specified entity could not be found.
+//
+//   * InvalidParameterException
+//   One or more parameters are not valid.
+//
+//   * SnapshotLimitExceededException
+//   The maximum number of manual snapshots for the directory has been reached.
+//   You can use the GetSnapshotLimits operation to determine the snapshot limits
+//   for a directory.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+func (c *DirectoryService) StartSchemaExtension(input *StartSchemaExtensionInput) (*StartSchemaExtensionOutput, error) {
+	req, out := c.StartSchemaExtensionRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -2975,6 +3227,72 @@ func (s *Attribute) SetName(v string) *Attribute {
 func (s *Attribute) SetValue(v string) *Attribute {
 	s.Value = &v
 	return s
+}
+
+type CancelSchemaExtensionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the directory whose schema extension will be canceled.
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+
+	// The identifier of the schema extension that will be canceled.
+	//
+	// SchemaExtensionId is a required field
+	SchemaExtensionId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelSchemaExtensionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelSchemaExtensionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelSchemaExtensionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelSchemaExtensionInput"}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+	if s.SchemaExtensionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SchemaExtensionId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *CancelSchemaExtensionInput) SetDirectoryId(v string) *CancelSchemaExtensionInput {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetSchemaExtensionId sets the SchemaExtensionId field's value.
+func (s *CancelSchemaExtensionInput) SetSchemaExtensionId(v string) *CancelSchemaExtensionInput {
+	s.SchemaExtensionId = &v
+	return s
+}
+
+type CancelSchemaExtensionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelSchemaExtensionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelSchemaExtensionOutput) GoString() string {
+	return s.String()
 }
 
 // Contains information about a computer account in a directory.
@@ -5941,6 +6259,98 @@ func (s *ListIpRoutesOutput) SetNextToken(v string) *ListIpRoutesOutput {
 	return s
 }
 
+type ListSchemaExtensionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the directory from which to retrieve the schema extension
+	// information.
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+
+	// The maximum number of items to return.
+	Limit *int64 `type:"integer"`
+
+	// The ListSchemaExtensions.NextToken value from a previous call to ListSchemaExtensions.
+	// Pass null if this is the first call.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListSchemaExtensionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSchemaExtensionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSchemaExtensionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSchemaExtensionsInput"}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *ListSchemaExtensionsInput) SetDirectoryId(v string) *ListSchemaExtensionsInput {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetLimit sets the Limit field's value.
+func (s *ListSchemaExtensionsInput) SetLimit(v int64) *ListSchemaExtensionsInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSchemaExtensionsInput) SetNextToken(v string) *ListSchemaExtensionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSchemaExtensionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If not null, more results are available. Pass this value for the NextToken
+	// parameter in a subsequent call to ListSchemaExtensions to retrieve the next
+	// set of items.
+	NextToken *string `type:"string"`
+
+	// Information about the schema extensions applied to the directory.
+	SchemaExtensionsInfo []*SchemaExtensionInfo `type:"list"`
+}
+
+// String returns the string representation
+func (s ListSchemaExtensionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSchemaExtensionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSchemaExtensionsOutput) SetNextToken(v string) *ListSchemaExtensionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSchemaExtensionsInfo sets the SchemaExtensionsInfo field's value.
+func (s *ListSchemaExtensionsOutput) SetSchemaExtensionsInfo(v []*SchemaExtensionInfo) *ListSchemaExtensionsOutput {
+	s.SchemaExtensionsInfo = v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6401,6 +6811,85 @@ func (s RestoreFromSnapshotOutput) GoString() string {
 	return s.String()
 }
 
+// Information about a schema extension.
+type SchemaExtensionInfo struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the schema extension.
+	Description *string `type:"string"`
+
+	// The identifier of the directory to which the schema extension is applied.
+	DirectoryId *string `type:"string"`
+
+	// The date and time that the schema extension was completed.
+	EndDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The identifier of the schema extension.
+	SchemaExtensionId *string `type:"string"`
+
+	// The current status of the schema extension.
+	SchemaExtensionStatus *string `type:"string" enum:"SchemaExtensionStatus"`
+
+	// The reason for the SchemaExtensionStatus.
+	SchemaExtensionStatusReason *string `type:"string"`
+
+	// The date and time that the schema extension started being applied to the
+	// directory.
+	StartDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s SchemaExtensionInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SchemaExtensionInfo) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *SchemaExtensionInfo) SetDescription(v string) *SchemaExtensionInfo {
+	s.Description = &v
+	return s
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *SchemaExtensionInfo) SetDirectoryId(v string) *SchemaExtensionInfo {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetEndDateTime sets the EndDateTime field's value.
+func (s *SchemaExtensionInfo) SetEndDateTime(v time.Time) *SchemaExtensionInfo {
+	s.EndDateTime = &v
+	return s
+}
+
+// SetSchemaExtensionId sets the SchemaExtensionId field's value.
+func (s *SchemaExtensionInfo) SetSchemaExtensionId(v string) *SchemaExtensionInfo {
+	s.SchemaExtensionId = &v
+	return s
+}
+
+// SetSchemaExtensionStatus sets the SchemaExtensionStatus field's value.
+func (s *SchemaExtensionInfo) SetSchemaExtensionStatus(v string) *SchemaExtensionInfo {
+	s.SchemaExtensionStatus = &v
+	return s
+}
+
+// SetSchemaExtensionStatusReason sets the SchemaExtensionStatusReason field's value.
+func (s *SchemaExtensionInfo) SetSchemaExtensionStatusReason(v string) *SchemaExtensionInfo {
+	s.SchemaExtensionStatusReason = &v
+	return s
+}
+
+// SetStartDateTime sets the StartDateTime field's value.
+func (s *SchemaExtensionInfo) SetStartDateTime(v time.Time) *SchemaExtensionInfo {
+	s.StartDateTime = &v
+	return s
+}
+
 // Describes a directory snapshot.
 type Snapshot struct {
 	_ struct{} `type:"structure"`
@@ -6509,6 +6998,114 @@ func (s *SnapshotLimits) SetManualSnapshotsLimit(v int64) *SnapshotLimits {
 // SetManualSnapshotsLimitReached sets the ManualSnapshotsLimitReached field's value.
 func (s *SnapshotLimits) SetManualSnapshotsLimitReached(v bool) *SnapshotLimits {
 	s.ManualSnapshotsLimitReached = &v
+	return s
+}
+
+type StartSchemaExtensionInput struct {
+	_ struct{} `type:"structure"`
+
+	// If true, creates a snapshot of the directory before applying the schema extension.
+	//
+	// CreateSnapshotBeforeSchemaExtension is a required field
+	CreateSnapshotBeforeSchemaExtension *bool `type:"boolean" required:"true"`
+
+	// A description of the schema extension.
+	//
+	// Description is a required field
+	Description *string `type:"string" required:"true"`
+
+	// The identifier of the directory for which the schema extension will be applied
+	// to.
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+
+	// The LDIF file represented as a string. The file size can be no larger than
+	// 1MB.
+	//
+	// LdifContent is a required field
+	LdifContent *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartSchemaExtensionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSchemaExtensionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartSchemaExtensionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartSchemaExtensionInput"}
+	if s.CreateSnapshotBeforeSchemaExtension == nil {
+		invalidParams.Add(request.NewErrParamRequired("CreateSnapshotBeforeSchemaExtension"))
+	}
+	if s.Description == nil {
+		invalidParams.Add(request.NewErrParamRequired("Description"))
+	}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+	if s.LdifContent == nil {
+		invalidParams.Add(request.NewErrParamRequired("LdifContent"))
+	}
+	if s.LdifContent != nil && len(*s.LdifContent) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LdifContent", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCreateSnapshotBeforeSchemaExtension sets the CreateSnapshotBeforeSchemaExtension field's value.
+func (s *StartSchemaExtensionInput) SetCreateSnapshotBeforeSchemaExtension(v bool) *StartSchemaExtensionInput {
+	s.CreateSnapshotBeforeSchemaExtension = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *StartSchemaExtensionInput) SetDescription(v string) *StartSchemaExtensionInput {
+	s.Description = &v
+	return s
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *StartSchemaExtensionInput) SetDirectoryId(v string) *StartSchemaExtensionInput {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetLdifContent sets the LdifContent field's value.
+func (s *StartSchemaExtensionInput) SetLdifContent(v string) *StartSchemaExtensionInput {
+	s.LdifContent = &v
+	return s
+}
+
+type StartSchemaExtensionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the schema extension that will be applied.
+	SchemaExtensionId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s StartSchemaExtensionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSchemaExtensionOutput) GoString() string {
+	return s.String()
+}
+
+// SetSchemaExtensionId sets the SchemaExtensionId field's value.
+func (s *StartSchemaExtensionOutput) SetSchemaExtensionId(v string) *StartSchemaExtensionOutput {
+	s.SchemaExtensionId = &v
 	return s
 }
 
@@ -7004,6 +7601,35 @@ const (
 const (
 	// ReplicationScopeDomain is a ReplicationScope enum value
 	ReplicationScopeDomain = "Domain"
+)
+
+const (
+	// SchemaExtensionStatusInitializing is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusInitializing = "Initializing"
+
+	// SchemaExtensionStatusCreatingSnapshot is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusCreatingSnapshot = "CreatingSnapshot"
+
+	// SchemaExtensionStatusUpdatingSchema is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusUpdatingSchema = "UpdatingSchema"
+
+	// SchemaExtensionStatusReplicating is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusReplicating = "Replicating"
+
+	// SchemaExtensionStatusCancelInProgress is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusCancelInProgress = "CancelInProgress"
+
+	// SchemaExtensionStatusRollbackInProgress is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusRollbackInProgress = "RollbackInProgress"
+
+	// SchemaExtensionStatusCancelled is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusCancelled = "Cancelled"
+
+	// SchemaExtensionStatusFailed is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusFailed = "Failed"
+
+	// SchemaExtensionStatusCompleted is a SchemaExtensionStatus enum value
+	SchemaExtensionStatusCompleted = "Completed"
 )
 
 const (

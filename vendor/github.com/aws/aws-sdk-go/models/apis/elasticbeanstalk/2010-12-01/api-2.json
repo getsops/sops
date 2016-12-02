@@ -7,6 +7,7 @@
     "serviceAbbreviation":"Elastic Beanstalk",
     "serviceFullName":"AWS Elastic Beanstalk",
     "signatureVersion":"v4",
+    "uid":"elasticbeanstalk-2010-12-01",
     "xmlNamespace":"http://elasticbeanstalk.amazonaws.com/docs/2010-12-01/"
   },
   "operations":{
@@ -95,7 +96,8 @@
         {"shape":"TooManyApplicationsException"},
         {"shape":"TooManyApplicationVersionsException"},
         {"shape":"InsufficientPrivilegesException"},
-        {"shape":"S3LocationNotInServiceRegionException"}
+        {"shape":"S3LocationNotInServiceRegionException"},
+        {"shape":"CodeBuildNotInServiceRegionException"}
       ]
     },
     "CreateConfigurationTemplate":{
@@ -578,6 +580,7 @@
         "Description":{"shape":"Description"},
         "VersionLabel":{"shape":"VersionLabel"},
         "SourceBuildInformation":{"shape":"SourceBuildInformation"},
+        "BuildArn":{"shape":"String"},
         "SourceBundle":{"shape":"S3Location"},
         "DateCreated":{"shape":"CreationDate"},
         "DateUpdated":{"shape":"UpdateDate"},
@@ -608,7 +611,8 @@
         "Processed",
         "Unprocessed",
         "Failed",
-        "Processing"
+        "Processing",
+        "Building"
       ]
     },
     "ApplyEnvironmentManagedActionRequest":{
@@ -648,6 +652,21 @@
       "type":"list",
       "member":{"shape":"SolutionStackName"}
     },
+    "BoxedInt":{"type":"integer"},
+    "BuildConfiguration":{
+      "type":"structure",
+      "required":[
+        "CodeBuildServiceRole",
+        "Image"
+      ],
+      "members":{
+        "ArtifactName":{"shape":"String"},
+        "CodeBuildServiceRole":{"shape":"NonEmptyString"},
+        "ComputeType":{"shape":"ComputeType"},
+        "Image":{"shape":"NonEmptyString"},
+        "TimeoutInMinutes":{"shape":"BoxedInt"}
+      }
+    },
     "CPUUtilization":{
       "type":"structure",
       "members":{
@@ -684,6 +703,17 @@
       }
     },
     "CnameAvailability":{"type":"boolean"},
+    "CodeBuildNotInServiceRegionException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"CodeBuildNotInServiceRegionException",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "ComposeEnvironmentsMessage":{
       "type":"structure",
       "members":{
@@ -691,6 +721,14 @@
         "GroupName":{"shape":"GroupName"},
         "VersionLabels":{"shape":"VersionLabels"}
       }
+    },
+    "ComputeType":{
+      "type":"string",
+      "enum":[
+        "BUILD_GENERAL1_SMALL",
+        "BUILD_GENERAL1_MEDIUM",
+        "BUILD_GENERAL1_LARGE"
+      ]
     },
     "ConfigurationDeploymentStatus":{
       "type":"string",
@@ -815,6 +853,7 @@
         "Description":{"shape":"Description"},
         "SourceBuildInformation":{"shape":"SourceBuildInformation"},
         "SourceBundle":{"shape":"S3Location"},
+        "BuildConfiguration":{"shape":"BuildConfiguration"},
         "AutoCreateApplication":{"shape":"AutoCreateApplication"},
         "Process":{"shape":"ApplicationVersionProccess"}
       }
@@ -1491,6 +1530,10 @@
       "max":100,
       "min":1
     },
+    "NonEmptyString":{
+      "type":"string",
+      "pattern":".*\\S.*"
+    },
     "NullableDouble":{"type":"double"},
     "NullableInteger":{"type":"integer"},
     "NullableLong":{"type":"long"},
@@ -1695,11 +1738,17 @@
     },
     "SourceRepository":{
       "type":"string",
-      "enum":["CodeCommit"]
+      "enum":[
+        "CodeCommit",
+        "S3"
+      ]
     },
     "SourceType":{
       "type":"string",
-      "enum":["Git"]
+      "enum":[
+        "Git",
+        "Zip"
+      ]
     },
     "StatusCodes":{
       "type":"structure",

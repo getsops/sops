@@ -80,6 +80,32 @@ func ExampleDirectoryService_AddTagsToResource() {
 	fmt.Println(resp)
 }
 
+func ExampleDirectoryService_CancelSchemaExtension() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directoryservice.New(sess)
+
+	params := &directoryservice.CancelSchemaExtensionInput{
+		DirectoryId:       aws.String("DirectoryId"),       // Required
+		SchemaExtensionId: aws.String("SchemaExtensionId"), // Required
+	}
+	resp, err := svc.CancelSchemaExtension(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleDirectoryService_ConnectDirectory() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -812,6 +838,33 @@ func ExampleDirectoryService_ListIpRoutes() {
 	fmt.Println(resp)
 }
 
+func ExampleDirectoryService_ListSchemaExtensions() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directoryservice.New(sess)
+
+	params := &directoryservice.ListSchemaExtensionsInput{
+		DirectoryId: aws.String("DirectoryId"), // Required
+		Limit:       aws.Int64(1),
+		NextToken:   aws.String("NextToken"),
+	}
+	resp, err := svc.ListSchemaExtensions(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleDirectoryService_ListTagsForResource() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -936,6 +989,34 @@ func ExampleDirectoryService_RestoreFromSnapshot() {
 		SnapshotId: aws.String("SnapshotId"), // Required
 	}
 	resp, err := svc.RestoreFromSnapshot(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectoryService_StartSchemaExtension() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directoryservice.New(sess)
+
+	params := &directoryservice.StartSchemaExtensionInput{
+		CreateSnapshotBeforeSchemaExtension: aws.Bool(true),            // Required
+		Description:                         aws.String("Description"), // Required
+		DirectoryId:                         aws.String("DirectoryId"), // Required
+		LdifContent:                         aws.String("LdifContent"), // Required
+	}
+	resp, err := svc.StartSchemaExtension(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

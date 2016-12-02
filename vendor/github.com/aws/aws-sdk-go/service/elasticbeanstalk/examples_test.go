@@ -162,8 +162,15 @@ func ExampleElasticBeanstalk_CreateApplicationVersion() {
 		ApplicationName:       aws.String("ApplicationName"), // Required
 		VersionLabel:          aws.String("VersionLabel"),    // Required
 		AutoCreateApplication: aws.Bool(true),
-		Description:           aws.String("Description"),
-		Process:               aws.Bool(true),
+		BuildConfiguration: &elasticbeanstalk.BuildConfiguration{
+			CodeBuildServiceRole: aws.String("NonEmptyString"), // Required
+			Image:                aws.String("NonEmptyString"), // Required
+			ArtifactName:         aws.String("String"),
+			ComputeType:          aws.String("ComputeType"),
+			TimeoutInMinutes:     aws.Int64(1),
+		},
+		Description: aws.String("Description"),
+		Process:     aws.Bool(true),
 		SourceBuildInformation: &elasticbeanstalk.SourceBuildInformation{
 			SourceLocation:   aws.String("SourceLocation"),   // Required
 			SourceRepository: aws.String("SourceRepository"), // Required

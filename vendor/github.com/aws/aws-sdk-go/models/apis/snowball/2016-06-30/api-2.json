@@ -8,9 +8,24 @@
     "serviceAbbreviation":"Amazon Snowball",
     "serviceFullName":"Amazon Import/Export Snowball",
     "signatureVersion":"v4",
-    "targetPrefix":"AWSIESnowballJobManagementService"
+    "targetPrefix":"AWSIESnowballJobManagementService",
+    "uid":"snowball-2016-06-30"
   },
   "operations":{
+    "CancelCluster":{
+      "name":"CancelCluster",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CancelClusterRequest"},
+      "output":{"shape":"CancelClusterResult"},
+      "errors":[
+        {"shape":"KMSRequestFailedException"},
+        {"shape":"InvalidJobStateException"},
+        {"shape":"InvalidResourceException"}
+      ]
+    },
     "CancelJob":{
       "name":"CancelJob",
       "http":{
@@ -38,6 +53,20 @@
         {"shape":"UnsupportedAddressException"}
       ]
     },
+    "CreateCluster":{
+      "name":"CreateCluster",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateClusterRequest"},
+      "output":{"shape":"CreateClusterResult"},
+      "errors":[
+        {"shape":"InvalidResourceException"},
+        {"shape":"KMSRequestFailedException"},
+        {"shape":"InvalidInputCombinationException"}
+      ]
+    },
     "CreateJob":{
       "name":"CreateJob",
       "http":{
@@ -48,7 +77,9 @@
       "output":{"shape":"CreateJobResult"},
       "errors":[
         {"shape":"InvalidResourceException"},
-        {"shape":"KMSRequestFailedException"}
+        {"shape":"KMSRequestFailedException"},
+        {"shape":"InvalidInputCombinationException"},
+        {"shape":"ClusterLimitExceededException"}
       ]
     },
     "DescribeAddress":{
@@ -71,6 +102,18 @@
       },
       "input":{"shape":"DescribeAddressesRequest"},
       "output":{"shape":"DescribeAddressesResult"},
+      "errors":[
+        {"shape":"InvalidResourceException"}
+      ]
+    },
+    "DescribeCluster":{
+      "name":"DescribeCluster",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeClusterRequest"},
+      "output":{"shape":"DescribeClusterResult"},
       "errors":[
         {"shape":"InvalidResourceException"}
       ]
@@ -122,6 +165,27 @@
       "input":{"shape":"GetSnowballUsageRequest"},
       "output":{"shape":"GetSnowballUsageResult"}
     },
+    "ListClusterJobs":{
+      "name":"ListClusterJobs",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListClusterJobsRequest"},
+      "output":{"shape":"ListClusterJobsResult"},
+      "errors":[
+        {"shape":"InvalidResourceException"}
+      ]
+    },
+    "ListClusters":{
+      "name":"ListClusters",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListClustersRequest"},
+      "output":{"shape":"ListClustersResult"}
+    },
     "ListJobs":{
       "name":"ListJobs",
       "http":{
@@ -130,6 +194,21 @@
       },
       "input":{"shape":"ListJobsRequest"},
       "output":{"shape":"ListJobsResult"}
+    },
+    "UpdateCluster":{
+      "name":"UpdateCluster",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateClusterRequest"},
+      "output":{"shape":"UpdateClusterResult"},
+      "errors":[
+        {"shape":"InvalidResourceException"},
+        {"shape":"InvalidJobStateException"},
+        {"shape":"KMSRequestFailedException"},
+        {"shape":"InvalidInputCombinationException"}
+      ]
     },
     "UpdateJob":{
       "name":"UpdateJob",
@@ -142,7 +221,9 @@
       "errors":[
         {"shape":"InvalidResourceException"},
         {"shape":"InvalidJobStateException"},
-        {"shape":"KMSRequestFailedException"}
+        {"shape":"KMSRequestFailedException"},
+        {"shape":"InvalidInputCombinationException"},
+        {"shape":"ClusterLimitExceededException"}
       ]
     }
   },
@@ -176,6 +257,18 @@
       "member":{"shape":"Address"}
     },
     "Boolean":{"type":"boolean"},
+    "CancelClusterRequest":{
+      "type":"structure",
+      "required":["ClusterId"],
+      "members":{
+        "ClusterId":{"shape":"ClusterId"}
+      }
+    },
+    "CancelClusterResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "CancelJobRequest":{
       "type":"structure",
       "required":["JobId"],
@@ -187,6 +280,59 @@
       "type":"structure",
       "members":{
       }
+    },
+    "ClusterId":{
+      "type":"string",
+      "max":39,
+      "min":39,
+      "pattern":"CID[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    },
+    "ClusterLimitExceededException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ClusterListEntry":{
+      "type":"structure",
+      "members":{
+        "ClusterId":{"shape":"String"},
+        "ClusterState":{"shape":"ClusterState"},
+        "CreationDate":{"shape":"Timestamp"},
+        "Description":{"shape":"String"}
+      }
+    },
+    "ClusterListEntryList":{
+      "type":"list",
+      "member":{"shape":"ClusterListEntry"}
+    },
+    "ClusterMetadata":{
+      "type":"structure",
+      "members":{
+        "ClusterId":{"shape":"String"},
+        "Description":{"shape":"String"},
+        "KmsKeyARN":{"shape":"KmsKeyARN"},
+        "RoleARN":{"shape":"RoleARN"},
+        "ClusterState":{"shape":"ClusterState"},
+        "JobType":{"shape":"JobType"},
+        "SnowballType":{"shape":"SnowballType"},
+        "CreationDate":{"shape":"Timestamp"},
+        "Resources":{"shape":"JobResource"},
+        "AddressId":{"shape":"AddressId"},
+        "ShippingOption":{"shape":"ShippingOption"},
+        "Notification":{"shape":"Notification"}
+      }
+    },
+    "ClusterState":{
+      "type":"string",
+      "enum":[
+        "AwaitingQuorum",
+        "Pending",
+        "InUse",
+        "Complete",
+        "Cancelled"
+      ]
     },
     "CreateAddressRequest":{
       "type":"structure",
@@ -201,7 +347,7 @@
         "AddressId":{"shape":"String"}
       }
     },
-    "CreateJobRequest":{
+    "CreateClusterRequest":{
       "type":"structure",
       "required":[
         "JobType",
@@ -217,9 +363,31 @@
         "AddressId":{"shape":"AddressId"},
         "KmsKeyARN":{"shape":"KmsKeyARN"},
         "RoleARN":{"shape":"RoleARN"},
-        "SnowballCapacityPreference":{"shape":"SnowballCapacity"},
+        "SnowballType":{"shape":"SnowballType"},
         "ShippingOption":{"shape":"ShippingOption"},
         "Notification":{"shape":"Notification"}
+      }
+    },
+    "CreateClusterResult":{
+      "type":"structure",
+      "members":{
+        "ClusterId":{"shape":"ClusterId"}
+      }
+    },
+    "CreateJobRequest":{
+      "type":"structure",
+      "members":{
+        "JobType":{"shape":"JobType"},
+        "Resources":{"shape":"JobResource"},
+        "Description":{"shape":"String"},
+        "AddressId":{"shape":"AddressId"},
+        "KmsKeyARN":{"shape":"KmsKeyARN"},
+        "RoleARN":{"shape":"RoleARN"},
+        "SnowballCapacityPreference":{"shape":"SnowballCapacity"},
+        "ShippingOption":{"shape":"ShippingOption"},
+        "Notification":{"shape":"Notification"},
+        "ClusterId":{"shape":"ClusterId"},
+        "SnowballType":{"shape":"SnowballType"}
       }
     },
     "CreateJobResult":{
@@ -264,6 +432,19 @@
         "NextToken":{"shape":"String"}
       }
     },
+    "DescribeClusterRequest":{
+      "type":"structure",
+      "required":["ClusterId"],
+      "members":{
+        "ClusterId":{"shape":"ClusterId"}
+      }
+    },
+    "DescribeClusterResult":{
+      "type":"structure",
+      "members":{
+        "ClusterMetadata":{"shape":"ClusterMetadata"}
+      }
+    },
     "DescribeJobRequest":{
       "type":"structure",
       "required":["JobId"],
@@ -277,6 +458,16 @@
         "JobMetadata":{"shape":"JobMetadata"},
         "SubJobMetadata":{"shape":"JobMetadataList"}
       }
+    },
+    "EventTriggerDefinition":{
+      "type":"structure",
+      "members":{
+        "EventResourceARN":{"shape":"ResourceARN"}
+      }
+    },
+    "EventTriggerDefinitionList":{
+      "type":"list",
+      "member":{"shape":"EventTriggerDefinition"}
     },
     "GetJobManifestRequest":{
       "type":"structure",
@@ -324,6 +515,13 @@
       },
       "exception":true
     },
+    "InvalidInputCombinationException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
     "InvalidJobStateException":{
       "type":"structure",
       "members":{
@@ -349,7 +547,11 @@
       "members":{
         "JobId":{"shape":"String"},
         "JobState":{"shape":"JobState"},
-        "IsMaster":{"shape":"Boolean"}
+        "IsMaster":{"shape":"Boolean"},
+        "JobType":{"shape":"JobType"},
+        "SnowballType":{"shape":"SnowballType"},
+        "CreationDate":{"shape":"Timestamp"},
+        "Description":{"shape":"String"}
       }
     },
     "JobListEntryList":{
@@ -370,6 +572,7 @@
         "JobId":{"shape":"String"},
         "JobState":{"shape":"JobState"},
         "JobType":{"shape":"JobType"},
+        "SnowballType":{"shape":"SnowballType"},
         "CreationDate":{"shape":"Timestamp"},
         "Resources":{"shape":"JobResource"},
         "Description":{"shape":"String"},
@@ -380,7 +583,8 @@
         "SnowballCapacityPreference":{"shape":"SnowballCapacity"},
         "Notification":{"shape":"Notification"},
         "DataTransferProgress":{"shape":"DataTransfer"},
-        "JobLogInfo":{"shape":"JobLogs"}
+        "JobLogInfo":{"shape":"JobLogs"},
+        "ClusterId":{"shape":"String"}
       }
     },
     "JobMetadataList":{
@@ -390,7 +594,8 @@
     "JobResource":{
       "type":"structure",
       "members":{
-        "S3Resources":{"shape":"S3ResourceList"}
+        "S3Resources":{"shape":"S3ResourceList"},
+        "LambdaResources":{"shape":"LambdaResourceList"}
       }
     },
     "JobState":{
@@ -418,7 +623,8 @@
       "type":"string",
       "enum":[
         "IMPORT",
-        "EXPORT"
+        "EXPORT",
+        "LOCAL_USE"
       ]
     },
     "KMSRequestFailedException":{
@@ -439,6 +645,47 @@
       "type":"string",
       "max":255,
       "pattern":"arn:(aws|aws-us-gov):kms:.*:[0-9]{12}:key/.*"
+    },
+    "LambdaResource":{
+      "type":"structure",
+      "members":{
+        "LambdaArn":{"shape":"ResourceARN"},
+        "EventTriggers":{"shape":"EventTriggerDefinitionList"}
+      }
+    },
+    "LambdaResourceList":{
+      "type":"list",
+      "member":{"shape":"LambdaResource"}
+    },
+    "ListClusterJobsRequest":{
+      "type":"structure",
+      "required":["ClusterId"],
+      "members":{
+        "ClusterId":{"shape":"ClusterId"},
+        "MaxResults":{"shape":"ListLimit"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "ListClusterJobsResult":{
+      "type":"structure",
+      "members":{
+        "JobListEntries":{"shape":"JobListEntryList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "ListClustersRequest":{
+      "type":"structure",
+      "members":{
+        "MaxResults":{"shape":"ListLimit"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "ListClustersResult":{
+      "type":"structure",
+      "members":{
+        "ClusterListEntries":{"shape":"ClusterListEntryList"},
+        "NextToken":{"shape":"String"}
+      }
     },
     "ListJobsRequest":{
       "type":"structure",
@@ -470,8 +717,7 @@
     },
     "ResourceARN":{
       "type":"string",
-      "max":255,
-      "pattern":"arn:(aws|aws-us-gov):s3:::.*"
+      "max":255
     },
     "RoleARN":{
       "type":"string",
@@ -518,7 +764,15 @@
       "enum":[
         "T50",
         "T80",
+        "T100",
         "NoPreference"
+      ]
+    },
+    "SnowballType":{
+      "type":"string",
+      "enum":[
+        "STANDARD",
+        "EDGE"
       ]
     },
     "SnsTopicARN":{
@@ -538,6 +792,24 @@
         "Message":{"shape":"String"}
       },
       "exception":true
+    },
+    "UpdateClusterRequest":{
+      "type":"structure",
+      "required":["ClusterId"],
+      "members":{
+        "ClusterId":{"shape":"ClusterId"},
+        "RoleARN":{"shape":"RoleARN"},
+        "Description":{"shape":"String"},
+        "Resources":{"shape":"JobResource"},
+        "AddressId":{"shape":"AddressId"},
+        "ShippingOption":{"shape":"ShippingOption"},
+        "Notification":{"shape":"Notification"}
+      }
+    },
+    "UpdateClusterResult":{
+      "type":"structure",
+      "members":{
+      }
     },
     "UpdateJobRequest":{
       "type":"structure",

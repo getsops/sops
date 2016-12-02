@@ -216,7 +216,8 @@
         "Sum":{"shape":"DatapointValue"},
         "Minimum":{"shape":"DatapointValue"},
         "Maximum":{"shape":"DatapointValue"},
-        "Unit":{"shape":"StandardUnit"}
+        "Unit":{"shape":"StandardUnit"},
+        "ExtendedStatistics":{"shape":"DatapointValueMap"}
       },
       "xmlOrder":[
         "Timestamp",
@@ -225,10 +226,16 @@
         "Sum",
         "Minimum",
         "Maximum",
-        "Unit"
+        "Unit",
+        "ExtendedStatistics"
       ]
     },
     "DatapointValue":{"type":"double"},
+    "DatapointValueMap":{
+      "type":"map",
+      "key":{"shape":"ExtendedStatistic"},
+      "value":{"shape":"DatapointValue"}
+    },
     "Datapoints":{
       "type":"list",
       "member":{"shape":"Datapoint"}
@@ -268,6 +275,7 @@
         "MetricName":{"shape":"MetricName"},
         "Namespace":{"shape":"Namespace"},
         "Statistic":{"shape":"Statistic"},
+        "ExtendedStatistic":{"shape":"ExtendedStatistic"},
         "Dimensions":{"shape":"Dimensions"},
         "Period":{"shape":"Period"},
         "Unit":{"shape":"StandardUnit"}
@@ -363,6 +371,16 @@
       "type":"integer",
       "min":1
     },
+    "ExtendedStatistic":{
+      "type":"string",
+      "pattern":"p(\\d{1,2}(\\.\\d{0,2})?|100)"
+    },
+    "ExtendedStatistics":{
+      "type":"list",
+      "member":{"shape":"ExtendedStatistic"},
+      "max":10,
+      "min":1
+    },
     "FaultDescription":{"type":"string"},
     "GetMetricStatisticsInput":{
       "type":"structure",
@@ -371,8 +389,7 @@
         "MetricName",
         "StartTime",
         "EndTime",
-        "Period",
-        "Statistics"
+        "Period"
       ],
       "members":{
         "Namespace":{"shape":"Namespace"},
@@ -382,6 +399,7 @@
         "EndTime":{"shape":"Timestamp"},
         "Period":{"shape":"Period"},
         "Statistics":{"shape":"Statistics"},
+        "ExtendedStatistics":{"shape":"ExtendedStatistics"},
         "Unit":{"shape":"StandardUnit"}
       }
     },
@@ -538,6 +556,7 @@
         "MetricName":{"shape":"MetricName"},
         "Namespace":{"shape":"Namespace"},
         "Statistic":{"shape":"Statistic"},
+        "ExtendedStatistic":{"shape":"ExtendedStatistic"},
         "Dimensions":{"shape":"Dimensions"},
         "Period":{"shape":"Period"},
         "Unit":{"shape":"StandardUnit"},
@@ -566,7 +585,8 @@
         "Unit",
         "EvaluationPeriods",
         "Threshold",
-        "ComparisonOperator"
+        "ComparisonOperator",
+        "ExtendedStatistic"
       ]
     },
     "MetricAlarms":{
@@ -632,7 +652,6 @@
         "AlarmName",
         "MetricName",
         "Namespace",
-        "Statistic",
         "Period",
         "EvaluationPeriods",
         "Threshold",
@@ -648,6 +667,7 @@
         "MetricName":{"shape":"MetricName"},
         "Namespace":{"shape":"Namespace"},
         "Statistic":{"shape":"Statistic"},
+        "ExtendedStatistic":{"shape":"ExtendedStatistic"},
         "Dimensions":{"shape":"Dimensions"},
         "Period":{"shape":"Period"},
         "Unit":{"shape":"StandardUnit"},

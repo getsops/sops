@@ -761,10 +761,28 @@ func ExampleCognitoIdentityProvider_CreateUserPool() {
 				RequireUppercase: aws.Bool(true),
 			},
 		},
+		Schema: []*cognitoidentityprovider.SchemaAttributeType{
+			{ // Required
+				AttributeDataType:      aws.String("AttributeDataType"),
+				DeveloperOnlyAttribute: aws.Bool(true),
+				Mutable:                aws.Bool(true),
+				Name:                   aws.String("CustomAttributeNameType"),
+				NumberAttributeConstraints: &cognitoidentityprovider.NumberAttributeConstraintsType{
+					MaxValue: aws.String("StringType"),
+					MinValue: aws.String("StringType"),
+				},
+				Required: aws.Bool(true),
+				StringAttributeConstraints: &cognitoidentityprovider.StringAttributeConstraintsType{
+					MaxLength: aws.String("StringType"),
+					MinLength: aws.String("StringType"),
+				},
+			},
+			// More values...
+		},
 		SmsAuthenticationMessage: aws.String("SmsVerificationMessageType"),
 		SmsConfiguration: &cognitoidentityprovider.SmsConfigurationType{
+			SnsCallerArn: aws.String("ArnType"), // Required
 			ExternalId:   aws.String("StringType"),
-			SnsCallerArn: aws.String("ArnType"),
 		},
 		SmsVerificationMessage: aws.String("SmsVerificationMessageType"),
 	}
@@ -1655,8 +1673,8 @@ func ExampleCognitoIdentityProvider_UpdateUserPool() {
 		},
 		SmsAuthenticationMessage: aws.String("SmsVerificationMessageType"),
 		SmsConfiguration: &cognitoidentityprovider.SmsConfigurationType{
+			SnsCallerArn: aws.String("ArnType"), // Required
 			ExternalId:   aws.String("StringType"),
-			SnsCallerArn: aws.String("ArnType"),
 		},
 		SmsVerificationMessage: aws.String("SmsVerificationMessageType"),
 	}

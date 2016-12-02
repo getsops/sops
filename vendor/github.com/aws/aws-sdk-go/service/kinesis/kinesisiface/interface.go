@@ -75,6 +75,10 @@ type KinesisAPI interface {
 
 	DeleteStream(*kinesis.DeleteStreamInput) (*kinesis.DeleteStreamOutput, error)
 
+	DescribeLimitsRequest(*kinesis.DescribeLimitsInput) (*request.Request, *kinesis.DescribeLimitsOutput)
+
+	DescribeLimits(*kinesis.DescribeLimitsInput) (*kinesis.DescribeLimitsOutput, error)
+
 	DescribeStreamRequest(*kinesis.DescribeStreamInput) (*request.Request, *kinesis.DescribeStreamOutput)
 
 	DescribeStream(*kinesis.DescribeStreamInput) (*kinesis.DescribeStreamOutput, error)
@@ -130,6 +134,10 @@ type KinesisAPI interface {
 	SplitShardRequest(*kinesis.SplitShardInput) (*request.Request, *kinesis.SplitShardOutput)
 
 	SplitShard(*kinesis.SplitShardInput) (*kinesis.SplitShardOutput, error)
+
+	UpdateShardCountRequest(*kinesis.UpdateShardCountInput) (*request.Request, *kinesis.UpdateShardCountOutput)
+
+	UpdateShardCount(*kinesis.UpdateShardCountInput) (*kinesis.UpdateShardCountOutput, error)
 
 	WaitUntilStreamExists(*kinesis.DescribeStreamInput) error
 }

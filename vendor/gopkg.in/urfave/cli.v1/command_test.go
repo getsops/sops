@@ -13,12 +13,18 @@ func TestCommandFlagParsing(t *testing.T) {
 	cases := []struct {
 		testArgs        []string
 		skipFlagParsing bool
+		skipArgReorder  bool
 		expectedErr     error
 	}{
-		{[]string{"blah", "blah", "-break"}, false, errors.New("flag provided but not defined: -break")}, // Test normal "not ignoring flags" flow
-		{[]string{"blah", "blah"}, true, nil},                                                            // Test SkipFlagParsing without any args that look like flags
-		{[]string{"blah", "-break"}, true, nil},                                                          // Test SkipFlagParsing with random flag arg
-		{[]string{"blah", "-help"}, true, nil},                                                           // Test SkipFlagParsing with "special" help flag arg
+		// Test normal "not ignoring flags" flow
+		{[]string{"test-cmd", "blah", "blah", "-break"}, false, false, errors.New("flag provided but not defined: -break")},
+
+		// Test no arg reorder
+		{[]string{"test-cmd", "blah", "blah", "-break"}, false, true, nil},
+
+		{[]string{"test-cmd", "blah", "blah"}, true, false, nil},   // Test SkipFlagParsing without any args that look like flags
+		{[]string{"test-cmd", "blah", "-break"}, true, false, nil}, // Test SkipFlagParsing with random flag arg
+		{[]string{"test-cmd", "blah", "-help"}, true, false, nil},  // Test SkipFlagParsing with "special" help flag arg
 	}
 
 	for _, c := range cases {
@@ -30,14 +36,14 @@ func TestCommandFlagParsing(t *testing.T) {
 		context := NewContext(app, set, nil)
 
 		command := Command{
-			Name:        "test-cmd",
-			Aliases:     []string{"tc"},
-			Usage:       "this is for testing",
-			Description: "testing",
-			Action:      func(_ *Context) error { return nil },
+			Name:            "test-cmd",
+			Aliases:         []string{"tc"},
+			Usage:           "this is for testing",
+			Description:     "testing",
+			Action:          func(_ *Context) error { return nil },
+			SkipFlagParsing: c.skipFlagParsing,
+			SkipArgReorder:  c.skipArgReorder,
 		}
-
-		command.SkipFlagParsing = c.skipFlagParsing
 
 		err := command.Run(context)
 
@@ -70,6 +76,54 @@ func TestCommand_Run_DoesNotOverwriteErrorFromBefore(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "after error") {
 		t.Errorf("expected text of error from After method, but got none in \"%v\"", err)
+	}
+}
+
+func TestCommand_Run_BeforeSavesMetadata(t *testing.T) {
+	var receivedMsgFromAction string
+	var receivedMsgFromAfter string
+
+	app := NewApp()
+	app.Commands = []Command{
+		{
+			Name: "bar",
+			Before: func(c *Context) error {
+				c.App.Metadata["msg"] = "hello world"
+				return nil
+			},
+			Action: func(c *Context) error {
+				msg, ok := c.App.Metadata["msg"]
+				if !ok {
+					return errors.New("msg not found")
+				}
+				receivedMsgFromAction = msg.(string)
+				return nil
+			},
+			After: func(c *Context) error {
+				msg, ok := c.App.Metadata["msg"]
+				if !ok {
+					return errors.New("msg not found")
+				}
+				receivedMsgFromAfter = msg.(string)
+				return nil
+			},
+		},
+	}
+
+	err := app.Run([]string{"foo", "bar"})
+	if err != nil {
+		t.Fatalf("expected no error from Run, got %s", err)
+	}
+
+	expectedMsg := "hello world"
+
+	if receivedMsgFromAction != expectedMsg {
+		t.Fatalf("expected msg from Action to match. Given: %q\nExpected: %q",
+			receivedMsgFromAction, expectedMsg)
+	}
+	if receivedMsgFromAfter != expectedMsg {
+		t.Fatalf("expected msg from After to match. Given: %q\nExpected: %q",
+			receivedMsgFromAction, expectedMsg)
 	}
 }
 

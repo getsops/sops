@@ -75,6 +75,10 @@ type EC2API interface {
 
 	AllocateHosts(*ec2.AllocateHostsInput) (*ec2.AllocateHostsOutput, error)
 
+	AssignIpv6AddressesRequest(*ec2.AssignIpv6AddressesInput) (*request.Request, *ec2.AssignIpv6AddressesOutput)
+
+	AssignIpv6Addresses(*ec2.AssignIpv6AddressesInput) (*ec2.AssignIpv6AddressesOutput, error)
+
 	AssignPrivateIpAddressesRequest(*ec2.AssignPrivateIpAddressesInput) (*request.Request, *ec2.AssignPrivateIpAddressesOutput)
 
 	AssignPrivateIpAddresses(*ec2.AssignPrivateIpAddressesInput) (*ec2.AssignPrivateIpAddressesOutput, error)
@@ -90,6 +94,14 @@ type EC2API interface {
 	AssociateRouteTableRequest(*ec2.AssociateRouteTableInput) (*request.Request, *ec2.AssociateRouteTableOutput)
 
 	AssociateRouteTable(*ec2.AssociateRouteTableInput) (*ec2.AssociateRouteTableOutput, error)
+
+	AssociateSubnetCidrBlockRequest(*ec2.AssociateSubnetCidrBlockInput) (*request.Request, *ec2.AssociateSubnetCidrBlockOutput)
+
+	AssociateSubnetCidrBlock(*ec2.AssociateSubnetCidrBlockInput) (*ec2.AssociateSubnetCidrBlockOutput, error)
+
+	AssociateVpcCidrBlockRequest(*ec2.AssociateVpcCidrBlockInput) (*request.Request, *ec2.AssociateVpcCidrBlockOutput)
+
+	AssociateVpcCidrBlock(*ec2.AssociateVpcCidrBlockInput) (*ec2.AssociateVpcCidrBlockOutput, error)
 
 	AttachClassicLinkVpcRequest(*ec2.AttachClassicLinkVpcInput) (*request.Request, *ec2.AttachClassicLinkVpcOutput)
 
@@ -170,6 +182,10 @@ type EC2API interface {
 	CreateDhcpOptionsRequest(*ec2.CreateDhcpOptionsInput) (*request.Request, *ec2.CreateDhcpOptionsOutput)
 
 	CreateDhcpOptions(*ec2.CreateDhcpOptionsInput) (*ec2.CreateDhcpOptionsOutput, error)
+
+	CreateEgressOnlyInternetGatewayRequest(*ec2.CreateEgressOnlyInternetGatewayInput) (*request.Request, *ec2.CreateEgressOnlyInternetGatewayOutput)
+
+	CreateEgressOnlyInternetGateway(*ec2.CreateEgressOnlyInternetGatewayInput) (*ec2.CreateEgressOnlyInternetGatewayOutput, error)
 
 	CreateFlowLogsRequest(*ec2.CreateFlowLogsInput) (*request.Request, *ec2.CreateFlowLogsOutput)
 
@@ -278,6 +294,10 @@ type EC2API interface {
 	DeleteDhcpOptionsRequest(*ec2.DeleteDhcpOptionsInput) (*request.Request, *ec2.DeleteDhcpOptionsOutput)
 
 	DeleteDhcpOptions(*ec2.DeleteDhcpOptionsInput) (*ec2.DeleteDhcpOptionsOutput, error)
+
+	DeleteEgressOnlyInternetGatewayRequest(*ec2.DeleteEgressOnlyInternetGatewayInput) (*request.Request, *ec2.DeleteEgressOnlyInternetGatewayOutput)
+
+	DeleteEgressOnlyInternetGateway(*ec2.DeleteEgressOnlyInternetGatewayInput) (*ec2.DeleteEgressOnlyInternetGatewayOutput, error)
 
 	DeleteFlowLogsRequest(*ec2.DeleteFlowLogsInput) (*request.Request, *ec2.DeleteFlowLogsOutput)
 
@@ -402,6 +422,10 @@ type EC2API interface {
 	DescribeDhcpOptionsRequest(*ec2.DescribeDhcpOptionsInput) (*request.Request, *ec2.DescribeDhcpOptionsOutput)
 
 	DescribeDhcpOptions(*ec2.DescribeDhcpOptionsInput) (*ec2.DescribeDhcpOptionsOutput, error)
+
+	DescribeEgressOnlyInternetGatewaysRequest(*ec2.DescribeEgressOnlyInternetGatewaysInput) (*request.Request, *ec2.DescribeEgressOnlyInternetGatewaysOutput)
+
+	DescribeEgressOnlyInternetGateways(*ec2.DescribeEgressOnlyInternetGatewaysInput) (*ec2.DescribeEgressOnlyInternetGatewaysOutput, error)
 
 	DescribeExportTasksRequest(*ec2.DescribeExportTasksInput) (*request.Request, *ec2.DescribeExportTasksOutput)
 
@@ -687,6 +711,14 @@ type EC2API interface {
 
 	DisassociateRouteTable(*ec2.DisassociateRouteTableInput) (*ec2.DisassociateRouteTableOutput, error)
 
+	DisassociateSubnetCidrBlockRequest(*ec2.DisassociateSubnetCidrBlockInput) (*request.Request, *ec2.DisassociateSubnetCidrBlockOutput)
+
+	DisassociateSubnetCidrBlock(*ec2.DisassociateSubnetCidrBlockInput) (*ec2.DisassociateSubnetCidrBlockOutput, error)
+
+	DisassociateVpcCidrBlockRequest(*ec2.DisassociateVpcCidrBlockInput) (*request.Request, *ec2.DisassociateVpcCidrBlockOutput)
+
+	DisassociateVpcCidrBlock(*ec2.DisassociateVpcCidrBlockInput) (*ec2.DisassociateVpcCidrBlockOutput, error)
+
 	EnableVgwRoutePropagationRequest(*ec2.EnableVgwRoutePropagationInput) (*request.Request, *ec2.EnableVgwRoutePropagationOutput)
 
 	EnableVgwRoutePropagation(*ec2.EnableVgwRoutePropagationInput) (*ec2.EnableVgwRoutePropagationOutput, error)
@@ -918,6 +950,10 @@ type EC2API interface {
 	TerminateInstancesRequest(*ec2.TerminateInstancesInput) (*request.Request, *ec2.TerminateInstancesOutput)
 
 	TerminateInstances(*ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error)
+
+	UnassignIpv6AddressesRequest(*ec2.UnassignIpv6AddressesInput) (*request.Request, *ec2.UnassignIpv6AddressesOutput)
+
+	UnassignIpv6Addresses(*ec2.UnassignIpv6AddressesInput) (*ec2.UnassignIpv6AddressesOutput, error)
 
 	UnassignPrivateIpAddressesRequest(*ec2.UnassignPrivateIpAddressesInput) (*request.Request, *ec2.UnassignPrivateIpAddressesOutput)
 

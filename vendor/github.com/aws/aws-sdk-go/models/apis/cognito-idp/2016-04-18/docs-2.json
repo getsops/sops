@@ -348,10 +348,10 @@
     "AuthenticationResultType": {
       "base": "<p>The result type of the authentication result.</p>",
       "refs": {
-        "AdminInitiateAuthResponse$AuthenticationResult": null,
-        "AdminRespondToAuthChallengeResponse$AuthenticationResult": null,
-        "InitiateAuthResponse$AuthenticationResult": null,
-        "RespondToAuthChallengeResponse$AuthenticationResult": null
+        "AdminInitiateAuthResponse$AuthenticationResult": "<p>The result of the authentication response.</p>",
+        "AdminRespondToAuthChallengeResponse$AuthenticationResult": "<p>The result returned by the server in response to the authentication request.</p>",
+        "InitiateAuthResponse$AuthenticationResult": "<p>The result returned by the server in response to the request to initiate authentication.</p>",
+        "RespondToAuthChallengeResponse$AuthenticationResult": "<p>The result returned by the server in response to the request to respond to the authentication challenge.</p>"
       }
     },
     "BooleanType": {
@@ -478,10 +478,10 @@
       "base": "<p>The type of code delivery details being returned from the server.</p>",
       "refs": {
         "CodeDeliveryDetailsListType$member": null,
-        "ForgotPasswordResponse$CodeDeliveryDetails": null,
-        "GetUserAttributeVerificationCodeResponse$CodeDeliveryDetails": "<p>The code delivery details returned by the server response to get the user attribute verification code.</p>",
-        "ResendConfirmationCodeResponse$CodeDeliveryDetails": null,
-        "SignUpResponse$CodeDeliveryDetails": null
+        "ForgotPasswordResponse$CodeDeliveryDetails": "<p>The code delivery details returned by the server in response to the request to reset a password.</p>",
+        "GetUserAttributeVerificationCodeResponse$CodeDeliveryDetails": "<p>The code delivery details returned by the server in response to the request to get the user attribute verification code.</p>",
+        "ResendConfirmationCodeResponse$CodeDeliveryDetails": "<p>The code delivery details returned by the server in response to the request to resend the confirmation code.</p>",
+        "SignUpResponse$CodeDeliveryDetails": "<p>The code delivery details returned by the server response to the user registration request.</p>"
       }
     },
     "CodeDeliveryFailureException": {
@@ -1167,7 +1167,7 @@
       }
     },
     "ResendConfirmationCodeResponse": {
-      "base": "<p>The response from the server when the Amazon Cognito service makes the request to resend a confirmation code.</p>",
+      "base": "<p>The response from the server when the Amazon Cognito Your User Pools service makes the request to resend a confirmation code.</p>",
       "refs": {
       }
     },
@@ -1196,6 +1196,7 @@
     "SchemaAttributesListType": {
       "base": null,
       "refs": {
+        "CreateUserPoolRequest$Schema": "<p>An array of schema attributes for the new user pool. These attributes can be standard or custom attributes.</p>",
         "UserPoolType$SchemaAttributes": "<p>A container with the schema attributes of a user pool.</p>"
       }
     },
@@ -1629,7 +1630,7 @@
         "AdminUserGlobalSignOutRequest$Username": "<p>The user name.</p>",
         "ConfirmForgotPasswordRequest$Username": "<p>The user name of the user for whom you want to enter a code to retrieve a forgotten password.</p>",
         "ConfirmSignUpRequest$Username": "<p>The user name of the user whose registration you wish to confirm.</p>",
-        "ForgotPasswordRequest$Username": "<p>The user name of the user for whom you want to enter a code to retrieve a forgotten password.</p>",
+        "ForgotPasswordRequest$Username": "<p>The user name of the user for whom you want to enter a code to reset a forgotten password.</p>",
         "GetUserResponse$Username": "<p>The user name of the user you wish to retrieve from the get user request.</p>",
         "ResendConfirmationCodeRequest$Username": "<p>The user name of the user to whom you wish to resend a confirmation code.</p>",
         "SignUpRequest$Username": "<p>The user name of the user you wish to register.</p>",

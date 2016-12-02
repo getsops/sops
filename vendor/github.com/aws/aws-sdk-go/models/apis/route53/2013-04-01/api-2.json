@@ -7,7 +7,8 @@
     "protocol":"rest-xml",
     "serviceAbbreviation":"Route 53",
     "serviceFullName":"Amazon Route 53",
-    "signatureVersion":"v4"
+    "signatureVersion":"v4",
+    "uid":"route53-2013-04-01"
   },
   "operations":{
     "AssociateVPCWithHostedZone":{
@@ -24,6 +25,7 @@
       "output":{"shape":"AssociateVPCWithHostedZoneResponse"},
       "errors":[
         {"shape":"NoSuchHostedZone"},
+        {"shape":"NotAuthorizedException"},
         {"shape":"InvalidVPCId"},
         {"shape":"InvalidInput"},
         {"shape":"PublicZoneVPCAssociation"},
@@ -199,6 +201,25 @@
         {"shape":"InvalidTrafficPolicyDocument"}
       ]
     },
+    "CreateVPCAssociationAuthorization":{
+      "name":"CreateVPCAssociationAuthorization",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2013-04-01/hostedzone/{Id}/authorizevpcassociation"
+      },
+      "input":{
+        "shape":"CreateVPCAssociationAuthorizationRequest",
+        "locationName":"CreateVPCAssociationAuthorizationRequest",
+        "xmlNamespace":{"uri":"https://route53.amazonaws.com/doc/2013-04-01/"}
+      },
+      "output":{"shape":"CreateVPCAssociationAuthorizationResponse"},
+      "errors":[
+        {"shape":"TooManyVPCAssociationAuthorizations"},
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"InvalidVPCId"},
+        {"shape":"InvalidInput"}
+      ]
+    },
     "DeleteHealthCheck":{
       "name":"DeleteHealthCheck",
       "http":{
@@ -273,6 +294,25 @@
         {"shape":"PriorRequestNotComplete"}
       ]
     },
+    "DeleteVPCAssociationAuthorization":{
+      "name":"DeleteVPCAssociationAuthorization",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2013-04-01/hostedzone/{Id}/deauthorizevpcassociation"
+      },
+      "input":{
+        "shape":"DeleteVPCAssociationAuthorizationRequest",
+        "locationName":"DeleteVPCAssociationAuthorizationRequest",
+        "xmlNamespace":{"uri":"https://route53.amazonaws.com/doc/2013-04-01/"}
+      },
+      "output":{"shape":"DeleteVPCAssociationAuthorizationResponse"},
+      "errors":[
+        {"shape":"VPCAssociationAuthorizationNotFound"},
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"InvalidVPCId"},
+        {"shape":"InvalidInput"}
+      ]
+    },
     "DisassociateVPCFromHostedZone":{
       "name":"DisassociateVPCFromHostedZone",
       "http":{
@@ -305,20 +345,6 @@
         {"shape":"NoSuchChange"},
         {"shape":"InvalidInput"}
       ]
-    },
-    "GetChangeDetails":{
-      "name":"GetChangeDetails",
-      "http":{
-        "method":"GET",
-        "requestUri":"/2013-04-01/changedetails/{Id}"
-      },
-      "input":{"shape":"GetChangeDetailsRequest"},
-      "output":{"shape":"GetChangeDetailsResponse"},
-      "errors":[
-        {"shape":"NoSuchChange"},
-        {"shape":"InvalidInput"}
-      ],
-      "deprecated":true
     },
     "GetCheckerIpRanges":{
       "name":"GetCheckerIpRanges",
@@ -464,34 +490,6 @@
       },
       "input":{"shape":"GetTrafficPolicyInstanceCountRequest"},
       "output":{"shape":"GetTrafficPolicyInstanceCountResponse"}
-    },
-    "ListChangeBatchesByHostedZone":{
-      "name":"ListChangeBatchesByHostedZone",
-      "http":{
-        "method":"GET",
-        "requestUri":"/2013-04-01/hostedzone/{Id}/changes"
-      },
-      "input":{"shape":"ListChangeBatchesByHostedZoneRequest"},
-      "output":{"shape":"ListChangeBatchesByHostedZoneResponse"},
-      "errors":[
-        {"shape":"NoSuchHostedZone"},
-        {"shape":"InvalidInput"}
-      ],
-      "deprecated":true
-    },
-    "ListChangeBatchesByRRSet":{
-      "name":"ListChangeBatchesByRRSet",
-      "http":{
-        "method":"GET",
-        "requestUri":"/2013-04-01/hostedzone/{Id}/rrsChanges"
-      },
-      "input":{"shape":"ListChangeBatchesByRRSetRequest"},
-      "output":{"shape":"ListChangeBatchesByRRSetResponse"},
-      "errors":[
-        {"shape":"NoSuchHostedZone"},
-        {"shape":"InvalidInput"}
-      ],
-      "deprecated":true
     },
     "ListGeoLocations":{
       "name":"ListGeoLocations",
@@ -672,6 +670,20 @@
         {"shape":"NoSuchTrafficPolicy"}
       ]
     },
+    "ListVPCAssociationAuthorizations":{
+      "name":"ListVPCAssociationAuthorizations",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2013-04-01/hostedzone/{Id}/authorizevpcassociation"
+      },
+      "input":{"shape":"ListVPCAssociationAuthorizationsRequest"},
+      "output":{"shape":"ListVPCAssociationAuthorizationsResponse"},
+      "errors":[
+        {"shape":"NoSuchHostedZone"},
+        {"shape":"InvalidInput"},
+        {"shape":"InvalidPaginationToken"}
+      ]
+    },
     "TestDNSAnswer":{
       "name":"TestDNSAnswer",
       "http":{
@@ -760,7 +772,6 @@
     }
   },
   "shapes":{
-    "AWSAccountID":{"type":"string"},
     "AlarmIdentifier":{
       "type":"structure",
       "required":[
@@ -841,31 +852,6 @@
         "Comment":{"shape":"ResourceDescription"},
         "Changes":{"shape":"Changes"}
       }
-    },
-    "ChangeBatchRecord":{
-      "type":"structure",
-      "required":[
-        "Id",
-        "Status"
-      ],
-      "members":{
-        "Id":{"shape":"ResourceId"},
-        "SubmittedAt":{"shape":"TimeStamp"},
-        "Status":{"shape":"ChangeStatus"},
-        "Comment":{"shape":"ResourceDescription"},
-        "Submitter":{"shape":"AWSAccountID"},
-        "Changes":{"shape":"Changes"}
-      },
-      "deprecated":true
-    },
-    "ChangeBatchRecords":{
-      "type":"list",
-      "member":{
-        "shape":"ChangeBatchRecord",
-        "locationName":"ChangeBatchRecord"
-      },
-      "deprecated":true,
-      "min":1
     },
     "ChangeInfo":{
       "type":"structure",
@@ -982,6 +968,7 @@
       "type":"string",
       "enum":[
         "us-east-1",
+        "us-east-2",
         "us-west-1",
         "us-west-2",
         "eu-central-1",
@@ -1201,16 +1188,37 @@
         }
       }
     },
+    "CreateVPCAssociationAuthorizationRequest":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPC"
+      ],
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"uri",
+          "locationName":"Id"
+        },
+        "VPC":{"shape":"VPC"}
+      }
+    },
+    "CreateVPCAssociationAuthorizationResponse":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPC"
+      ],
+      "members":{
+        "HostedZoneId":{"shape":"ResourceId"},
+        "VPC":{"shape":"VPC"}
+      }
+    },
     "DNSName":{
       "type":"string",
       "max":1024
     },
     "DNSRCode":{"type":"string"},
-    "Date":{
-      "type":"string",
-      "deprecated":true,
-      "max":256
-    },
     "DelegationSet":{
       "type":"structure",
       "required":["NameServers"],
@@ -1360,6 +1368,26 @@
       "members":{
       }
     },
+    "DeleteVPCAssociationAuthorizationRequest":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPC"
+      ],
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"uri",
+          "locationName":"Id"
+        },
+        "VPC":{"shape":"VPC"}
+      }
+    },
+    "DeleteVPCAssociationAuthorizationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "Dimension":{
       "type":"structure",
       "required":[
@@ -1485,26 +1513,6 @@
       "type":"string",
       "max":64,
       "min":1
-    },
-    "GetChangeDetailsRequest":{
-      "type":"structure",
-      "required":["Id"],
-      "members":{
-        "Id":{
-          "shape":"ResourceId",
-          "location":"uri",
-          "locationName":"Id"
-        }
-      },
-      "deprecated":true
-    },
-    "GetChangeDetailsResponse":{
-      "type":"structure",
-      "required":["ChangeBatchRecord"],
-      "members":{
-        "ChangeBatchRecord":{"shape":"ChangeBatchRecord"}
-      },
-      "deprecated":true
     },
     "GetChangeRequest":{
       "type":"structure",
@@ -1930,8 +1938,8 @@
     },
     "IPAddress":{
       "type":"string",
-      "max":15,
-      "pattern":"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+      "max":45,
+      "pattern":"(^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))$|^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$)"
     },
     "IPAddressCidr":{"type":"string"},
     "IncompatibleVersion":{
@@ -1980,6 +1988,14 @@
       "error":{"httpStatusCode":400},
       "exception":true
     },
+    "InvalidPaginationToken":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
     "InvalidTrafficPolicyDocument":{
       "type":"structure",
       "members":{
@@ -2012,127 +2028,6 @@
         "message":{"shape":"ErrorMessage"}
       },
       "exception":true
-    },
-    "ListChangeBatchesByHostedZoneRequest":{
-      "type":"structure",
-      "required":[
-        "HostedZoneId",
-        "StartDate",
-        "EndDate"
-      ],
-      "members":{
-        "HostedZoneId":{
-          "shape":"ResourceId",
-          "location":"uri",
-          "locationName":"Id"
-        },
-        "StartDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"startDate"
-        },
-        "EndDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"endDate"
-        },
-        "MaxItems":{
-          "shape":"PageMaxItems",
-          "location":"querystring",
-          "locationName":"maxItems"
-        },
-        "Marker":{
-          "shape":"PageMarker",
-          "location":"querystring",
-          "locationName":"marker"
-        }
-      },
-      "deprecated":true
-    },
-    "ListChangeBatchesByHostedZoneResponse":{
-      "type":"structure",
-      "required":[
-        "MaxItems",
-        "Marker",
-        "ChangeBatchRecords"
-      ],
-      "members":{
-        "MaxItems":{"shape":"PageMaxItems"},
-        "Marker":{"shape":"PageMarker"},
-        "IsTruncated":{"shape":"PageTruncated"},
-        "ChangeBatchRecords":{"shape":"ChangeBatchRecords"},
-        "NextMarker":{"shape":"PageMarker"}
-      },
-      "deprecated":true
-    },
-    "ListChangeBatchesByRRSetRequest":{
-      "type":"structure",
-      "required":[
-        "HostedZoneId",
-        "Name",
-        "Type",
-        "StartDate",
-        "EndDate"
-      ],
-      "members":{
-        "HostedZoneId":{
-          "shape":"ResourceId",
-          "location":"uri",
-          "locationName":"Id"
-        },
-        "Name":{
-          "shape":"DNSName",
-          "location":"querystring",
-          "locationName":"rrSet_name"
-        },
-        "Type":{
-          "shape":"RRType",
-          "location":"querystring",
-          "locationName":"type"
-        },
-        "SetIdentifier":{
-          "shape":"ResourceRecordSetIdentifier",
-          "location":"querystring",
-          "locationName":"identifier"
-        },
-        "StartDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"startDate"
-        },
-        "EndDate":{
-          "shape":"Date",
-          "location":"querystring",
-          "locationName":"endDate"
-        },
-        "MaxItems":{
-          "shape":"PageMaxItems",
-          "location":"querystring",
-          "locationName":"maxItems"
-        },
-        "Marker":{
-          "shape":"PageMarker",
-          "location":"querystring",
-          "locationName":"marker"
-        }
-      },
-      "deprecated":true
-    },
-    "ListChangeBatchesByRRSetResponse":{
-      "type":"structure",
-      "required":[
-        "MaxItems",
-        "Marker",
-        "ChangeBatchRecords"
-      ],
-      "members":{
-        "MaxItems":{"shape":"PageMaxItems"},
-        "Marker":{"shape":"PageMarker"},
-        "IsTruncated":{"shape":"PageTruncated"},
-        "ChangeBatchRecords":{"shape":"ChangeBatchRecords"},
-        "NextMarker":{"shape":"PageMarker"}
-      },
-      "deprecated":true
     },
     "ListGeoLocationsRequest":{
       "type":"structure",
@@ -2608,6 +2503,40 @@
         "MaxItems":{"shape":"PageMaxItems"}
       }
     },
+    "ListVPCAssociationAuthorizationsRequest":{
+      "type":"structure",
+      "required":["HostedZoneId"],
+      "members":{
+        "HostedZoneId":{
+          "shape":"ResourceId",
+          "location":"uri",
+          "locationName":"Id"
+        },
+        "NextToken":{
+          "shape":"PaginationToken",
+          "location":"querystring",
+          "locationName":"nexttoken"
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxresults"
+        }
+      }
+    },
+    "ListVPCAssociationAuthorizationsResponse":{
+      "type":"structure",
+      "required":[
+        "HostedZoneId",
+        "VPCs"
+      ],
+      "members":{
+        "HostedZoneId":{"shape":"ResourceId"},
+        "NextToken":{"shape":"PaginationToken"},
+        "VPCs":{"shape":"VPCs"}
+      }
+    },
+    "MaxResults":{"type":"string"},
     "MeasureLatency":{"type":"boolean"},
     "Message":{
       "type":"string",
@@ -2688,12 +2617,24 @@
       "max":128,
       "min":1
     },
+    "NotAuthorizedException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":401},
+      "exception":true
+    },
     "PageMarker":{
       "type":"string",
       "max":64
     },
     "PageMaxItems":{"type":"string"},
     "PageTruncated":{"type":"boolean"},
+    "PaginationToken":{
+      "type":"string",
+      "max":256
+    },
     "Period":{
       "type":"integer",
       "min":60
@@ -3052,6 +2993,14 @@
       "error":{"httpStatusCode":400},
       "exception":true
     },
+    "TooManyVPCAssociationAuthorizations":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
     "TrafficPolicies":{
       "type":"list",
       "member":{
@@ -3300,6 +3249,14 @@
         "VPCRegion":{"shape":"VPCRegion"},
         "VPCId":{"shape":"VPCId"}
       }
+    },
+    "VPCAssociationAuthorizationNotFound":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":404},
+      "exception":true
     },
     "VPCAssociationNotFound":{
       "type":"structure",

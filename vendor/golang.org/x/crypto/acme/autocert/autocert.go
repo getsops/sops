@@ -187,6 +187,7 @@ func (m *Manager) GetCertificate(hello *tls.ClientHelloInfo) (*tls.Certificate, 
 	}
 
 	// regular domain
+	name = strings.TrimSuffix(name, ".") // golang.org/issue/18114
 	cert, err := m.cert(name)
 	if err == nil {
 		return cert, nil

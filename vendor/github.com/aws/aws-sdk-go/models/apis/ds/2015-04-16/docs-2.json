@@ -2,18 +2,19 @@
   "version": "2.0",
   "service": "<fullname>AWS Directory Service</fullname> <p>This is the <i>AWS Directory Service API Reference</i>. This guide provides detailed information about AWS Directory Service operations, data types, parameters, and errors.</p>",
   "operations": {
-    "AddIpRoutes": "<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p>",
-    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified Amazon Directory Services directory. Each directory can have a maximum of 10 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>",
-    "ConnectDirectory": "<p>Creates an AD Connector to connect to an on-premises directory.</p>",
+    "AddIpRoutes": "<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>",
+    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified Amazon Directory Services directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>",
+    "CancelSchemaExtension": "<p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>",
+    "ConnectDirectory": "<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>",
     "CreateAlias": "<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>",
     "CreateComputer": "<p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>",
     "CreateConditionalForwarder": "<p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>",
-    "CreateDirectory": "<p>Creates a Simple AD directory.</p>",
-    "CreateMicrosoftAD": "<p>Creates a Microsoft AD in the AWS cloud.</p>",
+    "CreateDirectory": "<p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>",
+    "CreateMicrosoftAD": "<p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>",
     "CreateSnapshot": "<p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note>",
     "CreateTrust": "<p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>",
     "DeleteConditionalForwarder": "<p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>",
-    "DeleteDirectory": "<p>Deletes an AWS Directory Service directory.</p>",
+    "DeleteDirectory": "<p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>",
     "DeleteSnapshot": "<p>Deletes a directory snapshot.</p>",
     "DeleteTrust": "<p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>",
     "DeregisterEventTopic": "<p>Removes the specified directory as a publisher to the specified SNS topic.</p>",
@@ -29,11 +30,13 @@
     "GetDirectoryLimits": "<p>Obtains directory limit information for the current region.</p>",
     "GetSnapshotLimits": "<p>Obtains the manual snapshot limits for a directory.</p>",
     "ListIpRoutes": "<p>Lists the address blocks that you have added to a directory.</p>",
+    "ListSchemaExtensions": "<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>",
     "ListTagsForResource": "<p>Lists all tags on an Amazon Directory Services directory.</p>",
     "RegisterEventTopic": "<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>",
     "RemoveIpRoutes": "<p>Removes IP address blocks from a directory.</p>",
     "RemoveTagsFromResource": "<p>Removes tags from an Amazon Directory Services directory.</p>",
     "RestoreFromSnapshot": "<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>",
+    "StartSchemaExtension": "<p>Applies a schema extension to a Microsoft AD directory.</p>",
     "UpdateConditionalForwarder": "<p>Updates a conditional forwarder that has been set up for your AWS directory.</p>",
     "UpdateRadius": "<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>",
     "VerifyTrust": "<p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"
@@ -120,6 +123,16 @@
       "refs": {
         "DirectoryConnectSettingsDescription$AvailabilityZones": "<p>A list of the Availability Zones that the directory is in.</p>",
         "DirectoryVpcSettingsDescription$AvailabilityZones": "<p>The list of Availability Zones that the directory is in.</p>"
+      }
+    },
+    "CancelSchemaExtensionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CancelSchemaExtensionResult": {
+      "base": null,
+      "refs": {
       }
     },
     "CidrIp": {
@@ -251,6 +264,12 @@
     "CreateMicrosoftADResult": {
       "base": "<p>Result of a CreateMicrosoftAD request.</p>",
       "refs": {
+      }
+    },
+    "CreateSnapshotBeforeSchemaExtension": {
+      "base": null,
+      "refs": {
+        "StartSchemaExtensionRequest$CreateSnapshotBeforeSchemaExtension": "<p>If true, creates a snapshot of the directory before applying the schema extension.</p>"
       }
     },
     "CreateSnapshotRequest": {
@@ -394,7 +413,9 @@
         "CreateMicrosoftADRequest$Description": "<p>A textual description for the directory. This label will appear on the AWS console <code>Directory Details</code> page after the directory is created.</p>",
         "DirectoryDescription$Description": "<p>The textual description for the directory.</p>",
         "IpRoute$Description": "<p>Description of the address block.</p>",
-        "IpRouteInfo$Description": "<p>Description of the <a>IpRouteInfo</a>.</p>"
+        "IpRouteInfo$Description": "<p>Description of the <a>IpRouteInfo</a>.</p>",
+        "SchemaExtensionInfo$Description": "<p>A description of the schema extension.</p>",
+        "StartSchemaExtensionRequest$Description": "<p>A description of the schema extension.</p>"
       }
     },
     "DirectoryConnectSettings": {
@@ -425,6 +446,7 @@
       "base": null,
       "refs": {
         "AddIpRoutesRequest$DirectoryId": "<p>Identifier (ID) of the directory to which to add the address block.</p>",
+        "CancelSchemaExtensionRequest$DirectoryId": "<p>The identifier of the directory whose schema extension will be canceled.</p>",
         "ConnectDirectoryResult$DirectoryId": "<p>The identifier of the new directory.</p>",
         "CreateAliasRequest$DirectoryId": "<p>The identifier of the directory for which to create the alias.</p>",
         "CreateAliasResult$DirectoryId": "<p>The identifier of the directory.</p>",
@@ -452,9 +474,12 @@
         "GetSnapshotLimitsRequest$DirectoryId": "<p>Contains the identifier of the directory to obtain the limits for.</p>",
         "IpRouteInfo$DirectoryId": "<p>Identifier (ID) of the directory associated with the IP addresses.</p>",
         "ListIpRoutesRequest$DirectoryId": "<p>Identifier (ID) of the directory for which you want to retrieve the IP addresses.</p>",
+        "ListSchemaExtensionsRequest$DirectoryId": "<p>The identifier of the directory from which to retrieve the schema extension information.</p>",
         "RegisterEventTopicRequest$DirectoryId": "<p>The Directory ID that will publish status messages to the SNS topic.</p>",
         "RemoveIpRoutesRequest$DirectoryId": "<p>Identifier (ID) of the directory from which you want to remove the IP addresses.</p>",
+        "SchemaExtensionInfo$DirectoryId": "<p>The identifier of the directory to which the schema extension is applied.</p>",
         "Snapshot$DirectoryId": "<p>The directory identifier.</p>",
+        "StartSchemaExtensionRequest$DirectoryId": "<p>The identifier of the directory for which the schema extension will be applied to.</p>",
         "Trust$DirectoryId": "<p>The Directory ID of the AWS directory involved in the trust relationship.</p>",
         "UpdateConditionalForwarderRequest$DirectoryId": "<p>The directory ID of the AWS directory for which to update the conditional forwarder.</p>",
         "UpdateRadiusRequest$DirectoryId": "<p>The identifier of the directory for which to update the RADIUS server information.</p>"
@@ -582,6 +607,12 @@
     "EnableSsoResult": {
       "base": "<p>Contains the results of the <a>EnableSso</a> operation.</p>",
       "refs": {
+      }
+    },
+    "EndDateTime": {
+      "base": null,
+      "refs": {
+        "SchemaExtensionInfo$EndDateTime": "<p>The date and time that the schema extension was completed.</p>"
       }
     },
     "EntityAlreadyExistsException": {
@@ -727,6 +758,12 @@
         "DirectoryDescription$LaunchTime": "<p>Specifies when the directory was created.</p>"
       }
     },
+    "LdifContent": {
+      "base": null,
+      "refs": {
+        "StartSchemaExtensionRequest$LdifContent": "<p>The LDIF file represented as a string. The file size can be no larger than 1MB.</p>"
+      }
+    },
     "Limit": {
       "base": null,
       "refs": {
@@ -740,6 +777,7 @@
         "DirectoryLimits$ConnectedDirectoriesLimit": "<p>The maximum number of connected directories allowed in the region.</p>",
         "DirectoryLimits$ConnectedDirectoriesCurrentCount": "<p>The current number of connected directories in the region.</p>",
         "ListIpRoutesRequest$Limit": "<p>Maximum number of items to return. If this value is zero, the maximum number of items is specified by the limitations of the operation.</p>",
+        "ListSchemaExtensionsRequest$Limit": "<p>The maximum number of items to return.</p>",
         "ListTagsForResourceRequest$Limit": "<p>Reserved for future use.</p>",
         "SnapshotLimits$ManualSnapshotsLimit": "<p>The maximum number of manual snapshots allowed.</p>",
         "SnapshotLimits$ManualSnapshotsCurrentCount": "<p>The current number of manual snapshots of the directory.</p>"
@@ -751,6 +789,16 @@
       }
     },
     "ListIpRoutesResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSchemaExtensionsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListSchemaExtensionsResult": {
       "base": null,
       "refs": {
       }
@@ -782,6 +830,8 @@
         "DescribeTrustsResult$NextToken": "<p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>DescribeTrusts</a> to retrieve the next set of items.</p>",
         "ListIpRoutesRequest$NextToken": "<p>The <i>ListIpRoutes.NextToken</i> value from a previous call to <a>ListIpRoutes</a>. Pass null if this is the first call.</p>",
         "ListIpRoutesResult$NextToken": "<p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>ListIpRoutes</a> to retrieve the next set of items.</p>",
+        "ListSchemaExtensionsRequest$NextToken": "<p>The <code>ListSchemaExtensions.NextToken</code> value from a previous call to <code>ListSchemaExtensions</code>. Pass null if this is the first call.</p>",
+        "ListSchemaExtensionsResult$NextToken": "<p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <code>ListSchemaExtensions</code> to retrieve the next set of items.</p>",
         "ListTagsForResourceRequest$NextToken": "<p>Reserved for future use.</p>",
         "ListTagsForResourceResult$NextToken": "<p>Reserved for future use.</p>"
       }
@@ -946,6 +996,38 @@
         "Computer$ComputerId": "<p>The identifier of the computer.</p>"
       }
     },
+    "SchemaExtensionId": {
+      "base": null,
+      "refs": {
+        "CancelSchemaExtensionRequest$SchemaExtensionId": "<p>The identifier of the schema extension that will be canceled.</p>",
+        "SchemaExtensionInfo$SchemaExtensionId": "<p>The identifier of the schema extension.</p>",
+        "StartSchemaExtensionResult$SchemaExtensionId": "<p>The identifier of the schema extension that will be applied.</p>"
+      }
+    },
+    "SchemaExtensionInfo": {
+      "base": "<p>Information about a schema extension.</p>",
+      "refs": {
+        "SchemaExtensionsInfo$member": null
+      }
+    },
+    "SchemaExtensionStatus": {
+      "base": null,
+      "refs": {
+        "SchemaExtensionInfo$SchemaExtensionStatus": "<p>The current status of the schema extension.</p>"
+      }
+    },
+    "SchemaExtensionStatusReason": {
+      "base": null,
+      "refs": {
+        "SchemaExtensionInfo$SchemaExtensionStatusReason": "<p>The reason for the <code>SchemaExtensionStatus</code>.</p>"
+      }
+    },
+    "SchemaExtensionsInfo": {
+      "base": null,
+      "refs": {
+        "ListSchemaExtensionsResult$SchemaExtensionsInfo": "<p>Information about the schema extensions applied to the directory.</p>"
+      }
+    },
     "SecurityGroupId": {
       "base": null,
       "refs": {
@@ -1039,6 +1121,22 @@
       "base": null,
       "refs": {
         "DirectoryDescription$StageReason": "<p>Additional information about the directory stage.</p>"
+      }
+    },
+    "StartDateTime": {
+      "base": null,
+      "refs": {
+        "SchemaExtensionInfo$StartDateTime": "<p>The date and time that the schema extension started being applied to the directory.</p>"
+      }
+    },
+    "StartSchemaExtensionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartSchemaExtensionResult": {
+      "base": null,
+      "refs": {
       }
     },
     "StartTime": {

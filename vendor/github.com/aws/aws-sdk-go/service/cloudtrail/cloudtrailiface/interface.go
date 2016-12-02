@@ -75,6 +75,10 @@ type CloudTrailAPI interface {
 
 	DescribeTrails(*cloudtrail.DescribeTrailsInput) (*cloudtrail.DescribeTrailsOutput, error)
 
+	GetEventSelectorsRequest(*cloudtrail.GetEventSelectorsInput) (*request.Request, *cloudtrail.GetEventSelectorsOutput)
+
+	GetEventSelectors(*cloudtrail.GetEventSelectorsInput) (*cloudtrail.GetEventSelectorsOutput, error)
+
 	GetTrailStatusRequest(*cloudtrail.GetTrailStatusInput) (*request.Request, *cloudtrail.GetTrailStatusOutput)
 
 	GetTrailStatus(*cloudtrail.GetTrailStatusInput) (*cloudtrail.GetTrailStatusOutput, error)
@@ -90,6 +94,10 @@ type CloudTrailAPI interface {
 	LookupEventsRequest(*cloudtrail.LookupEventsInput) (*request.Request, *cloudtrail.LookupEventsOutput)
 
 	LookupEvents(*cloudtrail.LookupEventsInput) (*cloudtrail.LookupEventsOutput, error)
+
+	PutEventSelectorsRequest(*cloudtrail.PutEventSelectorsInput) (*request.Request, *cloudtrail.PutEventSelectorsOutput)
+
+	PutEventSelectors(*cloudtrail.PutEventSelectorsInput) (*cloudtrail.PutEventSelectorsOutput, error)
 
 	RemoveTagsRequest(*cloudtrail.RemoveTagsInput) (*request.Request, *cloudtrail.RemoveTagsOutput)
 

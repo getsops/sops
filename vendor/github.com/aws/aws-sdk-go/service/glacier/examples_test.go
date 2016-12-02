@@ -493,6 +493,7 @@ func ExampleGlacier_InitiateJob() {
 			},
 			RetrievalByteRange: aws.String("string"),
 			SNSTopic:           aws.String("string"),
+			Tier:               aws.String("string"),
 			Type:               aws.String("string"),
 		},
 	}
@@ -653,6 +654,31 @@ func ExampleGlacier_ListParts() {
 	fmt.Println(resp)
 }
 
+func ExampleGlacier_ListProvisionedCapacity() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := glacier.New(sess)
+
+	params := &glacier.ListProvisionedCapacityInput{
+		AccountId: aws.String("string"), // Required
+	}
+	resp, err := svc.ListProvisionedCapacity(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleGlacier_ListTagsForVault() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -694,6 +720,31 @@ func ExampleGlacier_ListVaults() {
 		Marker:    aws.String("string"),
 	}
 	resp, err := svc.ListVaults(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleGlacier_PurchaseProvisionedCapacity() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := glacier.New(sess)
+
+	params := &glacier.PurchaseProvisionedCapacityInput{
+		AccountId: aws.String("string"), // Required
+	}
+	resp, err := svc.PurchaseProvisionedCapacity(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

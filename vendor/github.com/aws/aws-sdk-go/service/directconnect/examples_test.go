@@ -59,6 +59,7 @@ func ExampleDirectConnect_AllocatePrivateVirtualInterface() {
 			Asn:                  aws.Int64(1),                       // Required
 			VirtualInterfaceName: aws.String("VirtualInterfaceName"), // Required
 			Vlan:                 aws.Int64(1),                       // Required
+			AddressFamily:        aws.String("AddressFamily"),
 			AmazonAddress:        aws.String("AmazonAddress"),
 			AuthKey:              aws.String("BGPAuthKey"),
 			CustomerAddress:      aws.String("CustomerAddress"),
@@ -90,18 +91,19 @@ func ExampleDirectConnect_AllocatePublicVirtualInterface() {
 	params := &directconnect.AllocatePublicVirtualInterfaceInput{
 		ConnectionId: aws.String("ConnectionId"), // Required
 		NewPublicVirtualInterfaceAllocation: &directconnect.NewPublicVirtualInterfaceAllocation{ // Required
-			AmazonAddress:   aws.String("AmazonAddress"),   // Required
-			Asn:             aws.Int64(1),                  // Required
-			CustomerAddress: aws.String("CustomerAddress"), // Required
-			RouteFilterPrefixes: []*directconnect.RouteFilterPrefix{ // Required
+			Asn:                  aws.Int64(1),                       // Required
+			VirtualInterfaceName: aws.String("VirtualInterfaceName"), // Required
+			Vlan:                 aws.Int64(1),                       // Required
+			AddressFamily:        aws.String("AddressFamily"),
+			AmazonAddress:        aws.String("AmazonAddress"),
+			AuthKey:              aws.String("BGPAuthKey"),
+			CustomerAddress:      aws.String("CustomerAddress"),
+			RouteFilterPrefixes: []*directconnect.RouteFilterPrefix{
 				{ // Required
 					Cidr: aws.String("CIDR"),
 				},
 				// More values...
 			},
-			VirtualInterfaceName: aws.String("VirtualInterfaceName"), // Required
-			Vlan:                 aws.Int64(1),                       // Required
-			AuthKey:              aws.String("BGPAuthKey"),
 		},
 		OwnerAccount: aws.String("OwnerAccount"), // Required
 	}
@@ -194,6 +196,38 @@ func ExampleDirectConnect_ConfirmPublicVirtualInterface() {
 	fmt.Println(resp)
 }
 
+func ExampleDirectConnect_CreateBGPPeer() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.CreateBGPPeerInput{
+		NewBGPPeer: &directconnect.NewBGPPeer{
+			AddressFamily:   aws.String("AddressFamily"),
+			AmazonAddress:   aws.String("AmazonAddress"),
+			Asn:             aws.Int64(1),
+			AuthKey:         aws.String("BGPAuthKey"),
+			CustomerAddress: aws.String("CustomerAddress"),
+		},
+		VirtualInterfaceId: aws.String("VirtualInterfaceId"),
+	}
+	resp, err := svc.CreateBGPPeer(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleDirectConnect_CreateConnection() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -264,6 +298,7 @@ func ExampleDirectConnect_CreatePrivateVirtualInterface() {
 			VirtualGatewayId:     aws.String("VirtualGatewayId"),     // Required
 			VirtualInterfaceName: aws.String("VirtualInterfaceName"), // Required
 			Vlan:                 aws.Int64(1),                       // Required
+			AddressFamily:        aws.String("AddressFamily"),
 			AmazonAddress:        aws.String("AmazonAddress"),
 			AuthKey:              aws.String("BGPAuthKey"),
 			CustomerAddress:      aws.String("CustomerAddress"),
@@ -294,21 +329,49 @@ func ExampleDirectConnect_CreatePublicVirtualInterface() {
 	params := &directconnect.CreatePublicVirtualInterfaceInput{
 		ConnectionId: aws.String("ConnectionId"), // Required
 		NewPublicVirtualInterface: &directconnect.NewPublicVirtualInterface{ // Required
-			AmazonAddress:   aws.String("AmazonAddress"),   // Required
-			Asn:             aws.Int64(1),                  // Required
-			CustomerAddress: aws.String("CustomerAddress"), // Required
-			RouteFilterPrefixes: []*directconnect.RouteFilterPrefix{ // Required
+			Asn:                  aws.Int64(1),                       // Required
+			VirtualInterfaceName: aws.String("VirtualInterfaceName"), // Required
+			Vlan:                 aws.Int64(1),                       // Required
+			AddressFamily:        aws.String("AddressFamily"),
+			AmazonAddress:        aws.String("AmazonAddress"),
+			AuthKey:              aws.String("BGPAuthKey"),
+			CustomerAddress:      aws.String("CustomerAddress"),
+			RouteFilterPrefixes: []*directconnect.RouteFilterPrefix{
 				{ // Required
 					Cidr: aws.String("CIDR"),
 				},
 				// More values...
 			},
-			VirtualInterfaceName: aws.String("VirtualInterfaceName"), // Required
-			Vlan:                 aws.Int64(1),                       // Required
-			AuthKey:              aws.String("BGPAuthKey"),
 		},
 	}
 	resp, err := svc.CreatePublicVirtualInterface(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_DeleteBGPPeer() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.DeleteBGPPeerInput{
+		Asn:                aws.Int64(1),
+		CustomerAddress:    aws.String("CustomerAddress"),
+		VirtualInterfaceId: aws.String("VirtualInterfaceId"),
+	}
+	resp, err := svc.DeleteBGPPeer(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

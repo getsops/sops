@@ -159,6 +159,10 @@ type GameLiftAPI interface {
 
 	GetGameSessionLogUrl(*gamelift.GetGameSessionLogUrlInput) (*gamelift.GetGameSessionLogUrlOutput, error)
 
+	GetInstanceAccessRequest(*gamelift.GetInstanceAccessInput) (*request.Request, *gamelift.GetInstanceAccessOutput)
+
+	GetInstanceAccess(*gamelift.GetInstanceAccessInput) (*gamelift.GetInstanceAccessOutput, error)
+
 	ListAliasesRequest(*gamelift.ListAliasesInput) (*request.Request, *gamelift.ListAliasesOutput)
 
 	ListAliases(*gamelift.ListAliasesInput) (*gamelift.ListAliasesOutput, error)

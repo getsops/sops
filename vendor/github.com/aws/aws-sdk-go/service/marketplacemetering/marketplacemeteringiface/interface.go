@@ -25,7 +25,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWSMarketplace Metering.
 //    func myFunc(svc marketplacemeteringiface.MarketplaceMeteringAPI) bool {
-//        // Make svc.MeterUsage request
+//        // Make svc.BatchMeterUsage request
 //    }
 //
 //    func main() {
@@ -41,7 +41,7 @@ import (
 //    type mockMarketplaceMeteringClient struct {
 //        marketplacemeteringiface.MarketplaceMeteringAPI
 //    }
-//    func (m *mockMarketplaceMeteringClient) MeterUsage(input *marketplacemetering.MeterUsageInput) (*marketplacemetering.MeterUsageOutput, error) {
+//    func (m *mockMarketplaceMeteringClient) BatchMeterUsage(input *marketplacemetering.BatchMeterUsageInput) (*marketplacemetering.BatchMeterUsageOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -59,9 +59,17 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type MarketplaceMeteringAPI interface {
+	BatchMeterUsageRequest(*marketplacemetering.BatchMeterUsageInput) (*request.Request, *marketplacemetering.BatchMeterUsageOutput)
+
+	BatchMeterUsage(*marketplacemetering.BatchMeterUsageInput) (*marketplacemetering.BatchMeterUsageOutput, error)
+
 	MeterUsageRequest(*marketplacemetering.MeterUsageInput) (*request.Request, *marketplacemetering.MeterUsageOutput)
 
 	MeterUsage(*marketplacemetering.MeterUsageInput) (*marketplacemetering.MeterUsageOutput, error)
+
+	ResolveCustomerRequest(*marketplacemetering.ResolveCustomerInput) (*request.Request, *marketplacemetering.ResolveCustomerOutput)
+
+	ResolveCustomer(*marketplacemetering.ResolveCustomerInput) (*marketplacemetering.ResolveCustomerOutput, error)
 }
 
 var _ MarketplaceMeteringAPI = (*marketplacemetering.MarketplaceMetering)(nil)

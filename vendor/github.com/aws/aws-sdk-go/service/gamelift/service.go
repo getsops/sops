@@ -123,6 +123,12 @@ import (
 //
 // DeleteFleet
 //
+//    * Manage your instances:
+//
+// DescribeInstances
+//
+// GetInstanceAccess
+//
 //    * Manage fleet aliases:
 //
 // ListAliases

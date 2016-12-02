@@ -742,7 +742,7 @@ func (c *ElastiCache) CreateReplicationGroupRequest(input *CreateReplicationGrou
 // When a Redis (cluster mode disabled) replication group has been successfully
 // created, you can add one or more read replicas to it, up to a total of 5
 // read replicas. You cannot alter a Redis (cluster mode enabled) replication
-// group once it has been created.
+// group after it has been created.
 //
 // This operation is valid for Redis only.
 //
@@ -4738,6 +4738,20 @@ type CreateCacheClusterInput struct {
 	// assumes single-az mode.
 	AZMode *string `type:"string" enum:"AZMode"`
 
+	// The password used to access a password protected server.
+	//
+	// Password constraints:
+	//
+	//    * Must be only printable ASCII characters.
+	//
+	//    * Must be at least 16 characters and no more than 128 characters in length.
+	//
+	//    * Cannot contain any of the following characters: '/', '"', or "@".
+	//
+	// For more information, see AUTH password (http://redis.io/commands/AUTH) at
+	// Redis.
+	AuthToken *string `type:"string"`
+
 	// This parameter is currently disabled.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
@@ -4996,6 +5010,12 @@ func (s *CreateCacheClusterInput) Validate() error {
 // SetAZMode sets the AZMode field's value.
 func (s *CreateCacheClusterInput) SetAZMode(v string) *CreateCacheClusterInput {
 	s.AZMode = &v
+	return s
+}
+
+// SetAuthToken sets the AuthToken field's value.
+func (s *CreateCacheClusterInput) SetAuthToken(v string) *CreateCacheClusterInput {
+	s.AuthToken = &v
 	return s
 }
 
@@ -5431,6 +5451,20 @@ func (s *CreateCacheSubnetGroupOutput) SetCacheSubnetGroup(v *CacheSubnetGroup) 
 type CreateReplicationGroupInput struct {
 	_ struct{} `type:"structure"`
 
+	// The password used to access a password protected server.
+	//
+	// Password constraints:
+	//
+	//    * Must be only printable ASCII characters.
+	//
+	//    * Must be at least 16 characters and no more than 128 characters in length.
+	//
+	//    * Cannot contain any of the following characters: '/', '"', or "@".
+	//
+	// For more information, see AUTH password (http://redis.io/commands/AUTH) at
+	// Redis.
+	AuthToken *string `type:"string"`
+
 	// This parameter is currently disabled.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
@@ -5556,9 +5590,6 @@ type CreateReplicationGroupInput struct {
 	// If Multi-AZ is enabled, the value of this parameter must be at least 2.
 	//
 	// The maximum permitted value for NumCacheClusters is 6 (primary plus 5 replicas).
-	// If you need to exceed this limit, fill out the ElastiCache Limit Increase
-	// Request form at http://aws.amazon.com/contact-us/elasticache-node-limit-request/
-	// (http://aws.amazon.com/contact-us/elasticache-node-limit-request/).
 	NumCacheClusters *int64 `type:"integer"`
 
 	// An optional parameter that specifies the number of node groups (shards) for
@@ -5719,6 +5750,12 @@ func (s *CreateReplicationGroupInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAuthToken sets the AuthToken field's value.
+func (s *CreateReplicationGroupInput) SetAuthToken(v string) *CreateReplicationGroupInput {
+	s.AuthToken = &v
+	return s
 }
 
 // SetAutoMinorVersionUpgrade sets the AutoMinorVersionUpgrade field's value.
@@ -7628,7 +7665,7 @@ type DescribeSnapshotsInput struct {
 	// only snapshots associated with that specific replication group are described.
 	ReplicationGroupId *string `type:"string"`
 
-	// A boolean value which if true, the node group (shard) configuration is included
+	// A Boolean value which if true, the node group (shard) configuration is included
 	// in the snapshot description.
 	ShowNodeGroupConfig *bool `type:"boolean"`
 
@@ -8854,7 +8891,7 @@ func (s *ModifyReplicationGroupOutput) SetReplicationGroup(v *ReplicationGroup) 
 }
 
 // Represents a collection of cache nodes in a replication group. One node in
-// the node group is the read/write Primary node. All the other nodes are read-only
+// the node group is the read/write primary node. All the other nodes are read-only
 // Replica nodes.
 type NodeGroup struct {
 	_ struct{} `type:"structure"`
@@ -9666,7 +9703,8 @@ type ReplicationGroup struct {
 	// group.
 	SnapshottingClusterId *string `type:"string"`
 
-	// The current state of this replication group - creating, available, etc.
+	// The current state of this replication group - creating, available, modifying,
+	// deleting, create-failed, snapshotting.
 	Status *string `type:"string"`
 }
 

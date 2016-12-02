@@ -4,14 +4,16 @@
   "operations": {
     "AllocateConnectionOnInterconnect": "<p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>",
     "AllocatePrivateVirtualInterface": "<p>Provisions a private virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a private virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPrivateVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>",
-    "AllocatePublicVirtualInterface": "<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>",
+    "AllocatePublicVirtualInterface": "<p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>",
     "ConfirmConnection": "<p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>",
     "ConfirmPrivateVirtualInterface": "<p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>",
     "ConfirmPublicVirtualInterface": "<p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>",
+    "CreateBGPPeer": "<p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>",
     "CreateConnection": "<p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p>",
     "CreateInterconnect": "<p>Creates a new interconnect between a AWS Direct Connect partner's network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner's network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner's router, the other to an AWS Direct Connect router.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>",
     "CreatePrivateVirtualInterface": "<p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>",
-    "CreatePublicVirtualInterface": "<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p>",
+    "CreatePublicVirtualInterface": "<p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>",
+    "DeleteBGPPeer": "<p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>",
     "DeleteConnection": "<p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>",
     "DeleteInterconnect": "<p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note>",
     "DeleteVirtualInterface": "<p>Deletes a virtual interface.</p>",
@@ -31,11 +33,26 @@
     "ASN": {
       "base": "<p>Autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p> <p>Example: 65000</p>",
       "refs": {
+        "BGPPeer$asn": null,
+        "DeleteBGPPeerRequest$asn": null,
+        "NewBGPPeer$asn": null,
         "NewPrivateVirtualInterface$asn": null,
         "NewPrivateVirtualInterfaceAllocation$asn": null,
         "NewPublicVirtualInterface$asn": null,
         "NewPublicVirtualInterfaceAllocation$asn": null,
         "VirtualInterface$asn": null
+      }
+    },
+    "AddressFamily": {
+      "base": "<p>Indicates the address family for the BGP peer.</p> <ul> <li> <p> <b>ipv4</b>: IPv4 address family</p> </li> <li> <p> <b>ipv6</b>: IPv6 address family</p> </li> </ul>",
+      "refs": {
+        "BGPPeer$addressFamily": null,
+        "NewBGPPeer$addressFamily": null,
+        "NewPrivateVirtualInterface$addressFamily": null,
+        "NewPrivateVirtualInterfaceAllocation$addressFamily": null,
+        "NewPublicVirtualInterface$addressFamily": null,
+        "NewPublicVirtualInterfaceAllocation$addressFamily": null,
+        "VirtualInterface$addressFamily": null
       }
     },
     "AllocateConnectionOnInterconnectRequest": {
@@ -54,8 +71,10 @@
       }
     },
     "AmazonAddress": {
-      "base": "<p>IP address assigned to the Amazon interface.</p> <p>Example: 192.168.1.1/30</p>",
+      "base": "<p>IP address assigned to the Amazon interface.</p> <p>Example: 192.168.1.1/30 or 2001:db8::1/125</p>",
       "refs": {
+        "BGPPeer$amazonAddress": null,
+        "NewBGPPeer$amazonAddress": null,
         "NewPrivateVirtualInterface$amazonAddress": null,
         "NewPrivateVirtualInterfaceAllocation$amazonAddress": null,
         "NewPublicVirtualInterface$amazonAddress": null,
@@ -66,11 +85,37 @@
     "BGPAuthKey": {
       "base": "<p>Authentication key for BGP configuration.</p> <p>Example: asdf34example</p>",
       "refs": {
+        "BGPPeer$authKey": null,
+        "NewBGPPeer$authKey": null,
         "NewPrivateVirtualInterface$authKey": null,
         "NewPrivateVirtualInterfaceAllocation$authKey": null,
         "NewPublicVirtualInterface$authKey": null,
         "NewPublicVirtualInterfaceAllocation$authKey": null,
         "VirtualInterface$authKey": null
+      }
+    },
+    "BGPPeer": {
+      "base": "<p>A structure containing information about a BGP peer.</p>",
+      "refs": {
+        "BGPPeerList$member": null
+      }
+    },
+    "BGPPeerList": {
+      "base": "<p>A list of the BGP peers configured on this virtual interface.</p>",
+      "refs": {
+        "VirtualInterface$bgpPeers": null
+      }
+    },
+    "BGPPeerState": {
+      "base": "<p>The state of the BGP peer.</p> <ul> <li> <p> <b>Verifying</b>: The BGP peering addresses or ASN require validation before the BGP peer can be created. This state only applies to BGP peers on a public virtual interface. </p> </li> <li> <p> <b>Pending</b>: The BGP peer has been created, and is in this state until it is ready to be established.</p> </li> <li> <p> <b>Available</b>: The BGP peer can be established.</p> </li> <li> <p> <b>Deleting</b>: The BGP peer is in the process of being deleted.</p> </li> <li> <p> <b>Deleted</b>: The BGP peer has been deleted and cannot be established.</p> </li> </ul>",
+      "refs": {
+        "BGPPeer$bgpPeerState": null
+      }
+    },
+    "BGPStatus": {
+      "base": "<p>The Up/Down state of the BGP peer.</p> <ul> <li> <p> <b>Up</b>: The BGP peer is established.</p> </li> <li> <p> <b>Down</b>: The BGP peer is down.</p> </li> </ul>",
+      "refs": {
+        "BGPPeer$bgpStatus": null
       }
     },
     "Bandwidth": {
@@ -86,7 +131,7 @@
     "CIDR": {
       "base": null,
       "refs": {
-        "RouteFilterPrefix$cidr": "<p>CIDR notation for the advertised route. Multiple routes are separated by commas.</p> <p>Example: 10.10.10.0/24,10.10.11.0/24</p>"
+        "RouteFilterPrefix$cidr": "<p>CIDR notation for the advertised route. Multiple routes are separated by commas.</p> <p>IPv6 CIDRs must be at least a /64 or shorter</p> <p>Example: 10.10.10.0/24,10.10.11.0/24,2001:db8::/64</p>"
       }
     },
     "ConfirmConnectionRequest": {
@@ -167,6 +212,16 @@
       "refs": {
       }
     },
+    "CreateBGPPeerRequest": {
+      "base": "<p>Container for the parameters to the CreateBGPPeer operation.</p>",
+      "refs": {
+      }
+    },
+    "CreateBGPPeerResponse": {
+      "base": "<p>The response received when CreateBGPPeer is called.</p>",
+      "refs": {
+      }
+    },
     "CreateConnectionRequest": {
       "base": "<p>Container for the parameters to the CreateConnection operation.</p>",
       "refs": {
@@ -188,13 +243,26 @@
       }
     },
     "CustomerAddress": {
-      "base": "<p>IP address assigned to the customer interface.</p> <p>Example: 192.168.1.2/30</p>",
+      "base": "<p>IP address assigned to the customer interface.</p> <p>Example: 192.168.1.2/30 or 2001:db8::2/125</p>",
       "refs": {
+        "BGPPeer$customerAddress": null,
+        "DeleteBGPPeerRequest$customerAddress": null,
+        "NewBGPPeer$customerAddress": null,
         "NewPrivateVirtualInterface$customerAddress": null,
         "NewPrivateVirtualInterfaceAllocation$customerAddress": null,
         "NewPublicVirtualInterface$customerAddress": null,
         "NewPublicVirtualInterfaceAllocation$customerAddress": null,
         "VirtualInterface$customerAddress": null
+      }
+    },
+    "DeleteBGPPeerRequest": {
+      "base": "<p>Container for the parameters to the DeleteBGPPeer operation.</p>",
+      "refs": {
+      }
+    },
+    "DeleteBGPPeerResponse": {
+      "base": "<p>The response received when DeleteBGPPeer is called.</p>",
+      "refs": {
       }
     },
     "DeleteConnectionRequest": {
@@ -396,6 +464,12 @@
     "Locations": {
       "base": "<p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>",
       "refs": {
+      }
+    },
+    "NewBGPPeer": {
+      "base": "<p>A structure containing information about a new BGP peer.</p>",
+      "refs": {
+        "CreateBGPPeerRequest$newBGPPeer": "<p>Detailed information for the BGP peer to be created.</p> <p>Default: None</p>"
       }
     },
     "NewPrivateVirtualInterface": {
@@ -603,6 +677,8 @@
     "VirtualInterface": {
       "base": "<p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>",
       "refs": {
+        "CreateBGPPeerResponse$virtualInterface": null,
+        "DeleteBGPPeerResponse$virtualInterface": null,
         "VirtualInterfaceList$member": null
       }
     },
@@ -611,6 +687,8 @@
       "refs": {
         "ConfirmPrivateVirtualInterfaceRequest$virtualInterfaceId": null,
         "ConfirmPublicVirtualInterfaceRequest$virtualInterfaceId": null,
+        "CreateBGPPeerRequest$virtualInterfaceId": "<p>The ID of the virtual interface on which the BGP peer will be provisioned.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>",
+        "DeleteBGPPeerRequest$virtualInterfaceId": "<p>The ID of the virtual interface from which the BGP peer will be deleted.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>",
         "DeleteVirtualInterfaceRequest$virtualInterfaceId": null,
         "DescribeVirtualInterfacesRequest$virtualInterfaceId": null,
         "VirtualInterface$virtualInterfaceId": null

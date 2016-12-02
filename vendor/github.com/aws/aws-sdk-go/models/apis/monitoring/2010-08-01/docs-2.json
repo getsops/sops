@@ -2,17 +2,17 @@
   "version": "2.0",
   "service": "<p>Amazon CloudWatch monitors your Amazon Web Services (AWS) resources and the applications you run on AWS in real-time. You can use CloudWatch to collect and track metrics, which are the variables you want to measure for your resources and applications.</p> <p>CloudWatch alarms send notifications or automatically make changes to the resources you are monitoring based on rules that you define. For example, you can monitor the CPU usage and disk reads and writes of your Amazon Elastic Compute Cloud (Amazon EC2) instances and then use this data to determine whether you should launch additional instances to handle increased load. You can also use this data to stop under-used instances to save money.</p> <p>In addition to monitoring the built-in metrics that come with AWS, you can monitor your own custom metrics. With CloudWatch, you gain system-wide visibility into resource utilization, application performance, and operational health.</p>",
   "operations": {
-    "DeleteAlarms": "<p>Deletes all specified alarms. In the event of an error, no alarms are deleted.</p>",
-    "DescribeAlarmHistory": "<p>Retrieves history for the specified alarm. Filter alarms by date range or item type. If an alarm name is not specified, Amazon CloudWatch returns histories for all of the owner's alarms.</p> <note> <p>Amazon CloudWatch retains the history of an alarm for two weeks, whether or not you delete the alarm.</p> </note>",
-    "DescribeAlarms": "<p>Retrieves alarms with the specified names. If no name is specified, all alarms for the user are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>",
-    "DescribeAlarmsForMetric": "<p>Retrieves all alarms for a single metric. Specify a statistic, period, or unit to filter the set of alarms further.</p>",
-    "DisableAlarmActions": "<p>Disables actions for the specified alarms. When an alarm's actions are disabled the alarm's state may change, but none of the alarm's actions will execute.</p>",
-    "EnableAlarmActions": "<p>Enables actions for the specified alarms.</p>",
-    "GetMetricStatistics": "<p>Gets statistics for the specified metric.</p> <p> The maximum number of data points that can be queried is 50,850, whereas the maximum number of data points returned from a single <code>GetMetricStatistics</code> request is 1,440. If you make a request that generates more than 1,440 data points, Amazon CloudWatch returns an error. In such a case, you can alter the request by narrowing the specified time range or increasing the specified period. A period can be as short as one minute (60 seconds) or as long as one day (86,400 seconds). Alternatively, you can make multiple requests across adjacent time ranges. <code>GetMetricStatistics</code> does not return the data in chronological order. </p> <p> Amazon CloudWatch aggregates data points based on the length of the <code>period</code> that you specify. For example, if you request statistics with a one-minute granularity, Amazon CloudWatch aggregates data points with time stamps that fall within the same one-minute period. In such a case, the data points queried can greatly outnumber the data points returned. </p> <p> The following examples show various statistics allowed by the data point query maximum of 50,850 when you call <code>GetMetricStatistics</code> on Amazon EC2 instances with detailed (one-minute) monitoring enabled: </p> <ul> <li> <p>Statistics for up to 400 instances for a span of one hour</p> </li> <li> <p>Statistics for up to 35 instances over a span of 24 hours</p> </li> <li> <p>Statistics for up to 2 instances over a span of 2 weeks</p> </li> </ul> <p> For information about the namespace, metric names, and dimensions that other Amazon Web Services products use to send metrics to CloudWatch, go to <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics, Namespaces, and Dimensions Reference</a> in the <i>Amazon CloudWatch Developer Guide</i>. </p>",
-    "ListMetrics": "<p> Returns a list of valid metrics stored for the AWS account owner. Returned metrics can be used with <a>GetMetricStatistics</a> to obtain statistical data for a given metric. </p> <note> <p> Up to 500 results are returned for any one call. To retrieve further results, use returned <code>NextToken</code> values with subsequent <code>ListMetrics</code> operations.</p> </note> <note> <p> If you create a metric with <a>PutMetricData</a>, allow up to fifteen minutes for the metric to appear in calls to <code>ListMetrics</code>. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p> </note>",
-    "PutMetricAlarm": "<p>Creates or updates an alarm and associates it with the specified Amazon CloudWatch metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p> When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its <code>StateValue</code> is set appropriately. Any actions associated with the <code>StateValue</code> are then executed. </p> <note> <p>When updating an existing alarm, its <code>StateValue</code> is left unchanged, but it completely overwrites the alarm's previous configuration.</p> </note> <note> <p>If you are using an AWS Identity and Access Management (IAM) account to create or modify an alarm, you must have the following Amazon EC2 permissions:</p> <ul> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on Amazon EC2 instance status metrics.</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions.</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions.</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code>, and <code>ec2:RecoverInstances</code> for alarms with recover actions.</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm but the stop or terminate actions won't be performed on the Amazon EC2 instance. However, if you are later granted permission to use the associated Amazon EC2 APIs, the alarm actions you created earlier will be performed. For more information about IAM permissions, see <a href=\"http://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html\">Permissions and Policies</a> in <i>Using IAM</i>.</p> <p>If you are using an IAM role (e.g., an Amazon EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using the AWS Security Token Service (AWS STS), you cannot stop or terminate an Amazon EC2 instance using alarm actions.</p> </note>",
-    "PutMetricData": "<p> Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>. </p> <p> Each <code>PutMetricData</code> request is limited to 8 KB in size for HTTP GET requests and is limited to 40 KB in size for HTTP POST requests. </p> <important> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> </important> <p>Data that is timestamped 24 hours or more in the past may take in excess of 48 hours to become available from submission time using <code>GetMetricStatistics</code>.</p>",
-    "SetAlarmState": "<p> Temporarily sets the state of an alarm for testing purposes. When the updated <code>StateValue</code> differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm's state to <b>ALARM</b> sends an Amazon SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens very quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <code>DescribeAlarmHistory</code>. </p>"
+    "DeleteAlarms": "<p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>",
+    "DescribeAlarmHistory": "<p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>Note that Amazon CloudWatch retains the history of an alarm even if you delete the alarm.</p>",
+    "DescribeAlarms": "<p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>",
+    "DescribeAlarmsForMetric": "<p>Retrieves the alarms for the specified metric. Specify a statistic, period, or unit to filter the results.</p>",
+    "DisableAlarmActions": "<p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>",
+    "EnableAlarmActions": "<p>Enables the actions for the specified alarms.</p>",
+    "GetMetricStatistics": "<p>Gets statistics for the specified metric.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of 60 seconds (1 minute) are available for 15 days</p> </li> <li> <p>Data points with a period of 300 seconds (5 minute) are available for 63 days</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months)</p> </li> </ul> <p>Note that CloudWatch started retaining 5-minute and 1-hour metric data as of 9 July 2016.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, Amazon CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. A period can be as short as one minute (60 seconds). Note that data points are not returned in chronological order.</p> <p>Amazon CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, Amazon CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>For a list of metrics and dimensions supported by AWS services, see the <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html\">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>",
+    "ListMetrics": "<p>List the specified metrics. You can use the returned metrics with <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p>",
+    "PutMetricAlarm": "<p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an AWS Identity and Access Management (IAM) user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions won't be performed. However, if you are later granted the required permissions, the alarm actions that you created earlier will be performed.</p> <p>If you are using an IAM role (for example, an Amazon EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using the AWS Security Token Service (AWS STS), you cannot stop or terminate an Amazon EC2 instance using alarm actions.</p> <p>Note that you must create at least one stop, terminate, or reboot alarm using the Amazon EC2 or CloudWatch console to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or an API.</p>",
+    "PutMetricData": "<p>Publishes metric data points to Amazon CloudWatch. Amazon CloudWatch associates the data points with the specified metric. If the specified metric does not exist, Amazon CloudWatch creates the metric. When Amazon CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 8 KB in size for HTTP GET requests and is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p>",
+    "SetAlarmState": "<p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an Amazon SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens very quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>"
   },
   "shapes": {
     "ActionPrefix": {
@@ -24,8 +24,8 @@
     "ActionsEnabled": {
       "base": null,
       "refs": {
-        "MetricAlarm$ActionsEnabled": "<p>Indicates whether actions should be executed during any changes to the alarm's state.</p>",
-        "PutMetricAlarmInput$ActionsEnabled": "<p>Indicates whether or not actions should be executed during any changes to the alarm's state.</p>"
+        "MetricAlarm$ActionsEnabled": "<p>Indicates whether actions should be executed during any changes to the alarm state.</p>",
+        "PutMetricAlarmInput$ActionsEnabled": "<p>Indicates whether actions should be executed during any changes to the alarm state.</p>"
       }
     },
     "AlarmArn": {
@@ -37,12 +37,12 @@
     "AlarmDescription": {
       "base": null,
       "refs": {
-        "MetricAlarm$AlarmDescription": "<p>The description for the alarm.</p>",
+        "MetricAlarm$AlarmDescription": "<p>The description of the alarm.</p>",
         "PutMetricAlarmInput$AlarmDescription": "<p>The description for the alarm.</p>"
       }
     },
     "AlarmHistoryItem": {
-      "base": "<p> The <code>AlarmHistoryItem</code> data type contains descriptive information about the history of a specific alarm. If you call <a>DescribeAlarmHistory</a>, Amazon CloudWatch returns this data type as part of the DescribeAlarmHistoryResult data type. </p>",
+      "base": "<p>Represents the history of a specific alarm.</p>",
       "refs": {
         "AlarmHistoryItems$member": null
       }
@@ -50,7 +50,7 @@
     "AlarmHistoryItems": {
       "base": null,
       "refs": {
-        "DescribeAlarmHistoryOutput$AlarmHistoryItems": "<p>A list of alarm histories in JSON format.</p>"
+        "DescribeAlarmHistoryOutput$AlarmHistoryItems": "<p>The alarm histories, in JSON format.</p>"
       }
     },
     "AlarmName": {
@@ -60,23 +60,23 @@
         "AlarmNames$member": null,
         "DescribeAlarmHistoryInput$AlarmName": "<p>The name of the alarm.</p>",
         "MetricAlarm$AlarmName": "<p>The name of the alarm.</p>",
-        "PutMetricAlarmInput$AlarmName": "<p>The descriptive name for the alarm. This name must be unique within the user's AWS account</p>",
-        "SetAlarmStateInput$AlarmName": "<p>The descriptive name for the alarm. This name must be unique within the user's AWS account. The maximum length is 255 characters.</p>"
+        "PutMetricAlarmInput$AlarmName": "<p>The name for the alarm. This name must be unique within the AWS account.</p>",
+        "SetAlarmStateInput$AlarmName": "<p>The name for the alarm. This name must be unique within the AWS account. The maximum length is 255 characters.</p>"
       }
     },
     "AlarmNamePrefix": {
       "base": null,
       "refs": {
-        "DescribeAlarmsInput$AlarmNamePrefix": "<p>The alarm name prefix. <code>AlarmNames</code> cannot be specified if this parameter is specified.</p>"
+        "DescribeAlarmsInput$AlarmNamePrefix": "<p>The alarm name prefix. You cannot specify <code>AlarmNames</code> if this parameter is specified.</p>"
       }
     },
     "AlarmNames": {
       "base": null,
       "refs": {
-        "DeleteAlarmsInput$AlarmNames": "<p>A list of alarms to be deleted.</p>",
-        "DescribeAlarmsInput$AlarmNames": "<p>A list of alarm names to retrieve information for.</p>",
-        "DisableAlarmActionsInput$AlarmNames": "<p>The names of the alarms to disable actions for.</p>",
-        "EnableAlarmActionsInput$AlarmNames": "<p>The names of the alarms to enable actions for.</p>"
+        "DeleteAlarmsInput$AlarmNames": "<p>The alarms to be deleted.</p>",
+        "DescribeAlarmsInput$AlarmNames": "<p>The names of the alarms.</p>",
+        "DisableAlarmActionsInput$AlarmNames": "<p>The names of the alarms.</p>",
+        "EnableAlarmActionsInput$AlarmNames": "<p>The names of the alarms.</p>"
       }
     },
     "AwsQueryErrorMessage": {
@@ -90,12 +90,12 @@
     "ComparisonOperator": {
       "base": null,
       "refs": {
-        "MetricAlarm$ComparisonOperator": "<p> The arithmetic operation to use when comparing the specified <code>Statistic</code> and <code>Threshold</code>. The specified <code>Statistic</code> value is used as the first operand. </p>",
-        "PutMetricAlarmInput$ComparisonOperator": "<p> The arithmetic operation to use when comparing the specified <code>Statistic</code> and <code>Threshold</code>. The specified <code>Statistic</code> value is used as the first operand. </p>"
+        "MetricAlarm$ComparisonOperator": "<p>The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>",
+        "PutMetricAlarmInput$ComparisonOperator": "<p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>"
       }
     },
     "Datapoint": {
-      "base": "<p> The <code>Datapoint</code> data type encapsulates the statistical data that Amazon CloudWatch computes from metric data. </p>",
+      "base": "<p>Encapsulates the statistical data that Amazon CloudWatch computes from metric data.</p>",
       "refs": {
         "Datapoints$member": null
       }
@@ -103,67 +103,74 @@
     "DatapointValue": {
       "base": null,
       "refs": {
-        "Datapoint$SampleCount": "<p>The number of metric values that contributed to the aggregate value of this datapoint.</p>",
-        "Datapoint$Average": "<p>The average of metric values that correspond to the datapoint.</p>",
-        "Datapoint$Sum": "<p>The sum of metric values used for the datapoint.</p>",
-        "Datapoint$Minimum": "<p>The minimum metric value used for the datapoint.</p>",
-        "Datapoint$Maximum": "<p>The maximum of the metric value used for the datapoint.</p>",
-        "MetricDatum$Value": "<p>The value for the metric.</p> <important> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (e.g., NaN, +Infinity, -Infinity) are not supported.</p> </important>",
+        "Datapoint$SampleCount": "<p>The number of metric values that contributed to the aggregate value of this data point.</p>",
+        "Datapoint$Average": "<p>The average of the metric values that correspond to the data point.</p>",
+        "Datapoint$Sum": "<p>The sum of the metric values for the data point.</p>",
+        "Datapoint$Minimum": "<p>The minimum metric value for the data point.</p>",
+        "Datapoint$Maximum": "<p>The maximum metric value for the data point.</p>",
+        "DatapointValueMap$value": null,
+        "MetricDatum$Value": "<p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, Amazon CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>",
         "StatisticSet$SampleCount": "<p>The number of samples used for the statistic set.</p>",
         "StatisticSet$Sum": "<p>The sum of values for the sample set.</p>",
         "StatisticSet$Minimum": "<p>The minimum value of the sample set.</p>",
         "StatisticSet$Maximum": "<p>The maximum value of the sample set.</p>"
       }
     },
+    "DatapointValueMap": {
+      "base": null,
+      "refs": {
+        "Datapoint$ExtendedStatistics": "<p>The percentile statistic for the data point.</p>"
+      }
+    },
     "Datapoints": {
       "base": null,
       "refs": {
-        "GetMetricStatisticsOutput$Datapoints": "<p>The datapoints for the specified metric.</p>"
+        "GetMetricStatisticsOutput$Datapoints": "<p>The data points for the specified metric.</p>"
       }
     },
     "DeleteAlarmsInput": {
-      "base": "<p>Describes the inputs for DeleteAlarms.</p>",
+      "base": null,
       "refs": {
       }
     },
     "DescribeAlarmHistoryInput": {
-      "base": "<p>Describes the inputs for DescribeAlarmHistory.</p>",
+      "base": null,
       "refs": {
       }
     },
     "DescribeAlarmHistoryOutput": {
-      "base": "<p> The output for <a>DescribeAlarmHistory</a>. </p>",
+      "base": null,
       "refs": {
       }
     },
     "DescribeAlarmsForMetricInput": {
-      "base": "<p>Describes the inputs for DescribeAlarmsForMetric.</p>",
+      "base": null,
       "refs": {
       }
     },
     "DescribeAlarmsForMetricOutput": {
-      "base": "<p> The output for <a>DescribeAlarmsForMetric</a>. </p>",
+      "base": null,
       "refs": {
       }
     },
     "DescribeAlarmsInput": {
-      "base": "<p>Describes the inputs for DescribeAlarms.</p>",
+      "base": null,
       "refs": {
       }
     },
     "DescribeAlarmsOutput": {
-      "base": "<p>The output for <a>DescribeAlarms</a>.</p>",
+      "base": null,
       "refs": {
       }
     },
     "Dimension": {
-      "base": "<p> The <code>Dimension</code> data type further expands on the identity of a metric using a Name, Value pair. </p> <p>For examples that use one or more dimensions, see <a>PutMetricData</a>.</p>",
+      "base": "<p>Expands the identity of a metric.</p>",
       "refs": {
         "Dimensions$member": null
       }
     },
     "DimensionFilter": {
-      "base": "<p> The <code>DimensionFilter</code> data type is used to filter <a>ListMetrics</a> results. </p>",
+      "base": "<p>Represents filters for a dimension.</p>",
       "refs": {
         "DimensionFilters$member": null
       }
@@ -171,7 +178,7 @@
     "DimensionFilters": {
       "base": null,
       "refs": {
-        "ListMetricsInput$Dimensions": "<p>A list of dimensions to filter against.</p>"
+        "ListMetricsInput$Dimensions": "<p>The dimensions to filter against.</p>"
       }
     },
     "DimensionName": {
@@ -184,28 +191,28 @@
     "DimensionValue": {
       "base": null,
       "refs": {
-        "Dimension$Value": "<p>The value representing the dimension measurement</p>",
-        "DimensionFilter$Value": "<p>The value of the dimension to be matched.</p> <note> <p>Specifying a <code>Name</code> without specifying a <code>Value</code> returns all values associated with that <code>Name</code>.</p> </note>"
+        "Dimension$Value": "<p>The value representing the dimension measurement.</p>",
+        "DimensionFilter$Value": "<p>The value of the dimension to be matched.</p>"
       }
     },
     "Dimensions": {
       "base": null,
       "refs": {
-        "DescribeAlarmsForMetricInput$Dimensions": "<p>The list of dimensions associated with the metric. If the metric has any associated dimensions, you must specify them in order for the DescribeAlarmsForMetric to succeed.</p>",
-        "GetMetricStatisticsInput$Dimensions": "<p>A list of dimensions describing qualities of the metric.</p>",
-        "Metric$Dimensions": "<p>A list of dimensions associated with the metric.</p>",
-        "MetricAlarm$Dimensions": "<p>The list of dimensions associated with the alarm's associated metric.</p>",
-        "MetricDatum$Dimensions": "<p>A list of dimensions associated with the metric. Note, when using the Dimensions value in a query, you need to append .member.N to it (e.g., Dimensions.member.N).</p>",
-        "PutMetricAlarmInput$Dimensions": "<p>The dimensions for the alarm's associated metric.</p>"
+        "DescribeAlarmsForMetricInput$Dimensions": "<p>The dimensions associated with the metric. If the metric has any associated dimensions, you must specify them in order for the call to succeed.</p>",
+        "GetMetricStatisticsInput$Dimensions": "<p>The dimensions. CloudWatch treats each unique combination of dimensions as a separate metric. You can't retrieve statistics using combinations of dimensions that were not specially published. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations\">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>.</p>",
+        "Metric$Dimensions": "<p>The dimensions for the metric.</p>",
+        "MetricAlarm$Dimensions": "<p>The dimensions for the metric associated with the alarm.</p>",
+        "MetricDatum$Dimensions": "<p>The dimensions associated with the metric.</p>",
+        "PutMetricAlarmInput$Dimensions": "<p>The dimensions for the metric associated with the alarm.</p>"
       }
     },
     "DisableAlarmActionsInput": {
-      "base": "<p/>",
+      "base": null,
       "refs": {
       }
     },
     "EnableAlarmActionsInput": {
-      "base": "<p>Describes the inputs for EnableAlarmActions.</p>",
+      "base": null,
       "refs": {
       }
     },
@@ -225,6 +232,22 @@
         "PutMetricAlarmInput$EvaluationPeriods": "<p>The number of periods over which data is compared to the specified threshold.</p>"
       }
     },
+    "ExtendedStatistic": {
+      "base": null,
+      "refs": {
+        "DatapointValueMap$key": null,
+        "DescribeAlarmsForMetricInput$ExtendedStatistic": "<p>The percentile statistic for the metric. Specify a value between p0.0 and p100.</p>",
+        "ExtendedStatistics$member": null,
+        "MetricAlarm$ExtendedStatistic": "<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>",
+        "PutMetricAlarmInput$ExtendedStatistic": "<p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100.</p>"
+      }
+    },
+    "ExtendedStatistics": {
+      "base": null,
+      "refs": {
+        "GetMetricStatisticsInput$ExtendedStatistics": "<p>The percentile statistics. Specify values between p0.0 and p100.</p>"
+      }
+    },
     "FaultDescription": {
       "base": null,
       "refs": {
@@ -232,19 +255,19 @@
       }
     },
     "GetMetricStatisticsInput": {
-      "base": "<p>Describes the inputs for GetMetricStatistics.</p>",
+      "base": null,
       "refs": {
       }
     },
     "GetMetricStatisticsOutput": {
-      "base": "<p> The output for <a>GetMetricStatistics</a>. </p>",
+      "base": null,
       "refs": {
       }
     },
     "HistoryData": {
       "base": null,
       "refs": {
-        "AlarmHistoryItem$HistoryData": "<p>Machine-readable data about the alarm in JSON format.</p>"
+        "AlarmHistoryItem$HistoryData": "<p>Data about the alarm, in JSON format.</p>"
       }
     },
     "HistoryItemType": {
@@ -257,11 +280,11 @@
     "HistorySummary": {
       "base": null,
       "refs": {
-        "AlarmHistoryItem$HistorySummary": "<p>A human-readable summary of the alarm history.</p>"
+        "AlarmHistoryItem$HistorySummary": "<p>A summary of the alarm history, in text format.</p>"
       }
     },
     "InternalServiceFault": {
-      "base": "<p>Indicates that the request processing has failed due to some unknown error, exception, or failure.</p>",
+      "base": "<p>Request processing has failed due to some unknown error, exception, or failure.</p>",
       "refs": {
       }
     },
@@ -276,12 +299,12 @@
       }
     },
     "InvalidParameterCombinationException": {
-      "base": "<p>Parameters that must not be used together were used together.</p>",
+      "base": "<p>Parameters that cannot be used together were used together.</p>",
       "refs": {
       }
     },
     "InvalidParameterValueException": {
-      "base": "<p>Bad or out-of-range value was supplied for the input parameter.</p>",
+      "base": "<p>The value of an input parameter is bad or out-of-range.</p>",
       "refs": {
       }
     },
@@ -291,12 +314,12 @@
       }
     },
     "ListMetricsInput": {
-      "base": "<p>Describes the inputs for ListMetrics.</p>",
+      "base": null,
       "refs": {
       }
     },
     "ListMetricsOutput": {
-      "base": "<p> The output for <a>ListMetrics</a>. </p>",
+      "base": null,
       "refs": {
       }
     },
@@ -308,13 +331,13 @@
       }
     },
     "Metric": {
-      "base": "<p> The <code>Metric</code> data type contains information about a specific metric. If you call <a>ListMetrics</a>, Amazon CloudWatch returns information contained by this data type. </p> <p>The example in the Examples section publishes two metrics named buffers and latency. Both metrics are in the examples namespace. Both metrics have two dimensions, InstanceID and InstanceType.</p>",
+      "base": "<p>Represents a specific metric.</p>",
       "refs": {
         "Metrics$member": null
       }
     },
     "MetricAlarm": {
-      "base": "<p> The <a>MetricAlarm</a> data type represents an alarm. You can use <a>PutMetricAlarm</a> to create or update an alarm. </p>",
+      "base": "<p>Represents an alarm.</p>",
       "refs": {
         "MetricAlarms$member": null
       }
@@ -322,18 +345,18 @@
     "MetricAlarms": {
       "base": null,
       "refs": {
-        "DescribeAlarmsForMetricOutput$MetricAlarms": "<p>A list of information for each alarm with the specified metric.</p>",
-        "DescribeAlarmsOutput$MetricAlarms": "<p>A list of information for the specified alarms.</p>"
+        "DescribeAlarmsForMetricOutput$MetricAlarms": "<p>The information for each alarm with the specified metric.</p>",
+        "DescribeAlarmsOutput$MetricAlarms": "<p>The information for the specified alarms.</p>"
       }
     },
     "MetricData": {
       "base": null,
       "refs": {
-        "PutMetricDataInput$MetricData": "<p>A list of data describing the metric.</p>"
+        "PutMetricDataInput$MetricData": "<p>The data for the metric.</p>"
       }
     },
     "MetricDatum": {
-      "base": "<p> The <code>MetricDatum</code> data type encapsulates the information sent with <a>PutMetricData</a> to either create a new metric or add new values to be aggregated into an existing metric. </p>",
+      "base": "<p>Encapsulates the information sent to either create a metric or add new values to be aggregated into an existing metric.</p>",
       "refs": {
         "MetricData$member": null
       }
@@ -341,7 +364,7 @@
     "MetricLabel": {
       "base": null,
       "refs": {
-        "GetMetricStatisticsOutput$Label": "<p>A label describing the specified metric.</p>"
+        "GetMetricStatisticsOutput$Label": "<p>A label for the specified metric.</p>"
       }
     },
     "MetricName": {
@@ -351,19 +374,19 @@
         "GetMetricStatisticsInput$MetricName": "<p>The name of the metric, with or without spaces.</p>",
         "ListMetricsInput$MetricName": "<p>The name of the metric to filter against.</p>",
         "Metric$MetricName": "<p>The name of the metric.</p>",
-        "MetricAlarm$MetricName": "<p>The name of the alarm's metric.</p>",
+        "MetricAlarm$MetricName": "<p>The name of the metric associated with the alarm.</p>",
         "MetricDatum$MetricName": "<p>The name of the metric.</p>",
-        "PutMetricAlarmInput$MetricName": "<p>The name for the alarm's associated metric.</p>"
+        "PutMetricAlarmInput$MetricName": "<p>The name for the metric associated with the alarm.</p>"
       }
     },
     "Metrics": {
       "base": null,
       "refs": {
-        "ListMetricsOutput$Metrics": "<p>A list of metrics used to generate statistics for an AWS account.</p>"
+        "ListMetricsOutput$Metrics": "<p>The metrics.</p>"
       }
     },
     "MissingRequiredParameterException": {
-      "base": "<p>An input parameter that is mandatory for processing the request is not supplied.</p>",
+      "base": "<p>An input parameter that is required is missing.</p>",
       "refs": {
       }
     },
@@ -374,50 +397,50 @@
         "GetMetricStatisticsInput$Namespace": "<p>The namespace of the metric, with or without spaces.</p>",
         "ListMetricsInput$Namespace": "<p>The namespace to filter against.</p>",
         "Metric$Namespace": "<p>The namespace of the metric.</p>",
-        "MetricAlarm$Namespace": "<p>The namespace of alarm's associated metric.</p>",
-        "PutMetricAlarmInput$Namespace": "<p>The namespace for the alarm's associated metric.</p>",
-        "PutMetricDataInput$Namespace": "<p>The namespace for the metric data.</p> <note> <p>You cannot specify a namespace that begins with \"AWS/\". Namespaces that begin with \"AWS/\" are reserved for other Amazon Web Services products that send metrics to Amazon CloudWatch.</p> </note>"
+        "MetricAlarm$Namespace": "<p>The namespace of the metric associated with the alarm.</p>",
+        "PutMetricAlarmInput$Namespace": "<p>The namespace for the metric associated with the alarm.</p>",
+        "PutMetricDataInput$Namespace": "<p>The namespace for the metric data.</p> <p>You cannot specify a namespace that begins with \"AWS/\". Namespaces that begin with \"AWS/\" are reserved for use by Amazon Web Services products.</p>"
       }
     },
     "NextToken": {
       "base": null,
       "refs": {
         "DescribeAlarmHistoryInput$NextToken": "<p>The token returned by a previous call to indicate that there is more data available.</p>",
-        "DescribeAlarmHistoryOutput$NextToken": "<p>A string that marks the start of the next batch of returned results.</p>",
+        "DescribeAlarmHistoryOutput$NextToken": "<p>The token that marks the start of the next batch of returned results.</p>",
         "DescribeAlarmsInput$NextToken": "<p>The token returned by a previous call to indicate that there is more data available.</p>",
-        "DescribeAlarmsOutput$NextToken": "<p>A string that marks the start of the next batch of returned results.</p>",
+        "DescribeAlarmsOutput$NextToken": "<p>The token that marks the start of the next batch of returned results.</p>",
         "ListMetricsInput$NextToken": "<p>The token returned by a previous call to indicate that there is more data available.</p>",
-        "ListMetricsOutput$NextToken": "<p>A string that marks the start of the next batch of returned results.</p>"
+        "ListMetricsOutput$NextToken": "<p>The token that marks the start of the next batch of returned results.</p>"
       }
     },
     "Period": {
       "base": null,
       "refs": {
-        "DescribeAlarmsForMetricInput$Period": "<p>The period in seconds over which the statistic is applied.</p>",
-        "GetMetricStatisticsInput$Period": "<p> The granularity, in seconds, of the returned datapoints. A <code>Period</code> can be as short as one minute (60 seconds) or as long as one day (86,400 seconds), and must be a multiple of 60. The default value is 60. </p>",
-        "MetricAlarm$Period": "<p>The period in seconds over which the statistic is applied.</p>",
-        "PutMetricAlarmInput$Period": "<p>The period in seconds over which the specified statistic is applied.</p>"
+        "DescribeAlarmsForMetricInput$Period": "<p>The period, in seconds, over which the statistic is applied.</p>",
+        "GetMetricStatisticsInput$Period": "<p>The granularity, in seconds, of the returned data points. A period can be as short as one minute (60 seconds) and must be a multiple of 60. The default value is 60.</p> <p>If the <code>StartTime</code> parameter specifies a time stamp that is greater than 15 days ago, you must specify the period as follows or no data points in that time range is returned:</p> <ul> <li> <p>Start time between 15 and 63 days ago - Use a multiple of 300 seconds (5 minutes).</p> </li> <li> <p>Start time greater than 63 days ago - Use a multiple of 3600 seconds (1 hour).</p> </li> </ul>",
+        "MetricAlarm$Period": "<p>The period, in seconds, over which the statistic is applied.</p>",
+        "PutMetricAlarmInput$Period": "<p>The period, in seconds, over which the specified statistic is applied.</p>"
       }
     },
     "PutMetricAlarmInput": {
-      "base": "<p>Describes the inputs for PutMetricAlarm.</p>",
+      "base": null,
       "refs": {
       }
     },
     "PutMetricDataInput": {
-      "base": "<p>Describes the inputs for PutMetricData.</p>",
+      "base": null,
       "refs": {
       }
     },
     "ResourceList": {
       "base": null,
       "refs": {
-        "MetricAlarm$OKActions": "<p> The list of actions to execute when this alarm transitions into an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN). </p>",
-        "MetricAlarm$AlarmActions": "<p> The list of actions to execute when this alarm transitions into an <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN). </p>",
-        "MetricAlarm$InsufficientDataActions": "<p> The list of actions to execute when this alarm transitions into an <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN). </p> <important> <p>The current WSDL lists this attribute as <code>UnknownActions</code>.</p> </important>",
-        "PutMetricAlarmInput$OKActions": "<p> The list of actions to execute when this alarm transitions into an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN). </p> <p>Valid Values: arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:stop | arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:terminate | arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p> <p> <b>Note:</b> You must create at least one stop, terminate, or reboot alarm using the Amazon EC2 or CloudWatch console to create the <b>EC2ActionsAccess</b> IAM role for the first time. After this IAM role is created, you can create stop, terminate, or reboot alarms using the CLI.</p>",
-        "PutMetricAlarmInput$AlarmActions": "<p> The list of actions to execute when this alarm transitions into an <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN). </p> <p>Valid Values: arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:stop | arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:terminate | arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p> <p> <b>Note:</b> You must create at least one stop, terminate, or reboot alarm using the Amazon EC2 or CloudWatch console to create the <b>EC2ActionsAccess</b> IAM role for the first time. After this IAM role is created, you can create stop, terminate, or reboot alarms using the CLI.</p>",
-        "PutMetricAlarmInput$InsufficientDataActions": "<p> The list of actions to execute when this alarm transitions into an <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN). </p> <p>Valid Values: arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:stop | arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:terminate | arn:aws:automate:<i>region (e.g., us-east-1)</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p> <p> <b>Note:</b> You must create at least one stop, terminate, or reboot alarm using the Amazon EC2 or CloudWatch console to create the <b>EC2ActionsAccess</b> IAM role for the first time. After this IAM role is created, you can create stop, terminate, or reboot alarms using the CLI.</p>"
+        "MetricAlarm$OKActions": "<p>The actions to execute when this alarm transitions to the <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>",
+        "MetricAlarm$AlarmActions": "<p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>",
+        "MetricAlarm$InsufficientDataActions": "<p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>",
+        "PutMetricAlarmInput$OKActions": "<p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>",
+        "PutMetricAlarmInput$AlarmActions": "<p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>",
+        "PutMetricAlarmInput$InsufficientDataActions": "<p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover</p> <p>Valid Values (for use with IAM roles): arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:us-east-1:{<i>customer-account</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>"
       }
     },
     "ResourceName": {
@@ -432,33 +455,33 @@
       }
     },
     "SetAlarmStateInput": {
-      "base": "<p>Describes the inputs for SetAlarmState.</p>",
+      "base": null,
       "refs": {
       }
     },
     "StandardUnit": {
       "base": null,
       "refs": {
-        "Datapoint$Unit": "<p>The standard unit used for the datapoint.</p>",
+        "Datapoint$Unit": "<p>The standard unit for the data point.</p>",
         "DescribeAlarmsForMetricInput$Unit": "<p>The unit for the metric.</p>",
-        "GetMetricStatisticsInput$Unit": "<p>The specific unit for a given metric. Metrics may be reported in multiple units. Not supplying a unit results in all units being returned. If the metric only ever reports one unit, specifying a unit will have no effect.</p>",
-        "MetricAlarm$Unit": "<p>The unit of the alarm's associated metric.</p>",
+        "GetMetricStatisticsInput$Unit": "<p>The unit for a given metric. Metrics may be reported in multiple units. Not supplying a unit results in all units being returned. If the metric only ever reports one unit, specifying a unit has no effect.</p>",
+        "MetricAlarm$Unit": "<p>The unit of the metric associated with the alarm.</p>",
         "MetricDatum$Unit": "<p>The unit of the metric.</p>",
-        "PutMetricAlarmInput$Unit": "<p>The statistic's unit of measure. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p> <b>Note:</b> If you specify a unit, you must use a unit that is appropriate for the metric. Otherwise, this can cause an Amazon CloudWatch alarm to get stuck in the INSUFFICIENT DATA state. </p>"
+        "PutMetricAlarmInput$Unit": "<p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you specify a unit, you must use a unit that is appropriate for the metric. Otherwise, the Amazon CloudWatch alarm can get stuck in the <code>INSUFFICIENT DATA</code> state. </p>"
       }
     },
     "StateReason": {
       "base": null,
       "refs": {
-        "MetricAlarm$StateReason": "<p>A human-readable explanation for the alarm's state.</p>",
-        "SetAlarmStateInput$StateReason": "<p>The reason that this alarm is set to this specific state (in human-readable text format)</p>"
+        "MetricAlarm$StateReason": "<p>An explanation for the alarm state, in text format.</p>",
+        "SetAlarmStateInput$StateReason": "<p>The reason that this alarm is set to this specific state, in text format.</p>"
       }
     },
     "StateReasonData": {
       "base": null,
       "refs": {
-        "MetricAlarm$StateReasonData": "<p>An explanation for the alarm's state in machine-readable JSON format</p>",
-        "SetAlarmStateInput$StateReasonData": "<p>The reason that this alarm is set to this specific state (in machine-readable JSON format)</p>"
+        "MetricAlarm$StateReasonData": "<p>An explanation for the alarm state, in JSON format.</p>",
+        "SetAlarmStateInput$StateReasonData": "<p>The reason that this alarm is set to this specific state, in JSON format.</p>"
       }
     },
     "StateValue": {
@@ -472,28 +495,28 @@
     "Statistic": {
       "base": null,
       "refs": {
-        "DescribeAlarmsForMetricInput$Statistic": "<p>The statistic for the metric.</p>",
-        "MetricAlarm$Statistic": "<p>The statistic to apply to the alarm's associated metric.</p>",
-        "PutMetricAlarmInput$Statistic": "<p>The statistic to apply to the alarm's associated metric.</p>",
+        "DescribeAlarmsForMetricInput$Statistic": "<p>The statistic for the metric, other than percentiles. For percentile statistics, use <code>ExtendedStatistics</code>.</p>",
+        "MetricAlarm$Statistic": "<p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>",
+        "PutMetricAlarmInput$Statistic": "<p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>",
         "Statistics$member": null
       }
     },
     "StatisticSet": {
-      "base": "<p> The <code>StatisticSet</code> data type describes the <code>StatisticValues</code> component of <a>MetricDatum</a>, and represents a set of statistics that describes a specific metric. </p>",
+      "base": "<p>Represents a set of statistics that describes a specific metric. </p>",
       "refs": {
-        "MetricDatum$StatisticValues": "<p>A set of statistical values describing the metric.</p>"
+        "MetricDatum$StatisticValues": "<p>The statistical values for the metric.</p>"
       }
     },
     "Statistics": {
       "base": null,
       "refs": {
-        "GetMetricStatisticsInput$Statistics": "<p> The metric statistics to return. For information about specific statistics returned by GetMetricStatistics, see <a href=\"http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Statistic\">Statistics</a> in the <i>Amazon CloudWatch Developer Guide</i>. </p>"
+        "GetMetricStatisticsInput$Statistics": "<p>The metric statistics, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>.</p>"
       }
     },
     "Threshold": {
       "base": null,
       "refs": {
-        "MetricAlarm$Threshold": "<p>The value against which the specified statistic is compared.</p>",
+        "MetricAlarm$Threshold": "<p>The value to compare with the specified statistic.</p>",
         "PutMetricAlarmInput$Threshold": "<p>The value against which the specified statistic is compared.</p>"
       }
     },
@@ -501,14 +524,14 @@
       "base": null,
       "refs": {
         "AlarmHistoryItem$Timestamp": "<p>The time stamp for the alarm history item.</p>",
-        "Datapoint$Timestamp": "<p>The time stamp used for the datapoint.</p>",
+        "Datapoint$Timestamp": "<p>The time stamp used for the data point.</p>",
         "DescribeAlarmHistoryInput$StartDate": "<p>The starting date to retrieve alarm history.</p>",
         "DescribeAlarmHistoryInput$EndDate": "<p>The ending date to retrieve alarm history.</p>",
-        "GetMetricStatisticsInput$StartTime": "<p>The time stamp to use for determining the first datapoint to return. The value specified is inclusive; results include datapoints with the time stamp specified. The time stamp must be in ISO 8601 UTC format (e.g., 2014-09-03T23:00:00Z).</p> <note> <p>The specified start time is rounded down to the nearest value. Datapoints are returned for start times up to two weeks in the past. Specified start times that are more than two weeks in the past will not return datapoints for metrics that are older than two weeks.</p> <p>Data that is timestamped 24 hours or more in the past may take in excess of 48 hours to become available from submission time using <code>GetMetricStatistics</code>.</p> </note>",
-        "GetMetricStatisticsInput$EndTime": "<p>The time stamp to use for determining the last datapoint to return. The value specified is exclusive; results will include datapoints up to the time stamp specified. The time stamp must be in ISO 8601 UTC format (e.g., 2014-09-03T23:00:00Z).</p>",
+        "GetMetricStatisticsInput$StartTime": "<p>The time stamp that determines the first data point to return. Note that start times are evaluated relative to the time that CloudWatch receives the request.</p> <p>The value specified is inclusive; results include data points with the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-03T23:00:00Z).</p> <p>CloudWatch rounds the specified time stamp as follows:</p> <ul> <li> <p>Start time less than 15 days ago - Round down to the nearest whole minute. For example, 12:32:34 is rounded down to 12:32:00.</p> </li> <li> <p>Start time between 15 and 63 days ago - Round down to the nearest 5-minute clock interval. For example, 12:32:34 is rounded down to 12:30:00.</p> </li> <li> <p>Start time greater than 63 days ago - Round down to the nearest 1-hour clock interval. For example, 12:32:34 is rounded down to 12:00:00.</p> </li> </ul>",
+        "GetMetricStatisticsInput$EndTime": "<p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results will include data points up to the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>",
         "MetricAlarm$AlarmConfigurationUpdatedTimestamp": "<p>The time stamp of the last update to the alarm configuration.</p>",
-        "MetricAlarm$StateUpdatedTimestamp": "<p>The time stamp of the last update to the alarm's state.</p>",
-        "MetricDatum$Timestamp": "<p>The time stamp used for the metric in ISO 8601 Universal Coordinated Time (UTC) format. If not specified, the default value is set to the time the metric data was received.</p>"
+        "MetricAlarm$StateUpdatedTimestamp": "<p>The time stamp of the last update to the alarm state.</p>",
+        "MetricDatum$Timestamp": "<p>The time the metric data was received, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>"
       }
     }
   }

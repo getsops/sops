@@ -5,7 +5,8 @@
     "endpointPrefix":"apigateway",
     "protocol":"rest-json",
     "serviceFullName":"Amazon API Gateway",
-    "signatureVersion":"v4"
+    "signatureVersion":"v4",
+    "uid":"apigateway-2015-07-09"
   },
   "operations":{
     "CreateApiKey":{
@@ -77,6 +78,42 @@
         {"shape":"LimitExceededException"},
         {"shape":"TooManyRequestsException"},
         {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "CreateDocumentationPart":{
+      "name":"CreateDocumentationPart",
+      "http":{
+        "method":"POST",
+        "requestUri":"/restapis/{restapi_id}/documentation/parts",
+        "responseCode":201
+      },
+      "input":{"shape":"CreateDocumentationPartRequest"},
+      "output":{"shape":"DocumentationPart"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"ConflictException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "CreateDocumentationVersion":{
+      "name":"CreateDocumentationVersion",
+      "http":{
+        "method":"POST",
+        "requestUri":"/restapis/{restapi_id}/documentation/versions",
+        "responseCode":201
+      },
+      "input":{"shape":"CreateDocumentationVersionRequest"},
+      "output":{"shape":"DocumentationVersion"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"ConflictException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"TooManyRequestsException"}
       ]
     },
     "CreateDomainName":{
@@ -179,7 +216,8 @@
         {"shape":"UnauthorizedException"},
         {"shape":"TooManyRequestsException"},
         {"shape":"LimitExceededException"},
-        {"shape":"ConflictException"}
+        {"shape":"ConflictException"},
+        {"shape":"NotFoundException"}
       ]
     },
     "CreateUsagePlanKey":{
@@ -270,6 +308,38 @@
         {"shape":"UnauthorizedException"},
         {"shape":"NotFoundException"},
         {"shape":"BadRequestException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "DeleteDocumentationPart":{
+      "name":"DeleteDocumentationPart",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/restapis/{restapi_id}/documentation/parts/{part_id}",
+        "responseCode":202
+      },
+      "input":{"shape":"DeleteDocumentationPartRequest"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"ConflictException"},
+        {"shape":"BadRequestException"}
+      ]
+    },
+    "DeleteDocumentationVersion":{
+      "name":"DeleteDocumentationVersion",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/restapis/{restapi_id}/documentation/versions/{doc_version}",
+        "responseCode":202
+      },
+      "input":{"shape":"DeleteDocumentationVersionRequest"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"BadRequestException"},
+        {"shape":"ConflictException"},
         {"shape":"TooManyRequestsException"}
       ]
     },
@@ -644,6 +714,64 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "GetDocumentationPart":{
+      "name":"GetDocumentationPart",
+      "http":{
+        "method":"GET",
+        "requestUri":"/restapis/{restapi_id}/documentation/parts/{part_id}"
+      },
+      "input":{"shape":"GetDocumentationPartRequest"},
+      "output":{"shape":"DocumentationPart"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "GetDocumentationParts":{
+      "name":"GetDocumentationParts",
+      "http":{
+        "method":"GET",
+        "requestUri":"/restapis/{restapi_id}/documentation/parts"
+      },
+      "input":{"shape":"GetDocumentationPartsRequest"},
+      "output":{"shape":"DocumentationParts"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "GetDocumentationVersion":{
+      "name":"GetDocumentationVersion",
+      "http":{
+        "method":"GET",
+        "requestUri":"/restapis/{restapi_id}/documentation/versions/{doc_version}"
+      },
+      "input":{"shape":"GetDocumentationVersionRequest"},
+      "output":{"shape":"DocumentationVersion"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "GetDocumentationVersions":{
+      "name":"GetDocumentationVersions",
+      "http":{
+        "method":"GET",
+        "requestUri":"/restapis/{restapi_id}/documentation/versions"
+      },
+      "input":{"shape":"GetDocumentationVersionsRequest"},
+      "output":{"shape":"DocumentationVersions"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
     "GetDomainName":{
       "name":"GetDomainName",
       "http":{
@@ -963,7 +1091,8 @@
         {"shape":"BadRequestException"},
         {"shape":"UnauthorizedException"},
         {"shape":"TooManyRequestsException"},
-        {"shape":"ConflictException"}
+        {"shape":"ConflictException"},
+        {"shape":"NotFoundException"}
       ]
     },
     "ImportApiKeys":{
@@ -982,6 +1111,22 @@
         {"shape":"LimitExceededException"},
         {"shape":"BadRequestException"},
         {"shape":"ConflictException"}
+      ]
+    },
+    "ImportDocumentationParts":{
+      "name":"ImportDocumentationParts",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/restapis/{restapi_id}/documentation/parts"
+      },
+      "input":{"shape":"ImportDocumentationPartsRequest"},
+      "output":{"shape":"DocumentationPartIds"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"BadRequestException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"TooManyRequestsException"}
       ]
     },
     "ImportRestApi":{
@@ -1212,6 +1357,39 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "UpdateDocumentationPart":{
+      "name":"UpdateDocumentationPart",
+      "http":{
+        "method":"PATCH",
+        "requestUri":"/restapis/{restapi_id}/documentation/parts/{part_id}"
+      },
+      "input":{"shape":"UpdateDocumentationPartRequest"},
+      "output":{"shape":"DocumentationPart"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"ConflictException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "UpdateDocumentationVersion":{
+      "name":"UpdateDocumentationVersion",
+      "http":{
+        "method":"PATCH",
+        "requestUri":"/restapis/{restapi_id}/documentation/versions/{doc_version}"
+      },
+      "input":{"shape":"UpdateDocumentationVersionRequest"},
+      "output":{"shape":"DocumentationVersion"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"ConflictException"},
+        {"shape":"BadRequestException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
     "UpdateDomainName":{
       "name":"UpdateDomainName",
       "http":{
@@ -1406,6 +1584,7 @@
         "id":{"shape":"String"},
         "value":{"shape":"String"},
         "name":{"shape":"String"},
+        "customerId":{"shape":"String"},
         "description":{"shape":"String"},
         "enabled":{"shape":"Boolean"},
         "createdDate":{"shape":"Timestamp"},
@@ -1553,6 +1732,13 @@
       "error":{"httpStatusCode":409},
       "exception":true
     },
+    "ContentHandlingStrategy":{
+      "type":"string",
+      "enum":[
+        "CONVERT_TO_BINARY",
+        "CONVERT_TO_TEXT"
+      ]
+    },
     "CreateApiKeyRequest":{
       "type":"structure",
       "members":{
@@ -1561,7 +1747,8 @@
         "enabled":{"shape":"Boolean"},
         "generateDistinctId":{"shape":"Boolean"},
         "value":{"shape":"String"},
-        "stageKeys":{"shape":"ListOfStageKeys"}
+        "stageKeys":{"shape":"ListOfStageKeys"},
+        "customerId":{"shape":"String"}
       }
     },
     "CreateAuthorizerRequest":{
@@ -1608,10 +1795,7 @@
     },
     "CreateDeploymentRequest":{
       "type":"structure",
-      "required":[
-        "restApiId",
-        "stageName"
-      ],
+      "required":["restApiId"],
       "members":{
         "restApiId":{
           "shape":"String",
@@ -1624,6 +1808,40 @@
         "cacheClusterEnabled":{"shape":"NullableBoolean"},
         "cacheClusterSize":{"shape":"CacheClusterSize"},
         "variables":{"shape":"MapOfStringToString"}
+      }
+    },
+    "CreateDocumentationPartRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "location",
+        "properties"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "location":{"shape":"DocumentationPartLocation"},
+        "properties":{"shape":"String"}
+      }
+    },
+    "CreateDocumentationVersionRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "documentationVersion"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "documentationVersion":{"shape":"String"},
+        "stageName":{"shape":"String"},
+        "description":{"shape":"String"}
       }
     },
     "CreateDomainNameRequest":{
@@ -1689,7 +1907,9 @@
       "members":{
         "name":{"shape":"String"},
         "description":{"shape":"String"},
-        "cloneFrom":{"shape":"String"}
+        "version":{"shape":"String"},
+        "cloneFrom":{"shape":"String"},
+        "binaryMediaTypes":{"shape":"ListOfString"}
       }
     },
     "CreateStageRequest":{
@@ -1710,7 +1930,8 @@
         "description":{"shape":"String"},
         "cacheClusterEnabled":{"shape":"Boolean"},
         "cacheClusterSize":{"shape":"CacheClusterSize"},
-        "variables":{"shape":"MapOfStringToString"}
+        "variables":{"shape":"MapOfStringToString"},
+        "documentationVersion":{"shape":"String"}
       }
     },
     "CreateUsagePlanKeyRequest":{
@@ -1817,6 +2038,44 @@
           "shape":"String",
           "location":"uri",
           "locationName":"deployment_id"
+        }
+      }
+    },
+    "DeleteDocumentationPartRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "documentationPartId"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "documentationPartId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"part_id"
+        }
+      }
+    },
+    "DeleteDocumentationVersionRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "documentationVersion"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "documentationVersion":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"doc_version"
         }
       }
     },
@@ -2060,6 +2319,81 @@
         }
       }
     },
+    "DocumentationPart":{
+      "type":"structure",
+      "members":{
+        "id":{"shape":"String"},
+        "location":{"shape":"DocumentationPartLocation"},
+        "properties":{"shape":"String"}
+      }
+    },
+    "DocumentationPartIds":{
+      "type":"structure",
+      "members":{
+        "ids":{"shape":"ListOfString"},
+        "warnings":{"shape":"ListOfString"}
+      }
+    },
+    "DocumentationPartLocation":{
+      "type":"structure",
+      "required":["type"],
+      "members":{
+        "type":{"shape":"DocumentationPartType"},
+        "path":{"shape":"String"},
+        "method":{"shape":"String"},
+        "statusCode":{"shape":"DocumentationPartLocationStatusCode"},
+        "name":{"shape":"String"}
+      }
+    },
+    "DocumentationPartLocationStatusCode":{
+      "type":"string",
+      "pattern":"^([1-5]\\d\\d|\\*|\\s*)$"
+    },
+    "DocumentationPartType":{
+      "type":"string",
+      "enum":[
+        "API",
+        "AUTHORIZER",
+        "MODEL",
+        "RESOURCE",
+        "METHOD",
+        "PATH_PARAMETER",
+        "QUERY_PARAMETER",
+        "REQUEST_HEADER",
+        "REQUEST_BODY",
+        "RESPONSE",
+        "RESPONSE_HEADER",
+        "RESPONSE_BODY"
+      ]
+    },
+    "DocumentationParts":{
+      "type":"structure",
+      "members":{
+        "position":{"shape":"String"},
+        "items":{
+          "shape":"ListOfDocumentationPart",
+          "locationName":"item"
+        }
+      }
+    },
+    "DocumentationVersion":{
+      "type":"structure",
+      "members":{
+        "version":{"shape":"String"},
+        "createdDate":{"shape":"Timestamp"},
+        "description":{"shape":"String"}
+      }
+    },
+    "DocumentationVersions":{
+      "type":"structure",
+      "members":{
+        "position":{"shape":"String"},
+        "items":{
+          "shape":"ListOfDocumentationVersion",
+          "locationName":"item"
+        }
+      }
+    },
     "DomainName":{
       "type":"structure",
       "members":{
@@ -2156,7 +2490,7 @@
           "locationName":"api_Key"
         },
         "includeValue":{
-          "shape":"Boolean",
+          "shape":"NullableBoolean",
           "location":"querystring",
           "locationName":"includeValue"
         }
@@ -2180,8 +2514,13 @@
           "location":"querystring",
           "locationName":"name"
         },
+        "customerId":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"customerId"
+        },
         "includeValues":{
-          "shape":"Boolean",
+          "shape":"NullableBoolean",
           "location":"querystring",
           "locationName":"includeValues"
         }
@@ -2313,6 +2652,101 @@
       }
     },
     "GetDeploymentsRequest":{
+      "type":"structure",
+      "required":["restApiId"],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "position":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"position"
+        },
+        "limit":{
+          "shape":"NullableInteger",
+          "location":"querystring",
+          "locationName":"limit"
+        }
+      }
+    },
+    "GetDocumentationPartRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "documentationPartId"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "documentationPartId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"part_id"
+        }
+      }
+    },
+    "GetDocumentationPartsRequest":{
+      "type":"structure",
+      "required":["restApiId"],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "type":{
+          "shape":"DocumentationPartType",
+          "location":"querystring",
+          "locationName":"type"
+        },
+        "nameQuery":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"name"
+        },
+        "path":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"path"
+        },
+        "position":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"position"
+        },
+        "limit":{
+          "shape":"NullableInteger",
+          "location":"querystring",
+          "locationName":"limit"
+        }
+      }
+    },
+    "GetDocumentationVersionRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "documentationVersion"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "documentationVersion":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"doc_version"
+        }
+      }
+    },
+    "GetDocumentationVersionsRequest":{
       "type":"structure",
       "required":["restApiId"],
       "members":{
@@ -2836,6 +3270,32 @@
       },
       "payload":"body"
     },
+    "ImportDocumentationPartsRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "body"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "mode":{
+          "shape":"PutMode",
+          "location":"querystring",
+          "locationName":"mode"
+        },
+        "failOnWarnings":{
+          "shape":"Boolean",
+          "location":"querystring",
+          "locationName":"failonwarnings"
+        },
+        "body":{"shape":"Blob"}
+      },
+      "payload":"body"
+    },
     "ImportRestApiRequest":{
       "type":"structure",
       "required":["body"],
@@ -2864,6 +3324,7 @@
         "requestParameters":{"shape":"MapOfStringToString"},
         "requestTemplates":{"shape":"MapOfStringToString"},
         "passthroughBehavior":{"shape":"String"},
+        "contentHandling":{"shape":"ContentHandlingStrategy"},
         "cacheNamespace":{"shape":"String"},
         "cacheKeyParameters":{"shape":"ListOfString"},
         "integrationResponses":{"shape":"MapOfIntegrationResponse"}
@@ -2875,7 +3336,8 @@
         "statusCode":{"shape":"StatusCode"},
         "selectionPattern":{"shape":"String"},
         "responseParameters":{"shape":"MapOfStringToString"},
-        "responseTemplates":{"shape":"MapOfStringToString"}
+        "responseTemplates":{"shape":"MapOfStringToString"},
+        "contentHandling":{"shape":"ContentHandlingStrategy"}
       }
     },
     "IntegrationType":{
@@ -2928,6 +3390,14 @@
     "ListOfDeployment":{
       "type":"list",
       "member":{"shape":"Deployment"}
+    },
+    "ListOfDocumentationPart":{
+      "type":"list",
+      "member":{"shape":"DocumentationPart"}
+    },
+    "ListOfDocumentationVersion":{
+      "type":"list",
+      "member":{"shape":"DocumentationVersion"}
     },
     "ListOfDomainName":{
       "type":"list",
@@ -3162,7 +3632,8 @@
         "requestTemplates":{"shape":"MapOfStringToString"},
         "passthroughBehavior":{"shape":"String"},
         "cacheNamespace":{"shape":"String"},
-        "cacheKeyParameters":{"shape":"ListOfString"}
+        "cacheKeyParameters":{"shape":"ListOfString"},
+        "contentHandling":{"shape":"ContentHandlingStrategy"}
       }
     },
     "PutIntegrationResponseRequest":{
@@ -3196,7 +3667,8 @@
         },
         "selectionPattern":{"shape":"String"},
         "responseParameters":{"shape":"MapOfStringToString"},
-        "responseTemplates":{"shape":"MapOfStringToString"}
+        "responseTemplates":{"shape":"MapOfStringToString"},
+        "contentHandling":{"shape":"ContentHandlingStrategy"}
       }
     },
     "PutMethodRequest":{
@@ -3343,7 +3815,9 @@
         "name":{"shape":"String"},
         "description":{"shape":"String"},
         "createdDate":{"shape":"Timestamp"},
-        "warnings":{"shape":"ListOfString"}
+        "version":{"shape":"String"},
+        "warnings":{"shape":"ListOfString"},
+        "binaryMediaTypes":{"shape":"ListOfString"}
       }
     },
     "RestApis":{
@@ -3399,6 +3873,7 @@
         "cacheClusterStatus":{"shape":"CacheClusterStatus"},
         "methodSettings":{"shape":"MapOfMethodSettings"},
         "variables":{"shape":"MapOfStringToString"},
+        "documentationVersion":{"shape":"String"},
         "createdDate":{"shape":"Timestamp"},
         "lastUpdatedDate":{"shape":"Timestamp"}
       }
@@ -3626,6 +4101,46 @@
           "shape":"String",
           "location":"uri",
           "locationName":"deployment_id"
+        },
+        "patchOperations":{"shape":"ListOfPatchOperation"}
+      }
+    },
+    "UpdateDocumentationPartRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "documentationPartId"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "documentationPartId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"part_id"
+        },
+        "patchOperations":{"shape":"ListOfPatchOperation"}
+      }
+    },
+    "UpdateDocumentationVersionRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "documentationVersion"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "documentationVersion":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"doc_version"
         },
         "patchOperations":{"shape":"ListOfPatchOperation"}
       }
@@ -3883,7 +4398,8 @@
         "description":{"shape":"String"},
         "apiStages":{"shape":"ListOfApiStage"},
         "throttle":{"shape":"ThrottleSettings"},
-        "quota":{"shape":"QuotaSettings"}
+        "quota":{"shape":"QuotaSettings"},
+        "productCode":{"shape":"String"}
       }
     },
     "UsagePlanKey":{

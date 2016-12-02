@@ -11,6 +11,23 @@
     "targetPrefix":"AWSMPMeteringService"
   },
   "operations":{
+    "BatchMeterUsage":{
+      "name":"BatchMeterUsage",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"BatchMeterUsageRequest"},
+      "output":{"shape":"BatchMeterUsageResult"},
+      "errors":[
+        {"shape":"InternalServiceErrorException"},
+        {"shape":"InvalidProductCodeException"},
+        {"shape":"InvalidUsageDimensionException"},
+        {"shape":"InvalidCustomerIdentifierException"},
+        {"shape":"TimestampOutOfBoundsException"},
+        {"shape":"ThrottlingException"}
+      ]
+    },
     "MeterUsage":{
       "name":"MeterUsage",
       "http":{
@@ -28,11 +45,56 @@
         {"shape":"DuplicateRequestException"},
         {"shape":"ThrottlingException"}
       ]
+    },
+    "ResolveCustomer":{
+      "name":"ResolveCustomer",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ResolveCustomerRequest"},
+      "output":{"shape":"ResolveCustomerResult"},
+      "errors":[
+        {"shape":"InvalidTokenException"},
+        {"shape":"ExpiredTokenException"},
+        {"shape":"ThrottlingException"},
+        {"shape":"InternalServiceErrorException"}
+      ]
     }
   },
   "shapes":{
+    "BatchMeterUsageRequest":{
+      "type":"structure",
+      "required":[
+        "UsageRecords",
+        "ProductCode"
+      ],
+      "members":{
+        "UsageRecords":{"shape":"UsageRecordList"},
+        "ProductCode":{"shape":"ProductCode"}
+      }
+    },
+    "BatchMeterUsageResult":{
+      "type":"structure",
+      "members":{
+        "Results":{"shape":"UsageRecordResultList"},
+        "UnprocessedRecords":{"shape":"UsageRecordList"}
+      }
+    },
     "Boolean":{"type":"boolean"},
+    "CustomerIdentifier":{
+      "type":"string",
+      "max":255,
+      "min":1
+    },
     "DuplicateRequestException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "ExpiredTokenException":{
       "type":"structure",
       "members":{
         "message":{"shape":"errorMessage"}
@@ -47,6 +109,13 @@
       "exception":true,
       "fault":true
     },
+    "InvalidCustomerIdentifierException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "InvalidEndpointRegionException":{
       "type":"structure",
       "members":{
@@ -55,6 +124,13 @@
       "exception":true
     },
     "InvalidProductCodeException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "InvalidTokenException":{
       "type":"structure",
       "members":{
         "message":{"shape":"errorMessage"}
@@ -91,10 +167,28 @@
         "MeteringRecordId":{"shape":"String"}
       }
     },
+    "NonEmptyString":{
+      "type":"string",
+      "pattern":"\\S+"
+    },
     "ProductCode":{
       "type":"string",
       "max":255,
       "min":1
+    },
+    "ResolveCustomerRequest":{
+      "type":"structure",
+      "required":["RegistrationToken"],
+      "members":{
+        "RegistrationToken":{"shape":"NonEmptyString"}
+      }
+    },
+    "ResolveCustomerResult":{
+      "type":"structure",
+      "members":{
+        "CustomerIdentifier":{"shape":"CustomerIdentifier"},
+        "ProductCode":{"shape":"ProductCode"}
+      }
     },
     "String":{"type":"string"},
     "ThrottlingException":{
@@ -121,6 +215,47 @@
       "type":"integer",
       "max":1000000,
       "min":0
+    },
+    "UsageRecord":{
+      "type":"structure",
+      "required":[
+        "Timestamp",
+        "CustomerIdentifier",
+        "Dimension",
+        "Quantity"
+      ],
+      "members":{
+        "Timestamp":{"shape":"Timestamp"},
+        "CustomerIdentifier":{"shape":"CustomerIdentifier"},
+        "Dimension":{"shape":"UsageDimension"},
+        "Quantity":{"shape":"UsageQuantity"}
+      }
+    },
+    "UsageRecordList":{
+      "type":"list",
+      "member":{"shape":"UsageRecord"},
+      "max":25,
+      "min":0
+    },
+    "UsageRecordResult":{
+      "type":"structure",
+      "members":{
+        "UsageRecord":{"shape":"UsageRecord"},
+        "MeteringRecordId":{"shape":"String"},
+        "Status":{"shape":"UsageRecordResultStatus"}
+      }
+    },
+    "UsageRecordResultList":{
+      "type":"list",
+      "member":{"shape":"UsageRecordResult"}
+    },
+    "UsageRecordResultStatus":{
+      "type":"string",
+      "enum":[
+        "Success",
+        "CustomerNotSubscribed",
+        "DuplicateRecord"
+      ]
     },
     "errorMessage":{"type":"string"}
   }

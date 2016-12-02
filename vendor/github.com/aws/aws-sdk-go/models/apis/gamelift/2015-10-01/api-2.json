@@ -398,6 +398,21 @@
         {"shape":"InvalidRequestException"}
       ]
     },
+    "GetInstanceAccess":{
+      "name":"GetInstanceAccess",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetInstanceAccessInput"},
+      "output":{"shape":"GetInstanceAccessOutput"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InternalServiceException"}
+      ]
+    },
     "ListAliases":{
       "name":"ListAliases",
       "http":{
@@ -1150,7 +1165,14 @@
         "FLEET_VALIDATION_TIMED_OUT",
         "FLEET_ACTIVATION_FAILED",
         "FLEET_ACTIVATION_FAILED_NO_INSTANCES",
-        "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED"
+        "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED",
+        "SERVER_PROCESS_INVALID_PATH",
+        "SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT",
+        "SERVER_PROCESS_PROCESS_READY_TIMEOUT",
+        "SERVER_PROCESS_CRASHED",
+        "SERVER_PROCESS_TERMINATED_UNHEALTHY",
+        "SERVER_PROCESS_FORCE_TERMINATED",
+        "SERVER_PROCESS_PROCESS_EXIT_TIMEOUT"
       ]
     },
     "EventList":{
@@ -1323,6 +1345,23 @@
         "PreSignedUrl":{"shape":"NonZeroAndMaxString"}
       }
     },
+    "GetInstanceAccessInput":{
+      "type":"structure",
+      "required":[
+        "FleetId",
+        "InstanceId"
+      ],
+      "members":{
+        "FleetId":{"shape":"FleetId"},
+        "InstanceId":{"shape":"InstanceId"}
+      }
+    },
+    "GetInstanceAccessOutput":{
+      "type":"structure",
+      "members":{
+        "InstanceAccess":{"shape":"InstanceAccess"}
+      }
+    },
     "IdStringModel":{
       "type":"string",
       "max":48,
@@ -1347,6 +1386,24 @@
         "Status":{"shape":"InstanceStatus"},
         "CreationTime":{"shape":"Timestamp"}
       }
+    },
+    "InstanceAccess":{
+      "type":"structure",
+      "members":{
+        "FleetId":{"shape":"FleetId"},
+        "InstanceId":{"shape":"InstanceId"},
+        "IpAddress":{"shape":"IpAddress"},
+        "OperatingSystem":{"shape":"OperatingSystem"},
+        "Credentials":{"shape":"InstanceCredentials"}
+      }
+    },
+    "InstanceCredentials":{
+      "type":"structure",
+      "members":{
+        "UserName":{"shape":"NonEmptyString"},
+        "Secret":{"shape":"NonEmptyString"}
+      },
+      "sensitive":true
     },
     "InstanceId":{
       "type":"string",

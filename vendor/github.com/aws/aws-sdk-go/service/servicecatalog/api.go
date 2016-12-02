@@ -11,6 +11,1051 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 )
 
+const opAcceptPortfolioShare = "AcceptPortfolioShare"
+
+// AcceptPortfolioShareRequest generates a "aws/request.Request" representing the
+// client's request for the AcceptPortfolioShare operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See AcceptPortfolioShare for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AcceptPortfolioShare method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the AcceptPortfolioShareRequest method.
+//    req, resp := client.AcceptPortfolioShareRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) AcceptPortfolioShareRequest(input *AcceptPortfolioShareInput) (req *request.Request, output *AcceptPortfolioShareOutput) {
+	op := &request.Operation{
+		Name:       opAcceptPortfolioShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AcceptPortfolioShareInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &AcceptPortfolioShareOutput{}
+	req.Data = output
+	return
+}
+
+// AcceptPortfolioShare API operation for AWS Service Catalog.
+//
+// Accepts an offer to share a portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation AcceptPortfolioShare for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+func (c *ServiceCatalog) AcceptPortfolioShare(input *AcceptPortfolioShareInput) (*AcceptPortfolioShareOutput, error) {
+	req, out := c.AcceptPortfolioShareRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opAssociatePrincipalWithPortfolio = "AssociatePrincipalWithPortfolio"
+
+// AssociatePrincipalWithPortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the AssociatePrincipalWithPortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See AssociatePrincipalWithPortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AssociatePrincipalWithPortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the AssociatePrincipalWithPortfolioRequest method.
+//    req, resp := client.AssociatePrincipalWithPortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) AssociatePrincipalWithPortfolioRequest(input *AssociatePrincipalWithPortfolioInput) (req *request.Request, output *AssociatePrincipalWithPortfolioOutput) {
+	op := &request.Operation{
+		Name:       opAssociatePrincipalWithPortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociatePrincipalWithPortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &AssociatePrincipalWithPortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// AssociatePrincipalWithPortfolio API operation for AWS Service Catalog.
+//
+// Associates the specified principal ARN with the specified portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation AssociatePrincipalWithPortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+func (c *ServiceCatalog) AssociatePrincipalWithPortfolio(input *AssociatePrincipalWithPortfolioInput) (*AssociatePrincipalWithPortfolioOutput, error) {
+	req, out := c.AssociatePrincipalWithPortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opAssociateProductWithPortfolio = "AssociateProductWithPortfolio"
+
+// AssociateProductWithPortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateProductWithPortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See AssociateProductWithPortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the AssociateProductWithPortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the AssociateProductWithPortfolioRequest method.
+//    req, resp := client.AssociateProductWithPortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) AssociateProductWithPortfolioRequest(input *AssociateProductWithPortfolioInput) (req *request.Request, output *AssociateProductWithPortfolioOutput) {
+	op := &request.Operation{
+		Name:       opAssociateProductWithPortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociateProductWithPortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &AssociateProductWithPortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// AssociateProductWithPortfolio API operation for AWS Service Catalog.
+//
+// Associates a product with a portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation AssociateProductWithPortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+func (c *ServiceCatalog) AssociateProductWithPortfolio(input *AssociateProductWithPortfolioInput) (*AssociateProductWithPortfolioOutput, error) {
+	req, out := c.AssociateProductWithPortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreateConstraint = "CreateConstraint"
+
+// CreateConstraintRequest generates a "aws/request.Request" representing the
+// client's request for the CreateConstraint operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CreateConstraint for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateConstraint method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateConstraintRequest method.
+//    req, resp := client.CreateConstraintRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) CreateConstraintRequest(input *CreateConstraintInput) (req *request.Request, output *CreateConstraintOutput) {
+	op := &request.Operation{
+		Name:       opCreateConstraint,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateConstraintInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateConstraintOutput{}
+	req.Data = output
+	return
+}
+
+// CreateConstraint API operation for AWS Service Catalog.
+//
+// Creates a new constraint.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation CreateConstraint for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+//   * DuplicateResourceException
+//   The specified resource is a duplicate.
+//
+func (c *ServiceCatalog) CreateConstraint(input *CreateConstraintInput) (*CreateConstraintOutput, error) {
+	req, out := c.CreateConstraintRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreatePortfolio = "CreatePortfolio"
+
+// CreatePortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CreatePortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreatePortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreatePortfolioRequest method.
+//    req, resp := client.CreatePortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) CreatePortfolioRequest(input *CreatePortfolioInput) (req *request.Request, output *CreatePortfolioOutput) {
+	op := &request.Operation{
+		Name:       opCreatePortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreatePortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreatePortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// CreatePortfolio API operation for AWS Service Catalog.
+//
+// Creates a new portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation CreatePortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+func (c *ServiceCatalog) CreatePortfolio(input *CreatePortfolioInput) (*CreatePortfolioOutput, error) {
+	req, out := c.CreatePortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreatePortfolioShare = "CreatePortfolioShare"
+
+// CreatePortfolioShareRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePortfolioShare operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CreatePortfolioShare for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreatePortfolioShare method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreatePortfolioShareRequest method.
+//    req, resp := client.CreatePortfolioShareRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) CreatePortfolioShareRequest(input *CreatePortfolioShareInput) (req *request.Request, output *CreatePortfolioShareOutput) {
+	op := &request.Operation{
+		Name:       opCreatePortfolioShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreatePortfolioShareInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreatePortfolioShareOutput{}
+	req.Data = output
+	return
+}
+
+// CreatePortfolioShare API operation for AWS Service Catalog.
+//
+// Creates a new portfolio share.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation CreatePortfolioShare for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) CreatePortfolioShare(input *CreatePortfolioShareInput) (*CreatePortfolioShareOutput, error) {
+	req, out := c.CreatePortfolioShareRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreateProduct = "CreateProduct"
+
+// CreateProductRequest generates a "aws/request.Request" representing the
+// client's request for the CreateProduct operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CreateProduct for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateProduct method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateProductRequest method.
+//    req, resp := client.CreateProductRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) CreateProductRequest(input *CreateProductInput) (req *request.Request, output *CreateProductOutput) {
+	op := &request.Operation{
+		Name:       opCreateProduct,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateProductInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateProductOutput{}
+	req.Data = output
+	return
+}
+
+// CreateProduct API operation for AWS Service Catalog.
+//
+// Creates a new product.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation CreateProduct for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+func (c *ServiceCatalog) CreateProduct(input *CreateProductInput) (*CreateProductOutput, error) {
+	req, out := c.CreateProductRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opCreateProvisioningArtifact = "CreateProvisioningArtifact"
+
+// CreateProvisioningArtifactRequest generates a "aws/request.Request" representing the
+// client's request for the CreateProvisioningArtifact operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CreateProvisioningArtifact for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CreateProvisioningArtifact method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CreateProvisioningArtifactRequest method.
+//    req, resp := client.CreateProvisioningArtifactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) CreateProvisioningArtifactRequest(input *CreateProvisioningArtifactInput) (req *request.Request, output *CreateProvisioningArtifactOutput) {
+	op := &request.Operation{
+		Name:       opCreateProvisioningArtifact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateProvisioningArtifactInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CreateProvisioningArtifactOutput{}
+	req.Data = output
+	return
+}
+
+// CreateProvisioningArtifact API operation for AWS Service Catalog.
+//
+// Create a new provisioning artifact for the specified product. This operation
+// will not work with a product that has been shared with you.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation CreateProvisioningArtifact for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+func (c *ServiceCatalog) CreateProvisioningArtifact(input *CreateProvisioningArtifactInput) (*CreateProvisioningArtifactOutput, error) {
+	req, out := c.CreateProvisioningArtifactRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeleteConstraint = "DeleteConstraint"
+
+// DeleteConstraintRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteConstraint operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DeleteConstraint for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteConstraint method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteConstraintRequest method.
+//    req, resp := client.DeleteConstraintRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DeleteConstraintRequest(input *DeleteConstraintInput) (req *request.Request, output *DeleteConstraintOutput) {
+	op := &request.Operation{
+		Name:       opDeleteConstraint,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteConstraintInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteConstraintOutput{}
+	req.Data = output
+	return
+}
+
+// DeleteConstraint API operation for AWS Service Catalog.
+//
+// Deletes the specified constraint.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DeleteConstraint for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) DeleteConstraint(input *DeleteConstraintInput) (*DeleteConstraintOutput, error) {
+	req, out := c.DeleteConstraintRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeletePortfolio = "DeletePortfolio"
+
+// DeletePortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DeletePortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeletePortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeletePortfolioRequest method.
+//    req, resp := client.DeletePortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DeletePortfolioRequest(input *DeletePortfolioInput) (req *request.Request, output *DeletePortfolioOutput) {
+	op := &request.Operation{
+		Name:       opDeletePortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeletePortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeletePortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// DeletePortfolio API operation for AWS Service Catalog.
+//
+// Deletes the specified portfolio. This operation will not work with a portfolio
+// that has been shared with you or if it has products, users, constraints,
+// or shared accounts associated with it.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DeletePortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * ResourceInUseException
+//   The operation was requested against a resource that is currently in use.
+//   Free the resource from use and retry the operation.
+//
+func (c *ServiceCatalog) DeletePortfolio(input *DeletePortfolioInput) (*DeletePortfolioOutput, error) {
+	req, out := c.DeletePortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeletePortfolioShare = "DeletePortfolioShare"
+
+// DeletePortfolioShareRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePortfolioShare operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DeletePortfolioShare for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeletePortfolioShare method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeletePortfolioShareRequest method.
+//    req, resp := client.DeletePortfolioShareRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DeletePortfolioShareRequest(input *DeletePortfolioShareInput) (req *request.Request, output *DeletePortfolioShareOutput) {
+	op := &request.Operation{
+		Name:       opDeletePortfolioShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeletePortfolioShareInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeletePortfolioShareOutput{}
+	req.Data = output
+	return
+}
+
+// DeletePortfolioShare API operation for AWS Service Catalog.
+//
+// Deletes the specified portfolio share.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DeletePortfolioShare for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) DeletePortfolioShare(input *DeletePortfolioShareInput) (*DeletePortfolioShareOutput, error) {
+	req, out := c.DeletePortfolioShareRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeleteProduct = "DeleteProduct"
+
+// DeleteProductRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteProduct operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DeleteProduct for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteProduct method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteProductRequest method.
+//    req, resp := client.DeleteProductRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DeleteProductRequest(input *DeleteProductInput) (req *request.Request, output *DeleteProductOutput) {
+	op := &request.Operation{
+		Name:       opDeleteProduct,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteProductInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteProductOutput{}
+	req.Data = output
+	return
+}
+
+// DeleteProduct API operation for AWS Service Catalog.
+//
+// Deletes the specified product. This operation will not work with a product
+// that has been shared with you or is associated with a portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DeleteProduct for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ResourceInUseException
+//   The operation was requested against a resource that is currently in use.
+//   Free the resource from use and retry the operation.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) DeleteProduct(input *DeleteProductInput) (*DeleteProductOutput, error) {
+	req, out := c.DeleteProductRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDeleteProvisioningArtifact = "DeleteProvisioningArtifact"
+
+// DeleteProvisioningArtifactRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteProvisioningArtifact operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DeleteProvisioningArtifact for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DeleteProvisioningArtifact method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DeleteProvisioningArtifactRequest method.
+//    req, resp := client.DeleteProvisioningArtifactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DeleteProvisioningArtifactRequest(input *DeleteProvisioningArtifactInput) (req *request.Request, output *DeleteProvisioningArtifactOutput) {
+	op := &request.Operation{
+		Name:       opDeleteProvisioningArtifact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteProvisioningArtifactInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DeleteProvisioningArtifactOutput{}
+	req.Data = output
+	return
+}
+
+// DeleteProvisioningArtifact API operation for AWS Service Catalog.
+//
+// Deletes the specified provisioning artifact. This operation will not work
+// on a provisioning artifact associated with a product that has been shared
+// with you, or on the last provisioning artifact associated with a product
+// (a product must have at least one provisioning artifact).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DeleteProvisioningArtifact for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * ResourceInUseException
+//   The operation was requested against a resource that is currently in use.
+//   Free the resource from use and retry the operation.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) DeleteProvisioningArtifact(input *DeleteProvisioningArtifactInput) (*DeleteProvisioningArtifactOutput, error) {
+	req, out := c.DeleteProvisioningArtifactRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeConstraint = "DescribeConstraint"
+
+// DescribeConstraintRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeConstraint operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DescribeConstraint for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeConstraint method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeConstraintRequest method.
+//    req, resp := client.DescribeConstraintRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DescribeConstraintRequest(input *DescribeConstraintInput) (req *request.Request, output *DescribeConstraintOutput) {
+	op := &request.Operation{
+		Name:       opDescribeConstraint,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeConstraintInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeConstraintOutput{}
+	req.Data = output
+	return
+}
+
+// DescribeConstraint API operation for AWS Service Catalog.
+//
+// Retrieves detailed information for a specified constraint.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DescribeConstraint for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) DescribeConstraint(input *DescribeConstraintInput) (*DescribeConstraintOutput, error) {
+	req, out := c.DescribeConstraintRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribePortfolio = "DescribePortfolio"
+
+// DescribePortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the DescribePortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DescribePortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribePortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribePortfolioRequest method.
+//    req, resp := client.DescribePortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DescribePortfolioRequest(input *DescribePortfolioInput) (req *request.Request, output *DescribePortfolioOutput) {
+	op := &request.Operation{
+		Name:       opDescribePortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribePortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribePortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// DescribePortfolio API operation for AWS Service Catalog.
+//
+// Retrieves detailed information and any tags associated with the specified
+// portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DescribePortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) DescribePortfolio(input *DescribePortfolioInput) (*DescribePortfolioOutput, error) {
+	req, out := c.DescribePortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeProduct = "DescribeProduct"
 
 // DescribeProductRequest generates a "aws/request.Request" representing the
@@ -81,6 +1126,70 @@ func (c *ServiceCatalog) DescribeProduct(input *DescribeProductInput) (*Describe
 	return out, err
 }
 
+const opDescribeProductAsAdmin = "DescribeProductAsAdmin"
+
+// DescribeProductAsAdminRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeProductAsAdmin operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DescribeProductAsAdmin for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeProductAsAdmin method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeProductAsAdminRequest method.
+//    req, resp := client.DescribeProductAsAdminRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DescribeProductAsAdminRequest(input *DescribeProductAsAdminInput) (req *request.Request, output *DescribeProductAsAdminOutput) {
+	op := &request.Operation{
+		Name:       opDescribeProductAsAdmin,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeProductAsAdminInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeProductAsAdminOutput{}
+	req.Data = output
+	return
+}
+
+// DescribeProductAsAdmin API operation for AWS Service Catalog.
+//
+// Retrieves information about a specified product, run with administrator access.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DescribeProductAsAdmin for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) DescribeProductAsAdmin(input *DescribeProductAsAdminInput) (*DescribeProductAsAdminOutput, error) {
+	req, out := c.DescribeProductAsAdminRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opDescribeProductView = "DescribeProductView"
 
 // DescribeProductViewRequest generates a "aws/request.Request" representing the
@@ -147,6 +1256,70 @@ func (c *ServiceCatalog) DescribeProductViewRequest(input *DescribeProductViewIn
 //
 func (c *ServiceCatalog) DescribeProductView(input *DescribeProductViewInput) (*DescribeProductViewOutput, error) {
 	req, out := c.DescribeProductViewRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDescribeProvisioningArtifact = "DescribeProvisioningArtifact"
+
+// DescribeProvisioningArtifactRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeProvisioningArtifact operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DescribeProvisioningArtifact for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DescribeProvisioningArtifact method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DescribeProvisioningArtifactRequest method.
+//    req, resp := client.DescribeProvisioningArtifactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DescribeProvisioningArtifactRequest(input *DescribeProvisioningArtifactInput) (req *request.Request, output *DescribeProvisioningArtifactOutput) {
+	op := &request.Operation{
+		Name:       opDescribeProvisioningArtifact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeProvisioningArtifactInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DescribeProvisioningArtifactOutput{}
+	req.Data = output
+	return
+}
+
+// DescribeProvisioningArtifact API operation for AWS Service Catalog.
+//
+// Retrieves detailed information about the specified provisioning artifact.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DescribeProvisioningArtifact for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) DescribeProvisioningArtifact(input *DescribeProvisioningArtifactInput) (*DescribeProvisioningArtifactOutput, error) {
+	req, out := c.DescribeProvisioningArtifactRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -287,6 +1460,272 @@ func (c *ServiceCatalog) DescribeRecord(input *DescribeRecordInput) (*DescribeRe
 	return out, err
 }
 
+const opDisassociatePrincipalFromPortfolio = "DisassociatePrincipalFromPortfolio"
+
+// DisassociatePrincipalFromPortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociatePrincipalFromPortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DisassociatePrincipalFromPortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisassociatePrincipalFromPortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DisassociatePrincipalFromPortfolioRequest method.
+//    req, resp := client.DisassociatePrincipalFromPortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DisassociatePrincipalFromPortfolioRequest(input *DisassociatePrincipalFromPortfolioInput) (req *request.Request, output *DisassociatePrincipalFromPortfolioOutput) {
+	op := &request.Operation{
+		Name:       opDisassociatePrincipalFromPortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociatePrincipalFromPortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DisassociatePrincipalFromPortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// DisassociatePrincipalFromPortfolio API operation for AWS Service Catalog.
+//
+// Disassociates a previously associated principal ARN from a specified portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DisassociatePrincipalFromPortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) DisassociatePrincipalFromPortfolio(input *DisassociatePrincipalFromPortfolioInput) (*DisassociatePrincipalFromPortfolioOutput, error) {
+	req, out := c.DisassociatePrincipalFromPortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opDisassociateProductFromPortfolio = "DisassociateProductFromPortfolio"
+
+// DisassociateProductFromPortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateProductFromPortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See DisassociateProductFromPortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the DisassociateProductFromPortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the DisassociateProductFromPortfolioRequest method.
+//    req, resp := client.DisassociateProductFromPortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) DisassociateProductFromPortfolioRequest(input *DisassociateProductFromPortfolioInput) (req *request.Request, output *DisassociateProductFromPortfolioOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateProductFromPortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociateProductFromPortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &DisassociateProductFromPortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// DisassociateProductFromPortfolio API operation for AWS Service Catalog.
+//
+// Disassociates the specified product from the specified portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DisassociateProductFromPortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) DisassociateProductFromPortfolio(input *DisassociateProductFromPortfolioInput) (*DisassociateProductFromPortfolioOutput, error) {
+	req, out := c.DisassociateProductFromPortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListAcceptedPortfolioShares = "ListAcceptedPortfolioShares"
+
+// ListAcceptedPortfolioSharesRequest generates a "aws/request.Request" representing the
+// client's request for the ListAcceptedPortfolioShares operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListAcceptedPortfolioShares for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListAcceptedPortfolioShares method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListAcceptedPortfolioSharesRequest method.
+//    req, resp := client.ListAcceptedPortfolioSharesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) ListAcceptedPortfolioSharesRequest(input *ListAcceptedPortfolioSharesInput) (req *request.Request, output *ListAcceptedPortfolioSharesOutput) {
+	op := &request.Operation{
+		Name:       opListAcceptedPortfolioShares,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListAcceptedPortfolioSharesInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListAcceptedPortfolioSharesOutput{}
+	req.Data = output
+	return
+}
+
+// ListAcceptedPortfolioShares API operation for AWS Service Catalog.
+//
+// Lists details of all portfolios for which sharing was accepted by this account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation ListAcceptedPortfolioShares for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) ListAcceptedPortfolioShares(input *ListAcceptedPortfolioSharesInput) (*ListAcceptedPortfolioSharesOutput, error) {
+	req, out := c.ListAcceptedPortfolioSharesRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListConstraintsForPortfolio = "ListConstraintsForPortfolio"
+
+// ListConstraintsForPortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the ListConstraintsForPortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListConstraintsForPortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListConstraintsForPortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListConstraintsForPortfolioRequest method.
+//    req, resp := client.ListConstraintsForPortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) ListConstraintsForPortfolioRequest(input *ListConstraintsForPortfolioInput) (req *request.Request, output *ListConstraintsForPortfolioOutput) {
+	op := &request.Operation{
+		Name:       opListConstraintsForPortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListConstraintsForPortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListConstraintsForPortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// ListConstraintsForPortfolio API operation for AWS Service Catalog.
+//
+// Retrieves detailed constraint information for the specified portfolio and
+// product.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation ListConstraintsForPortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) ListConstraintsForPortfolio(input *ListConstraintsForPortfolioInput) (*ListConstraintsForPortfolioOutput, error) {
+	req, out := c.ListConstraintsForPortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opListLaunchPaths = "ListLaunchPaths"
 
 // ListLaunchPathsRequest generates a "aws/request.Request" representing the
@@ -352,6 +1791,336 @@ func (c *ServiceCatalog) ListLaunchPathsRequest(input *ListLaunchPathsInput) (re
 //
 func (c *ServiceCatalog) ListLaunchPaths(input *ListLaunchPathsInput) (*ListLaunchPathsOutput, error) {
 	req, out := c.ListLaunchPathsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListPortfolioAccess = "ListPortfolioAccess"
+
+// ListPortfolioAccessRequest generates a "aws/request.Request" representing the
+// client's request for the ListPortfolioAccess operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListPortfolioAccess for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListPortfolioAccess method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListPortfolioAccessRequest method.
+//    req, resp := client.ListPortfolioAccessRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) ListPortfolioAccessRequest(input *ListPortfolioAccessInput) (req *request.Request, output *ListPortfolioAccessOutput) {
+	op := &request.Operation{
+		Name:       opListPortfolioAccess,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListPortfolioAccessInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListPortfolioAccessOutput{}
+	req.Data = output
+	return
+}
+
+// ListPortfolioAccess API operation for AWS Service Catalog.
+//
+// Lists the account IDs that have been authorized sharing of the specified
+// portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation ListPortfolioAccess for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) ListPortfolioAccess(input *ListPortfolioAccessInput) (*ListPortfolioAccessOutput, error) {
+	req, out := c.ListPortfolioAccessRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListPortfolios = "ListPortfolios"
+
+// ListPortfoliosRequest generates a "aws/request.Request" representing the
+// client's request for the ListPortfolios operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListPortfolios for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListPortfolios method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListPortfoliosRequest method.
+//    req, resp := client.ListPortfoliosRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) ListPortfoliosRequest(input *ListPortfoliosInput) (req *request.Request, output *ListPortfoliosOutput) {
+	op := &request.Operation{
+		Name:       opListPortfolios,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListPortfoliosInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListPortfoliosOutput{}
+	req.Data = output
+	return
+}
+
+// ListPortfolios API operation for AWS Service Catalog.
+//
+// Lists all portfolios in the catalog.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation ListPortfolios for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) ListPortfolios(input *ListPortfoliosInput) (*ListPortfoliosOutput, error) {
+	req, out := c.ListPortfoliosRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListPortfoliosForProduct = "ListPortfoliosForProduct"
+
+// ListPortfoliosForProductRequest generates a "aws/request.Request" representing the
+// client's request for the ListPortfoliosForProduct operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListPortfoliosForProduct for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListPortfoliosForProduct method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListPortfoliosForProductRequest method.
+//    req, resp := client.ListPortfoliosForProductRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) ListPortfoliosForProductRequest(input *ListPortfoliosForProductInput) (req *request.Request, output *ListPortfoliosForProductOutput) {
+	op := &request.Operation{
+		Name:       opListPortfoliosForProduct,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListPortfoliosForProductInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListPortfoliosForProductOutput{}
+	req.Data = output
+	return
+}
+
+// ListPortfoliosForProduct API operation for AWS Service Catalog.
+//
+// Lists all portfolios that the specified product is associated with.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation ListPortfoliosForProduct for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) ListPortfoliosForProduct(input *ListPortfoliosForProductInput) (*ListPortfoliosForProductOutput, error) {
+	req, out := c.ListPortfoliosForProductRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListPrincipalsForPortfolio = "ListPrincipalsForPortfolio"
+
+// ListPrincipalsForPortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the ListPrincipalsForPortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListPrincipalsForPortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListPrincipalsForPortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListPrincipalsForPortfolioRequest method.
+//    req, resp := client.ListPrincipalsForPortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) ListPrincipalsForPortfolioRequest(input *ListPrincipalsForPortfolioInput) (req *request.Request, output *ListPrincipalsForPortfolioOutput) {
+	op := &request.Operation{
+		Name:       opListPrincipalsForPortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListPrincipalsForPortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListPrincipalsForPortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// ListPrincipalsForPortfolio API operation for AWS Service Catalog.
+//
+// Lists all principal ARNs associated with the specified portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation ListPrincipalsForPortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) ListPrincipalsForPortfolio(input *ListPrincipalsForPortfolioInput) (*ListPrincipalsForPortfolioOutput, error) {
+	req, out := c.ListPrincipalsForPortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opListProvisioningArtifacts = "ListProvisioningArtifacts"
+
+// ListProvisioningArtifactsRequest generates a "aws/request.Request" representing the
+// client's request for the ListProvisioningArtifacts operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See ListProvisioningArtifacts for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the ListProvisioningArtifacts method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the ListProvisioningArtifactsRequest method.
+//    req, resp := client.ListProvisioningArtifactsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) ListProvisioningArtifactsRequest(input *ListProvisioningArtifactsInput) (req *request.Request, output *ListProvisioningArtifactsOutput) {
+	op := &request.Operation{
+		Name:       opListProvisioningArtifacts,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListProvisioningArtifactsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &ListProvisioningArtifactsOutput{}
+	req.Data = output
+	return
+}
+
+// ListProvisioningArtifacts API operation for AWS Service Catalog.
+//
+// Lists all provisioning artifacts associated with the specified product.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation ListProvisioningArtifacts for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) ListProvisioningArtifacts(input *ListProvisioningArtifactsInput) (*ListProvisioningArtifactsOutput, error) {
+	req, out := c.ListProvisioningArtifactsRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -496,6 +2265,70 @@ func (c *ServiceCatalog) ProvisionProduct(input *ProvisionProductInput) (*Provis
 	return out, err
 }
 
+const opRejectPortfolioShare = "RejectPortfolioShare"
+
+// RejectPortfolioShareRequest generates a "aws/request.Request" representing the
+// client's request for the RejectPortfolioShare operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See RejectPortfolioShare for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RejectPortfolioShare method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RejectPortfolioShareRequest method.
+//    req, resp := client.RejectPortfolioShareRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) RejectPortfolioShareRequest(input *RejectPortfolioShareInput) (req *request.Request, output *RejectPortfolioShareOutput) {
+	op := &request.Operation{
+		Name:       opRejectPortfolioShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RejectPortfolioShareInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &RejectPortfolioShareOutput{}
+	req.Data = output
+	return
+}
+
+// RejectPortfolioShare API operation for AWS Service Catalog.
+//
+// Rejects an offer to share a portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation RejectPortfolioShare for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+func (c *ServiceCatalog) RejectPortfolioShare(input *RejectPortfolioShareInput) (*RejectPortfolioShareOutput, error) {
+	req, out := c.RejectPortfolioShareRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opScanProvisionedProducts = "ScanProvisionedProducts"
 
 // ScanProvisionedProductsRequest generates a "aws/request.Request" representing the
@@ -629,6 +2462,76 @@ func (c *ServiceCatalog) SearchProducts(input *SearchProductsInput) (*SearchProd
 	return out, err
 }
 
+const opSearchProductsAsAdmin = "SearchProductsAsAdmin"
+
+// SearchProductsAsAdminRequest generates a "aws/request.Request" representing the
+// client's request for the SearchProductsAsAdmin operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See SearchProductsAsAdmin for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the SearchProductsAsAdmin method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the SearchProductsAsAdminRequest method.
+//    req, resp := client.SearchProductsAsAdminRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) SearchProductsAsAdminRequest(input *SearchProductsAsAdminInput) (req *request.Request, output *SearchProductsAsAdminOutput) {
+	op := &request.Operation{
+		Name:       opSearchProductsAsAdmin,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SearchProductsAsAdminInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &SearchProductsAsAdminOutput{}
+	req.Data = output
+	return
+}
+
+// SearchProductsAsAdmin API operation for AWS Service Catalog.
+//
+// Retrieves summary and status information about all products created within
+// the caller's account. If a portfolio ID is provided, this operation retrieves
+// information for only those products that are associated with the specified
+// portfolio.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation SearchProductsAsAdmin for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) SearchProductsAsAdmin(input *SearchProductsAsAdminInput) (*SearchProductsAsAdminOutput, error) {
+	req, out := c.SearchProductsAsAdminRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opTerminateProvisionedProduct = "TerminateProvisionedProduct"
 
 // TerminateProvisionedProductRequest generates a "aws/request.Request" representing the
@@ -696,6 +2599,212 @@ func (c *ServiceCatalog) TerminateProvisionedProductRequest(input *TerminateProv
 //
 func (c *ServiceCatalog) TerminateProvisionedProduct(input *TerminateProvisionedProductInput) (*TerminateProvisionedProductOutput, error) {
 	req, out := c.TerminateProvisionedProductRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateConstraint = "UpdateConstraint"
+
+// UpdateConstraintRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateConstraint operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See UpdateConstraint for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateConstraint method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateConstraintRequest method.
+//    req, resp := client.UpdateConstraintRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) UpdateConstraintRequest(input *UpdateConstraintInput) (req *request.Request, output *UpdateConstraintOutput) {
+	op := &request.Operation{
+		Name:       opUpdateConstraint,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateConstraintInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateConstraintOutput{}
+	req.Data = output
+	return
+}
+
+// UpdateConstraint API operation for AWS Service Catalog.
+//
+// Updates an existing constraint.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation UpdateConstraint for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) UpdateConstraint(input *UpdateConstraintInput) (*UpdateConstraintOutput, error) {
+	req, out := c.UpdateConstraintRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdatePortfolio = "UpdatePortfolio"
+
+// UpdatePortfolioRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePortfolio operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See UpdatePortfolio for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdatePortfolio method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdatePortfolioRequest method.
+//    req, resp := client.UpdatePortfolioRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) UpdatePortfolioRequest(input *UpdatePortfolioInput) (req *request.Request, output *UpdatePortfolioOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePortfolio,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdatePortfolioInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdatePortfolioOutput{}
+	req.Data = output
+	return
+}
+
+// UpdatePortfolio API operation for AWS Service Catalog.
+//
+// Updates the specified portfolio's details. This operation will not work with
+// a product that has been shared with you.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation UpdatePortfolio for usage and error information.
+//
+// Returned Error Codes:
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * LimitExceededException
+//   The current limits of the service would have been exceeded by this operation.
+//   Reduce the resource use or increase the service limits and retry the operation.
+//
+func (c *ServiceCatalog) UpdatePortfolio(input *UpdatePortfolioInput) (*UpdatePortfolioOutput, error) {
+	req, out := c.UpdatePortfolioRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opUpdateProduct = "UpdateProduct"
+
+// UpdateProductRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateProduct operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See UpdateProduct for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateProduct method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateProductRequest method.
+//    req, resp := client.UpdateProductRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) UpdateProductRequest(input *UpdateProductInput) (req *request.Request, output *UpdateProductOutput) {
+	op := &request.Operation{
+		Name:       opUpdateProduct,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateProductInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateProductOutput{}
+	req.Data = output
+	return
+}
+
+// UpdateProduct API operation for AWS Service Catalog.
+//
+// Updates an existing product.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation UpdateProduct for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) UpdateProduct(input *UpdateProductInput) (*UpdateProductOutput, error) {
+	req, out := c.UpdateProductRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -773,6 +2882,148 @@ func (c *ServiceCatalog) UpdateProvisionedProduct(input *UpdateProvisionedProduc
 	return out, err
 }
 
+const opUpdateProvisioningArtifact = "UpdateProvisioningArtifact"
+
+// UpdateProvisioningArtifactRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateProvisioningArtifact operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See UpdateProvisioningArtifact for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the UpdateProvisioningArtifact method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the UpdateProvisioningArtifactRequest method.
+//    req, resp := client.UpdateProvisioningArtifactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *ServiceCatalog) UpdateProvisioningArtifactRequest(input *UpdateProvisioningArtifactInput) (req *request.Request, output *UpdateProvisioningArtifactOutput) {
+	op := &request.Operation{
+		Name:       opUpdateProvisioningArtifact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateProvisioningArtifactInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &UpdateProvisioningArtifactOutput{}
+	req.Data = output
+	return
+}
+
+// UpdateProvisioningArtifact API operation for AWS Service Catalog.
+//
+// Updates an existing provisioning artifact's information. This operation will
+// not work on a provisioning artifact associated with a product that has been
+// shared with you.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation UpdateProvisioningArtifact for usage and error information.
+//
+// Returned Error Codes:
+//   * ResourceNotFoundException
+//   The specified resource was not found.
+//
+//   * InvalidParametersException
+//   One or more parameters provided to the operation are invalid.
+//
+func (c *ServiceCatalog) UpdateProvisioningArtifact(input *UpdateProvisioningArtifactInput) (*UpdateProvisioningArtifactOutput, error) {
+	req, out := c.UpdateProvisioningArtifactRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+type AcceptPortfolioShareInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AcceptPortfolioShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AcceptPortfolioShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AcceptPortfolioShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AcceptPortfolioShareInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *AcceptPortfolioShareInput) SetAcceptLanguage(v string) *AcceptPortfolioShareInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *AcceptPortfolioShareInput) SetPortfolioId(v string) *AcceptPortfolioShareInput {
+	s.PortfolioId = &v
+	return s
+}
+
+type AcceptPortfolioShareOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AcceptPortfolioShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AcceptPortfolioShareOutput) GoString() string {
+	return s.String()
+}
+
 // The access level to limit results.
 type AccessLevelFilter struct {
 	_ struct{} `type:"structure"`
@@ -813,6 +3064,263 @@ func (s *AccessLevelFilter) SetValue(v string) *AccessLevelFilter {
 	return s
 }
 
+type AssociatePrincipalWithPortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+
+	// The ARN representing the principal (IAM user, role, or group).
+	//
+	// PrincipalARN is a required field
+	PrincipalARN *string `min:"1" type:"string" required:"true"`
+
+	// The principal type. Must be IAM
+	//
+	// PrincipalType is a required field
+	PrincipalType *string `type:"string" required:"true" enum:"PrincipalType"`
+}
+
+// String returns the string representation
+func (s AssociatePrincipalWithPortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociatePrincipalWithPortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociatePrincipalWithPortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociatePrincipalWithPortfolioInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+	if s.PrincipalARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrincipalARN"))
+	}
+	if s.PrincipalARN != nil && len(*s.PrincipalARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PrincipalARN", 1))
+	}
+	if s.PrincipalType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrincipalType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *AssociatePrincipalWithPortfolioInput) SetAcceptLanguage(v string) *AssociatePrincipalWithPortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *AssociatePrincipalWithPortfolioInput) SetPortfolioId(v string) *AssociatePrincipalWithPortfolioInput {
+	s.PortfolioId = &v
+	return s
+}
+
+// SetPrincipalARN sets the PrincipalARN field's value.
+func (s *AssociatePrincipalWithPortfolioInput) SetPrincipalARN(v string) *AssociatePrincipalWithPortfolioInput {
+	s.PrincipalARN = &v
+	return s
+}
+
+// SetPrincipalType sets the PrincipalType field's value.
+func (s *AssociatePrincipalWithPortfolioInput) SetPrincipalType(v string) *AssociatePrincipalWithPortfolioInput {
+	s.PrincipalType = &v
+	return s
+}
+
+type AssociatePrincipalWithPortfolioOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AssociatePrincipalWithPortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociatePrincipalWithPortfolioOutput) GoString() string {
+	return s.String()
+}
+
+type AssociateProductWithPortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the source portfolio to use with this association.
+	SourcePortfolioId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s AssociateProductWithPortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateProductWithPortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateProductWithPortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateProductWithPortfolioInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+	if s.SourcePortfolioId != nil && len(*s.SourcePortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourcePortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *AssociateProductWithPortfolioInput) SetAcceptLanguage(v string) *AssociateProductWithPortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *AssociateProductWithPortfolioInput) SetPortfolioId(v string) *AssociateProductWithPortfolioInput {
+	s.PortfolioId = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *AssociateProductWithPortfolioInput) SetProductId(v string) *AssociateProductWithPortfolioInput {
+	s.ProductId = &v
+	return s
+}
+
+// SetSourcePortfolioId sets the SourcePortfolioId field's value.
+func (s *AssociateProductWithPortfolioInput) SetSourcePortfolioId(v string) *AssociateProductWithPortfolioInput {
+	s.SourcePortfolioId = &v
+	return s
+}
+
+type AssociateProductWithPortfolioOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AssociateProductWithPortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateProductWithPortfolioOutput) GoString() string {
+	return s.String()
+}
+
+// Detailed constraint information.
+type ConstraintDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the constraint.
+	ConstraintId *string `min:"1" type:"string"`
+
+	// The text description of the constraint.
+	Description *string `type:"string"`
+
+	// The owner of the constraint.
+	Owner *string `type:"string"`
+
+	// The type of the constraint.
+	Type *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ConstraintDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConstraintDetail) GoString() string {
+	return s.String()
+}
+
+// SetConstraintId sets the ConstraintId field's value.
+func (s *ConstraintDetail) SetConstraintId(v string) *ConstraintDetail {
+	s.ConstraintId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ConstraintDetail) SetDescription(v string) *ConstraintDetail {
+	s.Description = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *ConstraintDetail) SetOwner(v string) *ConstraintDetail {
+	s.Owner = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ConstraintDetail) SetType(v string) *ConstraintDetail {
+	s.Type = &v
+	return s
+}
+
 // An administrator-specified constraint to apply when provisioning a product.
 type ConstraintSummary struct {
 	_ struct{} `type:"structure"`
@@ -821,7 +3329,7 @@ type ConstraintSummary struct {
 	Description *string `type:"string"`
 
 	// The type of the constraint.
-	Type *string `type:"string"`
+	Type *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -843,6 +3351,1467 @@ func (s *ConstraintSummary) SetDescription(v string) *ConstraintSummary {
 // SetType sets the Type field's value.
 func (s *ConstraintSummary) SetType(v string) *ConstraintSummary {
 	s.Type = &v
+	return s
+}
+
+type CreateConstraintInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The text description of the constraint.
+	Description *string `type:"string"`
+
+	// A token to disambiguate duplicate requests. You can create multiple resources
+	// using the same input in multiple requests, provided that you also specify
+	// a different idempotency token for each request.
+	//
+	// IdempotencyToken is a required field
+	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
+
+	// The constraint parameters.
+	//
+	// Parameters is a required field
+	Parameters *string `type:"string" required:"true"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+
+	// The type of the constraint.
+	//
+	// Type is a required field
+	Type *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateConstraintInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConstraintInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateConstraintInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateConstraintInput"}
+	if s.IdempotencyToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdempotencyToken"))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.Parameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Parameters"))
+	}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Type != nil && len(*s.Type) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Type", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *CreateConstraintInput) SetAcceptLanguage(v string) *CreateConstraintInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateConstraintInput) SetDescription(v string) *CreateConstraintInput {
+	s.Description = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *CreateConstraintInput) SetIdempotencyToken(v string) *CreateConstraintInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *CreateConstraintInput) SetParameters(v string) *CreateConstraintInput {
+	s.Parameters = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *CreateConstraintInput) SetPortfolioId(v string) *CreateConstraintInput {
+	s.PortfolioId = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *CreateConstraintInput) SetProductId(v string) *CreateConstraintInput {
+	s.ProductId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CreateConstraintInput) SetType(v string) *CreateConstraintInput {
+	s.Type = &v
+	return s
+}
+
+type CreateConstraintOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resulting detailed constraint information.
+	ConstraintDetail *ConstraintDetail `type:"structure"`
+
+	// The resulting constraint parameters.
+	ConstraintParameters *string `type:"string"`
+
+	// The status of the current request.
+	Status *string `type:"string" enum:"Status"`
+}
+
+// String returns the string representation
+func (s CreateConstraintOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConstraintOutput) GoString() string {
+	return s.String()
+}
+
+// SetConstraintDetail sets the ConstraintDetail field's value.
+func (s *CreateConstraintOutput) SetConstraintDetail(v *ConstraintDetail) *CreateConstraintOutput {
+	s.ConstraintDetail = v
+	return s
+}
+
+// SetConstraintParameters sets the ConstraintParameters field's value.
+func (s *CreateConstraintOutput) SetConstraintParameters(v string) *CreateConstraintOutput {
+	s.ConstraintParameters = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateConstraintOutput) SetStatus(v string) *CreateConstraintOutput {
+	s.Status = &v
+	return s
+}
+
+type CreatePortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The text description of the portfolio.
+	Description *string `type:"string"`
+
+	// The name to use for display purposes.
+	//
+	// DisplayName is a required field
+	DisplayName *string `min:"1" type:"string" required:"true"`
+
+	// A token to disambiguate duplicate requests. You can create multiple resources
+	// using the same input in multiple requests, provided that you also specify
+	// a different idempotency token for each request.
+	//
+	// IdempotencyToken is a required field
+	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
+
+	// The name of the portfolio provider.
+	//
+	// ProviderName is a required field
+	ProviderName *string `min:"1" type:"string" required:"true"`
+
+	// Tags to associate with the new portfolio.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s CreatePortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePortfolioInput"}
+	if s.DisplayName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DisplayName"))
+	}
+	if s.DisplayName != nil && len(*s.DisplayName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DisplayName", 1))
+	}
+	if s.IdempotencyToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdempotencyToken"))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.ProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProviderName"))
+	}
+	if s.ProviderName != nil && len(*s.ProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProviderName", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *CreatePortfolioInput) SetAcceptLanguage(v string) *CreatePortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreatePortfolioInput) SetDescription(v string) *CreatePortfolioInput {
+	s.Description = &v
+	return s
+}
+
+// SetDisplayName sets the DisplayName field's value.
+func (s *CreatePortfolioInput) SetDisplayName(v string) *CreatePortfolioInput {
+	s.DisplayName = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *CreatePortfolioInput) SetIdempotencyToken(v string) *CreatePortfolioInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetProviderName sets the ProviderName field's value.
+func (s *CreatePortfolioInput) SetProviderName(v string) *CreatePortfolioInput {
+	s.ProviderName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePortfolioInput) SetTags(v []*Tag) *CreatePortfolioInput {
+	s.Tags = v
+	return s
+}
+
+type CreatePortfolioOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resulting detailed portfolio information.
+	PortfolioDetail *PortfolioDetail `type:"structure"`
+
+	// Tags successfully associated with the new portfolio.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s CreatePortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePortfolioOutput) GoString() string {
+	return s.String()
+}
+
+// SetPortfolioDetail sets the PortfolioDetail field's value.
+func (s *CreatePortfolioOutput) SetPortfolioDetail(v *PortfolioDetail) *CreatePortfolioOutput {
+	s.PortfolioDetail = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePortfolioOutput) SetTags(v []*Tag) *CreatePortfolioOutput {
+	s.Tags = v
+	return s
+}
+
+type CreatePortfolioShareInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The account ID with which to share the portfolio.
+	//
+	// AccountId is a required field
+	AccountId *string `type:"string" required:"true"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreatePortfolioShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePortfolioShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePortfolioShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePortfolioShareInput"}
+	if s.AccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccountId"))
+	}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *CreatePortfolioShareInput) SetAcceptLanguage(v string) *CreatePortfolioShareInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *CreatePortfolioShareInput) SetAccountId(v string) *CreatePortfolioShareInput {
+	s.AccountId = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *CreatePortfolioShareInput) SetPortfolioId(v string) *CreatePortfolioShareInput {
+	s.PortfolioId = &v
+	return s
+}
+
+type CreatePortfolioShareOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreatePortfolioShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePortfolioShareOutput) GoString() string {
+	return s.String()
+}
+
+type CreateProductInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The text description of the product.
+	Description *string `type:"string"`
+
+	// The distributor of the product.
+	Distributor *string `type:"string"`
+
+	// A token to disambiguate duplicate requests. You can create multiple resources
+	// using the same input in multiple requests, provided that you also specify
+	// a different idempotency token for each request.
+	//
+	// IdempotencyToken is a required field
+	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
+
+	// The name of the product.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The owner of the product.
+	//
+	// Owner is a required field
+	Owner *string `type:"string" required:"true"`
+
+	// The type of the product to create.
+	//
+	// ProductType is a required field
+	ProductType *string `type:"string" required:"true" enum:"ProductType"`
+
+	// Parameters for the provisioning artifact.
+	//
+	// ProvisioningArtifactParameters is a required field
+	ProvisioningArtifactParameters *ProvisioningArtifactProperties `type:"structure" required:"true"`
+
+	// Support information about the product.
+	SupportDescription *string `type:"string"`
+
+	// Contact email for product support.
+	SupportEmail *string `type:"string"`
+
+	// Contact URL for product support.
+	SupportUrl *string `type:"string"`
+
+	// Tags to associate with the new product.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s CreateProductInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateProductInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateProductInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateProductInput"}
+	if s.IdempotencyToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdempotencyToken"))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Owner == nil {
+		invalidParams.Add(request.NewErrParamRequired("Owner"))
+	}
+	if s.ProductType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductType"))
+	}
+	if s.ProvisioningArtifactParameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProvisioningArtifactParameters"))
+	}
+	if s.ProvisioningArtifactParameters != nil {
+		if err := s.ProvisioningArtifactParameters.Validate(); err != nil {
+			invalidParams.AddNested("ProvisioningArtifactParameters", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *CreateProductInput) SetAcceptLanguage(v string) *CreateProductInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateProductInput) SetDescription(v string) *CreateProductInput {
+	s.Description = &v
+	return s
+}
+
+// SetDistributor sets the Distributor field's value.
+func (s *CreateProductInput) SetDistributor(v string) *CreateProductInput {
+	s.Distributor = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *CreateProductInput) SetIdempotencyToken(v string) *CreateProductInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateProductInput) SetName(v string) *CreateProductInput {
+	s.Name = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *CreateProductInput) SetOwner(v string) *CreateProductInput {
+	s.Owner = &v
+	return s
+}
+
+// SetProductType sets the ProductType field's value.
+func (s *CreateProductInput) SetProductType(v string) *CreateProductInput {
+	s.ProductType = &v
+	return s
+}
+
+// SetProvisioningArtifactParameters sets the ProvisioningArtifactParameters field's value.
+func (s *CreateProductInput) SetProvisioningArtifactParameters(v *ProvisioningArtifactProperties) *CreateProductInput {
+	s.ProvisioningArtifactParameters = v
+	return s
+}
+
+// SetSupportDescription sets the SupportDescription field's value.
+func (s *CreateProductInput) SetSupportDescription(v string) *CreateProductInput {
+	s.SupportDescription = &v
+	return s
+}
+
+// SetSupportEmail sets the SupportEmail field's value.
+func (s *CreateProductInput) SetSupportEmail(v string) *CreateProductInput {
+	s.SupportEmail = &v
+	return s
+}
+
+// SetSupportUrl sets the SupportUrl field's value.
+func (s *CreateProductInput) SetSupportUrl(v string) *CreateProductInput {
+	s.SupportUrl = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateProductInput) SetTags(v []*Tag) *CreateProductInput {
+	s.Tags = v
+	return s
+}
+
+type CreateProductOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resulting detailed product view information.
+	ProductViewDetail *ProductViewDetail `type:"structure"`
+
+	// The resulting detailed provisioning artifact information.
+	ProvisioningArtifactDetail *ProvisioningArtifactDetail `type:"structure"`
+
+	// Tags successfully associated with the new product.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s CreateProductOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateProductOutput) GoString() string {
+	return s.String()
+}
+
+// SetProductViewDetail sets the ProductViewDetail field's value.
+func (s *CreateProductOutput) SetProductViewDetail(v *ProductViewDetail) *CreateProductOutput {
+	s.ProductViewDetail = v
+	return s
+}
+
+// SetProvisioningArtifactDetail sets the ProvisioningArtifactDetail field's value.
+func (s *CreateProductOutput) SetProvisioningArtifactDetail(v *ProvisioningArtifactDetail) *CreateProductOutput {
+	s.ProvisioningArtifactDetail = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateProductOutput) SetTags(v []*Tag) *CreateProductOutput {
+	s.Tags = v
+	return s
+}
+
+type CreateProvisioningArtifactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// A token to disambiguate duplicate requests. You can create multiple resources
+	// using the same input in multiple requests, provided that you also specify
+	// a different idempotency token for each request.
+	//
+	// IdempotencyToken is a required field
+	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
+
+	// The parameters to use when creating the new provisioning artifact.
+	//
+	// Parameters is a required field
+	Parameters *ProvisioningArtifactProperties `type:"structure" required:"true"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateProvisioningArtifactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateProvisioningArtifactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateProvisioningArtifactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateProvisioningArtifactInput"}
+	if s.IdempotencyToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdempotencyToken"))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.Parameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Parameters"))
+	}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+	if s.Parameters != nil {
+		if err := s.Parameters.Validate(); err != nil {
+			invalidParams.AddNested("Parameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *CreateProvisioningArtifactInput) SetAcceptLanguage(v string) *CreateProvisioningArtifactInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *CreateProvisioningArtifactInput) SetIdempotencyToken(v string) *CreateProvisioningArtifactInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *CreateProvisioningArtifactInput) SetParameters(v *ProvisioningArtifactProperties) *CreateProvisioningArtifactInput {
+	s.Parameters = v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *CreateProvisioningArtifactInput) SetProductId(v string) *CreateProvisioningArtifactInput {
+	s.ProductId = &v
+	return s
+}
+
+type CreateProvisioningArtifactOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Additional information about the provisioning artifact create request.
+	Info map[string]*string `min:"1" type:"map"`
+
+	// The resulting detailed provisioning artifact information.
+	ProvisioningArtifactDetail *ProvisioningArtifactDetail `type:"structure"`
+
+	// The status of the current request.
+	Status *string `type:"string" enum:"Status"`
+}
+
+// String returns the string representation
+func (s CreateProvisioningArtifactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateProvisioningArtifactOutput) GoString() string {
+	return s.String()
+}
+
+// SetInfo sets the Info field's value.
+func (s *CreateProvisioningArtifactOutput) SetInfo(v map[string]*string) *CreateProvisioningArtifactOutput {
+	s.Info = v
+	return s
+}
+
+// SetProvisioningArtifactDetail sets the ProvisioningArtifactDetail field's value.
+func (s *CreateProvisioningArtifactOutput) SetProvisioningArtifactDetail(v *ProvisioningArtifactDetail) *CreateProvisioningArtifactOutput {
+	s.ProvisioningArtifactDetail = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateProvisioningArtifactOutput) SetStatus(v string) *CreateProvisioningArtifactOutput {
+	s.Status = &v
+	return s
+}
+
+type DeleteConstraintInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The identifier of the constraint to delete.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteConstraintInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteConstraintInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteConstraintInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteConstraintInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DeleteConstraintInput) SetAcceptLanguage(v string) *DeleteConstraintInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteConstraintInput) SetId(v string) *DeleteConstraintInput {
+	s.Id = &v
+	return s
+}
+
+type DeleteConstraintOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteConstraintOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteConstraintOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The identifier of the portfolio for the delete request.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeletePortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePortfolioInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DeletePortfolioInput) SetAcceptLanguage(v string) *DeletePortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DeletePortfolioInput) SetId(v string) *DeletePortfolioInput {
+	s.Id = &v
+	return s
+}
+
+type DeletePortfolioOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeletePortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePortfolioOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePortfolioShareInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The account ID associated with the share to delete.
+	//
+	// AccountId is a required field
+	AccountId *string `type:"string" required:"true"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeletePortfolioShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePortfolioShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePortfolioShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePortfolioShareInput"}
+	if s.AccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccountId"))
+	}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DeletePortfolioShareInput) SetAcceptLanguage(v string) *DeletePortfolioShareInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *DeletePortfolioShareInput) SetAccountId(v string) *DeletePortfolioShareInput {
+	s.AccountId = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *DeletePortfolioShareInput) SetPortfolioId(v string) *DeletePortfolioShareInput {
+	s.PortfolioId = &v
+	return s
+}
+
+type DeletePortfolioShareOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeletePortfolioShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePortfolioShareOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteProductInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The identifier of the product for the delete request.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteProductInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteProductInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteProductInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteProductInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DeleteProductInput) SetAcceptLanguage(v string) *DeleteProductInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteProductInput) SetId(v string) *DeleteProductInput {
+	s.Id = &v
+	return s
+}
+
+type DeleteProductOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteProductOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteProductOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteProvisioningArtifactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the provisioning artifact for the delete request.
+	//
+	// ProvisioningArtifactId is a required field
+	ProvisioningArtifactId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteProvisioningArtifactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteProvisioningArtifactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteProvisioningArtifactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteProvisioningArtifactInput"}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+	if s.ProvisioningArtifactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProvisioningArtifactId"))
+	}
+	if s.ProvisioningArtifactId != nil && len(*s.ProvisioningArtifactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProvisioningArtifactId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DeleteProvisioningArtifactInput) SetAcceptLanguage(v string) *DeleteProvisioningArtifactInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *DeleteProvisioningArtifactInput) SetProductId(v string) *DeleteProvisioningArtifactInput {
+	s.ProductId = &v
+	return s
+}
+
+// SetProvisioningArtifactId sets the ProvisioningArtifactId field's value.
+func (s *DeleteProvisioningArtifactInput) SetProvisioningArtifactId(v string) *DeleteProvisioningArtifactInput {
+	s.ProvisioningArtifactId = &v
+	return s
+}
+
+type DeleteProvisioningArtifactOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteProvisioningArtifactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteProvisioningArtifactOutput) GoString() string {
+	return s.String()
+}
+
+type DescribeConstraintInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The identifier of the constraint.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeConstraintInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeConstraintInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeConstraintInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeConstraintInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DescribeConstraintInput) SetAcceptLanguage(v string) *DescribeConstraintInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeConstraintInput) SetId(v string) *DescribeConstraintInput {
+	s.Id = &v
+	return s
+}
+
+type DescribeConstraintOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Detailed constraint information.
+	ConstraintDetail *ConstraintDetail `type:"structure"`
+
+	// The current parameters associated with the specified constraint.
+	ConstraintParameters *string `type:"string"`
+
+	// The status of the current request.
+	Status *string `type:"string" enum:"Status"`
+}
+
+// String returns the string representation
+func (s DescribeConstraintOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeConstraintOutput) GoString() string {
+	return s.String()
+}
+
+// SetConstraintDetail sets the ConstraintDetail field's value.
+func (s *DescribeConstraintOutput) SetConstraintDetail(v *ConstraintDetail) *DescribeConstraintOutput {
+	s.ConstraintDetail = v
+	return s
+}
+
+// SetConstraintParameters sets the ConstraintParameters field's value.
+func (s *DescribeConstraintOutput) SetConstraintParameters(v string) *DescribeConstraintOutput {
+	s.ConstraintParameters = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeConstraintOutput) SetStatus(v string) *DescribeConstraintOutput {
+	s.Status = &v
+	return s
+}
+
+type DescribePortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The identifier of the portfolio for which to retrieve information.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribePortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribePortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribePortfolioInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DescribePortfolioInput) SetAcceptLanguage(v string) *DescribePortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DescribePortfolioInput) SetId(v string) *DescribePortfolioInput {
+	s.Id = &v
+	return s
+}
+
+type DescribePortfolioOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Detailed portfolio information.
+	PortfolioDetail *PortfolioDetail `type:"structure"`
+
+	// Tags associated with the portfolio.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribePortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribePortfolioOutput) GoString() string {
+	return s.String()
+}
+
+// SetPortfolioDetail sets the PortfolioDetail field's value.
+func (s *DescribePortfolioOutput) SetPortfolioDetail(v *PortfolioDetail) *DescribePortfolioOutput {
+	s.PortfolioDetail = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribePortfolioOutput) SetTags(v []*Tag) *DescribePortfolioOutput {
+	s.Tags = v
+	return s
+}
+
+type DescribeProductAsAdminInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The identifier of the product for which to retrieve information.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeProductAsAdminInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeProductAsAdminInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeProductAsAdminInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeProductAsAdminInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DescribeProductAsAdminInput) SetAcceptLanguage(v string) *DescribeProductAsAdminInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeProductAsAdminInput) SetId(v string) *DescribeProductAsAdminInput {
+	s.Id = &v
+	return s
+}
+
+type DescribeProductAsAdminOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Detailed product view information.
+	ProductViewDetail *ProductViewDetail `type:"structure"`
+
+	// Tags associated with the product.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeProductAsAdminOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeProductAsAdminOutput) GoString() string {
+	return s.String()
+}
+
+// SetProductViewDetail sets the ProductViewDetail field's value.
+func (s *DescribeProductAsAdminOutput) SetProductViewDetail(v *ProductViewDetail) *DescribeProductAsAdminOutput {
+	s.ProductViewDetail = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribeProductAsAdminOutput) SetTags(v []*Tag) *DescribeProductAsAdminOutput {
+	s.Tags = v
 	return s
 }
 
@@ -1030,6 +4999,123 @@ func (s *DescribeProductViewOutput) SetProvisioningArtifacts(v []*ProvisioningAr
 	return s
 }
 
+type DescribeProvisioningArtifactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the provisioning artifact.
+	//
+	// ProvisioningArtifactId is a required field
+	ProvisioningArtifactId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeProvisioningArtifactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeProvisioningArtifactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeProvisioningArtifactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeProvisioningArtifactInput"}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+	if s.ProvisioningArtifactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProvisioningArtifactId"))
+	}
+	if s.ProvisioningArtifactId != nil && len(*s.ProvisioningArtifactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProvisioningArtifactId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DescribeProvisioningArtifactInput) SetAcceptLanguage(v string) *DescribeProvisioningArtifactInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *DescribeProvisioningArtifactInput) SetProductId(v string) *DescribeProvisioningArtifactInput {
+	s.ProductId = &v
+	return s
+}
+
+// SetProvisioningArtifactId sets the ProvisioningArtifactId field's value.
+func (s *DescribeProvisioningArtifactInput) SetProvisioningArtifactId(v string) *DescribeProvisioningArtifactInput {
+	s.ProvisioningArtifactId = &v
+	return s
+}
+
+type DescribeProvisioningArtifactOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Additional information about the provisioning artifact.
+	Info map[string]*string `min:"1" type:"map"`
+
+	// Detailed provisioning artifact information.
+	ProvisioningArtifactDetail *ProvisioningArtifactDetail `type:"structure"`
+
+	// The status of the current request.
+	Status *string `type:"string" enum:"Status"`
+}
+
+// String returns the string representation
+func (s DescribeProvisioningArtifactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeProvisioningArtifactOutput) GoString() string {
+	return s.String()
+}
+
+// SetInfo sets the Info field's value.
+func (s *DescribeProvisioningArtifactOutput) SetInfo(v map[string]*string) *DescribeProvisioningArtifactOutput {
+	s.Info = v
+	return s
+}
+
+// SetProvisioningArtifactDetail sets the ProvisioningArtifactDetail field's value.
+func (s *DescribeProvisioningArtifactOutput) SetProvisioningArtifactDetail(v *ProvisioningArtifactDetail) *DescribeProvisioningArtifactOutput {
+	s.ProvisioningArtifactDetail = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeProvisioningArtifactOutput) SetStatus(v string) *DescribeProvisioningArtifactOutput {
+	s.Status = &v
+	return s
+}
+
 type DescribeProvisioningParametersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1050,7 +5136,7 @@ type DescribeProvisioningParametersInput struct {
 	// than one path for the specified product.
 	PathId *string `min:"1" type:"string"`
 
-	// The identifier of the product.
+	// The product identifier.
 	//
 	// ProductId is a required field
 	ProductId *string `min:"1" type:"string" required:"true"`
@@ -1289,6 +5375,186 @@ func (s *DescribeRecordOutput) SetRecordOutputs(v []*RecordOutput) *DescribeReco
 	return s
 }
 
+type DisassociatePrincipalFromPortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+
+	// The ARN representing the principal (IAM user, role, or group).
+	//
+	// PrincipalARN is a required field
+	PrincipalARN *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DisassociatePrincipalFromPortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociatePrincipalFromPortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociatePrincipalFromPortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociatePrincipalFromPortfolioInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+	if s.PrincipalARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrincipalARN"))
+	}
+	if s.PrincipalARN != nil && len(*s.PrincipalARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PrincipalARN", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DisassociatePrincipalFromPortfolioInput) SetAcceptLanguage(v string) *DisassociatePrincipalFromPortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *DisassociatePrincipalFromPortfolioInput) SetPortfolioId(v string) *DisassociatePrincipalFromPortfolioInput {
+	s.PortfolioId = &v
+	return s
+}
+
+// SetPrincipalARN sets the PrincipalARN field's value.
+func (s *DisassociatePrincipalFromPortfolioInput) SetPrincipalARN(v string) *DisassociatePrincipalFromPortfolioInput {
+	s.PrincipalARN = &v
+	return s
+}
+
+type DisassociatePrincipalFromPortfolioOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisassociatePrincipalFromPortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociatePrincipalFromPortfolioOutput) GoString() string {
+	return s.String()
+}
+
+type DisassociateProductFromPortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DisassociateProductFromPortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateProductFromPortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateProductFromPortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateProductFromPortfolioInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DisassociateProductFromPortfolioInput) SetAcceptLanguage(v string) *DisassociateProductFromPortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *DisassociateProductFromPortfolioInput) SetPortfolioId(v string) *DisassociateProductFromPortfolioInput {
+	s.PortfolioId = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *DisassociateProductFromPortfolioInput) SetProductId(v string) *DisassociateProductFromPortfolioInput {
+	s.ProductId = &v
+	return s
+}
+
+type DisassociateProductFromPortfolioOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisassociateProductFromPortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateProductFromPortfolioOutput) GoString() string {
+	return s.String()
+}
+
 // Summary information about a path for a user to have access to a specified
 // product.
 type LaunchPathSummary struct {
@@ -1341,6 +5607,217 @@ func (s *LaunchPathSummary) SetTags(v []*Tag) *LaunchPathSummary {
 	return s
 }
 
+type ListAcceptedPortfolioSharesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The maximum number of items to return in the results. If more results exist
+	// than fit in the specified PageSize, the value of NextPageToken in the response
+	// is non-null.
+	PageSize *int64 `type:"integer"`
+
+	// The page token of the first page retrieved. If null, this retrieves the first
+	// page of size PageSize.
+	PageToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListAcceptedPortfolioSharesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAcceptedPortfolioSharesInput) GoString() string {
+	return s.String()
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *ListAcceptedPortfolioSharesInput) SetAcceptLanguage(v string) *ListAcceptedPortfolioSharesInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListAcceptedPortfolioSharesInput) SetPageSize(v int64) *ListAcceptedPortfolioSharesInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *ListAcceptedPortfolioSharesInput) SetPageToken(v string) *ListAcceptedPortfolioSharesInput {
+	s.PageToken = &v
+	return s
+}
+
+type ListAcceptedPortfolioSharesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+
+	// List of detailed portfolio information objects.
+	PortfolioDetails []*PortfolioDetail `type:"list"`
+}
+
+// String returns the string representation
+func (s ListAcceptedPortfolioSharesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAcceptedPortfolioSharesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *ListAcceptedPortfolioSharesOutput) SetNextPageToken(v string) *ListAcceptedPortfolioSharesOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+// SetPortfolioDetails sets the PortfolioDetails field's value.
+func (s *ListAcceptedPortfolioSharesOutput) SetPortfolioDetails(v []*PortfolioDetail) *ListAcceptedPortfolioSharesOutput {
+	s.PortfolioDetails = v
+	return s
+}
+
+type ListConstraintsForPortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The maximum number of items to return in the results. If more results exist
+	// than fit in the specified PageSize, the value of NextPageToken in the response
+	// is non-null.
+	PageSize *int64 `type:"integer"`
+
+	// The page token of the first page retrieved. If null, this retrieves the first
+	// page of size PageSize.
+	PageToken *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+
+	// The product identifier.
+	ProductId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListConstraintsForPortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConstraintsForPortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListConstraintsForPortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListConstraintsForPortfolioInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *ListConstraintsForPortfolioInput) SetAcceptLanguage(v string) *ListConstraintsForPortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListConstraintsForPortfolioInput) SetPageSize(v int64) *ListConstraintsForPortfolioInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *ListConstraintsForPortfolioInput) SetPageToken(v string) *ListConstraintsForPortfolioInput {
+	s.PageToken = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *ListConstraintsForPortfolioInput) SetPortfolioId(v string) *ListConstraintsForPortfolioInput {
+	s.PortfolioId = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *ListConstraintsForPortfolioInput) SetProductId(v string) *ListConstraintsForPortfolioInput {
+	s.ProductId = &v
+	return s
+}
+
+type ListConstraintsForPortfolioOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List of detailed constraint information objects.
+	ConstraintDetails []*ConstraintDetail `type:"list"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListConstraintsForPortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConstraintsForPortfolioOutput) GoString() string {
+	return s.String()
+}
+
+// SetConstraintDetails sets the ConstraintDetails field's value.
+func (s *ListConstraintsForPortfolioOutput) SetConstraintDetails(v []*ConstraintDetail) *ListConstraintsForPortfolioOutput {
+	s.ConstraintDetails = v
+	return s
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *ListConstraintsForPortfolioOutput) SetNextPageToken(v string) *ListConstraintsForPortfolioOutput {
+	s.NextPageToken = &v
+	return s
+}
+
 type ListLaunchPathsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1365,7 +5842,8 @@ type ListLaunchPathsInput struct {
 	// page of size PageSize.
 	PageToken *string `type:"string"`
 
-	// Identifies the product for which to retrieve LaunchPathSummaries information.
+	// The product identifier.. Identifies the product for which to retrieve LaunchPathSummaries
+	// information.
 	//
 	// ProductId is a required field
 	ProductId *string `min:"1" type:"string" required:"true"`
@@ -1451,6 +5929,502 @@ func (s *ListLaunchPathsOutput) SetLaunchPathSummaries(v []*LaunchPathSummary) *
 // SetNextPageToken sets the NextPageToken field's value.
 func (s *ListLaunchPathsOutput) SetNextPageToken(v string) *ListLaunchPathsOutput {
 	s.NextPageToken = &v
+	return s
+}
+
+type ListPortfolioAccessInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListPortfolioAccessInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPortfolioAccessInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPortfolioAccessInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPortfolioAccessInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *ListPortfolioAccessInput) SetAcceptLanguage(v string) *ListPortfolioAccessInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *ListPortfolioAccessInput) SetPortfolioId(v string) *ListPortfolioAccessInput {
+	s.PortfolioId = &v
+	return s
+}
+
+type ListPortfolioAccessOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List of account IDs associated with access to the portfolio.
+	AccountIds []*string `type:"list"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListPortfolioAccessOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPortfolioAccessOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccountIds sets the AccountIds field's value.
+func (s *ListPortfolioAccessOutput) SetAccountIds(v []*string) *ListPortfolioAccessOutput {
+	s.AccountIds = v
+	return s
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *ListPortfolioAccessOutput) SetNextPageToken(v string) *ListPortfolioAccessOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+type ListPortfoliosForProductInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The maximum number of items to return in the results. If more results exist
+	// than fit in the specified PageSize, the value of NextPageToken in the response
+	// is non-null.
+	PageSize *int64 `type:"integer"`
+
+	// The page token of the first page retrieved. If null, this retrieves the first
+	// page of size PageSize.
+	PageToken *string `type:"string"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListPortfoliosForProductInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPortfoliosForProductInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPortfoliosForProductInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPortfoliosForProductInput"}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *ListPortfoliosForProductInput) SetAcceptLanguage(v string) *ListPortfoliosForProductInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListPortfoliosForProductInput) SetPageSize(v int64) *ListPortfoliosForProductInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *ListPortfoliosForProductInput) SetPageToken(v string) *ListPortfoliosForProductInput {
+	s.PageToken = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *ListPortfoliosForProductInput) SetProductId(v string) *ListPortfoliosForProductInput {
+	s.ProductId = &v
+	return s
+}
+
+type ListPortfoliosForProductOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+
+	// List of detailed portfolio information objects.
+	PortfolioDetails []*PortfolioDetail `type:"list"`
+}
+
+// String returns the string representation
+func (s ListPortfoliosForProductOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPortfoliosForProductOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *ListPortfoliosForProductOutput) SetNextPageToken(v string) *ListPortfoliosForProductOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+// SetPortfolioDetails sets the PortfolioDetails field's value.
+func (s *ListPortfoliosForProductOutput) SetPortfolioDetails(v []*PortfolioDetail) *ListPortfoliosForProductOutput {
+	s.PortfolioDetails = v
+	return s
+}
+
+type ListPortfoliosInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The maximum number of items to return in the results. If more results exist
+	// than fit in the specified PageSize, the value of NextPageToken in the response
+	// is non-null.
+	PageSize *int64 `type:"integer"`
+
+	// The page token of the first page retrieved. If null, this retrieves the first
+	// page of size PageSize.
+	PageToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListPortfoliosInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPortfoliosInput) GoString() string {
+	return s.String()
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *ListPortfoliosInput) SetAcceptLanguage(v string) *ListPortfoliosInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListPortfoliosInput) SetPageSize(v int64) *ListPortfoliosInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *ListPortfoliosInput) SetPageToken(v string) *ListPortfoliosInput {
+	s.PageToken = &v
+	return s
+}
+
+type ListPortfoliosOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+
+	// List of detailed portfolio information objects.
+	PortfolioDetails []*PortfolioDetail `type:"list"`
+}
+
+// String returns the string representation
+func (s ListPortfoliosOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPortfoliosOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *ListPortfoliosOutput) SetNextPageToken(v string) *ListPortfoliosOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+// SetPortfolioDetails sets the PortfolioDetails field's value.
+func (s *ListPortfoliosOutput) SetPortfolioDetails(v []*PortfolioDetail) *ListPortfoliosOutput {
+	s.PortfolioDetails = v
+	return s
+}
+
+type ListPrincipalsForPortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The maximum number of items to return in the results. If more results exist
+	// than fit in the specified PageSize, the value of NextPageToken in the response
+	// is non-null.
+	PageSize *int64 `type:"integer"`
+
+	// The page token of the first page retrieved. If null, this retrieves the first
+	// page of size PageSize.
+	PageToken *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListPrincipalsForPortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPrincipalsForPortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPrincipalsForPortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPrincipalsForPortfolioInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *ListPrincipalsForPortfolioInput) SetAcceptLanguage(v string) *ListPrincipalsForPortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListPrincipalsForPortfolioInput) SetPageSize(v int64) *ListPrincipalsForPortfolioInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *ListPrincipalsForPortfolioInput) SetPageToken(v string) *ListPrincipalsForPortfolioInput {
+	s.PageToken = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *ListPrincipalsForPortfolioInput) SetPortfolioId(v string) *ListPrincipalsForPortfolioInput {
+	s.PortfolioId = &v
+	return s
+}
+
+type ListPrincipalsForPortfolioOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+
+	// The IAM principals (users or roles) associated with the portfolio.
+	Principals []*Principal `type:"list"`
+}
+
+// String returns the string representation
+func (s ListPrincipalsForPortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPrincipalsForPortfolioOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *ListPrincipalsForPortfolioOutput) SetNextPageToken(v string) *ListPrincipalsForPortfolioOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+// SetPrincipals sets the Principals field's value.
+func (s *ListPrincipalsForPortfolioOutput) SetPrincipals(v []*Principal) *ListPrincipalsForPortfolioOutput {
+	s.Principals = v
+	return s
+}
+
+type ListProvisioningArtifactsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListProvisioningArtifactsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListProvisioningArtifactsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListProvisioningArtifactsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListProvisioningArtifactsInput"}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *ListProvisioningArtifactsInput) SetAcceptLanguage(v string) *ListProvisioningArtifactsInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *ListProvisioningArtifactsInput) SetProductId(v string) *ListProvisioningArtifactsInput {
+	s.ProductId = &v
+	return s
+}
+
+type ListProvisioningArtifactsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+
+	// List of detailed provisioning artifact information objects.
+	ProvisioningArtifactDetails []*ProvisioningArtifactDetail `type:"list"`
+}
+
+// String returns the string representation
+func (s ListProvisioningArtifactsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListProvisioningArtifactsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *ListProvisioningArtifactsOutput) SetNextPageToken(v string) *ListProvisioningArtifactsOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+// SetProvisioningArtifactDetails sets the ProvisioningArtifactDetails field's value.
+func (s *ListProvisioningArtifactsOutput) SetProvisioningArtifactDetails(v []*ProvisioningArtifactDetail) *ListProvisioningArtifactsOutput {
+	s.ProvisioningArtifactDetails = v
 	return s
 }
 
@@ -1616,6 +6590,108 @@ func (s *ParameterConstraints) SetAllowedValues(v []*string) *ParameterConstrain
 	return s
 }
 
+// Detailed portfolio information.
+type PortfolioDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN assigned to the portfolio.
+	ARN *string `min:"1" type:"string"`
+
+	// The UTC timestamp of the creation time.
+	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The text description of the portfolio.
+	Description *string `type:"string"`
+
+	// The name to use for display purposes.
+	DisplayName *string `min:"1" type:"string"`
+
+	// The identifier for the portfolio.
+	Id *string `min:"1" type:"string"`
+
+	// The name of the portfolio provider.
+	ProviderName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PortfolioDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PortfolioDetail) GoString() string {
+	return s.String()
+}
+
+// SetARN sets the ARN field's value.
+func (s *PortfolioDetail) SetARN(v string) *PortfolioDetail {
+	s.ARN = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *PortfolioDetail) SetCreatedTime(v time.Time) *PortfolioDetail {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *PortfolioDetail) SetDescription(v string) *PortfolioDetail {
+	s.Description = &v
+	return s
+}
+
+// SetDisplayName sets the DisplayName field's value.
+func (s *PortfolioDetail) SetDisplayName(v string) *PortfolioDetail {
+	s.DisplayName = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *PortfolioDetail) SetId(v string) *PortfolioDetail {
+	s.Id = &v
+	return s
+}
+
+// SetProviderName sets the ProviderName field's value.
+func (s *PortfolioDetail) SetProviderName(v string) *PortfolioDetail {
+	s.ProviderName = &v
+	return s
+}
+
+// A principal's ARN and type.
+type Principal struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN representing the principal (IAM user, role, or group).
+	PrincipalARN *string `min:"1" type:"string"`
+
+	// The principal type. Must be IAM
+	PrincipalType *string `type:"string" enum:"PrincipalType"`
+}
+
+// String returns the string representation
+func (s Principal) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Principal) GoString() string {
+	return s.String()
+}
+
+// SetPrincipalARN sets the PrincipalARN field's value.
+func (s *Principal) SetPrincipalARN(v string) *Principal {
+	s.PrincipalARN = &v
+	return s
+}
+
+// SetPrincipalType sets the PrincipalType field's value.
+func (s *Principal) SetPrincipalType(v string) *Principal {
+	s.PrincipalType = &v
+	return s
+}
+
 // A single product view aggregation value/count pair, containing metadata about
 // each product to which the calling user has access.
 type ProductViewAggregationValue struct {
@@ -1647,6 +6723,57 @@ func (s *ProductViewAggregationValue) SetApproximateCount(v int64) *ProductViewA
 // SetValue sets the Value field's value.
 func (s *ProductViewAggregationValue) SetValue(v string) *ProductViewAggregationValue {
 	s.Value = &v
+	return s
+}
+
+// Detailed product view information.
+type ProductViewDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The UTC timestamp of the creation time.
+	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The ARN associated with the product.
+	ProductARN *string `min:"1" type:"string"`
+
+	// The summary metadata about the specified product view.
+	ProductViewSummary *ProductViewSummary `type:"structure"`
+
+	// Current status of the product.
+	Status *string `type:"string" enum:"Status"`
+}
+
+// String returns the string representation
+func (s ProductViewDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ProductViewDetail) GoString() string {
+	return s.String()
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *ProductViewDetail) SetCreatedTime(v time.Time) *ProductViewDetail {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetProductARN sets the ProductARN field's value.
+func (s *ProductViewDetail) SetProductARN(v string) *ProductViewDetail {
+	s.ProductARN = &v
+	return s
+}
+
+// SetProductViewSummary sets the ProductViewSummary field's value.
+func (s *ProductViewDetail) SetProductViewSummary(v *ProductViewSummary) *ProductViewDetail {
+	s.ProductViewSummary = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ProductViewDetail) SetStatus(v string) *ProductViewDetail {
+	s.Status = &v
 	return s
 }
 
@@ -1692,7 +6819,7 @@ type ProductViewSummary struct {
 
 	// The product type. Contact the product administrator for the significance
 	// of this value.
-	Type *string `type:"string"`
+	Type *string `type:"string" enum:"ProductType"`
 }
 
 // String returns the string representation
@@ -1795,7 +6922,7 @@ type ProvisionProductInput struct {
 	// than one path for the specified product.
 	PathId *string `min:"1" type:"string"`
 
-	// The identifier of the product.
+	// The product identifier.
 	//
 	// ProductId is a required field
 	ProductId *string `min:"1" type:"string" required:"true"`
@@ -1861,6 +6988,16 @@ func (s *ProvisionProductInput) Validate() error {
 	}
 	if s.ProvisioningArtifactId != nil && len(*s.ProvisioningArtifactId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ProvisioningArtifactId", 1))
+	}
+	if s.ProvisioningParameters != nil {
+		for i, v := range s.ProvisioningParameters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ProvisioningParameters", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
@@ -1966,13 +7103,15 @@ type ProvisionedProductDetail struct {
 	// The ARN associated with the ProvisionedProduct object.
 	Arn *string `min:"1" type:"string"`
 
-	// The time the ProvisionedProduct was created.
+	// The UTC timestamp of the creation time.
 	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The identifier of the ProvisionedProduct object.
 	Id *string `type:"string"`
 
-	// An idempotency token that uniquely identifies this ProvisionedProduct.
+	// A token to disambiguate duplicate requests. You can create multiple resources
+	// using the same input in multiple requests, provided that you also specify
+	// a different idempotency token for each request.
 	IdempotencyToken *string `min:"1" type:"string"`
 
 	// The record identifier of the last request performed on this ProvisionedProduct
@@ -2060,7 +7199,7 @@ func (s *ProvisionedProductDetail) SetType(v string) *ProvisionedProductDetail {
 type ProvisioningArtifact struct {
 	_ struct{} `type:"structure"`
 
-	// The time that the artifact was created by the Administrator.
+	// The UTC timestamp of the creation time.
 	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The text description of the artifact.
@@ -2107,6 +7246,66 @@ func (s *ProvisioningArtifact) SetName(v string) *ProvisioningArtifact {
 	return s
 }
 
+// Detailed provisioning artifact information.
+type ProvisioningArtifactDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The UTC timestamp of the creation time.
+	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// The text description of the provisioning artifact.
+	Description *string `type:"string"`
+
+	// The identifier of the provisioning artifact.
+	Id *string `min:"1" type:"string"`
+
+	// The name assigned to the provisioning artifact.
+	Name *string `type:"string"`
+
+	// The type of the provisioning artifact.
+	Type *string `type:"string" enum:"ProvisioningArtifactType"`
+}
+
+// String returns the string representation
+func (s ProvisioningArtifactDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ProvisioningArtifactDetail) GoString() string {
+	return s.String()
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *ProvisioningArtifactDetail) SetCreatedTime(v time.Time) *ProvisioningArtifactDetail {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ProvisioningArtifactDetail) SetDescription(v string) *ProvisioningArtifactDetail {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ProvisioningArtifactDetail) SetId(v string) *ProvisioningArtifactDetail {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ProvisioningArtifactDetail) SetName(v string) *ProvisioningArtifactDetail {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ProvisioningArtifactDetail) SetType(v string) *ProvisioningArtifactDetail {
+	s.Type = &v
+	return s
+}
+
 // A parameter used to successfully provision the product. This value includes
 // a list of allowable values and additional metadata.
 type ProvisioningArtifactParameter struct {
@@ -2127,7 +7326,7 @@ type ProvisioningArtifactParameter struct {
 	ParameterConstraints *ParameterConstraints `type:"structure"`
 
 	// The parameter key.
-	ParameterKey *string `type:"string"`
+	ParameterKey *string `min:"1" type:"string"`
 
 	// The parameter type.
 	ParameterType *string `type:"string"`
@@ -2179,12 +7378,81 @@ func (s *ProvisioningArtifactParameter) SetParameterType(v string) *Provisioning
 	return s
 }
 
+// Provisioning artifact properties.
+type ProvisioningArtifactProperties struct {
+	_ struct{} `type:"structure"`
+
+	// The text description of the provisioning artifact properties.
+	Description *string `type:"string"`
+
+	// Additional information about the provisioning artifact properties.
+	//
+	// Info is a required field
+	Info map[string]*string `min:"1" type:"map" required:"true"`
+
+	// The name assigned to the provisioning artifact properties.
+	Name *string `type:"string"`
+
+	// The type of the provisioning artifact properties.
+	Type *string `type:"string" enum:"ProvisioningArtifactType"`
+}
+
+// String returns the string representation
+func (s ProvisioningArtifactProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ProvisioningArtifactProperties) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ProvisioningArtifactProperties) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ProvisioningArtifactProperties"}
+	if s.Info == nil {
+		invalidParams.Add(request.NewErrParamRequired("Info"))
+	}
+	if s.Info != nil && len(s.Info) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Info", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *ProvisioningArtifactProperties) SetDescription(v string) *ProvisioningArtifactProperties {
+	s.Description = &v
+	return s
+}
+
+// SetInfo sets the Info field's value.
+func (s *ProvisioningArtifactProperties) SetInfo(v map[string]*string) *ProvisioningArtifactProperties {
+	s.Info = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ProvisioningArtifactProperties) SetName(v string) *ProvisioningArtifactProperties {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ProvisioningArtifactProperties) SetType(v string) *ProvisioningArtifactProperties {
+	s.Type = &v
+	return s
+}
+
 // The arameter key/value pairs used to provision a product.
 type ProvisioningParameter struct {
 	_ struct{} `type:"structure"`
 
 	// The ProvisioningArtifactParameter.ParameterKey parameter from DescribeProvisioningParameters.
-	Key *string `type:"string"`
+	Key *string `min:"1" type:"string"`
 
 	// The value to use for provisioning. Any constraints on this value can be found
 	// in ProvisioningArtifactParameter for Key.
@@ -2199,6 +7467,19 @@ func (s ProvisioningParameter) String() string {
 // GoString returns the string representation
 func (s ProvisioningParameter) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ProvisioningParameter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ProvisioningParameter"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetKey sets the Key field's value.
@@ -2217,13 +7498,13 @@ func (s *ProvisioningParameter) SetValue(v string) *ProvisioningParameter {
 type RecordDetail struct {
 	_ struct{} `type:"structure"`
 
-	// The time when the record for the ProvisionedProduct object was created.
+	// The UTC timestamp of the creation time.
 	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The identifier of the path for this product's provisioning.
 	PathId *string `min:"1" type:"string"`
 
-	// The identifier of the product.
+	// The product identifier.
 	ProductId *string `min:"1" type:"string"`
 
 	// The identifier of the ProvisionedProduct object.
@@ -2455,6 +7736,79 @@ func (s *RecordTag) SetValue(v string) *RecordTag {
 	return s
 }
 
+type RejectPortfolioShareInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The portfolio identifier.
+	//
+	// PortfolioId is a required field
+	PortfolioId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RejectPortfolioShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RejectPortfolioShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RejectPortfolioShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RejectPortfolioShareInput"}
+	if s.PortfolioId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortfolioId"))
+	}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *RejectPortfolioShareInput) SetAcceptLanguage(v string) *RejectPortfolioShareInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *RejectPortfolioShareInput) SetPortfolioId(v string) *RejectPortfolioShareInput {
+	s.PortfolioId = &v
+	return s
+}
+
+type RejectPortfolioShareOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s RejectPortfolioShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RejectPortfolioShareOutput) GoString() string {
+	return s.String()
+}
+
 type ScanProvisionedProductsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2548,6 +7902,152 @@ func (s *ScanProvisionedProductsOutput) SetNextPageToken(v string) *ScanProvisio
 // SetProvisionedProducts sets the ProvisionedProducts field's value.
 func (s *ScanProvisionedProductsOutput) SetProvisionedProducts(v []*ProvisionedProductDetail) *ScanProvisionedProductsOutput {
 	s.ProvisionedProducts = v
+	return s
+}
+
+type SearchProductsAsAdminInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The list of filters with which to limit search results. If no search filters
+	// are specified, the output is all the products to which the administrator
+	// has access.
+	Filters map[string][]*string `type:"map"`
+
+	// The maximum number of items to return in the results. If more results exist
+	// than fit in the specified PageSize, the value of NextPageToken in the response
+	// is non-null.
+	PageSize *int64 `type:"integer"`
+
+	// The page token of the first page retrieved. If null, this retrieves the first
+	// page of size PageSize.
+	PageToken *string `type:"string"`
+
+	// The portfolio identifier.
+	PortfolioId *string `min:"1" type:"string"`
+
+	// Access level of the source of the product.
+	ProductSource *string `type:"string" enum:"ProductSource"`
+
+	// The sort field specifier. If no value is specified, results are not sorted.
+	SortBy *string `type:"string" enum:"ProductViewSortBy"`
+
+	// The sort order specifier. If no value is specified, results are not sorted.
+	SortOrder *string `type:"string" enum:"SortOrder"`
+}
+
+// String returns the string representation
+func (s SearchProductsAsAdminInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SearchProductsAsAdminInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchProductsAsAdminInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchProductsAsAdminInput"}
+	if s.PortfolioId != nil && len(*s.PortfolioId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PortfolioId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *SearchProductsAsAdminInput) SetAcceptLanguage(v string) *SearchProductsAsAdminInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *SearchProductsAsAdminInput) SetFilters(v map[string][]*string) *SearchProductsAsAdminInput {
+	s.Filters = v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *SearchProductsAsAdminInput) SetPageSize(v int64) *SearchProductsAsAdminInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetPageToken sets the PageToken field's value.
+func (s *SearchProductsAsAdminInput) SetPageToken(v string) *SearchProductsAsAdminInput {
+	s.PageToken = &v
+	return s
+}
+
+// SetPortfolioId sets the PortfolioId field's value.
+func (s *SearchProductsAsAdminInput) SetPortfolioId(v string) *SearchProductsAsAdminInput {
+	s.PortfolioId = &v
+	return s
+}
+
+// SetProductSource sets the ProductSource field's value.
+func (s *SearchProductsAsAdminInput) SetProductSource(v string) *SearchProductsAsAdminInput {
+	s.ProductSource = &v
+	return s
+}
+
+// SetSortBy sets the SortBy field's value.
+func (s *SearchProductsAsAdminInput) SetSortBy(v string) *SearchProductsAsAdminInput {
+	s.SortBy = &v
+	return s
+}
+
+// SetSortOrder sets the SortOrder field's value.
+func (s *SearchProductsAsAdminInput) SetSortOrder(v string) *SearchProductsAsAdminInput {
+	s.SortOrder = &v
+	return s
+}
+
+type SearchProductsAsAdminOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The page token to use to retrieve the next page of results for this operation.
+	// If there are no more pages, this value is null.
+	NextPageToken *string `type:"string"`
+
+	// List of detailed product view information objects.
+	ProductViewDetails []*ProductViewDetail `type:"list"`
+}
+
+// String returns the string representation
+func (s SearchProductsAsAdminOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SearchProductsAsAdminOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *SearchProductsAsAdminOutput) SetNextPageToken(v string) *SearchProductsAsAdminOutput {
+	s.NextPageToken = &v
+	return s
+}
+
+// SetProductViewDetails sets the ProductViewDetails field's value.
+func (s *SearchProductsAsAdminOutput) SetProductViewDetails(v []*ProductViewDetail) *SearchProductsAsAdminOutput {
+	s.ProductViewDetails = v
 	return s
 }
 
@@ -2681,10 +8181,14 @@ type Tag struct {
 	_ struct{} `type:"structure"`
 
 	// The ProvisioningArtifactParameter.TagKey parameter from DescribeProvisioningParameters.
-	Key *string `min:"1" type:"string"`
+	//
+	// Key is a required field
+	Key *string `min:"1" type:"string" required:"true"`
 
 	// The esired value for this key.
-	Value *string `min:"1" type:"string"`
+	//
+	// Value is a required field
+	Value *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -2700,8 +8204,14 @@ func (s Tag) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Tag) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
 	if s.Key != nil && len(*s.Key) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
 	}
 	if s.Value != nil && len(*s.Value) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
@@ -2849,6 +8359,449 @@ func (s *TerminateProvisionedProductOutput) SetRecordDetail(v *RecordDetail) *Te
 	return s
 }
 
+type UpdateConstraintInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The updated text description of the constraint.
+	Description *string `type:"string"`
+
+	// The identifier of the constraint to update.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateConstraintInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateConstraintInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateConstraintInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateConstraintInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *UpdateConstraintInput) SetAcceptLanguage(v string) *UpdateConstraintInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateConstraintInput) SetDescription(v string) *UpdateConstraintInput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateConstraintInput) SetId(v string) *UpdateConstraintInput {
+	s.Id = &v
+	return s
+}
+
+type UpdateConstraintOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resulting detailed constraint information.
+	ConstraintDetail *ConstraintDetail `type:"structure"`
+
+	// The resulting updated constraint parameters.
+	ConstraintParameters *string `type:"string"`
+
+	// The status of the current request.
+	Status *string `type:"string" enum:"Status"`
+}
+
+// String returns the string representation
+func (s UpdateConstraintOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateConstraintOutput) GoString() string {
+	return s.String()
+}
+
+// SetConstraintDetail sets the ConstraintDetail field's value.
+func (s *UpdateConstraintOutput) SetConstraintDetail(v *ConstraintDetail) *UpdateConstraintOutput {
+	s.ConstraintDetail = v
+	return s
+}
+
+// SetConstraintParameters sets the ConstraintParameters field's value.
+func (s *UpdateConstraintOutput) SetConstraintParameters(v string) *UpdateConstraintOutput {
+	s.ConstraintParameters = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateConstraintOutput) SetStatus(v string) *UpdateConstraintOutput {
+	s.Status = &v
+	return s
+}
+
+type UpdatePortfolioInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// Tags to add to the existing list of tags associated with the portfolio.
+	AddTags []*Tag `type:"list"`
+
+	// The updated text description of the portfolio.
+	Description *string `type:"string"`
+
+	// The name to use for display purposes.
+	DisplayName *string `min:"1" type:"string"`
+
+	// The identifier of the portfolio for the update request.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The updated name of the portfolio provider.
+	ProviderName *string `min:"1" type:"string"`
+
+	// Tags to remove from the existing list of tags associated with the portfolio.
+	RemoveTags []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s UpdatePortfolioInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdatePortfolioInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePortfolioInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePortfolioInput"}
+	if s.DisplayName != nil && len(*s.DisplayName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DisplayName", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.ProviderName != nil && len(*s.ProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProviderName", 1))
+	}
+	if s.AddTags != nil {
+		for i, v := range s.AddTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AddTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *UpdatePortfolioInput) SetAcceptLanguage(v string) *UpdatePortfolioInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetAddTags sets the AddTags field's value.
+func (s *UpdatePortfolioInput) SetAddTags(v []*Tag) *UpdatePortfolioInput {
+	s.AddTags = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdatePortfolioInput) SetDescription(v string) *UpdatePortfolioInput {
+	s.Description = &v
+	return s
+}
+
+// SetDisplayName sets the DisplayName field's value.
+func (s *UpdatePortfolioInput) SetDisplayName(v string) *UpdatePortfolioInput {
+	s.DisplayName = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdatePortfolioInput) SetId(v string) *UpdatePortfolioInput {
+	s.Id = &v
+	return s
+}
+
+// SetProviderName sets the ProviderName field's value.
+func (s *UpdatePortfolioInput) SetProviderName(v string) *UpdatePortfolioInput {
+	s.ProviderName = &v
+	return s
+}
+
+// SetRemoveTags sets the RemoveTags field's value.
+func (s *UpdatePortfolioInput) SetRemoveTags(v []*string) *UpdatePortfolioInput {
+	s.RemoveTags = v
+	return s
+}
+
+type UpdatePortfolioOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resulting detailed portfolio information.
+	PortfolioDetail *PortfolioDetail `type:"structure"`
+
+	// Tags associated with the portfolio.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s UpdatePortfolioOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdatePortfolioOutput) GoString() string {
+	return s.String()
+}
+
+// SetPortfolioDetail sets the PortfolioDetail field's value.
+func (s *UpdatePortfolioOutput) SetPortfolioDetail(v *PortfolioDetail) *UpdatePortfolioOutput {
+	s.PortfolioDetail = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdatePortfolioOutput) SetTags(v []*Tag) *UpdatePortfolioOutput {
+	s.Tags = v
+	return s
+}
+
+type UpdateProductInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// Tags to add to the existing list of tags associated with the product.
+	AddTags []*Tag `type:"list"`
+
+	// The updated text description of the product.
+	Description *string `type:"string"`
+
+	// The updated distributor of the product.
+	Distributor *string `type:"string"`
+
+	// The identifier of the product for the update request.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The updated product name.
+	Name *string `type:"string"`
+
+	// The updated owner of the product.
+	Owner *string `type:"string"`
+
+	// Tags to remove from the existing list of tags associated with the product.
+	RemoveTags []*string `type:"list"`
+
+	// The updated support description for the product.
+	SupportDescription *string `type:"string"`
+
+	// The updated support email for the product.
+	SupportEmail *string `type:"string"`
+
+	// The updated support URL for the product.
+	SupportUrl *string `type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateProductInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateProductInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateProductInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateProductInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.AddTags != nil {
+		for i, v := range s.AddTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AddTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *UpdateProductInput) SetAcceptLanguage(v string) *UpdateProductInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetAddTags sets the AddTags field's value.
+func (s *UpdateProductInput) SetAddTags(v []*Tag) *UpdateProductInput {
+	s.AddTags = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateProductInput) SetDescription(v string) *UpdateProductInput {
+	s.Description = &v
+	return s
+}
+
+// SetDistributor sets the Distributor field's value.
+func (s *UpdateProductInput) SetDistributor(v string) *UpdateProductInput {
+	s.Distributor = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateProductInput) SetId(v string) *UpdateProductInput {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateProductInput) SetName(v string) *UpdateProductInput {
+	s.Name = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *UpdateProductInput) SetOwner(v string) *UpdateProductInput {
+	s.Owner = &v
+	return s
+}
+
+// SetRemoveTags sets the RemoveTags field's value.
+func (s *UpdateProductInput) SetRemoveTags(v []*string) *UpdateProductInput {
+	s.RemoveTags = v
+	return s
+}
+
+// SetSupportDescription sets the SupportDescription field's value.
+func (s *UpdateProductInput) SetSupportDescription(v string) *UpdateProductInput {
+	s.SupportDescription = &v
+	return s
+}
+
+// SetSupportEmail sets the SupportEmail field's value.
+func (s *UpdateProductInput) SetSupportEmail(v string) *UpdateProductInput {
+	s.SupportEmail = &v
+	return s
+}
+
+// SetSupportUrl sets the SupportUrl field's value.
+func (s *UpdateProductInput) SetSupportUrl(v string) *UpdateProductInput {
+	s.SupportUrl = &v
+	return s
+}
+
+type UpdateProductOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resulting detailed product view information.
+	ProductViewDetail *ProductViewDetail `type:"structure"`
+
+	// Tags associated with the product.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s UpdateProductOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateProductOutput) GoString() string {
+	return s.String()
+}
+
+// SetProductViewDetail sets the ProductViewDetail field's value.
+func (s *UpdateProductOutput) SetProductViewDetail(v *ProductViewDetail) *UpdateProductOutput {
+	s.ProductViewDetail = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateProductOutput) SetTags(v []*Tag) *UpdateProductOutput {
+	s.Tags = v
+	return s
+}
+
 type UpdateProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2926,6 +8879,16 @@ func (s *UpdateProvisionedProductInput) Validate() error {
 	}
 	if s.UpdateToken != nil && len(*s.UpdateToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UpdateToken", 1))
+	}
+	if s.ProvisioningParameters != nil {
+		for i, v := range s.ProvisioningParameters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ProvisioningParameters", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3008,6 +8971,141 @@ func (s *UpdateProvisionedProductOutput) SetRecordDetail(v *RecordDetail) *Updat
 	return s
 }
 
+type UpdateProvisioningArtifactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code to use for this operation. Supported language codes are
+	// as follows:
+	//
+	// "en" (English)
+	//
+	// "jp" (Japanese)
+	//
+	// "zh" (Chinese)
+	//
+	// If no code is specified, "en" is used as the default.
+	AcceptLanguage *string `type:"string"`
+
+	// The updated text description of the provisioning artifact.
+	Description *string `type:"string"`
+
+	// The updated name of the provisioning artifact.
+	Name *string `type:"string"`
+
+	// The product identifier.
+	//
+	// ProductId is a required field
+	ProductId *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the provisioning artifact for the update request.
+	//
+	// ProvisioningArtifactId is a required field
+	ProvisioningArtifactId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateProvisioningArtifactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateProvisioningArtifactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateProvisioningArtifactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateProvisioningArtifactInput"}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.ProductId != nil && len(*s.ProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductId", 1))
+	}
+	if s.ProvisioningArtifactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProvisioningArtifactId"))
+	}
+	if s.ProvisioningArtifactId != nil && len(*s.ProvisioningArtifactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProvisioningArtifactId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *UpdateProvisioningArtifactInput) SetAcceptLanguage(v string) *UpdateProvisioningArtifactInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateProvisioningArtifactInput) SetDescription(v string) *UpdateProvisioningArtifactInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateProvisioningArtifactInput) SetName(v string) *UpdateProvisioningArtifactInput {
+	s.Name = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *UpdateProvisioningArtifactInput) SetProductId(v string) *UpdateProvisioningArtifactInput {
+	s.ProductId = &v
+	return s
+}
+
+// SetProvisioningArtifactId sets the ProvisioningArtifactId field's value.
+func (s *UpdateProvisioningArtifactInput) SetProvisioningArtifactId(v string) *UpdateProvisioningArtifactInput {
+	s.ProvisioningArtifactId = &v
+	return s
+}
+
+type UpdateProvisioningArtifactOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Additional information about the provisioning artifact update request.
+	Info map[string]*string `min:"1" type:"map"`
+
+	// The resulting detailed provisioning artifact information.
+	ProvisioningArtifactDetail *ProvisioningArtifactDetail `type:"structure"`
+
+	// The status of the current request.
+	Status *string `type:"string" enum:"Status"`
+}
+
+// String returns the string representation
+func (s UpdateProvisioningArtifactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateProvisioningArtifactOutput) GoString() string {
+	return s.String()
+}
+
+// SetInfo sets the Info field's value.
+func (s *UpdateProvisioningArtifactOutput) SetInfo(v map[string]*string) *UpdateProvisioningArtifactOutput {
+	s.Info = v
+	return s
+}
+
+// SetProvisioningArtifactDetail sets the ProvisioningArtifactDetail field's value.
+func (s *UpdateProvisioningArtifactOutput) SetProvisioningArtifactDetail(v *ProvisioningArtifactDetail) *UpdateProvisioningArtifactOutput {
+	s.ProvisioningArtifactDetail = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateProvisioningArtifactOutput) SetStatus(v string) *UpdateProvisioningArtifactOutput {
+	s.Status = &v
+	return s
+}
+
 // The parameter key/value pair used to update a ProvisionedProduct object.
 // If UsePreviousValue is set to true, Value is ignored and the value for Key
 // is kept as previously set (current value).
@@ -3015,7 +9113,7 @@ type UpdateProvisioningParameter struct {
 	_ struct{} `type:"structure"`
 
 	// The ProvisioningArtifactParameter.ParameterKey parameter from DescribeProvisioningParameters.
-	Key *string `type:"string"`
+	Key *string `min:"1" type:"string"`
 
 	// If true, uses the currently set value for Key, ignoring UpdateProvisioningParameter.Value.
 	UsePreviousValue *bool `type:"boolean"`
@@ -3034,6 +9132,19 @@ func (s UpdateProvisioningParameter) String() string {
 // GoString returns the string representation
 func (s UpdateProvisioningParameter) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateProvisioningParameter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateProvisioningParameter"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetKey sets the Key field's value.
@@ -3099,6 +9210,21 @@ const (
 )
 
 const (
+	// PrincipalTypeIam is a PrincipalType enum value
+	PrincipalTypeIam = "IAM"
+)
+
+const (
+	// ProductSourceAccount is a ProductSource enum value
+	ProductSourceAccount = "ACCOUNT"
+)
+
+const (
+	// ProductTypeCloudFormationTemplate is a ProductType enum value
+	ProductTypeCloudFormationTemplate = "CLOUD_FORMATION_TEMPLATE"
+)
+
+const (
 	// ProductViewFilterByFullTextSearch is a ProductViewFilterBy enum value
 	ProductViewFilterByFullTextSearch = "FullTextSearch"
 
@@ -3121,6 +9247,11 @@ const (
 )
 
 const (
+	// ProvisioningArtifactTypeCloudFormationTemplate is a ProvisioningArtifactType enum value
+	ProvisioningArtifactTypeCloudFormationTemplate = "CLOUD_FORMATION_TEMPLATE"
+)
+
+const (
 	// RecordStatusInProgress is a RecordStatus enum value
 	RecordStatusInProgress = "IN_PROGRESS"
 
@@ -3137,4 +9268,15 @@ const (
 
 	// SortOrderDescending is a SortOrder enum value
 	SortOrderDescending = "DESCENDING"
+)
+
+const (
+	// StatusAvailable is a Status enum value
+	StatusAvailable = "AVAILABLE"
+
+	// StatusCreating is a Status enum value
+	StatusCreating = "CREATING"
+
+	// StatusFailed is a Status enum value
+	StatusFailed = "FAILED"
 )

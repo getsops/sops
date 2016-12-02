@@ -88,6 +88,19 @@
         {"shape":"DirectConnectClientException"}
       ]
     },
+    "CreateBGPPeer":{
+      "name":"CreateBGPPeer",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateBGPPeerRequest"},
+      "output":{"shape":"CreateBGPPeerResponse"},
+      "errors":[
+        {"shape":"DirectConnectServerException"},
+        {"shape":"DirectConnectClientException"}
+      ]
+    },
     "CreateConnection":{
       "name":"CreateConnection",
       "http":{
@@ -135,6 +148,19 @@
       },
       "input":{"shape":"CreatePublicVirtualInterfaceRequest"},
       "output":{"shape":"VirtualInterface"},
+      "errors":[
+        {"shape":"DirectConnectServerException"},
+        {"shape":"DirectConnectClientException"}
+      ]
+    },
+    "DeleteBGPPeer":{
+      "name":"DeleteBGPPeer",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteBGPPeerRequest"},
+      "output":{"shape":"DeleteBGPPeerResponse"},
       "errors":[
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
@@ -325,6 +351,13 @@
   },
   "shapes":{
     "ASN":{"type":"integer"},
+    "AddressFamily":{
+      "type":"string",
+      "enum":[
+        "ipv4",
+        "ipv6"
+      ]
+    },
     "AllocateConnectionOnInterconnectRequest":{
       "type":"structure",
       "required":[
@@ -370,6 +403,39 @@
     },
     "AmazonAddress":{"type":"string"},
     "BGPAuthKey":{"type":"string"},
+    "BGPPeer":{
+      "type":"structure",
+      "members":{
+        "asn":{"shape":"ASN"},
+        "authKey":{"shape":"BGPAuthKey"},
+        "addressFamily":{"shape":"AddressFamily"},
+        "amazonAddress":{"shape":"AmazonAddress"},
+        "customerAddress":{"shape":"CustomerAddress"},
+        "bgpPeerState":{"shape":"BGPPeerState"},
+        "bgpStatus":{"shape":"BGPStatus"}
+      }
+    },
+    "BGPPeerList":{
+      "type":"list",
+      "member":{"shape":"BGPPeer"}
+    },
+    "BGPPeerState":{
+      "type":"string",
+      "enum":[
+        "verifying",
+        "pending",
+        "available",
+        "deleting",
+        "deleted"
+      ]
+    },
+    "BGPStatus":{
+      "type":"string",
+      "enum":[
+        "up",
+        "down"
+      ]
+    },
     "Bandwidth":{"type":"string"},
     "CIDR":{"type":"string"},
     "ConfirmConnectionRequest":{
@@ -455,6 +521,19 @@
         "connections":{"shape":"ConnectionList"}
       }
     },
+    "CreateBGPPeerRequest":{
+      "type":"structure",
+      "members":{
+        "virtualInterfaceId":{"shape":"VirtualInterfaceId"},
+        "newBGPPeer":{"shape":"NewBGPPeer"}
+      }
+    },
+    "CreateBGPPeerResponse":{
+      "type":"structure",
+      "members":{
+        "virtualInterface":{"shape":"VirtualInterface"}
+      }
+    },
     "CreateConnectionRequest":{
       "type":"structure",
       "required":[
@@ -504,6 +583,20 @@
       }
     },
     "CustomerAddress":{"type":"string"},
+    "DeleteBGPPeerRequest":{
+      "type":"structure",
+      "members":{
+        "virtualInterfaceId":{"shape":"VirtualInterfaceId"},
+        "asn":{"shape":"ASN"},
+        "customerAddress":{"shape":"CustomerAddress"}
+      }
+    },
+    "DeleteBGPPeerResponse":{
+      "type":"structure",
+      "members":{
+        "virtualInterface":{"shape":"VirtualInterface"}
+      }
+    },
     "DeleteConnectionRequest":{
       "type":"structure",
       "required":["connectionId"],
@@ -694,6 +787,16 @@
         "locations":{"shape":"LocationList"}
       }
     },
+    "NewBGPPeer":{
+      "type":"structure",
+      "members":{
+        "asn":{"shape":"ASN"},
+        "authKey":{"shape":"BGPAuthKey"},
+        "addressFamily":{"shape":"AddressFamily"},
+        "amazonAddress":{"shape":"AmazonAddress"},
+        "customerAddress":{"shape":"CustomerAddress"}
+      }
+    },
     "NewPrivateVirtualInterface":{
       "type":"structure",
       "required":[
@@ -709,6 +812,7 @@
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
+        "addressFamily":{"shape":"AddressFamily"},
         "virtualGatewayId":{"shape":"VirtualGatewayId"}
       }
     },
@@ -725,6 +829,7 @@
         "asn":{"shape":"ASN"},
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
+        "addressFamily":{"shape":"AddressFamily"},
         "customerAddress":{"shape":"CustomerAddress"}
       }
     },
@@ -733,10 +838,7 @@
       "required":[
         "virtualInterfaceName",
         "vlan",
-        "asn",
-        "amazonAddress",
-        "customerAddress",
-        "routeFilterPrefixes"
+        "asn"
       ],
       "members":{
         "virtualInterfaceName":{"shape":"VirtualInterfaceName"},
@@ -745,6 +847,7 @@
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
+        "addressFamily":{"shape":"AddressFamily"},
         "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"}
       }
     },
@@ -753,10 +856,7 @@
       "required":[
         "virtualInterfaceName",
         "vlan",
-        "asn",
-        "amazonAddress",
-        "customerAddress",
-        "routeFilterPrefixes"
+        "asn"
       ],
       "members":{
         "virtualInterfaceName":{"shape":"VirtualInterfaceName"},
@@ -765,6 +865,7 @@
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
+        "addressFamily":{"shape":"AddressFamily"},
         "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"}
       }
     },
@@ -900,10 +1001,12 @@
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
+        "addressFamily":{"shape":"AddressFamily"},
         "virtualInterfaceState":{"shape":"VirtualInterfaceState"},
         "customerRouterConfig":{"shape":"RouterConfig"},
         "virtualGatewayId":{"shape":"VirtualGatewayId"},
-        "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"}
+        "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"},
+        "bgpPeers":{"shape":"BGPPeerList"}
       }
     },
     "VirtualInterfaceId":{"type":"string"},

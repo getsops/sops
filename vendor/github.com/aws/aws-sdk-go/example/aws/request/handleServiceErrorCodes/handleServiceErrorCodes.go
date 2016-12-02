@@ -60,7 +60,7 @@ func main() {
 				exitErrorf("object with key %s does not exist in bucket %s", os.Args[2], os.Args[1])
 			}
 		}
-		exitErrorf("unknown error occured, %v", err)
+		exitErrorf("unknown error occurred, %v", err)
 	}
 	defer resp.Body.Close()
 

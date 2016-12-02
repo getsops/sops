@@ -75,6 +75,14 @@ type APIGatewayAPI interface {
 
 	CreateDeployment(*apigateway.CreateDeploymentInput) (*apigateway.Deployment, error)
 
+	CreateDocumentationPartRequest(*apigateway.CreateDocumentationPartInput) (*request.Request, *apigateway.DocumentationPart)
+
+	CreateDocumentationPart(*apigateway.CreateDocumentationPartInput) (*apigateway.DocumentationPart, error)
+
+	CreateDocumentationVersionRequest(*apigateway.CreateDocumentationVersionInput) (*request.Request, *apigateway.DocumentationVersion)
+
+	CreateDocumentationVersion(*apigateway.CreateDocumentationVersionInput) (*apigateway.DocumentationVersion, error)
+
 	CreateDomainNameRequest(*apigateway.CreateDomainNameInput) (*request.Request, *apigateway.DomainName)
 
 	CreateDomainName(*apigateway.CreateDomainNameInput) (*apigateway.DomainName, error)
@@ -122,6 +130,14 @@ type APIGatewayAPI interface {
 	DeleteDeploymentRequest(*apigateway.DeleteDeploymentInput) (*request.Request, *apigateway.DeleteDeploymentOutput)
 
 	DeleteDeployment(*apigateway.DeleteDeploymentInput) (*apigateway.DeleteDeploymentOutput, error)
+
+	DeleteDocumentationPartRequest(*apigateway.DeleteDocumentationPartInput) (*request.Request, *apigateway.DeleteDocumentationPartOutput)
+
+	DeleteDocumentationPart(*apigateway.DeleteDocumentationPartInput) (*apigateway.DeleteDocumentationPartOutput, error)
+
+	DeleteDocumentationVersionRequest(*apigateway.DeleteDocumentationVersionInput) (*request.Request, *apigateway.DeleteDocumentationVersionOutput)
+
+	DeleteDocumentationVersion(*apigateway.DeleteDocumentationVersionInput) (*apigateway.DeleteDocumentationVersionOutput, error)
 
 	DeleteDomainNameRequest(*apigateway.DeleteDomainNameInput) (*request.Request, *apigateway.DeleteDomainNameOutput)
 
@@ -231,6 +247,22 @@ type APIGatewayAPI interface {
 
 	GetDeploymentsPages(*apigateway.GetDeploymentsInput, func(*apigateway.GetDeploymentsOutput, bool) bool) error
 
+	GetDocumentationPartRequest(*apigateway.GetDocumentationPartInput) (*request.Request, *apigateway.DocumentationPart)
+
+	GetDocumentationPart(*apigateway.GetDocumentationPartInput) (*apigateway.DocumentationPart, error)
+
+	GetDocumentationPartsRequest(*apigateway.GetDocumentationPartsInput) (*request.Request, *apigateway.GetDocumentationPartsOutput)
+
+	GetDocumentationParts(*apigateway.GetDocumentationPartsInput) (*apigateway.GetDocumentationPartsOutput, error)
+
+	GetDocumentationVersionRequest(*apigateway.GetDocumentationVersionInput) (*request.Request, *apigateway.DocumentationVersion)
+
+	GetDocumentationVersion(*apigateway.GetDocumentationVersionInput) (*apigateway.DocumentationVersion, error)
+
+	GetDocumentationVersionsRequest(*apigateway.GetDocumentationVersionsInput) (*request.Request, *apigateway.GetDocumentationVersionsOutput)
+
+	GetDocumentationVersions(*apigateway.GetDocumentationVersionsInput) (*apigateway.GetDocumentationVersionsOutput, error)
+
 	GetDomainNameRequest(*apigateway.GetDomainNameInput) (*request.Request, *apigateway.DomainName)
 
 	GetDomainName(*apigateway.GetDomainNameInput) (*apigateway.DomainName, error)
@@ -337,6 +369,10 @@ type APIGatewayAPI interface {
 
 	ImportApiKeys(*apigateway.ImportApiKeysInput) (*apigateway.ImportApiKeysOutput, error)
 
+	ImportDocumentationPartsRequest(*apigateway.ImportDocumentationPartsInput) (*request.Request, *apigateway.ImportDocumentationPartsOutput)
+
+	ImportDocumentationParts(*apigateway.ImportDocumentationPartsInput) (*apigateway.ImportDocumentationPartsOutput, error)
+
 	ImportRestApiRequest(*apigateway.ImportRestApiInput) (*request.Request, *apigateway.RestApi)
 
 	ImportRestApi(*apigateway.ImportRestApiInput) (*apigateway.RestApi, error)
@@ -392,6 +428,14 @@ type APIGatewayAPI interface {
 	UpdateDeploymentRequest(*apigateway.UpdateDeploymentInput) (*request.Request, *apigateway.Deployment)
 
 	UpdateDeployment(*apigateway.UpdateDeploymentInput) (*apigateway.Deployment, error)
+
+	UpdateDocumentationPartRequest(*apigateway.UpdateDocumentationPartInput) (*request.Request, *apigateway.DocumentationPart)
+
+	UpdateDocumentationPart(*apigateway.UpdateDocumentationPartInput) (*apigateway.DocumentationPart, error)
+
+	UpdateDocumentationVersionRequest(*apigateway.UpdateDocumentationVersionInput) (*request.Request, *apigateway.DocumentationVersion)
+
+	UpdateDocumentationVersion(*apigateway.UpdateDocumentationVersionInput) (*apigateway.DocumentationVersion, error)
 
 	UpdateDomainNameRequest(*apigateway.UpdateDomainNameInput) (*request.Request, *apigateway.DomainName)
 

@@ -93,6 +93,22 @@
       ],
       "idempotent":true
     },
+    "GetEventSelectors":{
+      "name":"GetEventSelectors",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetEventSelectorsRequest"},
+      "output":{"shape":"GetEventSelectorsResponse"},
+      "errors":[
+        {"shape":"TrailNotFoundException"},
+        {"shape":"InvalidTrailNameException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"OperationNotPermittedException"}
+      ],
+      "idempotent":true
+    },
     "GetTrailStatus":{
       "name":"GetTrailStatus",
       "http":{
@@ -155,6 +171,24 @@
         {"shape":"InvalidTimeRangeException"},
         {"shape":"InvalidMaxResultsException"},
         {"shape":"InvalidNextTokenException"}
+      ],
+      "idempotent":true
+    },
+    "PutEventSelectors":{
+      "name":"PutEventSelectors",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutEventSelectorsRequest"},
+      "output":{"shape":"PutEventSelectorsResponse"},
+      "errors":[
+        {"shape":"TrailNotFoundException"},
+        {"shape":"InvalidTrailNameException"},
+        {"shape":"InvalidHomeRegionException"},
+        {"shape":"InvalidEventSelectorsException"},
+        {"shape":"UnsupportedOperationException"},
+        {"shape":"OperationNotPermittedException"}
       ],
       "idempotent":true
     },
@@ -308,6 +342,21 @@
         "KmsKeyId":{"shape":"String"}
       }
     },
+    "DataResource":{
+      "type":"structure",
+      "members":{
+        "Type":{"shape":"String"},
+        "Values":{"shape":"DataResourceValues"}
+      }
+    },
+    "DataResourceValues":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
+    "DataResources":{
+      "type":"list",
+      "member":{"shape":"DataResource"}
+    },
     "Date":{"type":"timestamp"},
     "DeleteTrailRequest":{
       "type":"structure",
@@ -340,14 +389,40 @@
         "EventId":{"shape":"String"},
         "EventName":{"shape":"String"},
         "EventTime":{"shape":"Date"},
+        "EventSource":{"shape":"String"},
         "Username":{"shape":"String"},
         "Resources":{"shape":"ResourceList"},
         "CloudTrailEvent":{"shape":"String"}
       }
     },
+    "EventSelector":{
+      "type":"structure",
+      "members":{
+        "ReadWriteType":{"shape":"ReadWriteType"},
+        "IncludeManagementEvents":{"shape":"Boolean"},
+        "DataResources":{"shape":"DataResources"}
+      }
+    },
+    "EventSelectors":{
+      "type":"list",
+      "member":{"shape":"EventSelector"}
+    },
     "EventsList":{
       "type":"list",
       "member":{"shape":"Event"}
+    },
+    "GetEventSelectorsRequest":{
+      "type":"structure",
+      "members":{
+        "TrailName":{"shape":"String"}
+      }
+    },
+    "GetEventSelectorsResponse":{
+      "type":"structure",
+      "members":{
+        "TrailARN":{"shape":"String"},
+        "EventSelectors":{"shape":"EventSelectors"}
+      }
     },
     "GetTrailStatusRequest":{
       "type":"structure",
@@ -403,6 +478,12 @@
       "exception":true
     },
     "InvalidCloudWatchLogsRoleArnException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "InvalidEventSelectorsException":{
       "type":"structure",
       "members":{
       },
@@ -553,7 +634,8 @@
         "EventName",
         "Username",
         "ResourceType",
-        "ResourceName"
+        "ResourceName",
+        "EventSource"
       ]
     },
     "LookupAttributesList":{
@@ -607,6 +689,28 @@
     "PublicKeyList":{
       "type":"list",
       "member":{"shape":"PublicKey"}
+    },
+    "PutEventSelectorsRequest":{
+      "type":"structure",
+      "members":{
+        "TrailName":{"shape":"String"},
+        "EventSelectors":{"shape":"EventSelectors"}
+      }
+    },
+    "PutEventSelectorsResponse":{
+      "type":"structure",
+      "members":{
+        "TrailARN":{"shape":"String"},
+        "EventSelectors":{"shape":"EventSelectors"}
+      }
+    },
+    "ReadWriteType":{
+      "type":"string",
+      "enum":[
+        "ReadOnly",
+        "WriteOnly",
+        "All"
+      ]
     },
     "RemoveTagsRequest":{
       "type":"structure",
@@ -726,7 +830,8 @@
         "LogFileValidationEnabled":{"shape":"Boolean"},
         "CloudWatchLogsLogGroupArn":{"shape":"String"},
         "CloudWatchLogsRoleArn":{"shape":"String"},
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "HasCustomEventSelectors":{"shape":"Boolean"}
       }
     },
     "TrailAlreadyExistsException":{

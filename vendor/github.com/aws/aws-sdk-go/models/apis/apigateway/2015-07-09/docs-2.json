@@ -6,6 +6,8 @@
     "CreateAuthorizer": "<p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html\">AWS CLI</a></div>",
     "CreateBasePathMapping": "<p>Creates a new <a>BasePathMapping</a> resource.</p>",
     "CreateDeployment": "<p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>",
+    "CreateDocumentationPart": null,
+    "CreateDocumentationVersion": null,
     "CreateDomainName": "<p>Creates a new domain name.</p>",
     "CreateModel": "<p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>",
     "CreateResource": "<p>Creates a <a>Resource</a> resource.</p>",
@@ -18,6 +20,8 @@
     "DeleteBasePathMapping": "<p>Deletes the <a>BasePathMapping</a> resource.</p>",
     "DeleteClientCertificate": "<p>Deletes the <a>ClientCertificate</a> resource.</p>",
     "DeleteDeployment": "<p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>",
+    "DeleteDocumentationPart": null,
+    "DeleteDocumentationVersion": null,
     "DeleteDomainName": "<p>Deletes the <a>DomainName</a> resource.</p>",
     "DeleteIntegration": "<p>Represents a delete integration.</p>",
     "DeleteIntegrationResponse": "<p>Represents a delete integration response.</p>",
@@ -43,6 +47,10 @@
     "GetClientCertificates": "<p>Gets a collection of <a>ClientCertificate</a> resources.</p>",
     "GetDeployment": "<p>Gets information about a <a>Deployment</a> resource.</p>",
     "GetDeployments": "<p>Gets information about a <a>Deployments</a> collection.</p>",
+    "GetDocumentationPart": null,
+    "GetDocumentationParts": null,
+    "GetDocumentationVersion": null,
+    "GetDocumentationVersions": null,
     "GetDomainName": "<p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>",
     "GetDomainNames": "<p>Represents a collection of <a>DomainName</a> resources.</p>",
     "GetExport": "<p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>",
@@ -66,6 +74,7 @@
     "GetUsagePlanKeys": "<p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>",
     "GetUsagePlans": "<p>Gets all the usage plans of the caller's account.</p>",
     "ImportApiKeys": "<p>Import API keys from an external source, such as a CSV-formatted file.</p>",
+    "ImportDocumentationParts": null,
     "ImportRestApi": "<p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>",
     "PutIntegration": "<p>Represents a put integration.</p>",
     "PutIntegrationResponse": "<p>Represents a put integration.</p>",
@@ -80,6 +89,8 @@
     "UpdateBasePathMapping": "<p>Changes information about the <a>BasePathMapping</a> resource.</p>",
     "UpdateClientCertificate": "<p>Changes information about an <a>ClientCertificate</a> resource.</p>",
     "UpdateDeployment": "<p>Changes information about a <a>Deployment</a> resource.</p>",
+    "UpdateDocumentationPart": null,
+    "UpdateDocumentationVersion": null,
     "UpdateDomainName": "<p>Changes information about the <a>DomainName</a> resource.</p>",
     "UpdateIntegration": "<p>Represents an update integration.</p>",
     "UpdateIntegrationResponse": "<p>Represents an update integration response.</p>",
@@ -105,7 +116,7 @@
       }
     },
     "ApiKeyIds": {
-      "base": "<p>The identifier of an API key used to reference an API key in a usage plan.</p>",
+      "base": "<p>The identifier of an <a>ApiKey</a> used in a <a>UsagePlan</a>.</p>",
       "refs": {
       }
     },
@@ -133,9 +144,9 @@
       }
     },
     "AuthorizerType": {
-      "base": "<p>The authorizer type. the only current value is TOKEN.</p>",
+      "base": "<p>The authorizer type. the current value is <code>TOKEN</code> for a Lambda function or <code>COGNITO_USER_POOLS</code> for an Amazon Cognito Your User Pool.</p>",
       "refs": {
-        "Authorizer$type": "<p>[Required] The type of the authorizer. Currently, the only valid type is TOKEN.</p>",
+        "Authorizer$type": "<p>[Required] The type of the authorizer. Currently, the valid type is <code>TOKEN</code> for a Lambda function or <code>COGNITO_USER_POOLS</code> for an Amazon Cognito user pool.</p>",
         "CreateAuthorizerRequest$type": "<p>[Required] The type of the authorizer.</p>"
       }
     },
@@ -165,6 +176,7 @@
       "refs": {
         "ExportResponse$body": "<p>The binary blob response to <a>GetExport</a>, which contains the export.</p>",
         "ImportApiKeysRequest$body": "<p>The payload of the POST request to import API keys. For the payload format, see <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-key-file-format.html\">API Key File Format</a>.</p>",
+        "ImportDocumentationPartsRequest$body": "<p>[Required] Raw byte array representing the to-be-imported documentation parts. To import from a Swagger file, this is a JSON object.</p>",
         "ImportRestApiRequest$body": "<p>The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported.</p>",
         "PutRestApiRequest$body": "<p>The PUT request body containing external API definitions. Currently, only Swagger definition JSON files are supported.</p>",
         "SdkResponse$body": "<p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>"
@@ -177,10 +189,9 @@
         "CreateApiKeyRequest$enabled": "<p>Specifies whether the <a>ApiKey</a> can be used by callers.</p>",
         "CreateApiKeyRequest$generateDistinctId": "<p>Specifies whether (<code>true</code>) or not (<code>false</code>) the key identifier is distinct from the created API key value.</p>",
         "CreateStageRequest$cacheClusterEnabled": "<p>Whether cache clustering is enabled for the stage.</p>",
-        "GetApiKeyRequest$includeValue": "<p>A boolean flag to specify whether (<code>true</code>) or not (<code>false</code>) the result contains the key value.</p>",
-        "GetApiKeysRequest$includeValues": "<p>A boolean flag to specify whether (<code>true</code>) or not (<code>false</code>) the result contains key values.</p>",
         "GetModelRequest$flatten": "<p>A query parameter of a Boolean value to resolve (<code>true</code>) all external model references and returns a flattened model schema or not (<code>false</code>) The default is <code>false</code>.</p>",
         "ImportApiKeysRequest$failOnWarnings": "<p>A query parameter to indicate whether to rollback <a>ApiKey</a> importation (<code>true</code>) or not (<code>false</code>) when error is encountered.</p>",
+        "ImportDocumentationPartsRequest$failOnWarnings": "<p>A query parameter to specify whether to rollback the documentation importation (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>",
         "ImportRestApiRequest$failOnWarnings": "<p>A query parameter to indicate whether to rollback the API creation (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>",
         "MethodSetting$metricsEnabled": "<p>Specifies whether Amazon CloudWatch metrics are enabled for this method. The PATCH path for this setting is <code>/{method_setting_key}/metrics/enabled</code>, and the value is a Boolean.</p>",
         "MethodSetting$dataTraceEnabled": "<p>Specifies whether data trace logging is enabled for this method, which effects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/dataTrace</code>, and the value is a Boolean.</p>",
@@ -223,6 +234,15 @@
       "refs": {
       }
     },
+    "ContentHandlingStrategy": {
+      "base": null,
+      "refs": {
+        "Integration$contentHandling": "<p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>",
+        "IntegrationResponse$contentHandling": "<p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>",
+        "PutIntegrationRequest$contentHandling": "<p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>",
+        "PutIntegrationResponseRequest$contentHandling": "<p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>"
+      }
+    },
     "CreateApiKeyRequest": {
       "base": "<p>Request to create an <a>ApiKey</a> resource.</p>",
       "refs": {
@@ -240,6 +260,16 @@
     },
     "CreateDeploymentRequest": {
       "base": "<p>Requests Amazon API Gateway to create a <a>Deployment</a> resource.</p>",
+      "refs": {
+      }
+    },
+    "CreateDocumentationPartRequest": {
+      "base": "<p>Creates a new documentation part of a given API.</p>",
+      "refs": {
+      }
+    },
+    "CreateDocumentationVersionRequest": {
+      "base": "<p>Creates a new documentation version of a given API.</p>",
       "refs": {
       }
     },
@@ -300,6 +330,16 @@
     },
     "DeleteDeploymentRequest": {
       "base": "<p>Requests Amazon API Gateway to delete a <a>Deployment</a> resource.</p>",
+      "refs": {
+      }
+    },
+    "DeleteDocumentationPartRequest": {
+      "base": "<p>Deletes an existing documentation part of an API.</p>",
+      "refs": {
+      }
+    },
+    "DeleteDocumentationVersionRequest": {
+      "base": "<p>Deletes an existing documentation version of an API.</p>",
       "refs": {
       }
     },
@@ -366,6 +406,53 @@
     },
     "Deployments": {
       "base": "<p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class=\"remarks\">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html\">Deploying an API</a>, <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html\">AWS CLI</a>, <a href=\"https://aws.amazon.com/tools/\">AWS SDKs</a> </div>",
+      "refs": {
+      }
+    },
+    "DocumentationPart": {
+      "base": "<p>A documentation part for a targeted API entity.</p> <div class=\"remarks\"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the Swagger-compliant documentation fields will be injected into the associated API entity definition in the exported Swagger definition file.</p></div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationParts</a> </div>",
+      "refs": {
+        "ListOfDocumentationPart$member": null
+      }
+    },
+    "DocumentationPartIds": {
+      "base": "<p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class=\"remarks\">This is used to return the result when documentation parts in an external (e.g., Swagger) file are imported into Amazon API Gateway</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a href=\"http://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/\">documentationpart:import</a>, <a>DocumentationPart</a> </div>",
+      "refs": {
+      }
+    },
+    "DocumentationPartLocation": {
+      "base": "<p>Specifies the target API entity to which the documentation applies.</p>",
+      "refs": {
+        "CreateDocumentationPartRequest$location": "<p>[Required] The location of the targeted API entity of the to-be-created documentation part.</p>",
+        "DocumentationPart$location": "<p>The location of the API entity to which the documentation applies. Valid fields depend on the targeted API entity type. All the valid location fields are not required. If not explicitly specified, a valid location field is treated as a wildcard and associated documentation content may be inherited by matching entities, unless overridden.</p>"
+      }
+    },
+    "DocumentationPartLocationStatusCode": {
+      "base": null,
+      "refs": {
+        "DocumentationPartLocation$statusCode": "<p>The HTTP status code of a response. It is a valid field for the API entity types of <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. The default value is <code>*</code> for any status code. When an applicable child entity inherits the content of an entity of the same type with more general specifications of the other <code>location</code> attributes, the child entity's <code>statusCode</code> attribute must match that of the parent entity exactly.</p>"
+      }
+    },
+    "DocumentationPartType": {
+      "base": null,
+      "refs": {
+        "DocumentationPartLocation$type": "<p>The type of API entity to which the documentation content applies. It is a valid and required field for API entity types of <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHROZER</code>, <code>MODEL</code>, or <code>RESOURCE</code> type.</p>",
+        "GetDocumentationPartsRequest$type": "<p>The type of API entities of the to-be-retrieved documentation parts. </p>"
+      }
+    },
+    "DocumentationParts": {
+      "base": "<p>The collection of documentation parts of an API.</p> <div class=\"remarks\"/> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a> </div>",
+      "refs": {
+      }
+    },
+    "DocumentationVersion": {
+      "base": "<p>A snapshot of the documentation of an API.</p> <div class=\"remarks\"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., Swagger) file.</p></div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div>",
+      "refs": {
+        "ListOfDocumentationVersion$member": null
+      }
+    },
+    "DocumentationVersions": {
+      "base": "<p>The collection of documentation snapshots of an API. </p> <div class=\"remarks\"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html\">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div>",
       "refs": {
       }
     },
@@ -459,6 +546,26 @@
     },
     "GetDeploymentsRequest": {
       "base": "<p>Requests Amazon API Gateway to get information about a <a>Deployments</a> collection.</p>",
+      "refs": {
+      }
+    },
+    "GetDocumentationPartRequest": {
+      "base": "<p>Gets a specified documentation part of a given API.</p>",
+      "refs": {
+      }
+    },
+    "GetDocumentationPartsRequest": {
+      "base": "<p>Gets the documentation parts of an API. The result may be filtered by the type, name, or path of API entities (targets).</p>",
+      "refs": {
+      }
+    },
+    "GetDocumentationVersionRequest": {
+      "base": "<p>Gets a documentation snapshot of an API.</p>",
+      "refs": {
+      }
+    },
+    "GetDocumentationVersionsRequest": {
+      "base": "<p>Gets the documentation versions of an API.</p>",
       "refs": {
       }
     },
@@ -577,6 +684,11 @@
       "refs": {
       }
     },
+    "ImportDocumentationPartsRequest": {
+      "base": "<p>Import documentation parts from an external (e.g., Swagger) definition file. </p>",
+      "refs": {
+      }
+    },
     "ImportRestApiRequest": {
       "base": "<p>A POST request to import an API to Amazon API Gateway using an input of an API definition file.</p>",
       "refs": {
@@ -595,7 +707,7 @@
       }
     },
     "Integration": {
-      "base": "<p>Represents an HTTP, AWS, or Mock integration.</p> <div class=\"remarks\">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a> </div>",
+      "base": "<p>Represents an HTTP, HTTP_PROXY, AWS, AWS_PROXY, or Mock integration.</p> <div class=\"remarks\">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/.html\"/> </div>",
       "refs": {
         "Method$methodIntegration": "<p>Gets the method's integration responsible for passing the client-submitted request to the back end and performing necessary transformations to make the request compliant with the back end.</p> <div class=\"remarks\"> <p/> <h4>Example: </h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T213210Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160613/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"0cjtch\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestTemplates\": { \"application/json\": \"{\\n \\\"a\\\": \\\"$input.params('operand1')\\\",\\n \\\"b\\\": \\\"$input.params('operand2')\\\", \\n \\\"op\\\": \\\"$input.params('operator')\\\" \\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-west-2:lambda:path//2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:Calc/invocations\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.operator\": \"integration.response.body.op\", \"method.response.header.operand_2\": \"integration.response.body.b\", \"method.response.header.operand_1\": \"integration.response.body.a\" }, \"responseTemplates\": { \"application/json\": \"#set($res = $input.path('$'))\\n{\\n \\\"result\\\": \\\"$res.a, $res.b, $res.op => $res.c\\\",\\n \\\"a\\\" : \\\"$res.a\\\",\\n \\\"b\\\" : \\\"$res.b\\\",\\n \\\"op\\\" : \\\"$res.op\\\",\\n \\\"c\\\" : \\\"$res.c\\\"\\n}\" }, \"selectionPattern\": \"\", \"statusCode\": \"200\" } } }</code></pre> <p/> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-integration.html\">AWS CLI</a> </div>"
       }
@@ -621,7 +733,7 @@
     "ListOfARNs": {
       "base": null,
       "refs": {
-        "Authorizer$providerARNs": "<p>A list of the provider ARNs of the authorizer.</p>",
+        "Authorizer$providerARNs": "<p>A list of the provider ARNs of the authorizer. For an <code>TOKEN</code> authorizer, this is not defined. For authorizers of the <code>COGNITO_USER_POOLS</code> type, each element corresponds to a user pool ARN of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. </p>",
         "CreateAuthorizerRequest$providerARNs": "<p>A list of the Cognito Your User Pool authorizer's provider ARNs.</p>"
       }
     },
@@ -662,6 +774,18 @@
         "Deployments$items": "<p>The current page of any <a>Deployment</a> resources in the collection of deployment resources.</p>"
       }
     },
+    "ListOfDocumentationPart": {
+      "base": null,
+      "refs": {
+        "DocumentationParts$items": "<p>The current page of <a>DocumentationPart</a> resources in the <a>DocumentationParts</a> collection.</p>"
+      }
+    },
+    "ListOfDocumentationVersion": {
+      "base": null,
+      "refs": {
+        "DocumentationVersions$items": "<p>The current page of <a>DocumentationVersion</a> items from the <a>DocumentationVersions</a> collection of an API.</p>"
+      }
+    },
     "ListOfDomainName": {
       "base": null,
       "refs": {
@@ -689,6 +813,8 @@
         "UpdateBasePathMappingRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateClientCertificateRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateDeploymentRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
+        "UpdateDocumentationPartRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
+        "UpdateDocumentationVersionRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateDomainNameRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateIntegrationRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateIntegrationResponseRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
@@ -734,10 +860,14 @@
         "ApiKeyIds$ids": "<p>A list of all the <a>ApiKey</a> identifiers.</p>",
         "ApiKeyIds$warnings": "<p>A list of warning messages.</p>",
         "ApiKeys$warnings": "<p>A list of warning messages logged during the import of API keys when the <code>failOnWarnings</code> option is set to true.</p>",
+        "CreateRestApiRequest$binaryMediaTypes": "<p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>",
+        "DocumentationPartIds$ids": "<p>A list of the returned documentation part identifiers.</p>",
+        "DocumentationPartIds$warnings": "<p>A list of warning messages reported during import of documentation parts.</p>",
         "Integration$cacheKeyParameters": "<p>Specifies the integration's cache key parameters.</p>",
         "MapOfStringToList$value": null,
         "PutIntegrationRequest$cacheKeyParameters": "<p>Specifies a put integration input's cache key parameters.</p>",
-        "RestApi$warnings": "<p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>"
+        "RestApi$warnings": "<p>The warning messages reported when <code>failonwarnings</code> is turned on during API import.</p>",
+        "RestApi$binaryMediaTypes": "<p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>"
       }
     },
     "ListOfUsage": {
@@ -897,6 +1027,8 @@
       "base": null,
       "refs": {
         "CreateDeploymentRequest$cacheClusterEnabled": "<p>Enables a cache cluster for the <a>Stage</a> resource specified in the input.</p>",
+        "GetApiKeyRequest$includeValue": "<p>A boolean flag to specify whether (<code>true</code>) or not (<code>false</code>) the result contains the key value.</p>",
+        "GetApiKeysRequest$includeValues": "<p>A boolean flag to specify whether (<code>true</code>) or not (<code>false</code>) the result contains key values.</p>",
         "MapOfStringToBoolean$value": null,
         "Method$apiKeyRequired": "<p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>"
       }
@@ -911,6 +1043,8 @@
         "GetBasePathMappingsRequest$limit": "<p>The maximum number of <a>BasePathMapping</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
         "GetClientCertificatesRequest$limit": "<p>The maximum number of <a>ClientCertificate</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
         "GetDeploymentsRequest$limit": "<p>The maximum number of <a>Deployment</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
+        "GetDocumentationPartsRequest$limit": "<p>The size of the paged results.</p>",
+        "GetDocumentationVersionsRequest$limit": "<p>The page size of the returned documentation versions.</p>",
         "GetDomainNamesRequest$limit": "<p>The maximum number of <a>DomainName</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
         "GetModelsRequest$limit": "<p>The maximum number of models in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
         "GetResourcesRequest$limit": "<p>The maximum number of <a>Resource</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
@@ -967,6 +1101,7 @@
     "PutMode": {
       "base": null,
       "refs": {
+        "ImportDocumentationPartsRequest$mode": "<p>A query parameter to indicate whether to overwrite (<code>OVERWRITE</code>) any existing <a>DocumentationParts</a> definition or to merge (<code>MERGE</code>) the new definition into the existing one. The default value is <code>MERGE</code>.</p>",
         "PutRestApiRequest$mode": "<p>The <code>mode</code> query parameter to specify the update mode. Valid values are \"merge\" and \"overwrite\". By default, the update mode is \"merge\".</p>"
       }
     },
@@ -1060,6 +1195,7 @@
         "ApiKey$id": "<p>The identifier of the API Key.</p>",
         "ApiKey$value": "<p>The value of the API Key.</p>",
         "ApiKey$name": "<p>The name of the API Key.</p>",
+        "ApiKey$customerId": "<p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>",
         "ApiKey$description": "<p>The description of the API Key.</p>",
         "ApiKeys$position": null,
         "ApiStage$apiId": "<p>API Id of the associated API stage in a usage plan.</p>",
@@ -1067,10 +1203,10 @@
         "Authorizer$id": "<p>The identifier for the authorizer resource.</p>",
         "Authorizer$name": "<p>[Required] The name of the authorizer.</p>",
         "Authorizer$authType": "<p>Optional customer-defined field, used in Swagger imports/exports. Has no functional impact.</p>",
-        "Authorizer$authorizerUri": "<p>[Required] Specifies the authorizer's Uniform Resource Identifier (URI). For TOKEN authorizers, this must be a well-formed Lambda function URI. The URI should be of the form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>. <code>Region</code> is used to determine the right endpoint. In this case, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations</p>",
+        "Authorizer$authorizerUri": "<p>[Required] Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>",
         "Authorizer$authorizerCredentials": "<p>Specifies the credentials required for the authorizer, if any. Two options are available. To specify an IAM role for Amazon API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>",
-        "Authorizer$identitySource": "<p>[Required] The source of the identity in an incoming request. For TOKEN authorizers, this value is a mapping expression with the same syntax as integration parameter mappings. The only valid source for tokens is 'header', so the expression should match 'method.request.header.[headerName]'. The value of the header '[headerName]' will be interpreted as the incoming token.</p>",
-        "Authorizer$identityValidationExpression": "<p>A validation expression for the incoming identity. For TOKEN authorizers, this value should be a regular expression. The incoming token from the client is matched against this expression, and will proceed if the token matches. If the token doesn't match, the client receives a 401 Unauthorized response.</p>",
+        "Authorizer$identitySource": "<p>[Required] The source of the identity in an incoming request. For a <code>TOKEN</code> authorizer, this value is a mapping expression with the same syntax as integration parameter mappings. The only valid source for tokens is 'header', so the expression should match 'method.request.header.[headerName]'. The value of the header '[headerName]' will be interpreted as the incoming token. For <code>COGNITO_USER_POOLS</code> authorizers, this property is used.</p>",
+        "Authorizer$identityValidationExpression": "<p>A validation expression for the incoming identity. For <code>TOKEN</code> authorizers, this value should be a regular expression. The incoming token from the client is matched against this expression, and will proceed if the token matches. If the token doesn't match, the client receives a 401 Unauthorized response.</p>",
         "Authorizers$position": null,
         "BadRequestException$message": null,
         "BasePathMapping$basePath": "<p>The base path name that callers of the API must provide as part of the URL after the domain name.</p>",
@@ -1085,6 +1221,7 @@
         "CreateApiKeyRequest$name": "<p>The name of the <a>ApiKey</a>.</p>",
         "CreateApiKeyRequest$description": "<p>The description of the <a>ApiKey</a>.</p>",
         "CreateApiKeyRequest$value": "<p>Specifies a value of the API key.</p>",
+        "CreateApiKeyRequest$customerId": "<p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>",
         "CreateAuthorizerRequest$restApiId": "<p>The <a>RestApi</a> identifier under which the <a>Authorizer</a> will be created.</p>",
         "CreateAuthorizerRequest$name": "<p>[Required] The name of the authorizer.</p>",
         "CreateAuthorizerRequest$authType": "<p>Optional customer-defined field, used in Swagger imports/exports. Has no functional impact.</p>",
@@ -1100,6 +1237,12 @@
         "CreateDeploymentRequest$stageName": "<p>The name of the <a>Stage</a> resource for the <a>Deployment</a> resource to create.</p>",
         "CreateDeploymentRequest$stageDescription": "<p>The description of the <a>Stage</a> resource for the <a>Deployment</a> resource to create.</p>",
         "CreateDeploymentRequest$description": "<p>The description for the <a>Deployment</a> resource to create.</p>",
+        "CreateDocumentationPartRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-created documentation part.</p>",
+        "CreateDocumentationPartRequest$properties": "<p>[Required] The new documentation content map of the targeted API entity. Enclosed key-value pairs are API-specific, but only Swagger-compliant key-value pairs can be exported and, hence, published.</p>",
+        "CreateDocumentationVersionRequest$restApiId": "<p>[Required] Specifies the API identifier of the to-be-created documentation version.</p>",
+        "CreateDocumentationVersionRequest$documentationVersion": "<p>[Required] The version identifier of the new snapshot.</p>",
+        "CreateDocumentationVersionRequest$stageName": "<p>The stage name to be associated with the new documentation snapshot.</p>",
+        "CreateDocumentationVersionRequest$description": "<p>A description about the new documentation snapshot.</p>",
         "CreateDomainNameRequest$domainName": "<p>The name of the <a>DomainName</a> resource.</p>",
         "CreateDomainNameRequest$certificateName": "<p>The name of the certificate.</p>",
         "CreateDomainNameRequest$certificateBody": "<p>The body of the server certificate provided by your certificate authority.</p>",
@@ -1115,11 +1258,13 @@
         "CreateResourceRequest$pathPart": "<p>The last path segment for this resource.</p>",
         "CreateRestApiRequest$name": "<p>The name of the <a>RestApi</a>.</p>",
         "CreateRestApiRequest$description": "<p>The description of the <a>RestApi</a>.</p>",
+        "CreateRestApiRequest$version": "<p>A version identifier for the API.</p>",
         "CreateRestApiRequest$cloneFrom": "<p>The ID of the <a>RestApi</a> that you want to clone from.</p>",
         "CreateStageRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to create.</p>",
         "CreateStageRequest$stageName": "<p>The name for the <a>Stage</a> resource.</p>",
         "CreateStageRequest$deploymentId": "<p>The identifier of the <a>Deployment</a> resource for the <a>Stage</a> resource.</p>",
         "CreateStageRequest$description": "<p>The description of the <a>Stage</a> resource.</p>",
+        "CreateStageRequest$documentationVersion": "<p>The version of the associated API documentation.</p>",
         "CreateUsagePlanKeyRequest$usagePlanId": "<p>The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-created <a>UsagePlanKey</a> resource representing a plan customer.</p>",
         "CreateUsagePlanKeyRequest$keyId": "<p>The identifier of a <a>UsagePlanKey</a> resource for a plan customer.</p>",
         "CreateUsagePlanKeyRequest$keyType": "<p>The type of a <a>UsagePlanKey</a> resource for a plan customer.</p>",
@@ -1133,6 +1278,10 @@
         "DeleteClientCertificateRequest$clientCertificateId": "<p>The identifier of the <a>ClientCertificate</a> resource to be deleted.</p>",
         "DeleteDeploymentRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to delete.</p>",
         "DeleteDeploymentRequest$deploymentId": "<p>The identifier of the <a>Deployment</a> resource to delete.</p>",
+        "DeleteDocumentationPartRequest$restApiId": "<p>[Required] Specifies the identifier of an API of the to-be-deleted documentation part.</p>",
+        "DeleteDocumentationPartRequest$documentationPartId": "<p>[Required] The identifier of the to-be-deleted documentation part.</p>",
+        "DeleteDocumentationVersionRequest$restApiId": "<p>[Required] The identifier of an API of a to-be-deleted documentation snapshot.</p>",
+        "DeleteDocumentationVersionRequest$documentationVersion": "<p>[Required] The version identifier of a to-be-deleted documentation snapshot.</p>",
         "DeleteDomainNameRequest$domainName": "<p>The name of the <a>DomainName</a> resource to be deleted.</p>",
         "DeleteIntegrationRequest$restApiId": "<p>Specifies a delete integration request's API identifier.</p>",
         "DeleteIntegrationRequest$resourceId": "<p>Specifies a delete integration request's resource identifier.</p>",
@@ -1159,6 +1308,15 @@
         "Deployment$id": "<p>The identifier for the deployment resource.</p>",
         "Deployment$description": "<p>The description for the deployment resource.</p>",
         "Deployments$position": null,
+        "DocumentationPart$id": "<p>The <a>DocumentationPart</a> identifier, generated by Amazon API Gateway when the <code>DocumentationPart</code> is created.</p>",
+        "DocumentationPart$properties": "<p>A content map of API-specific key-value pairs describing the targeted API entity. The map must be encoded as a JSON string, e.g., <code>\"{ \\\"description\\\": \\\"The API does ...\\\" }\"</code>. Only Swagger-compliant documentation-related fields from the <literal>properties</literal> map are exported and, hence, published as part of the API entity definitions, while the original documentation parts are exported in a Swagger extension of <code>x-amazon-apigateway-documentation</code>.</p>",
+        "DocumentationPartLocation$path": "<p>The URL path of the target. It is a valid field for the API entity types of <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. The default value is <code>/</code> for the root resource. When an applicable child entity inherits the content of another entity of the same type with more general specifications of the other <code>location</code> attributes, the child entity's <code>path</code> attribute must match that of the parent entity as a prefix.</p>",
+        "DocumentationPartLocation$method": "<p>The HTTP verb of a method. It is a valid field for the API entity types of <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. The default value is <code>*</code> for any method. When an applicable child entity inherits the content of an entity of the same type with more general specifications of the other <code>location</code> attributes, the child entity's <code>method</code> attribute must match that of the parent entity exactly.</p>",
+        "DocumentationPartLocation$name": "<p>The name of the targeted API entity. It is a valid and required field for the API entity types of <code>AUTHORIZER</code>, <code>MODEL</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code> and <code>RESPONSE_HEADER</code>. It is an invalid field for any other entity type.</p>",
+        "DocumentationParts$position": null,
+        "DocumentationVersion$version": "<p>The version identifier of the API documentation snapshot.</p>",
+        "DocumentationVersion$description": "<p>The description of the API documentation snapshot.</p>",
+        "DocumentationVersions$position": null,
         "DomainName$domainName": "<p>The name of the <a>DomainName</a> resource.</p>",
         "DomainName$certificateName": "<p>The name of the certificate.</p>",
         "DomainName$distributionDomainName": "<p>The domain name of the Amazon CloudFront distribution. For more information, see the <a href=\"http://aws.amazon.com/documentation/cloudfront/\" target=\"_blank\">Amazon CloudFront documentation</a>.</p>",
@@ -1173,6 +1331,7 @@
         "GetApiKeyRequest$apiKey": "<p>The identifier of the <a>ApiKey</a> resource.</p>",
         "GetApiKeysRequest$position": "<p>The position of the current <a>ApiKeys</a> resource to get information about.</p>",
         "GetApiKeysRequest$nameQuery": "<p>The name of queried API keys.</p>",
+        "GetApiKeysRequest$customerId": "<p>The identifier of a customer in AWS Marketplace or an external system, such as a developer portal.</p>",
         "GetAuthorizerRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Authorizer</a> resource.</p>",
         "GetAuthorizerRequest$authorizerId": "<p>The identifier of the <a>Authorizer</a> resource.</p>",
         "GetAuthorizersRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Authorizers</a> resource.</p>",
@@ -1187,6 +1346,16 @@
         "GetDeploymentRequest$deploymentId": "<p>The identifier of the <a>Deployment</a> resource to get information about.</p>",
         "GetDeploymentsRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource for the collection of <a>Deployment</a> resources to get information about.</p>",
         "GetDeploymentsRequest$position": "<p>The position of the current <a>Deployment</a> resource in the collection to get information about.</p>",
+        "GetDocumentationPartRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-retrieved documentation part.</p>",
+        "GetDocumentationPartRequest$documentationPartId": "<p>[Required] The identifier of the to-be-retrieved documentation part.</p>",
+        "GetDocumentationPartsRequest$restApiId": "<p>[Required] The identifier of the API of the to-be-retrieved documentation parts.</p>",
+        "GetDocumentationPartsRequest$nameQuery": "<p>The name of API entities of the to-be-retrieved documentation parts.</p>",
+        "GetDocumentationPartsRequest$path": "<p>The path of API entities of the to-be-retrieved documentation parts.</p>",
+        "GetDocumentationPartsRequest$position": "<p>The position of the to-be-retrieved documentation part in the <a>DocumentationParts</a> collection.</p>",
+        "GetDocumentationVersionRequest$restApiId": "<p>[Required] The identifier of the API of the to-be-retrieved documentation snapshot.</p>",
+        "GetDocumentationVersionRequest$documentationVersion": "<p>[Required] The version identifier of the to-be-retrieved documentation snapshot.</p>",
+        "GetDocumentationVersionsRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-retrieved documentation versions.</p>",
+        "GetDocumentationVersionsRequest$position": "<p>The position of the returned <code>DocumentationVersion</code> in the <a>DocumentationVersions</a> collection.</p>",
         "GetDomainNameRequest$domainName": "<p>The name of the <a>DomainName</a> resource.</p>",
         "GetDomainNamesRequest$position": "<p>The position of the current domain names to get information about.</p>",
         "GetExportRequest$restApiId": "<p>The identifier of the <a>RestApi</a> to be exported.</p>",
@@ -1237,6 +1406,7 @@
         "GetUsageRequest$startDate": "<p>The starting date (e.g., 2016-01-01) of the usage data.</p>",
         "GetUsageRequest$endDate": "<p>The ending date (e.g., 2016-12-31) of the usage data.</p>",
         "GetUsageRequest$position": "<p>Position</p>",
+        "ImportDocumentationPartsRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-imported documentation parts.</p>",
         "Integration$httpMethod": "<p>Specifies the integration's HTTP method type.</p>",
         "Integration$uri": "<p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href=\"https://www.ietf.org/rfc/rfc3986.txt\" target=\"_blank\">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>",
         "Integration$credentials": "<p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for Amazon API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\\*:user/\\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>",
@@ -1303,6 +1473,7 @@
         "RestApi$id": "<p>The API's identifier. This identifier is unique across all of your APIs in Amazon API Gateway.</p>",
         "RestApi$name": "<p>The API's name.</p>",
         "RestApi$description": "<p>The API's description.</p>",
+        "RestApi$version": "<p>A version identifier for the API.</p>",
         "RestApis$position": null,
         "SdkResponse$contentType": "<p>The content-type header value in the HTTP response.</p>",
         "SdkResponse$contentDisposition": "<p>The content-disposition header value in the HTTP response.</p>",
@@ -1312,6 +1483,7 @@
         "Stage$clientCertificateId": "<p>The identifier of a client certificate for an API stage.</p>",
         "Stage$stageName": "<p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to Amazon API Gateway.</p>",
         "Stage$description": "<p>The stage's description.</p>",
+        "Stage$documentationVersion": "<p>The version of the associated API documentation.</p>",
         "StageKey$restApiId": "<p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p>",
         "StageKey$stageName": "<p>The stage name in the <a>RestApi</a> that the stage key references.</p>",
         "Template$value": "<p>The Apache <a href=\"http://velocity.apache.org/engine/devel/vtl-reference-guide.html\" target=\"_blank\">Velocity Template Language (VTL)</a> template content used for the template resource.</p>",
@@ -1341,6 +1513,10 @@
         "UpdateClientCertificateRequest$clientCertificateId": "<p>The identifier of the <a>ClientCertificate</a> resource to be updated.</p>",
         "UpdateDeploymentRequest$restApiId": "<p>The replacement identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to change information about.</p>",
         "UpdateDeploymentRequest$deploymentId": "<p>The replacement identifier for the <a>Deployment</a> resource to change information about.</p>",
+        "UpdateDocumentationPartRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-updated documentation part.</p>",
+        "UpdateDocumentationPartRequest$documentationPartId": "<p>[Required] The identifier of the to-be-updated documentation part.</p>",
+        "UpdateDocumentationVersionRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-updated documentation version.</p>",
+        "UpdateDocumentationVersionRequest$documentationVersion": "<p>[Required] The version identifier of the to-be-updated documentation version.</p>",
         "UpdateDomainNameRequest$domainName": "<p>The name of the <a>DomainName</a> resource to be changed.</p>",
         "UpdateIntegrationRequest$restApiId": "<p>Represents an update integration request's API identifier.</p>",
         "UpdateIntegrationRequest$resourceId": "<p>Represents an update integration request's resource identifier.</p>",
@@ -1371,6 +1547,7 @@
         "UsagePlan$id": "<p>The identifier of a <a>UsagePlan</a> resource.</p>",
         "UsagePlan$name": "<p>The name of a usage plan.</p>",
         "UsagePlan$description": "<p>The description of a usage plan.</p>",
+        "UsagePlan$productCode": "<p>The AWS Markeplace product identifier to associate with the usage plan as a SaaS product on AWS Marketplace.</p>",
         "UsagePlanKey$id": "<p>The Id of a usage plan key.</p>",
         "UsagePlanKey$type": "<p>The type of a usage plan key. Currently, the valid key type is <code>API_KEY</code>.</p>",
         "UsagePlanKey$value": "<p>The value of a usage plan key.</p>",
@@ -1420,6 +1597,7 @@
         "ClientCertificate$createdDate": "<p>The date when the client certificate was created, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
         "ClientCertificate$expirationDate": "<p>The date when the client certificate will expire, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
         "Deployment$createdDate": "<p>The date and time that the deployment resource was created.</p>",
+        "DocumentationVersion$createdDate": "<p>The date when the API documentation snapshot is created.</p>",
         "DomainName$certificateUploadDate": "<p>The date when the certificate was uploaded, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
         "RestApi$createdDate": "<p>The date when the API was created, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
         "Stage$createdDate": "<p>The date and time that the stage was created, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
@@ -1469,6 +1647,16 @@
     },
     "UpdateDeploymentRequest": {
       "base": "<p>Requests Amazon API Gateway to change information about a <a>Deployment</a> resource.</p>",
+      "refs": {
+      }
+    },
+    "UpdateDocumentationPartRequest": {
+      "base": "<p>Updates an existing documentation part of a given API.</p>",
+      "refs": {
+      }
+    },
+    "UpdateDocumentationVersionRequest": {
+      "base": "<p>Updates an existing documentation version of an API.</p>",
       "refs": {
       }
     },

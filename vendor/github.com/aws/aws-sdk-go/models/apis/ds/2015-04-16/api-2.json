@@ -45,6 +45,20 @@
         {"shape":"ServiceException"}
       ]
     },
+    "CancelSchemaExtension":{
+      "name":"CancelSchemaExtension",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CancelSchemaExtensionRequest"},
+      "output":{"shape":"CancelSchemaExtensionResult"},
+      "errors":[
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
     "ConnectDirectory":{
       "name":"ConnectDirectory",
       "http":{
@@ -441,6 +455,21 @@
         {"shape":"ServiceException"}
       ]
     },
+    "ListSchemaExtensions":{
+      "name":"ListSchemaExtensions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListSchemaExtensionsRequest"},
+      "output":{"shape":"ListSchemaExtensionsResult"},
+      "errors":[
+        {"shape":"InvalidNextTokenException"},
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
     "ListTagsForResource":{
       "name":"ListTagsForResource",
       "http":{
@@ -514,6 +543,23 @@
       "errors":[
         {"shape":"EntityDoesNotExistException"},
         {"shape":"InvalidParameterException"},
+        {"shape":"ClientException"},
+        {"shape":"ServiceException"}
+      ]
+    },
+    "StartSchemaExtension":{
+      "name":"StartSchemaExtension",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartSchemaExtensionRequest"},
+      "output":{"shape":"StartSchemaExtensionResult"},
+      "errors":[
+        {"shape":"DirectoryUnavailableException"},
+        {"shape":"EntityDoesNotExistException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"SnapshotLimitExceededException"},
         {"shape":"ClientException"},
         {"shape":"ServiceException"}
       ]
@@ -641,6 +687,22 @@
     "AvailabilityZones":{
       "type":"list",
       "member":{"shape":"AvailabilityZone"}
+    },
+    "CancelSchemaExtensionRequest":{
+      "type":"structure",
+      "required":[
+        "DirectoryId",
+        "SchemaExtensionId"
+      ],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "SchemaExtensionId":{"shape":"SchemaExtensionId"}
+      }
+    },
+    "CancelSchemaExtensionResult":{
+      "type":"structure",
+      "members":{
+      }
     },
     "CidrIp":{
       "type":"string",
@@ -821,6 +883,7 @@
         "DirectoryId":{"shape":"DirectoryId"}
       }
     },
+    "CreateSnapshotBeforeSchemaExtension":{"type":"boolean"},
     "CreateSnapshotRequest":{
       "type":"structure",
       "required":["DirectoryId"],
@@ -1222,6 +1285,7 @@
       "members":{
       }
     },
+    "EndDateTime":{"type":"timestamp"},
     "EntityAlreadyExistsException":{
       "type":"structure",
       "members":{
@@ -1357,6 +1421,11 @@
     },
     "LastUpdatedDateTime":{"type":"timestamp"},
     "LaunchTime":{"type":"timestamp"},
+    "LdifContent":{
+      "type":"string",
+      "max":500000,
+      "min":1
+    },
     "Limit":{
       "type":"integer",
       "min":0
@@ -1374,6 +1443,22 @@
       "type":"structure",
       "members":{
         "IpRoutesInfo":{"shape":"IpRoutesInfo"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListSchemaExtensionsRequest":{
+      "type":"structure",
+      "required":["DirectoryId"],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"Limit"}
+      }
+    },
+    "ListSchemaExtensionsResult":{
+      "type":"structure",
+      "members":{
+        "SchemaExtensionsInfo":{"shape":"SchemaExtensionsInfo"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -1547,6 +1632,41 @@
       "min":1,
       "pattern":"[&\\w+-.@]+"
     },
+    "SchemaExtensionId":{
+      "type":"string",
+      "pattern":"^e-[0-9a-f]{10}$"
+    },
+    "SchemaExtensionInfo":{
+      "type":"structure",
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "SchemaExtensionId":{"shape":"SchemaExtensionId"},
+        "Description":{"shape":"Description"},
+        "SchemaExtensionStatus":{"shape":"SchemaExtensionStatus"},
+        "SchemaExtensionStatusReason":{"shape":"SchemaExtensionStatusReason"},
+        "StartDateTime":{"shape":"StartDateTime"},
+        "EndDateTime":{"shape":"EndDateTime"}
+      }
+    },
+    "SchemaExtensionStatus":{
+      "type":"string",
+      "enum":[
+        "Initializing",
+        "CreatingSnapshot",
+        "UpdatingSchema",
+        "Replicating",
+        "CancelInProgress",
+        "RollbackInProgress",
+        "Cancelled",
+        "Failed",
+        "Completed"
+      ]
+    },
+    "SchemaExtensionStatusReason":{"type":"string"},
+    "SchemaExtensionsInfo":{
+      "type":"list",
+      "member":{"shape":"SchemaExtensionInfo"}
+    },
     "SecurityGroupId":{
       "type":"string",
       "pattern":"^(sg-[0-9a-f]{8})$"
@@ -1631,6 +1751,28 @@
     },
     "SsoEnabled":{"type":"boolean"},
     "StageReason":{"type":"string"},
+    "StartDateTime":{"type":"timestamp"},
+    "StartSchemaExtensionRequest":{
+      "type":"structure",
+      "required":[
+        "DirectoryId",
+        "CreateSnapshotBeforeSchemaExtension",
+        "LdifContent",
+        "Description"
+      ],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "CreateSnapshotBeforeSchemaExtension":{"shape":"CreateSnapshotBeforeSchemaExtension"},
+        "LdifContent":{"shape":"LdifContent"},
+        "Description":{"shape":"Description"}
+      }
+    },
+    "StartSchemaExtensionResult":{
+      "type":"structure",
+      "members":{
+        "SchemaExtensionId":{"shape":"SchemaExtensionId"}
+      }
+    },
     "StartTime":{"type":"timestamp"},
     "StateLastUpdatedDateTime":{"type":"timestamp"},
     "SubnetId":{

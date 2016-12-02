@@ -1796,7 +1796,8 @@
         "DeviceConfiguration":{"shape":"DeviceConfigurationType"},
         "EmailConfiguration":{"shape":"EmailConfigurationType"},
         "SmsConfiguration":{"shape":"SmsConfigurationType"},
-        "AdminCreateUserConfig":{"shape":"AdminCreateUserConfigType"}
+        "AdminCreateUserConfig":{"shape":"AdminCreateUserConfigType"},
+        "Schema":{"shape":"SchemaAttributesListType"}
       }
     },
     "CreateUserPoolResponse":{
@@ -2467,9 +2468,18 @@
       "members":{
         "Name":{"shape":"CustomAttributeNameType"},
         "AttributeDataType":{"shape":"AttributeDataType"},
-        "DeveloperOnlyAttribute":{"shape":"BooleanType"},
-        "Mutable":{"shape":"BooleanType"},
-        "Required":{"shape":"BooleanType"},
+        "DeveloperOnlyAttribute":{
+          "shape":"BooleanType",
+          "box":true
+        },
+        "Mutable":{
+          "shape":"BooleanType",
+          "box":true
+        },
+        "Required":{
+          "shape":"BooleanType",
+          "box":true
+        },
         "NumberAttributeConstraints":{"shape":"NumberAttributeConstraintsType"},
         "StringAttributeConstraints":{"shape":"StringAttributeConstraintsType"}
       }
@@ -2542,6 +2552,7 @@
     },
     "SmsConfigurationType":{
       "type":"structure",
+      "required":["SnsCallerArn"],
       "members":{
         "SnsCallerArn":{"shape":"ArnType"},
         "ExternalId":{"shape":"StringType"}

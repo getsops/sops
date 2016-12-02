@@ -85,11 +85,12 @@ func ExampleLambda_CreateEventSourceMapping() {
 	svc := lambda.New(sess)
 
 	params := &lambda.CreateEventSourceMappingInput{
-		EventSourceArn:   aws.String("Arn"),                 // Required
-		FunctionName:     aws.String("FunctionName"),        // Required
-		StartingPosition: aws.String("EventSourcePosition"), // Required
-		BatchSize:        aws.Int64(1),
-		Enabled:          aws.Bool(true),
+		EventSourceArn:            aws.String("Arn"),                 // Required
+		FunctionName:              aws.String("FunctionName"),        // Required
+		StartingPosition:          aws.String("EventSourcePosition"), // Required
+		BatchSize:                 aws.Int64(1),
+		Enabled:                   aws.Bool(true),
+		StartingPositionTimestamp: aws.Time(time.Now()),
 	}
 	resp, err := svc.CreateEventSourceMapping(params)
 
@@ -124,10 +125,20 @@ func ExampleLambda_CreateFunction() {
 		Handler:      aws.String("Handler"),      // Required
 		Role:         aws.String("RoleArn"),      // Required
 		Runtime:      aws.String("Runtime"),      // Required
-		Description:  aws.String("Description"),
-		MemorySize:   aws.Int64(1),
-		Publish:      aws.Bool(true),
-		Timeout:      aws.Int64(1),
+		DeadLetterConfig: &lambda.DeadLetterConfig{
+			TargetArn: aws.String("ResourceArn"),
+		},
+		Description: aws.String("Description"),
+		Environment: &lambda.Environment{
+			Variables: map[string]*string{
+				"Key": aws.String("EnvironmentVariableValue"), // Required
+				// More values...
+			},
+		},
+		KMSKeyArn:  aws.String("KMSKeyArn"),
+		MemorySize: aws.Int64(1),
+		Publish:    aws.Bool(true),
+		Timeout:    aws.Int64(1),
 		VpcConfig: &lambda.VpcConfig{
 			SecurityGroupIds: []*string{
 				aws.String("SecurityGroupId"), // Required
@@ -217,6 +228,29 @@ func ExampleLambda_DeleteFunction() {
 		Qualifier:    aws.String("Qualifier"),
 	}
 	resp, err := svc.DeleteFunction(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleLambda_GetAccountSettings() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := lambda.New(sess)
+
+	var params *lambda.GetAccountSettingsInput
+	resp, err := svc.GetAccountSettings(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -674,12 +708,22 @@ func ExampleLambda_UpdateFunctionConfiguration() {
 
 	params := &lambda.UpdateFunctionConfigurationInput{
 		FunctionName: aws.String("FunctionName"), // Required
-		Description:  aws.String("Description"),
-		Handler:      aws.String("Handler"),
-		MemorySize:   aws.Int64(1),
-		Role:         aws.String("RoleArn"),
-		Runtime:      aws.String("Runtime"),
-		Timeout:      aws.Int64(1),
+		DeadLetterConfig: &lambda.DeadLetterConfig{
+			TargetArn: aws.String("ResourceArn"),
+		},
+		Description: aws.String("Description"),
+		Environment: &lambda.Environment{
+			Variables: map[string]*string{
+				"Key": aws.String("EnvironmentVariableValue"), // Required
+				// More values...
+			},
+		},
+		Handler:    aws.String("Handler"),
+		KMSKeyArn:  aws.String("KMSKeyArn"),
+		MemorySize: aws.Int64(1),
+		Role:       aws.String("RoleArn"),
+		Runtime:    aws.String("Runtime"),
+		Timeout:    aws.Int64(1),
 		VpcConfig: &lambda.VpcConfig{
 			SecurityGroupIds: []*string{
 				aws.String("SecurityGroupId"), // Required

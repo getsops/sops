@@ -6481,7 +6481,7 @@ func (s *AdminInitiateAuthInput) SetUserPoolId(v string) *AdminInitiateAuthInput
 type AdminInitiateAuthOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The result type of the authentication result.
+	// The result of the authentication response.
 	AuthenticationResult *AuthenticationResultType `type:"structure"`
 
 	// The name of the challenge.
@@ -6813,7 +6813,7 @@ func (s *AdminRespondToAuthChallengeInput) SetUserPoolId(v string) *AdminRespond
 type AdminRespondToAuthChallengeOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The result type of the authentication result.
+	// The result returned by the server in response to the authentication request.
 	AuthenticationResult *AuthenticationResultType `type:"structure"`
 
 	// The name of the challenge.
@@ -8090,6 +8090,10 @@ type CreateUserPoolInput struct {
 	// PoolName is a required field
 	PoolName *string `min:"1" type:"string" required:"true"`
 
+	// An array of schema attributes for the new user pool. These attributes can
+	// be standard or custom attributes.
+	Schema []*SchemaAttributeType `min:"1" type:"list"`
+
 	// A string representing the SMS authentication message.
 	SmsAuthenticationMessage *string `min:"6" type:"string"`
 
@@ -8125,6 +8129,9 @@ func (s *CreateUserPoolInput) Validate() error {
 	if s.PoolName != nil && len(*s.PoolName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("PoolName", 1))
 	}
+	if s.Schema != nil && len(s.Schema) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Schema", 1))
+	}
 	if s.SmsAuthenticationMessage != nil && len(*s.SmsAuthenticationMessage) < 6 {
 		invalidParams.Add(request.NewErrParamMinLen("SmsAuthenticationMessage", 6))
 	}
@@ -8149,6 +8156,16 @@ func (s *CreateUserPoolInput) Validate() error {
 	if s.Policies != nil {
 		if err := s.Policies.Validate(); err != nil {
 			invalidParams.AddNested("Policies", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Schema != nil {
+		for i, v := range s.Schema {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Schema", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.SmsConfiguration != nil {
@@ -8226,6 +8243,12 @@ func (s *CreateUserPoolInput) SetPolicies(v *UserPoolPolicyType) *CreateUserPool
 // SetPoolName sets the PoolName field's value.
 func (s *CreateUserPoolInput) SetPoolName(v string) *CreateUserPoolInput {
 	s.PoolName = &v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *CreateUserPoolInput) SetSchema(v []*SchemaAttributeType) *CreateUserPoolInput {
+	s.Schema = v
 	return s
 }
 
@@ -8987,8 +9010,8 @@ type ForgotPasswordInput struct {
 	// key of a user pool client and username plus the client ID in the message.
 	SecretHash *string `min:"1" type:"string"`
 
-	// The user name of the user for whom you want to enter a code to retrieve a
-	// forgotten password.
+	// The user name of the user for whom you want to enter a code to reset a forgotten
+	// password.
 	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true"`
@@ -9052,7 +9075,8 @@ func (s *ForgotPasswordInput) SetUsername(v string) *ForgotPasswordInput {
 type ForgotPasswordOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The type of code delivery details being returned from the server.
+	// The code delivery details returned by the server in response to the request
+	// to reset a password.
 	CodeDeliveryDetails *CodeDeliveryDetailsType `type:"structure"`
 }
 
@@ -9284,8 +9308,8 @@ func (s *GetUserAttributeVerificationCodeInput) SetAttributeName(v string) *GetU
 type GetUserAttributeVerificationCodeOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The code delivery details returned by the server response to get the user
-	// attribute verification code.
+	// The code delivery details returned by the server in response to the request
+	// to get the user attribute verification code.
 	CodeDeliveryDetails *CodeDeliveryDetailsType `type:"structure"`
 }
 
@@ -9494,7 +9518,8 @@ func (s *InitiateAuthInput) SetClientMetadata(v map[string]*string) *InitiateAut
 type InitiateAuthOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The result type of the authentication result.
+	// The result returned by the server in response to the request to initiate
+	// authentication.
 	AuthenticationResult *AuthenticationResultType `type:"structure"`
 
 	// The name of the challenge.
@@ -10494,12 +10519,13 @@ func (s *ResendConfirmationCodeInput) SetUsername(v string) *ResendConfirmationC
 	return s
 }
 
-// The response from the server when the Amazon Cognito service makes the request
-// to resend a confirmation code.
+// The response from the server when the Amazon Cognito Your User Pools service
+// makes the request to resend a confirmation code.
 type ResendConfirmationCodeOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The type of code delivery details being returned from the server.
+	// The code delivery details returned by the server in response to the request
+	// to resend the confirmation code.
 	CodeDeliveryDetails *CodeDeliveryDetailsType `type:"structure"`
 }
 
@@ -10600,7 +10626,8 @@ func (s *RespondToAuthChallengeInput) SetSession(v string) *RespondToAuthChallen
 type RespondToAuthChallengeOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The result type of the authentication result.
+	// The result returned by the server in response to the request to respond to
+	// the authentication challenge.
 	AuthenticationResult *AuthenticationResultType `type:"structure"`
 
 	// The challenge name.
@@ -10949,7 +10976,8 @@ func (s *SignUpInput) SetValidationData(v []*AttributeType) *SignUpInput {
 type SignUpOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The type of code delivery details being returned from the server.
+	// The code delivery details returned by the server response to the user registration
+	// request.
 	CodeDeliveryDetails *CodeDeliveryDetailsType `type:"structure"`
 
 	// A response from the server indicating that a user registration has been confirmed.
@@ -10987,7 +11015,9 @@ type SmsConfigurationType struct {
 
 	// The Amazon Resource Name (ARN) of the Amazon Simple Notification Service
 	// (SNS) caller.
-	SnsCallerArn *string `min:"20" type:"string"`
+	//
+	// SnsCallerArn is a required field
+	SnsCallerArn *string `min:"20" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -11003,6 +11033,9 @@ func (s SmsConfigurationType) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *SmsConfigurationType) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "SmsConfigurationType"}
+	if s.SnsCallerArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SnsCallerArn"))
+	}
 	if s.SnsCallerArn != nil && len(*s.SnsCallerArn) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("SnsCallerArn", 20))
 	}

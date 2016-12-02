@@ -135,6 +135,31 @@ func ExampleCloudTrail_DescribeTrails() {
 	fmt.Println(resp)
 }
 
+func ExampleCloudTrail_GetEventSelectors() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := cloudtrail.New(sess)
+
+	params := &cloudtrail.GetEventSelectorsInput{
+		TrailName: aws.String("String"),
+	}
+	resp, err := svc.GetEventSelectors(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleCloudTrail_GetTrailStatus() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -239,6 +264,48 @@ func ExampleCloudTrail_LookupEvents() {
 		StartTime:  aws.Time(time.Now()),
 	}
 	resp, err := svc.LookupEvents(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleCloudTrail_PutEventSelectors() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := cloudtrail.New(sess)
+
+	params := &cloudtrail.PutEventSelectorsInput{
+		EventSelectors: []*cloudtrail.EventSelector{
+			{ // Required
+				DataResources: []*cloudtrail.DataResource{
+					{ // Required
+						Type: aws.String("String"),
+						Values: []*string{
+							aws.String("String"), // Required
+							// More values...
+						},
+					},
+					// More values...
+				},
+				IncludeManagementEvents: aws.Bool(true),
+				ReadWriteType:           aws.String("ReadWriteType"),
+			},
+			// More values...
+		},
+		TrailName: aws.String("String"),
+	}
+	resp, err := svc.PutEventSelectors(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

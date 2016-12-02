@@ -4,9 +4,9 @@
     "apiVersion":"2012-06-01",
     "checksumFormat":"sha256",
     "endpointPrefix":"glacier",
+    "protocol":"rest-json",
     "serviceFullName":"Amazon Glacier",
-    "signatureVersion":"v4",
-    "protocol":"rest-json"
+    "signatureVersion":"v4"
   },
   "operations":{
     "AbortMultipartUpload":{
@@ -18,26 +18,10 @@
       },
       "input":{"shape":"AbortMultipartUploadInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "AbortVaultLock":{
@@ -49,26 +33,10 @@
       },
       "input":{"shape":"AbortVaultLockInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "AddTagsToVault":{
@@ -80,31 +48,11 @@
       },
       "input":{"shape":"AddTagsToVaultInput"},
       "errors":[
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"LimitExceededException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "CompleteMultipartUpload":{
@@ -117,26 +65,10 @@
       "input":{"shape":"CompleteMultipartUploadInput"},
       "output":{"shape":"ArchiveCreationOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "CompleteVaultLock":{
@@ -148,26 +80,10 @@
       },
       "input":{"shape":"CompleteVaultLockInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "CreateVault":{
@@ -180,26 +96,10 @@
       "input":{"shape":"CreateVaultInput"},
       "output":{"shape":"CreateVaultOutput"},
       "errors":[
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        },
-        {
-          "shape":"LimitExceededException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        }
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"LimitExceededException"}
       ]
     },
     "DeleteArchive":{
@@ -211,26 +111,10 @@
       },
       "input":{"shape":"DeleteArchiveInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "DeleteVault":{
@@ -242,26 +126,10 @@
       },
       "input":{"shape":"DeleteVaultInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "DeleteVaultAccessPolicy":{
@@ -273,26 +141,10 @@
       },
       "input":{"shape":"DeleteVaultAccessPolicyInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "DeleteVaultNotifications":{
@@ -304,26 +156,10 @@
       },
       "input":{"shape":"DeleteVaultNotificationsInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "DescribeJob":{
@@ -335,26 +171,10 @@
       "input":{"shape":"DescribeJobInput"},
       "output":{"shape":"GlacierJobDescription"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "DescribeVault":{
@@ -366,26 +186,10 @@
       "input":{"shape":"DescribeVaultInput"},
       "output":{"shape":"DescribeVaultOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "GetDataRetrievalPolicy":{
@@ -397,21 +201,9 @@
       "input":{"shape":"GetDataRetrievalPolicyInput"},
       "output":{"shape":"GetDataRetrievalPolicyOutput"},
       "errors":[
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "GetJobOutput":{
@@ -423,26 +215,10 @@
       "input":{"shape":"GetJobOutputInput"},
       "output":{"shape":"GetJobOutputOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "GetVaultAccessPolicy":{
@@ -454,26 +230,10 @@
       "input":{"shape":"GetVaultAccessPolicyInput"},
       "output":{"shape":"GetVaultAccessPolicyOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "GetVaultLock":{
@@ -485,26 +245,10 @@
       "input":{"shape":"GetVaultLockInput"},
       "output":{"shape":"GetVaultLockOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "GetVaultNotifications":{
@@ -516,26 +260,10 @@
       "input":{"shape":"GetVaultNotificationsInput"},
       "output":{"shape":"GetVaultNotificationsOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "InitiateJob":{
@@ -548,31 +276,12 @@
       "input":{"shape":"InitiateJobInput"},
       "output":{"shape":"InitiateJobOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"PolicyEnforcedException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"PolicyEnforcedException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"InsufficientCapacityException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "InitiateMultipartUpload":{
@@ -585,26 +294,10 @@
       "input":{"shape":"InitiateMultipartUploadInput"},
       "output":{"shape":"InitiateMultipartUploadOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "InitiateVaultLock":{
@@ -617,26 +310,10 @@
       "input":{"shape":"InitiateVaultLockInput"},
       "output":{"shape":"InitiateVaultLockOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "ListJobs":{
@@ -648,26 +325,10 @@
       "input":{"shape":"ListJobsInput"},
       "output":{"shape":"ListJobsOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "ListMultipartUploads":{
@@ -679,26 +340,10 @@
       "input":{"shape":"ListMultipartUploadsInput"},
       "output":{"shape":"ListMultipartUploadsOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "ListParts":{
@@ -710,26 +355,24 @@
       "input":{"shape":"ListPartsInput"},
       "output":{"shape":"ListPartsOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "ListProvisionedCapacity":{
+      "name":"ListProvisionedCapacity",
+      "http":{
+        "method":"GET",
+        "requestUri":"/{accountId}/provisioned-capacity"
+      },
+      "input":{"shape":"ListProvisionedCapacityInput"},
+      "output":{"shape":"ListProvisionedCapacityOutput"},
+      "errors":[
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "ListTagsForVault":{
@@ -741,26 +384,10 @@
       "input":{"shape":"ListTagsForVaultInput"},
       "output":{"shape":"ListTagsForVaultOutput"},
       "errors":[
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "ListVaults":{
@@ -772,26 +399,26 @@
       "input":{"shape":"ListVaultsInput"},
       "output":{"shape":"ListVaultsOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "PurchaseProvisionedCapacity":{
+      "name":"PurchaseProvisionedCapacity",
+      "http":{
+        "method":"POST",
+        "requestUri":"/{accountId}/provisioned-capacity",
+        "responseCode":201
+      },
+      "input":{"shape":"PurchaseProvisionedCapacityInput"},
+      "output":{"shape":"PurchaseProvisionedCapacityOutput"},
+      "errors":[
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "RemoveTagsFromVault":{
@@ -803,26 +430,10 @@
       },
       "input":{"shape":"RemoveTagsFromVaultInput"},
       "errors":[
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "SetDataRetrievalPolicy":{
@@ -834,21 +445,9 @@
       },
       "input":{"shape":"SetDataRetrievalPolicyInput"},
       "errors":[
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "SetVaultAccessPolicy":{
@@ -860,26 +459,10 @@
       },
       "input":{"shape":"SetVaultAccessPolicyInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "SetVaultNotifications":{
@@ -891,26 +474,10 @@
       },
       "input":{"shape":"SetVaultNotificationsInput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "UploadArchive":{
@@ -923,31 +490,11 @@
       "input":{"shape":"UploadArchiveInput"},
       "output":{"shape":"ArchiveCreationOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"RequestTimeoutException",
-          "error":{"httpStatusCode":408},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"RequestTimeoutException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "UploadMultipartPart":{
@@ -960,37 +507,22 @@
       "input":{"shape":"UploadMultipartPartInput"},
       "output":{"shape":"UploadMultipartPartOutput"},
       "errors":[
-        {
-          "shape":"ResourceNotFoundException",
-          "error":{"httpStatusCode":404},
-          "exception":true
-        },
-        {
-          "shape":"InvalidParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"MissingParameterValueException",
-          "error":{"httpStatusCode":400},
-          "exception":true
-        },
-        {
-          "shape":"RequestTimeoutException",
-          "error":{"httpStatusCode":408},
-          "exception":true
-        },
-        {
-          "shape":"ServiceUnavailableException",
-          "error":{"httpStatusCode":500},
-          "exception":true
-        }
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingParameterValueException"},
+        {"shape":"RequestTimeoutException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     }
   },
   "shapes":{
     "AbortMultipartUploadInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "uploadId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1007,15 +539,14 @@
           "location":"uri",
           "locationName":"uploadId"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName",
-        "uploadId"
-      ]
+      }
     },
     "AbortVaultLockInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1027,11 +558,7 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "ActionCode":{
       "type":"string",
@@ -1042,6 +569,10 @@
     },
     "AddTagsToVaultInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1054,11 +585,7 @@
           "locationName":"vaultName"
         },
         "Tags":{"shape":"TagMap"}
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "ArchiveCreationOutput":{
       "type":"structure",
@@ -1082,6 +609,11 @@
     },
     "CompleteMultipartUploadInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "uploadId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1108,15 +640,15 @@
           "location":"header",
           "locationName":"x-amz-sha256-tree-hash"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName",
-        "uploadId"
-      ]
+      }
     },
     "CompleteVaultLockInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "lockId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1133,15 +665,14 @@
           "location":"uri",
           "locationName":"lockId"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName",
-        "lockId"
-      ]
+      }
     },
     "CreateVaultInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1153,11 +684,7 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "CreateVaultOutput":{
       "type":"structure",
@@ -1189,6 +716,11 @@
     "DateTime":{"type":"string"},
     "DeleteArchiveInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "archiveId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1205,15 +737,14 @@
           "location":"uri",
           "locationName":"archiveId"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName",
-        "archiveId"
-      ]
+      }
     },
     "DeleteVaultAccessPolicyInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1225,14 +756,14 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "DeleteVaultInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1244,14 +775,14 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "DeleteVaultNotificationsInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1263,14 +794,15 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "DescribeJobInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "jobId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1287,15 +819,14 @@
           "location":"uri",
           "locationName":"jobId"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName",
-        "jobId"
-      ]
+      }
     },
     "DescribeVaultInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1307,11 +838,7 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "DescribeVaultOutput":{
       "type":"structure",
@@ -1326,14 +853,14 @@
     },
     "GetDataRetrievalPolicyInput":{
       "type":"structure",
+      "required":["accountId"],
       "members":{
         "accountId":{
           "shape":"string",
           "location":"uri",
           "locationName":"accountId"
         }
-      },
-      "required":["accountId"]
+      }
     },
     "GetDataRetrievalPolicyOutput":{
       "type":"structure",
@@ -1343,6 +870,11 @@
     },
     "GetJobOutputInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "jobId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1364,12 +896,7 @@
           "location":"header",
           "locationName":"Range"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName",
-        "jobId"
-      ]
+      }
     },
     "GetJobOutputOutput":{
       "type":"structure",
@@ -1409,6 +936,10 @@
     },
     "GetVaultAccessPolicyInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1420,11 +951,7 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "GetVaultAccessPolicyOutput":{
       "type":"structure",
@@ -1435,6 +962,10 @@
     },
     "GetVaultLockInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1446,11 +977,7 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "GetVaultLockOutput":{
       "type":"structure",
@@ -1463,6 +990,10 @@
     },
     "GetVaultNotificationsInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1474,11 +1005,7 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "GetVaultNotificationsOutput":{
       "type":"structure",
@@ -1506,11 +1033,16 @@
         "SHA256TreeHash":{"shape":"string"},
         "ArchiveSHA256TreeHash":{"shape":"string"},
         "RetrievalByteRange":{"shape":"string"},
+        "Tier":{"shape":"string"},
         "InventoryRetrievalParameters":{"shape":"InventoryRetrievalJobDescription"}
       }
     },
     "InitiateJobInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1524,10 +1056,6 @@
         },
         "jobParameters":{"shape":"JobParameters"}
       },
-      "required":[
-        "accountId",
-        "vaultName"
-      ],
       "payload":"jobParameters"
     },
     "InitiateJobOutput":{
@@ -1547,6 +1075,10 @@
     },
     "InitiateMultipartUploadInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1568,11 +1100,7 @@
           "location":"header",
           "locationName":"x-amz-part-size"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "InitiateMultipartUploadOutput":{
       "type":"structure",
@@ -1591,6 +1119,10 @@
     },
     "InitiateVaultLockInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1604,10 +1136,6 @@
         },
         "policy":{"shape":"VaultLockPolicy"}
       },
-      "required":[
-        "accountId",
-        "vaultName"
-      ],
       "payload":"policy"
     },
     "InitiateVaultLockOutput":{
@@ -1619,6 +1147,16 @@
           "locationName":"x-amz-lock-id"
         }
       }
+    },
+    "InsufficientCapacityException":{
+      "type":"structure",
+      "members":{
+        "type":{"shape":"string"},
+        "code":{"shape":"string"},
+        "message":{"shape":"string"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
     },
     "InvalidParameterValueException":{
       "type":"structure",
@@ -1662,6 +1200,7 @@
         "Description":{"shape":"string"},
         "SNSTopic":{"shape":"string"},
         "RetrievalByteRange":{"shape":"string"},
+        "Tier":{"shape":"string"},
         "InventoryRetrievalParameters":{"shape":"InventoryRetrievalJobInput"}
       }
     },
@@ -1677,6 +1216,10 @@
     },
     "ListJobsInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1708,11 +1251,7 @@
           "location":"querystring",
           "locationName":"completed"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "ListJobsOutput":{
       "type":"structure",
@@ -1723,6 +1262,10 @@
     },
     "ListMultipartUploadsInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1744,11 +1287,7 @@
           "location":"querystring",
           "locationName":"limit"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "ListMultipartUploadsOutput":{
       "type":"structure",
@@ -1759,6 +1298,11 @@
     },
     "ListPartsInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "uploadId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1785,12 +1329,7 @@
           "location":"querystring",
           "locationName":"limit"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName",
-        "uploadId"
-      ]
+      }
     },
     "ListPartsOutput":{
       "type":"structure",
@@ -1804,8 +1343,29 @@
         "Marker":{"shape":"string"}
       }
     },
+    "ListProvisionedCapacityInput":{
+      "type":"structure",
+      "required":["accountId"],
+      "members":{
+        "accountId":{
+          "shape":"string",
+          "location":"uri",
+          "locationName":"accountId"
+        }
+      }
+    },
+    "ListProvisionedCapacityOutput":{
+      "type":"structure",
+      "members":{
+        "ProvisionedCapacityList":{"shape":"ProvisionedCapacityList"}
+      }
+    },
     "ListTagsForVaultInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1817,11 +1377,7 @@
           "location":"uri",
           "locationName":"vaultName"
         }
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "ListTagsForVaultOutput":{
       "type":"structure",
@@ -1831,6 +1387,7 @@
     },
     "ListVaultsInput":{
       "type":"structure",
+      "required":["accountId"],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1847,8 +1404,7 @@
           "location":"querystring",
           "locationName":"limit"
         }
-      },
-      "required":["accountId"]
+      }
     },
     "ListVaultsOutput":{
       "type":"structure",
@@ -1893,8 +1449,45 @@
       "error":{"httpStatusCode":400},
       "exception":true
     },
+    "ProvisionedCapacityDescription":{
+      "type":"structure",
+      "members":{
+        "CapacityId":{"shape":"string"},
+        "StartDate":{"shape":"string"},
+        "ExpirationDate":{"shape":"string"}
+      }
+    },
+    "ProvisionedCapacityList":{
+      "type":"list",
+      "member":{"shape":"ProvisionedCapacityDescription"}
+    },
+    "PurchaseProvisionedCapacityInput":{
+      "type":"structure",
+      "required":["accountId"],
+      "members":{
+        "accountId":{
+          "shape":"string",
+          "location":"uri",
+          "locationName":"accountId"
+        }
+      }
+    },
+    "PurchaseProvisionedCapacityOutput":{
+      "type":"structure",
+      "members":{
+        "capacityId":{
+          "shape":"string",
+          "location":"header",
+          "locationName":"x-amz-capacity-id"
+        }
+      }
+    },
     "RemoveTagsFromVaultInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1907,11 +1500,7 @@
           "locationName":"vaultName"
         },
         "TagKeys":{"shape":"TagKeyList"}
-      },
-      "required":[
-        "accountId",
-        "vaultName"
-      ]
+      }
     },
     "RequestTimeoutException":{
       "type":"structure",
@@ -1945,6 +1534,7 @@
     },
     "SetDataRetrievalPolicyInput":{
       "type":"structure",
+      "required":["accountId"],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1952,11 +1542,14 @@
           "locationName":"accountId"
         },
         "Policy":{"shape":"DataRetrievalPolicy"}
-      },
-      "required":["accountId"]
+      }
     },
     "SetVaultAccessPolicyInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1970,14 +1563,14 @@
         },
         "policy":{"shape":"VaultAccessPolicy"}
       },
-      "required":[
-        "accountId",
-        "vaultName"
-      ],
       "payload":"policy"
     },
     "SetVaultNotificationsInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -1991,10 +1584,6 @@
         },
         "vaultNotificationConfig":{"shape":"VaultNotificationConfig"}
       },
-      "required":[
-        "accountId",
-        "vaultName"
-      ],
       "payload":"vaultNotificationConfig"
     },
     "Size":{"type":"long"},
@@ -2023,6 +1612,10 @@
     "TagValue":{"type":"string"},
     "UploadArchiveInput":{
       "type":"structure",
+      "required":[
+        "vaultName",
+        "accountId"
+      ],
       "members":{
         "vaultName":{
           "shape":"string",
@@ -2046,10 +1639,6 @@
         },
         "body":{"shape":"Stream"}
       },
-      "required":[
-        "vaultName",
-        "accountId"
-      ],
       "payload":"body"
     },
     "UploadListElement":{
@@ -2064,6 +1653,11 @@
     },
     "UploadMultipartPartInput":{
       "type":"structure",
+      "required":[
+        "accountId",
+        "vaultName",
+        "uploadId"
+      ],
       "members":{
         "accountId":{
           "shape":"string",
@@ -2092,11 +1686,6 @@
         },
         "body":{"shape":"Stream"}
       },
-      "required":[
-        "accountId",
-        "vaultName",
-        "uploadId"
-      ],
       "payload":"body"
     },
     "UploadMultipartPartOutput":{

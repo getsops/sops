@@ -15,6 +15,40 @@ import (
 var _ time.Duration
 var _ bytes.Buffer
 
+func ExampleMarketplaceMetering_BatchMeterUsage() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := marketplacemetering.New(sess)
+
+	params := &marketplacemetering.BatchMeterUsageInput{
+		ProductCode: aws.String("ProductCode"), // Required
+		UsageRecords: []*marketplacemetering.UsageRecord{ // Required
+			{ // Required
+				CustomerIdentifier: aws.String("CustomerIdentifier"), // Required
+				Dimension:          aws.String("UsageDimension"),     // Required
+				Quantity:           aws.Int64(1),                     // Required
+				Timestamp:          aws.Time(time.Now()),             // Required
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.BatchMeterUsage(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleMarketplaceMetering_MeterUsage() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -32,6 +66,31 @@ func ExampleMarketplaceMetering_MeterUsage() {
 		UsageQuantity:  aws.Int64(1),                 // Required
 	}
 	resp, err := svc.MeterUsage(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleMarketplaceMetering_ResolveCustomer() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := marketplacemetering.New(sess)
+
+	params := &marketplacemetering.ResolveCustomerInput{
+		RegistrationToken: aws.String("NonEmptyString"), // Required
+	}
+	resp, err := svc.ResolveCustomer(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

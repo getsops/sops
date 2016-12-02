@@ -2,33 +2,107 @@
   "version": "2.0",
   "service": "<fullname>AWS Service Catalog</fullname> <p> <b>Overview</b> </p> <p> <a href=\"https://aws.amazon.com/servicecatalog/\">AWS Service Catalog</a> allows organizations to create and manage catalogs of IT services that are approved for use on AWS. This documentation provides reference material for the AWS Service Catalog end user API. To get the most out of this documentation, you need to be familiar with the terminology discussed in <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/userguide/what-is_concepts.html\">AWS Service Catalog Concepts</a>.</p> <p> <i>Additional Resources</i> </p> <ul> <li> <p> <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html\">AWS Service Catalog Administrator Guide</a> </p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/servicecatalog/latest/userguide/introduction.html\">AWS Service Catalog User Guide</a> </p> </li> </ul>",
   "operations": {
+    "AcceptPortfolioShare": "<p>Accepts an offer to share a portfolio.</p>",
+    "AssociatePrincipalWithPortfolio": "<p>Associates the specified principal ARN with the specified portfolio.</p>",
+    "AssociateProductWithPortfolio": "<p>Associates a product with a portfolio.</p>",
+    "CreateConstraint": "<p>Creates a new constraint.</p>",
+    "CreatePortfolio": "<p>Creates a new portfolio.</p>",
+    "CreatePortfolioShare": "<p>Creates a new portfolio share.</p>",
+    "CreateProduct": "<p>Creates a new product.</p>",
+    "CreateProvisioningArtifact": "<p>Create a new provisioning artifact for the specified product. This operation will not work with a product that has been shared with you.</p>",
+    "DeleteConstraint": "<p>Deletes the specified constraint.</p>",
+    "DeletePortfolio": "<p>Deletes the specified portfolio. This operation will not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>",
+    "DeletePortfolioShare": "<p>Deletes the specified portfolio share.</p>",
+    "DeleteProduct": "<p>Deletes the specified product. This operation will not work with a product that has been shared with you or is associated with a portfolio. </p>",
+    "DeleteProvisioningArtifact": "<p>Deletes the specified provisioning artifact. This operation will not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>",
+    "DescribeConstraint": "<p>Retrieves detailed information for a specified constraint.</p>",
+    "DescribePortfolio": "<p>Retrieves detailed information and any tags associated with the specified portfolio.</p>",
     "DescribeProduct": "<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>",
+    "DescribeProductAsAdmin": "<p>Retrieves information about a specified product, run with administrator access.</p>",
     "DescribeProductView": "<p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>",
+    "DescribeProvisioningArtifact": "<p>Retrieves detailed information about the specified provisioning artifact.</p>",
     "DescribeProvisioningParameters": "<p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p>",
     "DescribeRecord": "<p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>",
+    "DisassociatePrincipalFromPortfolio": "<p>Disassociates a previously associated principal ARN from a specified portfolio.</p>",
+    "DisassociateProductFromPortfolio": "<p>Disassociates the specified product from the specified portfolio. </p>",
+    "ListAcceptedPortfolioShares": "<p>Lists details of all portfolios for which sharing was accepted by this account.</p>",
+    "ListConstraintsForPortfolio": "<p>Retrieves detailed constraint information for the specified portfolio and product.</p>",
     "ListLaunchPaths": "<p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>",
+    "ListPortfolioAccess": "<p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>",
+    "ListPortfolios": "<p>Lists all portfolios in the catalog.</p>",
+    "ListPortfoliosForProduct": "<p>Lists all portfolios that the specified product is associated with.</p>",
+    "ListPrincipalsForPortfolio": "<p>Lists all principal ARNs associated with the specified portfolio.</p>",
+    "ListProvisioningArtifacts": "<p>Lists all provisioning artifacts associated with the specified product.</p>",
     "ListRecordHistory": "<p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>",
     "ProvisionProduct": "<p>Requests a <i>Provision</i> of a specified product. A <i>ProvisionedProduct</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>",
+    "RejectPortfolioShare": "<p>Rejects an offer to share a portfolio.</p>",
     "ScanProvisionedProducts": "<p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>",
     "SearchProducts": "<p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>",
+    "SearchProductsAsAdmin": "<p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>",
     "TerminateProvisionedProduct": "<p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>",
-    "UpdateProvisionedProduct": "<p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>"
+    "UpdateConstraint": "<p>Updates an existing constraint.</p>",
+    "UpdatePortfolio": "<p>Updates the specified portfolio's details. This operation will not work with a product that has been shared with you.</p>",
+    "UpdateProduct": "<p>Updates an existing product.</p>",
+    "UpdateProvisionedProduct": "<p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>",
+    "UpdateProvisioningArtifact": "<p>Updates an existing provisioning artifact's information. This operation will not work on a provisioning artifact associated with a product that has been shared with you.</p>"
   },
   "shapes": {
     "AcceptLanguage": {
       "base": null,
       "refs": {
+        "AcceptPortfolioShareInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "AssociatePrincipalWithPortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "AssociateProductWithPortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "CreateConstraintInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "CreatePortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "CreatePortfolioShareInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "CreateProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "CreateProvisioningArtifactInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DeleteConstraintInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DeletePortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DeletePortfolioShareInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DeleteProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DeleteProvisioningArtifactInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DescribeConstraintInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DescribePortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DescribeProductAsAdminInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "DescribeProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "DescribeProductViewInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DescribeProvisioningArtifactInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "DescribeProvisioningParametersInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "DescribeRecordInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DisassociatePrincipalFromPortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "DisassociateProductFromPortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "ListAcceptedPortfolioSharesInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "ListConstraintsForPortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "ListLaunchPathsInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "ListPortfolioAccessInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "ListPortfoliosForProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "ListPortfoliosInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "ListPrincipalsForPortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "ListProvisioningArtifactsInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "ListRecordHistoryInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "ProvisionProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "RejectPortfolioShareInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "ScanProvisionedProductsInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "SearchProductsAsAdminInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "SearchProductsInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
         "TerminateProvisionedProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
-        "UpdateProvisionedProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"
+        "UpdateConstraintInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "UpdatePortfolioInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "UpdateProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "UpdateProvisionedProductInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>",
+        "UpdateProvisioningArtifactInput$AcceptLanguage": "<p>The language code to use for this operation. Supported language codes are as follows:</p> <p>\"en\" (English)</p> <p>\"jp\" (Japanese)</p> <p>\"zh\" (Chinese)</p> <p>If no code is specified, \"en\" is used as the default.</p>"
+      }
+    },
+    "AcceptPortfolioShareInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AcceptPortfolioShareOutput": {
+      "base": null,
+      "refs": {
       }
     },
     "AccessLevelFilter": {
@@ -50,6 +124,30 @@
         "AccessLevelFilter$Value": "<p>Specifies the user to which the access level applies. A value of <code>Self</code> is currently supported.</p>"
       }
     },
+    "AccountId": {
+      "base": null,
+      "refs": {
+        "AccountIds$member": null,
+        "ConstraintDetail$Owner": "<p>The owner of the constraint.</p>",
+        "CreatePortfolioShareInput$AccountId": "<p>The account ID with which to share the portfolio.</p>",
+        "DeletePortfolioShareInput$AccountId": "<p>The account ID associated with the share to delete.</p>"
+      }
+    },
+    "AccountIds": {
+      "base": null,
+      "refs": {
+        "ListPortfolioAccessOutput$AccountIds": "<p>List of account IDs associated with access to the portfolio.</p>"
+      }
+    },
+    "AddTags": {
+      "base": null,
+      "refs": {
+        "CreatePortfolioInput$Tags": "<p>Tags to associate with the new portfolio.</p>",
+        "CreateProductInput$Tags": "<p>Tags to associate with the new product.</p>",
+        "UpdatePortfolioInput$AddTags": "<p>Tags to add to the existing list of tags associated with the portfolio.</p>",
+        "UpdateProductInput$AddTags": "<p>Tags to add to the existing list of tags associated with the product.</p>"
+      }
+    },
     "AllowedValue": {
       "base": null,
       "refs": {
@@ -68,6 +166,26 @@
         "ProductViewAggregationValue$ApproximateCount": "<p>An approximate count of the products that match the value.</p>"
       }
     },
+    "AssociatePrincipalWithPortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AssociatePrincipalWithPortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AssociateProductWithPortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AssociateProductWithPortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "AttributeValue": {
       "base": null,
       "refs": {
@@ -77,7 +195,34 @@
     "ConstraintDescription": {
       "base": null,
       "refs": {
-        "ConstraintSummary$Description": "<p>The text description of the constraint.</p>"
+        "ConstraintDetail$Description": "<p>The text description of the constraint.</p>",
+        "ConstraintSummary$Description": "<p>The text description of the constraint.</p>",
+        "CreateConstraintInput$Description": "<p>The text description of the constraint.</p>",
+        "UpdateConstraintInput$Description": "<p>The updated text description of the constraint.</p>"
+      }
+    },
+    "ConstraintDetail": {
+      "base": "<p>Detailed constraint information.</p>",
+      "refs": {
+        "ConstraintDetails$member": null,
+        "CreateConstraintOutput$ConstraintDetail": "<p>The resulting detailed constraint information.</p>",
+        "DescribeConstraintOutput$ConstraintDetail": "<p>Detailed constraint information.</p>",
+        "UpdateConstraintOutput$ConstraintDetail": "<p>The resulting detailed constraint information.</p>"
+      }
+    },
+    "ConstraintDetails": {
+      "base": null,
+      "refs": {
+        "ListConstraintsForPortfolioOutput$ConstraintDetails": "<p>List of detailed constraint information objects.</p>"
+      }
+    },
+    "ConstraintParameters": {
+      "base": null,
+      "refs": {
+        "CreateConstraintInput$Parameters": "<p>The constraint parameters.</p>",
+        "CreateConstraintOutput$ConstraintParameters": "<p>The resulting constraint parameters.</p>",
+        "DescribeConstraintOutput$ConstraintParameters": "<p>The current parameters associated with the specified constraint.</p>",
+        "UpdateConstraintOutput$ConstraintParameters": "<p>The resulting updated constraint parameters.</p>"
       }
     },
     "ConstraintSummaries": {
@@ -96,20 +241,160 @@
     "ConstraintType": {
       "base": null,
       "refs": {
-        "ConstraintSummary$Type": "<p>The type of the constraint. </p>"
+        "ConstraintDetail$Type": "<p>The type of the constraint.</p>",
+        "ConstraintSummary$Type": "<p>The type of the constraint. </p>",
+        "CreateConstraintInput$Type": "<p>The type of the constraint.</p>"
+      }
+    },
+    "CreateConstraintInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateConstraintOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreatePortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreatePortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreatePortfolioShareInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreatePortfolioShareOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateProductInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateProductOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateProvisioningArtifactInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateProvisioningArtifactOutput": {
+      "base": null,
+      "refs": {
       }
     },
     "CreatedTime": {
       "base": null,
       "refs": {
-        "ProvisionedProductDetail$CreatedTime": "<p>The time the ProvisionedProduct was created.</p>",
-        "RecordDetail$CreatedTime": "<p>The time when the record for the ProvisionedProduct object was created.</p>"
+        "ProductViewDetail$CreatedTime": "<p>The UTC timestamp of the creation time.</p>",
+        "ProvisionedProductDetail$CreatedTime": "<p>The UTC timestamp of the creation time.</p>",
+        "RecordDetail$CreatedTime": "<p>The UTC timestamp of the creation time.</p>"
+      }
+    },
+    "CreationTime": {
+      "base": null,
+      "refs": {
+        "PortfolioDetail$CreatedTime": "<p>The UTC timestamp of the creation time.</p>",
+        "ProvisioningArtifactDetail$CreatedTime": "<p>The UTC timestamp of the creation time.</p>"
       }
     },
     "DefaultValue": {
       "base": null,
       "refs": {
         "ProvisioningArtifactParameter$DefaultValue": "<p>The default value for this parameter.</p>"
+      }
+    },
+    "DeleteConstraintInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteConstraintOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeletePortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeletePortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeletePortfolioShareInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeletePortfolioShareOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteProductInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteProductOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteProvisioningArtifactInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteProvisioningArtifactOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeConstraintInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeConstraintOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribePortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribePortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeProductAsAdminInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeProductAsAdminOutput": {
+      "base": null,
+      "refs": {
       }
     },
     "DescribeProductInput": {
@@ -128,6 +413,16 @@
       }
     },
     "DescribeProductViewOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeProvisioningArtifactInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeProvisioningArtifactOutput": {
       "base": null,
       "refs": {
       }
@@ -159,6 +454,26 @@
         "RecordOutput$Description": "<p>The text description of the output.</p>"
       }
     },
+    "DisassociatePrincipalFromPortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DisassociatePrincipalFromPortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DisassociateProductFromPortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DisassociateProductFromPortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DuplicateResourceException": {
       "base": "<p>The specified resource is a duplicate.</p>",
       "refs": {
@@ -185,37 +500,80 @@
     "Id": {
       "base": null,
       "refs": {
+        "AcceptPortfolioShareInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "AssociatePrincipalWithPortfolioInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "AssociateProductWithPortfolioInput$ProductId": "<p>The product identifier.</p>",
+        "AssociateProductWithPortfolioInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "AssociateProductWithPortfolioInput$SourcePortfolioId": "<p>The identifier of the source portfolio to use with this association.</p>",
+        "ConstraintDetail$ConstraintId": "<p>The identifier of the constraint.</p>",
+        "CreateConstraintInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "CreateConstraintInput$ProductId": "<p>The product identifier.</p>",
+        "CreatePortfolioShareInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "CreateProvisioningArtifactInput$ProductId": "<p>The product identifier.</p>",
+        "DeleteConstraintInput$Id": "<p>The identifier of the constraint to delete.</p>",
+        "DeletePortfolioInput$Id": "<p>The identifier of the portfolio for the delete request.</p>",
+        "DeletePortfolioShareInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "DeleteProductInput$Id": "<p>The identifier of the product for the delete request.</p>",
+        "DeleteProvisioningArtifactInput$ProductId": "<p>The product identifier.</p>",
+        "DeleteProvisioningArtifactInput$ProvisioningArtifactId": "<p>The identifier of the provisioning artifact for the delete request.</p>",
+        "DescribeConstraintInput$Id": "<p>The identifier of the constraint.</p>",
+        "DescribePortfolioInput$Id": "<p>The identifier of the portfolio for which to retrieve information.</p>",
+        "DescribeProductAsAdminInput$Id": "<p>The identifier of the product for which to retrieve information.</p>",
         "DescribeProductInput$Id": "<p>The <code>ProductId</code> of the product to describe.</p>",
         "DescribeProductViewInput$Id": "<p>The <code>ProductViewId</code> of the product to describe.</p>",
-        "DescribeProvisioningParametersInput$ProductId": "<p>The identifier of the product.</p>",
+        "DescribeProvisioningArtifactInput$ProvisioningArtifactId": "<p>The identifier of the provisioning artifact.</p>",
+        "DescribeProvisioningArtifactInput$ProductId": "<p>The product identifier.</p>",
+        "DescribeProvisioningParametersInput$ProductId": "<p>The product identifier.</p>",
         "DescribeProvisioningParametersInput$ProvisioningArtifactId": "<p>The provisioning artifact identifier for this product.</p>",
         "DescribeProvisioningParametersInput$PathId": "<p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>",
         "DescribeRecordInput$Id": "<p>The record identifier of the ProvisionedProduct object for which to retrieve output information. This is the <code>RecordDetail.RecordId</code> obtained from the request operation's response.</p>",
+        "DisassociatePrincipalFromPortfolioInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "DisassociateProductFromPortfolioInput$ProductId": "<p>The product identifier.</p>",
+        "DisassociateProductFromPortfolioInput$PortfolioId": "<p>The portfolio identifier.</p>",
         "LaunchPathSummary$Id": "<p>The unique identifier of the product path.</p>",
-        "ListLaunchPathsInput$ProductId": "<p>Identifies the product for which to retrieve <code>LaunchPathSummaries</code> information.</p>",
+        "ListConstraintsForPortfolioInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "ListConstraintsForPortfolioInput$ProductId": "<p>The product identifier.</p>",
+        "ListLaunchPathsInput$ProductId": "<p>The product identifier.. Identifies the product for which to retrieve <code>LaunchPathSummaries</code> information.</p>",
+        "ListPortfolioAccessInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "ListPortfoliosForProductInput$ProductId": "<p>The product identifier.</p>",
+        "ListPrincipalsForPortfolioInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "ListProvisioningArtifactsInput$ProductId": "<p>The product identifier.</p>",
+        "PortfolioDetail$Id": "<p>The identifier for the portfolio.</p>",
         "ProductViewSummary$Id": "<p>The product view identifier.</p>",
         "ProductViewSummary$ProductId": "<p>The product identifier.</p>",
-        "ProvisionProductInput$ProductId": "<p>The identifier of the product.</p>",
+        "ProvisionProductInput$ProductId": "<p>The product identifier.</p>",
         "ProvisionProductInput$ProvisioningArtifactId": "<p>The provisioning artifact identifier for this product.</p>",
         "ProvisionProductInput$PathId": "<p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>",
         "ProvisioningArtifact$Id": "<p>The identifier for the artifact.</p>",
+        "ProvisioningArtifactDetail$Id": "<p>The identifier of the provisioning artifact.</p>",
         "RecordDetail$RecordId": "<p>The identifier of the ProvisionedProduct object record.</p>",
         "RecordDetail$ProvisionedProductId": "<p>The identifier of the ProvisionedProduct object.</p>",
-        "RecordDetail$ProductId": "<p>The identifier of the product.</p>",
+        "RecordDetail$ProductId": "<p>The product identifier.</p>",
         "RecordDetail$ProvisioningArtifactId": "<p>The provisioning artifact identifier for this product.</p>",
         "RecordDetail$PathId": "<p>The identifier of the path for this product's provisioning.</p>",
+        "RejectPortfolioShareInput$PortfolioId": "<p>The portfolio identifier.</p>",
+        "SearchProductsAsAdminInput$PortfolioId": "<p>The portfolio identifier.</p>",
         "TerminateProvisionedProductInput$ProvisionedProductId": "<p>The identifier of the ProvisionedProduct object to terminate. You must specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>",
+        "UpdateConstraintInput$Id": "<p>The identifier of the constraint to update.</p>",
+        "UpdatePortfolioInput$Id": "<p>The identifier of the portfolio for the update request.</p>",
+        "UpdateProductInput$Id": "<p>The identifier of the product for the update request.</p>",
         "UpdateProvisionedProductInput$ProvisionedProductId": "<p>The identifier of the ProvisionedProduct object to update. You must specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>",
         "UpdateProvisionedProductInput$ProductId": "<p>The identifier of the ProvisionedProduct object.</p>",
         "UpdateProvisionedProductInput$ProvisioningArtifactId": "<p>The provisioning artifact identifier for this product.</p>",
-        "UpdateProvisionedProductInput$PathId": "<p>The identifier of the path to use in the updated ProvisionedProduct object. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>"
+        "UpdateProvisionedProductInput$PathId": "<p>The identifier of the path to use in the updated ProvisionedProduct object. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>",
+        "UpdateProvisioningArtifactInput$ProductId": "<p>The product identifier.</p>",
+        "UpdateProvisioningArtifactInput$ProvisioningArtifactId": "<p>The identifier of the provisioning artifact for the update request.</p>"
       }
     },
     "IdempotencyToken": {
       "base": null,
       "refs": {
+        "CreateConstraintInput$IdempotencyToken": "<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>",
+        "CreatePortfolioInput$IdempotencyToken": "<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>",
+        "CreateProductInput$IdempotencyToken": "<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>",
+        "CreateProvisioningArtifactInput$IdempotencyToken": "<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>",
         "ProvisionProductInput$ProvisionToken": "<p>An idempotency token that uniquely identifies the provisioning request. </p>",
-        "ProvisionedProductDetail$IdempotencyToken": "<p>An idempotency token that uniquely identifies this ProvisionedProduct.</p>",
+        "ProvisionedProductDetail$IdempotencyToken": "<p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>",
         "TerminateProvisionedProductInput$TerminateToken": "<p>An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the ProvisionedProduct object is terminated, further requests to terminate the same ProvisionedProduct object always return <b>ResourceNotFound</b> regardless of the value of <code>TerminateToken</code>.</p>",
         "UpdateProvisionedProductInput$UpdateToken": "<p>The idempotency token that uniquely identifies the provisioning update request.</p>"
       }
@@ -261,12 +619,87 @@
         "LaunchPathSummaries$member": null
       }
     },
+    "LimitExceededException": {
+      "base": "<p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>",
+      "refs": {
+      }
+    },
+    "ListAcceptedPortfolioSharesInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAcceptedPortfolioSharesOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListConstraintsForPortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListConstraintsForPortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListLaunchPathsInput": {
       "base": null,
       "refs": {
       }
     },
     "ListLaunchPathsOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPortfolioAccessInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPortfolioAccessOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPortfoliosForProductInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPortfoliosForProductOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPortfoliosInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPortfoliosOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPrincipalsForPortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPrincipalsForPortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListProvisioningArtifactsInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListProvisioningArtifactsOutput": {
       "base": null,
       "refs": {
       }
@@ -321,9 +754,15 @@
       "base": null,
       "refs": {
         "DescribeRecordInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
+        "ListAcceptedPortfolioSharesInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
+        "ListConstraintsForPortfolioInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
         "ListLaunchPathsInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
+        "ListPortfoliosForProductInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
+        "ListPortfoliosInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
+        "ListPrincipalsForPortfolioInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
         "ListRecordHistoryInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
         "ScanProvisionedProductsInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
+        "SearchProductsAsAdminInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>",
         "SearchProductsInput$PageSize": "<p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>"
       }
     },
@@ -332,12 +771,26 @@
       "refs": {
         "DescribeRecordInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
         "DescribeRecordOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "ListAcceptedPortfolioSharesInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
+        "ListAcceptedPortfolioSharesOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "ListConstraintsForPortfolioInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
+        "ListConstraintsForPortfolioOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
         "ListLaunchPathsInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
         "ListLaunchPathsOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "ListPortfolioAccessOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "ListPortfoliosForProductInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
+        "ListPortfoliosForProductOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "ListPortfoliosInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
+        "ListPortfoliosOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "ListPrincipalsForPortfolioInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
+        "ListPrincipalsForPortfolioOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "ListProvisioningArtifactsOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
         "ListRecordHistoryInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
         "ListRecordHistoryOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
         "ScanProvisionedProductsInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
         "ScanProvisionedProductsOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
+        "SearchProductsAsAdminInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
+        "SearchProductsAsAdminOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>",
         "SearchProductsInput$PageToken": "<p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>",
         "SearchProductsOutput$NextPageToken": "<p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>"
       }
@@ -369,15 +822,82 @@
         "UpdateProvisioningParameter$Value": "<p>The value to use for updating the product provisioning. Any constraints on this value can be found in the <code>ProvisioningArtifactParameter</code> parameter for <code>Key</code>.</p>"
       }
     },
+    "PortfolioDescription": {
+      "base": null,
+      "refs": {
+        "CreatePortfolioInput$Description": "<p>The text description of the portfolio.</p>",
+        "PortfolioDetail$Description": "<p>The text description of the portfolio.</p>",
+        "UpdatePortfolioInput$Description": "<p>The updated text description of the portfolio.</p>"
+      }
+    },
+    "PortfolioDetail": {
+      "base": "<p>Detailed portfolio information.</p>",
+      "refs": {
+        "CreatePortfolioOutput$PortfolioDetail": "<p>The resulting detailed portfolio information.</p>",
+        "DescribePortfolioOutput$PortfolioDetail": "<p>Detailed portfolio information.</p>",
+        "PortfolioDetails$member": null,
+        "UpdatePortfolioOutput$PortfolioDetail": "<p>The resulting detailed portfolio information.</p>"
+      }
+    },
+    "PortfolioDetails": {
+      "base": null,
+      "refs": {
+        "ListAcceptedPortfolioSharesOutput$PortfolioDetails": "<p>List of detailed portfolio information objects.</p>",
+        "ListPortfoliosForProductOutput$PortfolioDetails": "<p>List of detailed portfolio information objects.</p>",
+        "ListPortfoliosOutput$PortfolioDetails": "<p>List of detailed portfolio information objects.</p>"
+      }
+    },
+    "PortfolioDisplayName": {
+      "base": null,
+      "refs": {
+        "CreatePortfolioInput$DisplayName": "<p>The name to use for display purposes.</p>",
+        "PortfolioDetail$DisplayName": "<p>The name to use for display purposes.</p>",
+        "UpdatePortfolioInput$DisplayName": "<p>The name to use for display purposes.</p>"
+      }
+    },
     "PortfolioName": {
       "base": null,
       "refs": {
         "LaunchPathSummary$Name": "<p>Corresponds to the name of the portfolio to which the user was assigned.</p>"
       }
     },
+    "Principal": {
+      "base": "<p>A principal's ARN and type.</p>",
+      "refs": {
+        "Principals$member": null
+      }
+    },
+    "PrincipalARN": {
+      "base": null,
+      "refs": {
+        "AssociatePrincipalWithPortfolioInput$PrincipalARN": "<p>The ARN representing the principal (IAM user, role, or group).</p>",
+        "DisassociatePrincipalFromPortfolioInput$PrincipalARN": "<p>The ARN representing the principal (IAM user, role, or group).</p>",
+        "Principal$PrincipalARN": "<p>The ARN representing the principal (IAM user, role, or group).</p>"
+      }
+    },
+    "PrincipalType": {
+      "base": null,
+      "refs": {
+        "AssociatePrincipalWithPortfolioInput$PrincipalType": "<p>The principal type. Must be <code>IAM</code> </p>",
+        "Principal$PrincipalType": "<p>The principal type. Must be <code>IAM</code> </p>"
+      }
+    },
+    "Principals": {
+      "base": null,
+      "refs": {
+        "ListPrincipalsForPortfolioOutput$Principals": "<p>The IAM principals (users or roles) associated with the portfolio.</p>"
+      }
+    },
+    "ProductSource": {
+      "base": null,
+      "refs": {
+        "SearchProductsAsAdminInput$ProductSource": "<p>Access level of the source of the product.</p>"
+      }
+    },
     "ProductType": {
       "base": null,
       "refs": {
+        "CreateProductInput$ProductType": "<p>The type of the product to create.</p>",
         "ProductViewSummary$Type": "<p>The product type. Contact the product administrator for the significance of this value.</p>"
       }
     },
@@ -403,6 +923,21 @@
       "base": null,
       "refs": {
         "SearchProductsOutput$ProductViewAggregations": "<p>A list of the product view aggregation value objects.</p>"
+      }
+    },
+    "ProductViewDetail": {
+      "base": "<p>Detailed product view information.</p>",
+      "refs": {
+        "CreateProductOutput$ProductViewDetail": "<p>The resulting detailed product view information.</p>",
+        "DescribeProductAsAdminOutput$ProductViewDetail": "<p>Detailed product view information.</p>",
+        "ProductViewDetails$member": null,
+        "UpdateProductOutput$ProductViewDetail": "<p>The resulting detailed product view information.</p>"
+      }
+    },
+    "ProductViewDetails": {
+      "base": null,
+      "refs": {
+        "SearchProductsAsAdminOutput$ProductViewDetails": "<p>List of detailed product view information objects.</p>"
       }
     },
     "ProductViewDistributor": {
@@ -432,30 +967,40 @@
     "ProductViewFilters": {
       "base": null,
       "refs": {
+        "SearchProductsAsAdminInput$Filters": "<p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the administrator has access.</p>",
         "SearchProductsInput$Filters": "<p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the calling user has access. </p>"
       }
     },
     "ProductViewName": {
       "base": null,
       "refs": {
-        "ProductViewSummary$Name": "<p>The name of the product.</p>"
+        "CreateProductInput$Name": "<p>The name of the product.</p>",
+        "ProductViewSummary$Name": "<p>The name of the product.</p>",
+        "UpdateProductInput$Name": "<p>The updated product name.</p>"
       }
     },
     "ProductViewOwner": {
       "base": null,
       "refs": {
-        "ProductViewSummary$Owner": "<p>The owner of the product. Contact the product administrator for the significance of this value.</p>"
+        "CreateProductInput$Owner": "<p>The owner of the product.</p>",
+        "CreateProductInput$Distributor": "<p>The distributor of the product.</p>",
+        "ProductViewSummary$Owner": "<p>The owner of the product. Contact the product administrator for the significance of this value.</p>",
+        "UpdateProductInput$Owner": "<p>The updated owner of the product.</p>",
+        "UpdateProductInput$Distributor": "<p>The updated distributor of the product.</p>"
       }
     },
     "ProductViewShortDescription": {
       "base": null,
       "refs": {
-        "ProductViewSummary$ShortDescription": "<p>Short description of the product.</p>"
+        "CreateProductInput$Description": "<p>The text description of the product.</p>",
+        "ProductViewSummary$ShortDescription": "<p>Short description of the product.</p>",
+        "UpdateProductInput$Description": "<p>The updated text description of the product.</p>"
       }
     },
     "ProductViewSortBy": {
       "base": null,
       "refs": {
+        "SearchProductsAsAdminInput$SortBy": "<p>The sort field specifier. If no value is specified, results are not sorted.</p>",
         "SearchProductsInput$SortBy": "<p>The sort field specifier. If no value is specified, results are not sorted.</p>"
       }
     },
@@ -470,7 +1015,16 @@
       "refs": {
         "DescribeProductOutput$ProductViewSummary": "<p>The summary metadata about the specified product.</p>",
         "DescribeProductViewOutput$ProductViewSummary": "<p>The summary metadata about the specified product.</p>",
+        "ProductViewDetail$ProductViewSummary": "<p>The summary metadata about the specified product view.</p>",
         "ProductViewSummaries$member": null
+      }
+    },
+    "ProviderName": {
+      "base": null,
+      "refs": {
+        "CreatePortfolioInput$ProviderName": "<p>The name of the portfolio provider.</p>",
+        "PortfolioDetail$ProviderName": "<p>The name of the portfolio provider.</p>",
+        "UpdatePortfolioInput$ProviderName": "<p>The updated name of the portfolio provider.</p>"
       }
     },
     "ProvisionProductInput": {
@@ -539,19 +1093,62 @@
     "ProvisioningArtifactCreatedTime": {
       "base": null,
       "refs": {
-        "ProvisioningArtifact$CreatedTime": "<p>The time that the artifact was created by the Administrator.</p>"
+        "ProvisioningArtifact$CreatedTime": "<p>The UTC timestamp of the creation time.</p>"
       }
     },
     "ProvisioningArtifactDescription": {
       "base": null,
       "refs": {
-        "ProvisioningArtifact$Description": "<p>The text description of the artifact.</p>"
+        "ProvisioningArtifact$Description": "<p>The text description of the artifact.</p>",
+        "ProvisioningArtifactProperties$Description": "<p>The text description of the provisioning artifact properties.</p>",
+        "UpdateProvisioningArtifactInput$Description": "<p>The updated text description of the provisioning artifact.</p>"
+      }
+    },
+    "ProvisioningArtifactDetail": {
+      "base": "<p>Detailed provisioning artifact information.</p>",
+      "refs": {
+        "CreateProductOutput$ProvisioningArtifactDetail": "<p>The resulting detailed provisioning artifact information.</p>",
+        "CreateProvisioningArtifactOutput$ProvisioningArtifactDetail": "<p>The resulting detailed provisioning artifact information.</p>",
+        "DescribeProvisioningArtifactOutput$ProvisioningArtifactDetail": "<p>Detailed provisioning artifact information.</p>",
+        "ProvisioningArtifactDetails$member": null,
+        "UpdateProvisioningArtifactOutput$ProvisioningArtifactDetail": "<p>The resulting detailed provisioning artifact information.</p>"
+      }
+    },
+    "ProvisioningArtifactDetails": {
+      "base": null,
+      "refs": {
+        "ListProvisioningArtifactsOutput$ProvisioningArtifactDetails": "<p>List of detailed provisioning artifact information objects.</p>"
+      }
+    },
+    "ProvisioningArtifactInfo": {
+      "base": null,
+      "refs": {
+        "CreateProvisioningArtifactOutput$Info": "<p>Additional information about the provisioning artifact create request.</p>",
+        "DescribeProvisioningArtifactOutput$Info": "<p>Additional information about the provisioning artifact.</p>",
+        "ProvisioningArtifactProperties$Info": "<p>Additional information about the provisioning artifact properties.</p>",
+        "UpdateProvisioningArtifactOutput$Info": "<p>Additional information about the provisioning artifact update request.</p>"
+      }
+    },
+    "ProvisioningArtifactInfoKey": {
+      "base": null,
+      "refs": {
+        "ProvisioningArtifactInfo$key": null
+      }
+    },
+    "ProvisioningArtifactInfoValue": {
+      "base": null,
+      "refs": {
+        "ProvisioningArtifactInfo$value": null
       }
     },
     "ProvisioningArtifactName": {
       "base": null,
       "refs": {
-        "ProvisioningArtifact$Name": "<p>The name of the artifact.</p>"
+        "ProvisioningArtifact$Name": "<p>The name of the artifact.</p>",
+        "ProvisioningArtifactDetail$Name": "<p>The name assigned to the provisioning artifact.</p>",
+        "ProvisioningArtifactDetail$Description": "<p>The text description of the provisioning artifact.</p>",
+        "ProvisioningArtifactProperties$Name": "<p>The name assigned to the provisioning artifact properties.</p>",
+        "UpdateProvisioningArtifactInput$Name": "<p>The updated name of the provisioning artifact.</p>"
       }
     },
     "ProvisioningArtifactParameter": {
@@ -564,6 +1161,20 @@
       "base": null,
       "refs": {
         "DescribeProvisioningParametersOutput$ProvisioningArtifactParameters": "<p>The list of parameters used to successfully provision the product. Each parameter includes a list of allowable values and additional metadata about each parameter.</p>"
+      }
+    },
+    "ProvisioningArtifactProperties": {
+      "base": "<p>Provisioning artifact properties.</p>",
+      "refs": {
+        "CreateProductInput$ProvisioningArtifactParameters": "<p>Parameters for the provisioning artifact.</p>",
+        "CreateProvisioningArtifactInput$Parameters": "<p>The parameters to use when creating the new provisioning artifact.</p>"
+      }
+    },
+    "ProvisioningArtifactType": {
+      "base": null,
+      "refs": {
+        "ProvisioningArtifactDetail$Type": "<p>The type of the provisioning artifact.</p>",
+        "ProvisioningArtifactProperties$Type": "<p>The type of the provisioning artifact properties.</p>"
       }
     },
     "ProvisioningArtifacts": {
@@ -662,6 +1273,28 @@
         "RecordDetail$RecordType": "<p>The record type for this record.</p>"
       }
     },
+    "RejectPortfolioShareInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "RejectPortfolioShareOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ResourceARN": {
+      "base": null,
+      "refs": {
+        "PortfolioDetail$ARN": "<p>The ARN assigned to the portfolio.</p>",
+        "ProductViewDetail$ProductARN": "<p>The ARN associated with the product.</p>"
+      }
+    },
+    "ResourceInUseException": {
+      "base": "<p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>",
+      "refs": {
+      }
+    },
     "ResourceNotFoundException": {
       "base": "<p>The specified resource was not found.</p>",
       "refs": {
@@ -689,6 +1322,16 @@
         "ListRecordHistorySearchFilter$Value": "<p>The filter value for <code>Key</code>.</p>"
       }
     },
+    "SearchProductsAsAdminInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "SearchProductsAsAdminOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "SearchProductsInput": {
       "base": null,
       "refs": {
@@ -702,37 +1345,65 @@
     "SortOrder": {
       "base": null,
       "refs": {
+        "SearchProductsAsAdminInput$SortOrder": "<p>The sort order specifier. If no value is specified, results are not sorted.</p>",
         "SearchProductsInput$SortOrder": "<p>The sort order specifier. If no value is specified, results are not sorted.</p>"
+      }
+    },
+    "Status": {
+      "base": null,
+      "refs": {
+        "CreateConstraintOutput$Status": "<p>The status of the current request.</p>",
+        "CreateProvisioningArtifactOutput$Status": "<p>The status of the current request.</p>",
+        "DescribeConstraintOutput$Status": "<p>The status of the current request.</p>",
+        "DescribeProvisioningArtifactOutput$Status": "<p>The status of the current request.</p>",
+        "ProductViewDetail$Status": "<p>Current status of the product.</p>",
+        "UpdateConstraintOutput$Status": "<p>The status of the current request.</p>",
+        "UpdateProvisioningArtifactOutput$Status": "<p>The status of the current request.</p>"
       }
     },
     "SupportDescription": {
       "base": null,
       "refs": {
-        "ProductViewSummary$SupportDescription": "<p>The description of the support for this Product.</p>"
+        "CreateProductInput$SupportDescription": "<p>Support information about the product.</p>",
+        "ProductViewSummary$SupportDescription": "<p>The description of the support for this Product.</p>",
+        "UpdateProductInput$SupportDescription": "<p>The updated support description for the product.</p>"
       }
     },
     "SupportEmail": {
       "base": null,
       "refs": {
-        "ProductViewSummary$SupportEmail": "<p>The email contact information to obtain support for this Product.</p>"
+        "CreateProductInput$SupportEmail": "<p>Contact email for product support.</p>",
+        "ProductViewSummary$SupportEmail": "<p>The email contact information to obtain support for this Product.</p>",
+        "UpdateProductInput$SupportEmail": "<p>The updated support email for the product.</p>"
       }
     },
     "SupportUrl": {
       "base": null,
       "refs": {
-        "ProductViewSummary$SupportUrl": "<p>The URL information to obtain support for this Product.</p>"
+        "CreateProductInput$SupportUrl": "<p>Contact URL for product support.</p>",
+        "ProductViewSummary$SupportUrl": "<p>The URL information to obtain support for this Product.</p>",
+        "UpdateProductInput$SupportUrl": "<p>The updated support URL for the product.</p>"
       }
     },
     "Tag": {
       "base": "<p>Key/value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.</p>",
       "refs": {
+        "AddTags$member": null,
         "Tags$member": null
       }
     },
     "TagKey": {
       "base": null,
       "refs": {
-        "Tag$Key": "<p>The <code>ProvisioningArtifactParameter.TagKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>"
+        "Tag$Key": "<p>The <code>ProvisioningArtifactParameter.TagKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>",
+        "TagKeys$member": null
+      }
+    },
+    "TagKeys": {
+      "base": null,
+      "refs": {
+        "UpdatePortfolioInput$RemoveTags": "<p>Tags to remove from the existing list of tags associated with the portfolio.</p>",
+        "UpdateProductInput$RemoveTags": "<p>Tags to remove from the existing list of tags associated with the product.</p>"
       }
     },
     "TagValue": {
@@ -744,8 +1415,14 @@
     "Tags": {
       "base": null,
       "refs": {
+        "CreatePortfolioOutput$Tags": "<p>Tags successfully associated with the new portfolio.</p>",
+        "CreateProductOutput$Tags": "<p>Tags successfully associated with the new product.</p>",
+        "DescribePortfolioOutput$Tags": "<p>Tags associated with the portfolio.</p>",
+        "DescribeProductAsAdminOutput$Tags": "<p>Tags associated with the product.</p>",
         "LaunchPathSummary$Tags": "<p>List of tags used by this launch path.</p>",
-        "ProvisionProductInput$Tags": "<p>A list of tags to use as provisioning options.</p>"
+        "ProvisionProductInput$Tags": "<p>A list of tags to use as provisioning options.</p>",
+        "UpdatePortfolioOutput$Tags": "<p>Tags associated with the portfolio.</p>",
+        "UpdateProductOutput$Tags": "<p>Tags associated with the product.</p>"
       }
     },
     "TerminateProvisionedProductInput": {
@@ -758,12 +1435,52 @@
       "refs": {
       }
     },
+    "UpdateConstraintInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateConstraintOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdatePortfolioInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdatePortfolioOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateProductInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateProductOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "UpdateProvisionedProductInput": {
       "base": null,
       "refs": {
       }
     },
     "UpdateProvisionedProductOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateProvisioningArtifactInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateProvisioningArtifactOutput": {
       "base": null,
       "refs": {
       }

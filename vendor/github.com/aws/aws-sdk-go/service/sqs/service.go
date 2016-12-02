@@ -20,9 +20,17 @@ import (
 // between distributed components of your applications that perform different
 // tasks without losing messages or requiring each component to be always available.
 //
-// Helpful Links:
+// Topics
 //
-//    * Current WSDL (2012-11-05) (http://queue.amazonaws.com/doc/2012-11-05/QueueService.wsdl)
+//    *
+//
+//    *
+//
+//    * CommonParameters
+//
+//    * CommonErrors
+//
+// Helpful Links
 //
 //    * Making API Requests (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/MakingRequestsArticle.html)
 //
@@ -44,7 +52,7 @@ import (
 //
 //    * Handling error responses
 //
-// For a list of available SDKs, go to Tools for Amazon Web Services (http://aws.amazon.com/tools/).
+// For a list of available SDKs, see Tools for Amazon Web Services (http://aws.amazon.com/tools/).
 //The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
 type SQS struct {

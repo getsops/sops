@@ -101,6 +101,28 @@ func TestPresignRequest(t *testing.T) {
 	assert.Equal(t, expectedTarget, q.Get("X-Amz-Target"))
 }
 
+func TestPresignBodyWithArrayRequest(t *testing.T) {
+	req, body := buildRequest("dynamodb", "us-east-1", "{}")
+	req.URL.RawQuery = "Foo=z&Foo=o&Foo=m&Foo=a"
+
+	signer := buildSigner()
+	signer.Presign(req, body, "dynamodb", "us-east-1", 300*time.Second, time.Unix(0, 0))
+
+	expectedDate := "19700101T000000Z"
+	expectedHeaders := "content-length;content-type;host;x-amz-meta-other-header;x-amz-meta-other-header_with_underscore"
+	expectedSig := "fef6002062400bbf526d70f1a6456abc0fb2e213fe1416012737eebd42a62924"
+	expectedCred := "AKID/19700101/us-east-1/dynamodb/aws4_request"
+	expectedTarget := "prefix.Operation"
+
+	q := req.URL.Query()
+	assert.Equal(t, expectedSig, q.Get("X-Amz-Signature"))
+	assert.Equal(t, expectedCred, q.Get("X-Amz-Credential"))
+	assert.Equal(t, expectedHeaders, q.Get("X-Amz-SignedHeaders"))
+	assert.Equal(t, expectedDate, q.Get("X-Amz-Date"))
+	assert.Empty(t, q.Get("X-Amz-Meta-Other-Header"))
+	assert.Equal(t, expectedTarget, q.Get("X-Amz-Target"))
+}
+
 func TestSignRequest(t *testing.T) {
 	req, body := buildRequest("dynamodb", "us-east-1", "{}")
 	signer := buildSigner()
@@ -382,6 +404,24 @@ func TestSignWithRequestBody_Overwrite(t *testing.T) {
 	resp, err := http.DefaultClient.Do(req)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
+}
+
+func TestBuildCanonicalRequest(t *testing.T) {
+	req, body := buildRequest("dynamodb", "us-east-1", "{}")
+	req.URL.RawQuery = "Foo=z&Foo=o&Foo=m&Foo=a"
+	ctx := &signingCtx{
+		ServiceName: "dynamodb",
+		Region:      "us-east-1",
+		Request:     req,
+		Body:        body,
+		Query:       req.URL.Query(),
+		Time:        time.Now(),
+		ExpireTime:  5 * time.Second,
+	}
+
+	ctx.buildCanonicalString()
+	expected := "https://example.org/bucket/key-._~,!@#$%^&*()?Foo=z&Foo=o&Foo=m&Foo=a"
+	assert.Equal(t, expected, ctx.Request.URL.String())
 }
 
 func BenchmarkPresignRequest(b *testing.B) {

@@ -15,7 +15,7 @@
     "DeleteApplicationVersion": "<p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note>",
     "DeleteConfigurationTemplate": "<p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment's copy of the template without affecting the running environment.</p> </note>",
     "DeleteEnvironmentConfiguration": "<p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>",
-    "DescribeApplicationVersions": "<p>Retrieve a list of application versions stored in your AWS Elastic Beanstalk storage bucket.</p>",
+    "DescribeApplicationVersions": "<p>Retrieve a list of application versions.</p>",
     "DescribeApplications": "<p>Returns the descriptions of existing applications.</p>",
     "DescribeConfigurationOptions": "<p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>",
     "DescribeConfigurationSettings": "<p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul>",
@@ -25,7 +25,7 @@
     "DescribeEnvironmentResources": "<p>Returns AWS resources for this environment.</p>",
     "DescribeEnvironments": "<p>Returns descriptions for existing environments.</p>",
     "DescribeEvents": "<p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note>",
-    "DescribeInstancesHealth": "<p>Returns more detailed information about the health of the specified instances (for example, CPU utilization, load average, and causes). The <b>DescribeInstancesHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>",
+    "DescribeInstancesHealth": "<p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>",
     "ListAvailableSolutionStacks": "<p>Returns a list of the available solution stack names.</p>",
     "RebuildEnvironment": "<p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>",
     "RequestEnvironmentInfo": "<p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul>",
@@ -96,10 +96,10 @@
       }
     },
     "ApplicationMetrics": {
-      "base": "<p>Represents the application metrics for a specified environment.</p>",
+      "base": "<p>Application request metrics for an AWS Elastic Beanstalk environment.</p>",
       "refs": {
-        "DescribeEnvironmentHealthResult$ApplicationMetrics": null,
-        "SingleInstanceHealth$ApplicationMetrics": null
+        "DescribeEnvironmentHealthResult$ApplicationMetrics": "<p>Application request metrics for the environment.</p>",
+        "SingleInstanceHealth$ApplicationMetrics": "<p>Request metrics from your application.</p>"
       }
     },
     "ApplicationName": {
@@ -107,7 +107,7 @@
       "refs": {
         "ApplicationDescription$ApplicationName": "<p>The name of the application.</p>",
         "ApplicationNamesList$member": null,
-        "ApplicationVersionDescription$ApplicationName": "<p>The name of the application associated with this release.</p>",
+        "ApplicationVersionDescription$ApplicationName": "<p>The name of the application to which the application version belongs.</p>",
         "ComposeEnvironmentsMessage$ApplicationName": "<p>The name of the application to which the specified source bundles belong.</p>",
         "ConfigurationSettingsDescription$ApplicationName": "<p>The name of the application associated with this configuration set.</p>",
         "CreateApplicationMessage$ApplicationName": "<p>The name of the application.</p> <p>Constraint: This name must be unique within your account. If the specified name already exists, the action returns an <code>InvalidParameterValue</code> error.</p>",
@@ -115,10 +115,10 @@
         "CreateConfigurationTemplateMessage$ApplicationName": "<p>The name of the application to associate with this configuration template. If no application is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>",
         "CreateEnvironmentMessage$ApplicationName": "<p>The name of the application that contains the version to be deployed.</p> <p> If no application is found with this name, <code>CreateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p>",
         "DeleteApplicationMessage$ApplicationName": "<p>The name of the application to delete.</p>",
-        "DeleteApplicationVersionMessage$ApplicationName": "<p>The name of the application to delete releases from.</p>",
+        "DeleteApplicationVersionMessage$ApplicationName": "<p>The name of the application to which the version belongs.</p>",
         "DeleteConfigurationTemplateMessage$ApplicationName": "<p>The name of the application to delete the configuration template from.</p>",
         "DeleteEnvironmentConfigurationMessage$ApplicationName": "<p>The name of the application the environment is associated with.</p>",
-        "DescribeApplicationVersionsMessage$ApplicationName": "<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to only include ones that are associated with the specified application.</p>",
+        "DescribeApplicationVersionsMessage$ApplicationName": "<p>Specify an application name to show only application versions for that application.</p>",
         "DescribeConfigurationOptionsMessage$ApplicationName": "<p>The name of the application associated with the configuration template or environment. Only needed if you want to describe the configuration options associated with either the configuration template or environment.</p>",
         "DescribeConfigurationSettingsMessage$ApplicationName": "<p>The application for the environment or configuration template.</p>",
         "DescribeEnvironmentsMessage$ApplicationName": "<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that are associated with this application.</p>",
@@ -127,7 +127,7 @@
         "EventDescription$ApplicationName": "<p>The application associated with the event.</p>",
         "SourceConfiguration$ApplicationName": "<p>The name of the application associated with the configuration.</p>",
         "UpdateApplicationMessage$ApplicationName": "<p>The name of the application to update. If no such application is found, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>",
-        "UpdateApplicationVersionMessage$ApplicationName": "<p>The name of the application associated with this version.</p> <p> If no application is found with this name, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>",
+        "UpdateApplicationVersionMessage$ApplicationName": "<p>The name of the application associated with this version.</p> <p> If no application is found with this name, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error.</p>",
         "UpdateConfigurationTemplateMessage$ApplicationName": "<p>The name of the application associated with the configuration template to update.</p> <p> If no application is found with this name, <code>UpdateConfigurationTemplate</code> returns an <code>InvalidParameterValue</code> error. </p>",
         "UpdateEnvironmentMessage$ApplicationName": "<p>The name of the application with which the environment is associated.</p>",
         "ValidateConfigurationSettingsMessage$ApplicationName": "<p>The name of the application that the configuration template or environment belongs to.</p>"
@@ -149,7 +149,7 @@
     "ApplicationVersionDescriptionList": {
       "base": null,
       "refs": {
-        "ApplicationVersionDescriptionsMessage$ApplicationVersions": "<p>List of <code>ApplicationVersionDescription</code> objects sorted by order of creation.</p>"
+        "ApplicationVersionDescriptionsMessage$ApplicationVersions": "<p>List of <code>ApplicationVersionDescription</code> objects sorted in order of creation.</p>"
       }
     },
     "ApplicationVersionDescriptionMessage": {
@@ -187,7 +187,7 @@
     "AutoCreateApplication": {
       "base": null,
       "refs": {
-        "CreateApplicationVersionMessage$AutoCreateApplication": "<p>Determines how the system behaves if the specified application for this version does not already exist:</p> <ul> <li> <p> <code>true</code> : Automatically creates the specified application for this release if it does not already exist.</p> </li> <li> <p> <code>false</code> : Throws an <code>InvalidParameterValue</code> if the specified application for this release does not already exist.</p> </li> </ul> <p> Default: <code>false</code> </p> <p> Valid Values: <code>true</code> | <code>false</code> </p>"
+        "CreateApplicationVersionMessage$AutoCreateApplication": "<p>Set to <code>true</code> to create an application with the specified name if it doesn't already exist.</p>"
       }
     },
     "AutoScalingGroup": {
@@ -214,10 +214,22 @@
         "ListAvailableSolutionStacksResultMessage$SolutionStacks": "<p>A list of available solution stacks.</p>"
       }
     },
-    "CPUUtilization": {
-      "base": "<p>Represents CPU utilization information from the specified instance that belongs to the AWS Elastic Beanstalk environment. Use the <code>instanceId</code> property to specify the application instance for which you'd like to return data.</p>",
+    "BoxedInt": {
+      "base": null,
       "refs": {
-        "SystemStatus$CPUUtilization": null
+        "BuildConfiguration$TimeoutInMinutes": null
+      }
+    },
+    "BuildConfiguration": {
+      "base": null,
+      "refs": {
+        "CreateApplicationVersionMessage$BuildConfiguration": null
+      }
+    },
+    "CPUUtilization": {
+      "base": "<p>CPU utilization metrics for an instance.</p>",
+      "refs": {
+        "SystemStatus$CPUUtilization": "<p>CPU utilization metrics for the instance.</p>"
       }
     },
     "Cause": {
@@ -229,7 +241,7 @@
     "Causes": {
       "base": null,
       "refs": {
-        "DescribeEnvironmentHealthResult$Causes": "<p>Returns potential causes for the reported status.</p>",
+        "DescribeEnvironmentHealthResult$Causes": "<p>Descriptions of the data that contributed to the environment's current health status.</p>",
         "SingleInstanceHealth$Causes": "<p>Represents the causes, which provide more information about the current health status.</p>"
       }
     },
@@ -249,9 +261,20 @@
         "CheckDNSAvailabilityResultMessage$Available": "<p>Indicates if the specified CNAME is available:</p> <ul> <li> <p> <code>true</code> : The CNAME is available.</p> </li> <li> <p> <code>false</code> : The CNAME is not available.</p> </li> </ul>"
       }
     },
+    "CodeBuildNotInServiceRegionException": {
+      "base": "<p>The CodeBuild service is not supported in this region.</p>",
+      "refs": {
+      }
+    },
     "ComposeEnvironmentsMessage": {
       "base": "<p>Request to create or update a group of environments.</p>",
       "refs": {
+      }
+    },
+    "ComputeType": {
+      "base": null,
+      "refs": {
+        "BuildConfiguration$ComputeType": null
       }
     },
     "ConfigurationDeploymentStatus": {
@@ -284,7 +307,7 @@
         "ConfigurationOptionDescription$Name": "<p>The name of the configuration option.</p>",
         "ConfigurationOptionSetting$OptionName": "<p>The name of the configuration option.</p>",
         "OptionSpecification$OptionName": "<p>The name of the configuration option.</p>",
-        "ValidationMessage$OptionName": "<p/>"
+        "ValidationMessage$OptionName": "<p>The name of the option.</p>"
       }
     },
     "ConfigurationOptionPossibleValue": {
@@ -457,7 +480,7 @@
     "DeleteSourceBundle": {
       "base": null,
       "refs": {
-        "DeleteApplicationVersionMessage$DeleteSourceBundle": "<p>Indicates whether to delete the associated source bundle from Amazon S3:</p> <ul> <li> <p> <code>true</code>: An attempt is made to delete the associated Amazon S3 source bundle specified at time of creation.</p> </li> <li> <p> <code>false</code>: No action is taken on the Amazon S3 source bundle specified at time of creation.</p> </li> </ul> <p> Valid Values: <code>true</code> | <code>false</code> </p>"
+        "DeleteApplicationVersionMessage$DeleteSourceBundle": "<p>Set to <code>true</code> to delete the source bundle from your storage bucket. Otherwise, the application version is deleted only from Elastic Beanstalk and the source bundle remains in Amazon S3.</p>"
       }
     },
     "Deployment": {
@@ -473,7 +496,7 @@
       }
     },
     "DescribeApplicationVersionsMessage": {
-      "base": "<p>Result message containing a list of configuration descriptions.</p>",
+      "base": "<p>Request to describe application versions.</p>",
       "refs": {
       }
     },
@@ -498,7 +521,7 @@
       }
     },
     "DescribeEnvironmentHealthResult": {
-      "base": "<p>See the example below for a sample response.</p>",
+      "base": "<p>Health details for an AWS Elastic Beanstalk environment.</p>",
       "refs": {
       }
     },
@@ -538,12 +561,12 @@
       }
     },
     "DescribeInstancesHealthRequest": {
-      "base": "<p>See the example below to learn how to create a request body.</p>",
+      "base": "<p>Parameters for a call to <code>DescribeInstancesHealth</code>.</p>",
       "refs": {
       }
     },
     "DescribeInstancesHealthResult": {
-      "base": "<p>See the example below for a sample response.</p>",
+      "base": "<p>Detailed health information about the Amazon EC2 instances in an AWS Elastic Beanstalk environment.</p>",
       "refs": {
       }
     },
@@ -551,7 +574,7 @@
       "base": null,
       "refs": {
         "ApplicationDescription$Description": "<p>User-defined description of the application.</p>",
-        "ApplicationVersionDescription$Description": "<p>The description of this application version.</p>",
+        "ApplicationVersionDescription$Description": "<p>The description of the application version.</p>",
         "ConfigurationSettingsDescription$Description": "<p>Describes this configuration set.</p>",
         "CreateApplicationMessage$Description": "<p>Describes the application.</p>",
         "CreateApplicationVersionMessage$Description": "<p>Describes this version.</p>",
@@ -559,7 +582,7 @@
         "CreateEnvironmentMessage$Description": "<p>Describes this environment.</p>",
         "EnvironmentDescription$Description": "<p>Describes this environment.</p>",
         "UpdateApplicationMessage$Description": "<p>A new description for the application.</p> <p>Default: If not specified, AWS Elastic Beanstalk does not update the description.</p>",
-        "UpdateApplicationVersionMessage$Description": "<p>A new description for this release.</p>",
+        "UpdateApplicationVersionMessage$Description": "<p>A new description for this version.</p>",
         "UpdateConfigurationTemplateMessage$Description": "<p>A new description for the configuration.</p>",
         "UpdateEnvironmentMessage$Description": "<p>If this parameter is specified, AWS Elastic Beanstalk updates the description of this environment.</p>"
       }
@@ -601,7 +624,7 @@
     "EnvironmentHealth": {
       "base": null,
       "refs": {
-        "DescribeEnvironmentHealthResult$Status": "<p>Returns the health status value of the environment. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>",
+        "DescribeEnvironmentHealthResult$Status": "<p>The environment's operational status. <code>Ready</code>, <code>Launching</code>, <code>Updating</code>, <code>Terminating</code>, or <code>Terminated</code>.</p>",
         "EnvironmentDescription$Health": "<p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironement</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>"
       }
     },
@@ -614,7 +637,7 @@
     "EnvironmentHealthAttributes": {
       "base": null,
       "refs": {
-        "DescribeEnvironmentHealthRequest$AttributeNames": "<p>Specifies the response elements you wish to receive. If no attribute names are specified, AWS Elastic Beanstalk only returns the name of the environment.</p>"
+        "DescribeEnvironmentHealthRequest$AttributeNames": "<p>Specify the response elements to return. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns the name of the environment.</p>"
       }
     },
     "EnvironmentHealthStatus": {
@@ -628,11 +651,11 @@
       "refs": {
         "AbortEnvironmentUpdateMessage$EnvironmentId": "<p>This specifies the ID of the environment with the in-progress update that you want to cancel.</p>",
         "CreateConfigurationTemplateMessage$EnvironmentId": "<p>The ID of the environment used with this configuration template.</p>",
-        "DescribeEnvironmentHealthRequest$EnvironmentId": "<p>Specifies the AWS Elastic Beanstalk environment ID.</p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>",
+        "DescribeEnvironmentHealthRequest$EnvironmentId": "<p>Specify the environment by ID.</p> <p>You must specify either this or an EnvironmentName, or both.</p>",
         "DescribeEnvironmentManagedActionHistoryRequest$EnvironmentId": "<p>The environment ID of the target environment.</p>",
         "DescribeEnvironmentResourcesMessage$EnvironmentId": "<p>The ID of the environment to retrieve AWS resource usage data.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>",
         "DescribeEventsMessage$EnvironmentId": "<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this environment.</p>",
-        "DescribeInstancesHealthRequest$EnvironmentId": "<p>Specifies the AWS Elastic Beanstalk environment ID.</p>",
+        "DescribeInstancesHealthRequest$EnvironmentId": "<p>Specify the AWS Elastic Beanstalk environment by ID.</p>",
         "EnvironmentDescription$EnvironmentId": "<p>The ID of this environment.</p>",
         "EnvironmentIdList$member": null,
         "RebuildEnvironmentMessage$EnvironmentId": "<p>The ID of the environment to rebuild.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>",
@@ -692,12 +715,12 @@
         "DeleteEnvironmentConfigurationMessage$EnvironmentName": "<p>The name of the environment to delete the draft configuration from.</p>",
         "DescribeConfigurationOptionsMessage$EnvironmentName": "<p>The name of the environment whose configuration options you want to describe.</p>",
         "DescribeConfigurationSettingsMessage$EnvironmentName": "<p>The name of the environment to describe.</p> <p> Condition: You must specify either this or a TemplateName, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>",
-        "DescribeEnvironmentHealthRequest$EnvironmentName": "<p>Specifies the AWS Elastic Beanstalk environment name.</p> <p>Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>",
-        "DescribeEnvironmentHealthResult$EnvironmentName": "<p>The AWS Elastic Beanstalk environment name.</p>",
+        "DescribeEnvironmentHealthRequest$EnvironmentName": "<p>Specify the environment by name.</p> <p>You must specify either this or an EnvironmentName, or both.</p>",
+        "DescribeEnvironmentHealthResult$EnvironmentName": "<p>The environment's name.</p>",
         "DescribeEnvironmentManagedActionHistoryRequest$EnvironmentName": "<p>The name of the target environment.</p>",
         "DescribeEnvironmentResourcesMessage$EnvironmentName": "<p>The name of the environment to retrieve AWS resource usage data.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>",
         "DescribeEventsMessage$EnvironmentName": "<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this environment.</p>",
-        "DescribeInstancesHealthRequest$EnvironmentName": "<p>Specifies the AWS Elastic Beanstalk environment name.</p>",
+        "DescribeInstancesHealthRequest$EnvironmentName": "<p>Specify the AWS Elastic Beanstalk environment by name.</p>",
         "EnvironmentDescription$EnvironmentName": "<p>The name of this environment.</p>",
         "EnvironmentNamesList$member": null,
         "EnvironmentResourceDescription$EnvironmentName": "<p>The name of the environment.</p>",
@@ -839,13 +862,13 @@
     "InstanceHealthList": {
       "base": null,
       "refs": {
-        "DescribeInstancesHealthResult$InstanceHealthList": "<p>Contains the response body with information about the health of the instance.</p>"
+        "DescribeInstancesHealthResult$InstanceHealthList": "<p>Detailed health information about each instance.</p>"
       }
     },
     "InstanceHealthSummary": {
       "base": "<p>Represents summary information about the health of an instance. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>",
       "refs": {
-        "DescribeEnvironmentHealthResult$InstancesHealth": null
+        "DescribeEnvironmentHealthResult$InstancesHealth": "<p>Summary health information for the instances in the environment.</p>"
       }
     },
     "InstanceId": {
@@ -869,7 +892,7 @@
     "InstancesHealthAttributes": {
       "base": null,
       "refs": {
-        "DescribeInstancesHealthRequest$AttributeNames": "<p>Specifies the response elements you wish to receive. If no attribute names are specified, AWS Elastic Beanstalk only returns a list of instances.</p>"
+        "DescribeInstancesHealthRequest$AttributeNames": "<p>Specifies the response elements you wish to receive. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns a list of instances.</p>"
       }
     },
     "InsufficientPrivilegesException": {
@@ -1005,8 +1028,15 @@
     "NextToken": {
       "base": null,
       "refs": {
-        "DescribeInstancesHealthRequest$NextToken": "<p>Specifies the next token of the request.</p>",
-        "DescribeInstancesHealthResult$NextToken": "<p>The next token.</p>"
+        "DescribeInstancesHealthRequest$NextToken": "<p>Specify the pagination token returned by a previous call.</p>",
+        "DescribeInstancesHealthResult$NextToken": "<p>Pagination token for the next page of results, if available.</p>"
+      }
+    },
+    "NonEmptyString": {
+      "base": null,
+      "refs": {
+        "BuildConfiguration$CodeBuildServiceRole": null,
+        "BuildConfiguration$Image": null
       }
     },
     "NullableDouble": {
@@ -1064,7 +1094,7 @@
         "ConfigurationOptionDescription$Namespace": "<p>A unique namespace identifying the option's associated AWS resource.</p>",
         "ConfigurationOptionSetting$Namespace": "<p>A unique namespace identifying the option's associated AWS resource.</p>",
         "OptionSpecification$Namespace": "<p>A unique namespace identifying the option's associated AWS resource.</p>",
-        "ValidationMessage$Namespace": "<p/>"
+        "ValidationMessage$Namespace": "<p>The namespace to which the option belongs.</p>"
       }
     },
     "OptionRestrictionMaxLength": {
@@ -1126,8 +1156,8 @@
     "RefreshedAt": {
       "base": null,
       "refs": {
-        "DescribeEnvironmentHealthResult$RefreshedAt": "<p>The date and time the information was last refreshed.</p>",
-        "DescribeInstancesHealthResult$RefreshedAt": "<p>The date and time the information was last refreshed.</p>"
+        "DescribeEnvironmentHealthResult$RefreshedAt": "<p>The date and time that the health information was retrieved.</p>",
+        "DescribeInstancesHealthResult$RefreshedAt": "<p>The date and time that the health information was retrieved.</p>"
       }
     },
     "RegexLabel": {
@@ -1206,10 +1236,10 @@
       }
     },
     "S3Location": {
-      "base": "<p>A specification of a location in Amazon S3.</p>",
+      "base": "<p>The bucket and key of an item stored in Amazon S3.</p>",
       "refs": {
-        "ApplicationVersionDescription$SourceBundle": "<p>The location where the source bundle is located for this version.</p>",
-        "CreateApplicationVersionMessage$SourceBundle": "<p>The Amazon S3 bucket and key that identify the location of the source bundle for this version.</p> <p> If data found at the Amazon S3 location exceeds the maximum allowed source bundle size, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. The maximum size allowed is 512 MB. </p> <p>Default: If not specified, AWS Elastic Beanstalk uses a sample application. If only partially specified (for example, a bucket is provided but not the key) or if no data is found at the Amazon S3 location, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p>"
+        "ApplicationVersionDescription$SourceBundle": "<p>The storage location of the application version's source bundle in Amazon S3.</p>",
+        "CreateApplicationVersionMessage$SourceBundle": "<p>The Amazon S3 bucket and key that identify the location of the source bundle for this version.</p> <p>Specify a source bundle in S3 or a commit in an AWS CodeCommit repository (with <code>SourceBuildInformation</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>"
       }
     },
     "S3LocationNotInServiceRegionException": {
@@ -1229,7 +1259,7 @@
       }
     },
     "SingleInstanceHealth": {
-      "base": "<p>Represents health information from the specified instance that belongs to the AWS Elastic Beanstalk environment. Use the <code>InstanceId</code> property to specify the application instance for which you'd like to return data.</p>",
+      "base": "<p>Detailed health information about an Amazon EC2 instance in your Elastic Beanstalk environment.</p>",
       "refs": {
         "InstanceHealthList$member": null
       }
@@ -1261,10 +1291,10 @@
       }
     },
     "SourceBuildInformation": {
-      "base": null,
+      "base": "<p>Location of the source code for an application version.</p>",
       "refs": {
-        "ApplicationVersionDescription$SourceBuildInformation": null,
-        "CreateApplicationVersionMessage$SourceBuildInformation": null
+        "ApplicationVersionDescription$SourceBuildInformation": "<p>If the version's source code was retrieved from AWS CodeCommit, the location of the source code for the application version.</p>",
+        "CreateApplicationVersionMessage$SourceBuildInformation": "<p>Specify a commit in an AWS CodeCommit Git repository to use as the source code for the application version.</p> <p>Specify a commit in an AWS CodeCommit repository or a source bundle in S3 (with <code>SourceBundle</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>"
       }
     },
     "SourceBundleDeletionException": {
@@ -1281,19 +1311,19 @@
     "SourceLocation": {
       "base": null,
       "refs": {
-        "SourceBuildInformation$SourceLocation": null
+        "SourceBuildInformation$SourceLocation": "<p>The repository name and commit ID, separated by a forward slash. For example, <code>my-repo/265cfa0cf6af46153527f55d6503ec030551f57a</code>.</p>"
       }
     },
     "SourceRepository": {
       "base": null,
       "refs": {
-        "SourceBuildInformation$SourceRepository": null
+        "SourceBuildInformation$SourceRepository": "<p>Location where the repository is stored, such as <code>CodeCommit</code>.</p>"
       }
     },
     "SourceType": {
       "base": null,
       "refs": {
-        "SourceBuildInformation$SourceType": null
+        "SourceBuildInformation$SourceType": "<p>The type of repository, such as <code>Git</code>.</p>"
       }
     },
     "StatusCodes": {
@@ -1305,16 +1335,18 @@
     "String": {
       "base": null,
       "refs": {
+        "ApplicationVersionDescription$BuildArn": null,
         "ApplyEnvironmentManagedActionRequest$EnvironmentName": "<p>The name of the target environment.</p>",
         "ApplyEnvironmentManagedActionRequest$EnvironmentId": "<p>The environment ID of the target environment.</p>",
         "ApplyEnvironmentManagedActionRequest$ActionId": "<p>The action ID of the scheduled managed action to execute.</p>",
         "ApplyEnvironmentManagedActionResult$ActionId": "<p>The action ID of the managed action.</p>",
         "ApplyEnvironmentManagedActionResult$ActionDescription": "<p>A description of the managed action.</p>",
         "ApplyEnvironmentManagedActionResult$Status": "<p>The status of the managed action.</p>",
+        "BuildConfiguration$ArtifactName": null,
         "Deployment$VersionLabel": "<p>The version label of the application version in the deployment.</p>",
         "Deployment$Status": "<p>The status of the deployment:</p> <ul> <li> <p> <code>In Progress</code> : The deployment is in progress.</p> </li> <li> <p> <code>Deployed</code> : The deployment succeeded.</p> </li> <li> <p> <code>Failed</code> : The deployment failed.</p> </li> </ul>",
-        "DescribeEnvironmentHealthResult$HealthStatus": "<p>Contains the response body with information about the health of the environment.</p>",
-        "DescribeEnvironmentHealthResult$Color": "<p>Returns the color indicator that tells you information about the health of the environment. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>",
+        "DescribeEnvironmentHealthResult$HealthStatus": "<p>The <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">health status</a> of the environment. For example, <code>Ok</code>.</p>",
+        "DescribeEnvironmentHealthResult$Color": "<p>The <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">health color</a> of the environment.</p>",
         "DescribeEnvironmentManagedActionHistoryRequest$NextToken": "<p>The pagination token returned by a previous request.</p>",
         "DescribeEnvironmentManagedActionHistoryResult$NextToken": "<p>A pagination token that you pass to <a>DescribeEnvironmentManagedActionHistory</a> to get the next page of results.</p>",
         "DescribeEnvironmentManagedActionsRequest$EnvironmentName": "<p>The name of the target environment.</p>",
@@ -1346,9 +1378,9 @@
       }
     },
     "SystemStatus": {
-      "base": "<p>Represents CPU utilization and load average information for applications running in the specified environment.</p>",
+      "base": "<p>CPU utilization and load average metrics for an Amazon EC2 instance.</p>",
       "refs": {
-        "SingleInstanceHealth$System": null
+        "SingleInstanceHealth$System": "<p>Operating system metrics from the instance.</p>"
       }
     },
     "Tag": {
@@ -1525,7 +1557,7 @@
     "VersionLabel": {
       "base": null,
       "refs": {
-        "ApplicationVersionDescription$VersionLabel": "<p>A label uniquely identifying the version for the associated application.</p>",
+        "ApplicationVersionDescription$VersionLabel": "<p>A unique identifier for the application version.</p>",
         "CreateApplicationVersionMessage$VersionLabel": "<p>A label identifying this version.</p> <p>Constraint: Must be unique per application. If an application version already exists with this label for the specified application, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>",
         "CreateEnvironmentMessage$VersionLabel": "<p>The name of the application version to deploy.</p> <p> If the specified application has no associated application versions, AWS Elastic Beanstalk <code>UpdateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If not specified, AWS Elastic Beanstalk attempts to launch the sample application in the container.</p>",
         "DeleteApplicationVersionMessage$VersionLabel": "<p>The label of the version to delete.</p>",
@@ -1533,7 +1565,7 @@
         "DescribeEventsMessage$VersionLabel": "<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to those associated with this application version.</p>",
         "EnvironmentDescription$VersionLabel": "<p>The application version deployed in this environment.</p>",
         "EventDescription$VersionLabel": "<p>The release label for the application version associated with this event.</p>",
-        "UpdateApplicationVersionMessage$VersionLabel": "<p>The name of the version to update.</p> <p> If no application version is found with this label, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>",
+        "UpdateApplicationVersionMessage$VersionLabel": "<p>The name of the version to update.</p> <p>If no application version is found with this label, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>",
         "UpdateEnvironmentMessage$VersionLabel": "<p>If this parameter is specified, AWS Elastic Beanstalk deploys the named application version to the environment. If no such application version is found, returns an <code>InvalidParameterValue</code> error. </p>",
         "VersionLabels$member": null,
         "VersionLabelsList$member": null
@@ -1549,7 +1581,7 @@
       "base": null,
       "refs": {
         "ApplicationDescription$Versions": "<p>The names of the versions for this application.</p>",
-        "DescribeApplicationVersionsMessage$VersionLabels": "<p>If specified, restricts the returned descriptions to only include ones that have the specified version labels.</p>"
+        "DescribeApplicationVersionsMessage$VersionLabels": "<p>Specify a version label to show a specific application version.</p>"
       }
     }
   }

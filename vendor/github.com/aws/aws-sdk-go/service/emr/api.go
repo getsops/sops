@@ -58,7 +58,7 @@ func (c *EMR) AddInstanceGroupsRequest(input *AddInstanceGroupsInput) (req *requ
 
 // AddInstanceGroups API operation for Amazon Elastic MapReduce.
 //
-// AddInstanceGroups adds an instance group to a running cluster.
+// Adds one or more instance groups to a running cluster.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -131,8 +131,8 @@ func (c *EMR) AddJobFlowStepsRequest(input *AddJobFlowStepsInput) (req *request.
 // the 256-step limitation in various ways, including using the SSH shell to
 // connect to the master node and submitting queries directly to the software
 // running on the master node, such as Hive and Hadoop. For more information
-// on how to do this, go to Add More than 256 Steps to a Job Flow (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/AddMoreThan256Steps.html)
-// in the Amazon Elastic MapReduce Developer's Guide.
+// on how to do this, see Add More than 256 Steps to a Job Flow (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/AddMoreThan256Steps.html)
+// in the Amazon EMR Developer's Guide.
 //
 // A step specifies the location of a JAR file stored either on the master node
 // of the job flow or in Amazon S3. Each step is performed by the main function
@@ -140,10 +140,9 @@ func (c *EMR) AddJobFlowStepsRequest(input *AddJobFlowStepsInput) (req *request.
 // in the manifest of the JAR or by using the MainFunction parameter of the
 // step.
 //
-// Elastic MapReduce executes each step in the order listed. For a step to be
-// considered complete, the main function must exit with a zero exit code and
-// all Hadoop jobs started while the step was running must have completed and
-// run successfully.
+// Amazon EMR executes each step in the order listed. For a step to be considered
+// complete, the main function must exit with a zero exit code and all Hadoop
+// jobs started while the step was running must have completed and run successfully.
 //
 // You can only add steps to a job flow that is in one of the following states:
 // STARTING, BOOTSTRAPPING, RUNNING, or WAITING.
@@ -236,6 +235,78 @@ func (c *EMR) AddTags(input *AddTagsInput) (*AddTagsOutput, error) {
 	return out, err
 }
 
+const opCancelSteps = "CancelSteps"
+
+// CancelStepsRequest generates a "aws/request.Request" representing the
+// client's request for the CancelSteps operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See CancelSteps for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the CancelSteps method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the CancelStepsRequest method.
+//    req, resp := client.CancelStepsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *EMR) CancelStepsRequest(input *CancelStepsInput) (req *request.Request, output *CancelStepsOutput) {
+	op := &request.Operation{
+		Name:       opCancelSteps,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelStepsInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &CancelStepsOutput{}
+	req.Data = output
+	return
+}
+
+// CancelSteps API operation for Amazon Elastic MapReduce.
+//
+// Cancels a pending step or steps in a running cluster. Available only in Amazon
+// EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps
+// are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous;
+// it does not guarantee a step will be canceled, even if the request is successfully
+// submitted. You can only cancel steps that are in a PENDING state.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic MapReduce's
+// API operation CancelSteps for usage and error information.
+//
+// Returned Error Codes:
+//   * InternalServerError
+//   Indicates that an error occurred while processing the request and that the
+//   request was not completed.
+//
+//   * InvalidRequestException
+//   This exception occurs when there is something wrong with user input.
+//
+func (c *EMR) CancelSteps(input *CancelStepsInput) (*CancelStepsOutput, error) {
+	req, out := c.CancelStepsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
 const opCreateSecurityConfiguration = "CreateSecurityConfiguration"
 
 // CreateSecurityConfigurationRequest generates a "aws/request.Request" representing the
@@ -281,9 +352,8 @@ func (c *EMR) CreateSecurityConfigurationRequest(input *CreateSecurityConfigurat
 
 // CreateSecurityConfiguration API operation for Amazon Elastic MapReduce.
 //
-// Creates a security configuration using EMR Security Configurations, which
-// are stored in the service. Security Configurations enable you to more easily
-// create a configuration, reuse it, and apply it whenever a cluster is created.
+// Creates a security configuration, which is stored in the service and can
+// be specified when a cluster is created.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -507,7 +577,7 @@ func (c *EMR) DescribeJobFlowsRequest(input *DescribeJobFlowsInput) (req *reques
 //    *  Job flows created within the last two months that are in one of the
 //    following states: RUNNING, WAITING, SHUTTING_DOWN, STARTING
 //
-// Amazon Elastic MapReduce can return a maximum of 512 job flow descriptions.
+// Amazon EMR can return a maximum of 512 job flow descriptions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1183,7 +1253,8 @@ func (c *EMR) ListStepsRequest(input *ListStepsInput) (req *request.Request, out
 
 // ListSteps API operation for Amazon Elastic MapReduce.
 //
-// Provides a list of steps for the cluster.
+// Provides a list of steps for the cluster in reverse order unless you specify
+// stepIds with the request.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1296,6 +1367,128 @@ func (c *EMR) ModifyInstanceGroupsRequest(input *ModifyInstanceGroupsInput) (req
 //
 func (c *EMR) ModifyInstanceGroups(input *ModifyInstanceGroupsInput) (*ModifyInstanceGroupsOutput, error) {
 	req, out := c.ModifyInstanceGroupsRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opPutAutoScalingPolicy = "PutAutoScalingPolicy"
+
+// PutAutoScalingPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the PutAutoScalingPolicy operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See PutAutoScalingPolicy for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the PutAutoScalingPolicy method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the PutAutoScalingPolicyRequest method.
+//    req, resp := client.PutAutoScalingPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *EMR) PutAutoScalingPolicyRequest(input *PutAutoScalingPolicyInput) (req *request.Request, output *PutAutoScalingPolicyOutput) {
+	op := &request.Operation{
+		Name:       opPutAutoScalingPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutAutoScalingPolicyInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &PutAutoScalingPolicyOutput{}
+	req.Data = output
+	return
+}
+
+// PutAutoScalingPolicy API operation for Amazon Elastic MapReduce.
+//
+// Creates or updates an automatic scaling policy for a core instance group
+// or task instance group in an Amazon EMR cluster. The automatic scaling policy
+// defines how an instance group dynamically adds and terminates EC2 instances
+// in response to the value of a CloudWatch metric.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic MapReduce's
+// API operation PutAutoScalingPolicy for usage and error information.
+func (c *EMR) PutAutoScalingPolicy(input *PutAutoScalingPolicyInput) (*PutAutoScalingPolicyOutput, error) {
+	req, out := c.PutAutoScalingPolicyRequest(input)
+	err := req.Send()
+	return out, err
+}
+
+const opRemoveAutoScalingPolicy = "RemoveAutoScalingPolicy"
+
+// RemoveAutoScalingPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the RemoveAutoScalingPolicy operation. The "output" return
+// value can be used to capture response data after the request's "Send" method
+// is called.
+//
+// See RemoveAutoScalingPolicy for usage and error information.
+//
+// Creating a request object using this method should be used when you want to inject
+// custom logic into the request's lifecycle using a custom handler, or if you want to
+// access properties on the request object before or after sending the request. If
+// you just want the service response, call the RemoveAutoScalingPolicy method directly
+// instead.
+//
+// Note: You must call the "Send" method on the returned request object in order
+// to execute the request.
+//
+//    // Example sending a request using the RemoveAutoScalingPolicyRequest method.
+//    req, resp := client.RemoveAutoScalingPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+func (c *EMR) RemoveAutoScalingPolicyRequest(input *RemoveAutoScalingPolicyInput) (req *request.Request, output *RemoveAutoScalingPolicyOutput) {
+	op := &request.Operation{
+		Name:       opRemoveAutoScalingPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RemoveAutoScalingPolicyInput{}
+	}
+
+	req = c.newRequest(op, input, output)
+	output = &RemoveAutoScalingPolicyOutput{}
+	req.Data = output
+	return
+}
+
+// RemoveAutoScalingPolicy API operation for Amazon Elastic MapReduce.
+//
+// Removes an automatic scaling policy from a specified instance group within
+// an EMR cluster.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic MapReduce's
+// API operation RemoveAutoScalingPolicy for usage and error information.
+func (c *EMR) RemoveAutoScalingPolicy(input *RemoveAutoScalingPolicyInput) (*RemoveAutoScalingPolicyOutput, error) {
+	req, out := c.RemoveAutoScalingPolicyRequest(input)
 	err := req.Send()
 	return out, err
 }
@@ -1418,11 +1611,11 @@ func (c *EMR) RunJobFlowRequest(input *RunJobFlowInput) (req *request.Request, o
 // RunJobFlow API operation for Amazon Elastic MapReduce.
 //
 // RunJobFlow creates and starts running a new job flow. The job flow will run
-// the steps specified. Once the job flow completes, the cluster is stopped
+// the steps specified. After the job flow completes, the cluster is stopped
 // and the HDFS partition is lost. To prevent loss of data, configure the last
 // step of the job flow to store results in Amazon S3. If the JobFlowInstancesConfigKeepJobFlowAliveWhenNoSteps
 // parameter is set to TRUE, the job flow will transition to the WAITING state
-// rather than shutting down once the steps have completed.
+// rather than shutting down after the steps have completed.
 //
 // For additional protection, you can set the JobFlowInstancesConfigTerminationProtected
 // parameter to TRUE to lock the job flow and prevent it from being terminated
@@ -1435,8 +1628,8 @@ func (c *EMR) RunJobFlowRequest(input *RunJobFlowInput) (req *request.Request, o
 // the 256-step limitation in various ways, including using the SSH shell to
 // connect to the master node and submitting queries directly to the software
 // running on the master node, such as Hive and Hadoop. For more information
-// on how to do this, go to Add More than 256 Steps to a Job Flow (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/AddMoreThan256Steps.html)
-// in the Amazon Elastic MapReduce Developer's Guide.
+// on how to do this, see Add More than 256 Steps to a Job Flow (http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html)
+// in the Amazon EMR Management Guide.
 //
 // For long running job flows, we recommend that you periodically store your
 // results.
@@ -1506,12 +1699,12 @@ func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInp
 
 // SetTerminationProtection API operation for Amazon Elastic MapReduce.
 //
-// SetTerminationProtection locks a job flow so the Amazon EC2 instances in
-// the cluster cannot be terminated by user intervention, an API call, or in
-// the event of a job-flow error. The cluster still terminates upon successful
-// completion of the job flow. Calling SetTerminationProtection on a job flow
-// is analogous to calling the Amazon EC2 DisableAPITermination API on all of
-// the EC2 instances in a cluster.
+// SetTerminationProtection locks a job flow so the EC2 instances in the cluster
+// cannot be terminated by user intervention, an API call, or in the event of
+// a job-flow error. The cluster still terminates upon successful completion
+// of the job flow. Calling SetTerminationProtection on a job flow is analogous
+// to calling the Amazon EC2 DisableAPITermination API on all of the EC2 instances
+// in a cluster.
 //
 // SetTerminationProtection is used to prevent accidental termination of a job
 // flow and to ensure that in the event of an error, the instances will persist
@@ -1521,8 +1714,8 @@ func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInp
 // to true, you must first unlock the job flow by a subsequent call to SetTerminationProtection
 // in which you set the value to false.
 //
-// For more information, go to Protecting a Job Flow from Termination (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/UsingEMR_TerminationProtection.html)
-// in the Amazon Elastic MapReduce Developer's Guide.
+// For more information, seeProtecting a Job Flow from Termination (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/UsingEMR_TerminationProtection.html)
+// in the Amazon EMR Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1668,7 +1861,7 @@ func (c *EMR) TerminateJobFlowsRequest(input *TerminateJobFlowsInput) (req *requ
 //
 // The maximum number of JobFlows allowed is 10. The call to TerminateJobFlows
 // is asynchronous. Depending on the configuration of the job flow, it may take
-// up to 5-20 minutes for the job flow to completely terminate and release allocated
+// up to 1-5 minutes for the job flow to completely terminate and release allocated
 // resources, such as Amazon EC2 instances.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1693,7 +1886,7 @@ func (c *EMR) TerminateJobFlows(input *TerminateJobFlowsInput) (*TerminateJobFlo
 type AddInstanceGroupsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Instance Groups to add.
+	// Instance groups to add.
 	//
 	// InstanceGroups is a required field
 	InstanceGroups []*InstanceGroupConfig `type:"list" required:"true"`
@@ -1883,7 +2076,7 @@ type AddTagsInput struct {
 	// ResourceId is a required field
 	ResourceId *string `type:"string" required:"true"`
 
-	// A list of tags to associate with a cluster and propagate to Amazon EC2 instances.
+	// A list of tags to associate with a cluster and propagate to EC2 instances.
 	// Tags are user-defined key/value pairs that consist of a required key string
 	// with a maximum of 128 characters, and an optional value string with a maximum
 	// of 256 characters.
@@ -2014,12 +2207,206 @@ func (s *Application) SetVersion(v string) *Application {
 	return s
 }
 
+// An automatic scaling policy for a core instance group or task instance group
+// in an Amazon EMR cluster. An automatic scaling policy defines how an instance
+// group dynamically adds and terminates EC2 instances in response to the value
+// of a CloudWatch metric. See PutAutoScalingPolicy.
+type AutoScalingPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// The upper and lower EC2 instance limits for an automatic scaling policy.
+	// Automatic scaling activity will not cause an instance group to grow above
+	// or below these limits.
+	//
+	// Constraints is a required field
+	Constraints *ScalingConstraints `type:"structure" required:"true"`
+
+	// The scale-in and scale-out rules that comprise the automatic scaling policy.
+	//
+	// Rules is a required field
+	Rules []*ScalingRule `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s AutoScalingPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutoScalingPolicy) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AutoScalingPolicy) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AutoScalingPolicy"}
+	if s.Constraints == nil {
+		invalidParams.Add(request.NewErrParamRequired("Constraints"))
+	}
+	if s.Rules == nil {
+		invalidParams.Add(request.NewErrParamRequired("Rules"))
+	}
+	if s.Constraints != nil {
+		if err := s.Constraints.Validate(); err != nil {
+			invalidParams.AddNested("Constraints", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Rules != nil {
+		for i, v := range s.Rules {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Rules", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConstraints sets the Constraints field's value.
+func (s *AutoScalingPolicy) SetConstraints(v *ScalingConstraints) *AutoScalingPolicy {
+	s.Constraints = v
+	return s
+}
+
+// SetRules sets the Rules field's value.
+func (s *AutoScalingPolicy) SetRules(v []*ScalingRule) *AutoScalingPolicy {
+	s.Rules = v
+	return s
+}
+
+// An automatic scaling policy for a core instance group or task instance group
+// in an Amazon EMR cluster. The automatic scaling policy defines how an instance
+// group dynamically adds and terminates EC2 instances in response to the value
+// of a CloudWatch metric. See PutAutoScalingPolicy.
+type AutoScalingPolicyDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The upper and lower EC2 instance limits for an automatic scaling policy.
+	// Automatic scaling activity will not cause an instance group to grow above
+	// or below these limits.
+	Constraints *ScalingConstraints `type:"structure"`
+
+	// The scale-in and scale-out rules that comprise the automatic scaling policy.
+	Rules []*ScalingRule `type:"list"`
+
+	// The status of an automatic scaling policy.
+	Status *AutoScalingPolicyStatus `type:"structure"`
+}
+
+// String returns the string representation
+func (s AutoScalingPolicyDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutoScalingPolicyDescription) GoString() string {
+	return s.String()
+}
+
+// SetConstraints sets the Constraints field's value.
+func (s *AutoScalingPolicyDescription) SetConstraints(v *ScalingConstraints) *AutoScalingPolicyDescription {
+	s.Constraints = v
+	return s
+}
+
+// SetRules sets the Rules field's value.
+func (s *AutoScalingPolicyDescription) SetRules(v []*ScalingRule) *AutoScalingPolicyDescription {
+	s.Rules = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AutoScalingPolicyDescription) SetStatus(v *AutoScalingPolicyStatus) *AutoScalingPolicyDescription {
+	s.Status = v
+	return s
+}
+
+// The reason for an AutoScalingPolicyStatus change.
+type AutoScalingPolicyStateChangeReason struct {
+	_ struct{} `type:"structure"`
+
+	// The code indicating the reason for the change in status.USER_REQUEST indicates
+	// that the scaling policy status was changed by a user. PROVISION_FAILURE indicates
+	// that the status change was because the policy failed to provision. CLEANUP_FAILURE
+	// indicates something unclean happened.-->
+	Code *string `type:"string" enum:"AutoScalingPolicyStateChangeReasonCode"`
+
+	// A friendly, more verbose message that accompanies an automatic scaling policy
+	// state change.
+	Message *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AutoScalingPolicyStateChangeReason) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutoScalingPolicyStateChangeReason) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *AutoScalingPolicyStateChangeReason) SetCode(v string) *AutoScalingPolicyStateChangeReason {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *AutoScalingPolicyStateChangeReason) SetMessage(v string) *AutoScalingPolicyStateChangeReason {
+	s.Message = &v
+	return s
+}
+
+// The status of an automatic scaling policy.
+type AutoScalingPolicyStatus struct {
+	_ struct{} `type:"structure"`
+
+	State *string `type:"string" enum:"AutoScalingPolicyState"`
+
+	// The reason for a change in status.
+	StateChangeReason *AutoScalingPolicyStateChangeReason `type:"structure"`
+}
+
+// String returns the string representation
+func (s AutoScalingPolicyStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AutoScalingPolicyStatus) GoString() string {
+	return s.String()
+}
+
+// SetState sets the State field's value.
+func (s *AutoScalingPolicyStatus) SetState(v string) *AutoScalingPolicyStatus {
+	s.State = &v
+	return s
+}
+
+// SetStateChangeReason sets the StateChangeReason field's value.
+func (s *AutoScalingPolicyStatus) SetStateChangeReason(v *AutoScalingPolicyStateChangeReason) *AutoScalingPolicyStatus {
+	s.StateChangeReason = v
+	return s
+}
+
+// Configuration of a bootstrap action.
 type BootstrapActionConfig struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the bootstrap action.
+	//
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
 
+	// The script run by the bootstrap action.
+	//
 	// ScriptBootstrapAction is a required field
 	ScriptBootstrapAction *ScriptBootstrapActionConfig `type:"structure" required:"true"`
 }
@@ -2091,12 +2478,251 @@ func (s *BootstrapActionDetail) SetBootstrapActionConfig(v *BootstrapActionConfi
 	return s
 }
 
+type CancelStepsInfo struct {
+	_ struct{} `type:"structure"`
+
+	Reason *string `type:"string"`
+
+	Status *string `type:"string" enum:"CancelStepsRequestStatus"`
+
+	StepId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CancelStepsInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelStepsInfo) GoString() string {
+	return s.String()
+}
+
+// SetReason sets the Reason field's value.
+func (s *CancelStepsInfo) SetReason(v string) *CancelStepsInfo {
+	s.Reason = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CancelStepsInfo) SetStatus(v string) *CancelStepsInfo {
+	s.Status = &v
+	return s
+}
+
+// SetStepId sets the StepId field's value.
+func (s *CancelStepsInfo) SetStepId(v string) *CancelStepsInfo {
+	s.StepId = &v
+	return s
+}
+
+// The input argument to the CancelSteps operation.
+type CancelStepsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ClusterID for which specified steps will be canceled. Use RunJobFlow
+	// and ListClusters to get ClusterIDs.
+	ClusterId *string `type:"string"`
+
+	// The list of StepIDs to cancel. Use ListSteps to get steps and their states
+	// for the specified cluster.
+	StepIds []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s CancelStepsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelStepsInput) GoString() string {
+	return s.String()
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *CancelStepsInput) SetClusterId(v string) *CancelStepsInput {
+	s.ClusterId = &v
+	return s
+}
+
+// SetStepIds sets the StepIds field's value.
+func (s *CancelStepsInput) SetStepIds(v []*string) *CancelStepsInput {
+	s.StepIds = v
+	return s
+}
+
+// The output for the CancelSteps operation.
+type CancelStepsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of CancelStepsInfo, which shows the status of specified cancel requests
+	// for each StepID specified.
+	CancelStepsInfoList []*CancelStepsInfo `type:"list"`
+}
+
+// String returns the string representation
+func (s CancelStepsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelStepsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCancelStepsInfoList sets the CancelStepsInfoList field's value.
+func (s *CancelStepsOutput) SetCancelStepsInfoList(v []*CancelStepsInfo) *CancelStepsOutput {
+	s.CancelStepsInfoList = v
+	return s
+}
+
+// The definition of a CloudWatch metric alarm, which determines when an automatic
+// scaling activity is triggered. When the defined alarm conditions are satisfied,
+// scaling activity begins.
+type CloudWatchAlarmDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// Determines how the metric specified by MetricName is compared to the value
+	// specified by Threshold.
+	//
+	// ComparisonOperator is a required field
+	ComparisonOperator *string `type:"string" required:"true" enum:"ComparisonOperator"`
+
+	// A CloudWatch metric dimension.
+	Dimensions []*MetricDimension `type:"list"`
+
+	// The number of periods, expressed in seconds using Period, during which the
+	// alarm condition must exist before the alarm triggers automatic scaling activity.
+	// The default value is 1.
+	EvaluationPeriods *int64 `type:"integer"`
+
+	// The name of the CloudWatch metric that is watched to determine an alarm condition.
+	//
+	// MetricName is a required field
+	MetricName *string `type:"string" required:"true"`
+
+	// The namespace for the CloudWatch metric. The default is AWS/ElasticMapReduce.
+	Namespace *string `type:"string"`
+
+	// The period, in seconds, over which the statistic is applied. EMR CloudWatch
+	// metrics are emitted every five minutes (300 seconds), so if an EMR CloudWatch
+	// metric is specified, specify 300.
+	//
+	// Period is a required field
+	Period *int64 `type:"integer" required:"true"`
+
+	// The statistic to apply to the metric associated with the alarm. The default
+	// is AVERAGE.
+	Statistic *string `type:"string" enum:"Statistic"`
+
+	// The value against which the specified statistic is compared.
+	//
+	// Threshold is a required field
+	Threshold *float64 `type:"double" required:"true"`
+
+	// The unit of measure associated with the CloudWatch metric being watched.
+	// The value specified for Unit must correspond to the units specified in the
+	// CloudWatch metric.
+	Unit *string `type:"string" enum:"Unit"`
+}
+
+// String returns the string representation
+func (s CloudWatchAlarmDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CloudWatchAlarmDefinition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CloudWatchAlarmDefinition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CloudWatchAlarmDefinition"}
+	if s.ComparisonOperator == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComparisonOperator"))
+	}
+	if s.MetricName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricName"))
+	}
+	if s.Period == nil {
+		invalidParams.Add(request.NewErrParamRequired("Period"))
+	}
+	if s.Threshold == nil {
+		invalidParams.Add(request.NewErrParamRequired("Threshold"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComparisonOperator sets the ComparisonOperator field's value.
+func (s *CloudWatchAlarmDefinition) SetComparisonOperator(v string) *CloudWatchAlarmDefinition {
+	s.ComparisonOperator = &v
+	return s
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *CloudWatchAlarmDefinition) SetDimensions(v []*MetricDimension) *CloudWatchAlarmDefinition {
+	s.Dimensions = v
+	return s
+}
+
+// SetEvaluationPeriods sets the EvaluationPeriods field's value.
+func (s *CloudWatchAlarmDefinition) SetEvaluationPeriods(v int64) *CloudWatchAlarmDefinition {
+	s.EvaluationPeriods = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *CloudWatchAlarmDefinition) SetMetricName(v string) *CloudWatchAlarmDefinition {
+	s.MetricName = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *CloudWatchAlarmDefinition) SetNamespace(v string) *CloudWatchAlarmDefinition {
+	s.Namespace = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *CloudWatchAlarmDefinition) SetPeriod(v int64) *CloudWatchAlarmDefinition {
+	s.Period = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *CloudWatchAlarmDefinition) SetStatistic(v string) *CloudWatchAlarmDefinition {
+	s.Statistic = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *CloudWatchAlarmDefinition) SetThreshold(v float64) *CloudWatchAlarmDefinition {
+	s.Threshold = &v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *CloudWatchAlarmDefinition) SetUnit(v string) *CloudWatchAlarmDefinition {
+	s.Unit = &v
+	return s
+}
+
 // The detailed description of the cluster.
 type Cluster struct {
 	_ struct{} `type:"structure"`
 
 	// The applications installed on this cluster.
 	Applications []*Application `type:"list"`
+
+	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
+	// The IAM role provides permissions that the automatic scaling feature requires
+	// to launch and terminate EC2 instances in an instance group.
+	AutoScalingRole *string `type:"string"`
 
 	// Specifies whether the cluster should terminate after completing all steps.
 	AutoTerminate *bool `type:"boolean"`
@@ -2140,6 +2766,20 @@ type Cluster struct {
 	// The AMI version running on this cluster.
 	RunningAmiVersion *string `type:"string"`
 
+	// The way that individual Amazon EC2 instances terminate when an automatic
+	// scale-in activity occurs or an instance group is resized. TERMINATE_AT_INSTANCE_HOUR
+	// indicates that Amazon EMR terminates nodes at the instance-hour boundary,
+	// regardless of when the request to terminate the instance was submitted. This
+	// option is only available with Amazon EMR 5.1.0 and later and is the default
+	// for clusters created using that version. TERMINATE_AT_TASK_COMPLETION indicates
+	// that Amazon EMR blacklists and drains tasks from nodes before terminating
+	// the Amazon EC2 instances, regardless of the instance-hour boundary. With
+	// either behavior, Amazon EMR removes the least active nodes first and blocks
+	// instance termination if it could lead to HDFS corruption. TERMINATE_AT_TASK_COMPLETION
+	// is available only in Amazon EMR version 4.1.0 and later, and is the default
+	// for versions of Amazon EMR earlier than 5.1.0.
+	ScaleDownBehavior *string `type:"string" enum:"ScaleDownBehavior"`
+
 	// The name of the security configuration applied to the cluster.
 	SecurityConfiguration *string `type:"string"`
 
@@ -2180,6 +2820,12 @@ func (s Cluster) GoString() string {
 // SetApplications sets the Applications field's value.
 func (s *Cluster) SetApplications(v []*Application) *Cluster {
 	s.Applications = v
+	return s
+}
+
+// SetAutoScalingRole sets the AutoScalingRole field's value.
+func (s *Cluster) SetAutoScalingRole(v string) *Cluster {
+	s.AutoScalingRole = &v
 	return s
 }
 
@@ -2246,6 +2892,12 @@ func (s *Cluster) SetRequestedAmiVersion(v string) *Cluster {
 // SetRunningAmiVersion sets the RunningAmiVersion field's value.
 func (s *Cluster) SetRunningAmiVersion(v string) *Cluster {
 	s.RunningAmiVersion = &v
+	return s
+}
+
+// SetScaleDownBehavior sets the ScaleDownBehavior field's value.
+func (s *Cluster) SetScaleDownBehavior(v string) *Cluster {
+	s.ScaleDownBehavior = &v
 	return s
 }
 
@@ -2992,8 +3644,8 @@ type EbsBlockDevice struct {
 	// The device name that is exposed to the instance, such as /dev/sdh.
 	Device *string `type:"string"`
 
-	// EBS volume specifications such as volume type, IOPS, and size(GiB) that will
-	// be requested for the EBS volume attached to an EC2 instance in the cluster.
+	// EBS volume specifications such as volume type, IOPS, and size (GiB) that
+	// will be requested for the EBS volume attached to an EC2 instance in the cluster.
 	VolumeSpecification *VolumeSpecification `type:"structure"`
 }
 
@@ -3024,13 +3676,13 @@ func (s *EbsBlockDevice) SetVolumeSpecification(v *VolumeSpecification) *EbsBloc
 type EbsBlockDeviceConfig struct {
 	_ struct{} `type:"structure"`
 
-	// EBS volume specifications such as volume type, IOPS, and size(GiB) that will
-	// be requested for the EBS volume attached to an EC2 instance in the cluster.
+	// EBS volume specifications such as volume type, IOPS, and size (GiB) that
+	// will be requested for the EBS volume attached to an EC2 instance in the cluster.
 	//
 	// VolumeSpecification is a required field
 	VolumeSpecification *VolumeSpecification `type:"structure" required:"true"`
 
-	// Number of EBS volumes with specific volume configuration, that will be associated
+	// Number of EBS volumes with a specific volume configuration that will be associated
 	// with every instance in the instance group
 	VolumesPerInstance *int64 `type:"integer"`
 }
@@ -3075,11 +3727,14 @@ func (s *EbsBlockDeviceConfig) SetVolumesPerInstance(v int64) *EbsBlockDeviceCon
 	return s
 }
 
+// The Amazon EBS configuration of a cluster instance.
 type EbsConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// An array of Amazon EBS volume specifications attached to a cluster instance.
 	EbsBlockDeviceConfigs []*EbsBlockDeviceConfig `type:"list"`
 
+	// Indicates whether an Amazon EBS volume is EBS-optimized.
 	EbsOptimized *bool `type:"boolean"`
 }
 
@@ -3541,6 +4196,12 @@ func (s *Instance) SetStatus(v *InstanceStatus) *Instance {
 type InstanceGroup struct {
 	_ struct{} `type:"structure"`
 
+	// An automatic scaling policy for a core instance group or task instance group
+	// in an Amazon EMR cluster. The automatic scaling policy defines how an instance
+	// group dynamically adds and terminates EC2 instances in response to the value
+	// of a CloudWatch metric. See PutAutoScalingPolicy.
+	AutoScalingPolicy *AutoScalingPolicyDescription `type:"structure"`
+
 	// The bid price for each EC2 instance in the instance group when launching
 	// nodes as Spot Instances, expressed in USD.
 	BidPrice *string `type:"string"`
@@ -3597,6 +4258,12 @@ func (s InstanceGroup) String() string {
 // GoString returns the string representation
 func (s InstanceGroup) GoString() string {
 	return s.String()
+}
+
+// SetAutoScalingPolicy sets the AutoScalingPolicy field's value.
+func (s *InstanceGroup) SetAutoScalingPolicy(v *AutoScalingPolicyDescription) *InstanceGroup {
+	s.AutoScalingPolicy = v
+	return s
 }
 
 // SetBidPrice sets the BidPrice field's value.
@@ -3681,8 +4348,14 @@ func (s *InstanceGroup) SetStatus(v *InstanceGroupStatus) *InstanceGroup {
 type InstanceGroupConfig struct {
 	_ struct{} `type:"structure"`
 
-	// Bid price for each Amazon EC2 instance in the instance group when launching
-	// nodes as Spot Instances, expressed in USD.
+	// An automatic scaling policy for a core instance group or task instance group
+	// in an Amazon EMR cluster. The automatic scaling policy defines how an instance
+	// group dynamically adds and terminates EC2 instances in response to the value
+	// of a CloudWatch metric. See PutAutoScalingPolicy.
+	AutoScalingPolicy *AutoScalingPolicy `type:"structure"`
+
+	// Bid price for each EC2 instance in the instance group when launching nodes
+	// as Spot Instances, expressed in USD.
 	BidPrice *string `type:"string"`
 
 	// Amazon EMR releases 4.x or later.
@@ -3692,8 +4365,8 @@ type InstanceGroupConfig struct {
 	// and task).
 	Configurations []*Configuration `type:"list"`
 
-	// EBS configurations that will be attached to each Amazon EC2 instance in the
-	// instance group.
+	// EBS configurations that will be attached to each EC2 instance in the instance
+	// group.
 	EbsConfiguration *EbsConfiguration `type:"structure"`
 
 	// Target number of instances for the instance group.
@@ -3706,12 +4379,12 @@ type InstanceGroupConfig struct {
 	// InstanceRole is a required field
 	InstanceRole *string `type:"string" required:"true" enum:"InstanceRoleType"`
 
-	// The Amazon EC2 instance type for all instances in the instance group.
+	// The EC2 instance type for all instances in the instance group.
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
 
-	// Market type of the Amazon EC2 instances used to create a cluster node.
+	// Market type of the EC2 instances used to create a cluster node.
 	Market *string `type:"string" enum:"MarketType"`
 
 	// Friendly name given to the instance group.
@@ -3743,6 +4416,11 @@ func (s *InstanceGroupConfig) Validate() error {
 	if s.InstanceType != nil && len(*s.InstanceType) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("InstanceType", 1))
 	}
+	if s.AutoScalingPolicy != nil {
+		if err := s.AutoScalingPolicy.Validate(); err != nil {
+			invalidParams.AddNested("AutoScalingPolicy", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.EbsConfiguration != nil {
 		if err := s.EbsConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("EbsConfiguration", err.(request.ErrInvalidParams))
@@ -3753,6 +4431,12 @@ func (s *InstanceGroupConfig) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAutoScalingPolicy sets the AutoScalingPolicy field's value.
+func (s *InstanceGroupConfig) SetAutoScalingPolicy(v *AutoScalingPolicy) *InstanceGroupConfig {
+	s.AutoScalingPolicy = v
+	return s
 }
 
 // SetBidPrice sets the BidPrice field's value.
@@ -3837,7 +4521,7 @@ type InstanceGroupDetail struct {
 	// InstanceRunningCount is a required field
 	InstanceRunningCount *int64 `type:"integer" required:"true"`
 
-	// Amazon EC2 Instance type.
+	// EC2 instance type.
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
@@ -3845,7 +4529,7 @@ type InstanceGroupDetail struct {
 	// Details regarding the state of the instance group.
 	LastStateChangeReason *string `type:"string"`
 
-	// Market type of the Amazon EC2 instances used to create a cluster node.
+	// Market type of the EC2 instances used to create a cluster node.
 	//
 	// Market is a required field
 	Market *string `type:"string" required:"true" enum:"MarketType"`
@@ -3964,8 +4648,8 @@ func (s *InstanceGroupDetail) SetState(v string) *InstanceGroupDetail {
 type InstanceGroupModifyConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The EC2 InstanceIds to terminate. Once you terminate the instances, the instance
-	// group will not return to its original requested size.
+	// The EC2 InstanceIds to terminate. After you terminate the instances, the
+	// instance group will not return to its original requested size.
 	EC2InstanceIdsToTerminate []*string `type:"list"`
 
 	// Target size for the instance group.
@@ -4310,10 +4994,16 @@ type JobFlowDetail struct {
 	_ struct{} `type:"structure"`
 
 	// The version of the AMI used to initialize Amazon EC2 instances in the job
-	// flow. For a list of AMI versions currently supported by Amazon ElasticMapReduce,
-	// go to AMI Versions Supported in Elastic MapReduce (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported)
-	// in the Amazon Elastic MapReduce Developer Guide.
+	// flow. For a list of AMI versions currently supported by Amazon EMR, see AMI
+	// Versions Supported in EMR (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported)
+	// in the Amazon EMR Developer Guide.
 	AmiVersion *string `type:"string"`
+
+	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
+	// The IAM role provides a way for the automatic scaling feature to get the
+	// required permissions it needs to launch and terminate EC2 instances in an
+	// instance group.
+	AutoScalingRole *string `type:"string"`
 
 	// A list of the bootstrap actions run by the job flow.
 	BootstrapActions []*BootstrapActionDetail `type:"list"`
@@ -4344,6 +5034,20 @@ type JobFlowDetail struct {
 	//
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
+
+	// The way that individual Amazon EC2 instances terminate when an automatic
+	// scale-in activity occurs or an instance group is resized. TERMINATE_AT_INSTANCE_HOUR
+	// indicates that Amazon EMR terminates nodes at the instance-hour boundary,
+	// regardless of when the request to terminate the instance was submitted. This
+	// option is only available with Amazon EMR 5.1.0 and later and is the default
+	// for clusters created using that version. TERMINATE_AT_TASK_COMPLETION indicates
+	// that Amazon EMR blacklists and drains tasks from nodes before terminating
+	// the Amazon EC2 instances, regardless of the instance-hour boundary. With
+	// either behavior, Amazon EMR removes the least active nodes first and blocks
+	// instance termination if it could lead to HDFS corruption. TERMINATE_AT_TASK_COMPLETION
+	// available only in Amazon EMR version 4.1.0 and later, and is the default
+	// for versions of Amazon EMR earlier than 5.1.0.
+	ScaleDownBehavior *string `type:"string" enum:"ScaleDownBehavior"`
 
 	// The IAM role that will be assumed by the Amazon EMR service to access AWS
 	// resources on your behalf.
@@ -4379,6 +5083,12 @@ func (s JobFlowDetail) GoString() string {
 // SetAmiVersion sets the AmiVersion field's value.
 func (s *JobFlowDetail) SetAmiVersion(v string) *JobFlowDetail {
 	s.AmiVersion = &v
+	return s
+}
+
+// SetAutoScalingRole sets the AutoScalingRole field's value.
+func (s *JobFlowDetail) SetAutoScalingRole(v string) *JobFlowDetail {
+	s.AutoScalingRole = &v
 	return s
 }
 
@@ -4421,6 +5131,12 @@ func (s *JobFlowDetail) SetLogUri(v string) *JobFlowDetail {
 // SetName sets the Name field's value.
 func (s *JobFlowDetail) SetName(v string) *JobFlowDetail {
 	s.Name = &v
+	return s
+}
+
+// SetScaleDownBehavior sets the ScaleDownBehavior field's value.
+func (s *JobFlowDetail) SetScaleDownBehavior(v string) *JobFlowDetail {
+	s.ScaleDownBehavior = &v
 	return s
 }
 
@@ -4535,8 +5251,8 @@ type JobFlowInstancesConfig struct {
 	// A list of additional Amazon EC2 security group IDs for the slave nodes.
 	AdditionalSlaveSecurityGroups []*string `type:"list"`
 
-	// The name of the Amazon EC2 key pair that can be used to ssh to the master
-	// node as the user called "hadoop."
+	// The name of the EC2 key pair that can be used to ssh to the master node as
+	// the user called "hadoop."
 	Ec2KeyName *string `type:"string"`
 
 	// To launch the job flow in Amazon Virtual Private Cloud (Amazon VPC), set
@@ -4562,7 +5278,7 @@ type JobFlowInstancesConfig struct {
 	// of Hadoop for that AMI version is used.
 	HadoopVersion *string `type:"string"`
 
-	// The number of Amazon EC2 instances used to execute the job flow.
+	// The number of EC2 instances used to execute the job flow.
 	InstanceCount *int64 `type:"integer"`
 
 	// Configuration for the job flow's instance groups.
@@ -4762,11 +5478,11 @@ type JobFlowInstancesDetail struct {
 	MasterPublicDnsName *string `type:"string"`
 
 	// An approximation of the cost of the job flow, represented in m1.small/hours.
-	// This value is incremented once for every hour an m1.small runs. Larger instances
-	// are weighted more, so an Amazon EC2 instance that is roughly four times more
-	// expensive would result in the normalized instance hours being incremented
-	// by four. This result is only an approximation and does not reflect the actual
-	// billing rate.
+	// This value is incremented one time for every hour that an m1.small runs.
+	// Larger instances are weighted more, so an Amazon EC2 instance that is roughly
+	// four times more expensive would result in the normalized instance hours being
+	// incremented by four. This result is only an approximation and does not reflect
+	// the actual billing rate.
 	NormalizedInstanceHours *int64 `type:"integer"`
 
 	// The Amazon EC2 Availability Zone for the job flow.
@@ -4908,7 +5624,7 @@ func (s *KeyValue) SetValue(v string) *KeyValue {
 type ListBootstrapActionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The cluster identifier for the bootstrap actions to list .
+	// The cluster identifier for the bootstrap actions to list.
 	//
 	// ClusterId is a required field
 	ClusterId *string `type:"string" required:"true"`
@@ -4952,11 +5668,11 @@ func (s *ListBootstrapActionsInput) SetMarker(v string) *ListBootstrapActionsInp
 	return s
 }
 
-// This output contains the boostrap actions detail .
+// This output contains the bootstrap actions detail.
 type ListBootstrapActionsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The bootstrap actions associated with the cluster .
+	// The bootstrap actions associated with the cluster.
 	BootstrapActions []*Command `type:"list"`
 
 	// The pagination token that indicates the next set of results to retrieve.
@@ -4993,10 +5709,10 @@ type ListClustersInput struct {
 	// The cluster state filters to apply when listing clusters.
 	ClusterStates []*string `type:"list"`
 
-	// The creation date and time beginning value filter for listing clusters .
+	// The creation date and time beginning value filter for listing clusters.
 	CreatedAfter *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// The creation date and time end value filter for listing clusters .
+	// The creation date and time end value filter for listing clusters.
 	CreatedBefore *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The pagination token that indicates the next set of results to retrieve.
@@ -5418,9 +6134,50 @@ func (s *ListStepsOutput) SetSteps(v []*StepSummary) *ListStepsOutput {
 	return s
 }
 
+// A CloudWatch dimension, which is specified using a Key (known as a Name in
+// CloudWatch), Value pair. By default, Amazon EMR uses one dimension whose
+// Key is JobFlowID and Value is a variable representing the cluster ID, which
+// is ${emr:cluster_id}. This enables the rule to bootstrap when the cluster
+// ID becomes available, and also enables a single automatic scaling policy
+// to be reused for multiple clusters and instance groups.
+type MetricDimension struct {
+	_ struct{} `type:"structure"`
+
+	// The dimension name.
+	Key *string `type:"string"`
+
+	// The dimension value.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s MetricDimension) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MetricDimension) GoString() string {
+	return s.String()
+}
+
+// SetKey sets the Key field's value.
+func (s *MetricDimension) SetKey(v string) *MetricDimension {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *MetricDimension) SetValue(v string) *MetricDimension {
+	s.Value = &v
+	return s
+}
+
 // Change the size of some instance groups.
 type ModifyInstanceGroupsInput struct {
 	_ struct{} `type:"structure"`
+
+	// The ID of the cluster to which the instance group belongs.
+	ClusterId *string `type:"string"`
 
 	// Instance groups to change.
 	InstanceGroups []*InstanceGroupModifyConfig `type:"list"`
@@ -5454,6 +6211,12 @@ func (s *ModifyInstanceGroupsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *ModifyInstanceGroupsInput) SetClusterId(v string) *ModifyInstanceGroupsInput {
+	s.ClusterId = &v
+	return s
 }
 
 // SetInstanceGroups sets the InstanceGroups field's value.
@@ -5513,6 +6276,188 @@ func (s *PlacementType) Validate() error {
 func (s *PlacementType) SetAvailabilityZone(v string) *PlacementType {
 	s.AvailabilityZone = &v
 	return s
+}
+
+type PutAutoScalingPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the definition of the automatic scaling policy.
+	//
+	// AutoScalingPolicy is a required field
+	AutoScalingPolicy *AutoScalingPolicy `type:"structure" required:"true"`
+
+	// Specifies the ID of a cluster. The instance group to which the automatic
+	// scaling policy is applied is within this cluster.
+	//
+	// ClusterId is a required field
+	ClusterId *string `type:"string" required:"true"`
+
+	// Specifies the ID of the instance group to which the automatic scaling policy
+	// is applied.
+	//
+	// InstanceGroupId is a required field
+	InstanceGroupId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PutAutoScalingPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAutoScalingPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutAutoScalingPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutAutoScalingPolicyInput"}
+	if s.AutoScalingPolicy == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutoScalingPolicy"))
+	}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+	if s.InstanceGroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceGroupId"))
+	}
+	if s.AutoScalingPolicy != nil {
+		if err := s.AutoScalingPolicy.Validate(); err != nil {
+			invalidParams.AddNested("AutoScalingPolicy", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAutoScalingPolicy sets the AutoScalingPolicy field's value.
+func (s *PutAutoScalingPolicyInput) SetAutoScalingPolicy(v *AutoScalingPolicy) *PutAutoScalingPolicyInput {
+	s.AutoScalingPolicy = v
+	return s
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *PutAutoScalingPolicyInput) SetClusterId(v string) *PutAutoScalingPolicyInput {
+	s.ClusterId = &v
+	return s
+}
+
+// SetInstanceGroupId sets the InstanceGroupId field's value.
+func (s *PutAutoScalingPolicyInput) SetInstanceGroupId(v string) *PutAutoScalingPolicyInput {
+	s.InstanceGroupId = &v
+	return s
+}
+
+type PutAutoScalingPolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The automatic scaling policy definition.
+	AutoScalingPolicy *AutoScalingPolicyDescription `type:"structure"`
+
+	// Specifies the ID of a cluster. The instance group to which the automatic
+	// scaling policy is applied is within this cluster.
+	ClusterId *string `type:"string"`
+
+	// Specifies the ID of the instance group to which the scaling policy is applied.
+	InstanceGroupId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s PutAutoScalingPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAutoScalingPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetAutoScalingPolicy sets the AutoScalingPolicy field's value.
+func (s *PutAutoScalingPolicyOutput) SetAutoScalingPolicy(v *AutoScalingPolicyDescription) *PutAutoScalingPolicyOutput {
+	s.AutoScalingPolicy = v
+	return s
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *PutAutoScalingPolicyOutput) SetClusterId(v string) *PutAutoScalingPolicyOutput {
+	s.ClusterId = &v
+	return s
+}
+
+// SetInstanceGroupId sets the InstanceGroupId field's value.
+func (s *PutAutoScalingPolicyOutput) SetInstanceGroupId(v string) *PutAutoScalingPolicyOutput {
+	s.InstanceGroupId = &v
+	return s
+}
+
+type RemoveAutoScalingPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the ID of a cluster. The instance group to which the automatic
+	// scaling policy is applied is within this cluster.
+	//
+	// ClusterId is a required field
+	ClusterId *string `type:"string" required:"true"`
+
+	// Specifies the ID of the instance group to which the scaling policy is applied.
+	//
+	// InstanceGroupId is a required field
+	InstanceGroupId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RemoveAutoScalingPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveAutoScalingPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveAutoScalingPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RemoveAutoScalingPolicyInput"}
+	if s.ClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
+	}
+	if s.InstanceGroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceGroupId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterId sets the ClusterId field's value.
+func (s *RemoveAutoScalingPolicyInput) SetClusterId(v string) *RemoveAutoScalingPolicyInput {
+	s.ClusterId = &v
+	return s
+}
+
+// SetInstanceGroupId sets the InstanceGroupId field's value.
+func (s *RemoveAutoScalingPolicyInput) SetInstanceGroupId(v string) *RemoveAutoScalingPolicyInput {
+	s.InstanceGroupId = &v
+	return s
+}
+
+type RemoveAutoScalingPolicyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s RemoveAutoScalingPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveAutoScalingPolicyOutput) GoString() string {
+	return s.String()
 }
 
 // This input identifies a cluster and a list of tags to remove.
@@ -5604,8 +6549,14 @@ type RunJobFlowInput struct {
 	// parameter to modify the version of Hadoop from the defaults shown above.
 	//
 	// For details about the AMI versions currently supported by Amazon Elastic
-	// MapReduce, go to AMI Versions Supported in Elastic MapReduce (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported)
-	// in the Amazon Elastic MapReduce Developer's Guide.
+	// MapReduce, see AMI Versions Supported in Elastic MapReduce (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/EnvironmentConfig_AMIVersion.html#ami-versions-supported)
+	// in the Amazon Elastic MapReduce Developer Guide.
+	//
+	// Previously, the EMR AMI version API parameter options allowed you to use
+	// latest for the latest AMI version rather than specify a numerical value.
+	// Some regions no longer support this deprecated option as they only have a
+	// newer release label version of EMR, which requires you to specify an EMR
+	// release label release (EMR 4.x or later).
 	AmiVersion *string `type:"string"`
 
 	// Amazon EMR releases 4.x or later.
@@ -5613,6 +6564,11 @@ type RunJobFlowInput struct {
 	// A list of applications for the cluster. Valid values are: "Hadoop", "Hive",
 	// "Mahout", "Pig", and "Spark." They are case insensitive.
 	Applications []*Application `type:"list"`
+
+	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
+	// The IAM role provides permissions that the automatic scaling feature requires
+	// to launch and terminate EC2 instances in an instance group.
+	AutoScalingRole *string `type:"string"`
 
 	// A list of bootstrap actions that will be run before Hadoop is started on
 	// the cluster nodes.
@@ -5678,6 +6634,20 @@ type RunJobFlowInput struct {
 	// AMIs, use amiVersion instead instead of ReleaseLabel.
 	ReleaseLabel *string `type:"string"`
 
+	// Specifies the way that individual Amazon EC2 instances terminate when an
+	// automatic scale-in activity occurs or an instance group is resized. TERMINATE_AT_INSTANCE_HOUR
+	// indicates that Amazon EMR terminates nodes at the instance-hour boundary,
+	// regardless of when the request to terminate the instance was submitted. This
+	// option is only available with Amazon EMR 5.1.0 and later and is the default
+	// for clusters created using that version. TERMINATE_AT_TASK_COMPLETION indicates
+	// that Amazon EMR blacklists and drains tasks from nodes before terminating
+	// the Amazon EC2 instances, regardless of the instance-hour boundary. With
+	// either behavior, Amazon EMR removes the least active nodes first and blocks
+	// instance termination if it could lead to HDFS corruption. TERMINATE_AT_TASK_COMPLETION
+	// available only in Amazon EMR version 4.1.0 and later, and is the default
+	// for versions of Amazon EMR earlier than 5.1.0.
+	ScaleDownBehavior *string `type:"string" enum:"ScaleDownBehavior"`
+
 	// The name of a security configuration to apply to the cluster.
 	SecurityConfiguration *string `type:"string"`
 
@@ -5692,7 +6662,7 @@ type RunJobFlowInput struct {
 	// use Applications.
 	//
 	// A list of strings that indicates third-party software to use with the job
-	// flow. For more information, go to Use Third Party Applications with Amazon
+	// flow. For more information, see Use Third Party Applications with Amazon
 	// EMR (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-supported-products.html).
 	// Currently supported values are:
 	//
@@ -5781,6 +6751,12 @@ func (s *RunJobFlowInput) SetApplications(v []*Application) *RunJobFlowInput {
 	return s
 }
 
+// SetAutoScalingRole sets the AutoScalingRole field's value.
+func (s *RunJobFlowInput) SetAutoScalingRole(v string) *RunJobFlowInput {
+	s.AutoScalingRole = &v
+	return s
+}
+
 // SetBootstrapActions sets the BootstrapActions field's value.
 func (s *RunJobFlowInput) SetBootstrapActions(v []*BootstrapActionConfig) *RunJobFlowInput {
 	s.BootstrapActions = v
@@ -5826,6 +6802,12 @@ func (s *RunJobFlowInput) SetNewSupportedProducts(v []*SupportedProductConfig) *
 // SetReleaseLabel sets the ReleaseLabel field's value.
 func (s *RunJobFlowInput) SetReleaseLabel(v string) *RunJobFlowInput {
 	s.ReleaseLabel = &v
+	return s
+}
+
+// SetScaleDownBehavior sets the ScaleDownBehavior field's value.
+func (s *RunJobFlowInput) SetScaleDownBehavior(v string) *RunJobFlowInput {
+	s.ScaleDownBehavior = &v
 	return s
 }
 
@@ -5889,11 +6871,267 @@ func (s *RunJobFlowOutput) SetJobFlowId(v string) *RunJobFlowOutput {
 	return s
 }
 
+// The type of adjustment the automatic scaling activity makes when triggered,
+// and the periodicity of the adjustment.
+type ScalingAction struct {
+	_ struct{} `type:"structure"`
+
+	// Not available for instance groups. Instance groups use the market type specified
+	// for the group.
+	Market *string `type:"string" enum:"MarketType"`
+
+	// The type of adjustment the automatic scaling activity makes when triggered,
+	// and the periodicity of the adjustment.
+	//
+	// SimpleScalingPolicyConfiguration is a required field
+	SimpleScalingPolicyConfiguration *SimpleScalingPolicyConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s ScalingAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScalingAction) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScalingAction) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScalingAction"}
+	if s.SimpleScalingPolicyConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("SimpleScalingPolicyConfiguration"))
+	}
+	if s.SimpleScalingPolicyConfiguration != nil {
+		if err := s.SimpleScalingPolicyConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("SimpleScalingPolicyConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMarket sets the Market field's value.
+func (s *ScalingAction) SetMarket(v string) *ScalingAction {
+	s.Market = &v
+	return s
+}
+
+// SetSimpleScalingPolicyConfiguration sets the SimpleScalingPolicyConfiguration field's value.
+func (s *ScalingAction) SetSimpleScalingPolicyConfiguration(v *SimpleScalingPolicyConfiguration) *ScalingAction {
+	s.SimpleScalingPolicyConfiguration = v
+	return s
+}
+
+// The upper and lower EC2 instance limits for an automatic scaling policy.
+// Automatic scaling activities triggered by automatic scaling rules will not
+// cause an instance group to grow above or below these limits.
+type ScalingConstraints struct {
+	_ struct{} `type:"structure"`
+
+	// The upper boundary of EC2 instances in an instance group beyond which scaling
+	// activities are not allowed to grow. Scale-out activities will not add instances
+	// beyond this boundary.
+	//
+	// MaxCapacity is a required field
+	MaxCapacity *int64 `type:"integer" required:"true"`
+
+	// The lower boundary of EC2 instances in an instance group below which scaling
+	// activities are not allowed to shrink. Scale-in activities will not terminate
+	// instances below this boundary.
+	//
+	// MinCapacity is a required field
+	MinCapacity *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation
+func (s ScalingConstraints) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScalingConstraints) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScalingConstraints) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScalingConstraints"}
+	if s.MaxCapacity == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxCapacity"))
+	}
+	if s.MinCapacity == nil {
+		invalidParams.Add(request.NewErrParamRequired("MinCapacity"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *ScalingConstraints) SetMaxCapacity(v int64) *ScalingConstraints {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetMinCapacity sets the MinCapacity field's value.
+func (s *ScalingConstraints) SetMinCapacity(v int64) *ScalingConstraints {
+	s.MinCapacity = &v
+	return s
+}
+
+// A scale-in or scale-out rule that defines scaling activity, including the
+// CloudWatch metric alarm that triggers activity, how EC2 instances are added
+// or removed, and the periodicity of adjustments. The automatic scaling policy
+// for an instance group can comprise one or more automatic scaling rules.
+type ScalingRule struct {
+	_ struct{} `type:"structure"`
+
+	// The conditions that trigger an automatic scaling activity.
+	//
+	// Action is a required field
+	Action *ScalingAction `type:"structure" required:"true"`
+
+	// A friendly, more verbose description of the automatic scaling rule.
+	Description *string `type:"string"`
+
+	// The name used to identify an automatic scaling rule. Rule names must be unique
+	// within a scaling policy.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The CloudWatch alarm definition that determines when automatic scaling activity
+	// is triggered.
+	//
+	// Trigger is a required field
+	Trigger *ScalingTrigger `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s ScalingRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScalingRule) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScalingRule) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScalingRule"}
+	if s.Action == nil {
+		invalidParams.Add(request.NewErrParamRequired("Action"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Trigger == nil {
+		invalidParams.Add(request.NewErrParamRequired("Trigger"))
+	}
+	if s.Action != nil {
+		if err := s.Action.Validate(); err != nil {
+			invalidParams.AddNested("Action", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Trigger != nil {
+		if err := s.Trigger.Validate(); err != nil {
+			invalidParams.AddNested("Trigger", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAction sets the Action field's value.
+func (s *ScalingRule) SetAction(v *ScalingAction) *ScalingRule {
+	s.Action = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ScalingRule) SetDescription(v string) *ScalingRule {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ScalingRule) SetName(v string) *ScalingRule {
+	s.Name = &v
+	return s
+}
+
+// SetTrigger sets the Trigger field's value.
+func (s *ScalingRule) SetTrigger(v *ScalingTrigger) *ScalingRule {
+	s.Trigger = v
+	return s
+}
+
+// The conditions that trigger an automatic scaling activity.
+type ScalingTrigger struct {
+	_ struct{} `type:"structure"`
+
+	// The definition of a CloudWatch metric alarm. When the defined alarm conditions
+	// are met along with other trigger parameters, scaling activity begins.
+	//
+	// CloudWatchAlarmDefinition is a required field
+	CloudWatchAlarmDefinition *CloudWatchAlarmDefinition `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s ScalingTrigger) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScalingTrigger) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScalingTrigger) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScalingTrigger"}
+	if s.CloudWatchAlarmDefinition == nil {
+		invalidParams.Add(request.NewErrParamRequired("CloudWatchAlarmDefinition"))
+	}
+	if s.CloudWatchAlarmDefinition != nil {
+		if err := s.CloudWatchAlarmDefinition.Validate(); err != nil {
+			invalidParams.AddNested("CloudWatchAlarmDefinition", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCloudWatchAlarmDefinition sets the CloudWatchAlarmDefinition field's value.
+func (s *ScalingTrigger) SetCloudWatchAlarmDefinition(v *CloudWatchAlarmDefinition) *ScalingTrigger {
+	s.CloudWatchAlarmDefinition = v
+	return s
+}
+
+// Configuration of the script to run during a bootstrap action.
 type ScriptBootstrapActionConfig struct {
 	_ struct{} `type:"structure"`
 
+	// A list of command line arguments to pass to the bootstrap action script.
 	Args []*string `type:"list"`
 
+	// Location of the script to run during a bootstrap action. Can be either a
+	// location in Amazon S3 or on a local file system.
+	//
 	// Path is a required field
 	Path *string `type:"string" required:"true"`
 }
@@ -6141,6 +7379,83 @@ func (s *ShrinkPolicy) SetDecommissionTimeout(v int64) *ShrinkPolicy {
 // SetInstanceResizePolicy sets the InstanceResizePolicy field's value.
 func (s *ShrinkPolicy) SetInstanceResizePolicy(v *InstanceResizePolicy) *ShrinkPolicy {
 	s.InstanceResizePolicy = v
+	return s
+}
+
+// An automatic scaling configuration, which describes how the policy adds or
+// removes instances, the cooldown period, and the number of EC2 instances that
+// will be added each time the CloudWatch metric alarm condition is satisfied.
+type SimpleScalingPolicyConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The way in which EC2 instances are added (if ScalingAdjustment is a positive
+	// number) or terminated (if ScalingAdjustment is a negative number) each time
+	// the scaling activity is triggered. CHANGE_IN_CAPACITY is the default. CHANGE_IN_CAPACITY
+	// indicates that the EC2 instance count increments or decrements by ScalingAdjustment,
+	// which should be expressed as an integer. PERCENT_CHANGE_IN_CAPACITY indicates
+	// the instance count increments or decrements by the percentage specified by
+	// ScalingAdjustment, which should be expressed as a decimal, for example, 0.20
+	// indicates an increase in 20% increments of cluster capacity. EXACT_CAPACITY
+	// indicates the scaling activity results in an instance group with the number
+	// of EC2 instances specified by ScalingAdjustment, which should be expressed
+	// as a positive integer.
+	AdjustmentType *string `type:"string" enum:"AdjustmentType"`
+
+	// The amount of time, in seconds, after a scaling activity completes before
+	// any further trigger-related scaling activities can start. The default value
+	// is 0.
+	CoolDown *int64 `type:"integer"`
+
+	// The amount by which to scale in or scale out, based on the specified AdjustmentType.
+	// A positive value adds to the instance group's EC2 instance count while a
+	// negative number removes instances. If AdjustmentType is set to EXACT_CAPACITY,
+	// the number should only be a positive integer. If AdjustmentType is set to
+	// PERCENT_CHANGE_IN_CAPACITY, the value should express the percentage as a
+	// decimal. For example, -0.20 indicates a decrease in 20% increments of cluster
+	// capacity.
+	//
+	// ScalingAdjustment is a required field
+	ScalingAdjustment *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation
+func (s SimpleScalingPolicyConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SimpleScalingPolicyConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SimpleScalingPolicyConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SimpleScalingPolicyConfiguration"}
+	if s.ScalingAdjustment == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScalingAdjustment"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdjustmentType sets the AdjustmentType field's value.
+func (s *SimpleScalingPolicyConfiguration) SetAdjustmentType(v string) *SimpleScalingPolicyConfiguration {
+	s.AdjustmentType = &v
+	return s
+}
+
+// SetCoolDown sets the CoolDown field's value.
+func (s *SimpleScalingPolicyConfiguration) SetCoolDown(v int64) *SimpleScalingPolicyConfiguration {
+	s.CoolDown = &v
+	return s
+}
+
+// SetScalingAdjustment sets the ScalingAdjustment field's value.
+func (s *SimpleScalingPolicyConfiguration) SetScalingAdjustment(v int64) *SimpleScalingPolicyConfiguration {
+	s.ScalingAdjustment = &v
 	return s
 }
 
@@ -6599,7 +7914,7 @@ func (s *SupportedProductConfig) SetName(v string) *SupportedProductConfig {
 
 // A key/value pair containing user-defined metadata that you can associate
 // with an Amazon EMR resource. Tags make it easier to associate clusters in
-// various ways, such as grouping clu\ sters to track your Amazon EMR resource
+// various ways, such as grouping clusters to track your Amazon EMR resource
 // allocation costs. For more information, see Tagging Amazon EMR Resources
 // (http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html).
 type Tag struct {
@@ -6689,8 +8004,8 @@ func (s TerminateJobFlowsOutput) GoString() string {
 	return s.String()
 }
 
-// EBS volume specifications such as volume type, IOPS, and size(GiB) that will
-// be requested for the EBS volume attached to an EC2 instance in the cluster.
+// EBS volume specifications such as volume type, IOPS, and size (GiB) that
+// will be requested for the EBS volume attached to an EC2 instance in the cluster.
 type VolumeSpecification struct {
 	_ struct{} `type:"structure"`
 
@@ -6768,6 +8083,56 @@ const (
 )
 
 const (
+	// AdjustmentTypeChangeInCapacity is a AdjustmentType enum value
+	AdjustmentTypeChangeInCapacity = "CHANGE_IN_CAPACITY"
+
+	// AdjustmentTypePercentChangeInCapacity is a AdjustmentType enum value
+	AdjustmentTypePercentChangeInCapacity = "PERCENT_CHANGE_IN_CAPACITY"
+
+	// AdjustmentTypeExactCapacity is a AdjustmentType enum value
+	AdjustmentTypeExactCapacity = "EXACT_CAPACITY"
+)
+
+const (
+	// AutoScalingPolicyStatePending is a AutoScalingPolicyState enum value
+	AutoScalingPolicyStatePending = "PENDING"
+
+	// AutoScalingPolicyStateAttaching is a AutoScalingPolicyState enum value
+	AutoScalingPolicyStateAttaching = "ATTACHING"
+
+	// AutoScalingPolicyStateAttached is a AutoScalingPolicyState enum value
+	AutoScalingPolicyStateAttached = "ATTACHED"
+
+	// AutoScalingPolicyStateDetaching is a AutoScalingPolicyState enum value
+	AutoScalingPolicyStateDetaching = "DETACHING"
+
+	// AutoScalingPolicyStateDetached is a AutoScalingPolicyState enum value
+	AutoScalingPolicyStateDetached = "DETACHED"
+
+	// AutoScalingPolicyStateFailed is a AutoScalingPolicyState enum value
+	AutoScalingPolicyStateFailed = "FAILED"
+)
+
+const (
+	// AutoScalingPolicyStateChangeReasonCodeUserRequest is a AutoScalingPolicyStateChangeReasonCode enum value
+	AutoScalingPolicyStateChangeReasonCodeUserRequest = "USER_REQUEST"
+
+	// AutoScalingPolicyStateChangeReasonCodeProvisionFailure is a AutoScalingPolicyStateChangeReasonCode enum value
+	AutoScalingPolicyStateChangeReasonCodeProvisionFailure = "PROVISION_FAILURE"
+
+	// AutoScalingPolicyStateChangeReasonCodeCleanupFailure is a AutoScalingPolicyStateChangeReasonCode enum value
+	AutoScalingPolicyStateChangeReasonCodeCleanupFailure = "CLEANUP_FAILURE"
+)
+
+const (
+	// CancelStepsRequestStatusSubmitted is a CancelStepsRequestStatus enum value
+	CancelStepsRequestStatusSubmitted = "SUBMITTED"
+
+	// CancelStepsRequestStatusFailed is a CancelStepsRequestStatus enum value
+	CancelStepsRequestStatusFailed = "FAILED"
+)
+
+const (
 	// ClusterStateStarting is a ClusterState enum value
 	ClusterStateStarting = "STARTING"
 
@@ -6811,6 +8176,20 @@ const (
 
 	// ClusterStateChangeReasonCodeAllStepsCompleted is a ClusterStateChangeReasonCode enum value
 	ClusterStateChangeReasonCodeAllStepsCompleted = "ALL_STEPS_COMPLETED"
+)
+
+const (
+	// ComparisonOperatorGreaterThanOrEqual is a ComparisonOperator enum value
+	ComparisonOperatorGreaterThanOrEqual = "GREATER_THAN_OR_EQUAL"
+
+	// ComparisonOperatorGreaterThan is a ComparisonOperator enum value
+	ComparisonOperatorGreaterThan = "GREATER_THAN"
+
+	// ComparisonOperatorLessThan is a ComparisonOperator enum value
+	ComparisonOperatorLessThan = "LESS_THAN"
+
+	// ComparisonOperatorLessThanOrEqual is a ComparisonOperator enum value
+	ComparisonOperatorLessThanOrEqual = "LESS_THAN_OR_EQUAL"
 )
 
 const (
@@ -6951,6 +8330,31 @@ const (
 )
 
 const (
+	// ScaleDownBehaviorTerminateAtInstanceHour is a ScaleDownBehavior enum value
+	ScaleDownBehaviorTerminateAtInstanceHour = "TERMINATE_AT_INSTANCE_HOUR"
+
+	// ScaleDownBehaviorTerminateAtTaskCompletion is a ScaleDownBehavior enum value
+	ScaleDownBehaviorTerminateAtTaskCompletion = "TERMINATE_AT_TASK_COMPLETION"
+)
+
+const (
+	// StatisticSampleCount is a Statistic enum value
+	StatisticSampleCount = "SAMPLE_COUNT"
+
+	// StatisticAverage is a Statistic enum value
+	StatisticAverage = "AVERAGE"
+
+	// StatisticSum is a Statistic enum value
+	StatisticSum = "SUM"
+
+	// StatisticMinimum is a Statistic enum value
+	StatisticMinimum = "MINIMUM"
+
+	// StatisticMaximum is a Statistic enum value
+	StatisticMaximum = "MAXIMUM"
+)
+
+const (
 	// StepExecutionStatePending is a StepExecutionState enum value
 	StepExecutionStatePending = "PENDING"
 
@@ -6977,6 +8381,9 @@ const (
 	// StepStatePending is a StepState enum value
 	StepStatePending = "PENDING"
 
+	// StepStateCancelPending is a StepState enum value
+	StepStateCancelPending = "CANCEL_PENDING"
+
 	// StepStateRunning is a StepState enum value
 	StepStateRunning = "RUNNING"
 
@@ -6996,4 +8403,87 @@ const (
 const (
 	// StepStateChangeReasonCodeNone is a StepStateChangeReasonCode enum value
 	StepStateChangeReasonCodeNone = "NONE"
+)
+
+const (
+	// UnitNone is a Unit enum value
+	UnitNone = "NONE"
+
+	// UnitSeconds is a Unit enum value
+	UnitSeconds = "SECONDS"
+
+	// UnitMicroSeconds is a Unit enum value
+	UnitMicroSeconds = "MICRO_SECONDS"
+
+	// UnitMilliSeconds is a Unit enum value
+	UnitMilliSeconds = "MILLI_SECONDS"
+
+	// UnitBytes is a Unit enum value
+	UnitBytes = "BYTES"
+
+	// UnitKiloBytes is a Unit enum value
+	UnitKiloBytes = "KILO_BYTES"
+
+	// UnitMegaBytes is a Unit enum value
+	UnitMegaBytes = "MEGA_BYTES"
+
+	// UnitGigaBytes is a Unit enum value
+	UnitGigaBytes = "GIGA_BYTES"
+
+	// UnitTeraBytes is a Unit enum value
+	UnitTeraBytes = "TERA_BYTES"
+
+	// UnitBits is a Unit enum value
+	UnitBits = "BITS"
+
+	// UnitKiloBits is a Unit enum value
+	UnitKiloBits = "KILO_BITS"
+
+	// UnitMegaBits is a Unit enum value
+	UnitMegaBits = "MEGA_BITS"
+
+	// UnitGigaBits is a Unit enum value
+	UnitGigaBits = "GIGA_BITS"
+
+	// UnitTeraBits is a Unit enum value
+	UnitTeraBits = "TERA_BITS"
+
+	// UnitPercent is a Unit enum value
+	UnitPercent = "PERCENT"
+
+	// UnitCount is a Unit enum value
+	UnitCount = "COUNT"
+
+	// UnitBytesPerSecond is a Unit enum value
+	UnitBytesPerSecond = "BYTES_PER_SECOND"
+
+	// UnitKiloBytesPerSecond is a Unit enum value
+	UnitKiloBytesPerSecond = "KILO_BYTES_PER_SECOND"
+
+	// UnitMegaBytesPerSecond is a Unit enum value
+	UnitMegaBytesPerSecond = "MEGA_BYTES_PER_SECOND"
+
+	// UnitGigaBytesPerSecond is a Unit enum value
+	UnitGigaBytesPerSecond = "GIGA_BYTES_PER_SECOND"
+
+	// UnitTeraBytesPerSecond is a Unit enum value
+	UnitTeraBytesPerSecond = "TERA_BYTES_PER_SECOND"
+
+	// UnitBitsPerSecond is a Unit enum value
+	UnitBitsPerSecond = "BITS_PER_SECOND"
+
+	// UnitKiloBitsPerSecond is a Unit enum value
+	UnitKiloBitsPerSecond = "KILO_BITS_PER_SECOND"
+
+	// UnitMegaBitsPerSecond is a Unit enum value
+	UnitMegaBitsPerSecond = "MEGA_BITS_PER_SECOND"
+
+	// UnitGigaBitsPerSecond is a Unit enum value
+	UnitGigaBitsPerSecond = "GIGA_BITS_PER_SECOND"
+
+	// UnitTeraBitsPerSecond is a Unit enum value
+	UnitTeraBitsPerSecond = "TERA_BITS_PER_SECOND"
+
+	// UnitCountPerSecond is a Unit enum value
+	UnitCountPerSecond = "COUNT_PER_SECOND"
 )

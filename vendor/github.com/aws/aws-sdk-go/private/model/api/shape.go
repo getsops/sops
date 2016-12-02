@@ -161,9 +161,7 @@ func (s *Shape) GoStructValueType(name string, ref *ShapeRef) string {
 func (s *Shape) GoStructType(name string, ref *ShapeRef) string {
 	if (ref.Streaming || ref.Shape.Streaming) && s.Payload == name {
 		rtype := "io.ReadSeeker"
-		if len(s.refs) > 1 {
-			rtype = "aws.ReaderSeekCloser"
-		} else if strings.HasSuffix(s.ShapeName, "Output") {
+		if strings.HasSuffix(s.ShapeName, "Output") {
 			rtype = "io.ReadCloser"
 		}
 

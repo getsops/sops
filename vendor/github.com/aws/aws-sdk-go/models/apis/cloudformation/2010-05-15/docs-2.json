@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS CloudFormation</fullname> <p>AWS CloudFormation allows you to create and manage AWS infrastructure deployments predictably and repeatedly. You can use AWS CloudFormation to leverage AWS products, such as Amazon Elastic Compute Cloud, Amazon Elastic Block Store, Amazon Simple Notification Service, Elastic Load Balancing, and Auto Scaling to build highly-reliable, highly scalable, cost-effective applications without creating or configuring the underlying AWS infrastructure.</p> <p>With AWS CloudFormation, you declare all of your resources and dependencies in a template file. The template defines a collection of resources as a single unit called a stack. AWS CloudFormation creates and deletes all member resources of the stack together and manages all dependencies between the resources for you.</p> <p>For more information about AWS CloudFormation, see the <a href=\"http://aws.amazon.com/cloudformation/\">AWS CloudFormation Product Page</a>.</p> <p>Amazon CloudFormation makes use of other AWS products. If you need additional technical information about a specific AWS product, you can find the product's technical documentation at <a href=\"http://docs.aws.amazon.com/\">http://docs.aws.amazon.com/</a>.</p>",
+  "service": "<fullname>AWS CloudFormation</fullname> <p>AWS CloudFormation allows you to create and manage AWS infrastructure deployments predictably and repeatedly. You can use AWS CloudFormation to leverage AWS products, such as Amazon Elastic Compute Cloud, Amazon Elastic Block Store, Amazon Simple Notification Service, Elastic Load Balancing, and Auto Scaling to build highly-reliable, highly scalable, cost-effective applications without creating or configuring the underlying AWS infrastructure.</p> <p>With AWS CloudFormation, you declare all of your resources and dependencies in a template file. The template defines a collection of resources as a single unit called a stack. AWS CloudFormation creates and deletes all member resources of the stack together and manages all dependencies between the resources for you.</p> <p>For more information about AWS CloudFormation, see the <a href=\"http://aws.amazon.com/cloudformation/\">AWS CloudFormation Product Page</a>.</p> <p>Amazon CloudFormation makes use of other AWS products. If you need additional technical information about a specific AWS product, you can find the product's technical documentation at <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/\">http://docs.aws.amazon.com/</a>.</p>",
   "operations": {
     "CancelUpdateStack": "<p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE_IN_PROGRESS state.</p> </note>",
     "ContinueUpdateRollback": "<p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed\"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>",
@@ -20,7 +20,8 @@
     "GetTemplate": "<p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note>",
     "GetTemplateSummary": "<p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>",
     "ListChangeSets": "<p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>",
-    "ListExports": "<p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> AWS CloudFormation Export Stack Output Values</a>.</p>",
+    "ListExports": "<p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html\"> AWS CloudFormation Export Stack Output Values</a>.</p>",
+    "ListImports": "<p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html\"> <code>Fn::ImportValue</code> </a> function. </p>",
     "ListStackResources": "<p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>",
     "ListStacks": "<p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>",
     "SetStackPolicy": "<p>Sets a stack policy for a specified stack.</p>",
@@ -129,7 +130,7 @@
         "DeleteChangeSetInput$ChangeSetName": "<p>The name or Amazon Resource Name (ARN) of the change set that you want to delete.</p>",
         "DescribeChangeSetInput$ChangeSetName": "<p>The name or Amazon Resource Name (ARN) of the change set that you want to describe.</p>",
         "ExecuteChangeSetInput$ChangeSetName": "<p>The name or ARN of the change set that you want use to update the specified stack.</p>",
-        "GetTemplateInput$ChangeSetName": "<p>Returns the template for a change set using the Amazon Resource Name (ARN) or name of the change set. If you specify a name, you must also specify the <code>StackName</code>.</p>"
+        "GetTemplateInput$ChangeSetName": "<p>The name or Amazon Resource Name (ARN) of a change set for which AWS CloudFormation returns the associated template. If you specify a name, you must also specify the <code>StackName</code>.</p>"
       }
     },
     "ChangeSetNotFoundException": {
@@ -166,7 +167,7 @@
     "ChangeSetType": {
       "base": null,
       "refs": {
-        "CreateChangeSetInput$ChangeSetType": "<p>The type of change set operation. Valid values are <code>CREATE</code> and <code>UPDATE</code>:</p> <ul> <li> <p> <code>CREATE</code> - Specify for a change set for a stack that does not yet exist. The stack has an expected unique ID, but no template or resources. It can include multiple change sets.</p> </li> <li> <p> <code>UPDATE</code> - Specify for a change set for an existing stack.</p> </li> </ul>"
+        "CreateChangeSetInput$ChangeSetType": "<p>The type of change set operation. To create a change set for a new stack, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code>.</p> <p>If you create a change set for a new stack, AWS Cloudformation creates a stack with a unique stack ID, but no template or resources. The stack will be in the <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html#d0e11995\"> <code>REVIEW_IN_PROGRESS</code> </a> state until you execute the change set.</p> <p>By default, AWS CloudFormation specifies <code>UPDATE</code>. You can't use the <code>UPDATE</code> type to create a change set for a new stack or the <code>CREATE</code> type to create a change set for an existing stack.</p>"
       }
     },
     "ChangeSource": {
@@ -384,7 +385,8 @@
     "ExportName": {
       "base": null,
       "refs": {
-        "Export$Name": "<p>The name of exported output value. Use this name and the <code>Fn::ImportValue</code> function to import the associated value into other stacks. The name is defined in the <code>Export</code> field in the associated stack's <code>Outputs</code> section.</p>"
+        "Export$Name": "<p>The name of exported output value. Use this name and the <code>Fn::ImportValue</code> function to import the associated value into other stacks. The name is defined in the <code>Export</code> field in the associated stack's <code>Outputs</code> section.</p>",
+        "ListImportsInput$ExportName": "<p>The name of the exported output value. AWS CloudFormation returns the stack names that are importing this value. </p>"
       }
     },
     "ExportValue": {
@@ -427,6 +429,12 @@
     "GetTemplateSummaryOutput": {
       "base": "<p>The output for the <a>GetTemplateSummary</a> action.</p>",
       "refs": {
+      }
+    },
+    "Imports": {
+      "base": null,
+      "refs": {
+        "ListImportsOutput$Imports": "<p>A list of stack names that are importing the specified exported output value. </p>"
       }
     },
     "InsufficientCapabilitiesException": {
@@ -479,6 +487,16 @@
       }
     },
     "ListExportsOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListImportsInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListImportsOutput": {
       "base": null,
       "refs": {
       }
@@ -539,6 +557,8 @@
         "ListChangeSetsOutput$NextToken": "<p>If the output exceeds 1 MB, a string that identifies the next page of change sets. If there is no additional page, this value is null.</p>",
         "ListExportsInput$NextToken": "<p>A string (provided by the <a>ListExports</a> response output) that identifies the next page of exported output values that you asked to retrieve.</p>",
         "ListExportsOutput$NextToken": "<p>If the output exceeds 100 exported output values, a string that identifies the next page of exports. If there is no additional page, this value is null.</p>",
+        "ListImportsInput$NextToken": "<p>A string (provided by the <a>ListImports</a> response output) that identifies the next page of stacks that are importing the specified exported output value. </p>",
+        "ListImportsOutput$NextToken": "<p>A string that identifies the next page of exports. If there is no additional page, this value is null.</p>",
         "ListStackResourcesInput$NextToken": "<p>A string that identifies the next page of stack resources that you want to retrieve.</p>",
         "ListStackResourcesOutput$NextToken": "<p>If the output exceeds 1 MB, a string that identifies the next page of stack resources. If no additional page exists, this value is null.</p>",
         "ListStacksInput$NextToken": "<p>A string that identifies the next page of stacks that you want to retrieve.</p>",
@@ -793,7 +813,7 @@
       "base": null,
       "refs": {
         "ContinueUpdateRollbackInput$RoleARN": "<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to roll back the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>",
-        "CreateChangeSetInput$RoleARN": "<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes when executing the change set. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>",
+        "CreateChangeSetInput$RoleARN": "<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes when executing the change set. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>",
         "CreateStackInput$RoleARN": "<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to create the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf. AWS CloudFormation always uses this role for all future operations on the stack. As long as users have permission to operate on the stack, AWS CloudFormation uses this role even if the users don't have permission to pass it. Ensure that the role grants least privilege.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>",
         "DeleteStackInput$RoleARN": "<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that AWS CloudFormation assumes to delete the stack. AWS CloudFormation uses the role's credentials to make calls on your behalf.</p> <p>If you don't specify a value, AWS CloudFormation uses the role that was previously associated with the stack. If no role is available, AWS CloudFormation uses a temporary session that is generated from your user credentials.</p>",
         "Stack$RoleARN": "<p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that is associated with the stack. During a stack operation, AWS CloudFormation uses this role's credentials to make calls on your behalf.</p>",
@@ -864,6 +884,7 @@
         "DescribeStacksInput$StackName": "<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>",
         "GetStackPolicyInput$StackName": "<p>The name or unique stack ID that is associated with the stack whose policy you want to get.</p>",
         "GetTemplateInput$StackName": "<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>",
+        "Imports$member": null,
         "ListStackResourcesInput$StackName": "<p>The name or the unique stack ID that is associated with the stack, which are not always interchangeable:</p> <ul> <li> <p>Running stacks: You can specify either the stack's name or its unique stack ID.</p> </li> <li> <p>Deleted stacks: You must specify the unique stack ID.</p> </li> </ul> <p>Default: There is no default value.</p>",
         "SetStackPolicyInput$StackName": "<p>The name or unique stack ID that you want to associate a policy with.</p>",
         "Stack$StackName": "<p>The name associated with the stack.</p>",
@@ -988,7 +1009,7 @@
     "StageList": {
       "base": null,
       "refs": {
-        "GetTemplateOutput$StagesAvailable": "<p>The available template type. For stacks, both the <code>Original</code> and <code>Processed</code> template types are always available. For change sets, the <code>Original</code> template is always available. After the transforms are processed, the <code>Processed</code> template becomes available.</p>"
+        "GetTemplateOutput$StagesAvailable": "<p>The stage of the template that you can retrieve. For stacks, the <code>Original</code> and <code>Processed</code> templates are always available. For change sets, the <code>Original</code> template is always available. After AWS CloudFormation finishes creating the change set, the <code>Processed</code> template becomes available.</p>"
       }
     },
     "Tag": {
@@ -1052,7 +1073,7 @@
     "TemplateStage": {
       "base": null,
       "refs": {
-        "GetTemplateInput$TemplateStage": "<p>The stage of the template that is returned. Valid values are <code>Original</code> and <code>Processed</code>:</p> <ul> <li> <p> <code>Original</code> - Use to return the specified pre-transform template.</p> </li> <li> <p> <code>Processed</code> - Use to return the template after all transforms have been processed.</p> </li> </ul>",
+        "GetTemplateInput$TemplateStage": "<p>For templates that include transforms, the stage of the template that AWS CloudFormation returns. To get the user-submitted template, specify <code>Original</code>. To get the template after AWS CloudFormation has processed all transforms, specify <code>Processed</code>. </p> <p>If the template doesn't include transforms, <code>Original</code> and <code>Processed</code> return the same template. By default, AWS CloudFormation specifies <code>Original</code>. </p>",
         "StageList$member": null
       }
     },
@@ -1092,8 +1113,8 @@
     "TransformsList": {
       "base": null,
       "refs": {
-        "GetTemplateSummaryOutput$DeclaredTransforms": "<p>A list of the transforms that have been declared in the template.</p>",
-        "ValidateTemplateOutput$DeclaredTransforms": "<p>A list of the transforms that have been declared in the template.</p>"
+        "GetTemplateSummaryOutput$DeclaredTransforms": "<p>A list of the transforms that are declared in the template.</p>",
+        "ValidateTemplateOutput$DeclaredTransforms": "<p>A list of the transforms that are declared in the template.</p>"
       }
     },
     "UpdateStackInput": {

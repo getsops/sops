@@ -536,6 +536,7 @@
       "members":{
         "containerInstanceArn":{"shape":"String"},
         "ec2InstanceId":{"shape":"String"},
+        "version":{"shape":"Long"},
         "versionInfo":{"shape":"VersionInfo"},
         "remainingResources":{"shape":"Resources"},
         "registeredResources":{"shape":"Resources"},
@@ -1247,6 +1248,7 @@
         "desiredStatus":{"shape":"String"},
         "containers":{"shape":"Containers"},
         "startedBy":{"shape":"String"},
+        "version":{"shape":"Long"},
         "stoppedReason":{"shape":"String"},
         "createdAt":{"shape":"Timestamp"},
         "startedAt":{"shape":"Timestamp"},

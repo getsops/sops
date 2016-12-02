@@ -6,6 +6,7 @@
     "protocol":"query",
     "serviceFullName":"AWS CloudFormation",
     "signatureVersion":"v4",
+    "uid":"cloudformation-2010-05-15",
     "xmlNamespace":"http://cloudformation.amazonaws.com/doc/2010-05-15/"
   },
   "operations":{
@@ -186,7 +187,8 @@
       },
       "errors":[
         {"shape":"InvalidChangeSetStatusException"},
-        {"shape":"ChangeSetNotFoundException"}
+        {"shape":"ChangeSetNotFoundException"},
+        {"shape":"InsufficientCapabilitiesException"}
       ]
     },
     "GetStackPolicy":{
@@ -211,7 +213,10 @@
       "output":{
         "shape":"GetTemplateOutput",
         "resultWrapper":"GetTemplateResult"
-      }
+      },
+      "errors":[
+        {"shape":"ChangeSetNotFoundException"}
+      ]
     },
     "GetTemplateSummary":{
       "name":"GetTemplateSummary",
@@ -247,6 +252,18 @@
       "output":{
         "shape":"ListExportsOutput",
         "resultWrapper":"ListExportsResult"
+      }
+    },
+    "ListImports":{
+      "name":"ListImports",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListImportsInput"},
+      "output":{
+        "shape":"ListImportsOutput",
+        "resultWrapper":"ListImportsResult"
       }
     },
     "ListStackResources":{
@@ -777,6 +794,10 @@
         "DeclaredTransforms":{"shape":"TransformsList"}
       }
     },
+    "Imports":{
+      "type":"list",
+      "member":{"shape":"StackName"}
+    },
     "InsufficientCapabilitiesException":{
       "type":"structure",
       "members":{
@@ -838,6 +859,21 @@
       "type":"structure",
       "members":{
         "Exports":{"shape":"Exports"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListImportsInput":{
+      "type":"structure",
+      "required":["ExportName"],
+      "members":{
+        "ExportName":{"shape":"ExportName"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListImportsOutput":{
+      "type":"structure",
+      "members":{
+        "Imports":{"shape":"Imports"},
         "NextToken":{"shape":"NextToken"}
       }
     },

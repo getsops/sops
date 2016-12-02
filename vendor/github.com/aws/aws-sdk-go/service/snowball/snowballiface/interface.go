@@ -25,7 +25,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon Import/Export Snowball.
 //    func myFunc(svc snowballiface.SnowballAPI) bool {
-//        // Make svc.CancelJob request
+//        // Make svc.CancelCluster request
 //    }
 //
 //    func main() {
@@ -41,7 +41,7 @@ import (
 //    type mockSnowballClient struct {
 //        snowballiface.SnowballAPI
 //    }
-//    func (m *mockSnowballClient) CancelJob(input *snowball.CancelJobInput) (*snowball.CancelJobOutput, error) {
+//    func (m *mockSnowballClient) CancelCluster(input *snowball.CancelClusterInput) (*snowball.CancelClusterOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -59,6 +59,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type SnowballAPI interface {
+	CancelClusterRequest(*snowball.CancelClusterInput) (*request.Request, *snowball.CancelClusterOutput)
+
+	CancelCluster(*snowball.CancelClusterInput) (*snowball.CancelClusterOutput, error)
+
 	CancelJobRequest(*snowball.CancelJobInput) (*request.Request, *snowball.CancelJobOutput)
 
 	CancelJob(*snowball.CancelJobInput) (*snowball.CancelJobOutput, error)
@@ -66,6 +70,10 @@ type SnowballAPI interface {
 	CreateAddressRequest(*snowball.CreateAddressInput) (*request.Request, *snowball.CreateAddressOutput)
 
 	CreateAddress(*snowball.CreateAddressInput) (*snowball.CreateAddressOutput, error)
+
+	CreateClusterRequest(*snowball.CreateClusterInput) (*request.Request, *snowball.CreateClusterOutput)
+
+	CreateCluster(*snowball.CreateClusterInput) (*snowball.CreateClusterOutput, error)
 
 	CreateJobRequest(*snowball.CreateJobInput) (*request.Request, *snowball.CreateJobOutput)
 
@@ -80,6 +88,10 @@ type SnowballAPI interface {
 	DescribeAddresses(*snowball.DescribeAddressesInput) (*snowball.DescribeAddressesOutput, error)
 
 	DescribeAddressesPages(*snowball.DescribeAddressesInput, func(*snowball.DescribeAddressesOutput, bool) bool) error
+
+	DescribeClusterRequest(*snowball.DescribeClusterInput) (*request.Request, *snowball.DescribeClusterOutput)
+
+	DescribeCluster(*snowball.DescribeClusterInput) (*snowball.DescribeClusterOutput, error)
 
 	DescribeJobRequest(*snowball.DescribeJobInput) (*request.Request, *snowball.DescribeJobOutput)
 
@@ -97,11 +109,23 @@ type SnowballAPI interface {
 
 	GetSnowballUsage(*snowball.GetSnowballUsageInput) (*snowball.GetSnowballUsageOutput, error)
 
+	ListClusterJobsRequest(*snowball.ListClusterJobsInput) (*request.Request, *snowball.ListClusterJobsOutput)
+
+	ListClusterJobs(*snowball.ListClusterJobsInput) (*snowball.ListClusterJobsOutput, error)
+
+	ListClustersRequest(*snowball.ListClustersInput) (*request.Request, *snowball.ListClustersOutput)
+
+	ListClusters(*snowball.ListClustersInput) (*snowball.ListClustersOutput, error)
+
 	ListJobsRequest(*snowball.ListJobsInput) (*request.Request, *snowball.ListJobsOutput)
 
 	ListJobs(*snowball.ListJobsInput) (*snowball.ListJobsOutput, error)
 
 	ListJobsPages(*snowball.ListJobsInput, func(*snowball.ListJobsOutput, bool) bool) error
+
+	UpdateClusterRequest(*snowball.UpdateClusterInput) (*request.Request, *snowball.UpdateClusterOutput)
+
+	UpdateCluster(*snowball.UpdateClusterInput) (*snowball.UpdateClusterOutput, error)
 
 	UpdateJobRequest(*snowball.UpdateJobInput) (*request.Request, *snowball.UpdateJobOutput)
 

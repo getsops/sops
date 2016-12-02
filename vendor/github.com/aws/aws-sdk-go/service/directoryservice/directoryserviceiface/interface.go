@@ -67,6 +67,10 @@ type DirectoryServiceAPI interface {
 
 	AddTagsToResource(*directoryservice.AddTagsToResourceInput) (*directoryservice.AddTagsToResourceOutput, error)
 
+	CancelSchemaExtensionRequest(*directoryservice.CancelSchemaExtensionInput) (*request.Request, *directoryservice.CancelSchemaExtensionOutput)
+
+	CancelSchemaExtension(*directoryservice.CancelSchemaExtensionInput) (*directoryservice.CancelSchemaExtensionOutput, error)
+
 	ConnectDirectoryRequest(*directoryservice.ConnectDirectoryInput) (*request.Request, *directoryservice.ConnectDirectoryOutput)
 
 	ConnectDirectory(*directoryservice.ConnectDirectoryInput) (*directoryservice.ConnectDirectoryOutput, error)
@@ -167,6 +171,10 @@ type DirectoryServiceAPI interface {
 
 	ListIpRoutes(*directoryservice.ListIpRoutesInput) (*directoryservice.ListIpRoutesOutput, error)
 
+	ListSchemaExtensionsRequest(*directoryservice.ListSchemaExtensionsInput) (*request.Request, *directoryservice.ListSchemaExtensionsOutput)
+
+	ListSchemaExtensions(*directoryservice.ListSchemaExtensionsInput) (*directoryservice.ListSchemaExtensionsOutput, error)
+
 	ListTagsForResourceRequest(*directoryservice.ListTagsForResourceInput) (*request.Request, *directoryservice.ListTagsForResourceOutput)
 
 	ListTagsForResource(*directoryservice.ListTagsForResourceInput) (*directoryservice.ListTagsForResourceOutput, error)
@@ -186,6 +194,10 @@ type DirectoryServiceAPI interface {
 	RestoreFromSnapshotRequest(*directoryservice.RestoreFromSnapshotInput) (*request.Request, *directoryservice.RestoreFromSnapshotOutput)
 
 	RestoreFromSnapshot(*directoryservice.RestoreFromSnapshotInput) (*directoryservice.RestoreFromSnapshotOutput, error)
+
+	StartSchemaExtensionRequest(*directoryservice.StartSchemaExtensionInput) (*request.Request, *directoryservice.StartSchemaExtensionOutput)
+
+	StartSchemaExtension(*directoryservice.StartSchemaExtensionInput) (*directoryservice.StartSchemaExtensionOutput, error)
 
 	UpdateConditionalForwarderRequest(*directoryservice.UpdateConditionalForwarderInput) (*request.Request, *directoryservice.UpdateConditionalForwarderOutput)
 

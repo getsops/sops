@@ -49,6 +49,19 @@
         {"shape":"InvalidRequestException"}
       ]
     },
+    "CancelSteps":{
+      "name":"CancelSteps",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CancelStepsInput"},
+      "output":{"shape":"CancelStepsOutput"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidRequestException"}
+      ]
+    },
     "CreateSecurityConfiguration":{
       "name":"CreateSecurityConfiguration",
       "http":{
@@ -216,6 +229,24 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "PutAutoScalingPolicy":{
+      "name":"PutAutoScalingPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutAutoScalingPolicyInput"},
+      "output":{"shape":"PutAutoScalingPolicyOutput"}
+    },
+    "RemoveAutoScalingPolicy":{
+      "name":"RemoveAutoScalingPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RemoveAutoScalingPolicyInput"},
+      "output":{"shape":"RemoveAutoScalingPolicyOutput"}
+    },
     "RemoveTags":{
       "name":"RemoveTags",
       "http":{
@@ -336,6 +367,14 @@
       "members":{
       }
     },
+    "AdjustmentType":{
+      "type":"string",
+      "enum":[
+        "CHANGE_IN_CAPACITY",
+        "PERCENT_CHANGE_IN_CAPACITY",
+        "EXACT_CAPACITY"
+      ]
+    },
     "Application":{
       "type":"structure",
       "members":{
@@ -348,6 +387,58 @@
     "ApplicationList":{
       "type":"list",
       "member":{"shape":"Application"}
+    },
+    "AutoScalingPolicy":{
+      "type":"structure",
+      "required":[
+        "Constraints",
+        "Rules"
+      ],
+      "members":{
+        "Constraints":{"shape":"ScalingConstraints"},
+        "Rules":{"shape":"ScalingRuleList"}
+      }
+    },
+    "AutoScalingPolicyDescription":{
+      "type":"structure",
+      "members":{
+        "Status":{"shape":"AutoScalingPolicyStatus"},
+        "Constraints":{"shape":"ScalingConstraints"},
+        "Rules":{"shape":"ScalingRuleList"}
+      }
+    },
+    "AutoScalingPolicyState":{
+      "type":"string",
+      "enum":[
+        "PENDING",
+        "ATTACHING",
+        "ATTACHED",
+        "DETACHING",
+        "DETACHED",
+        "FAILED"
+      ]
+    },
+    "AutoScalingPolicyStateChangeReason":{
+      "type":"structure",
+      "members":{
+        "Code":{"shape":"AutoScalingPolicyStateChangeReasonCode"},
+        "Message":{"shape":"String"}
+      }
+    },
+    "AutoScalingPolicyStateChangeReasonCode":{
+      "type":"string",
+      "enum":[
+        "USER_REQUEST",
+        "PROVISION_FAILURE",
+        "CLEANUP_FAILURE"
+      ]
+    },
+    "AutoScalingPolicyStatus":{
+      "type":"structure",
+      "members":{
+        "State":{"shape":"AutoScalingPolicyState"},
+        "StateChangeReason":{"shape":"AutoScalingPolicyStateChangeReason"}
+      }
     },
     "Boolean":{"type":"boolean"},
     "BooleanObject":{"type":"boolean"},
@@ -376,6 +467,58 @@
       "type":"list",
       "member":{"shape":"BootstrapActionDetail"}
     },
+    "CancelStepsInfo":{
+      "type":"structure",
+      "members":{
+        "StepId":{"shape":"StepId"},
+        "Status":{"shape":"CancelStepsRequestStatus"},
+        "Reason":{"shape":"String"}
+      }
+    },
+    "CancelStepsInfoList":{
+      "type":"list",
+      "member":{"shape":"CancelStepsInfo"}
+    },
+    "CancelStepsInput":{
+      "type":"structure",
+      "members":{
+        "ClusterId":{"shape":"XmlStringMaxLen256"},
+        "StepIds":{"shape":"StepIdsList"}
+      }
+    },
+    "CancelStepsOutput":{
+      "type":"structure",
+      "members":{
+        "CancelStepsInfoList":{"shape":"CancelStepsInfoList"}
+      }
+    },
+    "CancelStepsRequestStatus":{
+      "type":"string",
+      "enum":[
+        "SUBMITTED",
+        "FAILED"
+      ]
+    },
+    "CloudWatchAlarmDefinition":{
+      "type":"structure",
+      "required":[
+        "ComparisonOperator",
+        "MetricName",
+        "Period",
+        "Threshold"
+      ],
+      "members":{
+        "ComparisonOperator":{"shape":"ComparisonOperator"},
+        "EvaluationPeriods":{"shape":"Integer"},
+        "MetricName":{"shape":"String"},
+        "Namespace":{"shape":"String"},
+        "Period":{"shape":"Integer"},
+        "Statistic":{"shape":"Statistic"},
+        "Threshold":{"shape":"NonNegativeDouble"},
+        "Unit":{"shape":"Unit"},
+        "Dimensions":{"shape":"MetricDimensionList"}
+      }
+    },
     "Cluster":{
       "type":"structure",
       "members":{
@@ -396,7 +539,9 @@
         "NormalizedInstanceHours":{"shape":"Integer"},
         "MasterPublicDnsName":{"shape":"String"},
         "Configurations":{"shape":"ConfigurationList"},
-        "SecurityConfiguration":{"shape":"XmlString"}
+        "SecurityConfiguration":{"shape":"XmlString"},
+        "AutoScalingRole":{"shape":"XmlString"},
+        "ScaleDownBehavior":{"shape":"ScaleDownBehavior"}
       }
     },
     "ClusterId":{"type":"string"},
@@ -475,6 +620,15 @@
     "CommandList":{
       "type":"list",
       "member":{"shape":"Command"}
+    },
+    "ComparisonOperator":{
+      "type":"string",
+      "enum":[
+        "GREATER_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "LESS_THAN",
+        "LESS_THAN_OR_EQUAL"
+      ]
     },
     "Configuration":{
       "type":"structure",
@@ -708,7 +862,8 @@
         "Configurations":{"shape":"ConfigurationList"},
         "EbsBlockDevices":{"shape":"EbsBlockDeviceList"},
         "EbsOptimized":{"shape":"BooleanObject"},
-        "ShrinkPolicy":{"shape":"ShrinkPolicy"}
+        "ShrinkPolicy":{"shape":"ShrinkPolicy"},
+        "AutoScalingPolicy":{"shape":"AutoScalingPolicyDescription"}
       }
     },
     "InstanceGroupConfig":{
@@ -726,7 +881,8 @@
         "InstanceType":{"shape":"InstanceType"},
         "InstanceCount":{"shape":"Integer"},
         "Configurations":{"shape":"ConfigurationList"},
-        "EbsConfiguration":{"shape":"EbsConfiguration"}
+        "EbsConfiguration":{"shape":"EbsConfiguration"},
+        "AutoScalingPolicy":{"shape":"AutoScalingPolicy"}
       }
     },
     "InstanceGroupConfigList":{
@@ -964,7 +1120,9 @@
         "SupportedProducts":{"shape":"SupportedProductsList"},
         "VisibleToAllUsers":{"shape":"Boolean"},
         "JobFlowRole":{"shape":"XmlString"},
-        "ServiceRole":{"shape":"XmlString"}
+        "ServiceRole":{"shape":"XmlString"},
+        "AutoScalingRole":{"shape":"XmlString"},
+        "ScaleDownBehavior":{"shape":"ScaleDownBehavior"}
       }
     },
     "JobFlowDetailList":{
@@ -1159,9 +1317,21 @@
         "SPOT"
       ]
     },
+    "MetricDimension":{
+      "type":"structure",
+      "members":{
+        "Key":{"shape":"String"},
+        "Value":{"shape":"String"}
+      }
+    },
+    "MetricDimensionList":{
+      "type":"list",
+      "member":{"shape":"MetricDimension"}
+    },
     "ModifyInstanceGroupsInput":{
       "type":"structure",
       "members":{
+        "ClusterId":{"shape":"ClusterId"},
         "InstanceGroups":{"shape":"InstanceGroupModifyConfigList"}
       }
     },
@@ -1169,11 +1339,52 @@
       "type":"list",
       "member":{"shape":"SupportedProductConfig"}
     },
+    "NonNegativeDouble":{
+      "type":"double",
+      "min":0.0
+    },
     "PlacementType":{
       "type":"structure",
       "required":["AvailabilityZone"],
       "members":{
         "AvailabilityZone":{"shape":"XmlString"}
+      }
+    },
+    "PutAutoScalingPolicyInput":{
+      "type":"structure",
+      "required":[
+        "ClusterId",
+        "InstanceGroupId",
+        "AutoScalingPolicy"
+      ],
+      "members":{
+        "ClusterId":{"shape":"ClusterId"},
+        "InstanceGroupId":{"shape":"InstanceGroupId"},
+        "AutoScalingPolicy":{"shape":"AutoScalingPolicy"}
+      }
+    },
+    "PutAutoScalingPolicyOutput":{
+      "type":"structure",
+      "members":{
+        "ClusterId":{"shape":"ClusterId"},
+        "InstanceGroupId":{"shape":"InstanceGroupId"},
+        "AutoScalingPolicy":{"shape":"AutoScalingPolicyDescription"}
+      }
+    },
+    "RemoveAutoScalingPolicyInput":{
+      "type":"structure",
+      "required":[
+        "ClusterId",
+        "InstanceGroupId"
+      ],
+      "members":{
+        "ClusterId":{"shape":"ClusterId"},
+        "InstanceGroupId":{"shape":"InstanceGroupId"}
+      }
+    },
+    "RemoveAutoScalingPolicyOutput":{
+      "type":"structure",
+      "members":{
       }
     },
     "RemoveTagsInput":{
@@ -1216,13 +1427,66 @@
         "JobFlowRole":{"shape":"XmlString"},
         "ServiceRole":{"shape":"XmlString"},
         "Tags":{"shape":"TagList"},
-        "SecurityConfiguration":{"shape":"XmlString"}
+        "SecurityConfiguration":{"shape":"XmlString"},
+        "AutoScalingRole":{"shape":"XmlString"},
+        "ScaleDownBehavior":{"shape":"ScaleDownBehavior"}
       }
     },
     "RunJobFlowOutput":{
       "type":"structure",
       "members":{
         "JobFlowId":{"shape":"XmlStringMaxLen256"}
+      }
+    },
+    "ScaleDownBehavior":{
+      "type":"string",
+      "enum":[
+        "TERMINATE_AT_INSTANCE_HOUR",
+        "TERMINATE_AT_TASK_COMPLETION"
+      ]
+    },
+    "ScalingAction":{
+      "type":"structure",
+      "required":["SimpleScalingPolicyConfiguration"],
+      "members":{
+        "Market":{"shape":"MarketType"},
+        "SimpleScalingPolicyConfiguration":{"shape":"SimpleScalingPolicyConfiguration"}
+      }
+    },
+    "ScalingConstraints":{
+      "type":"structure",
+      "required":[
+        "MinCapacity",
+        "MaxCapacity"
+      ],
+      "members":{
+        "MinCapacity":{"shape":"Integer"},
+        "MaxCapacity":{"shape":"Integer"}
+      }
+    },
+    "ScalingRule":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Action",
+        "Trigger"
+      ],
+      "members":{
+        "Name":{"shape":"String"},
+        "Description":{"shape":"String"},
+        "Action":{"shape":"ScalingAction"},
+        "Trigger":{"shape":"ScalingTrigger"}
+      }
+    },
+    "ScalingRuleList":{
+      "type":"list",
+      "member":{"shape":"ScalingRule"}
+    },
+    "ScalingTrigger":{
+      "type":"structure",
+      "required":["CloudWatchAlarmDefinition"],
+      "members":{
+        "CloudWatchAlarmDefinition":{"shape":"CloudWatchAlarmDefinition"}
       }
     },
     "ScriptBootstrapActionConfig":{
@@ -1276,6 +1540,25 @@
         "DecommissionTimeout":{"shape":"Integer"},
         "InstanceResizePolicy":{"shape":"InstanceResizePolicy"}
       }
+    },
+    "SimpleScalingPolicyConfiguration":{
+      "type":"structure",
+      "required":["ScalingAdjustment"],
+      "members":{
+        "AdjustmentType":{"shape":"AdjustmentType"},
+        "ScalingAdjustment":{"shape":"Integer"},
+        "CoolDown":{"shape":"Integer"}
+      }
+    },
+    "Statistic":{
+      "type":"string",
+      "enum":[
+        "SAMPLE_COUNT",
+        "AVERAGE",
+        "SUM",
+        "MINIMUM",
+        "MAXIMUM"
+      ]
     },
     "Step":{
       "type":"structure",
@@ -1353,6 +1636,7 @@
       "type":"string",
       "enum":[
         "PENDING",
+        "CANCEL_PENDING",
         "RUNNING",
         "COMPLETED",
         "CANCELLED",
@@ -1444,6 +1728,38 @@
       "members":{
         "JobFlowIds":{"shape":"XmlStringList"}
       }
+    },
+    "Unit":{
+      "type":"string",
+      "enum":[
+        "NONE",
+        "SECONDS",
+        "MICRO_SECONDS",
+        "MILLI_SECONDS",
+        "BYTES",
+        "KILO_BYTES",
+        "MEGA_BYTES",
+        "GIGA_BYTES",
+        "TERA_BYTES",
+        "BITS",
+        "KILO_BITS",
+        "MEGA_BITS",
+        "GIGA_BITS",
+        "TERA_BITS",
+        "PERCENT",
+        "COUNT",
+        "BYTES_PER_SECOND",
+        "KILO_BYTES_PER_SECOND",
+        "MEGA_BYTES_PER_SECOND",
+        "GIGA_BYTES_PER_SECOND",
+        "TERA_BYTES_PER_SECOND",
+        "BITS_PER_SECOND",
+        "KILO_BITS_PER_SECOND",
+        "MEGA_BITS_PER_SECOND",
+        "GIGA_BITS_PER_SECOND",
+        "TERA_BITS_PER_SECOND",
+        "COUNT_PER_SECOND"
+      ]
     },
     "VolumeSpecification":{
       "type":"structure",
