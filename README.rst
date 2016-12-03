@@ -18,7 +18,7 @@ Install **sops** with:
 
 (requires Go >= 1.6)
 
-Or **download RPM & DEB packages from `go.mozilla.org/sops/dist/ <https://go.mozilla.org/sops/dist/>`_**.
+Or download RPM & DEB packages from `go.mozilla.org/sops/dist/ <https://go.mozilla.org/sops/dist/>`_.
 
 If you don't have Go installed, set it up with:
 
