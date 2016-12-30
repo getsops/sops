@@ -384,7 +384,7 @@ def main():
 
 def set_gpg_exec(exec_name=None):
     """Sets the name of the GPG binary to use for PGP.
-    If no exec_name is specified, try to get it from the SOPS_GPG_EXEC environment variable.
+    If no exec_name is specified, use the SOPS_GPG_EXEC environment variable.
     Failing that, default to 'gpg'"""
     global GPG_EXEC
 
