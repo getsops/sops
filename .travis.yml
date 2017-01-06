@@ -55,7 +55,7 @@ addons:
             - gnupg
 before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                 ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi libyaml python; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libffi libyaml gpg2; fi
 install:
     - if [[ "$TRAVIS_OS_NAME" == "linux" && ! -z $TOX_ENV ]]; then pip install tox; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [ $SYSTEM_TEST -eq 1 ]; then sudo pip install -r requirements.txt; else pip install -r requirements.txt; fi; fi
