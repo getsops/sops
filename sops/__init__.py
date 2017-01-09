@@ -207,10 +207,6 @@ def main():
     if args.pgpfp:
         pgp_fps = args.pgpfp
 
-    # check if the user has specified a custom GPG program.
-    global GPG_EXEC
-    GPG_EXEC = os.environ.get('SOPS_GPG_EXEC', 'gpg')
-
     # use filename extension as input type if not given on cmdline
     if args.input_type:
         itype = args.input_type
@@ -385,6 +381,18 @@ def main():
     path = write_file(tree, path=args.file, filetype=otype)
     print("INFO: file written to %s" % (path), file=sys.stderr)
     sys.exit(0)
+
+
+def set_gpg_exec(exec_name=None):
+    """Sets the name of the GPG binary to use for PGP.
+    If no exec_name is specified, use the SOPS_GPG_EXEC environment variable.
+    Failing that, default to 'gpg'"""
+    global GPG_EXEC
+
+    if exec_name is not None:
+        GPG_EXEC = exec_name
+    else:
+        GPG_EXEC = os.environ.get('SOPS_GPG_EXEC', 'gpg')
 
 
 def detect_filetype(filename):
@@ -1220,6 +1228,9 @@ def get_key_from_pgp(tree):
         except KeyError:
             continue
         try:
+            # check if the user has specified a custom GPG program.
+            set_gpg_exec()
+
             p = subprocess.Popen([GPG_EXEC, '--use-agent', '-d'],
                                  stdout=subprocess.PIPE,
                                  stdin=subprocess.PIPE)
@@ -1240,6 +1251,9 @@ def encrypt_key_with_pgp(key, entry):
         return None
     fp = entry['fp']
     try:
+        # check if the user has specified a custom GPG program.
+        set_gpg_exec()
+
         p = subprocess.Popen([GPG_EXEC, '--no-default-recipient', '--yes',
                               '--encrypt', '-a', '-r', fp, '--trusted-key',
                               fp[-16:], '--no-encrypt-to'],
