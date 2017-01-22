@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"swf-2012-01-25",
     "apiVersion":"2012-01-25",
     "endpointPrefix":"swf",
     "jsonVersion":"1.0",

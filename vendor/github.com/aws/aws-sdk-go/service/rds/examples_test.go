@@ -269,7 +269,10 @@ func ExampleRDS_CopyDBSnapshot() {
 		SourceDBSnapshotIdentifier: aws.String("String"), // Required
 		TargetDBSnapshotIdentifier: aws.String("String"), // Required
 		CopyTags:                   aws.Bool(true),
+		DestinationRegion:          aws.String("String"),
 		KmsKeyId:                   aws.String("String"),
+		PreSignedUrl:               aws.String("String"),
+		SourceRegion:               aws.String("String"),
 		Tags: []*rds.Tag{
 			{ // Required
 				Key:   aws.String("String"),

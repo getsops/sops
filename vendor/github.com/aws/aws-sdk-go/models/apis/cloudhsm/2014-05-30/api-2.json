@@ -8,7 +8,8 @@
     "serviceAbbreviation":"CloudHSM",
     "serviceFullName":"Amazon CloudHSM",
     "signatureVersion":"v4",
-    "targetPrefix":"CloudHsmFrontendService"
+    "targetPrefix":"CloudHsmFrontendService",
+    "uid":"cloudhsm-2014-05-30"
   },
   "operations":{
     "AddTagsToResource":{

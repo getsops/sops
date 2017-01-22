@@ -129,6 +129,20 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "CreatePatchBaseline":{
+      "name":"CreatePatchBaseline",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreatePatchBaselineRequest"},
+      "output":{"shape":"CreatePatchBaselineResult"},
+      "errors":[
+        {"shape":"IdempotentParameterMismatch"},
+        {"shape":"ResourceLimitExceededException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "DeleteActivation":{
       "name":"DeleteActivation",
       "http":{
@@ -199,6 +213,19 @@
         {"shape":"ParameterNotFound"}
       ]
     },
+    "DeletePatchBaseline":{
+      "name":"DeletePatchBaseline",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeletePatchBaselineRequest"},
+      "output":{"shape":"DeletePatchBaselineResult"},
+      "errors":[
+        {"shape":"ResourceInUseException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "DeregisterManagedInstance":{
       "name":"DeregisterManagedInstance",
       "http":{
@@ -209,6 +236,19 @@
       "output":{"shape":"DeregisterManagedInstanceResult"},
       "errors":[
         {"shape":"InvalidInstanceId"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "DeregisterPatchBaselineForPatchGroup":{
+      "name":"DeregisterPatchBaselineForPatchGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeregisterPatchBaselineForPatchGroupRequest"},
+      "output":{"shape":"DeregisterPatchBaselineForPatchGroupResult"},
+      "errors":[
+        {"shape":"InvalidResourceId"},
         {"shape":"InternalServerError"}
       ]
     },
@@ -280,6 +320,18 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "DescribeAvailablePatches":{
+      "name":"DescribeAvailablePatches",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeAvailablePatchesRequest"},
+      "output":{"shape":"DescribeAvailablePatchesResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
+      ]
+    },
     "DescribeDocument":{
       "name":"DescribeDocument",
       "http":{
@@ -322,6 +374,20 @@
         {"shape":"InvalidNextToken"}
       ]
     },
+    "DescribeEffectivePatchesForPatchBaseline":{
+      "name":"DescribeEffectivePatchesForPatchBaseline",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeEffectivePatchesForPatchBaselineRequest"},
+      "output":{"shape":"DescribeEffectivePatchesForPatchBaselineResult"},
+      "errors":[
+        {"shape":"InvalidResourceId"},
+        {"shape":"DoesNotExistException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "DescribeInstanceAssociationsStatus":{
       "name":"DescribeInstanceAssociationsStatus",
       "http":{
@@ -350,6 +416,48 @@
         {"shape":"InvalidNextToken"},
         {"shape":"InvalidInstanceInformationFilterValue"},
         {"shape":"InvalidFilterKey"}
+      ]
+    },
+    "DescribeInstancePatchStates":{
+      "name":"DescribeInstancePatchStates",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeInstancePatchStatesRequest"},
+      "output":{"shape":"DescribeInstancePatchStatesResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidNextToken"}
+      ]
+    },
+    "DescribeInstancePatchStatesForPatchGroup":{
+      "name":"DescribeInstancePatchStatesForPatchGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeInstancePatchStatesForPatchGroupRequest"},
+      "output":{"shape":"DescribeInstancePatchStatesForPatchGroupResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidFilter"},
+        {"shape":"InvalidNextToken"}
+      ]
+    },
+    "DescribeInstancePatches":{
+      "name":"DescribeInstancePatches",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeInstancePatchesRequest"},
+      "output":{"shape":"DescribeInstancePatchesResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidInstanceId"},
+        {"shape":"InvalidFilter"},
+        {"shape":"InvalidNextToken"}
       ]
     },
     "DescribeMaintenanceWindowExecutionTaskInvocations":{
@@ -442,6 +550,43 @@
         {"shape":"InvalidNextToken"}
       ]
     },
+    "DescribePatchBaselines":{
+      "name":"DescribePatchBaselines",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribePatchBaselinesRequest"},
+      "output":{"shape":"DescribePatchBaselinesResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "DescribePatchGroupState":{
+      "name":"DescribePatchGroupState",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribePatchGroupStateRequest"},
+      "output":{"shape":"DescribePatchGroupStateResult"},
+      "errors":[
+        {"shape":"InternalServerError"},
+        {"shape":"InvalidNextToken"}
+      ]
+    },
+    "DescribePatchGroups":{
+      "name":"DescribePatchGroups",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribePatchGroupsRequest"},
+      "output":{"shape":"DescribePatchGroupsResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
+      ]
+    },
     "GetAutomationExecution":{
       "name":"GetAutomationExecution",
       "http":{
@@ -469,6 +614,30 @@
         {"shape":"InvalidInstanceId"},
         {"shape":"InvalidPluginName"},
         {"shape":"InvocationDoesNotExist"}
+      ]
+    },
+    "GetDefaultPatchBaseline":{
+      "name":"GetDefaultPatchBaseline",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetDefaultPatchBaselineRequest"},
+      "output":{"shape":"GetDefaultPatchBaselineResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "GetDeployablePatchSnapshotForInstance":{
+      "name":"GetDeployablePatchSnapshotForInstance",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetDeployablePatchSnapshotForInstanceRequest"},
+      "output":{"shape":"GetDeployablePatchSnapshotForInstanceResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
       ]
     },
     "GetDocument":{
@@ -576,6 +745,32 @@
       },
       "input":{"shape":"GetParametersRequest"},
       "output":{"shape":"GetParametersResult"},
+      "errors":[
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "GetPatchBaseline":{
+      "name":"GetPatchBaseline",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetPatchBaselineRequest"},
+      "output":{"shape":"GetPatchBaselineResult"},
+      "errors":[
+        {"shape":"DoesNotExistException"},
+        {"shape":"InvalidResourceId"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "GetPatchBaselineForPatchGroup":{
+      "name":"GetPatchBaselineForPatchGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetPatchBaselineForPatchGroupRequest"},
+      "output":{"shape":"GetPatchBaselineForPatchGroupResult"},
       "errors":[
         {"shape":"InternalServerError"}
       ]
@@ -734,6 +929,36 @@
         {"shape":"TooManyUpdates"},
         {"shape":"ParameterAlreadyExists"},
         {"shape":"UnsupportedParameterType"}
+      ]
+    },
+    "RegisterDefaultPatchBaseline":{
+      "name":"RegisterDefaultPatchBaseline",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RegisterDefaultPatchBaselineRequest"},
+      "output":{"shape":"RegisterDefaultPatchBaselineResult"},
+      "errors":[
+        {"shape":"InvalidResourceId"},
+        {"shape":"DoesNotExistException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "RegisterPatchBaselineForPatchGroup":{
+      "name":"RegisterPatchBaselineForPatchGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RegisterPatchBaselineForPatchGroupRequest"},
+      "output":{"shape":"RegisterPatchBaselineForPatchGroupResult"},
+      "errors":[
+        {"shape":"AlreadyExistsException"},
+        {"shape":"DoesNotExistException"},
+        {"shape":"InvalidResourceId"},
+        {"shape":"ResourceLimitExceededException"},
+        {"shape":"InternalServerError"}
       ]
     },
     "RegisterTargetWithMaintenanceWindow":{
@@ -925,6 +1150,19 @@
         {"shape":"InvalidInstanceId"},
         {"shape":"InternalServerError"}
       ]
+    },
+    "UpdatePatchBaseline":{
+      "name":"UpdatePatchBaseline",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdatePatchBaselineRequest"},
+      "output":{"shape":"UpdatePatchBaselineResult"},
+      "errors":[
+        {"shape":"DoesNotExistException"},
+        {"shape":"InternalServerError"}
+      ]
     }
   },
   "shapes":{
@@ -993,6 +1231,18 @@
     "AgentErrorCode":{
       "type":"string",
       "max":10
+    },
+    "AlreadyExistsException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ApproveAfterDays":{
+      "type":"integer",
+      "max":100,
+      "min":0
     },
     "AssociatedInstances":{
       "type":"structure",
@@ -1288,6 +1538,23 @@
       "member":{"shape":"AutomationParameterValue"},
       "max":10,
       "min":0
+    },
+    "BaselineDescription":{
+      "type":"string",
+      "max":1024,
+      "min":1
+    },
+    "BaselineId":{
+      "type":"string",
+      "max":128,
+      "min":20,
+      "pattern":"^[a-zA-Z0-9_\\-:/]{20,128}$"
+    },
+    "BaselineName":{
+      "type":"string",
+      "max":128,
+      "min":3,
+      "pattern":"^[a-zA-Z0-9_\\-.]{3,128}$"
     },
     "BatchErrorMessage":{"type":"string"},
     "Boolean":{"type":"boolean"},
@@ -1595,6 +1862,28 @@
         "WindowId":{"shape":"MaintenanceWindowId"}
       }
     },
+    "CreatePatchBaselineRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"BaselineName"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
+        "ApprovedPatches":{"shape":"PatchIdList"},
+        "RejectedPatches":{"shape":"PatchIdList"},
+        "Description":{"shape":"BaselineDescription"},
+        "ClientToken":{
+          "shape":"ClientToken",
+          "idempotencyToken":true
+        }
+      }
+    },
+    "CreatePatchBaselineResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"}
+      }
+    },
     "CreatedDate":{"type":"timestamp"},
     "CustomSchemaCountLimitExceededException":{
       "type":"structure",
@@ -1604,6 +1893,7 @@
       "exception":true
     },
     "DateTime":{"type":"timestamp"},
+    "DefaultBaseline":{"type":"boolean"},
     "DefaultInstanceName":{
       "type":"string",
       "max":256,
@@ -1672,6 +1962,19 @@
       "members":{
       }
     },
+    "DeletePatchBaselineRequest":{
+      "type":"structure",
+      "required":["BaselineId"],
+      "members":{
+        "BaselineId":{"shape":"BaselineId"}
+      }
+    },
+    "DeletePatchBaselineResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"}
+      }
+    },
     "DeregisterManagedInstanceRequest":{
       "type":"structure",
       "required":["InstanceId"],
@@ -1682,6 +1985,24 @@
     "DeregisterManagedInstanceResult":{
       "type":"structure",
       "members":{
+      }
+    },
+    "DeregisterPatchBaselineForPatchGroupRequest":{
+      "type":"structure",
+      "required":[
+        "BaselineId",
+        "PatchGroup"
+      ],
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "PatchGroup":{"shape":"PatchGroup"}
+      }
+    },
+    "DeregisterPatchBaselineForPatchGroupResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "PatchGroup":{"shape":"PatchGroup"}
       }
     },
     "DeregisterTargetFromMaintenanceWindowRequest":{
@@ -1789,6 +2110,24 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "DescribeAvailablePatchesRequest":{
+      "type":"structure",
+      "members":{
+        "Filters":{"shape":"PatchOrchestratorFilterList"},
+        "MaxResults":{
+          "shape":"PatchBaselineMaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeAvailablePatchesResult":{
+      "type":"structure",
+      "members":{
+        "Patches":{"shape":"PatchList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "DescribeDocumentPermissionRequest":{
       "type":"structure",
       "required":[
@@ -1839,6 +2178,25 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "DescribeEffectivePatchesForPatchBaselineRequest":{
+      "type":"structure",
+      "required":["BaselineId"],
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "MaxResults":{
+          "shape":"PatchBaselineMaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeEffectivePatchesForPatchBaselineResult":{
+      "type":"structure",
+      "members":{
+        "EffectivePatches":{"shape":"EffectivePatchList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "DescribeInstanceAssociationsStatusRequest":{
       "type":"structure",
       "required":["InstanceId"],
@@ -1874,6 +2232,65 @@
       "type":"structure",
       "members":{
         "InstanceInformationList":{"shape":"InstanceInformationList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeInstancePatchStatesForPatchGroupRequest":{
+      "type":"structure",
+      "required":["PatchGroup"],
+      "members":{
+        "PatchGroup":{"shape":"PatchGroup"},
+        "Filters":{"shape":"InstancePatchStateFilterList"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{
+          "shape":"PatchComplianceMaxResults",
+          "box":true
+        }
+      }
+    },
+    "DescribeInstancePatchStatesForPatchGroupResult":{
+      "type":"structure",
+      "members":{
+        "InstancePatchStates":{"shape":"InstancePatchStatesList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeInstancePatchStatesRequest":{
+      "type":"structure",
+      "required":["InstanceIds"],
+      "members":{
+        "InstanceIds":{"shape":"InstanceIdList"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{
+          "shape":"PatchComplianceMaxResults",
+          "box":true
+        }
+      }
+    },
+    "DescribeInstancePatchStatesResult":{
+      "type":"structure",
+      "members":{
+        "InstancePatchStates":{"shape":"InstancePatchStateList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeInstancePatchesRequest":{
+      "type":"structure",
+      "required":["InstanceId"],
+      "members":{
+        "InstanceId":{"shape":"InstanceId"},
+        "Filters":{"shape":"PatchOrchestratorFilterList"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{
+          "shape":"PatchComplianceMaxResults",
+          "box":true
+        }
+      }
+    },
+    "DescribeInstancePatchesResult":{
+      "type":"structure",
+      "members":{
+        "Patches":{"shape":"PatchComplianceDataList"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -2014,6 +2431,59 @@
       "type":"structure",
       "members":{
         "Parameters":{"shape":"ParameterMetadataList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribePatchBaselinesRequest":{
+      "type":"structure",
+      "members":{
+        "Filters":{"shape":"PatchOrchestratorFilterList"},
+        "MaxResults":{
+          "shape":"PatchBaselineMaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribePatchBaselinesResult":{
+      "type":"structure",
+      "members":{
+        "BaselineIdentities":{"shape":"PatchBaselineIdentityList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribePatchGroupStateRequest":{
+      "type":"structure",
+      "required":["PatchGroup"],
+      "members":{
+        "PatchGroup":{"shape":"PatchGroup"}
+      }
+    },
+    "DescribePatchGroupStateResult":{
+      "type":"structure",
+      "members":{
+        "Instances":{"shape":"Integer"},
+        "InstancesWithInstalledPatches":{"shape":"Integer"},
+        "InstancesWithInstalledOtherPatches":{"shape":"Integer"},
+        "InstancesWithMissingPatches":{"shape":"Integer"},
+        "InstancesWithFailedPatches":{"shape":"Integer"},
+        "InstancesWithNotApplicablePatches":{"shape":"Integer"}
+      }
+    },
+    "DescribePatchGroupsRequest":{
+      "type":"structure",
+      "members":{
+        "MaxResults":{
+          "shape":"PatchBaselineMaxResults",
+          "box":true
+        },
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribePatchGroupsResult":{
+      "type":"structure",
+      "members":{
+        "Mappings":{"shape":"PatchGroupPatchBaselineMappingList"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -2246,6 +2716,17 @@
       "max":5,
       "min":1
     },
+    "EffectivePatch":{
+      "type":"structure",
+      "members":{
+        "Patch":{"shape":"Patch"},
+        "PatchStatus":{"shape":"PatchStatus"}
+      }
+    },
+    "EffectivePatchList":{
+      "type":"list",
+      "member":{"shape":"EffectivePatch"}
+    },
     "ErrorCount":{"type":"integer"},
     "ExpirationDate":{"type":"timestamp"},
     "FailedCreateAssociation":{
@@ -2314,6 +2795,36 @@
         "StandardOutputUrl":{"shape":"Url"},
         "StandardErrorContent":{"shape":"StandardErrorContent"},
         "StandardErrorUrl":{"shape":"Url"}
+      }
+    },
+    "GetDefaultPatchBaselineRequest":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "GetDefaultPatchBaselineResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"}
+      }
+    },
+    "GetDeployablePatchSnapshotForInstanceRequest":{
+      "type":"structure",
+      "required":[
+        "InstanceId",
+        "SnapshotId"
+      ],
+      "members":{
+        "InstanceId":{"shape":"InstanceId"},
+        "SnapshotId":{"shape":"SnapshotId"}
+      }
+    },
+    "GetDeployablePatchSnapshotForInstanceResult":{
+      "type":"structure",
+      "members":{
+        "InstanceId":{"shape":"InstanceId"},
+        "SnapshotId":{"shape":"SnapshotId"},
+        "SnapshotDownloadUrl":{"shape":"SnapshotDownloadUrl"}
       }
     },
     "GetDocumentRequest":{
@@ -2482,6 +2993,42 @@
       "members":{
         "Parameters":{"shape":"ParameterList"},
         "InvalidParameters":{"shape":"ParameterNameList"}
+      }
+    },
+    "GetPatchBaselineForPatchGroupRequest":{
+      "type":"structure",
+      "required":["PatchGroup"],
+      "members":{
+        "PatchGroup":{"shape":"PatchGroup"}
+      }
+    },
+    "GetPatchBaselineForPatchGroupResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "PatchGroup":{"shape":"PatchGroup"}
+      }
+    },
+    "GetPatchBaselineRequest":{
+      "type":"structure",
+      "required":["BaselineId"],
+      "members":{
+        "BaselineId":{"shape":"BaselineId"}
+      }
+    },
+    "GetPatchBaselineResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "Name":{"shape":"BaselineName"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
+        "ApprovedPatches":{"shape":"PatchIdList"},
+        "RejectedPatches":{"shape":"PatchIdList"},
+        "PatchGroups":{"shape":"PatchGroupList"},
+        "CreatedDate":{"shape":"DateTime"},
+        "ModifiedDate":{"shape":"DateTime"},
+        "Description":{"shape":"BaselineDescription"}
       }
     },
     "IPAddress":{
@@ -2679,10 +3226,87 @@
       },
       "min":0
     },
+    "InstancePatchState":{
+      "type":"structure",
+      "required":[
+        "InstanceId",
+        "PatchGroup",
+        "BaselineId",
+        "OperationStartTime",
+        "OperationEndTime",
+        "Operation"
+      ],
+      "members":{
+        "InstanceId":{"shape":"InstanceId"},
+        "PatchGroup":{"shape":"PatchGroup"},
+        "BaselineId":{"shape":"BaselineId"},
+        "SnapshotId":{"shape":"SnapshotId"},
+        "OwnerInformation":{"shape":"OwnerInformation"},
+        "InstalledCount":{"shape":"PatchInstalledCount"},
+        "InstalledOtherCount":{"shape":"PatchInstalledOtherCount"},
+        "MissingCount":{"shape":"PatchMissingCount"},
+        "FailedCount":{"shape":"PatchFailedCount"},
+        "NotApplicableCount":{"shape":"PatchNotApplicableCount"},
+        "OperationStartTime":{"shape":"PatchOperationStartTime"},
+        "OperationEndTime":{"shape":"PatchOperationEndTime"},
+        "Operation":{"shape":"PatchOperationType"}
+      }
+    },
+    "InstancePatchStateFilter":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Values",
+        "Type"
+      ],
+      "members":{
+        "Key":{"shape":"InstancePatchStateFilterKey"},
+        "Values":{"shape":"InstancePatchStateFilterValues"},
+        "Type":{"shape":"InstancePatchStateOperatorType"}
+      }
+    },
+    "InstancePatchStateFilterKey":{
+      "type":"string",
+      "max":200,
+      "min":1
+    },
+    "InstancePatchStateFilterList":{
+      "type":"list",
+      "member":{"shape":"InstancePatchStateFilter"},
+      "max":4,
+      "min":0
+    },
+    "InstancePatchStateFilterValue":{"type":"string"},
+    "InstancePatchStateFilterValues":{
+      "type":"list",
+      "member":{"shape":"InstancePatchStateFilterValue"},
+      "max":1,
+      "min":1
+    },
+    "InstancePatchStateList":{
+      "type":"list",
+      "member":{"shape":"InstancePatchState"}
+    },
+    "InstancePatchStateOperatorType":{
+      "type":"string",
+      "enum":[
+        "Equal",
+        "NotEqual",
+        "LessThan",
+        "GreaterThan"
+      ]
+    },
+    "InstancePatchStatesList":{
+      "type":"list",
+      "member":{"shape":"InstancePatchState"},
+      "max":5,
+      "min":1
+    },
     "InstanceTagName":{
       "type":"string",
       "max":255
     },
+    "Integer":{"type":"integer"},
     "InternalServerError":{
       "type":"structure",
       "members":{
@@ -3767,6 +4391,256 @@
       "max":50,
       "min":1
     },
+    "Patch":{
+      "type":"structure",
+      "members":{
+        "Id":{"shape":"PatchId"},
+        "ReleaseDate":{"shape":"DateTime"},
+        "Title":{"shape":"PatchTitle"},
+        "Description":{"shape":"PatchDescription"},
+        "ContentUrl":{"shape":"PatchContentUrl"},
+        "Vendor":{"shape":"PatchVendor"},
+        "ProductFamily":{"shape":"PatchProductFamily"},
+        "Product":{"shape":"PatchProduct"},
+        "Classification":{"shape":"PatchClassification"},
+        "MsrcSeverity":{"shape":"PatchMsrcSeverity"},
+        "KbNumber":{"shape":"PatchKbNumber"},
+        "MsrcNumber":{"shape":"PatchMsrcNumber"},
+        "Language":{"shape":"PatchLanguage"}
+      }
+    },
+    "PatchBaselineIdentity":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "BaselineName":{"shape":"BaselineName"},
+        "BaselineDescription":{"shape":"BaselineDescription"},
+        "DefaultBaseline":{"shape":"DefaultBaseline"}
+      }
+    },
+    "PatchBaselineIdentityList":{
+      "type":"list",
+      "member":{"shape":"PatchBaselineIdentity"}
+    },
+    "PatchBaselineMaxResults":{
+      "type":"integer",
+      "max":100,
+      "min":1
+    },
+    "PatchClassification":{"type":"string"},
+    "PatchComplianceData":{
+      "type":"structure",
+      "required":[
+        "Title",
+        "KBId",
+        "Classification",
+        "Severity",
+        "State",
+        "InstalledTime"
+      ],
+      "members":{
+        "Title":{"shape":"PatchTitle"},
+        "KBId":{"shape":"PatchKbNumber"},
+        "Classification":{"shape":"PatchClassification"},
+        "Severity":{"shape":"PatchSeverity"},
+        "State":{"shape":"PatchComplianceDataState"},
+        "InstalledTime":{"shape":"PatchInstalledTime"}
+      }
+    },
+    "PatchComplianceDataList":{
+      "type":"list",
+      "member":{"shape":"PatchComplianceData"}
+    },
+    "PatchComplianceDataState":{
+      "type":"string",
+      "enum":[
+        "INSTALLED",
+        "INSTALLED_OTHER",
+        "MISSING",
+        "NOT_APPLICABLE",
+        "FAILED"
+      ]
+    },
+    "PatchComplianceMaxResults":{
+      "type":"integer",
+      "max":100,
+      "min":10
+    },
+    "PatchContentUrl":{"type":"string"},
+    "PatchDeploymentStatus":{
+      "type":"string",
+      "enum":[
+        "APPROVED",
+        "PENDING_APPROVAL",
+        "EXPLICIT_APPROVED",
+        "EXPLICIT_REJECTED"
+      ]
+    },
+    "PatchDescription":{"type":"string"},
+    "PatchFailedCount":{"type":"integer"},
+    "PatchFilter":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Values"
+      ],
+      "members":{
+        "Key":{"shape":"PatchFilterKey"},
+        "Values":{"shape":"PatchFilterValueList"}
+      }
+    },
+    "PatchFilterGroup":{
+      "type":"structure",
+      "required":["PatchFilters"],
+      "members":{
+        "PatchFilters":{"shape":"PatchFilterList"}
+      }
+    },
+    "PatchFilterKey":{
+      "type":"string",
+      "enum":[
+        "PRODUCT",
+        "CLASSIFICATION",
+        "MSRC_SEVERITY",
+        "PATCH_ID"
+      ]
+    },
+    "PatchFilterList":{
+      "type":"list",
+      "member":{"shape":"PatchFilter"},
+      "max":4,
+      "min":0
+    },
+    "PatchFilterValue":{
+      "type":"string",
+      "max":64,
+      "min":1
+    },
+    "PatchFilterValueList":{
+      "type":"list",
+      "member":{"shape":"PatchFilterValue"},
+      "max":20,
+      "min":1
+    },
+    "PatchGroup":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+    },
+    "PatchGroupList":{
+      "type":"list",
+      "member":{"shape":"PatchGroup"}
+    },
+    "PatchGroupPatchBaselineMapping":{
+      "type":"structure",
+      "members":{
+        "PatchGroup":{"shape":"PatchGroup"},
+        "BaselineIdentity":{"shape":"PatchBaselineIdentity"}
+      }
+    },
+    "PatchGroupPatchBaselineMappingList":{
+      "type":"list",
+      "member":{"shape":"PatchGroupPatchBaselineMapping"}
+    },
+    "PatchId":{
+      "type":"string",
+      "pattern":"(^KB[0-9]{1,7}$)|(^MS[0-9]{2}\\-[0-9]{3}$)"
+    },
+    "PatchIdList":{
+      "type":"list",
+      "member":{"shape":"PatchId"},
+      "max":50,
+      "min":0
+    },
+    "PatchInstalledCount":{"type":"integer"},
+    "PatchInstalledOtherCount":{"type":"integer"},
+    "PatchInstalledTime":{"type":"timestamp"},
+    "PatchKbNumber":{"type":"string"},
+    "PatchLanguage":{"type":"string"},
+    "PatchList":{
+      "type":"list",
+      "member":{"shape":"Patch"}
+    },
+    "PatchMissingCount":{"type":"integer"},
+    "PatchMsrcNumber":{"type":"string"},
+    "PatchMsrcSeverity":{"type":"string"},
+    "PatchNotApplicableCount":{"type":"integer"},
+    "PatchOperationEndTime":{"type":"timestamp"},
+    "PatchOperationStartTime":{"type":"timestamp"},
+    "PatchOperationType":{
+      "type":"string",
+      "enum":[
+        "Scan",
+        "Install"
+      ]
+    },
+    "PatchOrchestratorFilter":{
+      "type":"structure",
+      "members":{
+        "Key":{"shape":"PatchOrchestratorFilterKey"},
+        "Values":{"shape":"PatchOrchestratorFilterValues"}
+      }
+    },
+    "PatchOrchestratorFilterKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "PatchOrchestratorFilterList":{
+      "type":"list",
+      "member":{"shape":"PatchOrchestratorFilter"},
+      "max":5,
+      "min":0
+    },
+    "PatchOrchestratorFilterValue":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
+    "PatchOrchestratorFilterValues":{
+      "type":"list",
+      "member":{"shape":"PatchOrchestratorFilterValue"}
+    },
+    "PatchProduct":{"type":"string"},
+    "PatchProductFamily":{"type":"string"},
+    "PatchRule":{
+      "type":"structure",
+      "required":[
+        "PatchFilterGroup",
+        "ApproveAfterDays"
+      ],
+      "members":{
+        "PatchFilterGroup":{"shape":"PatchFilterGroup"},
+        "ApproveAfterDays":{
+          "shape":"ApproveAfterDays",
+          "box":true
+        }
+      }
+    },
+    "PatchRuleGroup":{
+      "type":"structure",
+      "required":["PatchRules"],
+      "members":{
+        "PatchRules":{"shape":"PatchRuleList"}
+      }
+    },
+    "PatchRuleList":{
+      "type":"list",
+      "member":{"shape":"PatchRule"},
+      "max":10,
+      "min":0
+    },
+    "PatchSeverity":{"type":"string"},
+    "PatchStatus":{
+      "type":"structure",
+      "members":{
+        "DeploymentStatus":{"shape":"PatchDeploymentStatus"},
+        "ApprovalDate":{"shape":"DateTime"}
+      }
+    },
+    "PatchTitle":{"type":"string"},
+    "PatchVendor":{"type":"string"},
     "PingStatus":{
       "type":"string",
       "enum":[
@@ -3827,6 +4701,37 @@
     "PutParameterResult":{
       "type":"structure",
       "members":{
+      }
+    },
+    "RegisterDefaultPatchBaselineRequest":{
+      "type":"structure",
+      "required":["BaselineId"],
+      "members":{
+        "BaselineId":{"shape":"BaselineId"}
+      }
+    },
+    "RegisterDefaultPatchBaselineResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"}
+      }
+    },
+    "RegisterPatchBaselineForPatchGroupRequest":{
+      "type":"structure",
+      "required":[
+        "BaselineId",
+        "PatchGroup"
+      ],
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "PatchGroup":{"shape":"PatchGroup"}
+      }
+    },
+    "RegisterPatchBaselineForPatchGroupResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "PatchGroup":{"shape":"PatchGroup"}
       }
     },
     "RegisterTargetWithMaintenanceWindowRequest":{
@@ -3919,6 +4824,13 @@
       }
     },
     "ResourceId":{"type":"string"},
+    "ResourceInUseException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
     "ResourceLimitExceededException":{
       "type":"structure",
       "members":{
@@ -4023,6 +4935,13 @@
       }
     },
     "ServiceRole":{"type":"string"},
+    "SnapshotDownloadUrl":{"type":"string"},
+    "SnapshotId":{
+      "type":"string",
+      "max":36,
+      "min":36,
+      "pattern":"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
     "StandardErrorContent":{
       "type":"string",
       "max":8000
@@ -4035,7 +4954,7 @@
       "type":"structure",
       "required":["DocumentName"],
       "members":{
-        "DocumentName":{"shape":"DocumentName"},
+        "DocumentName":{"shape":"DocumentARN"},
         "DocumentVersion":{
           "shape":"DocumentVersion",
           "box":true
@@ -4333,6 +5252,33 @@
     "UpdateManagedInstanceRoleResult":{
       "type":"structure",
       "members":{
+      }
+    },
+    "UpdatePatchBaselineRequest":{
+      "type":"structure",
+      "required":["BaselineId"],
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "Name":{"shape":"BaselineName"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
+        "ApprovedPatches":{"shape":"PatchIdList"},
+        "RejectedPatches":{"shape":"PatchIdList"},
+        "Description":{"shape":"BaselineDescription"}
+      }
+    },
+    "UpdatePatchBaselineResult":{
+      "type":"structure",
+      "members":{
+        "BaselineId":{"shape":"BaselineId"},
+        "Name":{"shape":"BaselineName"},
+        "GlobalFilters":{"shape":"PatchFilterGroup"},
+        "ApprovalRules":{"shape":"PatchRuleGroup"},
+        "ApprovedPatches":{"shape":"PatchIdList"},
+        "RejectedPatches":{"shape":"PatchIdList"},
+        "CreatedDate":{"shape":"DateTime"},
+        "ModifiedDate":{"shape":"DateTime"},
+        "Description":{"shape":"BaselineDescription"}
       }
     },
     "Url":{"type":"string"},

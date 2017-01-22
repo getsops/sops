@@ -45,3 +45,31 @@ func Test_Section(t *testing.T) {
 		})
 	})
 }
+
+func Test_SectionRaw(t *testing.T) {
+	Convey("Test section raw string", t, func() {
+		cfg, err := LoadSources(
+			LoadOptions{
+				Insensitive: true,
+				UnparseableSections: []string{"core_lesson", "comments"},
+			},
+			"testdata/aicc.ini")
+		So(err, ShouldBeNil)
+		So(cfg, ShouldNotBeNil)
+
+		Convey("Get section strings", func() {
+			So(strings.Join(cfg.SectionStrings(), ","), ShouldEqual, "DEFAULT,core,core_lesson,comments")
+		})
+
+		Convey("Validate non-raw section", func() {
+			val, err := cfg.Section("core").GetKey("lesson_status")
+			So(err, ShouldBeNil)
+			So(val.String(), ShouldEqual, "C")
+		})
+
+		Convey("Validate raw section", func() {
+			So(cfg.Section("core_lesson").Body(), ShouldEqual, `my lesson state data – 1111111111111111111000000000000000001110000
+111111111111111111100000000000111000000000 – end my lesson state data`)
+		})
+	})
+}

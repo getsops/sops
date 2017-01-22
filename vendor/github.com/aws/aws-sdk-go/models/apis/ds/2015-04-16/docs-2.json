@@ -1,9 +1,9 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS Directory Service</fullname> <p>This is the <i>AWS Directory Service API Reference</i>. This guide provides detailed information about AWS Directory Service operations, data types, parameters, and errors.</p>",
+  "service": "<fullname>AWS Directory Service</fullname> <p>AWS Directory Service is a web service that makes it easy for you to setup and run directories in the AWS cloud, or connect your AWS resources with an existing on-premises Microsoft Active Directory. This guide provides detailed information about AWS Directory Service operations, data types, parameters, and errors. For information about AWS Directory Services features, see <a href=\"https://aws.amazon.com/directoryservice/\">AWS Directory Service</a> and the <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html\">AWS Directory Service Administration Guide</a>.</p> <note> <p>AWS provides SDKs that consist of libraries and sample code for various programming languages and platforms (Java, Ruby, .Net, iOS, Android, etc.). The SDKs provide a convenient way to create programmatic access to AWS Directory Service and other AWS services. For more information about the AWS SDKs, including how to download and install them, see <a href=\"http://aws.amazon.com/tools/\">Tools for Amazon Web Services</a>.</p> </note>",
   "operations": {
     "AddIpRoutes": "<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>",
-    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified Amazon Directory Services directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>",
+    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>",
     "CancelSchemaExtension": "<p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>",
     "ConnectDirectory": "<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>",
     "CreateAlias": "<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>",
@@ -26,15 +26,15 @@
     "DisableRadius": "<p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>",
     "DisableSso": "<p>Disables single-sign on for a directory.</p>",
     "EnableRadius": "<p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>",
-    "EnableSso": "<p>Enables single-sign on for a directory.</p>",
+    "EnableSso": "<p>Enables single sign-on for a directory.</p>",
     "GetDirectoryLimits": "<p>Obtains directory limit information for the current region.</p>",
     "GetSnapshotLimits": "<p>Obtains the manual snapshot limits for a directory.</p>",
     "ListIpRoutes": "<p>Lists the address blocks that you have added to a directory.</p>",
     "ListSchemaExtensions": "<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>",
-    "ListTagsForResource": "<p>Lists all tags on an Amazon Directory Services directory.</p>",
+    "ListTagsForResource": "<p>Lists all tags on a directory.</p>",
     "RegisterEventTopic": "<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>",
     "RemoveIpRoutes": "<p>Removes IP address blocks from a directory.</p>",
-    "RemoveTagsFromResource": "<p>Removes tags from an Amazon Directory Services directory.</p>",
+    "RemoveTagsFromResource": "<p>Removes tags from a directory.</p>",
     "RestoreFromSnapshot": "<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>",
     "StartSchemaExtension": "<p>Applies a schema extension to a Microsoft AD directory.</p>",
     "UpdateConditionalForwarder": "<p>Updates a conditional forwarder that has been set up for your AWS directory.</p>",
@@ -761,7 +761,7 @@
     "LdifContent": {
       "base": null,
       "refs": {
-        "StartSchemaExtensionRequest$LdifContent": "<p>The LDIF file represented as a string. The file size can be no larger than 1MB.</p>"
+        "StartSchemaExtensionRequest$LdifContent": "<p>The LDIF file represented as a string. To construct the LdifContent string, precede each line as it would be formatted in an ldif file with \\n. See the example request below for more details. The file size can be no larger than 1MB.</p>"
       }
     },
     "Limit": {
@@ -1167,7 +1167,7 @@
       }
     },
     "Tag": {
-      "base": "<p>Metadata assigned to an Amazon Directory Services directory consisting of a key-value pair.</p>",
+      "base": "<p>Metadata assigned to a directory consisting of a key-value pair.</p>",
       "refs": {
         "Tags$member": null
       }
@@ -1199,7 +1199,7 @@
     "Tags": {
       "base": null,
       "refs": {
-        "AddTagsToResourceRequest$Tags": "<p>The tags to be assigned to the Amazon Directory Services directory.</p>",
+        "AddTagsToResourceRequest$Tags": "<p>The tags to be assigned to the directory.</p>",
         "ListTagsForResourceResult$Tags": "<p>List of tags returned by the ListTagsForResource operation.</p>"
       }
     },

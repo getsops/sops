@@ -30,6 +30,7 @@ var $throwRuntimeError; /* set by package "runtime" */
 var $throwNilPointerError = function() { $throwRuntimeError("invalid memory address or nil pointer dereference"); };
 var $call = function(fn, rcvr, args) { return fn.apply(rcvr, args); };
 var $makeFunc = function(fn) { return function() { return $externalize(fn(this, new ($sliceType($jsObjectPtr))($global.Array.prototype.slice.call(arguments, []))), $emptyInterface); }; };
+var $unused = function(v) {};
 
 var $mapArray = function(array, f) {
   var newArray = new array.constructor(array.length);

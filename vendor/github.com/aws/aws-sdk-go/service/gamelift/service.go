@@ -153,8 +153,9 @@ import (
 //
 // To view changes to the API, see the GameLift Document History (http://docs.aws.amazon.com/gamelift/latest/developerguide/doc-history.html)
 // page.
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01
 type GameLift struct {
 	*client.Client
 }
@@ -165,8 +166,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "gamelift"
+// Service information constants
+const (
+	ServiceName = "gamelift"  // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the GameLift client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -179,17 +183,18 @@ const ServiceName = "gamelift"
 //     // Create a GameLift client with additional configuration
 //     svc := gamelift.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *GameLift {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *GameLift {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *GameLift {
 	svc := &GameLift{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2015-10-01",

@@ -145,6 +145,10 @@ type CloudWatchLogsAPI interface {
 
 	GetLogEventsPages(*cloudwatchlogs.GetLogEventsInput, func(*cloudwatchlogs.GetLogEventsOutput, bool) bool) error
 
+	ListTagsLogGroupRequest(*cloudwatchlogs.ListTagsLogGroupInput) (*request.Request, *cloudwatchlogs.ListTagsLogGroupOutput)
+
+	ListTagsLogGroup(*cloudwatchlogs.ListTagsLogGroupInput) (*cloudwatchlogs.ListTagsLogGroupOutput, error)
+
 	PutDestinationRequest(*cloudwatchlogs.PutDestinationInput) (*request.Request, *cloudwatchlogs.PutDestinationOutput)
 
 	PutDestination(*cloudwatchlogs.PutDestinationInput) (*cloudwatchlogs.PutDestinationOutput, error)
@@ -169,9 +173,17 @@ type CloudWatchLogsAPI interface {
 
 	PutSubscriptionFilter(*cloudwatchlogs.PutSubscriptionFilterInput) (*cloudwatchlogs.PutSubscriptionFilterOutput, error)
 
+	TagLogGroupRequest(*cloudwatchlogs.TagLogGroupInput) (*request.Request, *cloudwatchlogs.TagLogGroupOutput)
+
+	TagLogGroup(*cloudwatchlogs.TagLogGroupInput) (*cloudwatchlogs.TagLogGroupOutput, error)
+
 	TestMetricFilterRequest(*cloudwatchlogs.TestMetricFilterInput) (*request.Request, *cloudwatchlogs.TestMetricFilterOutput)
 
 	TestMetricFilter(*cloudwatchlogs.TestMetricFilterInput) (*cloudwatchlogs.TestMetricFilterOutput, error)
+
+	UntagLogGroupRequest(*cloudwatchlogs.UntagLogGroupInput) (*request.Request, *cloudwatchlogs.UntagLogGroupOutput)
+
+	UntagLogGroup(*cloudwatchlogs.UntagLogGroupInput) (*cloudwatchlogs.UntagLogGroupOutput, error)
 }
 
 var _ CloudWatchLogsAPI = (*cloudwatchlogs.CloudWatchLogs)(nil)

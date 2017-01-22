@@ -8,7 +8,8 @@
     "serviceFullName":"Application Auto Scaling",
     "signatureVersion":"v4",
     "signingName":"application-autoscaling",
-    "targetPrefix":"AnyScaleFrontendService"
+    "targetPrefix":"AnyScaleFrontendService",
+    "uid":"application-autoscaling-2016-02-06"
   },
   "operations":{
     "DeleteScalingPolicy":{

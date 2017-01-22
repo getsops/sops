@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"ec2-2015-10-01",
     "apiVersion":"2015-10-01",
     "endpointPrefix":"ec2",
     "protocol":"ec2",

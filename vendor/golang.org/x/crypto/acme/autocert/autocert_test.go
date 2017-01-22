@@ -108,18 +108,41 @@ func decodePayload(v interface{}, r io.Reader) error {
 }
 
 func TestGetCertificate(t *testing.T) {
-	testGetCertificate(t, false)
+	man := &Manager{Prompt: AcceptTOS}
+	defer man.stopRenew()
+	hello := &tls.ClientHelloInfo{ServerName: "example.org"}
+	testGetCertificate(t, man, "example.org", hello)
 }
 
 func TestGetCertificate_trailingDot(t *testing.T) {
-	testGetCertificate(t, true)
-}
-
-func testGetCertificate(t *testing.T, trailingDot bool) {
-	const domain = "example.org"
 	man := &Manager{Prompt: AcceptTOS}
 	defer man.stopRenew()
+	hello := &tls.ClientHelloInfo{ServerName: "example.org."}
+	testGetCertificate(t, man, "example.org", hello)
+}
 
+func TestGetCertificate_ForceRSA(t *testing.T) {
+	man := &Manager{
+		Prompt:   AcceptTOS,
+		Cache:    make(memCache),
+		ForceRSA: true,
+	}
+	defer man.stopRenew()
+	hello := &tls.ClientHelloInfo{ServerName: "example.org"}
+	testGetCertificate(t, man, "example.org", hello)
+
+	cert, err := man.cacheGet("example.org")
+	if err != nil {
+		t.Fatalf("man.cacheGet: %v", err)
+	}
+	if _, ok := cert.PrivateKey.(*rsa.PrivateKey); !ok {
+		t.Errorf("cert.PrivateKey is %T; want *rsa.PrivateKey", cert.PrivateKey)
+	}
+}
+
+// tests man.GetCertificate flow using the provided hello argument.
+// The domain argument is the expected domain name of a certificate request.
+func testGetCertificate(t *testing.T, man *Manager, domain string, hello *tls.ClientHelloInfo) {
 	// echo token-02 | shasum -a 256
 	// then divide result in 2 parts separated by dot
 	tokenCertName := "4e8eb87631187e9ff2153b56b13a4dec.13a35d002e485d60ff37354b32f665d9.token.acme.invalid"
@@ -212,14 +235,10 @@ func testGetCertificate(t *testing.T, trailingDot bool) {
 	// simulate tls.Config.GetCertificate
 	var tlscert *tls.Certificate
 	done := make(chan struct{})
-	go func(serverName string) {
-		if trailingDot {
-			serverName += "."
-		}
-		hello := &tls.ClientHelloInfo{ServerName: serverName}
+	go func() {
 		tlscert, err = man.GetCertificate(hello)
 		close(done)
-	}(domain)
+	}()
 	select {
 	case <-time.After(time.Minute):
 		t.Fatal("man.GetCertificate took too long to return")

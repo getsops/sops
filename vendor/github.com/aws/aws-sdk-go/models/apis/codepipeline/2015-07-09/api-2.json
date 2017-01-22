@@ -8,7 +8,8 @@
     "serviceAbbreviation":"CodePipeline",
     "serviceFullName":"AWS CodePipeline",
     "signatureVersion":"v4",
-    "targetPrefix":"CodePipeline_20150709"
+    "targetPrefix":"CodePipeline_20150709",
+    "uid":"codepipeline-2015-07-09"
   },
   "operations":{
     "AcknowledgeJob":{
@@ -493,7 +494,7 @@
     },
     "ActionConfigurationValue":{
       "type":"string",
-      "max":500,
+      "max":1000,
       "min":1
     },
     "ActionContext":{

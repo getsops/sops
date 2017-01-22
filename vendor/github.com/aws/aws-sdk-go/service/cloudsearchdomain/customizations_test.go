@@ -25,7 +25,6 @@ func TestRequireEndpointIfRegionProvided(t *testing.T) {
 
 func TestRequireEndpointIfNoRegionProvided(t *testing.T) {
 	svc := cloudsearchdomain.New(unit.Session, &aws.Config{
-		Region:                 aws.String(""),
 		DisableParamValidation: aws.Bool(true),
 	})
 	req, _ := svc.SearchRequest(nil)

@@ -189,6 +189,10 @@ type ElasticBeanstalkAPI interface {
 
 	UpdateApplication(*elasticbeanstalk.UpdateApplicationInput) (*elasticbeanstalk.ApplicationDescriptionMessage, error)
 
+	UpdateApplicationResourceLifecycleRequest(*elasticbeanstalk.UpdateApplicationResourceLifecycleInput) (*request.Request, *elasticbeanstalk.UpdateApplicationResourceLifecycleOutput)
+
+	UpdateApplicationResourceLifecycle(*elasticbeanstalk.UpdateApplicationResourceLifecycleInput) (*elasticbeanstalk.UpdateApplicationResourceLifecycleOutput, error)
+
 	UpdateApplicationVersionRequest(*elasticbeanstalk.UpdateApplicationVersionInput) (*request.Request, *elasticbeanstalk.ApplicationVersionDescriptionMessage)
 
 	UpdateApplicationVersion(*elasticbeanstalk.UpdateApplicationVersionInput) (*elasticbeanstalk.ApplicationVersionDescriptionMessage, error)

@@ -4,6 +4,8 @@
 package iotdataplane
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/awstesting/integration/smoke"
 	"github.com/aws/aws-sdk-go/service/iot"
@@ -20,6 +22,7 @@ func init() {
 			return
 		}
 
+		fmt.Println("IOT Data endpoint:", *result.EndpointAddress)
 		gucumber.World["client"] = iotdataplane.New(smoke.Session, aws.NewConfig().
 			WithEndpoint(*result.EndpointAddress))
 	})

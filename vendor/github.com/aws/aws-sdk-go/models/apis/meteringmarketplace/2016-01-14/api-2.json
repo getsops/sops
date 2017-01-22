@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"meteringmarketplace-2016-01-14",
     "apiVersion":"2016-01-14",
     "endpointPrefix":"metering.marketplace",
     "jsonVersion":"1.1",

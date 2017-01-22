@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"importexport-2010-06-01",
     "apiVersion":"2010-06-01",
     "endpointPrefix":"importexport",
     "globalEndpoint":"importexport.amazonaws.com",

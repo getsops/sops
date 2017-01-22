@@ -9161,6 +9161,8 @@
         "t2.small",
         "t2.medium",
         "t2.large",
+        "t2.xlarge",
+        "t2.2xlarge",
         "m1.small",
         "m1.medium",
         "m1.large",
@@ -9184,6 +9186,12 @@
         "r3.2xlarge",
         "r3.4xlarge",
         "r3.8xlarge",
+        "r4.large",
+        "r4.xlarge",
+        "r4.2xlarge",
+        "r4.4xlarge",
+        "r4.8xlarge",
+        "r4.16xlarge",
         "x1.16xlarge",
         "x1.32xlarge",
         "i2.xlarge",
@@ -13522,6 +13530,10 @@
         "GroupName":{
           "shape":"String",
           "locationName":"groupName"
+        },
+        "Tenancy":{
+          "shape":"Tenancy",
+          "locationName":"tenancy"
         }
       }
     },

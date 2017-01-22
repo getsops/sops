@@ -62,10 +62,85 @@ func ExampleFirehose_CreateDeliveryStream() {
 				LogStreamName: aws.String("LogStreamName"),
 			},
 			IndexRotationPeriod: aws.String("ElasticsearchIndexRotationPeriod"),
+			ProcessingConfiguration: &firehose.ProcessingConfiguration{
+				Enabled: aws.Bool(true),
+				Processors: []*firehose.Processor{
+					{ // Required
+						Type: aws.String("ProcessorType"), // Required
+						Parameters: []*firehose.ProcessorParameter{
+							{ // Required
+								ParameterName:  aws.String("ProcessorParameterName"),  // Required
+								ParameterValue: aws.String("ProcessorParameterValue"), // Required
+							},
+							// More values...
+						},
+					},
+					// More values...
+				},
+			},
 			RetryOptions: &firehose.ElasticsearchRetryOptions{
 				DurationInSeconds: aws.Int64(1),
 			},
 			S3BackupMode: aws.String("ElasticsearchS3BackupMode"),
+		},
+		ExtendedS3DestinationConfiguration: &firehose.ExtendedS3DestinationConfiguration{
+			BucketARN: aws.String("BucketARN"), // Required
+			RoleARN:   aws.String("RoleARN"),   // Required
+			BufferingHints: &firehose.BufferingHints{
+				IntervalInSeconds: aws.Int64(1),
+				SizeInMBs:         aws.Int64(1),
+			},
+			CloudWatchLoggingOptions: &firehose.CloudWatchLoggingOptions{
+				Enabled:       aws.Bool(true),
+				LogGroupName:  aws.String("LogGroupName"),
+				LogStreamName: aws.String("LogStreamName"),
+			},
+			CompressionFormat: aws.String("CompressionFormat"),
+			EncryptionConfiguration: &firehose.EncryptionConfiguration{
+				KMSEncryptionConfig: &firehose.KMSEncryptionConfig{
+					AWSKMSKeyARN: aws.String("AWSKMSKeyARN"), // Required
+				},
+				NoEncryptionConfig: aws.String("NoEncryptionConfig"),
+			},
+			Prefix: aws.String("Prefix"),
+			ProcessingConfiguration: &firehose.ProcessingConfiguration{
+				Enabled: aws.Bool(true),
+				Processors: []*firehose.Processor{
+					{ // Required
+						Type: aws.String("ProcessorType"), // Required
+						Parameters: []*firehose.ProcessorParameter{
+							{ // Required
+								ParameterName:  aws.String("ProcessorParameterName"),  // Required
+								ParameterValue: aws.String("ProcessorParameterValue"), // Required
+							},
+							// More values...
+						},
+					},
+					// More values...
+				},
+			},
+			S3BackupConfiguration: &firehose.S3DestinationConfiguration{
+				BucketARN: aws.String("BucketARN"), // Required
+				RoleARN:   aws.String("RoleARN"),   // Required
+				BufferingHints: &firehose.BufferingHints{
+					IntervalInSeconds: aws.Int64(1),
+					SizeInMBs:         aws.Int64(1),
+				},
+				CloudWatchLoggingOptions: &firehose.CloudWatchLoggingOptions{
+					Enabled:       aws.Bool(true),
+					LogGroupName:  aws.String("LogGroupName"),
+					LogStreamName: aws.String("LogStreamName"),
+				},
+				CompressionFormat: aws.String("CompressionFormat"),
+				EncryptionConfiguration: &firehose.EncryptionConfiguration{
+					KMSEncryptionConfig: &firehose.KMSEncryptionConfig{
+						AWSKMSKeyARN: aws.String("AWSKMSKeyARN"), // Required
+					},
+					NoEncryptionConfig: aws.String("NoEncryptionConfig"),
+				},
+				Prefix: aws.String("Prefix"),
+			},
+			S3BackupMode: aws.String("S3BackupMode"),
 		},
 		RedshiftDestinationConfiguration: &firehose.RedshiftDestinationConfiguration{
 			ClusterJDBCURL: aws.String("ClusterJDBCURL"), // Required
@@ -103,9 +178,47 @@ func ExampleFirehose_CreateDeliveryStream() {
 				LogGroupName:  aws.String("LogGroupName"),
 				LogStreamName: aws.String("LogStreamName"),
 			},
+			ProcessingConfiguration: &firehose.ProcessingConfiguration{
+				Enabled: aws.Bool(true),
+				Processors: []*firehose.Processor{
+					{ // Required
+						Type: aws.String("ProcessorType"), // Required
+						Parameters: []*firehose.ProcessorParameter{
+							{ // Required
+								ParameterName:  aws.String("ProcessorParameterName"),  // Required
+								ParameterValue: aws.String("ProcessorParameterValue"), // Required
+							},
+							// More values...
+						},
+					},
+					// More values...
+				},
+			},
 			RetryOptions: &firehose.RedshiftRetryOptions{
 				DurationInSeconds: aws.Int64(1),
 			},
+			S3BackupConfiguration: &firehose.S3DestinationConfiguration{
+				BucketARN: aws.String("BucketARN"), // Required
+				RoleARN:   aws.String("RoleARN"),   // Required
+				BufferingHints: &firehose.BufferingHints{
+					IntervalInSeconds: aws.Int64(1),
+					SizeInMBs:         aws.Int64(1),
+				},
+				CloudWatchLoggingOptions: &firehose.CloudWatchLoggingOptions{
+					Enabled:       aws.Bool(true),
+					LogGroupName:  aws.String("LogGroupName"),
+					LogStreamName: aws.String("LogStreamName"),
+				},
+				CompressionFormat: aws.String("CompressionFormat"),
+				EncryptionConfiguration: &firehose.EncryptionConfiguration{
+					KMSEncryptionConfig: &firehose.KMSEncryptionConfig{
+						AWSKMSKeyARN: aws.String("AWSKMSKeyARN"), // Required
+					},
+					NoEncryptionConfig: aws.String("NoEncryptionConfig"),
+				},
+				Prefix: aws.String("Prefix"),
+			},
+			S3BackupMode: aws.String("RedshiftS3BackupMode"),
 		},
 		S3DestinationConfiguration: &firehose.S3DestinationConfiguration{
 			BucketARN: aws.String("BucketARN"), // Required
@@ -305,6 +418,22 @@ func ExampleFirehose_UpdateDestination() {
 			DomainARN:           aws.String("ElasticsearchDomainARN"),
 			IndexName:           aws.String("ElasticsearchIndexName"),
 			IndexRotationPeriod: aws.String("ElasticsearchIndexRotationPeriod"),
+			ProcessingConfiguration: &firehose.ProcessingConfiguration{
+				Enabled: aws.Bool(true),
+				Processors: []*firehose.Processor{
+					{ // Required
+						Type: aws.String("ProcessorType"), // Required
+						Parameters: []*firehose.ProcessorParameter{
+							{ // Required
+								ParameterName:  aws.String("ProcessorParameterName"),  // Required
+								ParameterValue: aws.String("ProcessorParameterValue"), // Required
+							},
+							// More values...
+						},
+					},
+					// More values...
+				},
+			},
 			RetryOptions: &firehose.ElasticsearchRetryOptions{
 				DurationInSeconds: aws.Int64(1),
 			},
@@ -332,6 +461,65 @@ func ExampleFirehose_UpdateDestination() {
 			},
 			TypeName: aws.String("ElasticsearchTypeName"),
 		},
+		ExtendedS3DestinationUpdate: &firehose.ExtendedS3DestinationUpdate{
+			BucketARN: aws.String("BucketARN"),
+			BufferingHints: &firehose.BufferingHints{
+				IntervalInSeconds: aws.Int64(1),
+				SizeInMBs:         aws.Int64(1),
+			},
+			CloudWatchLoggingOptions: &firehose.CloudWatchLoggingOptions{
+				Enabled:       aws.Bool(true),
+				LogGroupName:  aws.String("LogGroupName"),
+				LogStreamName: aws.String("LogStreamName"),
+			},
+			CompressionFormat: aws.String("CompressionFormat"),
+			EncryptionConfiguration: &firehose.EncryptionConfiguration{
+				KMSEncryptionConfig: &firehose.KMSEncryptionConfig{
+					AWSKMSKeyARN: aws.String("AWSKMSKeyARN"), // Required
+				},
+				NoEncryptionConfig: aws.String("NoEncryptionConfig"),
+			},
+			Prefix: aws.String("Prefix"),
+			ProcessingConfiguration: &firehose.ProcessingConfiguration{
+				Enabled: aws.Bool(true),
+				Processors: []*firehose.Processor{
+					{ // Required
+						Type: aws.String("ProcessorType"), // Required
+						Parameters: []*firehose.ProcessorParameter{
+							{ // Required
+								ParameterName:  aws.String("ProcessorParameterName"),  // Required
+								ParameterValue: aws.String("ProcessorParameterValue"), // Required
+							},
+							// More values...
+						},
+					},
+					// More values...
+				},
+			},
+			RoleARN:      aws.String("RoleARN"),
+			S3BackupMode: aws.String("S3BackupMode"),
+			S3BackupUpdate: &firehose.S3DestinationUpdate{
+				BucketARN: aws.String("BucketARN"),
+				BufferingHints: &firehose.BufferingHints{
+					IntervalInSeconds: aws.Int64(1),
+					SizeInMBs:         aws.Int64(1),
+				},
+				CloudWatchLoggingOptions: &firehose.CloudWatchLoggingOptions{
+					Enabled:       aws.Bool(true),
+					LogGroupName:  aws.String("LogGroupName"),
+					LogStreamName: aws.String("LogStreamName"),
+				},
+				CompressionFormat: aws.String("CompressionFormat"),
+				EncryptionConfiguration: &firehose.EncryptionConfiguration{
+					KMSEncryptionConfig: &firehose.KMSEncryptionConfig{
+						AWSKMSKeyARN: aws.String("AWSKMSKeyARN"), // Required
+					},
+					NoEncryptionConfig: aws.String("NoEncryptionConfig"),
+				},
+				Prefix:  aws.String("Prefix"),
+				RoleARN: aws.String("RoleARN"),
+			},
+		},
 		RedshiftDestinationUpdate: &firehose.RedshiftDestinationUpdate{
 			CloudWatchLoggingOptions: &firehose.CloudWatchLoggingOptions{
 				Enabled:       aws.Bool(true),
@@ -345,10 +533,48 @@ func ExampleFirehose_UpdateDestination() {
 				DataTableColumns: aws.String("DataTableColumns"),
 			},
 			Password: aws.String("Password"),
+			ProcessingConfiguration: &firehose.ProcessingConfiguration{
+				Enabled: aws.Bool(true),
+				Processors: []*firehose.Processor{
+					{ // Required
+						Type: aws.String("ProcessorType"), // Required
+						Parameters: []*firehose.ProcessorParameter{
+							{ // Required
+								ParameterName:  aws.String("ProcessorParameterName"),  // Required
+								ParameterValue: aws.String("ProcessorParameterValue"), // Required
+							},
+							// More values...
+						},
+					},
+					// More values...
+				},
+			},
 			RetryOptions: &firehose.RedshiftRetryOptions{
 				DurationInSeconds: aws.Int64(1),
 			},
-			RoleARN: aws.String("RoleARN"),
+			RoleARN:      aws.String("RoleARN"),
+			S3BackupMode: aws.String("RedshiftS3BackupMode"),
+			S3BackupUpdate: &firehose.S3DestinationUpdate{
+				BucketARN: aws.String("BucketARN"),
+				BufferingHints: &firehose.BufferingHints{
+					IntervalInSeconds: aws.Int64(1),
+					SizeInMBs:         aws.Int64(1),
+				},
+				CloudWatchLoggingOptions: &firehose.CloudWatchLoggingOptions{
+					Enabled:       aws.Bool(true),
+					LogGroupName:  aws.String("LogGroupName"),
+					LogStreamName: aws.String("LogStreamName"),
+				},
+				CompressionFormat: aws.String("CompressionFormat"),
+				EncryptionConfiguration: &firehose.EncryptionConfiguration{
+					KMSEncryptionConfig: &firehose.KMSEncryptionConfig{
+						AWSKMSKeyARN: aws.String("AWSKMSKeyARN"), // Required
+					},
+					NoEncryptionConfig: aws.String("NoEncryptionConfig"),
+				},
+				Prefix:  aws.String("Prefix"),
+				RoleARN: aws.String("RoleARN"),
+			},
 			S3Update: &firehose.S3DestinationUpdate{
 				BucketARN: aws.String("BucketARN"),
 				BufferingHints: &firehose.BufferingHints{

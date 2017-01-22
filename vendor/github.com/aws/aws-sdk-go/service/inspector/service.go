@@ -14,8 +14,9 @@ import (
 // Amazon Inspector enables you to analyze the behavior of your AWS resources
 // and to identify potential security issues. For more information, see  Amazon
 // Inspector User Guide (http://docs.aws.amazon.com/inspector/latest/userguide/inspector_introduction.html).
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/inspector-2016-02-16
 type Inspector struct {
 	*client.Client
 }
@@ -26,8 +27,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "inspector"
+// Service information constants
+const (
+	ServiceName = "inspector" // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the Inspector client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -40,17 +44,18 @@ const ServiceName = "inspector"
 //     // Create a Inspector client with additional configuration
 //     svc := inspector.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *Inspector {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *Inspector {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *Inspector {
 	svc := &Inspector{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2016-02-16",

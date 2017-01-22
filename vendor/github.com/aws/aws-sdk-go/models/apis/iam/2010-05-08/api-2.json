@@ -8,6 +8,7 @@
     "serviceAbbreviation":"IAM",
     "serviceFullName":"AWS Identity and Access Management",
     "signatureVersion":"v4",
+    "uid":"iam-2010-05-08",
     "xmlNamespace":"https://iam.amazonaws.com/doc/2010-05-08/"
   },
   "operations":{
@@ -286,6 +287,23 @@
         {"shape":"ServiceFailureException"}
       ]
     },
+    "CreateServiceSpecificCredential":{
+      "name":"CreateServiceSpecificCredential",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateServiceSpecificCredentialRequest"},
+      "output":{
+        "shape":"CreateServiceSpecificCredentialResponse",
+        "resultWrapper":"CreateServiceSpecificCredentialResult"
+      },
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"NoSuchEntityException"},
+        {"shape":"ServiceNotSupportedException"}
+      ]
+    },
     "CreateUser":{
       "name":"CreateUser",
       "http":{
@@ -535,6 +553,17 @@
         {"shape":"DeleteConflictException"},
         {"shape":"LimitExceededException"},
         {"shape":"ServiceFailureException"}
+      ]
+    },
+    "DeleteServiceSpecificCredential":{
+      "name":"DeleteServiceSpecificCredential",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteServiceSpecificCredentialRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"}
       ]
     },
     "DeleteSigningCertificate":{
@@ -1315,6 +1344,22 @@
         {"shape":"ServiceFailureException"}
       ]
     },
+    "ListServiceSpecificCredentials":{
+      "name":"ListServiceSpecificCredentials",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListServiceSpecificCredentialsRequest"},
+      "output":{
+        "shape":"ListServiceSpecificCredentialsResponse",
+        "resultWrapper":"ListServiceSpecificCredentialsResult"
+      },
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"ServiceNotSupportedException"}
+      ]
+    },
     "ListSigningCertificates":{
       "name":"ListSigningCertificates",
       "http":{
@@ -1453,6 +1498,21 @@
         {"shape":"NoSuchEntityException"},
         {"shape":"LimitExceededException"},
         {"shape":"ServiceFailureException"}
+      ]
+    },
+    "ResetServiceSpecificCredential":{
+      "name":"ResetServiceSpecificCredential",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ResetServiceSpecificCredentialRequest"},
+      "output":{
+        "shape":"ResetServiceSpecificCredentialResponse",
+        "resultWrapper":"ResetServiceSpecificCredentialResult"
+      },
+      "errors":[
+        {"shape":"NoSuchEntityException"}
       ]
     },
     "ResyncMFADevice":{
@@ -1640,6 +1700,17 @@
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"LimitExceededException"},
         {"shape":"ServiceFailureException"}
+      ]
+    },
+    "UpdateServiceSpecificCredential":{
+      "name":"UpdateServiceSpecificCredential",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateServiceSpecificCredentialRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"}
       ]
     },
     "UpdateSigningCertificate":{
@@ -2070,6 +2141,23 @@
         "SAMLProviderArn":{"shape":"arnType"}
       }
     },
+    "CreateServiceSpecificCredentialRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "ServiceName"
+      ],
+      "members":{
+        "UserName":{"shape":"userNameType"},
+        "ServiceName":{"shape":"serviceName"}
+      }
+    },
+    "CreateServiceSpecificCredentialResponse":{
+      "type":"structure",
+      "members":{
+        "ServiceSpecificCredential":{"shape":"ServiceSpecificCredential"}
+      }
+    },
     "CreateUserRequest":{
       "type":"structure",
       "required":["UserName"],
@@ -2271,6 +2359,14 @@
       "required":["ServerCertificateName"],
       "members":{
         "ServerCertificateName":{"shape":"serverCertificateNameType"}
+      }
+    },
+    "DeleteServiceSpecificCredentialRequest":{
+      "type":"structure",
+      "required":["ServiceSpecificCredentialId"],
+      "members":{
+        "UserName":{"shape":"userNameType"},
+        "ServiceSpecificCredentialId":{"shape":"serviceSpecificCredentialId"}
       }
     },
     "DeleteSigningCertificateRequest":{
@@ -3238,6 +3334,19 @@
         "Marker":{"shape":"markerType"}
       }
     },
+    "ListServiceSpecificCredentialsRequest":{
+      "type":"structure",
+      "members":{
+        "UserName":{"shape":"userNameType"},
+        "ServiceName":{"shape":"serviceName"}
+      }
+    },
+    "ListServiceSpecificCredentialsResponse":{
+      "type":"structure",
+      "members":{
+        "ServiceSpecificCredentials":{"shape":"ServiceSpecificCredentialsListType"}
+      }
+    },
     "ListSigningCertificatesRequest":{
       "type":"structure",
       "members":{
@@ -3619,6 +3728,20 @@
         "COMPLETE"
       ]
     },
+    "ResetServiceSpecificCredentialRequest":{
+      "type":"structure",
+      "required":["ServiceSpecificCredentialId"],
+      "members":{
+        "UserName":{"shape":"userNameType"},
+        "ServiceSpecificCredentialId":{"shape":"serviceSpecificCredentialId"}
+      }
+    },
+    "ResetServiceSpecificCredentialResponse":{
+      "type":"structure",
+      "members":{
+        "ServiceSpecificCredential":{"shape":"ServiceSpecificCredential"}
+      }
+    },
     "ResourceHandlingOptionType":{
       "type":"string",
       "max":64,
@@ -3797,6 +3920,62 @@
         "httpStatusCode":500
       },
       "exception":true
+    },
+    "ServiceNotSupportedException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"serviceNotSupportedMessage"}
+      },
+      "error":{
+        "code":"NotSupportedService",
+        "httpStatusCode":404,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "ServiceSpecificCredential":{
+      "type":"structure",
+      "required":[
+        "CreateDate",
+        "ServiceName",
+        "ServiceUserName",
+        "ServicePassword",
+        "ServiceSpecificCredentialId",
+        "UserName",
+        "Status"
+      ],
+      "members":{
+        "CreateDate":{"shape":"dateType"},
+        "ServiceName":{"shape":"serviceName"},
+        "ServiceUserName":{"shape":"serviceUserName"},
+        "ServicePassword":{"shape":"servicePassword"},
+        "ServiceSpecificCredentialId":{"shape":"serviceSpecificCredentialId"},
+        "UserName":{"shape":"userNameType"},
+        "Status":{"shape":"statusType"}
+      }
+    },
+    "ServiceSpecificCredentialMetadata":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "Status",
+        "ServiceUserName",
+        "CreateDate",
+        "ServiceSpecificCredentialId",
+        "ServiceName"
+      ],
+      "members":{
+        "UserName":{"shape":"userNameType"},
+        "Status":{"shape":"statusType"},
+        "ServiceUserName":{"shape":"serviceUserName"},
+        "CreateDate":{"shape":"dateType"},
+        "ServiceSpecificCredentialId":{"shape":"serviceSpecificCredentialId"},
+        "ServiceName":{"shape":"serviceName"}
+      }
+    },
+    "ServiceSpecificCredentialsListType":{
+      "type":"list",
+      "member":{"shape":"ServiceSpecificCredentialMetadata"}
     },
     "SetDefaultPolicyVersionRequest":{
       "type":"structure",
@@ -4004,6 +4183,18 @@
         "ServerCertificateName":{"shape":"serverCertificateNameType"},
         "NewPath":{"shape":"pathType"},
         "NewServerCertificateName":{"shape":"serverCertificateNameType"}
+      }
+    },
+    "UpdateServiceSpecificCredentialRequest":{
+      "type":"structure",
+      "required":[
+        "ServiceSpecificCredentialId",
+        "Status"
+      ],
+      "members":{
+        "UserName":{"shape":"userNameType"},
+        "ServiceSpecificCredentialId":{"shape":"serviceSpecificCredentialId"},
+        "Status":{"shape":"statusType"}
       }
     },
     "UpdateSigningCertificateRequest":{
@@ -4433,6 +4624,24 @@
       "pattern":"[\\w+=,.@-]+"
     },
     "serviceFailureExceptionMessage":{"type":"string"},
+    "serviceName":{"type":"string"},
+    "serviceNotSupportedMessage":{"type":"string"},
+    "servicePassword":{
+      "type":"string",
+      "sensitive":true
+    },
+    "serviceSpecificCredentialId":{
+      "type":"string",
+      "max":128,
+      "min":20,
+      "pattern":"[\\w]+"
+    },
+    "serviceUserName":{
+      "type":"string",
+      "max":200,
+      "min":17,
+      "pattern":"[\\w+=,.@-]+"
+    },
     "statusType":{
       "type":"string",
       "enum":[

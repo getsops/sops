@@ -1,12 +1,16 @@
 package assert
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"math"
 	"os"
 	"reflect"
 	"regexp"
+	"runtime"
+	"strings"
 	"testing"
 	"time"
 )
@@ -192,7 +196,67 @@ func TestEqual(t *testing.T) {
 	if !Equal(mockT, uint64(123), uint64(123)) {
 		t.Error("Equal should return true")
 	}
+	if !Equal(mockT, &struct{}{}, &struct{}{}) {
+		t.Error("Equal should return true (pointer equality is based on equality of underlying value)")
+	}
+}
 
+// bufferT implements TestingT. Its implementation of Errorf writes the output that would be produced by
+// testing.T.Errorf to an internal bytes.Buffer.
+type bufferT struct {
+	buf bytes.Buffer
+}
+
+func (t *bufferT) Errorf(format string, args ...interface{}) {
+	// implementation of decorate is copied from testing.T
+	decorate := func(s string) string {
+		_, file, line, ok := runtime.Caller(3) // decorate + log + public function.
+		if ok {
+			// Truncate file name at last file name separator.
+			if index := strings.LastIndex(file, "/"); index >= 0 {
+				file = file[index+1:]
+			} else if index = strings.LastIndex(file, "\\"); index >= 0 {
+				file = file[index+1:]
+			}
+		} else {
+			file = "???"
+			line = 1
+		}
+		buf := new(bytes.Buffer)
+		// Every line is indented at least one tab.
+		buf.WriteByte('\t')
+		fmt.Fprintf(buf, "%s:%d: ", file, line)
+		lines := strings.Split(s, "\n")
+		if l := len(lines); l > 1 && lines[l-1] == "" {
+			lines = lines[:l-1]
+		}
+		for i, line := range lines {
+			if i > 0 {
+				// Second and subsequent lines are indented an extra tab.
+				buf.WriteString("\n\t\t")
+			}
+			buf.WriteString(line)
+		}
+		buf.WriteByte('\n')
+		return buf.String()
+	}
+	t.buf.WriteString(decorate(fmt.Sprintf(format, args...)))
+}
+
+func TestEqualFormatting(t *testing.T) {
+	for i, currCase := range []struct {
+		equalWant  string
+		equalGot   string
+		msgAndArgs []interface{}
+		want       string
+	}{
+		{equalWant:"want", equalGot: "got", want: "\tassertions.go:[0-9]+: \r                          \r\tError Trace:\t\n\t\t\r\tError:      \tNot equal: \n\t\t\r\t            \texpected: \"want\"\n\t\t\r\t            \treceived: \"got\"\n"},
+		{equalWant:"want", equalGot: "got", msgAndArgs: []interface{}{"hello, %v!", "world"}, want: "\tassertions.go:[0-9]+: \r                          \r\tError Trace:\t\n\t\t\r\tError:      \tNot equal: \n\t\t\r\t            \texpected: \"want\"\n\t\t\r\t            \treceived: \"got\"\n\t\t\r\tMessages:   \thello, world!\n"},
+	} {
+		mockT := &bufferT{}
+		Equal(mockT, currCase.equalWant, currCase.equalGot, currCase.msgAndArgs...)
+		Regexp(t, regexp.MustCompile(currCase.want), mockT.buf.String(), "Case %d", i)
+	}
 }
 
 func TestFormatUnequalValues(t *testing.T) {
@@ -207,6 +271,10 @@ func TestFormatUnequalValues(t *testing.T) {
 	expected, actual = formatUnequalValues(int64(123), int32(123))
 	Equal(t, `int64(123)`, expected, "value should include type")
 	Equal(t, `int32(123)`, actual, "value should include type")
+
+	expected, actual = formatUnequalValues(int64(123), nil)
+	Equal(t, `int64(123)`, expected, "value should include type")
+	Equal(t, `<nil>(<nil>)`, actual, "value should include type")
 
 	type testStructType struct {
 		Val string
@@ -341,6 +409,9 @@ func TestNotEqual(t *testing.T) {
 		t.Error("NotEqual should return false")
 	}
 	if NotEqual(mockT, new(AssertionTesterConformingObject), new(AssertionTesterConformingObject)) {
+		t.Error("NotEqual should return false")
+	}
+	if NotEqual(mockT, &struct{}{}, &struct{}{}) {
 		t.Error("NotEqual should return false")
 	}
 }

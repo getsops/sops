@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"sns-2010-03-31",
     "apiVersion":"2010-03-31",
     "endpointPrefix":"sns",
     "protocol":"query",

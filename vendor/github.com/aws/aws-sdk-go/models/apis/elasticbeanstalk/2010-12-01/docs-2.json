@@ -7,7 +7,7 @@
     "CheckDNSAvailability": "<p>Checks if the specified CNAME is available.</p>",
     "ComposeEnvironments": "<p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html\">Compose Environments</a> for details.</p>",
     "CreateApplication": "<p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>",
-    "CreateApplicationVersion": "<p>Creates an application version for the specified application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>",
+    "CreateApplicationVersion": "<p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>",
     "CreateConfigurationTemplate": "<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>",
     "CreateEnvironment": "<p>Launches an environment for the specified application using the specified configuration.</p>",
     "CreateStorageLocation": "<p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>",
@@ -34,6 +34,7 @@
     "SwapEnvironmentCNAMEs": "<p>Swaps the CNAMEs of two environments.</p>",
     "TerminateEnvironment": "<p>Terminates the specified environment.</p>",
     "UpdateApplication": "<p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note>",
+    "UpdateApplicationResourceLifecycle": "<p>Modifies lifecycle settings for an application.</p>",
     "UpdateApplicationVersion": "<p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note>",
     "UpdateConfigurationTemplate": "<p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul>",
     "UpdateEnvironment": "<p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>",
@@ -107,6 +108,7 @@
       "refs": {
         "ApplicationDescription$ApplicationName": "<p>The name of the application.</p>",
         "ApplicationNamesList$member": null,
+        "ApplicationResourceLifecycleDescriptionMessage$ApplicationName": "<p>The name of the application.</p>",
         "ApplicationVersionDescription$ApplicationName": "<p>The name of the application to which the application version belongs.</p>",
         "ComposeEnvironmentsMessage$ApplicationName": "<p>The name of the application to which the specified source bundles belong.</p>",
         "ConfigurationSettingsDescription$ApplicationName": "<p>The name of the application associated with this configuration set.</p>",
@@ -127,6 +129,7 @@
         "EventDescription$ApplicationName": "<p>The application associated with the event.</p>",
         "SourceConfiguration$ApplicationName": "<p>The name of the application associated with the configuration.</p>",
         "UpdateApplicationMessage$ApplicationName": "<p>The name of the application to update. If no such application is found, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>",
+        "UpdateApplicationResourceLifecycleMessage$ApplicationName": "<p>The name of the application.</p>",
         "UpdateApplicationVersionMessage$ApplicationName": "<p>The name of the application associated with this version.</p> <p> If no application is found with this name, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error.</p>",
         "UpdateConfigurationTemplateMessage$ApplicationName": "<p>The name of the application associated with the configuration template to update.</p> <p> If no application is found with this name, <code>UpdateConfigurationTemplate</code> returns an <code>InvalidParameterValue</code> error. </p>",
         "UpdateEnvironmentMessage$ApplicationName": "<p>The name of the application with which the environment is associated.</p>",
@@ -137,6 +140,20 @@
       "base": null,
       "refs": {
         "DescribeApplicationsMessage$ApplicationNames": "<p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to only include those with the specified names.</p>"
+      }
+    },
+    "ApplicationResourceLifecycleConfig": {
+      "base": "<p>The resource lifecycle configuration for an application. Defines lifecycle settings for resources that belong to the application, and the service role that Elastic Beanstalk assumes in order to apply lifecycle settings. The version lifecycle configuration defines lifecycle settings for application versions.</p>",
+      "refs": {
+        "ApplicationDescription$ResourceLifecycleConfig": "<p>The lifecycle settings for the application.</p>",
+        "ApplicationResourceLifecycleDescriptionMessage$ResourceLifecycleConfig": "<p>The lifecycle configuration.</p>",
+        "CreateApplicationMessage$ResourceLifecycleConfig": "<p>Specify an application resource lifecycle configuration to prevent your application from accumulating too many versions.</p>",
+        "UpdateApplicationResourceLifecycleMessage$ResourceLifecycleConfig": "<p>The lifecycle configuration.</p>"
+      }
+    },
+    "ApplicationResourceLifecycleDescriptionMessage": {
+      "base": null,
+      "refs": {
       }
     },
     "ApplicationVersionDescription": {
@@ -160,6 +177,12 @@
     "ApplicationVersionDescriptionsMessage": {
       "base": "<p>Result message wrapping a list of application version descriptions.</p>",
       "refs": {
+      }
+    },
+    "ApplicationVersionLifecycleConfig": {
+      "base": "<p>The application version lifecycle settings for an application. Defines the rules that Elastic Beanstalk applies to an application's versions in order to avoid hitting the per-region limit for application versions.</p> <p>When Elastic Beanstalk deletes an application version from its database, you can no longer deploy that version to an environment. The source bundle remains in S3 unless you configure the rule to delete it.</p>",
+      "refs": {
+        "ApplicationResourceLifecycleConfig$VersionLifecycleConfig": "<p>The application version lifecycle configuration.</p>"
       }
     },
     "ApplicationVersionProccess": {
@@ -214,16 +237,27 @@
         "ListAvailableSolutionStacksResultMessage$SolutionStacks": "<p>A list of available solution stacks.</p>"
       }
     },
+    "BoxedBoolean": {
+      "base": null,
+      "refs": {
+        "MaxAgeRule$Enabled": "<p>Specify <code>true</code> to apply the rule, or <code>false</code> to disable it.</p>",
+        "MaxAgeRule$DeleteSourceFromS3": "<p>Set to <code>true</code> to delete a version's source bundle from Amazon S3 when Elastic Beanstalk deletes the application version.</p>",
+        "MaxCountRule$Enabled": "<p>Specify <code>true</code> to apply the rule, or <code>false</code> to disable it.</p>",
+        "MaxCountRule$DeleteSourceFromS3": "<p>Set to <code>true</code> to delete a version's source bundle from Amazon S3 when Elastic Beanstalk deletes the application version.</p>"
+      }
+    },
     "BoxedInt": {
       "base": null,
       "refs": {
-        "BuildConfiguration$TimeoutInMinutes": null
+        "BuildConfiguration$TimeoutInMinutes": "<p>How long in minutes, from 5 to 480 (8 hours), for AWS CodeBuild to wait until timing out any related build that does not get marked as completed. The default is 60 minutes.</p>",
+        "MaxAgeRule$MaxAgeInDays": "<p>Specify the number of days to retain an application versions.</p>",
+        "MaxCountRule$MaxCount": "<p>Specify the maximum number of application versions to retain.</p>"
       }
     },
     "BuildConfiguration": {
-      "base": null,
+      "base": "<p>Settings for an AWS CodeBuild build.</p>",
       "refs": {
-        "CreateApplicationVersionMessage$BuildConfiguration": null
+        "CreateApplicationVersionMessage$BuildConfiguration": "<p>Settings for an AWS CodeBuild build.</p>"
       }
     },
     "CPUUtilization": {
@@ -262,7 +296,7 @@
       }
     },
     "CodeBuildNotInServiceRegionException": {
-      "base": "<p>The CodeBuild service is not supported in this region.</p>",
+      "base": "<p>AWS CodeBuild is not available in the specified region.</p>",
       "refs": {
       }
     },
@@ -274,7 +308,7 @@
     "ComputeType": {
       "base": null,
       "refs": {
-        "BuildConfiguration$ComputeType": null
+        "BuildConfiguration$ComputeType": "<p>Information about the compute resources the build project will use.</p> <ul> <li> <p> <code>BUILD_GENERAL1_SMALL: Use up to 3 GB memory and 2 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD_GENERAL1_MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds</code> </p> </li> <li> <p> <code>BUILD_GENERAL1_LARGE: Use up to 15 GB memory and 8 vCPUs for builds</code> </p> </li> </ul>"
       }
     },
     "ConfigurationDeploymentStatus": {
@@ -1012,6 +1046,18 @@
         "DescribeEnvironmentManagedActionsResult$ManagedActions": "<p>A list of upcoming and in-progress managed actions.</p>"
       }
     },
+    "MaxAgeRule": {
+      "base": "<p>A lifecycle rule that deletes application versions after the specified number of days.</p>",
+      "refs": {
+        "ApplicationVersionLifecycleConfig$MaxAgeRule": "<p>Specify a max age rule to restrict the length of time that application versions are retained for an application.</p>"
+      }
+    },
+    "MaxCountRule": {
+      "base": "<p>A lifecycle rule that deletes the oldest application version when the maximum count is exceeded.</p>",
+      "refs": {
+        "ApplicationVersionLifecycleConfig$MaxCountRule": "<p>Specify a max count rule to restrict the number of application versions that are retained for an application.</p>"
+      }
+    },
     "MaxRecords": {
       "base": null,
       "refs": {
@@ -1035,8 +1081,8 @@
     "NonEmptyString": {
       "base": null,
       "refs": {
-        "BuildConfiguration$CodeBuildServiceRole": null,
-        "BuildConfiguration$Image": null
+        "BuildConfiguration$CodeBuildServiceRole": "<p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that enables AWS CodeBuild to interact with dependent AWS services on behalf of the AWS account.</p>",
+        "BuildConfiguration$Image": "<p>The ID of the Docker image to use for this build project.</p>"
       }
     },
     "NullableDouble": {
@@ -1239,11 +1285,11 @@
       "base": "<p>The bucket and key of an item stored in Amazon S3.</p>",
       "refs": {
         "ApplicationVersionDescription$SourceBundle": "<p>The storage location of the application version's source bundle in Amazon S3.</p>",
-        "CreateApplicationVersionMessage$SourceBundle": "<p>The Amazon S3 bucket and key that identify the location of the source bundle for this version.</p> <p>Specify a source bundle in S3 or a commit in an AWS CodeCommit repository (with <code>SourceBuildInformation</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>"
+        "CreateApplicationVersionMessage$SourceBundle": "<p>The Amazon S3 bucket and key that identify the location of the source bundle for this version.</p> <note> <p>The Amazon S3 bucket must be in the same region as the environment.</p> </note> <p>Specify a source bundle in S3 or a commit in an AWS CodeCommit repository (with <code>SourceBuildInformation</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>"
       }
     },
     "S3LocationNotInServiceRegionException": {
-      "base": "<p>The specified S3 bucket does not belong to the S3 region in which the service is running.</p>",
+      "base": "<p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul>",
       "refs": {
       }
     },
@@ -1294,7 +1340,7 @@
       "base": "<p>Location of the source code for an application version.</p>",
       "refs": {
         "ApplicationVersionDescription$SourceBuildInformation": "<p>If the version's source code was retrieved from AWS CodeCommit, the location of the source code for the application version.</p>",
-        "CreateApplicationVersionMessage$SourceBuildInformation": "<p>Specify a commit in an AWS CodeCommit Git repository to use as the source code for the application version.</p> <p>Specify a commit in an AWS CodeCommit repository or a source bundle in S3 (with <code>SourceBundle</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>"
+        "CreateApplicationVersionMessage$SourceBuildInformation": "<p>Specify a commit in an AWS CodeCommit Git repository to use as the source code for the application version.</p>"
       }
     },
     "SourceBundleDeletionException": {
@@ -1311,19 +1357,19 @@
     "SourceLocation": {
       "base": null,
       "refs": {
-        "SourceBuildInformation$SourceLocation": "<p>The repository name and commit ID, separated by a forward slash. For example, <code>my-repo/265cfa0cf6af46153527f55d6503ec030551f57a</code>.</p>"
+        "SourceBuildInformation$SourceLocation": "<p>The location of the source code, as a formatted string, depending on the value of <code>SourceRepository</code> </p> <ul> <li> <p>For <code>CodeCommit</code>, the format is the repository name and commit ID, separated by a forward slash. For example, <code>my-git-repo/265cfa0cf6af46153527f55d6503ec030551f57a</code>.</p> </li> <li> <p>For <code>S3</code>, the format is the S3 bucket name and object key, separated by a forward slash. For example, <code>my-s3-bucket/Folders/my-source-file</code>.</p> </li> </ul>"
       }
     },
     "SourceRepository": {
       "base": null,
       "refs": {
-        "SourceBuildInformation$SourceRepository": "<p>Location where the repository is stored, such as <code>CodeCommit</code>.</p>"
+        "SourceBuildInformation$SourceRepository": "<p>Location where the repository is stored.</p> <ul> <li> <p> <code>CodeCommit</code> </p> </li> <li> <p> <code>S3</code> </p> </li> </ul>"
       }
     },
     "SourceType": {
       "base": null,
       "refs": {
-        "SourceBuildInformation$SourceType": "<p>The type of repository, such as <code>Git</code>.</p>"
+        "SourceBuildInformation$SourceType": "<p>The type of repository.</p> <ul> <li> <p> <code>Git</code> </p> </li> <li> <p> <code>Zip</code> </p> </li> </ul>"
       }
     },
     "StatusCodes": {
@@ -1335,14 +1381,15 @@
     "String": {
       "base": null,
       "refs": {
-        "ApplicationVersionDescription$BuildArn": null,
+        "ApplicationResourceLifecycleConfig$ServiceRole": "<p>The ARN of an IAM service role that Elastic Beanstalk has permission to assume.</p>",
+        "ApplicationVersionDescription$BuildArn": "<p>Reference to the artifact from the AWS CodeBuild build.</p>",
         "ApplyEnvironmentManagedActionRequest$EnvironmentName": "<p>The name of the target environment.</p>",
         "ApplyEnvironmentManagedActionRequest$EnvironmentId": "<p>The environment ID of the target environment.</p>",
         "ApplyEnvironmentManagedActionRequest$ActionId": "<p>The action ID of the scheduled managed action to execute.</p>",
         "ApplyEnvironmentManagedActionResult$ActionId": "<p>The action ID of the managed action.</p>",
         "ApplyEnvironmentManagedActionResult$ActionDescription": "<p>A description of the managed action.</p>",
         "ApplyEnvironmentManagedActionResult$Status": "<p>The status of the managed action.</p>",
-        "BuildConfiguration$ArtifactName": null,
+        "BuildConfiguration$ArtifactName": "<p>The name of the artifact of the CodeBuild build. If provided, Elastic Beanstalk stores the build artifact in the S3 location <i>S3-bucket</i>/resources/<i>application-name</i>/codebuild/codebuild-<i>version-label</i>-<i>artifact-name</i>.zip. If not provided, Elastic Beanstalk stores the build artifact in the S3 location <i>S3-bucket</i>/resources/<i>application-name</i>/codebuild/codebuild-<i>version-label</i>.zip. </p>",
         "Deployment$VersionLabel": "<p>The version label of the application version in the deployment.</p>",
         "Deployment$Status": "<p>The status of the deployment:</p> <ul> <li> <p> <code>In Progress</code> : The deployment is in progress.</p> </li> <li> <p> <code>Deployed</code> : The deployment succeeded.</p> </li> <li> <p> <code>Failed</code> : The deployment failed.</p> </li> </ul>",
         "DescribeEnvironmentHealthResult$HealthStatus": "<p>The <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">health status</a> of the environment. For example, <code>Ok</code>.</p>",
@@ -1492,6 +1539,11 @@
     },
     "UpdateApplicationMessage": {
       "base": "<p>Request to update an application.</p>",
+      "refs": {
+      }
+    },
+    "UpdateApplicationResourceLifecycleMessage": {
+      "base": null,
       "refs": {
       }
     },

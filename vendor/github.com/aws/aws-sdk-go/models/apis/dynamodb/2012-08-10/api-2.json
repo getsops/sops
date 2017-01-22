@@ -8,7 +8,8 @@
     "serviceAbbreviation":"DynamoDB",
     "serviceFullName":"Amazon DynamoDB",
     "signatureVersion":"v4",
-    "targetPrefix":"DynamoDB_20120810"
+    "targetPrefix":"DynamoDB_20120810",
+    "uid":"dynamodb-2012-08-10"
   },
   "operations":{
     "BatchGetItem":{
@@ -136,6 +137,19 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "ListTagsOfResource":{
+      "name":"ListTagsOfResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsOfResourceInput"},
+      "output":{"shape":"ListTagsOfResourceOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "PutItem":{
       "name":"PutItem",
       "http":{
@@ -178,6 +192,34 @@
         {"shape":"ProvisionedThroughputExceededException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"InternalServerError"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceInput"},
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalServerError"},
+        {"shape":"ResourceInUseException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceInput"},
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalServerError"},
+        {"shape":"ResourceInUseException"}
       ]
     },
     "UpdateItem":{
@@ -777,6 +819,21 @@
         "LastEvaluatedTableName":{"shape":"TableName"}
       }
     },
+    "ListTagsOfResourceInput":{
+      "type":"structure",
+      "required":["ResourceArn"],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArnString"},
+        "NextToken":{"shape":"NextTokenString"}
+      }
+    },
+    "ListTagsOfResourceOutput":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"TagList"},
+        "NextToken":{"shape":"NextTokenString"}
+      }
+    },
     "LocalSecondaryIndex":{
       "type":"structure",
       "required":[
@@ -815,6 +872,7 @@
       "key":{"shape":"AttributeName"},
       "value":{"shape":"AttributeValue"}
     },
+    "NextTokenString":{"type":"string"},
     "NonKeyAttributeName":{
       "type":"string",
       "max":255,
@@ -955,6 +1013,11 @@
         "LastEvaluatedKey":{"shape":"Key"},
         "ConsumedCapacity":{"shape":"ConsumedCapacity"}
       }
+    },
+    "ResourceArnString":{
+      "type":"string",
+      "max":1283,
+      "min":1
     },
     "ResourceInUseException":{
       "type":"structure",
@@ -1124,6 +1187,57 @@
         "DELETING",
         "ACTIVE"
       ]
+    },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Value"
+      ],
+      "members":{
+        "Key":{"shape":"TagKeyString"},
+        "Value":{"shape":"TagValueString"}
+      }
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKeyString"}
+    },
+    "TagKeyString":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagResourceInput":{
+      "type":"structure",
+      "required":[
+        "ResourceArn",
+        "Tags"
+      ],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArnString"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagValueString":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
+    "UntagResourceInput":{
+      "type":"structure",
+      "required":[
+        "ResourceArn",
+        "TagKeys"
+      ],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArnString"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
     },
     "UpdateExpression":{"type":"string"},
     "UpdateGlobalSecondaryIndexAction":{

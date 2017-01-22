@@ -8,7 +8,8 @@
     "serviceAbbreviation":"CloudTrail",
     "serviceFullName":"AWS CloudTrail",
     "signatureVersion":"v4",
-    "targetPrefix":"com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101"
+    "targetPrefix":"com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101",
+    "uid":"cloudtrail-2013-11-01"
   },
   "operations":{
     "AddTags":{

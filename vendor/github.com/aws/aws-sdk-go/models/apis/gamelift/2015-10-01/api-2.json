@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"gamelift-2015-10-01",
     "apiVersion":"2015-10-01",
     "endpointPrefix":"gamelift",
     "jsonVersion":"1.1",

@@ -331,6 +331,14 @@ type APIGatewayAPI interface {
 
 	GetSdk(*apigateway.GetSdkInput) (*apigateway.GetSdkOutput, error)
 
+	GetSdkTypeRequest(*apigateway.GetSdkTypeInput) (*request.Request, *apigateway.SdkType)
+
+	GetSdkType(*apigateway.GetSdkTypeInput) (*apigateway.SdkType, error)
+
+	GetSdkTypesRequest(*apigateway.GetSdkTypesInput) (*request.Request, *apigateway.GetSdkTypesOutput)
+
+	GetSdkTypes(*apigateway.GetSdkTypesInput) (*apigateway.GetSdkTypesOutput, error)
+
 	GetStageRequest(*apigateway.GetStageInput) (*request.Request, *apigateway.Stage)
 
 	GetStage(*apigateway.GetStageInput) (*apigateway.Stage, error)

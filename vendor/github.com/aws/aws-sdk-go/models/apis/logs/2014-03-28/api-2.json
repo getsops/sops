@@ -7,7 +7,8 @@
     "protocol":"json",
     "serviceFullName":"Amazon CloudWatch Logs",
     "signatureVersion":"v4",
-    "targetPrefix":"Logs_20140328"
+    "targetPrefix":"Logs_20140328",
+    "uid":"logs-2014-03-28"
   },
   "operations":{
     "CancelExportTask":{
@@ -263,6 +264,19 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "ListTagsLogGroup":{
+      "name":"ListTagsLogGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsLogGroupRequest"},
+      "output":{"shape":"ListTagsLogGroupResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "PutDestination":{
       "name":"PutDestination",
       "http":{
@@ -350,6 +364,18 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "TagLogGroup":{
+      "name":"TagLogGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagLogGroupRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterException"}
+      ]
+    },
     "TestMetricFilter":{
       "name":"TestMetricFilter",
       "http":{
@@ -361,6 +387,17 @@
       "errors":[
         {"shape":"InvalidParameterException"},
         {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "UntagLogGroup":{
+      "name":"UntagLogGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagLogGroupRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
       ]
     }
   },
@@ -405,7 +442,8 @@
       "type":"structure",
       "required":["logGroupName"],
       "members":{
-        "logGroupName":{"shape":"LogGroupName"}
+        "logGroupName":{"shape":"LogGroupName"},
+        "tags":{"shape":"Tags"}
       }
     },
     "CreateLogStreamRequest":{
@@ -613,6 +651,13 @@
       "type":"list",
       "member":{"shape":"Destination"}
     },
+    "Distribution":{
+      "type":"string",
+      "enum":[
+        "Random",
+        "ByLogStream"
+      ]
+    },
     "EventId":{"type":"string"},
     "EventMessage":{
       "type":"string",
@@ -809,6 +854,19 @@
       "members":{
       },
       "exception":true
+    },
+    "ListTagsLogGroupRequest":{
+      "type":"structure",
+      "required":["logGroupName"],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"}
+      }
+    },
+    "ListTagsLogGroupResponse":{
+      "type":"structure",
+      "members":{
+        "tags":{"shape":"Tags"}
+      }
     },
     "LogEventIndex":{"type":"integer"},
     "LogGroup":{
@@ -1035,7 +1093,8 @@
         "filterName":{"shape":"FilterName"},
         "filterPattern":{"shape":"FilterPattern"},
         "destinationArn":{"shape":"DestinationArn"},
-        "roleArn":{"shape":"RoleArn"}
+        "roleArn":{"shape":"RoleArn"},
+        "distribution":{"shape":"Distribution"}
       }
     },
     "RejectedLogEventsInfo":{
@@ -1097,12 +1156,47 @@
         "filterPattern":{"shape":"FilterPattern"},
         "destinationArn":{"shape":"DestinationArn"},
         "roleArn":{"shape":"RoleArn"},
+        "distribution":{"shape":"Distribution"},
         "creationTime":{"shape":"Timestamp"}
       }
     },
     "SubscriptionFilters":{
       "type":"list",
       "member":{"shape":"SubscriptionFilter"}
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]+)$"
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "min":1
+    },
+    "TagLogGroupRequest":{
+      "type":"structure",
+      "required":[
+        "logGroupName",
+        "tags"
+      ],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "tags":{"shape":"Tags"}
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+    },
+    "Tags":{
+      "type":"map",
+      "key":{"shape":"TagKey"},
+      "value":{"shape":"TagValue"},
+      "max":50,
+      "min":1
     },
     "TargetArn":{
       "type":"string",
@@ -1136,6 +1230,17 @@
       "min":0
     },
     "Token":{"type":"string"},
+    "UntagLogGroupRequest":{
+      "type":"structure",
+      "required":[
+        "logGroupName",
+        "tags"
+      ],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "tags":{"shape":"TagList"}
+      }
+    },
     "Value":{"type":"string"}
   }
 }

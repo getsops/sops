@@ -350,7 +350,13 @@ footer .recording.replay .fa {
 .statusicon.skip, .skip-clr { color: #888; }
 
 .ansi-green { color: #76C13C; }
-.ansi-yellow   { color: #EA9C4D; }
+.ansi-yellow { color: #EA9C4D; }
+.ansi-red { color: #FF3232; }
+.ansi-black { color: #000000; }
+.ansi-blue { color: #FF3232; }
+.ansi-purple { color: #C646C6; }
+.ansi-cyan { color: #00CDCD; }
+.ansi-white { color: #FFFFFF; }
 
 .log .timestamp {
 	color: #999;

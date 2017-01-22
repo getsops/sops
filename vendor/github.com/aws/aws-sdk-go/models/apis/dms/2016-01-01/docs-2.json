@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS Database Migration Service</fullname> <p>AWS Database Migration Service (AWS DMS) can migrate your data to and from the most widely used commercial and open-source databases such as Oracle, PostgreSQL, Microsoft SQL Server, Amazon Redshift, MariaDB, Amazon Aurora, and MySQL. The service supports homogeneous migrations such as Oracle to Oracle, as well as heterogeneous migrations between different database platforms, such as Oracle to MySQL or SQL Server to PostgreSQL.</p>",
+  "service": "<fullname>AWS Database Migration Service</fullname> <p>AWS Database Migration Service (AWS DMS) can migrate your data to and from the most widely used commercial and open-source databases such as Oracle, PostgreSQL, Microsoft SQL Server, Amazon Redshift, MariaDB, Amazon Aurora, MySQL, and SAP Adaptive Server Enterprise (ASE). The service supports homogeneous migrations such as Oracle to Oracle, as well as heterogeneous migrations between different database platforms, such as Oracle to MySQL or SQL Server to PostgreSQL.</p>",
   "operations": {
     "AddTagsToResource": "<p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>",
     "CreateEndpoint": "<p>Creates an endpoint using the provided settings.</p>",
@@ -29,6 +29,7 @@
     "ModifyEndpoint": "<p>Modifies the specified endpoint.</p>",
     "ModifyReplicationInstance": "<p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/>",
     "ModifyReplicationSubnetGroup": "<p>Modifies the settings for the specified replication subnet group.</p>",
+    "ModifyReplicationTask": "<p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p>",
     "RefreshSchemas": "<p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>",
     "RemoveTagsFromResource": "<p>Removes metadata tags from a DMS resource.</p>",
     "StartReplicationTask": "<p>Starts the replication task.</p>",
@@ -95,14 +96,21 @@
       "base": "<p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>",
       "refs": {
         "CertificateList$member": null,
-        "DeleteCertificateResponse$Certificate": "<p>The SSL certificate.</p>",
+        "DeleteCertificateResponse$Certificate": "<p>The Secure Sockets Layer (SSL) certificate.</p>",
         "ImportCertificateResponse$Certificate": "<p>The certificate to be uploaded.</p>"
       }
     },
     "CertificateList": {
       "base": null,
       "refs": {
-        "DescribeCertificatesResponse$Certificates": "<p>The SSL certificates associated with the replication instance.</p>"
+        "DescribeCertificatesResponse$Certificates": "<p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>"
+      }
+    },
+    "CertificateWallet": {
+      "base": null,
+      "refs": {
+        "Certificate$CertificateWallet": "<p>The location of the imported Oracle Wallet certificate for use with SSL.</p>",
+        "ImportCertificateMessage$CertificateWallet": "<p>The location of the imported Oracle Wallet certificate for use with SSL.</p>"
       }
     },
     "Connection": {
@@ -498,6 +506,7 @@
       "base": null,
       "refs": {
         "CreateReplicationTaskMessage$MigrationType": "<p>The migration type.</p>",
+        "ModifyReplicationTaskMessage$MigrationType": "<p>The migration type.</p> <p>Valid values: full-load | cdc | full-load-and-cdc</p>",
         "ReplicationTask$MigrationType": "<p>The type of migration.</p>"
       }
     },
@@ -527,6 +536,16 @@
       }
     },
     "ModifyReplicationSubnetGroupResponse": {
+      "base": "<p/>",
+      "refs": {
+      }
+    },
+    "ModifyReplicationTaskMessage": {
+      "base": "<p/>",
+      "refs": {
+      }
+    },
+    "ModifyReplicationTaskResponse": {
       "base": "<p/>",
       "refs": {
       }
@@ -643,6 +662,7 @@
       "refs": {
         "CreateReplicationTaskResponse$ReplicationTask": "<p>The replication task that was created.</p>",
         "DeleteReplicationTaskResponse$ReplicationTask": "<p>The deleted replication task.</p>",
+        "ModifyReplicationTaskResponse$ReplicationTask": "<p>The replication task that was modified.</p>",
         "ReplicationTaskList$member": null,
         "StartReplicationTaskResponse$ReplicationTask": "<p>The replication task started.</p>",
         "StopReplicationTaskResponse$ReplicationTask": "<p>The replication task stopped.</p>"
@@ -725,8 +745,8 @@
         "AccountQuota$AccountQuotaName": "<p>The name of the AWS DMS quota for this AWS account.</p>",
         "AddTagsToResourceMessage$ResourceArn": "<p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>",
         "AvailabilityZone$Name": "<p>The name of the availability zone.</p>",
-        "Certificate$CertificateIdentifier": "<p>The customer-assigned name of the certificate. Valid characters are [A-z_0-9].</p>",
-        "Certificate$CertificatePem": "<p>The contents of the .pem X.509 certificate file.</p>",
+        "Certificate$CertificateIdentifier": "<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>",
+        "Certificate$CertificatePem": "<p>The contents of the .pem X.509 certificate file for the certificate.</p>",
         "Certificate$CertificateArn": "<p>The Amazon Resource Name (ARN) for the certificate.</p>",
         "Certificate$CertificateOwner": "<p>The owner of the certificate.</p>",
         "Certificate$SigningAlgorithm": "<p>The signing algorithm for the certificate.</p>",
@@ -737,7 +757,7 @@
         "Connection$EndpointIdentifier": "<p>The identifier of the endpoint. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
         "Connection$ReplicationInstanceIdentifier": "<p>The replication instance identifier. This parameter is stored as a lowercase string.</p>",
         "CreateEndpointMessage$EndpointIdentifier": "<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
-        "CreateEndpointMessage$EngineName": "<p>The type of engine for the endpoint. Valid values include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, and SQLSERVER.</p>",
+        "CreateEndpointMessage$EngineName": "<p>The type of engine for the endpoint. Valid values include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, SYBASE, and SQLSERVER.</p>",
         "CreateEndpointMessage$Username": "<p>The user name to be used to login to the endpoint database.</p>",
         "CreateEndpointMessage$ServerName": "<p>The name of the server where the endpoint database resides.</p>",
         "CreateEndpointMessage$DatabaseName": "<p>The name of the endpoint database.</p>",
@@ -758,8 +778,8 @@
         "CreateReplicationTaskMessage$TargetEndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "CreateReplicationTaskMessage$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance.</p>",
         "CreateReplicationTaskMessage$TableMappings": "<p>The path of the JSON file that contains the table mappings. Preceed the path with \"file://\".</p> <p>For example, --table-mappings file://mappingfile.json</p>",
-        "CreateReplicationTaskMessage$ReplicationTaskSettings": "<p>Settings for the task, such as target metadata settings.</p>",
-        "DeleteCertificateMessage$CertificateArn": "<p>the Amazon Resource Name (ARN) of the deleted certificate.</p>",
+        "CreateReplicationTaskMessage$ReplicationTaskSettings": "<p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html\">Task Settings for AWS Database Migration Service Tasks</a>.</p>",
+        "DeleteCertificateMessage$CertificateArn": "<p>The Amazon Resource Name (ARN) of the deleted certificate.</p>",
         "DeleteEndpointMessage$EndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "DeleteReplicationInstanceMessage$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>",
         "DeleteReplicationSubnetGroupMessage$ReplicationSubnetGroupIdentifier": "<p>The subnet group name of the replication instance.</p>",
@@ -789,7 +809,7 @@
         "DescribeTableStatisticsResponse$ReplicationTaskArn": "<p>The Amazon Resource Name (ARN) of the replication task.</p>",
         "DescribeTableStatisticsResponse$Marker": "<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>",
         "Endpoint$EndpointIdentifier": "<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
-        "Endpoint$EngineName": "<p>The database engine name.</p>",
+        "Endpoint$EngineName": "<p>The database engine name. Valid values include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, SYBASE, and SQLSERVER.</p>",
         "Endpoint$Username": "<p>The user name used to connect to the endpoint.</p>",
         "Endpoint$ServerName": "<p>The name of the server at the endpoint.</p>",
         "Endpoint$DatabaseName": "<p>The name of the database at the endpoint.</p>",
@@ -800,13 +820,13 @@
         "Endpoint$CertificateArn": "<p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>",
         "Filter$Name": "<p>The name of the filter.</p>",
         "FilterValueList$member": null,
-        "ImportCertificateMessage$CertificateIdentifier": "<p>The customer-assigned name of the certificate. Valid characters are [A-z_0-9].</p>",
-        "ImportCertificateMessage$CertificatePem": "<p>The contents of the .pem X.509 certificate file.</p>",
+        "ImportCertificateMessage$CertificateIdentifier": "<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>",
+        "ImportCertificateMessage$CertificatePem": "<p>The contents of the .pem X.509 certificate file for the certificate.</p>",
         "KeyList$member": null,
         "ListTagsForResourceMessage$ResourceArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>",
         "ModifyEndpointMessage$EndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "ModifyEndpointMessage$EndpointIdentifier": "<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
-        "ModifyEndpointMessage$EngineName": "<p>The type of engine for the endpoint. Valid values include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, and SQLSERVER.</p>",
+        "ModifyEndpointMessage$EngineName": "<p>The type of engine for the endpoint. Valid values include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, SYBASE, and SQLSERVER.</p>",
         "ModifyEndpointMessage$Username": "<p>The user name to be used to login to the endpoint database.</p>",
         "ModifyEndpointMessage$ServerName": "<p>The name of the server where the endpoint database resides.</p>",
         "ModifyEndpointMessage$DatabaseName": "<p>The name of the endpoint database.</p>",
@@ -819,6 +839,10 @@
         "ModifyReplicationInstanceMessage$ReplicationInstanceIdentifier": "<p>The replication instance identifier. This parameter is stored as a lowercase string.</p>",
         "ModifyReplicationSubnetGroupMessage$ReplicationSubnetGroupIdentifier": "<p>The name of the replication instance subnet group.</p>",
         "ModifyReplicationSubnetGroupMessage$ReplicationSubnetGroupDescription": "<p>The description of the replication instance subnet group.</p>",
+        "ModifyReplicationTaskMessage$ReplicationTaskArn": "<p>The Amazon Resource Name (ARN) of the replication task.</p>",
+        "ModifyReplicationTaskMessage$ReplicationTaskIdentifier": "<p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>",
+        "ModifyReplicationTaskMessage$TableMappings": "<p>The path of the JSON file that contains the table mappings. Preceed the path with \"file://\".</p> <p>For example, --table-mappings file://mappingfile.json</p>",
+        "ModifyReplicationTaskMessage$ReplicationTaskSettings": "<p>JSON file that contains settings for the task, such as target metadata settings.</p>",
         "OrderableReplicationInstance$EngineVersion": "<p>The version of the replication engine.</p>",
         "OrderableReplicationInstance$ReplicationInstanceClass": "<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>",
         "OrderableReplicationInstance$StorageType": "<p>The type of storage used by the replication instance.</p>",
@@ -838,6 +862,7 @@
         "ReplicationInstance$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance.</p>",
         "ReplicationInstance$ReplicationInstancePublicIpAddress": "<p>The public IP address of the replication instance.</p>",
         "ReplicationInstance$ReplicationInstancePrivateIpAddress": "<p>The private IP address of the replication instance.</p>",
+        "ReplicationInstance$SecondaryAvailabilityZone": "<p>The availability zone of the standby replication instance in a Multi-AZ deployment.</p>",
         "ReplicationInstancePrivateIpAddressList$member": null,
         "ReplicationInstancePublicIpAddressList$member": null,
         "ReplicationPendingModifiedValues$ReplicationInstanceClass": "<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>",
@@ -854,6 +879,7 @@
         "ReplicationTask$ReplicationTaskSettings": "<p>The settings for the replication task.</p>",
         "ReplicationTask$Status": "<p>The status of the replication task.</p>",
         "ReplicationTask$LastFailureMessage": "<p>The last error (failure) message generated for the replication instance.</p>",
+        "ReplicationTask$StopReason": "<p>The reason the replication task was stopped.</p>",
         "ReplicationTask$ReplicationTaskArn": "<p>The Amazon Resource Name (ARN) of the replication task.</p>",
         "SchemaList$member": null,
         "StartReplicationTaskMessage$ReplicationTaskArn": "<p>The Amazon Resource Number (ARN) of the replication task to be started.</p>",
@@ -861,7 +887,7 @@
         "Subnet$SubnetIdentifier": "<p>The subnet identifier.</p>",
         "Subnet$SubnetStatus": "<p>The status of the subnet.</p>",
         "SubnetIdentifierList$member": null,
-        "SupportedEndpointType$EngineName": "<p>The database engine name.</p>",
+        "SupportedEndpointType$EngineName": "<p>The database engine name. Valid values include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, SYBASE, and SQLSERVER.</p>",
         "TableStatistics$SchemaName": "<p>The schema name.</p>",
         "TableStatistics$TableName": "<p>The name of the table.</p>",
         "TableStatistics$TableState": "<p>The state of the table.</p>",
@@ -913,10 +939,11 @@
     "TStamp": {
       "base": null,
       "refs": {
-        "Certificate$CertificateCreationDate": "<p>the date the certificate was created.</p>",
-        "Certificate$ValidFromDate": "<p>The beginning date the certificate is valid.</p>",
-        "Certificate$ValidToDate": "<p>the final date the certificate is valid.</p>",
+        "Certificate$CertificateCreationDate": "<p>The date that the certificate was created.</p>",
+        "Certificate$ValidFromDate": "<p>The beginning date that the certificate is valid.</p>",
+        "Certificate$ValidToDate": "<p>The final date that the certificate is valid.</p>",
         "CreateReplicationTaskMessage$CdcStartTime": "<p>The start time for the Change Data Capture (CDC) operation.</p>",
+        "ModifyReplicationTaskMessage$CdcStartTime": "<p>The start time for the Change Data Capture (CDC) operation.</p>",
         "RefreshSchemasStatus$LastRefreshDate": "<p>The date the schema was last refreshed.</p>",
         "ReplicationInstance$InstanceCreateTime": "<p>The time the replication instance was created.</p>",
         "ReplicationTask$ReplicationTaskCreationDate": "<p>The date the replication task was created.</p>",

@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"iot-data-2015-05-28",
     "apiVersion":"2015-05-28",
     "endpointPrefix":"data.iot",
     "protocol":"rest-json",

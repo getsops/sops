@@ -7,7 +7,8 @@
     "protocol":"json",
     "serviceFullName":"Amazon Inspector",
     "signatureVersion":"v4",
-    "targetPrefix":"InspectorService"
+    "targetPrefix":"InspectorService",
+    "uid":"inspector-2016-02-16"
   },
   "operations":{
     "AddAttributesToFindings":{

@@ -12,8 +12,9 @@ import (
 )
 
 // Pinpoint is a client for Amazon Pinpoint.
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/
 type Pinpoint struct {
 	*client.Client
 }
@@ -24,8 +25,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "pinpoint"
+// Service information constants
+const (
+	ServiceName = "pinpoint"  // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the Pinpoint client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -38,21 +42,25 @@ const ServiceName = "pinpoint"
 //     // Create a Pinpoint client with additional configuration
 //     svc := pinpoint.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *Pinpoint {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *Pinpoint {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *Pinpoint {
+	if len(signingName) == 0 {
+		signingName = "mobiletargeting"
+	}
 	svc := &Pinpoint{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
-				SigningName:   "mobiletargeting",
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2016-12-01",
+				JSONVersion:   "1.1",
 			},
 			handlers,
 		),

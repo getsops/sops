@@ -66,6 +66,8 @@
     "GetRestApi": "<p>Lists the <a>RestApi</a> resource in the collection.</p>",
     "GetRestApis": "<p>Lists the <a>RestApis</a> resources for your collection.</p>",
     "GetSdk": "<p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>",
+    "GetSdkType": null,
+    "GetSdkTypes": null,
     "GetStage": "<p>Gets information about a <a>Stage</a> resource.</p>",
     "GetStages": "<p>Gets information about one or more <a>Stage</a> resources.</p>",
     "GetUsage": "<p>Gets the usage data of a usage plan in a specified time interval.</p>",
@@ -201,6 +203,7 @@
         "MethodSnapshot$apiKeyRequired": "<p>Specifies whether the method requires a valid <a>ApiKey</a>.</p>",
         "PutMethodRequest$apiKeyRequired": "<p>Specifies whether the method required a valid <a>ApiKey</a>.</p>",
         "PutRestApiRequest$failOnWarnings": "<p>A query parameter to indicate whether to rollback the API update (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>",
+        "SdkConfigurationProperty$required": "<p>A boolean flag of an <a>SdkType</a> configuration property to indicate if the associated SDK configuration property is required (<code>true</code>) or not (<code>false</code>).</p>",
         "Stage$cacheClusterEnabled": "<p>Specifies whether a cache cluster is enabled for the stage.</p>"
       }
     },
@@ -644,6 +647,16 @@
       "refs": {
       }
     },
+    "GetSdkTypeRequest": {
+      "base": "<p>Get an <a>SdkType</a> instance.</p>",
+      "refs": {
+      }
+    },
+    "GetSdkTypesRequest": {
+      "base": "<p>Get the <a>SdkTypes</a> collection.</p>",
+      "refs": {
+      }
+    },
     "GetStageRequest": {
       "base": "<p>Requests Amazon API Gateway to get information about a <a>Stage</a> resource.</p>",
       "refs": {
@@ -707,7 +720,7 @@
       }
     },
     "Integration": {
-      "base": "<p>Represents an HTTP, HTTP_PROXY, AWS, AWS_PROXY, or Mock integration.</p> <div class=\"remarks\">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a>, <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/.html\"/> </div>",
+      "base": "<p>Represents an HTTP, HTTP_PROXY, AWS, AWS_PROXY, or Mock integration.</p> <div class=\"remarks\">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html\">Creating an API</a> </div>",
       "refs": {
         "Method$methodIntegration": "<p>Gets the method's integration responsible for passing the client-submitted request to the back end and performing necessary transformations to make the request compliant with the back end.</p> <div class=\"remarks\"> <p/> <h4>Example: </h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T213210Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160613/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"0cjtch\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestTemplates\": { \"application/json\": \"{\\n \\\"a\\\": \\\"$input.params('operand1')\\\",\\n \\\"b\\\": \\\"$input.params('operand2')\\\", \\n \\\"op\\\": \\\"$input.params('operator')\\\" \\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-west-2:lambda:path//2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:Calc/invocations\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.operator\": \"integration.response.body.op\", \"method.response.header.operand_2\": \"integration.response.body.b\", \"method.response.header.operand_1\": \"integration.response.body.a\" }, \"responseTemplates\": { \"application/json\": \"#set($res = $input.path('$'))\\n{\\n \\\"result\\\": \\\"$res.a, $res.b, $res.op => $res.c\\\",\\n \\\"a\\\" : \\\"$res.a\\\",\\n \\\"b\\\" : \\\"$res.b\\\",\\n \\\"op\\\" : \\\"$res.op\\\",\\n \\\"c\\\" : \\\"$res.c\\\"\\n}\" }, \"selectionPattern\": \"\", \"statusCode\": \"200\" } } }</code></pre> <p/> </div> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-integration.html\">AWS CLI</a> </div>"
       }
@@ -838,6 +851,18 @@
       "base": null,
       "refs": {
         "RestApis$items": "<p>An array of links to the current page of <a>RestApi</a> resources.</p>"
+      }
+    },
+    "ListOfSdkConfigurationProperty": {
+      "base": null,
+      "refs": {
+        "SdkType$configurationProperties": "<p>A list of configuration properties of an <a>SdkType</a>.</p>"
+      }
+    },
+    "ListOfSdkType": {
+      "base": null,
+      "refs": {
+        "SdkTypes$items": "<p>The set of <a>SdkType</a> items that comprise this view of the <a>SdkTypes</a> collection.</p>"
       }
     },
     "ListOfStage": {
@@ -1049,6 +1074,7 @@
         "GetModelsRequest$limit": "<p>The maximum number of models in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
         "GetResourcesRequest$limit": "<p>The maximum number of <a>Resource</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
         "GetRestApisRequest$limit": "<p>The maximum number of <a>RestApi</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
+        "GetSdkTypesRequest$limit": "<p>The maximum number of <a>SdkType</a> instances to be returned. </p>",
         "GetUsagePlanKeysRequest$limit": "<p>A query parameter specifying the maximum number usage plan keys returned by the GET request.</p>",
         "GetUsagePlansRequest$limit": "<p>The number of <a>UsagePlan</a> resources to be returned as the result.</p>",
         "GetUsageRequest$limit": "<p>The maximum number of results to be returned.</p>"
@@ -1145,8 +1171,25 @@
       "refs": {
       }
     },
+    "SdkConfigurationProperty": {
+      "base": "<p>A configuration property of an SDK type.</p>",
+      "refs": {
+        "ListOfSdkConfigurationProperty$member": null
+      }
+    },
     "SdkResponse": {
       "base": "<p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>",
+      "refs": {
+      }
+    },
+    "SdkType": {
+      "base": "<p>A type of SDK that API Gateway can generate.</p>",
+      "refs": {
+        "ListOfSdkType$member": null
+      }
+    },
+    "SdkTypes": {
+      "base": "<p>The collection of <a>SdkType</a> instances.</p>",
       "refs": {
       }
     },
@@ -1389,6 +1432,8 @@
         "GetSdkRequest$restApiId": "<p>The identifier of the <a>RestApi</a> that the SDK will use.</p>",
         "GetSdkRequest$stageName": "<p>The name of the <a>Stage</a> that the SDK will use.</p>",
         "GetSdkRequest$sdkType": "<p>The language for the generated SDK. Currently <code>javascript</code>, <code>android</code>, and <code>objectivec</code> (for iOS) are supported.</p>",
+        "GetSdkTypeRequest$id": "<p>The identifier of the queried <a>SdkType</a> instance.</p>",
+        "GetSdkTypesRequest$position": "<p>The position of the last fetched element in the <a>SdkTypes</a> collection.</p>",
         "GetStageRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to get information about.</p>",
         "GetStageRequest$stageName": "<p>The name of the <a>Stage</a> resource to get information about.</p>",
         "GetStagesRequest$restApiId": "<p>The stages' API identifiers.</p>",
@@ -1408,7 +1453,7 @@
         "GetUsageRequest$position": "<p>Position</p>",
         "ImportDocumentationPartsRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-imported documentation parts.</p>",
         "Integration$httpMethod": "<p>Specifies the integration's HTTP method type.</p>",
-        "Integration$uri": "<p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href=\"https://www.ietf.org/rfc/rfc3986.txt\" target=\"_blank\">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>",
+        "Integration$uri": "<p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href=\"https://en.wikipedia.org/wiki/Uniform_Resource_Identifier\" target=\"_blank\">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>",
         "Integration$credentials": "<p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for Amazon API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\\*:user/\\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>",
         "Integration$passthroughBehavior": "<div> <p> Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in <code>requestTemplates</code>. There are three valid values: <code>WHEN_NO_MATCH</code>, <code>WHEN_NO_TEMPLATES</code>, and <code>NEVER</code>. </p> <ul> <li> <code>WHEN_NO_MATCH</code> passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. </li> <li> <code>WHEN_NO_TEMPLATES</code> passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP <code>415 Unsupported Media Type</code> response. </li> <li> <code>NEVER</code> rejects the method request with an HTTP <code>415 Unsupported Media Type</code> response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request. </li> </ul> </div>",
         "Integration$cacheNamespace": "<p>Specifies the integration's cache namespace.</p>",
@@ -1431,6 +1476,7 @@
         "Method$httpMethod": "<p>The method's HTTP verb.</p>",
         "Method$authorizationType": "<p>The method's authorization type.</p>",
         "Method$authorizerId": "<p>The identifier of an <a>Authorizer</a> to use on this method. The <code>authorizationType</code> must be <code>CUSTOM</code>.</p>",
+        "Method$operationName": "<p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href=\"http://petstore-demo-endpoint.execute-api.com/petstore/pets\">PetStore</a> example.</p>",
         "MethodSetting$loggingLevel": "<p>Specifies the logging level for this method, which effects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/loglevel</code>, and the available levels are <code>OFF</code>, <code>ERROR</code>, and <code>INFO</code>.</p>",
         "MethodSnapshot$authorizationType": "<p>Specifies the type of authorization used for the method.</p>",
         "Model$id": "<p>The identifier for the model resource.</p>",
@@ -1461,6 +1507,7 @@
         "PutMethodRequest$httpMethod": "<p>Specifies the method request's HTTP method type.</p>",
         "PutMethodRequest$authorizationType": "<p>Specifies the type of authorization used for the method.</p>",
         "PutMethodRequest$authorizerId": "<p>Specifies the identifier of an <a>Authorizer</a> to use on this Method, if the type is CUSTOM.</p>",
+        "PutMethodRequest$operationName": "<p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href=\"http://petstore-demo-endpoint.execute-api.com/petstore/pets\">PetStore</a> example.</p>",
         "PutMethodResponseRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Method</a> resource.</p>",
         "PutMethodResponseRequest$resourceId": "<p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>",
         "PutMethodResponseRequest$httpMethod": "<p>The HTTP verb of the <a>Method</a> resource.</p>",
@@ -1475,8 +1522,16 @@
         "RestApi$description": "<p>The API's description.</p>",
         "RestApi$version": "<p>A version identifier for the API.</p>",
         "RestApis$position": null,
+        "SdkConfigurationProperty$name": "<p>The name of a an <a>SdkType</a> configuration property.</p>",
+        "SdkConfigurationProperty$friendlyName": "<p>The user-friendly name of an <a>SdkType</a> configuration property.</p>",
+        "SdkConfigurationProperty$description": "<p>The description of an <a>SdkType</a> configuration property.</p>",
+        "SdkConfigurationProperty$defaultValue": "<p>The default value of an <a>SdkType</a> configuration property.</p>",
         "SdkResponse$contentType": "<p>The content-type header value in the HTTP response.</p>",
         "SdkResponse$contentDisposition": "<p>The content-disposition header value in the HTTP response.</p>",
+        "SdkType$id": "<p>The identifier of an <a>SdkType</a> instance.</p>",
+        "SdkType$friendlyName": "<p>The user-friendly name of an <a>SdkType</a> instance.</p>",
+        "SdkType$description": "<p>The description of an <a>SdkType</a>.</p>",
+        "SdkTypes$position": null,
         "ServiceUnavailableException$retryAfterSeconds": null,
         "ServiceUnavailableException$message": null,
         "Stage$deploymentId": "<p>The identifier of the <a>Deployment</a> that the stage points to.</p>",

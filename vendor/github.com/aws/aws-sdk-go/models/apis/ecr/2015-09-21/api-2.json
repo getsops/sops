@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"ecr-2015-09-21",
     "apiVersion":"2015-09-21",
     "endpointPrefix":"ecr",
     "jsonVersion":"1.1",
@@ -332,7 +333,8 @@
       "members":{
         "registryId":{"shape":"RegistryId"},
         "repositoryName":{"shape":"RepositoryName"},
-        "imageIds":{"shape":"ImageIdentifierList"}
+        "imageIds":{"shape":"ImageIdentifierList"},
+        "acceptedMediaTypes":{"shape":"MediaTypeList"}
       }
     },
     "BatchGetImageResponse":{
@@ -656,7 +658,8 @@
       "members":{
         "layerDigest":{"shape":"LayerDigest"},
         "layerAvailability":{"shape":"LayerAvailability"},
-        "layerSize":{"shape":"LayerSizeInBytes"}
+        "layerSize":{"shape":"LayerSizeInBytes"},
+        "mediaType":{"shape":"MediaType"}
       }
     },
     "LayerAlreadyExistsException":{
@@ -766,6 +769,16 @@
       "max":100,
       "min":1
     },
+    "MediaType":{
+      "type":"string",
+      "pattern":"\\w{1,127}\\/[-+.\\w]{1,127}"
+    },
+    "MediaTypeList":{
+      "type":"list",
+      "member":{"shape":"MediaType"},
+      "max":100,
+      "min":1
+    },
     "NextToken":{"type":"string"},
     "PartSize":{
       "type":"long",
@@ -782,7 +795,8 @@
       "members":{
         "registryId":{"shape":"RegistryId"},
         "repositoryName":{"shape":"RepositoryName"},
-        "imageManifest":{"shape":"ImageManifest"}
+        "imageManifest":{"shape":"ImageManifest"},
+        "imageTag":{"shape":"ImageTag"}
       }
     },
     "PutImageResponse":{

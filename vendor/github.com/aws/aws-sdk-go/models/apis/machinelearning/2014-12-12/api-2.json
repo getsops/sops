@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"machinelearning-2014-12-12",
     "apiVersion":"2014-12-12",
     "endpointPrefix":"machinelearning",
     "jsonVersion":"1.1",

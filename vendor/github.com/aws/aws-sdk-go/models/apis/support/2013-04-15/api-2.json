@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"support-2013-04-15",
     "apiVersion":"2013-04-15",
     "endpointPrefix":"support",
     "jsonVersion":"1.1",

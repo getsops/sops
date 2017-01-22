@@ -10,6 +10,10 @@ a > img {
 	padding-top:8px;
 }
 
+.packages dd:nth-child(odd) {
+	background-color: #ececec;
+}
+
 body {
 	margin: 0;
 	font-family: HelveticaNeueBold,Helvetica,Helvetica,Arial,sans-serif;
@@ -67,6 +71,7 @@ ol {
 	margin: 20px;
 }
 .packages {
+	display:inline;
 	margin: 0px;
 	text-align: left;
 	width: 100%;
@@ -766,8 +771,6 @@ a.error {
 	div#mobile_container {
 		display:inline-block;
 		width: 100%;
-		padding-left:20px;
-		padding-top:10px;
 	}
 }
 
@@ -818,6 +821,8 @@ a.error {
 		content:"";
 		height: 5px; 
 		width:30px;
+		padding-left:20px;
+		padding-top:10px;
 	}
 }
 

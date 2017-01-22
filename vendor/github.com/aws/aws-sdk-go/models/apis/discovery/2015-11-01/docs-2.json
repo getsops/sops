@@ -1,21 +1,28 @@
 {
   "version": "2.0",
-  "service": "<p>The AWS Application Discovery Service helps Systems Integrators quickly and reliably plan application migration projects by automatically identifying applications running in on-premises data centers, their associated dependencies, and their performance profile.</p> <p> Planning data center migrations can involve thousands of workloads that are often deeply interdependent. Application discovery and dependency mapping are important early first steps in the migration process, but difficult to perform at scale due to the lack of automated tools.</p> <p>The AWS Application Discovery Service automatically collects configuration and usage data from servers to develop a list of applications, how they perform, and how they are interdependent. This information is securely retained in an AWS Application Discovery Service database which you can export as a CSV file into your preferred visualization tool or cloud migration solution to help reduce the complexity and time in planning your cloud migration.</p> <p>The Application Discovery Service is currently available for preview. Only customers who are engaged with <a href=\"https://aws.amazon.com/professional-services/\">AWS Professional Services</a> or a certified AWS partner can use the service. To see the list of certified partners and request access to the Application Discovery Service, complete the following <a href=\"http://aws.amazon.com/application-discovery/preview/\">preview form</a>.</p> <p>This API reference provides descriptions, syntax, and usage examples for each of the actions and data types for the Discovery Service. The topic for each action shows the API request parameters and the response. Alternatively, you can use one of the AWS SDKs to access an API that is tailored to the programming language or platform that you're using. For more information, see <a href=\"http://aws.amazon.com/tools/#SDKs\">AWS SDKs</a>.</p> <p>This guide is intended for use with the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/userguide/what-is-appdiscovery.html\"> <i>AWS Discovery Service User Guide</i> </a>.</p> <p>The following are short descriptions of each API action, organized by function.</p> <p> <b>Managing AWS Agents Using the Application Discovery Service</b> </p> <p>An AWS agent is software that you install on on-premises servers and virtual machines that are targeted for discovery and migration. Agents run on Linux and Windows Server and collect server configuration and activity information about your applications and infrastructure. Specifically, agents collect the following information and send it to the Application Discovery Service using Secure Sockets Layer (SSL) encryption:</p> <ul> <li> <p>User information (user name, home directory)</p> </li> <li> <p>Group information (name)</p> </li> <li> <p>List of installed packages</p> </li> <li> <p>List of kernel modules</p> </li> <li> <p>All create and stop process events</p> </li> <li> <p>DNS queries</p> </li> <li> <p>NIC information</p> </li> <li> <p>TCP/UDP process listening ports</p> </li> <li> <p>TCPV4/V6 connections</p> </li> <li> <p>Operating system information</p> </li> <li> <p>System performance</p> </li> <li> <p>Process performance</p> </li> </ul> <p>The Application Discovery Service API includes the following actions to manage AWS agents:</p> <ul> <li> <p> <i>StartDataCollectionByAgentIds</i>: Instructs the specified agents to start collecting data. The Application Discovery Service takes several minutes to receive and process data after you initiate data collection.</p> </li> <li> <p> <i>StopDataCollectionByAgentIds</i>: Instructs the specified agents to stop collecting data.</p> </li> <li> <p> <i>DescribeAgents</i>: Lists AWS agents by ID or lists all agents associated with your user account if you did not specify an agent ID. The output includes agent IDs, IP addresses, media access control (MAC) addresses, agent health, host name where the agent resides, and the version number of each agent.</p> </li> </ul> <p> <b>Querying Configuration Items</b> </p> <p>A <i>configuration item</i> is an IT asset that was discovered in your data center by an AWS agent. When you use the Application Discovery Service, you can specify filters and query specific configuration items. The service supports Server, Process, and Connection configuration items. This means you can specify a value for the following keys and query your IT assets:</p> <p class=\"title\"> <b>Server</b> </p> <ul> <li> <p>server.HostName</p> </li> <li> <p>server.osName</p> </li> <li> <p>server.osVersion</p> </li> <li> <p>server.configurationId</p> </li> <li> <p>server.agentId</p> </li> </ul> <p class=\"title\"> <b>Process</b> </p> <ul> <li> <p>process.name</p> </li> <li> <p>process.CommandLine</p> </li> <li> <p>process.configurationId</p> </li> <li> <p>server.hostName</p> </li> <li> <p>server.osName</p> </li> <li> <p>server.osVersion</p> </li> <li> <p>server.configurationId</p> </li> <li> <p>server.agentId</p> </li> </ul> <p class=\"title\"> <b>Connection</b> </p> <ul> <li> <p>connection.sourceIp</p> </li> <li> <p>connection.sourcePort</p> </li> <li> <p>connection.destinationIp</p> </li> <li> <p>connection.destinationPort</p> </li> <li> <p>sourceProcess.configurationId</p> </li> <li> <p>sourceProcess.commandLine</p> </li> <li> <p>sourceProcess.name</p> </li> <li> <p>destinationProcessId.configurationId</p> </li> <li> <p>destinationProcess.commandLine</p> </li> <li> <p>destinationProcess.name</p> </li> <li> <p>sourceServer.configurationId</p> </li> <li> <p>sourceServer.hostName</p> </li> <li> <p>sourceServer.osName</p> </li> <li> <p>sourceServer.osVersion</p> </li> <li> <p>destinationServer.configurationId</p> </li> <li> <p>destinationServer.hostName</p> </li> <li> <p>destinationServer.osName</p> </li> <li> <p>destinationServer.osVersion</p> </li> </ul> <p>The Application Discovery Service includes the following actions for querying configuration items. </p> <ul> <li> <p> <i>DescribeConfigurations</i>: Retrieves a list of attributes for a specific configuration ID. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, including host name, operating system, number of network cards, etc.</p> </li> <li> <p> <i>ListConfigurations</i>: Retrieves a list of configuration items according to the criteria you specify in a filter. The filter criteria identify relationship requirements. For example, you can specify filter criteria of process.name with values of <i>nginx</i> and <i>apache</i>.</p> </li> </ul> <p> <b>Tagging Discovered Configuration Items</b> </p> <p>You can tag discovered configuration items. Tags are metadata that help you categorize IT assets in your data center. Tags use a <i>key</i>-<i>value</i> format. For example, <code>{\"key\": \"serverType\", \"value\": \"webServer\"}</code>. </p> <ul> <li> <p> <i>CreateTags</i>: Creates one or more tags for a configuration items.</p> </li> <li> <p> <i>DescribeTags</i>: Retrieves a list of configuration items that are tagged with a specific tag. <i>Or</i>, retrieves a list of all tags assigned to a specific configuration item.</p> </li> <li> <p> <i>DeleteTags</i>: Deletes the association between a configuration item and one or more tags.</p> </li> </ul> <p> <b>Exporting Data</b> </p> <p>You can export data as a CSV file to an Amazon S3 bucket or into your preferred visualization tool or cloud migration solution to help reduce the complexity and time in planning your cloud migration.</p> <ul> <li> <p> <i>ExportConfigurations</i>: Exports all discovered configuration data to an Amazon S3 bucket. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID which you can query using the GetExportStatus API.</p> </li> <li> <p> <i>DescribeExportConfigurations</i>: Gets the status of the data export. When the export is complete, the service returns an Amazon S3 URL where you can download CSV files that include the data.</p> </li> </ul>",
+  "service": "<fullname>AWS Application Discovery Service</fullname> <p>AWS Application Discovery Service helps you plan application migration projects by automatically identifying servers, virtual machines (VMs), software, and software dependencies running in your on-premises data centers. Application Discovery Service also collects application performance data, which can help you assess the outcome of your migration. The data collected by Application Discovery Service is securely retained in an Amazon-hosted and managed database in the cloud. You can export the data as a CSV or XML file into your preferred visualization tool or cloud-migration solution to plan your migration. For more information, see the Application Discovery Service <a href=\"http://aws.amazon.com/application-discovery/faqs/\">FAQ</a>.</p> <p>Application Discovery Service offers two modes of operation.</p> <ul> <li> <p> <b>Agentless discovery</b> mode is recommended for environments that use VMware vCenter Server. This mode doesn't require you to install an agent on each host. Agentless discovery gathers server information regardless of the operating systems, which minimizes the time required for initial on-premises infrastructure assessment. Agentless discovery doesn't collect information about software and software dependencies. It also doesn't work in non-VMware environments. We recommend that you use agent-based discovery for non-VMware environments and if you want to collect information about software and software dependencies. You can also run agent-based and agentless discovery simultaneously. Use agentless discovery to quickly complete the initial infrastructure assessment and then install agents on select hosts to gather information about software and software dependencies.</p> </li> <li> <p> <b>Agent-based discovery</b> mode collects a richer set of data than agentless discovery by using Amazon software, the AWS Application Discovery Agent, which you install on one or more hosts in your data center. The agent captures infrastructure and application information, including an inventory of installed software applications, system and process performance, resource utilization, and network dependencies between workloads. The information collected by agents is secured at rest and in transit to the Application Discovery Service database in the cloud. </p> </li> </ul> <p>Application Discovery Service integrates with application discovery solutions from AWS Partner Network (APN) partners. Third-party application discovery tools can query the Application Discovery Service and write to the Application Discovery Service database using a public API. You can then import the data into either a visualization tool or cloud-migration solution.</p> <important> <p>Application Discovery Service doesn't gather sensitive information. All data is handled according to the <a href=\"http://aws.amazon.com/privacy/\">AWS Privacy Policy</a>. You can operate Application Discovery Service using offline mode to inspect collected data before it is shared with the service.</p> </important> <p>Your AWS account must be granted access to Application Discovery Service, a process called <i>whitelisting</i>. This is true for AWS partners and customers alike. To request access, sign up for the AWS Application Discovery Service <a href=\"http://aws.amazon.com/application-discovery/preview/\">here</a>. We will send you information about how to get started.</p> <p>This API reference provides descriptions, syntax, and usage examples for each of the actions and data types for the Application Discovery Service. The topic for each action shows the API request parameters and the response. Alternatively, you can use one of the AWS SDKs to access an API that is tailored to the programming language or platform that you're using. For more information, see <a href=\"http://aws.amazon.com/tools/#SDKs\">AWS SDKs</a>.</p> <p>This guide is intended for use with the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/userguide/\"> <i>AWS Application Discovery Service User Guide</i> </a>.</p>",
   "operations": {
+    "AssociateConfigurationItemsToApplication": "<p>Associates one or more configuration items with an application.</p>",
+    "CreateApplication": "<p>Creates an application with the given name and description.</p>",
     "CreateTags": "<p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>",
+    "DeleteApplications": "<p>Deletes a list of applications and their associations with configuration items.</p>",
     "DeleteTags": "<p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>",
-    "DescribeAgents": "<p>Lists AWS agents by ID or lists all agents associated with your user account if you did not specify an agent ID.</p>",
-    "DescribeConfigurations": "<p>Retrieves a list of attributes for a specific configuration ID. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, including host name, operating system, number of network cards, etc.</p>",
+    "DescribeAgents": "<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>",
+    "DescribeConfigurations": "<p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/querying-configuration-items.html#DescribeConfigurations\">Querying Discovered Configuration Items</a>.</p>",
     "DescribeExportConfigurations": "<p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>",
     "DescribeTags": "<p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>",
-    "ExportConfigurations": "<p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID which you can query using the <i>GetExportStatus</i> API. The system imposes a limit of two configuration exports in six hours.</p>",
-    "ListConfigurations": "<p>Retrieves a list of configurations items according to the criteria you specify in a filter. The filter criteria identify relationship requirements.</p>",
-    "StartDataCollectionByAgentIds": "<p>Instructs the specified agents to start collecting data. Agents can reside on host servers or virtual machines in your data center.</p>",
-    "StopDataCollectionByAgentIds": "<p>Instructs the specified agents to stop collecting data.</p>"
+    "DisassociateConfigurationItemsFromApplication": "<p>Disassociates one or more configuration items from an application.</p>",
+    "ExportConfigurations": "<p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID which you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>",
+    "GetDiscoverySummary": "<p>Retrieves a short summary of discovered assets.</p>",
+    "ListConfigurations": "<p>Retrieves a list of configuration items according to criteria you specify in a filter. The filter criteria identify relationship requirements.</p>",
+    "ListServerNeighbors": "<p>Retrieves a list of servers which are one network hop away from a specified server.</p>",
+    "StartDataCollectionByAgentIds": "<p>Instructs the specified agents or Connectors to start collecting data.</p>",
+    "StopDataCollectionByAgentIds": "<p>Instructs the specified agents or Connectors to stop collecting data.</p>",
+    "UpdateApplication": "<p>Updates metadata about an application.</p>"
   },
   "shapes": {
     "AgentConfigurationStatus": {
-      "base": "<p>Information about agents that were instructed to start collecting data. Information includes the agent ID, a description of the operation, and whether or not the agent configuration was updated.</p>",
+      "base": "<p>Information about agents or Connectors that were instructed to start collecting data. Information includes the agent/Connector ID, a description of the operation, and whether or not the agent/Connector configuration was updated.</p>",
       "refs": {
         "AgentConfigurationStatusList$member": null
       }
@@ -23,33 +30,33 @@
     "AgentConfigurationStatusList": {
       "base": null,
       "refs": {
-        "StartDataCollectionByAgentIdsResponse$agentsConfigurationStatus": "<p>Information about agents that were instructed to start collecting data. Information includes the agent ID, a description of the operation performed, and whether or not the agent configuration was updated.</p>",
-        "StopDataCollectionByAgentIdsResponse$agentsConfigurationStatus": "<p>Information about agents that were instructed to stop collecting data. Information includes the agent ID, a description of the operation performed, and whether or not the agent configuration was updated.</p>"
+        "StartDataCollectionByAgentIdsResponse$agentsConfigurationStatus": "<p>Information about agents or the Connector that were instructed to start collecting data. Information includes the agent/Connector ID, a description of the operation performed, and whether or not the agent/Connector configuration was updated.</p>",
+        "StopDataCollectionByAgentIdsResponse$agentsConfigurationStatus": "<p>Information about agents or the Connector that were instructed to stop collecting data. Information includes the agent/Connector ID, a description of the operation performed, and whether or not the agent/Connector configuration was updated.</p>"
       }
     },
     "AgentId": {
       "base": null,
       "refs": {
         "AgentIds$member": null,
-        "AgentInfo$agentId": "<p>The agent ID.</p>"
+        "AgentInfo$agentId": "<p>The agent or connector ID.</p>"
       }
     },
     "AgentIds": {
       "base": null,
       "refs": {
-        "DescribeAgentsRequest$agentIds": "<p>The agent IDs for which you want information. If you specify no IDs, the system returns information about all agents associated with your AWS user account.</p>",
-        "StartDataCollectionByAgentIdsRequest$agentIds": "<p>The IDs of the agents that you want to start collecting data. If you send a request to an AWS agent ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents and you do not have permission to contact some of those agents, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>",
-        "StopDataCollectionByAgentIdsRequest$agentIds": "<p>The IDs of the agents that you want to stop collecting data.</p>"
+        "DescribeAgentsRequest$agentIds": "<p>The agent or the Connector IDs for which you want information. If you specify no IDs, the system returns information about all agents/Connectors associated with your AWS user account.</p>",
+        "StartDataCollectionByAgentIdsRequest$agentIds": "<p>The IDs of the agents or Connectors that you want to start collecting data. If you send a request to an agent/Connector ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents/Connectors and you do not have permission to contact some of those agents/Connectors, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>",
+        "StopDataCollectionByAgentIdsRequest$agentIds": "<p>The IDs of the agents or Connectors that you want to stop collecting data.</p>"
       }
     },
     "AgentInfo": {
-      "base": "<p>Information about agents associated with the user’s AWS account. Information includes agent IDs, IP addresses, media access control (MAC) addresses, agent health, hostname where the agent resides, and agent version for each agent.</p>",
+      "base": "<p>Information about agents or connectors associated with the user’s AWS account. Information includes agent or connector IDs, IP addresses, media access control (MAC) addresses, agent or connector health, hostname where the agent or connector resides, and agent version for each agent.</p>",
       "refs": {
         "AgentsInfo$member": null
       }
     },
     "AgentNetworkInfo": {
-      "base": "<p>Network details about the host where the agent resides.</p>",
+      "base": "<p>Network details about the host where the agent/Connector resides.</p>",
       "refs": {
         "AgentNetworkInfoList$member": null
       }
@@ -57,19 +64,44 @@
     "AgentNetworkInfoList": {
       "base": null,
       "refs": {
-        "AgentInfo$agentNetworkInfoList": "<p>Network details about the host where the agent resides.</p>"
+        "AgentInfo$agentNetworkInfoList": "<p>Network details about the host where the agent or connector resides.</p>"
       }
     },
     "AgentStatus": {
       "base": null,
       "refs": {
-        "AgentInfo$health": "<p>The health of the agent.</p>"
+        "AgentInfo$health": "<p>The health of the agent or connector.</p>"
       }
     },
     "AgentsInfo": {
       "base": null,
       "refs": {
-        "DescribeAgentsResponse$agentsInfo": "<p>Lists AWS agents by ID or lists all agents associated with your user account if you did not specify an agent ID. The output includes agent IDs, IP addresses, media access control (MAC) addresses, agent health, host name where the agent resides, and the version number of each agent.</p>"
+        "DescribeAgentsResponse$agentsInfo": "<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an agent/Connector ID. The output includes agent/Connector IDs, IP addresses, media access control (MAC) addresses, agent/Connector health, host name where the agent/Connector resides, and the version number of each agent/Connector.</p>"
+      }
+    },
+    "ApplicationId": {
+      "base": null,
+      "refs": {
+        "ApplicationIdsList$member": null,
+        "AssociateConfigurationItemsToApplicationRequest$applicationConfigurationId": "<p>The configuration ID of an application with which items are to be associated.</p>",
+        "DisassociateConfigurationItemsFromApplicationRequest$applicationConfigurationId": "<p>Configuration ID of an application from which each item will be disassociated.</p>",
+        "UpdateApplicationRequest$configurationId": "<p>Configuration ID of the application to be updated.</p>"
+      }
+    },
+    "ApplicationIdsList": {
+      "base": null,
+      "refs": {
+        "DeleteApplicationsRequest$configurationIds": "<p>Configuration ID of an application to be deleted.</p>"
+      }
+    },
+    "AssociateConfigurationItemsToApplicationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AssociateConfigurationItemsToApplicationResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "AuthorizationErrorException": {
@@ -80,7 +112,14 @@
     "Boolean": {
       "base": null,
       "refs": {
-        "AgentConfigurationStatus$operationSucceeded": "<p>Information about the status of the <code>StartDataCollection</code> and <code>StopDataCollection</code> operations. The system has recorded the data collection operation. The agent receives this command the next time it polls for a new command. </p>"
+        "AgentConfigurationStatus$operationSucceeded": "<p>Information about the status of the <code>StartDataCollection</code> and <code>StopDataCollection</code> operations. The system has recorded the data collection operation. The agent/Connector receives this command the next time it polls for a new command. </p>",
+        "ListServerNeighborsRequest$portInformationNeeded": "<p>Flag to indicate if port and protocol information is needed as part of the response.</p>"
+      }
+    },
+    "BoxedInteger": {
+      "base": null,
+      "refs": {
+        "NeighborConnectionDetail$destinationPort": "<p>Destination network port for the connection.</p>"
       }
     },
     "Condition": {
@@ -99,15 +138,21 @@
       "base": null,
       "refs": {
         "ConfigurationIdList$member": null,
-        "ConfigurationTag$configurationId": "<p>The configuration ID for the item you want to tag. You can specify a list of keys and values.</p>"
+        "ConfigurationTag$configurationId": "<p>The configuration ID for the item you want to tag. You can specify a list of keys and values.</p>",
+        "ListServerNeighborsRequest$configurationId": "<p>Configuration ID of the server for which neighbors are being listed.</p>",
+        "NeighborConnectionDetail$sourceServerId": "<p>ID of server that opened the network connection.</p>",
+        "NeighborConnectionDetail$destinationServerId": "<p>ID of the server that accepted the networker connection.</p>"
       }
     },
     "ConfigurationIdList": {
       "base": null,
       "refs": {
+        "AssociateConfigurationItemsToApplicationRequest$configurationIds": "<p>The ID of each configuration item to be associated with an application.</p>",
         "CreateTagsRequest$configurationIds": "<p>A list of configuration items that you want to tag.</p>",
         "DeleteTagsRequest$configurationIds": "<p>A list of configuration items with tags that you want to delete.</p>",
-        "DescribeConfigurationsRequest$configurationIds": "<p>One or more configuration IDs.</p>"
+        "DescribeConfigurationsRequest$configurationIds": "<p>One or more configuration IDs.</p>",
+        "DisassociateConfigurationItemsFromApplicationRequest$configurationIds": "<p>Configuration ID of each item be be disassociated from an application.</p>",
+        "ListServerNeighborsRequest$neighborConfigurationIds": "<p>List of configuration IDs to test for one-hop-away.</p>"
       }
     },
     "ConfigurationItemType": {
@@ -149,12 +194,44 @@
         "ExportInfo$exportId": "<p>A unique identifier that you can use to query the export.</p>"
       }
     },
+    "CreateApplicationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateApplicationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateTagsRequest": {
       "base": null,
       "refs": {
       }
     },
     "CreateTagsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CustomerAgentInfo": {
+      "base": "<p>Inventory data for installed discovery agents.</p>",
+      "refs": {
+        "GetDiscoverySummaryResponse$agentSummary": "<p>Details about discovered agents, including agent status and health.</p>"
+      }
+    },
+    "CustomerConnectorInfo": {
+      "base": "<p>Inventory data for installed discovery connectors.</p>",
+      "refs": {
+        "GetDiscoverySummaryResponse$connectorSummary": "<p>Details about discovered connectors, including connector status and health.</p>"
+      }
+    },
+    "DeleteApplicationsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteApplicationsResponse": {
       "base": null,
       "refs": {
       }
@@ -221,6 +298,16 @@
       "refs": {
       }
     },
+    "DisassociateConfigurationItemsFromApplicationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DisassociateConfigurationItemsFromApplicationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ExportConfigurationsResponse": {
       "base": null,
       "refs": {
@@ -263,7 +350,7 @@
       }
     },
     "Filter": {
-      "base": "<p>A filter that can use conditional operators.</p>",
+      "base": "<p>A filter that can use conditional operators.</p> <p>for a complete list of filters and guidance for using them with the Application Discovery Service, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/querying-configuration-items.html\">Querying Discovered Configuration Items</a>.</p>",
       "refs": {
         "Filters$member": null
       }
@@ -290,16 +377,42 @@
     "Filters": {
       "base": null,
       "refs": {
-        "ListConfigurationsRequest$filters": "<p>You can filter the list using a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{\"key\": \"serverType\", \"value\": \"webServer\"}</code> </p> <p>You can separate these items by using logical operators. </p>"
+        "DescribeAgentsRequest$filters": "<p>You can filter the request using various logical operators and a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{\"key\": \"collectionStatus\", \"value\": \"STARTED\"}</code> </p> <p>For a complete list of filter options and guidance about using them with this action, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/managing-agent.html\">Managing AWS Application Discovery Service Agents and the AWS Application Discovery Connector </a>.</p>",
+        "ListConfigurationsRequest$filters": "<p>You can filter the request using various logical operators and a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{\"key\": \"serverType\", \"value\": \"webServer\"}</code> </p> <p>For a complete list of filter options and guidance about using them with this action, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/querying-configuration-items.html#ListConfigurations\">Querying Discovered Configuration Items</a>. </p>"
+      }
+    },
+    "GetDiscoverySummaryRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetDiscoverySummaryResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "Integer": {
       "base": null,
       "refs": {
-        "DescribeAgentsRequest$maxResults": "<p>The total number of agents to return. The maximum value is 100.</p>",
+        "CustomerAgentInfo$activeAgents": "<p>Number of active discovery agents.</p>",
+        "CustomerAgentInfo$healthyAgents": "<p>Number of healthy discovery agents</p>",
+        "CustomerAgentInfo$blackListedAgents": "<p>Number of blacklisted discovery agents.</p>",
+        "CustomerAgentInfo$shutdownAgents": "<p>Number of discovery agents with status SHUTDOWN.</p>",
+        "CustomerAgentInfo$unhealthyAgents": "<p>Number of unhealthy discovery agents.</p>",
+        "CustomerAgentInfo$totalAgents": "<p>Total number of discovery agents.</p>",
+        "CustomerAgentInfo$unknownAgents": "<p>Number of unknown discovery agents.</p>",
+        "CustomerConnectorInfo$activeConnectors": "<p>Number of active discovery connectors.</p>",
+        "CustomerConnectorInfo$healthyConnectors": "<p>Number of healthy discovery connectors.</p>",
+        "CustomerConnectorInfo$blackListedConnectors": "<p>Number of blacklisted discovery connectors.</p>",
+        "CustomerConnectorInfo$shutdownConnectors": "<p>Number of discovery connectors with status SHUTDOWN,</p>",
+        "CustomerConnectorInfo$unhealthyConnectors": "<p>Number of unhealthy discovery connectors.</p>",
+        "CustomerConnectorInfo$totalConnectors": "<p>Total number of discovery connectors.</p>",
+        "CustomerConnectorInfo$unknownConnectors": "<p>Number of unknown discovery connectors.</p>",
+        "DescribeAgentsRequest$maxResults": "<p>The total number of agents/Connectors to return in a single page of output. The maximum value is 100.</p>",
         "DescribeExportConfigurationsRequest$maxResults": "<p>The maximum number of results that you want to display as a part of the query.</p>",
-        "DescribeTagsRequest$maxResults": "<p>The total number of items to return. The maximum value is 100.</p>",
-        "ListConfigurationsRequest$maxResults": "<p>The total number of items to return. The maximum value is 100.</p>"
+        "DescribeTagsRequest$maxResults": "<p>The total number of items to return in a single page of output. The maximum value is 100.</p>",
+        "ListConfigurationsRequest$maxResults": "<p>The total number of items to return. The maximum value is 100.</p>",
+        "ListServerNeighborsRequest$maxResults": "<p>Maximum number of results to return in a single page of output.</p>"
       }
     },
     "InvalidParameterException": {
@@ -322,6 +435,27 @@
       "refs": {
       }
     },
+    "ListServerNeighborsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListServerNeighborsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "Long": {
+      "base": null,
+      "refs": {
+        "GetDiscoverySummaryResponse$servers": "<p>Number of servers discovered.</p>",
+        "GetDiscoverySummaryResponse$applications": "<p>Number of applications discovered.</p>",
+        "GetDiscoverySummaryResponse$serversMappedToApplications": "<p>Number of servers mapped to applications.</p>",
+        "GetDiscoverySummaryResponse$serversMappedtoTags": "<p>Number of servers mapped to tags.</p>",
+        "ListServerNeighborsResponse$knownDependencyCount": "<p>Count of distinct servers that are one hop away from the given server.</p>",
+        "NeighborConnectionDetail$connectionsCount": "<p>Number of open network connections with the neighboring server.</p>"
+      }
+    },
     "Message": {
       "base": null,
       "refs": {
@@ -333,22 +467,46 @@
         "ServerInternalErrorException$message": null
       }
     },
+    "NeighborConnectionDetail": {
+      "base": "<p>Details about neighboring servers.</p>",
+      "refs": {
+        "NeighborDetailsList$member": null
+      }
+    },
+    "NeighborDetailsList": {
+      "base": null,
+      "refs": {
+        "ListServerNeighborsResponse$neighbors": "<p>List of distinct servers that are one hop away from the given server.</p>"
+      }
+    },
     "NextToken": {
       "base": null,
       "refs": {
-        "DescribeAgentsRequest$nextToken": "<p>A token to start the list. Use this token to get the next set of results.</p>",
-        "DescribeAgentsResponse$nextToken": "<p>The call returns a token. Use this token to get the next set of results.</p>",
-        "DescribeExportConfigurationsRequest$nextToken": "<p>A token to get the next set of results. For example, if you specified 100 IDs for <code>DescribeConfigurationsRequest$configurationIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you will get results in a set of 10. Use the token in the query to get the next set of 10.</p>",
-        "DescribeExportConfigurationsResponse$nextToken": "<p>A token to get the next set of results. For example, if you specified 100 IDs for <code>DescribeConfigurationsRequest$configurationIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you will get results in a set of 10. Use the token in the query to get the next set of 10.</p>",
+        "DescribeAgentsRequest$nextToken": "<p>Token to retrieve the next set of results. For example, if you previously specified 100 IDs for <code>DescribeAgentsRequest$agentIds</code> but set <code>DescribeAgentsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>",
+        "DescribeAgentsResponse$nextToken": "<p>Token to retrieve the next set of results. For example, if you specified 100 IDs for <code>DescribeAgentsRequest$agentIds</code> but set <code>DescribeAgentsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>",
+        "DescribeExportConfigurationsRequest$nextToken": "<p>A token to get the next set of results. For example, if you specified 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you will get results in a set of 10. Use the token in the query to get the next set of 10.</p>",
+        "DescribeExportConfigurationsResponse$nextToken": "<p>A token to get the next set of results. For example, if you specified 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you will get results in a set of 10. Use the token in the query to get the next set of 10.</p>",
         "DescribeTagsRequest$nextToken": "<p>A token to start the list. Use this token to get the next set of results.</p>",
         "DescribeTagsResponse$nextToken": "<p>The call returns a token. Use this token to get the next set of results.</p>",
-        "ListConfigurationsRequest$nextToken": "<p>A token to start the list. Use this token to get the next set of results.</p>",
-        "ListConfigurationsResponse$nextToken": "<p>The call returns a token. Use this token to get the next set of results.</p>"
+        "ListConfigurationsRequest$nextToken": "<p>Token to retrieve the next set of results. For example, if a previous call to ListConfigurations returned 100 items, but you set <code>ListConfigurationsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>",
+        "ListConfigurationsResponse$nextToken": "<p>Token to retrieve the next set of results. For example, if your call to ListConfigurations returned 100 items, but you set <code>ListConfigurationsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>"
       }
     },
     "OperationNotPermittedException": {
       "base": "<p>This operation is not permitted.</p>",
       "refs": {
+      }
+    },
+    "OrderByElement": {
+      "base": "<p>Field and direction for ordered output.</p>",
+      "refs": {
+        "OrderByList$member": null
+      }
+    },
+    "OrderByList": {
+      "base": null,
+      "refs": {
+        "ListConfigurationsRequest$orderBy": "<p>Certain filter criteria return output that can be sorted in ascending or descending order. For a list of output characteristics for each filter, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/querying-configuration-items.html#ListConfigurations\">Querying Discovered Configuration Items</a>.</p>"
       }
     },
     "ResourceNotFoundException": {
@@ -384,18 +542,31 @@
     "String": {
       "base": null,
       "refs": {
-        "AgentConfigurationStatus$agentId": "<p>The agent ID.</p>",
+        "AgentConfigurationStatus$agentId": "<p>The agent/Connector ID.</p>",
         "AgentConfigurationStatus$description": "<p>A description of the operation performed.</p>",
-        "AgentInfo$hostName": "<p>The name of the host where the agent resides. The host can be a server or virtual machine.</p>",
-        "AgentInfo$connectorId": "<p>This data type is currently not valid.</p>",
-        "AgentInfo$version": "<p>The agent version.</p>",
-        "AgentNetworkInfo$ipAddress": "<p>The IP address for the host where the agent resides.</p>",
-        "AgentNetworkInfo$macAddress": "<p>The MAC address for the host where the agent resides.</p>",
+        "AgentInfo$hostName": "<p>The name of the host where the agent or connector resides. The host can be a server or virtual machine.</p>",
+        "AgentInfo$connectorId": "<p>The ID of the connector.</p>",
+        "AgentInfo$version": "<p>The agent or connector version.</p>",
+        "AgentInfo$lastHealthPingTime": "<p>Time since agent or connector health was reported.</p>",
+        "AgentInfo$collectionStatus": "<p>Status of the collection process for an agent or connector.</p>",
+        "AgentInfo$agentType": "<p>Type of agent.</p>",
+        "AgentInfo$registeredTime": "<p>Agent's first registration time stamp in UTC.</p>",
+        "AgentNetworkInfo$ipAddress": "<p>The IP address for the host where the agent/Connector resides.</p>",
+        "AgentNetworkInfo$macAddress": "<p>The MAC address for the host where the agent/Connector resides.</p>",
         "Configuration$key": null,
         "Configuration$value": null,
+        "CreateApplicationRequest$name": "<p>Name of the application to be created.</p>",
+        "CreateApplicationRequest$description": "<p>Description of the application to be created.</p>",
+        "CreateApplicationResponse$configurationId": "<p>Configuration ID of an application to be created.</p>",
         "DescribeConfigurationsAttribute$key": null,
         "DescribeConfigurationsAttribute$value": null,
-        "Filter$name": "<p>The name of the filter. The following filter names are allowed for <code>SERVER</code> configuration items.</p> <p class=\"title\"> <b>Server</b> </p> <ul> <li> <p> <code>server.hostName</code> </p> </li> <li> <p> <code>server.osName</code> </p> </li> <li> <p> <code>server.osVersion</code> </p> </li> <li> <p> <code>server.configurationid</code> </p> </li> <li> <p> <code>server.agentid</code> </p> </li> </ul> <p>The name of the filter. The following filter names are allowed for <code>PROCESS</code> configuration items.</p> <p class=\"title\"> <b>Process</b> </p> <ul> <li> <p> <code>process.configurationid</code> </p> </li> <li> <p> <code>process.name</code> </p> </li> <li> <p> <code>process.commandLine</code> </p> </li> <li> <p> <code>server.configurationid</code> </p> </li> <li> <p> <code>server.hostName</code> </p> </li> <li> <p> <code>server.osName</code> </p> </li> <li> <p> <code>server.osVersion</code> </p> </li> <li> <p> <code>server.agentId</code> </p> </li> </ul> <p>The name of the filter. The following filter names are allowed for <code>CONNECTION</code> configuration items.</p> <p class=\"title\"> <b>Connection</b> </p> <ul> <li> <p> <code>connection.sourceIp</code> </p> </li> <li> <p> <code>connection.destinationIp</code> </p> </li> <li> <p> <code>connection.destinationPort</code> </p> </li> <li> <p> <code>sourceProcess.configurationId</code> </p> </li> <li> <p> <code>sourceProcess.name</code> </p> </li> <li> <p> <code>sourceProcess.commandLine</code> </p> </li> <li> <p> <code>destinationProcess.configurationId</code> </p> </li> <li> <p> <code>destinationProcess.name</code> </p> </li> <li> <p> <code>destinationProcess.commandLine</code> </p> </li> <li> <p> <code>sourceServer.configurationId</code> </p> </li> <li> <p> <code>sourceServer.hostName</code> </p> </li> <li> <p> <code>sourceServer.osName</code> </p> </li> <li> <p> <code>sourceServer.osVersion</code> </p> </li> <li> <p> <code>sourceServer.agentId</code> </p> </li> <li> <p> <code>destinationServer.configurationId</code> </p> </li> <li> <p> <code>destinationServer.hostName</code> </p> </li> <li> <p> <code>destinationServer.osName</code> </p> </li> <li> <p> <code>destinationServer.osVersion</code> </p> </li> <li> <p> <code>destinationServer.agentId</code> </p> </li> </ul>"
+        "Filter$name": "<p>The name of the filter.</p>",
+        "ListServerNeighborsRequest$nextToken": "<p>Token to retrieve the next set of results. For example, if you previously specified 100 IDs for <code>ListServerNeighborsRequest$neighborConfigurationIds</code> but set <code>ListServerNeighborsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>",
+        "ListServerNeighborsResponse$nextToken": "<p>Token to retrieve the next set of results. For example, if you specified 100 IDs for <code>ListServerNeighborsRequest$neighborConfigurationIds</code> but set <code>ListServerNeighborsRequest$maxResults</code> to 10, you received a set of 10 results along with this token. Use this token in the next query to retrieve the next set of 10.</p>",
+        "NeighborConnectionDetail$transportProtocol": "<p>Network protocol used for the connection.</p>",
+        "OrderByElement$fieldName": "<p>Field to order on.</p>",
+        "UpdateApplicationRequest$name": "<p>New name of the application to be updated.</p>",
+        "UpdateApplicationRequest$description": "<p>New description of the application to be updated.</p>"
       }
     },
     "Tag": {
@@ -413,7 +584,7 @@
     "TagFilters": {
       "base": null,
       "refs": {
-        "DescribeTagsRequest$filters": "<p>You can filter the list using a <i>key</i>-<i>value</i> format. You can separate these items by using logical operators. Allowed filters include <code>tagKey</code>, <code>tagValue</code>, and <code>configurationId</code>. </p>"
+        "DescribeTagsRequest$filters": "<p>You can filter the list using a <i>key</i>-<i>value</i> format. You can separate these items by using logical operators. Allowed filters include <code>tagKey</code>, <code>tagValue</code>, and <code>configurationId</code>. </p> <p>For a complete list of filter options and guidance about using them with this action, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/managing-agents.html\">Managing AWS Application Discovery Service Agents and the AWS Application Discovery Connector </a>.</p>"
       }
     },
     "TagKey": {
@@ -441,6 +612,22 @@
       "base": null,
       "refs": {
         "ConfigurationTag$timeOfCreation": "<p>The time the configuration tag was created in Coordinated Universal Time (UTC).</p>"
+      }
+    },
+    "UpdateApplicationRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateApplicationResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "orderString": {
+      "base": null,
+      "refs": {
+        "OrderByElement$sortOrder": "<p>Ordering direction.</p>"
       }
     }
   }

@@ -25,7 +25,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Application Discovery Service.
 //    func myFunc(svc applicationdiscoveryserviceiface.ApplicationDiscoveryServiceAPI) bool {
-//        // Make svc.CreateTags request
+//        // Make svc.AssociateConfigurationItemsToApplication request
 //    }
 //
 //    func main() {
@@ -41,7 +41,7 @@ import (
 //    type mockApplicationDiscoveryServiceClient struct {
 //        applicationdiscoveryserviceiface.ApplicationDiscoveryServiceAPI
 //    }
-//    func (m *mockApplicationDiscoveryServiceClient) CreateTags(input *applicationdiscoveryservice.CreateTagsInput) (*applicationdiscoveryservice.CreateTagsOutput, error) {
+//    func (m *mockApplicationDiscoveryServiceClient) AssociateConfigurationItemsToApplication(input *applicationdiscoveryservice.AssociateConfigurationItemsToApplicationInput) (*applicationdiscoveryservice.AssociateConfigurationItemsToApplicationOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -59,9 +59,21 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type ApplicationDiscoveryServiceAPI interface {
+	AssociateConfigurationItemsToApplicationRequest(*applicationdiscoveryservice.AssociateConfigurationItemsToApplicationInput) (*request.Request, *applicationdiscoveryservice.AssociateConfigurationItemsToApplicationOutput)
+
+	AssociateConfigurationItemsToApplication(*applicationdiscoveryservice.AssociateConfigurationItemsToApplicationInput) (*applicationdiscoveryservice.AssociateConfigurationItemsToApplicationOutput, error)
+
+	CreateApplicationRequest(*applicationdiscoveryservice.CreateApplicationInput) (*request.Request, *applicationdiscoveryservice.CreateApplicationOutput)
+
+	CreateApplication(*applicationdiscoveryservice.CreateApplicationInput) (*applicationdiscoveryservice.CreateApplicationOutput, error)
+
 	CreateTagsRequest(*applicationdiscoveryservice.CreateTagsInput) (*request.Request, *applicationdiscoveryservice.CreateTagsOutput)
 
 	CreateTags(*applicationdiscoveryservice.CreateTagsInput) (*applicationdiscoveryservice.CreateTagsOutput, error)
+
+	DeleteApplicationsRequest(*applicationdiscoveryservice.DeleteApplicationsInput) (*request.Request, *applicationdiscoveryservice.DeleteApplicationsOutput)
+
+	DeleteApplications(*applicationdiscoveryservice.DeleteApplicationsInput) (*applicationdiscoveryservice.DeleteApplicationsOutput, error)
 
 	DeleteTagsRequest(*applicationdiscoveryservice.DeleteTagsInput) (*request.Request, *applicationdiscoveryservice.DeleteTagsOutput)
 
@@ -83,13 +95,25 @@ type ApplicationDiscoveryServiceAPI interface {
 
 	DescribeTags(*applicationdiscoveryservice.DescribeTagsInput) (*applicationdiscoveryservice.DescribeTagsOutput, error)
 
+	DisassociateConfigurationItemsFromApplicationRequest(*applicationdiscoveryservice.DisassociateConfigurationItemsFromApplicationInput) (*request.Request, *applicationdiscoveryservice.DisassociateConfigurationItemsFromApplicationOutput)
+
+	DisassociateConfigurationItemsFromApplication(*applicationdiscoveryservice.DisassociateConfigurationItemsFromApplicationInput) (*applicationdiscoveryservice.DisassociateConfigurationItemsFromApplicationOutput, error)
+
 	ExportConfigurationsRequest(*applicationdiscoveryservice.ExportConfigurationsInput) (*request.Request, *applicationdiscoveryservice.ExportConfigurationsOutput)
 
 	ExportConfigurations(*applicationdiscoveryservice.ExportConfigurationsInput) (*applicationdiscoveryservice.ExportConfigurationsOutput, error)
 
+	GetDiscoverySummaryRequest(*applicationdiscoveryservice.GetDiscoverySummaryInput) (*request.Request, *applicationdiscoveryservice.GetDiscoverySummaryOutput)
+
+	GetDiscoverySummary(*applicationdiscoveryservice.GetDiscoverySummaryInput) (*applicationdiscoveryservice.GetDiscoverySummaryOutput, error)
+
 	ListConfigurationsRequest(*applicationdiscoveryservice.ListConfigurationsInput) (*request.Request, *applicationdiscoveryservice.ListConfigurationsOutput)
 
 	ListConfigurations(*applicationdiscoveryservice.ListConfigurationsInput) (*applicationdiscoveryservice.ListConfigurationsOutput, error)
+
+	ListServerNeighborsRequest(*applicationdiscoveryservice.ListServerNeighborsInput) (*request.Request, *applicationdiscoveryservice.ListServerNeighborsOutput)
+
+	ListServerNeighbors(*applicationdiscoveryservice.ListServerNeighborsInput) (*applicationdiscoveryservice.ListServerNeighborsOutput, error)
 
 	StartDataCollectionByAgentIdsRequest(*applicationdiscoveryservice.StartDataCollectionByAgentIdsInput) (*request.Request, *applicationdiscoveryservice.StartDataCollectionByAgentIdsOutput)
 
@@ -98,6 +122,10 @@ type ApplicationDiscoveryServiceAPI interface {
 	StopDataCollectionByAgentIdsRequest(*applicationdiscoveryservice.StopDataCollectionByAgentIdsInput) (*request.Request, *applicationdiscoveryservice.StopDataCollectionByAgentIdsOutput)
 
 	StopDataCollectionByAgentIds(*applicationdiscoveryservice.StopDataCollectionByAgentIdsInput) (*applicationdiscoveryservice.StopDataCollectionByAgentIdsOutput, error)
+
+	UpdateApplicationRequest(*applicationdiscoveryservice.UpdateApplicationInput) (*request.Request, *applicationdiscoveryservice.UpdateApplicationOutput)
+
+	UpdateApplication(*applicationdiscoveryservice.UpdateApplicationInput) (*applicationdiscoveryservice.UpdateApplicationOutput, error)
 }
 
 var _ ApplicationDiscoveryServiceAPI = (*applicationdiscoveryservice.ApplicationDiscoveryService)(nil)

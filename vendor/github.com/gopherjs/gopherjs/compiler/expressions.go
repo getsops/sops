@@ -756,12 +756,6 @@ func (c *funcContext) translateExpr(expr ast.Expr) *expression {
 			panic(fmt.Sprintf("Unhandled object: %T\n", o))
 		}
 
-	case *this:
-		if isWrapped(c.p.TypeOf(e)) {
-			return c.formatExpr("this.$val")
-		}
-		return c.formatExpr("this")
-
 	case nil:
 		return c.formatExpr("")
 
@@ -772,7 +766,7 @@ func (c *funcContext) translateExpr(expr ast.Expr) *expression {
 }
 
 func (c *funcContext) translateCall(e *ast.CallExpr, sig *types.Signature, fun *expression) *expression {
-	args := c.translateArgs(sig, e.Args, e.Ellipsis.IsValid(), false)
+	args := c.translateArgs(sig, e.Args, e.Ellipsis.IsValid())
 	if c.Blocking[e] {
 		resumeCase := c.caseCounter
 		c.caseCounter++
@@ -823,8 +817,11 @@ func (c *funcContext) makeReceiver(e *ast.SelectorExpr) *expression {
 		recvType = types.NewPointer(recvType)
 		x = c.setType(&ast.UnaryExpr{Op: token.AND, X: x}, recvType)
 	}
+	if isPointer && !pointerExpected {
+		x = c.setType(x, methodsRecvType)
+	}
 
-	recv := c.translateExpr(x)
+	recv := c.translateImplicitConversionWithCloning(x, methodsRecvType)
 	if isWrapped(recvType) {
 		recv = c.formatExpr("new %s(%s)", c.typeName(methodsRecvType), recv)
 	}
@@ -896,7 +893,7 @@ func (c *funcContext) translateBuiltin(name string, sig *types.Signature, args [
 		return c.formatExpr("$panic(%s)", c.translateImplicitConversion(args[0], types.NewInterface(nil, nil)))
 	case "append":
 		if ellipsis || len(args) == 1 {
-			argStr := c.translateArgs(sig, args, ellipsis, false)
+			argStr := c.translateArgs(sig, args, ellipsis)
 			return c.formatExpr("$appendSlice(%s, %s)", argStr[0], argStr[1])
 		}
 		sliceType := sig.Results().At(0).Type().Underlying().(*types.Slice)
@@ -912,7 +909,7 @@ func (c *funcContext) translateBuiltin(name string, sig *types.Signature, args [
 	case "print", "println":
 		return c.formatExpr("console.log(%s)", strings.Join(c.translateExprSlice(args, nil), ", "))
 	case "complex":
-		argStr := c.translateArgs(sig, args, ellipsis, false)
+		argStr := c.translateArgs(sig, args, ellipsis)
 		return c.formatExpr("new %s(%s, %s)", c.typeName(sig.Results().At(0).Type()), argStr[0], argStr[1])
 	case "real":
 		return c.formatExpr("%e.$real", args[0])

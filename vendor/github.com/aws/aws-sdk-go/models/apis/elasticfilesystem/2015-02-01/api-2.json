@@ -6,7 +6,8 @@
     "protocol":"rest-json",
     "serviceAbbreviation":"EFS",
     "serviceFullName":"Amazon Elastic File System",
-    "signatureVersion":"v4"
+    "signatureVersion":"v4",
+    "uid":"elasticfilesystem-2015-02-01"
   },
   "operations":{
     "CreateFileSystem":{

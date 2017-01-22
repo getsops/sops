@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"elasticmapreduce-2009-03-31",
     "apiVersion":"2009-03-31",
     "endpointPrefix":"elasticmapreduce",
     "jsonVersion":"1.1",

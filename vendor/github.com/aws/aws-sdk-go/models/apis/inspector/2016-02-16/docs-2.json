@@ -263,7 +263,7 @@
       "base": null,
       "refs": {
         "AssessmentRun$name": "<p>The auto-generated name for the assessment run.</p>",
-        "StartAssessmentRunRequest$assessmentRunName": "<p>You can specify the name for the assessment run, or you can use the auto-generated name that is based on the assessment template name. The name must be unique for the assessment template.</p>"
+        "StartAssessmentRunRequest$assessmentRunName": "<p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>"
       }
     },
     "AssessmentRunNotification": {
@@ -428,7 +428,7 @@
       "refs": {
         "DescribeAssessmentRunsRequest$assessmentRunArns": "<p>The ARN that specifies the assessment run that you want to describe.</p>",
         "DescribeAssessmentTargetsRequest$assessmentTargetArns": "<p>The ARNs that specifies the assessment targets that you want to describe.</p>",
-        "DescribeAssessmentTemplatesRequest$assessmentTemplateArns": "<p>The ARN that specifiesthe assessment templates that you want to describe.</p>",
+        "DescribeAssessmentTemplatesRequest$assessmentTemplateArns": null,
         "DescribeFindingsRequest$findingArns": "<p>The ARN that specifies the finding that you want to describe.</p>",
         "DescribeResourceGroupsRequest$resourceGroupArns": "<p>The ARN that specifies the resource group that you want to describe.</p>",
         "DescribeRulesPackagesRequest$rulesPackageArns": "<p>The ARN that specifies the rules package that you want to describe.</p>"

@@ -135,6 +135,21 @@ func ExampleElasticBeanstalk_CreateApplication() {
 	params := &elasticbeanstalk.CreateApplicationInput{
 		ApplicationName: aws.String("ApplicationName"), // Required
 		Description:     aws.String("Description"),
+		ResourceLifecycleConfig: &elasticbeanstalk.ApplicationResourceLifecycleConfig{
+			ServiceRole: aws.String("String"),
+			VersionLifecycleConfig: &elasticbeanstalk.ApplicationVersionLifecycleConfig{
+				MaxAgeRule: &elasticbeanstalk.MaxAgeRule{
+					Enabled:            aws.Bool(true), // Required
+					DeleteSourceFromS3: aws.Bool(true),
+					MaxAgeInDays:       aws.Int64(1),
+				},
+				MaxCountRule: &elasticbeanstalk.MaxCountRule{
+					Enabled:            aws.Bool(true), // Required
+					DeleteSourceFromS3: aws.Bool(true),
+					MaxCount:           aws.Int64(1),
+				},
+			},
+		},
 	}
 	resp, err := svc.CreateApplication(params)
 
@@ -959,6 +974,46 @@ func ExampleElasticBeanstalk_UpdateApplication() {
 		Description:     aws.String("Description"),
 	}
 	resp, err := svc.UpdateApplication(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleElasticBeanstalk_UpdateApplicationResourceLifecycle() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := elasticbeanstalk.New(sess)
+
+	params := &elasticbeanstalk.UpdateApplicationResourceLifecycleInput{
+		ApplicationName: aws.String("ApplicationName"), // Required
+		ResourceLifecycleConfig: &elasticbeanstalk.ApplicationResourceLifecycleConfig{ // Required
+			ServiceRole: aws.String("String"),
+			VersionLifecycleConfig: &elasticbeanstalk.ApplicationVersionLifecycleConfig{
+				MaxAgeRule: &elasticbeanstalk.MaxAgeRule{
+					Enabled:            aws.Bool(true), // Required
+					DeleteSourceFromS3: aws.Bool(true),
+					MaxAgeInDays:       aws.Int64(1),
+				},
+				MaxCountRule: &elasticbeanstalk.MaxCountRule{
+					Enabled:            aws.Bool(true), // Required
+					DeleteSourceFromS3: aws.Bool(true),
+					MaxCount:           aws.Int64(1),
+				},
+			},
+		},
+	}
+	resp, err := svc.UpdateApplicationResourceLifecycle(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

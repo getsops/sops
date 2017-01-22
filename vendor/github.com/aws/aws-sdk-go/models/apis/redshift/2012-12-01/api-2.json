@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"redshift-2012-12-01",
     "apiVersion":"2012-12-01",
     "endpointPrefix":"redshift",
     "protocol":"query",

@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"elasticloadbalancing-2012-06-01",
     "apiVersion":"2012-06-01",
     "endpointPrefix":"elasticloadbalancing",
     "protocol":"query",

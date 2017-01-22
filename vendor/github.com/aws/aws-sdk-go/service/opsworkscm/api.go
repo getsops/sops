@@ -36,6 +36,7 @@ const opAssociateNode = "AssociateNode"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/AssociateNode
 func (c *OpsWorksCM) AssociateNodeRequest(input *AssociateNodeInput) (req *request.Request, output *AssociateNodeOutput) {
 	op := &request.Operation{
 		Name:       opAssociateNode,
@@ -47,9 +48,8 @@ func (c *OpsWorksCM) AssociateNodeRequest(input *AssociateNodeInput) (req *reque
 		input = &AssociateNodeInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &AssociateNodeOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -73,6 +73,7 @@ func (c *OpsWorksCM) AssociateNodeRequest(input *AssociateNodeInput) (req *reque
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/AssociateNode
 func (c *OpsWorksCM) AssociateNode(input *AssociateNodeInput) (*AssociateNodeOutput, error) {
 	req, out := c.AssociateNodeRequest(input)
 	err := req.Send()
@@ -105,6 +106,7 @@ const opCreateBackup = "CreateBackup"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateBackup
 func (c *OpsWorksCM) CreateBackupRequest(input *CreateBackupInput) (req *request.Request, output *CreateBackupOutput) {
 	op := &request.Operation{
 		Name:       opCreateBackup,
@@ -116,9 +118,8 @@ func (c *OpsWorksCM) CreateBackupRequest(input *CreateBackupInput) (req *request
 		input = &CreateBackupInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &CreateBackupOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -160,6 +161,7 @@ func (c *OpsWorksCM) CreateBackupRequest(input *CreateBackupInput) (req *request
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateBackup
 func (c *OpsWorksCM) CreateBackup(input *CreateBackupInput) (*CreateBackupOutput, error) {
 	req, out := c.CreateBackupRequest(input)
 	err := req.Send()
@@ -192,6 +194,7 @@ const opCreateServer = "CreateServer"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateServer
 func (c *OpsWorksCM) CreateServerRequest(input *CreateServerInput) (req *request.Request, output *CreateServerOutput) {
 	op := &request.Operation{
 		Name:       opCreateServer,
@@ -203,9 +206,8 @@ func (c *OpsWorksCM) CreateServerRequest(input *CreateServerInput) (req *request
 		input = &CreateServerInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &CreateServerOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -255,6 +257,7 @@ func (c *OpsWorksCM) CreateServerRequest(input *CreateServerInput) (req *request
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateServer
 func (c *OpsWorksCM) CreateServer(input *CreateServerInput) (*CreateServerOutput, error) {
 	req, out := c.CreateServerRequest(input)
 	err := req.Send()
@@ -287,6 +290,7 @@ const opDeleteBackup = "DeleteBackup"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteBackup
 func (c *OpsWorksCM) DeleteBackupRequest(input *DeleteBackupInput) (req *request.Request, output *DeleteBackupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteBackup,
@@ -298,9 +302,8 @@ func (c *OpsWorksCM) DeleteBackupRequest(input *DeleteBackupInput) (req *request
 		input = &DeleteBackupInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteBackupOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -332,6 +335,7 @@ func (c *OpsWorksCM) DeleteBackupRequest(input *DeleteBackupInput) (req *request
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteBackup
 func (c *OpsWorksCM) DeleteBackup(input *DeleteBackupInput) (*DeleteBackupOutput, error) {
 	req, out := c.DeleteBackupRequest(input)
 	err := req.Send()
@@ -364,6 +368,7 @@ const opDeleteServer = "DeleteServer"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteServer
 func (c *OpsWorksCM) DeleteServerRequest(input *DeleteServerInput) (req *request.Request, output *DeleteServerOutput) {
 	op := &request.Operation{
 		Name:       opDeleteServer,
@@ -375,9 +380,8 @@ func (c *OpsWorksCM) DeleteServerRequest(input *DeleteServerInput) (req *request
 		input = &DeleteServerInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteServerOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -413,6 +417,7 @@ func (c *OpsWorksCM) DeleteServerRequest(input *DeleteServerInput) (req *request
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteServer
 func (c *OpsWorksCM) DeleteServer(input *DeleteServerInput) (*DeleteServerOutput, error) {
 	req, out := c.DeleteServerRequest(input)
 	err := req.Send()
@@ -445,6 +450,7 @@ const opDescribeAccountAttributes = "DescribeAccountAttributes"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeAccountAttributes
 func (c *OpsWorksCM) DescribeAccountAttributesRequest(input *DescribeAccountAttributesInput) (req *request.Request, output *DescribeAccountAttributesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAccountAttributes,
@@ -456,9 +462,8 @@ func (c *OpsWorksCM) DescribeAccountAttributesRequest(input *DescribeAccountAttr
 		input = &DescribeAccountAttributesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeAccountAttributesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -475,6 +480,7 @@ func (c *OpsWorksCM) DescribeAccountAttributesRequest(input *DescribeAccountAttr
 //
 // See the AWS API reference guide for AWS OpsWorks for Chef Automate's
 // API operation DescribeAccountAttributes for usage and error information.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeAccountAttributes
 func (c *OpsWorksCM) DescribeAccountAttributes(input *DescribeAccountAttributesInput) (*DescribeAccountAttributesOutput, error) {
 	req, out := c.DescribeAccountAttributesRequest(input)
 	err := req.Send()
@@ -507,6 +513,7 @@ const opDescribeBackups = "DescribeBackups"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeBackups
 func (c *OpsWorksCM) DescribeBackupsRequest(input *DescribeBackupsInput) (req *request.Request, output *DescribeBackupsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeBackups,
@@ -518,9 +525,8 @@ func (c *OpsWorksCM) DescribeBackupsRequest(input *DescribeBackupsInput) (req *r
 		input = &DescribeBackupsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeBackupsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -551,6 +557,7 @@ func (c *OpsWorksCM) DescribeBackupsRequest(input *DescribeBackupsInput) (req *r
 //   * InvalidNextTokenException
 //   This occurs when the provided nextToken is not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeBackups
 func (c *OpsWorksCM) DescribeBackups(input *DescribeBackupsInput) (*DescribeBackupsOutput, error) {
 	req, out := c.DescribeBackupsRequest(input)
 	err := req.Send()
@@ -583,6 +590,7 @@ const opDescribeEvents = "DescribeEvents"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeEvents
 func (c *OpsWorksCM) DescribeEventsRequest(input *DescribeEventsInput) (req *request.Request, output *DescribeEventsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEvents,
@@ -594,9 +602,8 @@ func (c *OpsWorksCM) DescribeEventsRequest(input *DescribeEventsInput) (req *req
 		input = &DescribeEventsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeEventsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -627,6 +634,7 @@ func (c *OpsWorksCM) DescribeEventsRequest(input *DescribeEventsInput) (req *req
 //   * ResourceNotFoundException
 //   The requested resource does not exist, or access was denied.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeEvents
 func (c *OpsWorksCM) DescribeEvents(input *DescribeEventsInput) (*DescribeEventsOutput, error) {
 	req, out := c.DescribeEventsRequest(input)
 	err := req.Send()
@@ -659,6 +667,7 @@ const opDescribeNodeAssociationStatus = "DescribeNodeAssociationStatus"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeNodeAssociationStatus
 func (c *OpsWorksCM) DescribeNodeAssociationStatusRequest(input *DescribeNodeAssociationStatusInput) (req *request.Request, output *DescribeNodeAssociationStatusOutput) {
 	op := &request.Operation{
 		Name:       opDescribeNodeAssociationStatus,
@@ -670,9 +679,8 @@ func (c *OpsWorksCM) DescribeNodeAssociationStatusRequest(input *DescribeNodeAss
 		input = &DescribeNodeAssociationStatusInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeNodeAssociationStatusOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -692,6 +700,7 @@ func (c *OpsWorksCM) DescribeNodeAssociationStatusRequest(input *DescribeNodeAss
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeNodeAssociationStatus
 func (c *OpsWorksCM) DescribeNodeAssociationStatus(input *DescribeNodeAssociationStatusInput) (*DescribeNodeAssociationStatusOutput, error) {
 	req, out := c.DescribeNodeAssociationStatusRequest(input)
 	err := req.Send()
@@ -724,6 +733,7 @@ const opDescribeServers = "DescribeServers"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeServers
 func (c *OpsWorksCM) DescribeServersRequest(input *DescribeServersInput) (req *request.Request, output *DescribeServersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeServers,
@@ -735,9 +745,8 @@ func (c *OpsWorksCM) DescribeServersRequest(input *DescribeServersInput) (req *r
 		input = &DescribeServersInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeServersOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -769,6 +778,7 @@ func (c *OpsWorksCM) DescribeServersRequest(input *DescribeServersInput) (req *r
 //   * InvalidNextTokenException
 //   This occurs when the provided nextToken is not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeServers
 func (c *OpsWorksCM) DescribeServers(input *DescribeServersInput) (*DescribeServersOutput, error) {
 	req, out := c.DescribeServersRequest(input)
 	err := req.Send()
@@ -801,6 +811,7 @@ const opDisassociateNode = "DisassociateNode"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DisassociateNode
 func (c *OpsWorksCM) DisassociateNodeRequest(input *DisassociateNodeInput) (req *request.Request, output *DisassociateNodeOutput) {
 	op := &request.Operation{
 		Name:       opDisassociateNode,
@@ -812,9 +823,8 @@ func (c *OpsWorksCM) DisassociateNodeRequest(input *DisassociateNodeInput) (req 
 		input = &DisassociateNodeInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DisassociateNodeOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -838,6 +848,7 @@ func (c *OpsWorksCM) DisassociateNodeRequest(input *DisassociateNodeInput) (req 
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DisassociateNode
 func (c *OpsWorksCM) DisassociateNode(input *DisassociateNodeInput) (*DisassociateNodeOutput, error) {
 	req, out := c.DisassociateNodeRequest(input)
 	err := req.Send()
@@ -870,6 +881,7 @@ const opRestoreServer = "RestoreServer"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/RestoreServer
 func (c *OpsWorksCM) RestoreServerRequest(input *RestoreServerInput) (req *request.Request, output *RestoreServerOutput) {
 	op := &request.Operation{
 		Name:       opRestoreServer,
@@ -881,9 +893,8 @@ func (c *OpsWorksCM) RestoreServerRequest(input *RestoreServerInput) (req *reque
 		input = &RestoreServerInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &RestoreServerOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -919,6 +930,7 @@ func (c *OpsWorksCM) RestoreServerRequest(input *RestoreServerInput) (req *reque
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/RestoreServer
 func (c *OpsWorksCM) RestoreServer(input *RestoreServerInput) (*RestoreServerOutput, error) {
 	req, out := c.RestoreServerRequest(input)
 	err := req.Send()
@@ -951,6 +963,7 @@ const opStartMaintenance = "StartMaintenance"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/StartMaintenance
 func (c *OpsWorksCM) StartMaintenanceRequest(input *StartMaintenanceInput) (req *request.Request, output *StartMaintenanceOutput) {
 	op := &request.Operation{
 		Name:       opStartMaintenance,
@@ -962,9 +975,8 @@ func (c *OpsWorksCM) StartMaintenanceRequest(input *StartMaintenanceInput) (req 
 		input = &StartMaintenanceInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &StartMaintenanceOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -998,6 +1010,7 @@ func (c *OpsWorksCM) StartMaintenanceRequest(input *StartMaintenanceInput) (req 
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/StartMaintenance
 func (c *OpsWorksCM) StartMaintenance(input *StartMaintenanceInput) (*StartMaintenanceOutput, error) {
 	req, out := c.StartMaintenanceRequest(input)
 	err := req.Send()
@@ -1030,6 +1043,7 @@ const opUpdateServer = "UpdateServer"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServer
 func (c *OpsWorksCM) UpdateServerRequest(input *UpdateServerInput) (req *request.Request, output *UpdateServerOutput) {
 	op := &request.Operation{
 		Name:       opUpdateServer,
@@ -1041,9 +1055,8 @@ func (c *OpsWorksCM) UpdateServerRequest(input *UpdateServerInput) (req *request
 		input = &UpdateServerInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &UpdateServerOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1071,6 +1084,7 @@ func (c *OpsWorksCM) UpdateServerRequest(input *UpdateServerInput) (req *request
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServer
 func (c *OpsWorksCM) UpdateServer(input *UpdateServerInput) (*UpdateServerOutput, error) {
 	req, out := c.UpdateServerRequest(input)
 	err := req.Send()
@@ -1103,6 +1117,7 @@ const opUpdateServerEngineAttributes = "UpdateServerEngineAttributes"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServerEngineAttributes
 func (c *OpsWorksCM) UpdateServerEngineAttributesRequest(input *UpdateServerEngineAttributesInput) (req *request.Request, output *UpdateServerEngineAttributesOutput) {
 	op := &request.Operation{
 		Name:       opUpdateServerEngineAttributes,
@@ -1114,9 +1129,8 @@ func (c *OpsWorksCM) UpdateServerEngineAttributesRequest(input *UpdateServerEngi
 		input = &UpdateServerEngineAttributesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &UpdateServerEngineAttributesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1153,6 +1167,7 @@ func (c *OpsWorksCM) UpdateServerEngineAttributesRequest(input *UpdateServerEngi
 //   * ValidationException
 //   One or more of the provided request parameters are not valid.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServerEngineAttributes
 func (c *OpsWorksCM) UpdateServerEngineAttributes(input *UpdateServerEngineAttributesInput) (*UpdateServerEngineAttributesOutput, error) {
 	req, out := c.UpdateServerEngineAttributesRequest(input)
 	err := req.Send()
@@ -1160,6 +1175,7 @@ func (c *OpsWorksCM) UpdateServerEngineAttributes(input *UpdateServerEngineAttri
 }
 
 // Stores account attributes.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/AccountAttribute
 type AccountAttribute struct {
 	_ struct{} `type:"structure"`
 
@@ -1208,6 +1224,7 @@ func (s *AccountAttribute) SetUsed(v int64) *AccountAttribute {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/AssociateNodeRequest
 type AssociateNodeInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1267,6 +1284,7 @@ func (s *AssociateNodeInput) SetServerName(v string) *AssociateNodeInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/AssociateNodeResponse
 type AssociateNodeOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1290,6 +1308,7 @@ func (s *AssociateNodeOutput) SetNodeAssociationStatusToken(v string) *Associate
 }
 
 // Describes a single backup.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/Backup
 type Backup struct {
 	_ struct{} `type:"structure"`
 
@@ -1530,6 +1549,7 @@ func (s *Backup) SetUserArn(v string) *Backup {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateBackupRequest
 type CreateBackupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1580,6 +1600,7 @@ func (s *CreateBackupInput) SetServerName(v string) *CreateBackupInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateBackupResponse
 type CreateBackupOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1603,6 +1624,7 @@ func (s *CreateBackupOutput) SetBackup(v *Backup) *CreateBackupOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateServerRequest
 type CreateServerInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1855,6 +1877,7 @@ func (s *CreateServerInput) SetSubnetIds(v []*string) *CreateServerInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/CreateServerResponse
 type CreateServerOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1878,6 +1901,7 @@ func (s *CreateServerOutput) SetServer(v *Server) *CreateServerOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteBackupRequest
 type DeleteBackupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1917,6 +1941,7 @@ func (s *DeleteBackupInput) SetBackupId(v string) *DeleteBackupInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteBackupResponse
 type DeleteBackupOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1931,6 +1956,7 @@ func (s DeleteBackupOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteServerRequest
 type DeleteServerInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1972,6 +1998,7 @@ func (s *DeleteServerInput) SetServerName(v string) *DeleteServerInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DeleteServerResponse
 type DeleteServerOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1986,6 +2013,7 @@ func (s DeleteServerOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeAccountAttributesRequest
 type DescribeAccountAttributesInput struct {
 	_ struct{} `type:"structure"`
 }
@@ -2000,6 +2028,7 @@ func (s DescribeAccountAttributesInput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeAccountAttributesResponse
 type DescribeAccountAttributesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2023,6 +2052,7 @@ func (s *DescribeAccountAttributesOutput) SetAttributes(v []*AccountAttribute) *
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeBackupsRequest
 type DescribeBackupsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2100,6 +2130,7 @@ func (s *DescribeBackupsInput) SetServerName(v string) *DescribeBackupsInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeBackupsResponse
 type DescribeBackupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2139,6 +2170,7 @@ func (s *DescribeBackupsOutput) SetNextToken(v string) *DescribeBackupsOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeEventsRequest
 type DescribeEventsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2212,6 +2244,7 @@ func (s *DescribeEventsInput) SetServerName(v string) *DescribeEventsInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeEventsResponse
 type DescribeEventsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2251,6 +2284,7 @@ func (s *DescribeEventsOutput) SetServerEvents(v []*ServerEvent) *DescribeEvents
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeNodeAssociationStatusRequest
 type DescribeNodeAssociationStatusInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2302,6 +2336,7 @@ func (s *DescribeNodeAssociationStatusInput) SetServerName(v string) *DescribeNo
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeNodeAssociationStatusResponse
 type DescribeNodeAssociationStatusOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2324,6 +2359,7 @@ func (s *DescribeNodeAssociationStatusOutput) SetNodeAssociationStatus(v string)
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeServersRequest
 type DescribeServersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2392,6 +2428,7 @@ func (s *DescribeServersInput) SetServerName(v string) *DescribeServersInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DescribeServersResponse
 type DescribeServersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2431,6 +2468,7 @@ func (s *DescribeServersOutput) SetServers(v []*Server) *DescribeServersOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DisassociateNodeRequest
 type DisassociateNodeInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2490,6 +2528,7 @@ func (s *DisassociateNodeInput) SetServerName(v string) *DisassociateNodeInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/DisassociateNodeResponse
 type DisassociateNodeOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2513,6 +2552,7 @@ func (s *DisassociateNodeOutput) SetNodeAssociationStatusToken(v string) *Disass
 }
 
 // A name/value pair that is specific to the engine of the server.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/EngineAttribute
 type EngineAttribute struct {
 	_ struct{} `type:"structure"`
 
@@ -2545,6 +2585,7 @@ func (s *EngineAttribute) SetValue(v string) *EngineAttribute {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/RestoreServerRequest
 type RestoreServerInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2622,6 +2663,7 @@ func (s *RestoreServerInput) SetServerName(v string) *RestoreServerInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/RestoreServerResponse
 type RestoreServerOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -2637,6 +2679,7 @@ func (s RestoreServerOutput) GoString() string {
 }
 
 // Describes a configuration management server.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/Server
 type Server struct {
 	_ struct{} `type:"structure"`
 
@@ -2865,6 +2908,7 @@ func (s *Server) SetSubnetIds(v []*string) *Server {
 
 // An event that is related to the server, such as the start of maintenance
 // or backup.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/ServerEvent
 type ServerEvent struct {
 	_ struct{} `type:"structure"`
 
@@ -2915,6 +2959,7 @@ func (s *ServerEvent) SetServerName(v string) *ServerEvent {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/StartMaintenanceRequest
 type StartMaintenanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2956,6 +3001,7 @@ func (s *StartMaintenanceInput) SetServerName(v string) *StartMaintenanceInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/StartMaintenanceResponse
 type StartMaintenanceOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2979,6 +3025,7 @@ func (s *StartMaintenanceOutput) SetServer(v *Server) *StartMaintenanceOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServerEngineAttributesRequest
 type UpdateServerEngineAttributesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3046,6 +3093,7 @@ func (s *UpdateServerEngineAttributesInput) SetServerName(v string) *UpdateServe
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServerEngineAttributesResponse
 type UpdateServerEngineAttributesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3069,6 +3117,7 @@ func (s *UpdateServerEngineAttributesOutput) SetServer(v *Server) *UpdateServerE
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServerRequest
 type UpdateServerInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3155,6 +3204,7 @@ func (s *UpdateServerInput) SetServerName(v string) *UpdateServerInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/UpdateServerResponse
 type UpdateServerOutput struct {
 	_ struct{} `type:"structure"`
 

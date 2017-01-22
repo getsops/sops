@@ -29,8 +29,9 @@ import (
 // probably want to make API calls via the AWS Mobile SDK. To learn more, see
 // the Developer Guide for Android (http://docs.aws.amazon.com/mobile/sdkforandroid/developerguide/cognito-sync.html)
 // and the Developer Guide for iOS (http://docs.aws.amazon.com/mobile/sdkforios/developerguide/cognito-sync.html).
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30
 type CognitoSync struct {
 	*client.Client
 }
@@ -41,8 +42,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "cognito-sync"
+// Service information constants
+const (
+	ServiceName = "cognito-sync" // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName    // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the CognitoSync client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -55,20 +59,22 @@ const ServiceName = "cognito-sync"
 //     // Create a CognitoSync client with additional configuration
 //     svc := cognitosync.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *CognitoSync {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *CognitoSync {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *CognitoSync {
 	svc := &CognitoSync{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2014-06-30",
+				JSONVersion:   "1.1",
 			},
 			handlers,
 		),

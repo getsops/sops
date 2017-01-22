@@ -16,5 +16,9 @@ func NewClient(cfgs ...*aws.Config) *client.Client {
 	def := defaults.Get()
 	def.Config.MergeIn(cfgs...)
 
+	if v := aws.StringValue(def.Config.Endpoint); len(v) > 0 {
+		info.Endpoint = v
+	}
+
 	return client.New(*def.Config, info, def.Handlers)
 }

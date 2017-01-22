@@ -278,8 +278,15 @@ TEXT ·chacha20Poly1305Open(SB), 0, $288-97
 	MOVQ ad+72(FP), adp
 
 	// Check for AVX2 support
-	CMPB runtime·support_avx2(SB), $1
-	JE   chacha20Poly1305Open_AVX2
+	CMPB runtime·support_avx2(SB), $0
+	JE   noavx2bmi2Open
+
+	// Check BMI2 bit for MULXQ.
+	// runtime·cpuid_ebx7 is always available here
+	// because it passed avx2 check
+	TESTL $(1<<8), runtime·cpuid_ebx7(SB)
+	JNE   chacha20Poly1305Open_AVX2
+noavx2bmi2Open:
 
 	// Special optimization, for very short buffers
 	CMPQ inl, $128
@@ -1485,8 +1492,15 @@ TEXT ·chacha20Poly1305Seal(SB), 0, $288-96
 	MOVQ ad+72(FP), adp
 
 	// Check for AVX2 support
-	CMPB runtime·support_avx2(SB), $1
-	JE   chacha20Poly1305Seal_AVX2
+	CMPB runtime·support_avx2(SB), $0
+	JE   noavx2bmi2Seal
+
+	// Check BMI2 bit for MULXQ.
+	// runtime·cpuid_ebx7 is always available here
+	// because it passed avx2 check
+	TESTL $(1<<8), runtime·cpuid_ebx7(SB)
+	JNE   chacha20Poly1305Seal_AVX2
+noavx2bmi2Seal:
 
 	// Special optimization, for very short buffers
 	CMPQ inl, $128
@@ -1691,7 +1705,7 @@ sealSSETail64:
 	MOVO  D1, ctr0Store
 
 sealSSETail64LoopA:
-	// Perform ChaCha rounds, while hashing the prevsiosly encrpyted ciphertext
+	// Perform ChaCha rounds, while hashing the previously encrypted ciphertext
 	polyAdd(0(oup))
 	polyMul
 	LEAQ 16(oup), oup
@@ -1725,7 +1739,7 @@ sealSSETail128:
 	MOVO A0, A1; MOVO B0, B1; MOVO C0, C1; MOVO D0, D1; PADDL ·sseIncMask<>(SB), D1; MOVO D1, ctr1Store
 
 sealSSETail128LoopA:
-	// Perform ChaCha rounds, while hashing the prevsiosly encrpyted ciphertext
+	// Perform ChaCha rounds, while hashing the previously encrypted ciphertext
 	polyAdd(0(oup))
 	polyMul
 	LEAQ 16(oup), oup
@@ -1771,7 +1785,7 @@ sealSSETail192:
 	MOVO A1, A2; MOVO B1, B2; MOVO C1, C2; MOVO D1, D2; PADDL ·sseIncMask<>(SB), D2; MOVO D2, ctr2Store
 
 sealSSETail192LoopA:
-	// Perform ChaCha rounds, while hashing the prevsiosly encrpyted ciphertext
+	// Perform ChaCha rounds, while hashing the previously encrypted ciphertext
 	polyAdd(0(oup))
 	polyMul
 	LEAQ 16(oup), oup

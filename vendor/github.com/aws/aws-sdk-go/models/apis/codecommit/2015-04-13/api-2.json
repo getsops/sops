@@ -8,7 +8,8 @@
     "serviceAbbreviation":"CodeCommit",
     "serviceFullName":"AWS CodeCommit",
     "signatureVersion":"v4",
-    "targetPrefix":"CodeCommit_20150413"
+    "targetPrefix":"CodeCommit_20150413",
+    "uid":"codecommit-2015-04-13"
   },
   "operations":{
     "BatchGetRepositories":{

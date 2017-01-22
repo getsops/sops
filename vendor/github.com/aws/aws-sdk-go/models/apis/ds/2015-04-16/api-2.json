@@ -8,7 +8,8 @@
     "serviceAbbreviation":"Directory Service",
     "serviceFullName":"AWS Directory Service",
     "signatureVersion":"v4",
-    "targetPrefix":"DirectoryService_20150416"
+    "targetPrefix":"DirectoryService_20150416",
+    "uid":"ds-2015-04-16"
   },
   "operations":{
     "AddIpRoutes":{

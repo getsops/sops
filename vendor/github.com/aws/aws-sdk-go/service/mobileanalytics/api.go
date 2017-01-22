@@ -38,6 +38,7 @@ const opPutEvents = "PutEvents"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI//PutEvents
 func (c *MobileAnalytics) PutEventsRequest(input *PutEventsInput) (req *request.Request, output *PutEventsOutput) {
 	op := &request.Operation{
 		Name:       opPutEvents,
@@ -49,11 +50,10 @@ func (c *MobileAnalytics) PutEventsRequest(input *PutEventsInput) (req *request.
 		input = &PutEventsInput{}
 	}
 
+	output = &PutEventsOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
 	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
-	output = &PutEventsOutput{}
-	req.Data = output
 	return
 }
 
@@ -74,6 +74,7 @@ func (c *MobileAnalytics) PutEventsRequest(input *PutEventsInput) (req *request.
 //   * BadRequestException
 //   An exception object returned when a request fails.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI//PutEvents
 func (c *MobileAnalytics) PutEvents(input *PutEventsInput) (*PutEventsOutput, error) {
 	req, out := c.PutEventsRequest(input)
 	err := req.Send()
@@ -81,6 +82,7 @@ func (c *MobileAnalytics) PutEvents(input *PutEventsInput) (*PutEventsOutput, er
 }
 
 // A JSON object representing a batch of unique event occurrences in your app.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI//Event
 type Event struct {
 	_ struct{} `type:"structure"`
 
@@ -189,6 +191,7 @@ func (s *Event) SetVersion(v string) *Event {
 }
 
 // A container for the data needed for a PutEvent operation
+// Please also see https://docs.aws.amazon.com/goto/WebAPI//PutEventsInput
 type PutEventsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -261,6 +264,7 @@ func (s *PutEventsInput) SetEvents(v []*Event) *PutEventsInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI//PutEventsOutput
 type PutEventsOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -276,6 +280,7 @@ func (s PutEventsOutput) GoString() string {
 }
 
 // Describes the session. Session information is required on ALL events.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI//Session
 type Session struct {
 	_ struct{} `type:"structure"`
 

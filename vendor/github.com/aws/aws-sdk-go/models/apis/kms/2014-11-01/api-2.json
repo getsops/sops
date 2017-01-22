@@ -8,7 +8,8 @@
     "serviceAbbreviation":"KMS",
     "serviceFullName":"AWS Key Management Service",
     "signatureVersion":"v4",
-    "targetPrefix":"TrentService"
+    "targetPrefix":"TrentService",
+    "uid":"kms-2014-11-01"
   },
   "operations":{
     "CancelKeyDeletion":{
