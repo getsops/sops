@@ -1784,6 +1784,57 @@ func ExampleAPIGateway_GetSdk() {
 	fmt.Println(resp)
 }
 
+func ExampleAPIGateway_GetSdkType() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := apigateway.New(sess)
+
+	params := &apigateway.GetSdkTypeInput{
+		Id: aws.String("String"), // Required
+	}
+	resp, err := svc.GetSdkType(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleAPIGateway_GetSdkTypes() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := apigateway.New(sess)
+
+	params := &apigateway.GetSdkTypesInput{
+		Limit:    aws.Int64(1),
+		Position: aws.String("String"),
+	}
+	resp, err := svc.GetSdkTypes(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleAPIGateway_GetStage() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -2157,6 +2208,7 @@ func ExampleAPIGateway_PutMethod() {
 		RestApiId:         aws.String("String"), // Required
 		ApiKeyRequired:    aws.Bool(true),
 		AuthorizerId:      aws.String("String"),
+		OperationName:     aws.String("String"),
 		RequestModels: map[string]*string{
 			"Key": aws.String("String"), // Required
 			// More values...

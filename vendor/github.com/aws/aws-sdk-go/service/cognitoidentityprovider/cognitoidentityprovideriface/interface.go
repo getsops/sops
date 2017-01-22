@@ -63,6 +63,10 @@ type CognitoIdentityProviderAPI interface {
 
 	AddCustomAttributes(*cognitoidentityprovider.AddCustomAttributesInput) (*cognitoidentityprovider.AddCustomAttributesOutput, error)
 
+	AdminAddUserToGroupRequest(*cognitoidentityprovider.AdminAddUserToGroupInput) (*request.Request, *cognitoidentityprovider.AdminAddUserToGroupOutput)
+
+	AdminAddUserToGroup(*cognitoidentityprovider.AdminAddUserToGroupInput) (*cognitoidentityprovider.AdminAddUserToGroupOutput, error)
+
 	AdminConfirmSignUpRequest(*cognitoidentityprovider.AdminConfirmSignUpInput) (*request.Request, *cognitoidentityprovider.AdminConfirmSignUpOutput)
 
 	AdminConfirmSignUp(*cognitoidentityprovider.AdminConfirmSignUpInput) (*cognitoidentityprovider.AdminConfirmSignUpOutput, error)
@@ -107,6 +111,14 @@ type CognitoIdentityProviderAPI interface {
 
 	AdminListDevices(*cognitoidentityprovider.AdminListDevicesInput) (*cognitoidentityprovider.AdminListDevicesOutput, error)
 
+	AdminListGroupsForUserRequest(*cognitoidentityprovider.AdminListGroupsForUserInput) (*request.Request, *cognitoidentityprovider.AdminListGroupsForUserOutput)
+
+	AdminListGroupsForUser(*cognitoidentityprovider.AdminListGroupsForUserInput) (*cognitoidentityprovider.AdminListGroupsForUserOutput, error)
+
+	AdminRemoveUserFromGroupRequest(*cognitoidentityprovider.AdminRemoveUserFromGroupInput) (*request.Request, *cognitoidentityprovider.AdminRemoveUserFromGroupOutput)
+
+	AdminRemoveUserFromGroup(*cognitoidentityprovider.AdminRemoveUserFromGroupInput) (*cognitoidentityprovider.AdminRemoveUserFromGroupOutput, error)
+
 	AdminResetUserPasswordRequest(*cognitoidentityprovider.AdminResetUserPasswordInput) (*request.Request, *cognitoidentityprovider.AdminResetUserPasswordOutput)
 
 	AdminResetUserPassword(*cognitoidentityprovider.AdminResetUserPasswordInput) (*cognitoidentityprovider.AdminResetUserPasswordOutput, error)
@@ -147,6 +159,10 @@ type CognitoIdentityProviderAPI interface {
 
 	ConfirmSignUp(*cognitoidentityprovider.ConfirmSignUpInput) (*cognitoidentityprovider.ConfirmSignUpOutput, error)
 
+	CreateGroupRequest(*cognitoidentityprovider.CreateGroupInput) (*request.Request, *cognitoidentityprovider.CreateGroupOutput)
+
+	CreateGroup(*cognitoidentityprovider.CreateGroupInput) (*cognitoidentityprovider.CreateGroupOutput, error)
+
 	CreateUserImportJobRequest(*cognitoidentityprovider.CreateUserImportJobInput) (*request.Request, *cognitoidentityprovider.CreateUserImportJobOutput)
 
 	CreateUserImportJob(*cognitoidentityprovider.CreateUserImportJobInput) (*cognitoidentityprovider.CreateUserImportJobOutput, error)
@@ -158,6 +174,10 @@ type CognitoIdentityProviderAPI interface {
 	CreateUserPoolClientRequest(*cognitoidentityprovider.CreateUserPoolClientInput) (*request.Request, *cognitoidentityprovider.CreateUserPoolClientOutput)
 
 	CreateUserPoolClient(*cognitoidentityprovider.CreateUserPoolClientInput) (*cognitoidentityprovider.CreateUserPoolClientOutput, error)
+
+	DeleteGroupRequest(*cognitoidentityprovider.DeleteGroupInput) (*request.Request, *cognitoidentityprovider.DeleteGroupOutput)
+
+	DeleteGroup(*cognitoidentityprovider.DeleteGroupInput) (*cognitoidentityprovider.DeleteGroupOutput, error)
 
 	DeleteUserRequest(*cognitoidentityprovider.DeleteUserInput) (*request.Request, *cognitoidentityprovider.DeleteUserOutput)
 
@@ -203,6 +223,10 @@ type CognitoIdentityProviderAPI interface {
 
 	GetDevice(*cognitoidentityprovider.GetDeviceInput) (*cognitoidentityprovider.GetDeviceOutput, error)
 
+	GetGroupRequest(*cognitoidentityprovider.GetGroupInput) (*request.Request, *cognitoidentityprovider.GetGroupOutput)
+
+	GetGroup(*cognitoidentityprovider.GetGroupInput) (*cognitoidentityprovider.GetGroupOutput, error)
+
 	GetUserRequest(*cognitoidentityprovider.GetUserInput) (*request.Request, *cognitoidentityprovider.GetUserOutput)
 
 	GetUser(*cognitoidentityprovider.GetUserInput) (*cognitoidentityprovider.GetUserOutput, error)
@@ -223,6 +247,10 @@ type CognitoIdentityProviderAPI interface {
 
 	ListDevices(*cognitoidentityprovider.ListDevicesInput) (*cognitoidentityprovider.ListDevicesOutput, error)
 
+	ListGroupsRequest(*cognitoidentityprovider.ListGroupsInput) (*request.Request, *cognitoidentityprovider.ListGroupsOutput)
+
+	ListGroups(*cognitoidentityprovider.ListGroupsInput) (*cognitoidentityprovider.ListGroupsOutput, error)
+
 	ListUserImportJobsRequest(*cognitoidentityprovider.ListUserImportJobsInput) (*request.Request, *cognitoidentityprovider.ListUserImportJobsOutput)
 
 	ListUserImportJobs(*cognitoidentityprovider.ListUserImportJobsInput) (*cognitoidentityprovider.ListUserImportJobsOutput, error)
@@ -238,6 +266,10 @@ type CognitoIdentityProviderAPI interface {
 	ListUsersRequest(*cognitoidentityprovider.ListUsersInput) (*request.Request, *cognitoidentityprovider.ListUsersOutput)
 
 	ListUsers(*cognitoidentityprovider.ListUsersInput) (*cognitoidentityprovider.ListUsersOutput, error)
+
+	ListUsersInGroupRequest(*cognitoidentityprovider.ListUsersInGroupInput) (*request.Request, *cognitoidentityprovider.ListUsersInGroupOutput)
+
+	ListUsersInGroup(*cognitoidentityprovider.ListUsersInGroupInput) (*cognitoidentityprovider.ListUsersInGroupOutput, error)
 
 	ResendConfirmationCodeRequest(*cognitoidentityprovider.ResendConfirmationCodeInput) (*request.Request, *cognitoidentityprovider.ResendConfirmationCodeOutput)
 
@@ -266,6 +298,10 @@ type CognitoIdentityProviderAPI interface {
 	UpdateDeviceStatusRequest(*cognitoidentityprovider.UpdateDeviceStatusInput) (*request.Request, *cognitoidentityprovider.UpdateDeviceStatusOutput)
 
 	UpdateDeviceStatus(*cognitoidentityprovider.UpdateDeviceStatusInput) (*cognitoidentityprovider.UpdateDeviceStatusOutput, error)
+
+	UpdateGroupRequest(*cognitoidentityprovider.UpdateGroupInput) (*request.Request, *cognitoidentityprovider.UpdateGroupOutput)
+
+	UpdateGroup(*cognitoidentityprovider.UpdateGroupInput) (*cognitoidentityprovider.UpdateGroupOutput, error)
 
 	UpdateUserAttributesRequest(*cognitoidentityprovider.UpdateUserAttributesInput) (*request.Request, *cognitoidentityprovider.UpdateUserAttributesOutput)
 

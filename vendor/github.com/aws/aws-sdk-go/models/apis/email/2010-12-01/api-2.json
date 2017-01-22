@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"email-2010-12-01",
     "apiVersion":"2010-12-01",
     "endpointPrefix":"email",
     "protocol":"query",

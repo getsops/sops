@@ -7,7 +7,8 @@
     "protocol":"json",
     "serviceFullName":"AWS Device Farm",
     "signatureVersion":"v4",
-    "targetPrefix":"DeviceFarm_20150623"
+    "targetPrefix":"DeviceFarm_20150623",
+    "uid":"devicefarm-2015-06-23"
   },
   "operations":{
     "CreateDevicePool":{

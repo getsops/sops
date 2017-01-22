@@ -72,11 +72,13 @@
 					<dd><a href="#{{$name_html}}">{{node_html $ .Decl false | sanitize}}</a></dd>
 				{{end}}
 				{{range .Methods}}
-				<!-- Hide stringers -->
 				{{if (and (ne .Name "String") (ne .Name "GoString")) }}
-				{{if (ne .Name "Validate") }}
+				{{ if (not (is_setter $.PDoc.Name .)) }}
+				{{ if (not (is_paginator .)) }}
+				{{ if (ne .Name "Validate") }}
 					{{$name_html := html .Name}}
-					<dd><a href="#{{$tname_html}}.{{$name_html}}">{{node_html $ .Decl false | sanitize}}</a></dd>
+					<dd><a href="#{{$tname_html}}.{{$name_html}}">{{client_html $ .Decl false | sanitize}}</a></dd>
+				{{end}}
 				{{end}}
 				{{end}}
 				{{end}}
@@ -86,32 +88,30 @@
 				<dd><a href="#pkg-note-{{$marker}}">{{noteTitle $marker | html}}s</a></dd>
 				{{end}}
 			{{end}}
+			{{end}}
 			</dl>
 			</div><!-- #manual-nav -->
-
-		<!--{{if $.Examples}}
-		<div id="pkg-examples">
-			<h4>Examples</h4>
-			<dl>
-			{{range $.Examples}}
-			<dd><a class="exampleLink" href="#example_{{.Name}}">{{example_name .Name}}</a></dd>
-			{{end}}
-			</dl>
-		</div>
-		{{end}}-->
-
-		<!--{{with .Filenames}}
-			<h4>Package files</h4>
-			<p>
-			<span style="font-size:90%">
-			{{range .}}
-				<a href="{{.|srcLink|html}}">{{.|filename|html}}</a>
-			{{end}}
-			</span>
-			</p>
-		{{end}}-->
 		</div><!-- .expanded -->
 		</div><!-- #pkg-index -->
+		{{ if $.HasPaginators }}
+		<div id="pkg-pagination " class="toggle">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Index section">Paginators ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Index section">Paginators ▾</h2>
+			{{range .Types -}}
+			{{$tname_html := html .Name}}
+			{{range .Methods -}}
+				{{if is_paginator . -}}
+					{{$name_html := html .Name}}
+					<dd><a href="#{{$tname_html}}.{{$name_html}}">{{client_html $ .Decl false | sanitize}}</a></dd>
+				{{end }}
+			{{ end }}
+			{{ end }}
+			</div>
+		</div>
+		{{ end }}
 		<div id="pkg-types" class="toggle">
 			<div class="collapsed">
 				<h2 class="toggleButton" title="Click to show Index section">Types ▹</h2>
@@ -121,10 +121,18 @@
 				{{if .Vars}}
 					<dd><a href="#pkg-variables">Variables</a></dd>
 				{{end}}
+				<dl>
 				{{range .Types}}
 					{{$tname_html := html .Name}}
-					<dd><a href="#{{$tname_html}}">type {{$tname_html}}</a></dd>
+					<dt><a href="#{{$tname_html}}">type {{$tname_html}}</a></dd>
+					{{range .Methods}}
+					{{ if is_setter $.PDoc.Name .}}
+					{{$name_html := html .Name}}
+					<dd><a href="#{{$tname_html}}.{{$name_html}}">{{name_only_html $ . | sanitize}}</a></dd>
+					{{end}}
+					{{end}}
 				{{end}}
+				</dl>
 			</div>
 		</div>
 
@@ -184,11 +192,18 @@
 		</div> <!-- #pkg-callgraph -->
 
 		{{with .Consts}}
-			<h2 id="pkg-constants">Constants</h2>
-			{{range .}}
-				<pre>{{node_html $ .Decl true}}</pre>
-				{{comment_html .Doc}}
-			{{end}}
+			<div id="pkg-consts" class="toggle">
+				<div class="collapsed">
+					<h2 class="toggleButton" title="Click to show Index section">Constants ▹</h2>
+				</div>
+				<div class="expanded">
+					<h2 class="toggleButton" title="Click to hide Index section">Constants ▾</h2>
+				{{range .}}
+					<pre>{{node_html $ .Decl true}}</pre>
+					{{comment_html .Doc}}
+				{{end}}
+				</div>
+			</div>
 		{{end}}
 		{{with .Vars}}
 			<h2 id="pkg-variables">Variables</h2>

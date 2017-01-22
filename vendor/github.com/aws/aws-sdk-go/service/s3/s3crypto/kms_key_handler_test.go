@@ -43,7 +43,7 @@ func TestKMSGenerateCipherData(t *testing.T) {
 
 	sess := unit.Session.Copy(&aws.Config{
 		MaxRetries:       aws.Int(0),
-		Endpoint:         aws.String(ts.URL[7:]),
+		Endpoint:         aws.String(ts.URL),
 		DisableSSL:       aws.Bool(true),
 		S3ForcePathStyle: aws.Bool(true),
 		Region:           aws.String("us-west-2"),
@@ -72,7 +72,7 @@ func TestKMSDecrypt(t *testing.T) {
 
 	sess := unit.Session.Copy(&aws.Config{
 		MaxRetries:       aws.Int(0),
-		Endpoint:         aws.String(ts.URL[7:]),
+		Endpoint:         aws.String(ts.URL),
 		DisableSSL:       aws.Bool(true),
 		S3ForcePathStyle: aws.Bool(true),
 		Region:           aws.String("us-west-2"),
@@ -94,7 +94,7 @@ func TestKMSDecryptBadJSON(t *testing.T) {
 
 	sess := unit.Session.Copy(&aws.Config{
 		MaxRetries:       aws.Int(0),
-		Endpoint:         aws.String(ts.URL[7:]),
+		Endpoint:         aws.String(ts.URL),
 		DisableSSL:       aws.Bool(true),
 		S3ForcePathStyle: aws.Bool(true),
 		Region:           aws.String("us-west-2"),

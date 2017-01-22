@@ -8,7 +8,8 @@
     "serviceAbbreviation":"Config Service",
     "serviceFullName":"AWS Config",
     "signatureVersion":"v4",
-    "targetPrefix":"StarlingDoveService"
+    "targetPrefix":"StarlingDoveService",
+    "uid":"config-2014-11-12"
   },
   "operations":{
     "DeleteConfigRule":{
@@ -83,7 +84,8 @@
       "output":{"shape":"DescribeComplianceByConfigRuleResponse"},
       "errors":[
         {"shape":"InvalidParameterValueException"},
-        {"shape":"NoSuchConfigRuleException"}
+        {"shape":"NoSuchConfigRuleException"},
+        {"shape":"InvalidNextTokenException"}
       ]
     },
     "DescribeComplianceByResource":{
@@ -108,7 +110,9 @@
       "input":{"shape":"DescribeConfigRuleEvaluationStatusRequest"},
       "output":{"shape":"DescribeConfigRuleEvaluationStatusResponse"},
       "errors":[
-        {"shape":"NoSuchConfigRuleException"}
+        {"shape":"NoSuchConfigRuleException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidNextTokenException"}
       ]
     },
     "DescribeConfigRules":{
@@ -120,7 +124,8 @@
       "input":{"shape":"DescribeConfigRulesRequest"},
       "output":{"shape":"DescribeConfigRulesResponse"},
       "errors":[
-        {"shape":"NoSuchConfigRuleException"}
+        {"shape":"NoSuchConfigRuleException"},
+        {"shape":"InvalidNextTokenException"}
       ]
     },
     "DescribeConfigurationRecorderStatus":{
@@ -465,7 +470,7 @@
         "Description":{"shape":"EmptiableStringWithCharLimit256"},
         "Scope":{"shape":"Scope"},
         "Source":{"shape":"Source"},
-        "InputParameters":{"shape":"StringWithCharLimit256"},
+        "InputParameters":{"shape":"StringWithCharLimit1024"},
         "MaximumExecutionFrequency":{"shape":"MaximumExecutionFrequency"},
         "ConfigRuleState":{"shape":"ConfigRuleState"}
       }
@@ -718,13 +723,16 @@
     "DescribeConfigRuleEvaluationStatusRequest":{
       "type":"structure",
       "members":{
-        "ConfigRuleNames":{"shape":"ConfigRuleNames"}
+        "ConfigRuleNames":{"shape":"ConfigRuleNames"},
+        "NextToken":{"shape":"String"},
+        "Limit":{"shape":"RuleLimit"}
       }
     },
     "DescribeConfigRuleEvaluationStatusResponse":{
       "type":"structure",
       "members":{
-        "ConfigRulesEvaluationStatus":{"shape":"ConfigRuleEvaluationStatusList"}
+        "ConfigRulesEvaluationStatus":{"shape":"ConfigRuleEvaluationStatusList"},
+        "NextToken":{"shape":"String"}
       }
     },
     "DescribeConfigRulesRequest":{
@@ -1079,7 +1087,8 @@
       "enum":[
         "ConfigurationItemChangeNotification",
         "ConfigurationSnapshotDeliveryCompleted",
-        "ScheduledNotification"
+        "ScheduledNotification",
+        "OversizedConfigurationItemChangeNotification"
       ]
     },
     "Name":{"type":"string"},
@@ -1277,7 +1286,14 @@
         "AWS::RDS::DBSnapshot",
         "AWS::RDS::EventSubscription",
         "AWS::ElasticLoadBalancingV2::LoadBalancer",
-        "AWS::S3::Bucket"
+        "AWS::S3::Bucket",
+        "AWS::SSM::ManagedInstanceInventory",
+        "AWS::Redshift::Cluster",
+        "AWS::Redshift::ClusterSnapshot",
+        "AWS::Redshift::ClusterParameterGroup",
+        "AWS::Redshift::ClusterSecurityGroup",
+        "AWS::Redshift::ClusterSubnetGroup",
+        "AWS::Redshift::EventSubscription"
       ]
     },
     "ResourceTypeList":{
@@ -1288,6 +1304,11 @@
       "type":"list",
       "member":{"shape":"StringWithCharLimit256"},
       "max":20,
+      "min":0
+    },
+    "RuleLimit":{
+      "type":"integer",
+      "max":50,
       "min":0
     },
     "Scope":{
@@ -1301,6 +1322,10 @@
     },
     "Source":{
       "type":"structure",
+      "required":[
+        "Owner",
+        "SourceIdentifier"
+      ],
       "members":{
         "Owner":{"shape":"Owner"},
         "SourceIdentifier":{"shape":"StringWithCharLimit256"},
@@ -1347,6 +1372,11 @@
       }
     },
     "String":{"type":"string"},
+    "StringWithCharLimit1024":{
+      "type":"string",
+      "max":1024,
+      "min":1
+    },
     "StringWithCharLimit128":{
       "type":"string",
       "max":128,

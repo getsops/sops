@@ -8,6 +8,7 @@
     "serviceAbbreviation":"AWS STS",
     "serviceFullName":"AWS Security Token Service",
     "signatureVersion":"v4",
+    "uid":"sts-2011-06-15",
     "xmlNamespace":"https://sts.amazonaws.com/doc/2011-06-15/"
   },
   "operations":{

@@ -9,7 +9,8 @@
     "serviceFullName":"AWS CodeDeploy",
     "signatureVersion":"v4",
     "targetPrefix":"CodeDeploy_20141006",
-    "timestampFormat":"unixTimestamp"
+    "timestampFormat":"unixTimestamp",
+    "uid":"codedeploy-2014-10-06"
   },
   "operations":{
     "AddTagsToOnPremisesInstances":{
@@ -506,11 +507,15 @@
       "input":{"shape":"RegisterOnPremisesInstanceInput"},
       "errors":[
         {"shape":"InstanceNameAlreadyRegisteredException"},
+        {"shape":"IamArnRequiredException"},
+        {"shape":"IamSessionArnAlreadyRegisteredException"},
         {"shape":"IamUserArnAlreadyRegisteredException"},
         {"shape":"InstanceNameRequiredException"},
         {"shape":"IamUserArnRequiredException"},
         {"shape":"InvalidInstanceNameException"},
-        {"shape":"InvalidIamUserArnException"}
+        {"shape":"InvalidIamSessionArnException"},
+        {"shape":"InvalidIamUserArnException"},
+        {"shape":"MultipleIamArnsProvidedException"}
       ]
     },
     "RemoveTagsFromOnPremisesInstances":{
@@ -1329,6 +1334,19 @@
         "commitId":{"shape":"CommitId"}
       }
     },
+    "IamArnRequiredException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "IamSessionArn":{"type":"string"},
+    "IamSessionArnAlreadyRegisteredException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "IamUserArn":{"type":"string"},
     "IamUserArnAlreadyRegisteredException":{
       "type":"structure",
@@ -1361,6 +1379,7 @@
       "type":"structure",
       "members":{
         "instanceName":{"shape":"InstanceName"},
+        "iamSessionArn":{"shape":"IamSessionArn"},
         "iamUserArn":{"shape":"IamUserArn"},
         "instanceArn":{"shape":"InstanceArn"},
         "registerTime":{"shape":"Timestamp"},
@@ -1495,6 +1514,12 @@
       "exception":true
     },
     "InvalidEC2TagException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "InvalidIamSessionArnException":{
       "type":"structure",
       "members":{
       },
@@ -1776,6 +1801,12 @@
       ]
     },
     "MinimumHealthyHostsValue":{"type":"integer"},
+    "MultipleIamArnsProvidedException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "NextToken":{"type":"string"},
     "NullableBoolean":{"type":"boolean"},
     "RegisterApplicationRevisionInput":{
@@ -1792,12 +1823,10 @@
     },
     "RegisterOnPremisesInstanceInput":{
       "type":"structure",
-      "required":[
-        "instanceName",
-        "iamUserArn"
-      ],
+      "required":["instanceName"],
       "members":{
         "instanceName":{"shape":"InstanceName"},
+        "iamSessionArn":{"shape":"IamSessionArn"},
         "iamUserArn":{"shape":"IamUserArn"}
       }
     },

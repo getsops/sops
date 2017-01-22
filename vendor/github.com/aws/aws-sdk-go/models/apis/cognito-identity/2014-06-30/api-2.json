@@ -7,7 +7,8 @@
     "protocol":"json",
     "serviceFullName":"Amazon Cognito Identity",
     "signatureVersion":"v4",
-    "targetPrefix":"AWSCognitoIdentityService"
+    "targetPrefix":"AWSCognitoIdentityService",
+    "uid":"cognito-identity-2014-06-30"
   },
   "operations":{
     "CreateIdentityPool":{
@@ -327,6 +328,24 @@
       "min":1,
       "pattern":"\\d+"
     },
+    "AmbiguousRoleResolutionType":{
+      "type":"string",
+      "enum":[
+        "AuthenticatedRole",
+        "Deny"
+      ]
+    },
+    "ClaimName":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+"
+    },
+    "ClaimValue":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
     "CognitoIdentityProvider":{
       "type":"structure",
       "members":{
@@ -433,8 +452,7 @@
     "DeveloperUserIdentifier":{
       "type":"string",
       "max":1024,
-      "min":1,
-      "pattern":"[\\w.@_-]+"
+      "min":1
     },
     "DeveloperUserIdentifierList":{
       "type":"list",
@@ -496,7 +514,8 @@
       "type":"structure",
       "members":{
         "IdentityPoolId":{"shape":"IdentityPoolId"},
-        "Roles":{"shape":"RolesMap"}
+        "Roles":{"shape":"RolesMap"},
+        "RoleMappings":{"shape":"RoleMappingMap"}
       }
     },
     "GetOpenIdTokenForDeveloperIdentityInput":{
@@ -718,6 +737,36 @@
         "NextToken":{"shape":"PaginationKey"}
       }
     },
+    "MappingRule":{
+      "type":"structure",
+      "required":[
+        "Claim",
+        "MatchType",
+        "Value",
+        "RoleARN"
+      ],
+      "members":{
+        "Claim":{"shape":"ClaimName"},
+        "MatchType":{"shape":"MappingRuleMatchType"},
+        "Value":{"shape":"ClaimValue"},
+        "RoleARN":{"shape":"ARNString"}
+      }
+    },
+    "MappingRuleMatchType":{
+      "type":"string",
+      "enum":[
+        "Equals",
+        "Contains",
+        "StartsWith",
+        "NotEqual"
+      ]
+    },
+    "MappingRulesList":{
+      "type":"list",
+      "member":{"shape":"MappingRule"},
+      "max":25,
+      "min":1
+    },
     "MergeDeveloperIdentitiesInput":{
       "type":"structure",
       "required":[
@@ -775,6 +824,28 @@
       },
       "exception":true
     },
+    "RoleMapping":{
+      "type":"structure",
+      "required":["Type"],
+      "members":{
+        "Type":{"shape":"RoleMappingType"},
+        "AmbiguousRoleResolution":{"shape":"AmbiguousRoleResolutionType"},
+        "RulesConfiguration":{"shape":"RulesConfigurationType"}
+      }
+    },
+    "RoleMappingMap":{
+      "type":"map",
+      "key":{"shape":"IdentityProviderName"},
+      "value":{"shape":"RoleMapping"},
+      "max":10
+    },
+    "RoleMappingType":{
+      "type":"string",
+      "enum":[
+        "Token",
+        "Rules"
+      ]
+    },
     "RoleType":{
       "type":"string",
       "pattern":"(un)?authenticated"
@@ -784,6 +855,13 @@
       "key":{"shape":"RoleType"},
       "value":{"shape":"ARNString"},
       "max":2
+    },
+    "RulesConfigurationType":{
+      "type":"structure",
+      "required":["Rules"],
+      "members":{
+        "Rules":{"shape":"MappingRulesList"}
+      }
     },
     "SAMLProviderList":{
       "type":"list",
@@ -799,7 +877,8 @@
       ],
       "members":{
         "IdentityPoolId":{"shape":"IdentityPoolId"},
-        "Roles":{"shape":"RolesMap"}
+        "Roles":{"shape":"RolesMap"},
+        "RoleMappings":{"shape":"RoleMappingMap"}
       }
     },
     "String":{"type":"string"},

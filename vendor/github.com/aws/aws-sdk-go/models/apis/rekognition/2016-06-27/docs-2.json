@@ -1,18 +1,18 @@
 {
   "version": "2.0",
-  "service": "<p>This is Amazon Rekognition API guide.</p>",
+  "service": "<p>This is the Amazon Rekognition API reference.</p>",
   "operations": {
     "CompareFaces": "<p>Compares a face in the <i>source</i> input image with each face detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and uses it to compare with each face detected in the target image. </p> </note> <p>In response, the operation returns an array of face matches ordered by similarity score with the highest similarity scores first. For each face match, the response provides a bounding box of the face and <code>confidence</code> value (indicating the level of confidence that the bounding box contains a face). The response also provides a <code>similarity</code> score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with the similarity score of greater than or equal to 80% are returned in the response. You can change this value.</p> </note> <p>In addition to the face matches, the response returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <note> <p> This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>For an example, see <a>get-started-exercise-compare-faces</a> </p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>",
-    "CreateCollection": "<p>Creates a collection in an AWS region. You can add faces to the collection using the operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <p>For an example, see <a>example1</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>",
+    "CreateCollection": "<p>Creates a collection in an AWS Region. You can add faces to the collection using the operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <p>For an example, see <a>example1</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>",
     "DeleteCollection": "<p>Deletes the specified collection. Note that this operation removes all faces in the collection. For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteCollection</code> action.</p>",
     "DeleteFaces": "<p>Deletes faces from a collection. You specify a collection ID and an array of face IDs to remove from the collection.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteFaces</code> action.</p>",
     "DetectFaces": "<p>Detects faces within an image (JPEG or PNG) that is provided as input.</p> <p> For each face detected, the operation returns face details including a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, etc. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm may not detect the faces or might detect faces with lower confidence. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>For an example, see <a>get-started-exercise-detect-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>",
-    "DetectLabels": "<p>Detects instances of real-world labels within an image (JPEG or PNG) provided as input. This includes objects like flower, tree, and table; events like wedding, graduation, and birthday party; and concepts like landscape, evening, and nature. For an example, see <a>get-started-exercise-detect-labels</a>.</p> <p> For each object, scene, and concept the API returns one or more labels. Each label provides the object name, and the level of confidence that the image contains the object. For example, suppose the input image has a lighthouse, the sea, and a rock. The response will include all three labels, one for each object. </p> <p> <code>{Name: lighthouse, Confidence: 98.4629}</code> </p> <p> <code>{Name: rock,Confidence: 79.2097}</code> </p> <p> <code> {Name: sea,Confidence: 75.061}</code> </p> <p> In the preceding example, the operation returns one label for each of the three objects. The operation can also return multiple labels for the same object in the image. For example, if the input image shows a flower (for example, a tulip), the operation might return the following three labels. </p> <p> <code>{Name: flower,Confidence: 99.0562}</code> </p> <p> <code>{Name: plant,Confidence: 99.0562}</code> </p> <p> <code>{Name: tulip,Confidence: 99.0562}</code> </p> <p>In this example, the detection algorithm more precisely identifies the flower as a tulip.</p> <p> You can provide the input image as an S3 object or as base64-encoded bytes. In response, the API returns an array of labels. In addition, the response also includes the orientation correction. Optionally, you can specify <code>MinConfidence</code> to control the confidence threshold for the labels returned. The default is 50%. You can also add the <code>MaxLabels</code> parameter to limit the number of labels returned. </p> <note> <p>If the object detected is a person, the operation doesn't provide the same facial details that the <a>DetectFaces</a> operation provides.</p> </note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectLabels</code> action. </p>",
-    "IndexFaces": "<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>",
+    "DetectLabels": "<p>Detects instances of real-world labels within an image (JPEG or PNG) provided as input. This includes objects like flower, tree, and table; events like wedding, graduation, and birthday party; and concepts like landscape, evening, and nature. For an example, see <a>get-started-exercise-detect-labels</a>.</p> <p> For each object, scene, and concept the API returns one or more labels. Each label provides the object name, and the level of confidence that the image contains the object. For example, suppose the input image has a lighthouse, the sea, and a rock. The response will include all three labels, one for each object. </p> <p> <code>{Name: lighthouse, Confidence: 98.4629}</code> </p> <p> <code>{Name: rock,Confidence: 79.2097}</code> </p> <p> <code> {Name: sea,Confidence: 75.061}</code> </p> <p> In the preceding example, the operation returns one label for each of the three objects. The operation can also return multiple labels for the same object in the image. For example, if the input image shows a flower (for example, a tulip), the operation might return the following three labels. </p> <p> <code>{Name: flower,Confidence: 99.0562}</code> </p> <p> <code>{Name: plant,Confidence: 99.0562}</code> </p> <p> <code>{Name: tulip,Confidence: 99.0562}</code> </p> <p>In this example, the detection algorithm more precisely identifies the flower as a tulip.</p> <p>You can provide the input image as an S3 object or as base64-encoded bytes. In response, the API returns an array of labels. In addition, the response also includes the orientation correction. Optionally, you can specify <code>MinConfidence</code> to control the confidence threshold for the labels returned. The default is 50%. You can also add the <code>MaxLabels</code> parameter to limit the number of labels returned. </p> <note> <p>If the object detected is a person, the operation doesn't provide the same facial details that the <a>DetectFaces</a> operation provides.</p> </note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectLabels</code> action. </p>",
+    "IndexFaces": "<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>",
     "ListCollections": "<p>Returns list of collection IDs in your account. If the result is truncated, the response also provides a <code>NextToken</code> that you can use in the subsequent request to fetch the next set of collection IDs.</p> <p>For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:ListCollections</code> action.</p>",
     "ListFaces": "<p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see <a>example3</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>",
-    "SearchFaces": "<p>For a given input face ID, searches the specified collection for matching faces. You get a face ID when you add a face to the collection using the <a>IndexFaces</a> operation. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>You can also search faces without indexing faces by using the <code>SearchFacesByImage</code> operation.</p> </note> <p> The operation response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match that is found. Along with the metadata, the response also includes a <code>confidence</code> value for each face match, indicating the confidence that the specific face matches the input face. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFaces</code> action.</p>",
-    "SearchFacesByImage": "<p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p> To search for all faces in an input image, you might first call the API, and then use the face IDs returned in subsequent calls to the API. </p> <p> You can also call the <code>DetectFaces</code> API and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> API. </p> </note> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the API also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Rekognition used for the input image. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>"
+    "SearchFaces": "<p>For a given input face ID, searches for matching faces in the collection the face belongs to. You get a face ID when you add a face to the collection using the <a>IndexFaces</a> operation. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>You can also search faces without indexing faces by using the <code>SearchFacesByImage</code> operation.</p> </note> <p> The operation response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match that is found. Along with the metadata, the response also includes a <code>confidence</code> value for each face match, indicating the confidence that the specific face matches the input face. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFaces</code> action.</p>",
+    "SearchFacesByImage": "<p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p> To search for all faces in an input image, you might first call the operation, and then use the face IDs returned in subsequent calls to the operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, see <a>example3</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>"
   },
   "shapes": {
     "AccessDeniedException": {
@@ -29,8 +29,8 @@
     "Attributes": {
       "base": null,
       "refs": {
-        "DetectFacesRequest$Attributes": "<p>A list of facial attributes you would like to be returned. By default, the API returns subset of facial attributes. </p> <p>For example, you can specify the value as, [\"ALL\"] or [\"DEFAULT\"]. If you provide both, [\"ALL\", \"DEFAULT\"], the service uses a logical AND operator to determine which attributes to return (in this case, it is all attributes). If you specify all attributes, Rekognition performs additional detection. </p>",
-        "IndexFacesRequest$DetectionAttributes": "<p>(Optional) Returns detailed attributes of indexed faces. By default, the operation returns a subset of the facial attributes. </p> <p>For example, you can specify the value as, [\"ALL\"] or [\"DEFAULT\"]. If you provide both, [\"ALL\", \"DEFAULT\"], Rekognition uses the logical AND operator to determine which attributes to return (in this case, it is all attributes). If you specify all attributes, the service performs additional detection, in addition to the default. </p>"
+        "DetectFacesRequest$Attributes": "<p>A list of facial attributes you would like to be returned. By default, the API returns subset of facial attributes. </p> <p>For example, you can specify the value as, [\"ALL\"] or [\"DEFAULT\"]. If you provide both, [\"ALL\", \"DEFAULT\"], the service uses a logical AND operator to determine which attributes to return (in this case, it is all attributes). If you specify all attributes, Amazon Rekognition performs additional detection. </p>",
+        "IndexFacesRequest$DetectionAttributes": "<p>(Optional) Returns detailed attributes of indexed faces. By default, the operation returns a subset of the facial attributes. </p> <p>For example, you can specify the value as, [\"ALL\"] or [\"DEFAULT\"]. If you provide both, [\"ALL\", \"DEFAULT\"], Amazon Rekognition uses the logical AND operator to determine which attributes to return (in this case, it is all attributes). If you specify all attributes, the service performs additional detection, in addition to the default. </p>"
       }
     },
     "Beard": {
@@ -58,7 +58,7 @@
         "ComparedSourceImageFace$BoundingBox": null,
         "Face$BoundingBox": null,
         "FaceDetail$BoundingBox": "<p>Bounding box of the face.</p>",
-        "SearchFacesByImageResponse$SearchedFaceBoundingBox": "<p>The bounding box around the face in the input image that Rekognition used for the search.</p>"
+        "SearchFacesByImageResponse$SearchedFaceBoundingBox": "<p>The bounding box around the face in the input image that Amazon Rekognition used for the search.</p>"
       }
     },
     "CollectionId": {
@@ -71,7 +71,7 @@
         "IndexFacesRequest$CollectionId": "<p>ID of an existing collection to which you want to add the faces that are detected in the input images.</p>",
         "ListFacesRequest$CollectionId": "<p>ID of the collection from which to list the faces.</p>",
         "SearchFacesByImageRequest$CollectionId": "<p>ID of the collection to search.</p>",
-        "SearchFacesRequest$CollectionId": "<p>ID of the collection to search.</p>"
+        "SearchFacesRequest$CollectionId": "<p>ID of the collection the face belongs to.</p>"
       }
     },
     "CollectionIdList": {
@@ -81,7 +81,7 @@
       }
     },
     "CompareFacesMatch": {
-      "base": "<p>Provide the bounding box, confidence that the bounding box actually contains a face, and the similarity between the face in the bounding box and the face in the source image.</p>",
+      "base": "<p>For the provided the bounding box, confidence level that the bounding box actually contains a face, and the similarity between the face in the bounding box and the face in the source image.</p>",
       "refs": {
         "CompareFacesMatchList$member": null
       }
@@ -89,7 +89,7 @@
     "CompareFacesMatchList": {
       "base": null,
       "refs": {
-        "CompareFacesResponse$FaceMatches": "<p>Provides an array of <code>CompareFacesMatch </code> objects. Each object provides the bounding box, confidence that the bounding box contains a face, and the similarity between the face in the bounding box and the face in the source image.</p>"
+        "CompareFacesResponse$FaceMatches": "<p>Provides an array of <code>CompareFacesMatch</code> objects. Each object provides the bounding box, confidence that the bounding box contains a face, and the similarity between the face in the bounding box and the face in the source image.</p>"
       }
     },
     "CompareFacesRequest": {
@@ -286,8 +286,8 @@
         "BoundingBox$Top": "<p>Top coordinate of the bounding box as a ratio of overall image height.</p>",
         "ImageQuality$Brightness": "<p>Value representing brightness of the face. The service returns a value between 0 and 1 (inclusive).</p>",
         "ImageQuality$Sharpness": "<p>Value representing sharpness of the face.</p>",
-        "Landmark$X": "<p>x-coordinate from the top left of the landmark expressed as the ration of the width of the image. For example, if the images is 700x200 and the x-coordinate of the landmark is at 350 pixels, then this value is 0.5. </p>",
-        "Landmark$Y": "<p>y-coordinate from the top left of the landmark expressed as the ration of the height of the image. For example, if the images is 700x200 and the y-coordinate of the landmark is at 100 pixels, then this value is 0.5.</p>"
+        "Landmark$X": "<p>x-coordinate from the top left of the landmark expressed as the ration of the width of the image. For example, if the images is 700x200 and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>",
+        "Landmark$Y": "<p>y-coordinate from the top left of the landmark expressed as the ration of the height of the image. For example, if the images is 700x200 and the y-coordinate of the landmark is at 100 pixels, this value is 0.5.</p>"
       }
     },
     "Gender": {
@@ -303,10 +303,10 @@
       }
     },
     "Image": {
-      "base": "<p>Provides the source image either as bytes or an S3 object.</p>",
+      "base": "<p>Provides the source image either as bytes or an S3 object.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>You may need to Base64-encode the image bytes depending on the language you are using and whether or not you are using the AWS SDK. For more information, see <a>example4</a>.</p> <p>If you use the Amazon CLI to call Amazon Rekognition operations, passing image bytes using the Bytes property is not supported. You must first upload the image to an Amazon S3 bucket and then call the operation using the S3Object property.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>",
       "refs": {
-        "CompareFacesRequest$SourceImage": "<p>Source image either as bytes or an Amazon S3 object</p>",
-        "CompareFacesRequest$TargetImage": "<p>Target image either as bytes or an Amazon S3 object</p>",
+        "CompareFacesRequest$SourceImage": "<p>Source image either as bytes or an S3 object</p>",
+        "CompareFacesRequest$TargetImage": "<p>Target image either as bytes or an S3 object</p>",
         "DetectFacesRequest$Image": "<p>The image in which you want to detect faces. You can specify a blob or an S3 object. </p>",
         "DetectLabelsRequest$Image": "<p>The input image. You can provide a blob of image bytes or an S3 object.</p>",
         "IndexFacesRequest$Image": null,
@@ -362,7 +362,7 @@
       }
     },
     "InvalidParameterException": {
-      "base": "<p>Input parameter violated a constraint. Validate your parameter before calling the API again.</p>",
+      "base": "<p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>",
       "refs": {
       }
     },
@@ -372,7 +372,7 @@
       }
     },
     "Label": {
-      "base": "<p>Structure containing details about the detected label, including bounding box, name, and level of confidence.</p>",
+      "base": "<p>Structure containing details about the detected label, including name, and level of confidence.</p>",
       "refs": {
         "Labels$member": null
       }
@@ -425,7 +425,7 @@
       "base": null,
       "refs": {
         "SearchFacesByImageRequest$MaxFaces": "<p>Maximum number of faces to return. The operation returns the maximum number of faces with the highest confidence in the match.</p>",
-        "SearchFacesRequest$MaxFaces": "<p>Maximum number of faces to return. The API will return the maximum number of faces with the highest confidence in the match.</p>"
+        "SearchFacesRequest$MaxFaces": "<p>Maximum number of faces to return. The operation returns the maximum number of faces with the highest confidence in the match.</p>"
       }
     },
     "MouthOpen": {
@@ -443,9 +443,9 @@
     "OrientationCorrection": {
       "base": null,
       "refs": {
-        "DetectFacesResponse$OrientationCorrection": "<p>The algorithm detects the image orientation. If it detects that the image was rotated, it returns the degrees of rotation. If your application is displaying the image, you can use this value to adjust the orientation. </p> <p>For example, if the service detects that the input image was rotated by 90 degrees, it corrects orientation, performs face detection, and then returns the faces. That is, the bounding box coordinates in the response are based on the corrected orientation. </p>",
-        "DetectLabelsResponse$OrientationCorrection": "<p> Amazon Rekognition returns the orientation of the input image that was detected (clockwise direction). If your application displays the image, you can use this value to correct the orientation. If Rekognition detects that the input image was rotated (for example, by 90 degrees), it first corrects the orientation before detecting the labels. </p>",
-        "IndexFacesResponse$OrientationCorrection": "<p>The algorithm detects the image orientation. If it detects that the image was rotated, it returns the degree of rotation. You can use this value to correct the orientation and also appropriately analyze the bounding box coordinates that are returned. </p>"
+        "DetectFacesResponse$OrientationCorrection": "<p>The algorithm detects the image orientation. If it detects that the image was rotated, it returns the degrees of rotation. If your application is displaying the image, you can use this value to adjust the orientation. </p> <p>For example, if the service detects that the input image was rotated by 90 degrees, it corrects orientation, performs face detection, and then returns the faces. That is, the bounding box coordinates in the response are based on the corrected orientation. </p> <note> <p>If the source image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be nil.</p> </note>",
+        "DetectLabelsResponse$OrientationCorrection": "<p> Amazon Rekognition returns the orientation of the input image that was detected (clockwise direction). If your application displays the image, you can use this value to correct the orientation. If Amazon Rekognition detects that the input image was rotated (for example, by 90 degrees), it first corrects the orientation before detecting the labels. </p> <note> <p>If the source image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be nil.</p> </note>",
+        "IndexFacesResponse$OrientationCorrection": "<p>The algorithm detects the image orientation. If it detects that the image was rotated, it returns the degree of rotation. You can use this value to correct the orientation and also appropriately analyze the bounding box coordinates that are returned. </p> <note> <p>If the source image Exif metadata populates the orientation field, Amazon Rekognition does not perform orientation correction and the value of OrientationCorrection will be nil.</p> </note>"
       }
     },
     "PageSize": {
@@ -470,7 +470,7 @@
         "CompareFacesMatch$Similarity": "<p>Level of confidence that the faces match.</p>",
         "CompareFacesRequest$SimilarityThreshold": "<p>The minimum level of confidence in the match you want included in the result.</p>",
         "ComparedFace$Confidence": "<p>Level of confidence that what the bounding box contains is a face.</p>",
-        "ComparedSourceImageFace$Confidence": "<p>Confidence that the selected bounding box contains a face.</p>",
+        "ComparedSourceImageFace$Confidence": "<p>Confidence level that the selected bounding box contains a face.</p>",
         "DetectLabelsRequest$MinConfidence": "<p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with confidence lower than this specified value.</p> <p>If <code>minConfidence</code> is not specified, the operation returns labels with a confidence values greater than or equal to 50 percent.</p>",
         "Emotion$Confidence": "<p>Level of confidence in the determination.</p>",
         "EyeOpen$Confidence": "<p>Level of confidence in the determination.</p>",
@@ -501,7 +501,7 @@
       }
     },
     "ResourceAlreadyExistsException": {
-      "base": "<p>The collection with specific ID already exist.</p>",
+      "base": "<p>A collection with the specified ID already exists.</p>",
       "refs": {
       }
     },
@@ -517,7 +517,7 @@
       }
     },
     "S3Object": {
-      "base": "<p>Provides the S3 bucket name and object name.</p>",
+      "base": "<p>Provides the S3 bucket name and object name.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see <a>manage-access-resource-policies</a>. </p>",
       "refs": {
         "Image$S3Object": "<p>Identifies an S3 object as the image source.</p>"
       }

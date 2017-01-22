@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"opsworks-2013-02-18",
     "apiVersion":"2013-02-18",
     "endpointPrefix":"opsworks",
     "jsonVersion":"1.1",

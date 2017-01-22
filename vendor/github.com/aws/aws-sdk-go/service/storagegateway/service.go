@@ -20,18 +20,18 @@ import (
 // Use the following links to get started using the AWS Storage Gateway Service
 // API Reference:
 //
-//    * AWS Storage Gateway Required Request Headers (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayHTTPRequestsHeaders.html):
+//    * AWS Storage Gateway Required Request Headers (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewayHTTPRequestsHeaders):
 //    Describes the required headers that you must send with every POST request
 //    to AWS Storage Gateway.
 //
-//    * Signing Requests (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewaySigningRequests.html):
+//    * Signing Requests (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewaySigningRequests):
 //    AWS Storage Gateway requires that you authenticate every request you send;
 //    this topic describes how sign such a request.
 //
-//    * Error Responses (http://docs.aws.amazon.com/storagegateway/latest/userguide/APIErrorResponses.html):
+//    * Error Responses (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#APIErrorResponses):
 //    Provides reference information about AWS Storage Gateway errors.
 //
-//    * Operations in AWS Storage Gateway (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPIOperations.html):
+//    * Operations in AWS Storage Gateway (http://docs.aws.amazon.com/storagegateway/latest/APIReference/API_Operations.html):
 //    Contains detailed descriptions of all AWS Storage Gateway operations,
 //    their request parameters, response elements, possible errors, and examples
 //    of requests and responses.
@@ -63,8 +63,9 @@ import (
 //
 // For more information, see Announcement: Heads-up – Longer AWS Storage Gateway
 // volume and snapshot IDs coming in 2016 (https://forums.aws.amazon.com/ann.jspa?annID=3557).
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/storagegateway-2013-06-30
 type StorageGateway struct {
 	*client.Client
 }
@@ -75,8 +76,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "storagegateway"
+// Service information constants
+const (
+	ServiceName = "storagegateway" // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName      // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the StorageGateway client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -89,17 +93,18 @@ const ServiceName = "storagegateway"
 //     // Create a StorageGateway client with additional configuration
 //     svc := storagegateway.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *StorageGateway {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *StorageGateway {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *StorageGateway {
 	svc := &StorageGateway{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2013-06-30",

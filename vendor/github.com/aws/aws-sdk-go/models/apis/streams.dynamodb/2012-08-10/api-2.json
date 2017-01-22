@@ -8,7 +8,8 @@
     "serviceFullName":"Amazon DynamoDB Streams",
     "signatureVersion":"v4",
     "signingName":"dynamodb",
-    "targetPrefix":"DynamoDBStreams_20120810"
+    "targetPrefix":"DynamoDBStreams_20120810",
+    "uid":"streams-dynamodb-2012-08-10"
   },
   "operations":{
     "DescribeStream":{

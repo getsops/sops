@@ -1,3 +1,37 @@
+/*
+Package Sops manages JSON, YAML and BINARY documents to be encrypted or decrypted.
+
+This package should not be used directly. Instead, Sops users should install the
+command line client via `go get -u go.mozilla.org/sops/cmd/sops`, or use the
+decryption helper provided at `go.mozilla.org/sops/decrypt`.
+
+A Sops document is a Tree composed of a data branch with arbitrary key/value pairs
+and a metadata branch with encryption and integrity information.
+
+In JSON and YAML formats, the structure of the cleartext tree is preserved, keys are
+stored in cleartext and only values are encrypted. Keeping the values in cleartext
+provides better readability when storing Sops documents in version controls, and allows
+for merging competing changes on documents. This is a major difference between Sops
+and other encryption tools that store documents as encrypted blobs.
+
+In BINARY format, the cleartext data is treated as a single blob and the encrypted
+document is in JSON format with a single `data` key and a single encrypted value.
+
+Sops allows operators to encrypt their documents with multiple master keys. Each of
+the master key defined in the document is able to decrypt it, allowing users to
+share documents amongst themselves without sharing keys, or using a PGP key as a
+backup for KMS.
+
+In practice, this is achieved by generating a data key for each document that is used
+to encrypt all values, and encrypting the data with each master key defined. Being
+able to decrypt the data key gives access to the document.
+
+The integrity of each document is guaranteed by calculating a Message Access Control
+that is stored encrypted by the data key. When decrypting a document, the MAC should
+be recalculated and compared with the MAC stored in the document to verify that no
+fraudulent changes have been applied. The MAC covers keys and values as well as their
+ordering.
+*/
 package sops //import "go.mozilla.org/sops"
 
 import (
@@ -48,7 +82,7 @@ type TreeBranch []TreeItem
 
 // InsertOrReplaceValue replaces the value under the provided key with the newValue provided,
 // or inserts a new key-value if it didn't exist already.
-func (branch TreeBranch) InsertOrReplaceValue(key interface{}, newValue interface{}) (TreeBranch) {
+func (branch TreeBranch) InsertOrReplaceValue(key interface{}, newValue interface{}) TreeBranch {
 	replaced := false
 	for i, kv := range branch {
 		if kv.Key == key {

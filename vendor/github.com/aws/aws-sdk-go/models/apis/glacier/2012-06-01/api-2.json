@@ -6,7 +6,8 @@
     "endpointPrefix":"glacier",
     "protocol":"rest-json",
     "serviceFullName":"Amazon Glacier",
-    "signatureVersion":"v4"
+    "signatureVersion":"v4",
+    "uid":"glacier-2012-06-01"
   },
   "operations":{
     "AbortMultipartUpload":{

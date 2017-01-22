@@ -467,6 +467,32 @@ func ExampleIAM_CreateSAMLProvider() {
 	fmt.Println(resp)
 }
 
+func ExampleIAM_CreateServiceSpecificCredential() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := iam.New(sess)
+
+	params := &iam.CreateServiceSpecificCredentialInput{
+		ServiceName: aws.String("serviceName"),  // Required
+		UserName:    aws.String("userNameType"), // Required
+	}
+	resp, err := svc.CreateServiceSpecificCredential(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleIAM_CreateUser() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -911,6 +937,32 @@ func ExampleIAM_DeleteServerCertificate() {
 		ServerCertificateName: aws.String("serverCertificateNameType"), // Required
 	}
 	resp, err := svc.DeleteServerCertificate(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleIAM_DeleteServiceSpecificCredential() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := iam.New(sess)
+
+	params := &iam.DeleteServiceSpecificCredentialInput{
+		ServiceSpecificCredentialId: aws.String("serviceSpecificCredentialId"), // Required
+		UserName:                    aws.String("userNameType"),
+	}
+	resp, err := svc.DeleteServiceSpecificCredential(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -2231,6 +2283,32 @@ func ExampleIAM_ListServerCertificates() {
 	fmt.Println(resp)
 }
 
+func ExampleIAM_ListServiceSpecificCredentials() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := iam.New(sess)
+
+	params := &iam.ListServiceSpecificCredentialsInput{
+		ServiceName: aws.String("serviceName"),
+		UserName:    aws.String("userNameType"),
+	}
+	resp, err := svc.ListServiceSpecificCredentials(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleIAM_ListSigningCertificates() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -2486,6 +2564,32 @@ func ExampleIAM_RemoveUserFromGroup() {
 		UserName:  aws.String("existingUserNameType"), // Required
 	}
 	resp, err := svc.RemoveUserFromGroup(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleIAM_ResetServiceSpecificCredential() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := iam.New(sess)
+
+	params := &iam.ResetServiceSpecificCredentialInput{
+		ServiceSpecificCredentialId: aws.String("serviceSpecificCredentialId"), // Required
+		UserName:                    aws.String("userNameType"),
+	}
+	resp, err := svc.ResetServiceSpecificCredential(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -2896,6 +3000,33 @@ func ExampleIAM_UpdateServerCertificate() {
 		NewServerCertificateName: aws.String("serverCertificateNameType"),
 	}
 	resp, err := svc.UpdateServerCertificate(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleIAM_UpdateServiceSpecificCredential() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := iam.New(sess)
+
+	params := &iam.UpdateServiceSpecificCredentialInput{
+		ServiceSpecificCredentialId: aws.String("serviceSpecificCredentialId"), // Required
+		Status:   aws.String("statusType"), // Required
+		UserName: aws.String("userNameType"),
+	}
+	resp, err := svc.UpdateServiceSpecificCredential(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

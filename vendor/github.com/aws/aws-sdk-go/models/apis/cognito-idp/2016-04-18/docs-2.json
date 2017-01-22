@@ -3,30 +3,35 @@
   "service": "<p>Using the Amazon Cognito Your User Pools API, you can create a user pool to manage directories and users. You can authenticate a user to obtain tokens related to user identity and access policies.</p> <p>This API reference provides information about user pools in Amazon Cognito Your User Pools.</p> <p>For more information, see the Amazon Cognito Documentation.</p>",
   "operations": {
     "AddCustomAttributes": "<p>Adds additional user attributes to the user pool schema.</p>",
-    "AdminConfirmSignUp": "<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p>",
+    "AdminAddUserToGroup": "<p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>",
+    "AdminConfirmSignUp": "<p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>",
     "AdminCreateUser": "<p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to CreateUserPool or UpdateUserPool. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>",
-    "AdminDeleteUser": "<p>Deletes a user as an administrator. Works on any user.</p>",
-    "AdminDeleteUserAttributes": "<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p>",
-    "AdminDisableUser": "<p>Disables the specified user as an administrator. Works on any user.</p>",
-    "AdminEnableUser": "<p>Enables the specified user as an administrator. Works on any user.</p>",
-    "AdminForgetDevice": "<p>Forgets the device, as an administrator.</p>",
-    "AdminGetDevice": "<p>Gets the device, as an administrator.</p>",
-    "AdminGetUser": "<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p>",
-    "AdminInitiateAuth": "<p>Initiates the authentication flow, as an administrator.</p>",
-    "AdminListDevices": "<p>Lists devices, as an administrator.</p>",
-    "AdminResetUserPassword": "<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p>",
-    "AdminRespondToAuthChallenge": "<p>Responds to an authentication challenge, as an administrator.</p>",
-    "AdminSetUserSettings": "<p>Sets all the user settings for a specified user name. Works on any user.</p>",
-    "AdminUpdateDeviceStatus": "<p>Updates the device status as an administrator.</p>",
-    "AdminUpdateUserAttributes": "<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p>",
-    "AdminUserGlobalSignOut": "<p>Signs out users from all devices, as an administrator.</p>",
+    "AdminDeleteUser": "<p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>",
+    "AdminDeleteUserAttributes": "<p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>",
+    "AdminDisableUser": "<p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>",
+    "AdminEnableUser": "<p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>",
+    "AdminForgetDevice": "<p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>",
+    "AdminGetDevice": "<p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>",
+    "AdminGetUser": "<p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>",
+    "AdminInitiateAuth": "<p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>",
+    "AdminListDevices": "<p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>",
+    "AdminListGroupsForUser": "<p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>",
+    "AdminRemoveUserFromGroup": "<p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>",
+    "AdminResetUserPassword": "<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>",
+    "AdminRespondToAuthChallenge": "<p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>",
+    "AdminSetUserSettings": "<p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>",
+    "AdminUpdateDeviceStatus": "<p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>",
+    "AdminUpdateUserAttributes": "<p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>",
+    "AdminUserGlobalSignOut": "<p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>",
     "ChangePassword": "<p>Changes the password for a specified user in a user pool.</p>",
     "ConfirmDevice": "<p>Confirms tracking of the device. This API call is the call that beings device tracking.</p>",
     "ConfirmForgotPassword": "<p>Allows a user to enter a code provided when they reset their password to update their password.</p>",
     "ConfirmSignUp": "<p>Confirms registration of a user and handles the existing alias from a previous user.</p>",
+    "CreateGroup": "<p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>",
     "CreateUserImportJob": "<p>Creates the user import job.</p>",
     "CreateUserPool": "<p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>",
     "CreateUserPoolClient": "<p>Creates the user pool client.</p>",
+    "DeleteGroup": "<p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>",
     "DeleteUser": "<p>Allows a user to delete one's self.</p>",
     "DeleteUserAttributes": "<p>Deletes the attributes for a user.</p>",
     "DeleteUserPool": "<p>Deletes the specified Amazon Cognito user pool.</p>",
@@ -38,15 +43,18 @@
     "ForgotPassword": "<p>Retrieves the password for the specified client ID or username.</p>",
     "GetCSVHeader": "<p>Gets the header information for the .csv file to be used as input for the user import job.</p>",
     "GetDevice": "<p>Gets the device.</p>",
+    "GetGroup": "<p>Gets a group.</p> <p>Requires developer credentials.</p>",
     "GetUser": "<p>Gets the user attributes and metadata for a user.</p>",
     "GetUserAttributeVerificationCode": "<p>Gets the user attribute verification code for the specified attribute name.</p>",
     "GlobalSignOut": "<p>Signs out users from all devices.</p>",
     "InitiateAuth": "<p>Initiates the authentication flow.</p>",
     "ListDevices": "<p>Lists the devices.</p>",
+    "ListGroups": "<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>",
     "ListUserImportJobs": "<p>Lists the user import jobs.</p>",
     "ListUserPoolClients": "<p>Lists the clients that have been created for the specified user pool.</p>",
     "ListUserPools": "<p>Lists the user pools associated with an AWS account.</p>",
     "ListUsers": "<p>Lists the users in the Amazon Cognito user pool.</p>",
+    "ListUsersInGroup": "<p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>",
     "ResendConfirmationCode": "<p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>",
     "RespondToAuthChallenge": "<p>Responds to the authentication challenge.</p>",
     "SetUserSettings": "<p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>",
@@ -54,6 +62,7 @@
     "StartUserImportJob": "<p>Starts the user import.</p>",
     "StopUserImportJob": "<p>Stops the user import job.</p>",
     "UpdateDeviceStatus": "<p>Updates the device status.</p>",
+    "UpdateGroup": "<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>",
     "UpdateUserAttributes": "<p>Allows a user to update a specific attribute (one at a time).</p>",
     "UpdateUserPool": "<p>Updates the specified user pool with the specified attributes.</p>",
     "UpdateUserPoolClient": "<p>Allows the developer to update the specified user pool client and password policy.</p>",
@@ -67,6 +76,11 @@
     },
     "AddCustomAttributesResponse": {
       "base": "<p>Represents the response from the server for the request to add custom attributes.</p>",
+      "refs": {
+      }
+    },
+    "AdminAddUserToGroupRequest": {
+      "base": null,
       "refs": {
       }
     },
@@ -101,7 +115,7 @@
     "AdminCreateUserUnusedAccountValidityDaysType": {
       "base": null,
       "refs": {
-        "AdminCreateUserConfigType$UnusedAccountValidityDays": "<p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call AdminCreateUser again, specifying \"RESEND\" for the MessageAction parameter.</p>"
+        "AdminCreateUserConfigType$UnusedAccountValidityDays": "<p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call AdminCreateUser again, specifying \"RESEND\" for the MessageAction parameter. The default value for this paameter is 7.</p>"
       }
     },
     "AdminDeleteUserAttributesRequest": {
@@ -181,6 +195,21 @@
     },
     "AdminListDevicesResponse": {
       "base": "<p>Lists the device's response, as an administrator.</p>",
+      "refs": {
+      }
+    },
+    "AdminListGroupsForUserRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AdminListGroupsForUserResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AdminRemoveUserFromGroupRequest": {
+      "base": null,
       "refs": {
       }
     },
@@ -265,8 +294,10 @@
     "ArnType": {
       "base": null,
       "refs": {
+        "CreateGroupRequest$RoleArn": "<p>The role ARN for the group.</p>",
         "CreateUserImportJobRequest$CloudWatchLogsRoleArn": "<p>The role ARN for the Amazon CloudWatch Logging role for the user import job.</p>",
         "EmailConfigurationType$SourceArn": "<p>The Amazon Resource Name (ARN) of the email source.</p>",
+        "GroupType$RoleArn": "<p>The role ARN for the group.</p>",
         "LambdaConfigType$PreSignUp": "<p>A pre-registration AWS Lambda trigger.</p>",
         "LambdaConfigType$CustomMessage": "<p>A custom Message AWS Lambda trigger.</p>",
         "LambdaConfigType$PostConfirmation": "<p>A post-confirmation AWS Lambda trigger.</p>",
@@ -276,6 +307,7 @@
         "LambdaConfigType$CreateAuthChallenge": "<p>Creates an authentication challenge.</p>",
         "LambdaConfigType$VerifyAuthChallengeResponse": "<p>Verifies the authentication challenge response.</p>",
         "SmsConfigurationType$SnsCallerArn": "<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller.</p>",
+        "UpdateGroupRequest$RoleArn": "<p>The new role ARN for the group. This is used for setting the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the token.</p>",
         "UserImportJobType$CloudWatchLogsRoleArn": "<p>The role ARN for the Amazon CloudWatch Logging role for the user import job. For more information, see \"Creating the CloudWatch Logs IAM Role\" in the Amazon Cognito Developer Guide.</p>"
       }
     },
@@ -543,6 +575,16 @@
         "VerifyUserAttributeRequest$Code": "<p>The verification code in the request to verify user attributes.</p>"
       }
     },
+    "CreateGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateGroupResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateUserImportJobRequest": {
       "base": "<p>Represents the request to create the user import job.</p>",
       "refs": {
@@ -593,6 +635,8 @@
         "DeviceType$DeviceCreateDate": "<p>The creation date of the device.</p>",
         "DeviceType$DeviceLastModifiedDate": "<p>The last modified date of the device.</p>",
         "DeviceType$DeviceLastAuthenticatedDate": "<p>The date in which the device was last authenticated.</p>",
+        "GroupType$LastModifiedDate": "<p>The date the group was last modified.</p>",
+        "GroupType$CreationDate": "<p>The date the group was created.</p>",
         "UserImportJobType$CreationDate": "<p>The date when the user import job was created.</p>",
         "UserImportJobType$StartDate": "<p>The date when the user import job was started.</p>",
         "UserImportJobType$CompletionDate": "<p>The date when the user imoprt job was completed.</p>",
@@ -604,6 +648,11 @@
         "UserPoolType$CreationDate": "<p>The creation date of a user pool.</p>",
         "UserType$UserCreateDate": "<p>The creation date of the user.</p>",
         "UserType$UserLastModifiedDate": "<p>The last modified date of the user.</p>"
+      }
+    },
+    "DeleteGroupRequest": {
+      "base": null,
+      "refs": {
       }
     },
     "DeleteUserAttributesRequest": {
@@ -673,6 +722,14 @@
     "DescribeUserPoolResponse": {
       "base": "<p>Represents the response to describe the user pool.</p>",
       "refs": {
+      }
+    },
+    "DescriptionType": {
+      "base": null,
+      "refs": {
+        "CreateGroupRequest$Description": "<p>A string containing the description of the group.</p>",
+        "GroupType$Description": "<p>A string containing the description of the group.</p>",
+        "UpdateGroupRequest$Description": "<p>A string containing the new description of the group.</p>"
       }
     },
     "DeviceConfigurationType": {
@@ -830,6 +887,16 @@
       "refs": {
       }
     },
+    "GetGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetGroupResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "GetUserAttributeVerificationCodeRequest": {
       "base": "<p>Represents the request to get user attribute verification.</p>",
       "refs": {
@@ -858,6 +925,40 @@
     "GlobalSignOutResponse": {
       "base": "<p>The response to the request to sign out all devices.</p>",
       "refs": {
+      }
+    },
+    "GroupExistsException": {
+      "base": "<p>This exception is thrown when Amazon Cognito encounters a group that already exists in the user pool.</p>",
+      "refs": {
+      }
+    },
+    "GroupListType": {
+      "base": null,
+      "refs": {
+        "AdminListGroupsForUserResponse$Groups": "<p>The groups that the user belongs to.</p>",
+        "ListGroupsResponse$Groups": "<p>The group objects for the groups.</p>"
+      }
+    },
+    "GroupNameType": {
+      "base": null,
+      "refs": {
+        "AdminAddUserToGroupRequest$GroupName": "<p>The group name.</p>",
+        "AdminRemoveUserFromGroupRequest$GroupName": "<p>The group name.</p>",
+        "CreateGroupRequest$GroupName": "<p>The name of the group. Must be unique.</p>",
+        "DeleteGroupRequest$GroupName": "<p>The name of the group.</p>",
+        "GetGroupRequest$GroupName": "<p>The name of the group.</p>",
+        "GroupType$GroupName": "<p>The name of the group.</p>",
+        "ListUsersInGroupRequest$GroupName": "<p>The name of the group.</p>",
+        "UpdateGroupRequest$GroupName": "<p>The name of the group.</p>"
+      }
+    },
+    "GroupType": {
+      "base": "<p>The group type.</p>",
+      "refs": {
+        "CreateGroupResponse$Group": "<p>The group object for the group.</p>",
+        "GetGroupResponse$Group": "<p>The group object for the group.</p>",
+        "GroupListType$member": null,
+        "UpdateGroupResponse$Group": "<p>The group object for the group.</p>"
       }
     },
     "InitiateAuthRequest": {
@@ -941,6 +1042,16 @@
       "refs": {
       }
     },
+    "ListGroupsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListGroupsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListOfStringTypes": {
       "base": null,
       "refs": {
@@ -974,6 +1085,16 @@
     },
     "ListUserPoolsResponse": {
       "base": "<p>Represents the response to list user pools.</p>",
+      "refs": {
+      }
+    },
+    "ListUsersInGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListUsersInGroupResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -1036,6 +1157,7 @@
         "CodeMismatchException$message": "<p>The message provided when the code mismatch exception is thrown.</p>",
         "ConcurrentModificationException$message": "<p>The message provided when the concurrent exception is thrown.</p>",
         "ExpiredCodeException$message": "<p>The message returned when the expired code exception is thrown.</p>",
+        "GroupExistsException$message": null,
         "InternalErrorException$message": "<p>The message returned when Amazon Cognito throws an internal error exception.</p>",
         "InvalidEmailRoleAccessPolicyException$message": "<p>The message returned when you have an unverified email address or the identity policy is not set on an email address that Amazon Cognito can access.</p>",
         "InvalidLambdaResponseException$message": "<p>The message returned when the Amazon Cognito service throws an invalid AWS Lambda response exception.</p>",
@@ -1058,6 +1180,7 @@
         "UserLambdaValidationException$message": "<p>The message returned when the Amazon Cognito service returns a user validation exception with the AWS Lambda service.</p>",
         "UserNotConfirmedException$message": "<p>The message returned when a user is not confirmed successfully.</p>",
         "UserNotFoundException$message": "<p>The message returned when a user is not found.</p>",
+        "UserPoolTaggingException$message": null,
         "UsernameExistsException$message": "<p>The message returned when Amazon Cognito throws a user name exists exception.</p>"
       }
     },
@@ -1081,8 +1204,14 @@
     "PaginationKey": {
       "base": null,
       "refs": {
+        "AdminListGroupsForUserRequest$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "AdminListGroupsForUserResponse$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListGroupsRequest$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListGroupsResponse$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
         "ListUserPoolClientsRequest$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
-        "ListUserPoolClientsResponse$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"
+        "ListUserPoolClientsResponse$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListUsersInGroupRequest$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListUsersInGroupResponse$NextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>"
       }
     },
     "PaginationKeyType": {
@@ -1134,6 +1263,14 @@
         "UserImportJobType$PreSignedUrl": "<p>The pre-signed URL to be used to upload the .csv file.</p>"
       }
     },
+    "PrecedenceType": {
+      "base": null,
+      "refs": {
+        "CreateGroupRequest$Precedence": "<p>A nonnegative integer value that specifies the precedence of this group relative to the other groups that a user can belong to in the user pool. Zero is the highest precedence value. Groups with lower <code>Precedence</code> values take precedence over groups with higher or null <code>Precedence</code> values. If a user belongs to two or more groups, it is the group with the lowest precedence value whose role ARN will be used in the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the user's tokens.</p> <p>Two groups can have the same <code>Precedence</code> value. If this happens, neither group takes precedence over the other. If two groups with the same <code>Precedence</code> have the same role ARN, that role is used in the <code>cognito:preferred_role</code> claim in tokens for users in each group. If the two groups have different role ARNs, the <code>cognito:preferred_role</code> claim is not set in users' tokens.</p> <p>The default <code>Precedence</code> value is null.</p>",
+        "GroupType$Precedence": "<p>A nonnegative integer value that specifies the precedence of this group relative to the other groups that a user can belong to in the user pool. If a user belongs to two or more groups, it is the group with the highest precedence whose role ARN will be used in the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the user's tokens. Groups with higher <code>Precedence</code> values take precedence over groups with lower <code>Precedence</code> values or with null <code>Precedence</code> values.</p> <p>Two groups can have the same <code>Precedence</code> value. If this happens, neither group takes precedence over the other. If two groups with the same <code>Precedence</code> have the same role ARN, that role is used in the <code>cognito:preferred_role</code> claim in tokens for users in each group. If the two groups have different role ARNs, the <code>cognito:preferred_role</code> claim is not set in users' tokens.</p> <p>The default <code>Precedence</code> value is null.</p>",
+        "UpdateGroupRequest$Precedence": "<p>The new precedence value for the group. For more information about this parameter, see <a href=\"API_CreateGroupRequeste.html\">CreateGroupRequest</a>.</p>"
+      }
+    },
     "PreconditionNotMetException": {
       "base": "<p>This exception is thrown when a precondition is not met.</p>",
       "refs": {
@@ -1149,16 +1286,19 @@
       "base": null,
       "refs": {
         "AdminListDevicesRequest$Limit": "<p>The limit of the devices request.</p>",
+        "AdminListGroupsForUserRequest$Limit": "<p>The limit of the request to list groups.</p>",
         "ListDevicesRequest$Limit": "<p>The limit of the device request.</p>",
+        "ListGroupsRequest$Limit": "<p>The limit of the request to list groups.</p>",
+        "ListUsersInGroupRequest$Limit": "<p>The limit of the request to list users.</p>",
         "ListUsersRequest$Limit": "<p>The limit of the request to list users.</p>"
       }
     },
     "RefreshTokenValidityType": {
       "base": null,
       "refs": {
-        "CreateUserPoolClientRequest$RefreshTokenValidity": "<p>Refreshes the token validity.</p>",
-        "UpdateUserPoolClientRequest$RefreshTokenValidity": "<p>The validity of the refresh token.</p>",
-        "UserPoolClientType$RefreshTokenValidity": "<p>The validity of the refresh token.</p>"
+        "CreateUserPoolClientRequest$RefreshTokenValidity": "<p>The validity of the refresh token, in days.</p>",
+        "UpdateUserPoolClientRequest$RefreshTokenValidity": "<p>The validity of the refresh token, in days.</p>",
+        "UserPoolClientType$RefreshTokenValidity": "<p>The validity of the refresh token, in days.</p>"
       }
     },
     "ResendConfirmationCodeRequest": {
@@ -1333,6 +1473,8 @@
         "SmsConfigurationType$ExternalId": "<p>The external ID.</p>",
         "StringAttributeConstraintsType$MinLength": "<p>The minimum length of an attribute value of the string type.</p>",
         "StringAttributeConstraintsType$MaxLength": "<p>The maximum length of an attribute value of the string type.</p>",
+        "UserPoolTagsType$key": null,
+        "UserPoolTagsType$value": null,
         "UserPoolType$SmsConfigurationFailure": "<p>The reason why the SMS configuration cannot send the message(s) to your users.</p>",
         "UserPoolType$EmailConfigurationFailure": "<p>The reason why the email configuration cannot send the messages to your users.</p>"
       }
@@ -1386,6 +1528,16 @@
     },
     "UpdateDeviceStatusResponse": {
       "base": "<p>The response to the request to update the device status.</p>",
+      "refs": {
+      }
+    },
+    "UpdateGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateGroupResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -1484,7 +1636,7 @@
       }
     },
     "UserPoolClientDescription": {
-      "base": "<p>The description of the user poool client.</p>",
+      "base": "<p>The description of the user pool client.</p>",
       "refs": {
         "UserPoolClientListType$member": null
       }
@@ -1513,6 +1665,7 @@
       "base": null,
       "refs": {
         "AddCustomAttributesRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to add custom attributes.</p>",
+        "AdminAddUserToGroupRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "AdminConfirmSignUpRequest$UserPoolId": "<p>The user pool ID for which you want to confirm user registration.</p>",
         "AdminCreateUserRequest$UserPoolId": "<p>The user pool ID for the user pool where the user will be created.</p>",
         "AdminDeleteUserAttributesRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to delete user attributes.</p>",
@@ -1524,14 +1677,18 @@
         "AdminGetUserRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to get information about the user.</p>",
         "AdminInitiateAuthRequest$UserPoolId": "<p>The ID of the Amazon Cognito user pool.</p>",
         "AdminListDevicesRequest$UserPoolId": "<p>The user pool ID.</p>",
+        "AdminListGroupsForUserRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
+        "AdminRemoveUserFromGroupRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "AdminResetUserPasswordRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to reset the user's password.</p>",
         "AdminRespondToAuthChallengeRequest$UserPoolId": "<p>The ID of the Amazon Cognito user pool.</p>",
         "AdminSetUserSettingsRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to set the user's settings, such as MFA options.</p>",
         "AdminUpdateDeviceStatusRequest$UserPoolId": "<p>The user pool ID&gt;</p>",
         "AdminUpdateUserAttributesRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to update user attributes.</p>",
         "AdminUserGlobalSignOutRequest$UserPoolId": "<p>The user pool ID.</p>",
+        "CreateGroupRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "CreateUserImportJobRequest$UserPoolId": "<p>The user pool ID for the user pool that the users are being imported into.</p>",
         "CreateUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to create a user pool client.</p>",
+        "DeleteGroupRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "DeleteUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to delete the client.</p>",
         "DeleteUserPoolRequest$UserPoolId": "<p>The user pool ID for the user pool you want to delete.</p>",
         "DescribeUserImportJobRequest$UserPoolId": "<p>The user pool ID for the user pool that the users are being imported into.</p>",
@@ -1539,11 +1696,16 @@
         "DescribeUserPoolRequest$UserPoolId": "<p>The user pool ID for the user pool you want to describe.</p>",
         "GetCSVHeaderRequest$UserPoolId": "<p>The user pool ID for the user pool that the users are to be imported into.</p>",
         "GetCSVHeaderResponse$UserPoolId": "<p>The user pool ID for the user pool that the users are to be imported into.</p>",
+        "GetGroupRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
+        "GroupType$UserPoolId": "<p>The user pool ID for the user pool.</p>",
+        "ListGroupsRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "ListUserImportJobsRequest$UserPoolId": "<p>The user pool ID for the user pool that the users are being imported into.</p>",
         "ListUserPoolClientsRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to list user pool clients.</p>",
+        "ListUsersInGroupRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "ListUsersRequest$UserPoolId": "<p>The user pool ID for which you want to list users.</p>",
         "StartUserImportJobRequest$UserPoolId": "<p>The user pool ID for the user pool that the users are being imported into.</p>",
         "StopUserImportJobRequest$UserPoolId": "<p>The user pool ID for the user pool that the users are being imported into.</p>",
+        "UpdateGroupRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "UpdateUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to update the user pool client.</p>",
         "UpdateUserPoolRequest$UserPoolId": "<p>The user pool ID for the user pool you want to update.</p>",
         "UserImportJobType$UserPoolId": "<p>The user pool ID for the user pool that the users are being imported into.</p>",
@@ -1583,6 +1745,19 @@
         "UserPoolType$Policies": "<p>A container describing the policies associated with a user pool.</p>"
       }
     },
+    "UserPoolTaggingException": {
+      "base": "<p>This exception gets thrown when a user pool tag cannot be set or updated.</p>",
+      "refs": {
+      }
+    },
+    "UserPoolTagsType": {
+      "base": null,
+      "refs": {
+        "CreateUserPoolRequest$UserPoolTags": "<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>",
+        "UpdateUserPoolRequest$UserPoolTags": "<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>",
+        "UserPoolType$UserPoolTags": "<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>"
+      }
+    },
     "UserPoolType": {
       "base": "<p>A container with information about the user pool type.</p>",
       "refs": {
@@ -1612,6 +1787,7 @@
     "UsernameType": {
       "base": null,
       "refs": {
+        "AdminAddUserToGroupRequest$Username": "<p>The username for the user.</p>",
         "AdminConfirmSignUpRequest$Username": "<p>The user name for which you want to confirm user registration.</p>",
         "AdminCreateUserRequest$Username": "<p>The username for the user. Must be unique within the user pool. Must be a UTF-8 string between 1 and 128 characters. After the user is created, the username cannot be changed.</p>",
         "AdminDeleteUserAttributesRequest$Username": "<p>The user name of the user from which you would like to delete attributes.</p>",
@@ -1623,6 +1799,8 @@
         "AdminGetUserRequest$Username": "<p>The user name of the user you wish to retrieve.</p>",
         "AdminGetUserResponse$Username": "<p>The user name of the user about whom you are receiving information.</p>",
         "AdminListDevicesRequest$Username": "<p>The user name.</p>",
+        "AdminListGroupsForUserRequest$Username": "<p>The username for the user.</p>",
+        "AdminRemoveUserFromGroupRequest$Username": "<p>The username for the user.</p>",
         "AdminResetUserPasswordRequest$Username": "<p>The user name of the user whose password you wish to reset.</p>",
         "AdminSetUserSettingsRequest$Username": "<p>The user name of the user for whom you wish to set user settings.</p>",
         "AdminUpdateDeviceStatusRequest$Username": "<p>The user name.</p>",
@@ -1640,6 +1818,7 @@
     "UsersListType": {
       "base": null,
       "refs": {
+        "ListUsersInGroupResponse$Users": "<p>The users returned in the request to list users.</p>",
         "ListUsersResponse$Users": "<p>The users returned in the request to list users.</p>"
       }
     },

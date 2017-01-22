@@ -7,9 +7,40 @@
     "protocol":"json",
     "serviceFullName":"AWS Application Discovery Service",
     "signatureVersion":"v4",
-    "targetPrefix":"AWSPoseidonService_V2015_11_01"
+    "targetPrefix":"AWSPoseidonService_V2015_11_01",
+    "uid":"discovery-2015-11-01"
   },
   "operations":{
+    "AssociateConfigurationItemsToApplication":{
+      "name":"AssociateConfigurationItemsToApplication",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AssociateConfigurationItemsToApplicationRequest"},
+      "output":{"shape":"AssociateConfigurationItemsToApplicationResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"}
+      ]
+    },
+    "CreateApplication":{
+      "name":"CreateApplication",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateApplicationRequest"},
+      "output":{"shape":"CreateApplicationResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"}
+      ]
+    },
     "CreateTags":{
       "name":"CreateTags",
       "http":{
@@ -21,6 +52,21 @@
       "errors":[
         {"shape":"AuthorizationErrorException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"}
+      ]
+    },
+    "DeleteApplications":{
+      "name":"DeleteApplications",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteApplicationsRequest"},
+      "output":{"shape":"DeleteApplicationsResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
         {"shape":"InvalidParameterException"},
         {"shape":"InvalidParameterValueException"},
         {"shape":"ServerInternalErrorException"}
@@ -104,6 +150,21 @@
         {"shape":"ServerInternalErrorException"}
       ]
     },
+    "DisassociateConfigurationItemsFromApplication":{
+      "name":"DisassociateConfigurationItemsFromApplication",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisassociateConfigurationItemsFromApplicationRequest"},
+      "output":{"shape":"DisassociateConfigurationItemsFromApplicationResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"}
+      ]
+    },
     "ExportConfigurations":{
       "name":"ExportConfigurations",
       "http":{
@@ -119,6 +180,21 @@
         {"shape":"OperationNotPermittedException"}
       ]
     },
+    "GetDiscoverySummary":{
+      "name":"GetDiscoverySummary",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetDiscoverySummaryRequest"},
+      "output":{"shape":"GetDiscoverySummaryResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"}
+      ]
+    },
     "ListConfigurations":{
       "name":"ListConfigurations",
       "http":{
@@ -130,6 +206,21 @@
       "errors":[
         {"shape":"AuthorizationErrorException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"}
+      ]
+    },
+    "ListServerNeighbors":{
+      "name":"ListServerNeighbors",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListServerNeighborsRequest"},
+      "output":{"shape":"ListServerNeighborsResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
         {"shape":"InvalidParameterException"},
         {"shape":"InvalidParameterValueException"},
         {"shape":"ServerInternalErrorException"}
@@ -164,6 +255,21 @@
         {"shape":"InvalidParameterValueException"},
         {"shape":"ServerInternalErrorException"}
       ]
+    },
+    "UpdateApplication":{
+      "name":"UpdateApplication",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateApplicationRequest"},
+      "output":{"shape":"UpdateApplicationResponse"},
+      "errors":[
+        {"shape":"AuthorizationErrorException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"ServerInternalErrorException"}
+      ]
     }
   },
   "shapes":{
@@ -192,7 +298,11 @@
         "agentNetworkInfoList":{"shape":"AgentNetworkInfoList"},
         "connectorId":{"shape":"String"},
         "version":{"shape":"String"},
-        "health":{"shape":"AgentStatus"}
+        "health":{"shape":"AgentStatus"},
+        "lastHealthPingTime":{"shape":"String"},
+        "collectionStatus":{"shape":"String"},
+        "agentType":{"shape":"String"},
+        "registeredTime":{"shape":"String"}
       }
     },
     "AgentNetworkInfo":{
@@ -221,6 +331,27 @@
       "type":"list",
       "member":{"shape":"AgentInfo"}
     },
+    "ApplicationId":{"type":"string"},
+    "ApplicationIdsList":{
+      "type":"list",
+      "member":{"shape":"ApplicationId"}
+    },
+    "AssociateConfigurationItemsToApplicationRequest":{
+      "type":"structure",
+      "required":[
+        "applicationConfigurationId",
+        "configurationIds"
+      ],
+      "members":{
+        "applicationConfigurationId":{"shape":"ApplicationId"},
+        "configurationIds":{"shape":"ConfigurationIdList"}
+      }
+    },
+    "AssociateConfigurationItemsToApplicationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "AuthorizationErrorException":{
       "type":"structure",
       "members":{
@@ -229,6 +360,10 @@
       "exception":true
     },
     "Boolean":{"type":"boolean"},
+    "BoxedInteger":{
+      "type":"integer",
+      "box":true
+    },
     "Condition":{"type":"string"},
     "Configuration":{
       "type":"map",
@@ -245,7 +380,8 @@
       "enum":[
         "SERVER",
         "PROCESS",
-        "CONNECTION"
+        "CONNECTION",
+        "APPLICATION"
       ]
     },
     "ConfigurationTag":{
@@ -271,6 +407,20 @@
     },
     "ConfigurationsDownloadUrl":{"type":"string"},
     "ConfigurationsExportId":{"type":"string"},
+    "CreateApplicationRequest":{
+      "type":"structure",
+      "required":["name"],
+      "members":{
+        "name":{"shape":"String"},
+        "description":{"shape":"String"}
+      }
+    },
+    "CreateApplicationResponse":{
+      "type":"structure",
+      "members":{
+        "configurationId":{"shape":"String"}
+      }
+    },
     "CreateTagsRequest":{
       "type":"structure",
       "required":[
@@ -283,6 +433,60 @@
       }
     },
     "CreateTagsResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "CustomerAgentInfo":{
+      "type":"structure",
+      "required":[
+        "activeAgents",
+        "healthyAgents",
+        "blackListedAgents",
+        "shutdownAgents",
+        "unhealthyAgents",
+        "totalAgents",
+        "unknownAgents"
+      ],
+      "members":{
+        "activeAgents":{"shape":"Integer"},
+        "healthyAgents":{"shape":"Integer"},
+        "blackListedAgents":{"shape":"Integer"},
+        "shutdownAgents":{"shape":"Integer"},
+        "unhealthyAgents":{"shape":"Integer"},
+        "totalAgents":{"shape":"Integer"},
+        "unknownAgents":{"shape":"Integer"}
+      }
+    },
+    "CustomerConnectorInfo":{
+      "type":"structure",
+      "required":[
+        "activeConnectors",
+        "healthyConnectors",
+        "blackListedConnectors",
+        "shutdownConnectors",
+        "unhealthyConnectors",
+        "totalConnectors",
+        "unknownConnectors"
+      ],
+      "members":{
+        "activeConnectors":{"shape":"Integer"},
+        "healthyConnectors":{"shape":"Integer"},
+        "blackListedConnectors":{"shape":"Integer"},
+        "shutdownConnectors":{"shape":"Integer"},
+        "unhealthyConnectors":{"shape":"Integer"},
+        "totalConnectors":{"shape":"Integer"},
+        "unknownConnectors":{"shape":"Integer"}
+      }
+    },
+    "DeleteApplicationsRequest":{
+      "type":"structure",
+      "required":["configurationIds"],
+      "members":{
+        "configurationIds":{"shape":"ApplicationIdsList"}
+      }
+    },
+    "DeleteApplicationsResponse":{
       "type":"structure",
       "members":{
       }
@@ -304,6 +508,7 @@
       "type":"structure",
       "members":{
         "agentIds":{"shape":"AgentIds"},
+        "filters":{"shape":"Filters"},
         "maxResults":{"shape":"Integer"},
         "nextToken":{"shape":"NextToken"}
       }
@@ -365,6 +570,22 @@
       "members":{
         "tags":{"shape":"ConfigurationTagSet"},
         "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "DisassociateConfigurationItemsFromApplicationRequest":{
+      "type":"structure",
+      "required":[
+        "applicationConfigurationId",
+        "configurationIds"
+      ],
+      "members":{
+        "applicationConfigurationId":{"shape":"ApplicationId"},
+        "configurationIds":{"shape":"ConfigurationIdList"}
+      }
+    },
+    "DisassociateConfigurationItemsFromApplicationResponse":{
+      "type":"structure",
+      "members":{
       }
     },
     "ExportConfigurationsResponse":{
@@ -433,6 +654,22 @@
       "type":"list",
       "member":{"shape":"Filter"}
     },
+    "GetDiscoverySummaryRequest":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "GetDiscoverySummaryResponse":{
+      "type":"structure",
+      "members":{
+        "servers":{"shape":"Long"},
+        "applications":{"shape":"Long"},
+        "serversMappedToApplications":{"shape":"Long"},
+        "serversMappedtoTags":{"shape":"Long"},
+        "agentSummary":{"shape":"CustomerAgentInfo"},
+        "connectorSummary":{"shape":"CustomerConnectorInfo"}
+      }
+    },
     "Integer":{"type":"integer"},
     "InvalidParameterException":{
       "type":"structure",
@@ -455,7 +692,8 @@
         "configurationType":{"shape":"ConfigurationItemType"},
         "filters":{"shape":"Filters"},
         "maxResults":{"shape":"Integer"},
-        "nextToken":{"shape":"NextToken"}
+        "nextToken":{"shape":"NextToken"},
+        "orderBy":{"shape":"OrderByList"}
       }
     },
     "ListConfigurationsResponse":{
@@ -465,7 +703,47 @@
         "nextToken":{"shape":"NextToken"}
       }
     },
+    "ListServerNeighborsRequest":{
+      "type":"structure",
+      "required":["configurationId"],
+      "members":{
+        "configurationId":{"shape":"ConfigurationId"},
+        "portInformationNeeded":{"shape":"Boolean"},
+        "neighborConfigurationIds":{"shape":"ConfigurationIdList"},
+        "maxResults":{"shape":"Integer"},
+        "nextToken":{"shape":"String"}
+      }
+    },
+    "ListServerNeighborsResponse":{
+      "type":"structure",
+      "required":["neighbors"],
+      "members":{
+        "neighbors":{"shape":"NeighborDetailsList"},
+        "nextToken":{"shape":"String"},
+        "knownDependencyCount":{"shape":"Long"}
+      }
+    },
+    "Long":{"type":"long"},
     "Message":{"type":"string"},
+    "NeighborConnectionDetail":{
+      "type":"structure",
+      "required":[
+        "sourceServerId",
+        "destinationServerId",
+        "connectionsCount"
+      ],
+      "members":{
+        "sourceServerId":{"shape":"ConfigurationId"},
+        "destinationServerId":{"shape":"ConfigurationId"},
+        "destinationPort":{"shape":"BoxedInteger"},
+        "transportProtocol":{"shape":"String"},
+        "connectionsCount":{"shape":"Long"}
+      }
+    },
+    "NeighborDetailsList":{
+      "type":"list",
+      "member":{"shape":"NeighborConnectionDetail"}
+    },
     "NextToken":{"type":"string"},
     "OperationNotPermittedException":{
       "type":"structure",
@@ -473,6 +751,18 @@
         "message":{"shape":"Message"}
       },
       "exception":true
+    },
+    "OrderByElement":{
+      "type":"structure",
+      "required":["fieldName"],
+      "members":{
+        "fieldName":{"shape":"String"},
+        "sortOrder":{"shape":"orderString"}
+      }
+    },
+    "OrderByList":{
+      "type":"list",
+      "member":{"shape":"OrderByElement"}
     },
     "ResourceNotFoundException":{
       "type":"structure",
@@ -551,6 +841,27 @@
       }
     },
     "TagValue":{"type":"string"},
-    "TimeStamp":{"type":"timestamp"}
+    "TimeStamp":{"type":"timestamp"},
+    "UpdateApplicationRequest":{
+      "type":"structure",
+      "required":["configurationId"],
+      "members":{
+        "configurationId":{"shape":"ApplicationId"},
+        "name":{"shape":"String"},
+        "description":{"shape":"String"}
+      }
+    },
+    "UpdateApplicationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "orderString":{
+      "type":"string",
+      "enum":[
+        "ASC",
+        "DESC"
+      ]
+    }
   }
 }

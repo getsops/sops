@@ -39,6 +39,7 @@ const opBulkPublish = "BulkPublish"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/BulkPublish
 func (c *CognitoSync) BulkPublishRequest(input *BulkPublishInput) (req *request.Request, output *BulkPublishOutput) {
 	op := &request.Operation{
 		Name:       opBulkPublish,
@@ -50,9 +51,8 @@ func (c *CognitoSync) BulkPublishRequest(input *BulkPublishInput) (req *request.
 		input = &BulkPublishInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &BulkPublishOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -94,6 +94,7 @@ func (c *CognitoSync) BulkPublishRequest(input *BulkPublishInput) (req *request.
 //   An exception thrown when a bulk publish operation is requested less than
 //   24 hours after a previous bulk publish operation completed successfully.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/BulkPublish
 func (c *CognitoSync) BulkPublish(input *BulkPublishInput) (*BulkPublishOutput, error) {
 	req, out := c.BulkPublishRequest(input)
 	err := req.Send()
@@ -126,6 +127,7 @@ const opDeleteDataset = "DeleteDataset"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DeleteDataset
 func (c *CognitoSync) DeleteDatasetRequest(input *DeleteDatasetInput) (req *request.Request, output *DeleteDatasetOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDataset,
@@ -137,9 +139,8 @@ func (c *CognitoSync) DeleteDatasetRequest(input *DeleteDatasetInput) (req *requ
 		input = &DeleteDatasetInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteDatasetOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -180,6 +181,7 @@ func (c *CognitoSync) DeleteDatasetRequest(input *DeleteDatasetInput) (req *requ
 //   Thrown if an update can't be applied because the resource was changed by
 //   another call and this would result in a conflict.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DeleteDataset
 func (c *CognitoSync) DeleteDataset(input *DeleteDatasetInput) (*DeleteDatasetOutput, error) {
 	req, out := c.DeleteDatasetRequest(input)
 	err := req.Send()
@@ -212,6 +214,7 @@ const opDescribeDataset = "DescribeDataset"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeDataset
 func (c *CognitoSync) DescribeDatasetRequest(input *DescribeDatasetInput) (req *request.Request, output *DescribeDatasetOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDataset,
@@ -223,9 +226,8 @@ func (c *CognitoSync) DescribeDatasetRequest(input *DescribeDatasetInput) (req *
 		input = &DescribeDatasetInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeDatasetOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -262,6 +264,7 @@ func (c *CognitoSync) DescribeDatasetRequest(input *DescribeDatasetInput) (req *
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeDataset
 func (c *CognitoSync) DescribeDataset(input *DescribeDatasetInput) (*DescribeDatasetOutput, error) {
 	req, out := c.DescribeDatasetRequest(input)
 	err := req.Send()
@@ -294,6 +297,7 @@ const opDescribeIdentityPoolUsage = "DescribeIdentityPoolUsage"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityPoolUsage
 func (c *CognitoSync) DescribeIdentityPoolUsageRequest(input *DescribeIdentityPoolUsageInput) (req *request.Request, output *DescribeIdentityPoolUsageOutput) {
 	op := &request.Operation{
 		Name:       opDescribeIdentityPoolUsage,
@@ -305,9 +309,8 @@ func (c *CognitoSync) DescribeIdentityPoolUsageRequest(input *DescribeIdentityPo
 		input = &DescribeIdentityPoolUsageInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeIdentityPoolUsageOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -342,6 +345,7 @@ func (c *CognitoSync) DescribeIdentityPoolUsageRequest(input *DescribeIdentityPo
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityPoolUsage
 func (c *CognitoSync) DescribeIdentityPoolUsage(input *DescribeIdentityPoolUsageInput) (*DescribeIdentityPoolUsageOutput, error) {
 	req, out := c.DescribeIdentityPoolUsageRequest(input)
 	err := req.Send()
@@ -374,6 +378,7 @@ const opDescribeIdentityUsage = "DescribeIdentityUsage"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityUsage
 func (c *CognitoSync) DescribeIdentityUsageRequest(input *DescribeIdentityUsageInput) (req *request.Request, output *DescribeIdentityUsageOutput) {
 	op := &request.Operation{
 		Name:       opDescribeIdentityUsage,
@@ -385,9 +390,8 @@ func (c *CognitoSync) DescribeIdentityUsageRequest(input *DescribeIdentityUsageI
 		input = &DescribeIdentityUsageInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeIdentityUsageOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -422,6 +426,7 @@ func (c *CognitoSync) DescribeIdentityUsageRequest(input *DescribeIdentityUsageI
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityUsage
 func (c *CognitoSync) DescribeIdentityUsage(input *DescribeIdentityUsageInput) (*DescribeIdentityUsageOutput, error) {
 	req, out := c.DescribeIdentityUsageRequest(input)
 	err := req.Send()
@@ -454,6 +459,7 @@ const opGetBulkPublishDetails = "GetBulkPublishDetails"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetBulkPublishDetails
 func (c *CognitoSync) GetBulkPublishDetailsRequest(input *GetBulkPublishDetailsInput) (req *request.Request, output *GetBulkPublishDetailsOutput) {
 	op := &request.Operation{
 		Name:       opGetBulkPublishDetails,
@@ -465,9 +471,8 @@ func (c *CognitoSync) GetBulkPublishDetailsRequest(input *GetBulkPublishDetailsI
 		input = &GetBulkPublishDetailsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &GetBulkPublishDetailsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -498,6 +503,7 @@ func (c *CognitoSync) GetBulkPublishDetailsRequest(input *GetBulkPublishDetailsI
 //   * InternalErrorException
 //   Indicates an internal service error.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetBulkPublishDetails
 func (c *CognitoSync) GetBulkPublishDetails(input *GetBulkPublishDetailsInput) (*GetBulkPublishDetailsOutput, error) {
 	req, out := c.GetBulkPublishDetailsRequest(input)
 	err := req.Send()
@@ -530,6 +536,7 @@ const opGetCognitoEvents = "GetCognitoEvents"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetCognitoEvents
 func (c *CognitoSync) GetCognitoEventsRequest(input *GetCognitoEventsInput) (req *request.Request, output *GetCognitoEventsOutput) {
 	op := &request.Operation{
 		Name:       opGetCognitoEvents,
@@ -541,9 +548,8 @@ func (c *CognitoSync) GetCognitoEventsRequest(input *GetCognitoEventsInput) (req
 		input = &GetCognitoEventsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &GetCognitoEventsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -578,6 +584,7 @@ func (c *CognitoSync) GetCognitoEventsRequest(input *GetCognitoEventsInput) (req
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetCognitoEvents
 func (c *CognitoSync) GetCognitoEvents(input *GetCognitoEventsInput) (*GetCognitoEventsOutput, error) {
 	req, out := c.GetCognitoEventsRequest(input)
 	err := req.Send()
@@ -610,6 +617,7 @@ const opGetIdentityPoolConfiguration = "GetIdentityPoolConfiguration"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetIdentityPoolConfiguration
 func (c *CognitoSync) GetIdentityPoolConfigurationRequest(input *GetIdentityPoolConfigurationInput) (req *request.Request, output *GetIdentityPoolConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opGetIdentityPoolConfiguration,
@@ -621,9 +629,8 @@ func (c *CognitoSync) GetIdentityPoolConfigurationRequest(input *GetIdentityPool
 		input = &GetIdentityPoolConfigurationInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &GetIdentityPoolConfigurationOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -657,6 +664,7 @@ func (c *CognitoSync) GetIdentityPoolConfigurationRequest(input *GetIdentityPool
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetIdentityPoolConfiguration
 func (c *CognitoSync) GetIdentityPoolConfiguration(input *GetIdentityPoolConfigurationInput) (*GetIdentityPoolConfigurationOutput, error) {
 	req, out := c.GetIdentityPoolConfigurationRequest(input)
 	err := req.Send()
@@ -689,6 +697,7 @@ const opListDatasets = "ListDatasets"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListDatasets
 func (c *CognitoSync) ListDatasetsRequest(input *ListDatasetsInput) (req *request.Request, output *ListDatasetsOutput) {
 	op := &request.Operation{
 		Name:       opListDatasets,
@@ -700,9 +709,8 @@ func (c *CognitoSync) ListDatasetsRequest(input *ListDatasetsInput) (req *reques
 		input = &ListDatasetsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &ListDatasetsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -736,6 +744,7 @@ func (c *CognitoSync) ListDatasetsRequest(input *ListDatasetsInput) (req *reques
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListDatasets
 func (c *CognitoSync) ListDatasets(input *ListDatasetsInput) (*ListDatasetsOutput, error) {
 	req, out := c.ListDatasetsRequest(input)
 	err := req.Send()
@@ -768,6 +777,7 @@ const opListIdentityPoolUsage = "ListIdentityPoolUsage"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListIdentityPoolUsage
 func (c *CognitoSync) ListIdentityPoolUsageRequest(input *ListIdentityPoolUsageInput) (req *request.Request, output *ListIdentityPoolUsageOutput) {
 	op := &request.Operation{
 		Name:       opListIdentityPoolUsage,
@@ -779,9 +789,8 @@ func (c *CognitoSync) ListIdentityPoolUsageRequest(input *ListIdentityPoolUsageI
 		input = &ListIdentityPoolUsageInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &ListIdentityPoolUsageOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -813,6 +822,7 @@ func (c *CognitoSync) ListIdentityPoolUsageRequest(input *ListIdentityPoolUsageI
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListIdentityPoolUsage
 func (c *CognitoSync) ListIdentityPoolUsage(input *ListIdentityPoolUsageInput) (*ListIdentityPoolUsageOutput, error) {
 	req, out := c.ListIdentityPoolUsageRequest(input)
 	err := req.Send()
@@ -845,6 +855,7 @@ const opListRecords = "ListRecords"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListRecords
 func (c *CognitoSync) ListRecordsRequest(input *ListRecordsInput) (req *request.Request, output *ListRecordsOutput) {
 	op := &request.Operation{
 		Name:       opListRecords,
@@ -856,9 +867,8 @@ func (c *CognitoSync) ListRecordsRequest(input *ListRecordsInput) (req *request.
 		input = &ListRecordsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &ListRecordsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -893,6 +903,7 @@ func (c *CognitoSync) ListRecordsRequest(input *ListRecordsInput) (req *request.
 //   * InternalErrorException
 //   Indicates an internal service error.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListRecords
 func (c *CognitoSync) ListRecords(input *ListRecordsInput) (*ListRecordsOutput, error) {
 	req, out := c.ListRecordsRequest(input)
 	err := req.Send()
@@ -925,6 +936,7 @@ const opRegisterDevice = "RegisterDevice"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/RegisterDevice
 func (c *CognitoSync) RegisterDeviceRequest(input *RegisterDeviceInput) (req *request.Request, output *RegisterDeviceOutput) {
 	op := &request.Operation{
 		Name:       opRegisterDevice,
@@ -936,9 +948,8 @@ func (c *CognitoSync) RegisterDeviceRequest(input *RegisterDeviceInput) (req *re
 		input = &RegisterDeviceInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &RegisterDeviceOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -975,6 +986,7 @@ func (c *CognitoSync) RegisterDeviceRequest(input *RegisterDeviceInput) (req *re
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/RegisterDevice
 func (c *CognitoSync) RegisterDevice(input *RegisterDeviceInput) (*RegisterDeviceOutput, error) {
 	req, out := c.RegisterDeviceRequest(input)
 	err := req.Send()
@@ -1007,6 +1019,7 @@ const opSetCognitoEvents = "SetCognitoEvents"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetCognitoEvents
 func (c *CognitoSync) SetCognitoEventsRequest(input *SetCognitoEventsInput) (req *request.Request, output *SetCognitoEventsOutput) {
 	op := &request.Operation{
 		Name:       opSetCognitoEvents,
@@ -1018,11 +1031,10 @@ func (c *CognitoSync) SetCognitoEventsRequest(input *SetCognitoEventsInput) (req
 		input = &SetCognitoEventsInput{}
 	}
 
+	output = &SetCognitoEventsOutput{}
 	req = c.newRequest(op, input, output)
 	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
 	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
-	output = &SetCognitoEventsOutput{}
-	req.Data = output
 	return
 }
 
@@ -1059,6 +1071,7 @@ func (c *CognitoSync) SetCognitoEventsRequest(input *SetCognitoEventsInput) (req
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetCognitoEvents
 func (c *CognitoSync) SetCognitoEvents(input *SetCognitoEventsInput) (*SetCognitoEventsOutput, error) {
 	req, out := c.SetCognitoEventsRequest(input)
 	err := req.Send()
@@ -1091,6 +1104,7 @@ const opSetIdentityPoolConfiguration = "SetIdentityPoolConfiguration"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetIdentityPoolConfiguration
 func (c *CognitoSync) SetIdentityPoolConfigurationRequest(input *SetIdentityPoolConfigurationInput) (req *request.Request, output *SetIdentityPoolConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opSetIdentityPoolConfiguration,
@@ -1102,9 +1116,8 @@ func (c *CognitoSync) SetIdentityPoolConfigurationRequest(input *SetIdentityPool
 		input = &SetIdentityPoolConfigurationInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &SetIdentityPoolConfigurationOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1141,6 +1154,7 @@ func (c *CognitoSync) SetIdentityPoolConfigurationRequest(input *SetIdentityPool
 //   * ConcurrentModificationException
 //   Thrown if there are parallel requests to modify a resource.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetIdentityPoolConfiguration
 func (c *CognitoSync) SetIdentityPoolConfiguration(input *SetIdentityPoolConfigurationInput) (*SetIdentityPoolConfigurationOutput, error) {
 	req, out := c.SetIdentityPoolConfigurationRequest(input)
 	err := req.Send()
@@ -1173,6 +1187,7 @@ const opSubscribeToDataset = "SubscribeToDataset"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SubscribeToDataset
 func (c *CognitoSync) SubscribeToDatasetRequest(input *SubscribeToDatasetInput) (req *request.Request, output *SubscribeToDatasetOutput) {
 	op := &request.Operation{
 		Name:       opSubscribeToDataset,
@@ -1184,9 +1199,8 @@ func (c *CognitoSync) SubscribeToDatasetRequest(input *SubscribeToDatasetInput) 
 		input = &SubscribeToDatasetInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &SubscribeToDatasetOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1224,6 +1238,7 @@ func (c *CognitoSync) SubscribeToDatasetRequest(input *SubscribeToDatasetInput) 
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SubscribeToDataset
 func (c *CognitoSync) SubscribeToDataset(input *SubscribeToDatasetInput) (*SubscribeToDatasetOutput, error) {
 	req, out := c.SubscribeToDatasetRequest(input)
 	err := req.Send()
@@ -1256,6 +1271,7 @@ const opUnsubscribeFromDataset = "UnsubscribeFromDataset"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UnsubscribeFromDataset
 func (c *CognitoSync) UnsubscribeFromDatasetRequest(input *UnsubscribeFromDatasetInput) (req *request.Request, output *UnsubscribeFromDatasetOutput) {
 	op := &request.Operation{
 		Name:       opUnsubscribeFromDataset,
@@ -1267,9 +1283,8 @@ func (c *CognitoSync) UnsubscribeFromDatasetRequest(input *UnsubscribeFromDatase
 		input = &UnsubscribeFromDatasetInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &UnsubscribeFromDatasetOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1307,6 +1322,7 @@ func (c *CognitoSync) UnsubscribeFromDatasetRequest(input *UnsubscribeFromDatase
 //   * TooManyRequestsException
 //   Thrown if the request is throttled.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UnsubscribeFromDataset
 func (c *CognitoSync) UnsubscribeFromDataset(input *UnsubscribeFromDatasetInput) (*UnsubscribeFromDatasetOutput, error) {
 	req, out := c.UnsubscribeFromDatasetRequest(input)
 	err := req.Send()
@@ -1339,6 +1355,7 @@ const opUpdateRecords = "UpdateRecords"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UpdateRecords
 func (c *CognitoSync) UpdateRecordsRequest(input *UpdateRecordsInput) (req *request.Request, output *UpdateRecordsOutput) {
 	op := &request.Operation{
 		Name:       opUpdateRecords,
@@ -1350,9 +1367,8 @@ func (c *CognitoSync) UpdateRecordsRequest(input *UpdateRecordsInput) (req *requ
 		input = &UpdateRecordsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &UpdateRecordsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1411,6 +1427,7 @@ func (c *CognitoSync) UpdateRecordsRequest(input *UpdateRecordsInput) (req *requ
 //   * InternalErrorException
 //   Indicates an internal service error.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UpdateRecords
 func (c *CognitoSync) UpdateRecords(input *UpdateRecordsInput) (*UpdateRecordsOutput, error) {
 	req, out := c.UpdateRecordsRequest(input)
 	err := req.Send()
@@ -1418,6 +1435,7 @@ func (c *CognitoSync) UpdateRecords(input *UpdateRecordsInput) (*UpdateRecordsOu
 }
 
 // The input for the BulkPublish operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/BulkPublishRequest
 type BulkPublishInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1461,6 +1479,7 @@ func (s *BulkPublishInput) SetIdentityPoolId(v string) *BulkPublishInput {
 }
 
 // The output for the BulkPublish operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/BulkPublishResponse
 type BulkPublishOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1486,6 +1505,7 @@ func (s *BulkPublishOutput) SetIdentityPoolId(v string) *BulkPublishOutput {
 }
 
 // Configuration options for configure Cognito streams.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/CognitoStreams
 type CognitoStreams struct {
 	_ struct{} `type:"structure"`
 
@@ -1555,6 +1575,7 @@ func (s *CognitoStreams) SetStreamingStatus(v string) *CognitoStreams {
 // a particular entity in an application (like a saved game). Datasets are automatically
 // created if they don't exist. Data is synced by dataset, and a dataset can
 // hold up to 1MB of key-value pairs.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/Dataset
 type Dataset struct {
 	_ struct{} `type:"structure"`
 
@@ -1635,6 +1656,7 @@ func (s *Dataset) SetNumRecords(v int64) *Dataset {
 }
 
 // A request to delete the specific dataset.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DeleteDatasetRequest
 type DeleteDatasetInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1714,6 +1736,7 @@ func (s *DeleteDatasetInput) SetIdentityPoolId(v string) *DeleteDatasetInput {
 }
 
 // Response to a successful DeleteDataset request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DeleteDatasetResponse
 type DeleteDatasetOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1743,6 +1766,7 @@ func (s *DeleteDatasetOutput) SetDataset(v *Dataset) *DeleteDatasetOutput {
 
 // A request for meta data about a dataset (creation date, number of records,
 // size) by owner and dataset name.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeDatasetRequest
 type DescribeDatasetInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1822,6 +1846,7 @@ func (s *DescribeDatasetInput) SetIdentityPoolId(v string) *DescribeDatasetInput
 }
 
 // Response to a successful DescribeDataset request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeDatasetResponse
 type DescribeDatasetOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1850,6 +1875,7 @@ func (s *DescribeDatasetOutput) SetDataset(v *Dataset) *DescribeDatasetOutput {
 }
 
 // A request for usage information about the identity pool.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityPoolUsageRequest
 type DescribeIdentityPoolUsageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1893,6 +1919,7 @@ func (s *DescribeIdentityPoolUsageInput) SetIdentityPoolId(v string) *DescribeId
 }
 
 // Response to a successful DescribeIdentityPoolUsage request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityPoolUsageResponse
 type DescribeIdentityPoolUsageOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1917,6 +1944,7 @@ func (s *DescribeIdentityPoolUsageOutput) SetIdentityPoolUsage(v *IdentityPoolUs
 }
 
 // A request for information about the usage of an identity pool.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityUsageRequest
 type DescribeIdentityUsageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1978,6 +2006,7 @@ func (s *DescribeIdentityUsageInput) SetIdentityPoolId(v string) *DescribeIdenti
 }
 
 // The response to a successful DescribeIdentityUsage request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityUsageResponse
 type DescribeIdentityUsageOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2002,6 +2031,7 @@ func (s *DescribeIdentityUsageOutput) SetIdentityUsage(v *IdentityUsage) *Descri
 }
 
 // The input for the GetBulkPublishDetails operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetBulkPublishDetailsRequest
 type GetBulkPublishDetailsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2045,6 +2075,7 @@ func (s *GetBulkPublishDetailsInput) SetIdentityPoolId(v string) *GetBulkPublish
 }
 
 // The output for the GetBulkPublishDetails operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetBulkPublishDetailsResponse
 type GetBulkPublishDetailsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2117,6 +2148,7 @@ func (s *GetBulkPublishDetailsOutput) SetIdentityPoolId(v string) *GetBulkPublis
 }
 
 // A request for a list of the configured Cognito Events
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetCognitoEventsRequest
 type GetCognitoEventsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2159,6 +2191,7 @@ func (s *GetCognitoEventsInput) SetIdentityPoolId(v string) *GetCognitoEventsInp
 }
 
 // The response from the GetCognitoEvents request
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetCognitoEventsResponse
 type GetCognitoEventsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2183,6 +2216,7 @@ func (s *GetCognitoEventsOutput) SetEvents(v map[string]*string) *GetCognitoEven
 }
 
 // The input for the GetIdentityPoolConfiguration operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetIdentityPoolConfigurationRequest
 type GetIdentityPoolConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2227,6 +2261,7 @@ func (s *GetIdentityPoolConfigurationInput) SetIdentityPoolId(v string) *GetIden
 }
 
 // The output for the GetIdentityPoolConfiguration operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetIdentityPoolConfigurationResponse
 type GetIdentityPoolConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2270,6 +2305,7 @@ func (s *GetIdentityPoolConfigurationOutput) SetPushSync(v *PushSync) *GetIdenti
 }
 
 // Usage information for the identity pool.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/IdentityPoolUsage
 type IdentityPoolUsage struct {
 	_ struct{} `type:"structure"`
 
@@ -2322,6 +2358,7 @@ func (s *IdentityPoolUsage) SetSyncSessionsCount(v int64) *IdentityPoolUsage {
 }
 
 // Usage information for the identity.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/IdentityUsage
 type IdentityUsage struct {
 	_ struct{} `type:"structure"`
 
@@ -2384,6 +2421,7 @@ func (s *IdentityUsage) SetLastModifiedDate(v time.Time) *IdentityUsage {
 }
 
 // Request for a list of datasets for an identity.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListDatasetsRequest
 type ListDatasetsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2463,6 +2501,7 @@ func (s *ListDatasetsInput) SetNextToken(v string) *ListDatasetsInput {
 }
 
 // Returned for a successful ListDatasets request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListDatasetsResponse
 type ListDatasetsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2505,6 +2544,7 @@ func (s *ListDatasetsOutput) SetNextToken(v string) *ListDatasetsOutput {
 }
 
 // A request for usage information on an identity pool.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListIdentityPoolUsageRequest
 type ListIdentityPoolUsageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2538,6 +2578,7 @@ func (s *ListIdentityPoolUsageInput) SetNextToken(v string) *ListIdentityPoolUsa
 }
 
 // Returned for a successful ListIdentityPoolUsage request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListIdentityPoolUsageResponse
 type ListIdentityPoolUsageOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2589,6 +2630,7 @@ func (s *ListIdentityPoolUsageOutput) SetNextToken(v string) *ListIdentityPoolUs
 }
 
 // A request for a list of records.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListRecordsRequest
 type ListRecordsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2704,6 +2746,7 @@ func (s *ListRecordsInput) SetSyncSessionToken(v string) *ListRecordsInput {
 }
 
 // Returned for a successful ListRecordsRequest.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListRecordsResponse
 type ListRecordsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2800,6 +2843,7 @@ func (s *ListRecordsOutput) SetSyncSessionToken(v string) *ListRecordsOutput {
 }
 
 // Configuration options to be applied to the identity pool.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/PushSync
 type PushSync struct {
 	_ struct{} `type:"structure"`
 
@@ -2846,6 +2890,7 @@ func (s *PushSync) SetRoleArn(v string) *PushSync {
 }
 
 // The basic data structure of a dataset.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/Record
 type Record struct {
 	_ struct{} `type:"structure"`
 
@@ -2915,6 +2960,7 @@ func (s *Record) SetValue(v string) *Record {
 }
 
 // An update operation for a record.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/RecordPatch
 type RecordPatch struct {
 	_ struct{} `type:"structure"`
 
@@ -3003,6 +3049,7 @@ func (s *RecordPatch) SetValue(v string) *RecordPatch {
 }
 
 // A request to RegisterDevice.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/RegisterDeviceRequest
 type RegisterDeviceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3092,6 +3139,7 @@ func (s *RegisterDeviceInput) SetToken(v string) *RegisterDeviceInput {
 }
 
 // Response to a RegisterDevice request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/RegisterDeviceResponse
 type RegisterDeviceOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3116,6 +3164,7 @@ func (s *RegisterDeviceOutput) SetDeviceId(v string) *RegisterDeviceOutput {
 }
 
 // A request to configure Cognito Events"
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetCognitoEventsRequest
 type SetCognitoEventsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3171,6 +3220,7 @@ func (s *SetCognitoEventsInput) SetIdentityPoolId(v string) *SetCognitoEventsInp
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetCognitoEventsOutput
 type SetCognitoEventsOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -3186,6 +3236,7 @@ func (s SetCognitoEventsOutput) GoString() string {
 }
 
 // The input for the SetIdentityPoolConfiguration operation.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetIdentityPoolConfigurationRequest
 type SetIdentityPoolConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3257,6 +3308,7 @@ func (s *SetIdentityPoolConfigurationInput) SetPushSync(v *PushSync) *SetIdentit
 }
 
 // The output for the SetIdentityPoolConfiguration operation
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetIdentityPoolConfigurationResponse
 type SetIdentityPoolConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3300,6 +3352,7 @@ func (s *SetIdentityPoolConfigurationOutput) SetPushSync(v *PushSync) *SetIdenti
 }
 
 // A request to SubscribeToDatasetRequest.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SubscribeToDatasetRequest
 type SubscribeToDatasetInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3394,6 +3447,7 @@ func (s *SubscribeToDatasetInput) SetIdentityPoolId(v string) *SubscribeToDatase
 }
 
 // Response to a SubscribeToDataset request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SubscribeToDatasetResponse
 type SubscribeToDatasetOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -3409,6 +3463,7 @@ func (s SubscribeToDatasetOutput) GoString() string {
 }
 
 // A request to UnsubscribeFromDataset.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UnsubscribeFromDatasetRequest
 type UnsubscribeFromDatasetInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3503,6 +3558,7 @@ func (s *UnsubscribeFromDatasetInput) SetIdentityPoolId(v string) *UnsubscribeFr
 }
 
 // Response to an UnsubscribeFromDataset request.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UnsubscribeFromDatasetResponse
 type UnsubscribeFromDatasetOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -3519,6 +3575,7 @@ func (s UnsubscribeFromDatasetOutput) GoString() string {
 
 // A request to post updates to records or add and delete records for a dataset
 // and user.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UpdateRecordsRequest
 type UpdateRecordsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3654,6 +3711,7 @@ func (s *UpdateRecordsInput) SetSyncSessionToken(v string) *UpdateRecordsInput {
 }
 
 // Returned for a successful UpdateRecordsRequest.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UpdateRecordsResponse
 type UpdateRecordsOutput struct {
 	_ struct{} `type:"structure"`
 

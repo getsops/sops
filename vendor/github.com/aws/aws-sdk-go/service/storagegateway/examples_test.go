@@ -233,8 +233,46 @@ func ExampleStorageGateway_CreateCachediSCSIVolume() {
 		TargetName:         aws.String("TargetName"),         // Required
 		VolumeSizeInBytes:  aws.Int64(1),                     // Required
 		SnapshotId:         aws.String("SnapshotId"),
+		SourceVolumeARN:    aws.String("VolumeARN"),
 	}
 	resp, err := svc.CreateCachediSCSIVolume(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleStorageGateway_CreateNFSFileShare() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := storagegateway.New(sess)
+
+	params := &storagegateway.CreateNFSFileShareInput{
+		ClientToken:         aws.String("ClientToken"), // Required
+		GatewayARN:          aws.String("GatewayARN"),  // Required
+		LocationARN:         aws.String("LocationARN"), // Required
+		Role:                aws.String("Role"),        // Required
+		DefaultStorageClass: aws.String("StorageClass"),
+		KMSEncrypted:        aws.Bool(true),
+		KMSKey:              aws.String("KMSKey"),
+		NFSFileShareDefaults: &storagegateway.NFSFileShareDefaults{
+			DirectoryMode: aws.String("PermissionMode"),
+			FileMode:      aws.String("PermissionMode"),
+			GroupId:       aws.Int64(1),
+			OwnerId:       aws.Int64(1),
+		},
+	}
+	resp, err := svc.CreateNFSFileShare(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -425,6 +463,31 @@ func ExampleStorageGateway_DeleteChapCredentials() {
 		TargetARN:     aws.String("TargetARN"), // Required
 	}
 	resp, err := svc.DeleteChapCredentials(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleStorageGateway_DeleteFileShare() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := storagegateway.New(sess)
+
+	params := &storagegateway.DeleteFileShareInput{
+		FileShareARN: aws.String("FileShareARN"), // Required
+	}
+	resp, err := svc.DeleteFileShare(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -716,6 +779,34 @@ func ExampleStorageGateway_DescribeMaintenanceStartTime() {
 	fmt.Println(resp)
 }
 
+func ExampleStorageGateway_DescribeNFSFileShares() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := storagegateway.New(sess)
+
+	params := &storagegateway.DescribeNFSFileSharesInput{
+		FileShareARNList: []*string{ // Required
+			aws.String("FileShareARN"), // Required
+			// More values...
+		},
+	}
+	resp, err := svc.DescribeNFSFileShares(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleStorageGateway_DescribeSnapshotSchedule() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -951,6 +1042,33 @@ func ExampleStorageGateway_DisableGateway() {
 		GatewayARN: aws.String("GatewayARN"), // Required
 	}
 	resp, err := svc.DisableGateway(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleStorageGateway_ListFileShares() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := storagegateway.New(sess)
+
+	params := &storagegateway.ListFileSharesInput{
+		GatewayARN: aws.String("GatewayARN"),
+		Limit:      aws.Int64(1),
+		Marker:     aws.String("Marker"),
+	}
+	resp, err := svc.ListFileShares(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -1453,6 +1571,40 @@ func ExampleStorageGateway_UpdateMaintenanceStartTime() {
 		MinuteOfHour: aws.Int64(1),             // Required
 	}
 	resp, err := svc.UpdateMaintenanceStartTime(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleStorageGateway_UpdateNFSFileShare() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := storagegateway.New(sess)
+
+	params := &storagegateway.UpdateNFSFileShareInput{
+		FileShareARN:        aws.String("FileShareARN"), // Required
+		DefaultStorageClass: aws.String("StorageClass"),
+		KMSEncrypted:        aws.Bool(true),
+		KMSKey:              aws.String("KMSKey"),
+		NFSFileShareDefaults: &storagegateway.NFSFileShareDefaults{
+			DirectoryMode: aws.String("PermissionMode"),
+			FileMode:      aws.String("PermissionMode"),
+			GroupId:       aws.Int64(1),
+			OwnerId:       aws.Int64(1),
+		},
+	}
+	resp, err := svc.UpdateNFSFileShare(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

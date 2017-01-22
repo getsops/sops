@@ -42,13 +42,15 @@ func TestPresignHandler(t *testing.T) {
 
 	assert.NoError(t, err)
 
+	expectedHost := "bucket.s3.mock-region.amazonaws.com"
 	expectedDate := "19700101T000000Z"
 	expectedHeaders := "content-disposition;host;x-amz-acl"
-	expectedSig := "b2754ba8ffeb74a40b94767017e24c4672107d6d5a894648d5d332ca61f5ffe4"
+	expectedSig := "2d76a414208c0eac2a23ef9c834db9635ecd5a0fbb447a00ad191f82d854f55b"
 	expectedCred := "AKID/19700101/mock-region/s3/aws4_request"
 
 	u, _ := url.Parse(urlstr)
 	urlQ := u.Query()
+	assert.Equal(t, expectedHost, u.Host)
 	assert.Equal(t, expectedSig, urlQ.Get("X-Amz-Signature"))
 	assert.Equal(t, expectedCred, urlQ.Get("X-Amz-Credential"))
 	assert.Equal(t, expectedHeaders, urlQ.Get("X-Amz-SignedHeaders"))
@@ -71,9 +73,10 @@ func TestPresignRequest(t *testing.T) {
 
 	assert.NoError(t, err)
 
+	expectedHost := "bucket.s3.mock-region.amazonaws.com"
 	expectedDate := "19700101T000000Z"
 	expectedHeaders := "content-disposition;host;x-amz-acl;x-amz-content-sha256"
-	expectedSig := "0d200ba61501d752acd06f39ef4dbe7d83ffd5ea15978dc3476dfc00b8eb574e"
+	expectedSig := "a5b2b500dfbf2eab5b4f55bec3e3752e04536ea1d5c047aa93bc9f1130a72cd2"
 	expectedCred := "AKID/19700101/mock-region/s3/aws4_request"
 	expectedHeaderMap := http.Header{
 		"x-amz-acl":            []string{"public-read"},
@@ -83,6 +86,7 @@ func TestPresignRequest(t *testing.T) {
 
 	u, _ := url.Parse(urlstr)
 	urlQ := u.Query()
+	assert.Equal(t, expectedHost, u.Host)
 	assert.Equal(t, expectedSig, urlQ.Get("X-Amz-Signature"))
 	assert.Equal(t, expectedCred, urlQ.Get("X-Amz-Credential"))
 	assert.Equal(t, expectedHeaders, urlQ.Get("X-Amz-SignedHeaders"))

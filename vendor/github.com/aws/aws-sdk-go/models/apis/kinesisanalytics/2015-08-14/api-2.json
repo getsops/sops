@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"kinesisanalytics-2015-08-14",
     "apiVersion":"2015-08-14",
     "endpointPrefix":"kinesisanalytics",
     "jsonVersion":"1.1",

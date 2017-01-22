@@ -219,6 +219,8 @@ func ExampleConfigService_DescribeConfigRuleEvaluationStatus() {
 			aws.String("StringWithCharLimit64"), // Required
 			// More values...
 		},
+		Limit:     aws.Int64(1),
+		NextToken: aws.String("String"),
 	}
 	resp, err := svc.DescribeConfigRuleEvaluationStatus(params)
 
@@ -563,7 +565,8 @@ func ExampleConfigService_PutConfigRule() {
 	params := &configservice.PutConfigRuleInput{
 		ConfigRule: &configservice.ConfigRule{ // Required
 			Source: &configservice.Source{ // Required
-				Owner: aws.String("Owner"),
+				Owner:            aws.String("Owner"),                  // Required
+				SourceIdentifier: aws.String("StringWithCharLimit256"), // Required
 				SourceDetails: []*configservice.SourceDetail{
 					{ // Required
 						EventSource:               aws.String("EventSource"),
@@ -572,14 +575,13 @@ func ExampleConfigService_PutConfigRule() {
 					},
 					// More values...
 				},
-				SourceIdentifier: aws.String("StringWithCharLimit256"),
 			},
 			ConfigRuleArn:             aws.String("String"),
 			ConfigRuleId:              aws.String("String"),
 			ConfigRuleName:            aws.String("StringWithCharLimit64"),
 			ConfigRuleState:           aws.String("ConfigRuleState"),
 			Description:               aws.String("EmptiableStringWithCharLimit256"),
-			InputParameters:           aws.String("StringWithCharLimit256"),
+			InputParameters:           aws.String("StringWithCharLimit1024"),
 			MaximumExecutionFrequency: aws.String("MaximumExecutionFrequency"),
 			Scope: &configservice.Scope{
 				ComplianceResourceId: aws.String("StringWithCharLimit256"),

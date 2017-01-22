@@ -7,10 +7,15 @@ formats and encrypts with AWS KMS and PGP.
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
 
+------------
+
+.. image:: https://godoc.org/go.mozilla.org/sops?status.svg
+	:target: https://godoc.org/go.mozilla.org/sops
+
 .. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
 	:target: https://travis-ci.org/mozilla/sops
 
-Install **sops** with:
+Install the **sops** command line with:
 
 .. code:: bash
 
@@ -31,10 +36,12 @@ If you don't have Go installed, set it up with:
 
 Or whatever variation of the above fits your system and shell.
 
+To use **sops** as a library, take a look at the `decrypt package <https://godoc.org/go.mozilla.org/sops/decrypt>`_.
+
 **Questions?** ping "ulfr" in `#security` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
 (use a web client like `mibbit <https://chat.mibbit.com>`_ ).
 
-**What happened to Python Sops?** We rewrote Sops in Go to solve a number of deployment issues, but the Python branch still exists under `python-sops`. You can still `pip install sops`, but we strongly recommend you use the Go version instead.
+**What happened to Python Sops?** We rewrote Sops in Go to solve a number of deployment issues, but the Python branch still exists under `python-sops`. We will keep maintaining it for a while, and you can still `pip install sops`, but we strongly recommend you use the Go version instead.
 
 .. sectnum::
 .. contents:: Table of Contents

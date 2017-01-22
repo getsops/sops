@@ -33,7 +33,6 @@ const opCompareFaces = "CompareFaces"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) CompareFacesRequest(input *CompareFacesInput) (req *request.Request, output *CompareFacesOutput) {
 	op := &request.Operation{
 		Name:       opCompareFaces,
@@ -45,9 +44,8 @@ func (c *Rekognition) CompareFacesRequest(input *CompareFacesInput) (req *reques
 		input = &CompareFacesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &CompareFacesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -90,7 +88,7 @@ func (c *Rekognition) CompareFacesRequest(input *CompareFacesInput) (req *reques
 // Returned Error Codes:
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * InvalidS3ObjectException
 //   Amazon Rekognition is unable to access the S3 object specified in the request.
@@ -147,7 +145,6 @@ const opCreateCollection = "CreateCollection"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req *request.Request, output *CreateCollectionOutput) {
 	op := &request.Operation{
 		Name:       opCreateCollection,
@@ -159,15 +156,14 @@ func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req
 		input = &CreateCollectionInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &CreateCollectionOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
 // CreateCollection API operation for Amazon Rekognition.
 //
-// Creates a collection in an AWS region. You can add faces to the collection
+// Creates a collection in an AWS Region. You can add faces to the collection
 // using the operation.
 //
 // For example, you might create collections, one for each of your application
@@ -190,7 +186,7 @@ func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req
 // Returned Error Codes:
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * AccessDeniedException
 //   You are not authorized to perform the action.
@@ -207,7 +203,7 @@ func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req
 //   this limit, contact Amazon Rekognition.
 //
 //   * ResourceAlreadyExistsException
-//   The collection with specific ID already exist.
+//   A collection with the specified ID already exists.
 //
 func (c *Rekognition) CreateCollection(input *CreateCollectionInput) (*CreateCollectionOutput, error) {
 	req, out := c.CreateCollectionRequest(input)
@@ -240,7 +236,6 @@ const opDeleteCollection = "DeleteCollection"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) DeleteCollectionRequest(input *DeleteCollectionInput) (req *request.Request, output *DeleteCollectionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteCollection,
@@ -252,9 +247,8 @@ func (c *Rekognition) DeleteCollectionRequest(input *DeleteCollectionInput) (req
 		input = &DeleteCollectionInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteCollectionOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -276,7 +270,7 @@ func (c *Rekognition) DeleteCollectionRequest(input *DeleteCollectionInput) (req
 // Returned Error Codes:
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * AccessDeniedException
 //   You are not authorized to perform the action.
@@ -326,7 +320,6 @@ const opDeleteFaces = "DeleteFaces"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) DeleteFacesRequest(input *DeleteFacesInput) (req *request.Request, output *DeleteFacesOutput) {
 	op := &request.Operation{
 		Name:       opDeleteFaces,
@@ -338,9 +331,8 @@ func (c *Rekognition) DeleteFacesRequest(input *DeleteFacesInput) (req *request.
 		input = &DeleteFacesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteFacesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -362,7 +354,7 @@ func (c *Rekognition) DeleteFacesRequest(input *DeleteFacesInput) (req *request.
 // Returned Error Codes:
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * AccessDeniedException
 //   You are not authorized to perform the action.
@@ -412,7 +404,6 @@ const opDetectFaces = "DetectFaces"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) DetectFacesRequest(input *DetectFacesInput) (req *request.Request, output *DetectFacesOutput) {
 	op := &request.Operation{
 		Name:       opDetectFaces,
@@ -424,9 +415,8 @@ func (c *Rekognition) DetectFacesRequest(input *DetectFacesInput) (req *request.
 		input = &DetectFacesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DetectFacesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -464,7 +454,7 @@ func (c *Rekognition) DetectFacesRequest(input *DetectFacesInput) (req *request.
 //
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * ImageTooLargeException
 //   The input image size exceeds the allowed limit. For more information, see
@@ -518,7 +508,6 @@ const opDetectLabels = "DetectLabels"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *request.Request, output *DetectLabelsOutput) {
 	op := &request.Operation{
 		Name:       opDetectLabels,
@@ -530,9 +519,8 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 		input = &DetectLabelsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DetectLabelsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -598,7 +586,7 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 //
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * ImageTooLargeException
 //   The input image size exceeds the allowed limit. For more information, see
@@ -652,7 +640,6 @@ const opIndexFaces = "IndexFaces"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Request, output *IndexFacesOutput) {
 	op := &request.Operation{
 		Name:       opIndexFaces,
@@ -664,9 +651,8 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 		input = &IndexFacesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &IndexFacesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -691,11 +677,11 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 // (indicating the bounding box contains a face), a face ID assigned by the
 // service for each face that is detected and stored, and an image ID assigned
 // by the service for the input image If you request all facial attributes (using
-// the detectionAttributes parameter, Rekognition returns detailed facial attributes
-// such as facial landmarks (for example, location of eye and mount) and other
-// facial attributes such gender. If you provide the same image, specify the
-// same collection, and use the same external ID in the IndexFaces operation,
-// Rekognition doesn't save duplicate face metadata.
+// the detectionAttributes parameter, Amazon Rekognition returns detailed facial
+// attributes such as facial landmarks (for example, location of eye and mount)
+// and other facial attributes such gender. If you provide the same image, specify
+// the same collection, and use the same external ID in the IndexFaces operation,
+// Amazon Rekognition doesn't save duplicate face metadata.
 //
 // For an example, see example2.
 //
@@ -715,7 +701,7 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 //
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * ImageTooLargeException
 //   The input image size exceeds the allowed limit. For more information, see
@@ -772,7 +758,6 @@ const opListCollections = "ListCollections"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) ListCollectionsRequest(input *ListCollectionsInput) (req *request.Request, output *ListCollectionsOutput) {
 	op := &request.Operation{
 		Name:       opListCollections,
@@ -790,9 +775,8 @@ func (c *Rekognition) ListCollectionsRequest(input *ListCollectionsInput) (req *
 		input = &ListCollectionsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &ListCollectionsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -817,7 +801,7 @@ func (c *Rekognition) ListCollectionsRequest(input *ListCollectionsInput) (req *
 // Returned Error Codes:
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * AccessDeniedException
 //   You are not authorized to perform the action.
@@ -895,7 +879,6 @@ const opListFaces = "ListFaces"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) ListFacesRequest(input *ListFacesInput) (req *request.Request, output *ListFacesOutput) {
 	op := &request.Operation{
 		Name:       opListFaces,
@@ -913,9 +896,8 @@ func (c *Rekognition) ListFacesRequest(input *ListFacesInput) (req *request.Requ
 		input = &ListFacesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &ListFacesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -938,7 +920,7 @@ func (c *Rekognition) ListFacesRequest(input *ListFacesInput) (req *request.Requ
 // Returned Error Codes:
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * AccessDeniedException
 //   You are not authorized to perform the action.
@@ -1016,7 +998,6 @@ const opSearchFaces = "SearchFaces"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) SearchFacesRequest(input *SearchFacesInput) (req *request.Request, output *SearchFacesOutput) {
 	op := &request.Operation{
 		Name:       opSearchFaces,
@@ -1028,18 +1009,17 @@ func (c *Rekognition) SearchFacesRequest(input *SearchFacesInput) (req *request.
 		input = &SearchFacesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &SearchFacesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
 // SearchFaces API operation for Amazon Rekognition.
 //
-// For a given input face ID, searches the specified collection for matching
-// faces. You get a face ID when you add a face to the collection using the
-// IndexFaces operation. The operation compares the features of the input face
-// with faces in the specified collection.
+// For a given input face ID, searches for matching faces in the collection
+// the face belongs to. You get a face ID when you add a face to the collection
+// using the IndexFaces operation. The operation compares the features of the
+// input face with faces in the specified collection.
 //
 // You can also search faces without indexing faces by using the SearchFacesByImage
 // operation.
@@ -1065,7 +1045,7 @@ func (c *Rekognition) SearchFacesRequest(input *SearchFacesInput) (req *request.
 // Returned Error Codes:
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * AccessDeniedException
 //   You are not authorized to perform the action.
@@ -1115,7 +1095,6 @@ const opSearchFacesByImage = "SearchFacesByImage"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *Rekognition) SearchFacesByImageRequest(input *SearchFacesByImageInput) (req *request.Request, output *SearchFacesByImageOutput) {
 	op := &request.Operation{
 		Name:       opSearchFacesByImage,
@@ -1127,9 +1106,8 @@ func (c *Rekognition) SearchFacesByImageRequest(input *SearchFacesByImageInput) 
 		input = &SearchFacesByImageInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &SearchFacesByImageOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1139,20 +1117,20 @@ func (c *Rekognition) SearchFacesByImageRequest(input *SearchFacesByImageInput) 
 // then searches the specified collection for matching faces. The operation
 // compares the features of the input face with faces in the specified collection.
 //
-// To search for all faces in an input image, you might first call the API,
-// and then use the face IDs returned in subsequent calls to the API.
+// To search for all faces in an input image, you might first call the operation,
+// and then use the face IDs returned in subsequent calls to the operation.
 //
-//  You can also call the DetectFaces API and use the bounding boxes in the
-// response to make face crops, which then you can pass in to the SearchFacesByImage
-// API.
+//  You can also call the DetectFaces operation and use the bounding boxes in
+// the response to make face crops, which then you can pass in to the SearchFacesByImage
+// operation.
 //
 // The response returns an array of faces that match, ordered by similarity
 // score with the highest similarity first. More specifically, it is an array
 // of metadata for each face match found. Along with the metadata, the response
 // also includes a similarity indicating how similar the face is to the input
-// face. In the response, the API also returns the bounding box (and a confidence
-// level that the bounding box contains a face) of the face that Rekognition
-// used for the input image.
+// face. In the response, the operation also returns the bounding box (and a
+// confidence level that the bounding box contains a face) of the face that
+// Amazon Rekognition used for the input image.
 //
 // For an example, see example3.
 //
@@ -1172,7 +1150,7 @@ func (c *Rekognition) SearchFacesByImageRequest(input *SearchFacesByImageInput) 
 //
 //   * InvalidParameterException
 //   Input parameter violated a constraint. Validate your parameter before calling
-//   the API again.
+//   the API operation again.
 //
 //   * ImageTooLargeException
 //   The input image size exceeds the allowed limit. For more information, see
@@ -1314,12 +1292,12 @@ type CompareFacesInput struct {
 	// The minimum level of confidence in the match you want included in the result.
 	SimilarityThreshold *float64 `type:"float"`
 
-	// Source image either as bytes or an Amazon S3 object
+	// Source image either as bytes or an S3 object
 	//
 	// SourceImage is a required field
 	SourceImage *Image `type:"structure" required:"true"`
 
-	// Target image either as bytes or an Amazon S3 object
+	// Target image either as bytes or an S3 object
 	//
 	// TargetImage is a required field
 	TargetImage *Image `type:"structure" required:"true"`
@@ -1379,9 +1357,9 @@ func (s *CompareFacesInput) SetTargetImage(v *Image) *CompareFacesInput {
 	return s
 }
 
-// Provide the bounding box, confidence that the bounding box actually contains
-// a face, and the similarity between the face in the bounding box and the face
-// in the source image.
+// For the provided the bounding box, confidence level that the bounding box
+// actually contains a face, and the similarity between the face in the bounding
+// box and the face in the source image.
 type CompareFacesMatch struct {
 	_ struct{} `type:"structure"`
 
@@ -1418,7 +1396,7 @@ func (s *CompareFacesMatch) SetSimilarity(v float64) *CompareFacesMatch {
 type CompareFacesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Provides an array of CompareFacesMatch  objects. Each object provides the
+	// Provides an array of CompareFacesMatch objects. Each object provides the
 	// bounding box, confidence that the bounding box contains a face, and the similarity
 	// between the face in the bounding box and the face in the source image.
 	FaceMatches []*CompareFacesMatch `type:"list"`
@@ -1531,7 +1509,7 @@ type ComparedSourceImageFace struct {
 	// or values greater than 1 for the left or top values.
 	BoundingBox *BoundingBox `type:"structure"`
 
-	// Confidence that the selected bounding box contains a face.
+	// Confidence level that the selected bounding box contains a face.
 	Confidence *float64 `type:"float"`
 }
 
@@ -1785,7 +1763,7 @@ type DetectFacesInput struct {
 	// For example, you can specify the value as, ["ALL"] or ["DEFAULT"]. If you
 	// provide both, ["ALL", "DEFAULT"], the service uses a logical AND operator
 	// to determine which attributes to return (in this case, it is all attributes).
-	// If you specify all attributes, Rekognition performs additional detection.
+	// If you specify all attributes, Amazon Rekognition performs additional detection.
 	Attributes []*string `type:"list"`
 
 	// The image in which you want to detect faces. You can specify a blob or an
@@ -1849,6 +1827,10 @@ type DetectFacesOutput struct {
 	// degrees, it corrects orientation, performs face detection, and then returns
 	// the faces. That is, the bounding box coordinates in the response are based
 	// on the corrected orientation.
+	//
+	// If the source image Exif metadata populates the orientation field, Amazon
+	// Rekognition does not perform orientation correction and the value of OrientationCorrection
+	// will be nil.
 	OrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
 }
 
@@ -1948,9 +1930,13 @@ type DetectLabelsOutput struct {
 
 	// Amazon Rekognition returns the orientation of the input image that was detected
 	// (clockwise direction). If your application displays the image, you can use
-	// this value to correct the orientation. If Rekognition detects that the input
-	// image was rotated (for example, by 90 degrees), it first corrects the orientation
-	// before detecting the labels.
+	// this value to correct the orientation. If Amazon Rekognition detects that
+	// the input image was rotated (for example, by 90 degrees), it first corrects
+	// the orientation before detecting the labels.
+	//
+	// If the source image Exif metadata populates the orientation field, Amazon
+	// Rekognition does not perform orientation correction and the value of OrientationCorrection
+	// will be nil.
 	OrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
 }
 
@@ -2413,6 +2399,21 @@ func (s *Gender) SetValue(v string) *Gender {
 }
 
 // Provides the source image either as bytes or an S3 object.
+//
+// The region for the S3 bucket containing the S3 object must match the region
+// you use for Amazon Rekognition operations.
+//
+// You may need to Base64-encode the image bytes depending on the language you
+// are using and whether or not you are using the AWS SDK. For more information,
+// see example4.
+//
+// If you use the Amazon CLI to call Amazon Rekognition operations, passing
+// image bytes using the Bytes property is not supported. You must first upload
+// the image to an Amazon S3 bucket and then call the operation using the S3Object
+// property.
+//
+// For Amazon Rekognition to process an S3 object, the user must have permission
+// to access the S3 object. For more information, see manage-access-resource-policies.
 type Image struct {
 	_ struct{} `type:"structure"`
 
@@ -2512,16 +2513,31 @@ type IndexFacesInput struct {
 	// operation returns a subset of the facial attributes.
 	//
 	// For example, you can specify the value as, ["ALL"] or ["DEFAULT"]. If you
-	// provide both, ["ALL", "DEFAULT"], Rekognition uses the logical AND operator
-	// to determine which attributes to return (in this case, it is all attributes).
-	// If you specify all attributes, the service performs additional detection,
-	// in addition to the default.
+	// provide both, ["ALL", "DEFAULT"], Amazon Rekognition uses the logical AND
+	// operator to determine which attributes to return (in this case, it is all
+	// attributes). If you specify all attributes, the service performs additional
+	// detection, in addition to the default.
 	DetectionAttributes []*string `type:"list"`
 
 	// ID you want to assign to all the faces detected in the image.
 	ExternalImageId *string `min:"1" type:"string"`
 
 	// Provides the source image either as bytes or an S3 object.
+	//
+	// The region for the S3 bucket containing the S3 object must match the region
+	// you use for Amazon Rekognition operations.
+	//
+	// You may need to Base64-encode the image bytes depending on the language you
+	// are using and whether or not you are using the AWS SDK. For more information,
+	// see example4.
+	//
+	// If you use the Amazon CLI to call Amazon Rekognition operations, passing
+	// image bytes using the Bytes property is not supported. You must first upload
+	// the image to an Amazon S3 bucket and then call the operation using the S3Object
+	// property.
+	//
+	// For Amazon Rekognition to process an S3 object, the user must have permission
+	// to access the S3 object. For more information, see manage-access-resource-policies.
 	//
 	// Image is a required field
 	Image *Image `type:"structure" required:"true"`
@@ -2599,6 +2615,10 @@ type IndexFacesOutput struct {
 	// was rotated, it returns the degree of rotation. You can use this value to
 	// correct the orientation and also appropriately analyze the bounding box coordinates
 	// that are returned.
+	//
+	// If the source image Exif metadata populates the orientation field, Amazon
+	// Rekognition does not perform orientation correction and the value of OrientationCorrection
+	// will be nil.
 	OrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
 }
 
@@ -2624,8 +2644,8 @@ func (s *IndexFacesOutput) SetOrientationCorrection(v string) *IndexFacesOutput 
 	return s
 }
 
-// Structure containing details about the detected label, including bounding
-// box, name, and level of confidence.
+// Structure containing details about the detected label, including name, and
+// level of confidence.
 type Label struct {
 	_ struct{} `type:"structure"`
 
@@ -2667,12 +2687,12 @@ type Landmark struct {
 
 	// x-coordinate from the top left of the landmark expressed as the ration of
 	// the width of the image. For example, if the images is 700x200 and the x-coordinate
-	// of the landmark is at 350 pixels, then this value is 0.5.
+	// of the landmark is at 350 pixels, this value is 0.5.
 	X *float64 `type:"float"`
 
 	// y-coordinate from the top left of the landmark expressed as the ration of
 	// the height of the image. For example, if the images is 700x200 and the y-coordinate
-	// of the landmark is at 100 pixels, then this value is 0.5.
+	// of the landmark is at 100 pixels, this value is 0.5.
 	Y *float64 `type:"float"`
 }
 
@@ -2974,6 +2994,12 @@ func (s *Pose) SetYaw(v float64) *Pose {
 }
 
 // Provides the S3 bucket name and object name.
+//
+// The region for the S3 bucket containing the S3 object must match the region
+// you use for Amazon Rekognition operations.
+//
+// For Amazon Rekognition to process an S3 object, the user must have permission
+// to access the S3 object. For more information, see manage-access-resource-policies.
 type S3Object struct {
 	_ struct{} `type:"structure"`
 
@@ -3048,6 +3074,21 @@ type SearchFacesByImageInput struct {
 	FaceMatchThreshold *float64 `type:"float"`
 
 	// Provides the source image either as bytes or an S3 object.
+	//
+	// The region for the S3 bucket containing the S3 object must match the region
+	// you use for Amazon Rekognition operations.
+	//
+	// You may need to Base64-encode the image bytes depending on the language you
+	// are using and whether or not you are using the AWS SDK. For more information,
+	// see example4.
+	//
+	// If you use the Amazon CLI to call Amazon Rekognition operations, passing
+	// image bytes using the Bytes property is not supported. You must first upload
+	// the image to an Amazon S3 bucket and then call the operation using the S3Object
+	// property.
+	//
+	// For Amazon Rekognition to process an S3 object, the user must have permission
+	// to access the S3 object. For more information, see manage-access-resource-policies.
 	//
 	// Image is a required field
 	Image *Image `type:"structure" required:"true"`
@@ -3125,8 +3166,8 @@ type SearchFacesByImageOutput struct {
 	// the match.
 	FaceMatches []*FaceMatch `type:"list"`
 
-	// The bounding box around the face in the input image that Rekognition used
-	// for the search.
+	// The bounding box around the face in the input image that Amazon Rekognition
+	// used for the search.
 	SearchedFaceBoundingBox *BoundingBox `type:"structure"`
 
 	// The level of confidence that the searchedFaceBoundingBox, contains a face.
@@ -3164,7 +3205,7 @@ func (s *SearchFacesByImageOutput) SetSearchedFaceConfidence(v float64) *SearchF
 type SearchFacesInput struct {
 	_ struct{} `type:"structure"`
 
-	// ID of the collection to search.
+	// ID of the collection the face belongs to.
 	//
 	// CollectionId is a required field
 	CollectionId *string `min:"1" type:"string" required:"true"`
@@ -3179,7 +3220,7 @@ type SearchFacesInput struct {
 	// than 70%.
 	FaceMatchThreshold *float64 `type:"float"`
 
-	// Maximum number of faces to return. The API will return the maximum number
+	// Maximum number of faces to return. The operation returns the maximum number
 	// of faces with the highest confidence in the match.
 	MaxFaces *int64 `min:"1" type:"integer"`
 }

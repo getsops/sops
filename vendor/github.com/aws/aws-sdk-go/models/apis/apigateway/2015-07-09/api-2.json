@@ -990,6 +990,33 @@
         {"shape":"TooManyRequestsException"}
       ]
     },
+    "GetSdkType":{
+      "name":"GetSdkType",
+      "http":{
+        "method":"GET",
+        "requestUri":"/sdktypes/{sdktype_id}"
+      },
+      "input":{"shape":"GetSdkTypeRequest"},
+      "output":{"shape":"SdkType"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "GetSdkTypes":{
+      "name":"GetSdkTypes",
+      "http":{
+        "method":"GET",
+        "requestUri":"/sdktypes"
+      },
+      "input":{"shape":"GetSdkTypesRequest"},
+      "output":{"shape":"SdkTypes"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
     "GetStage":{
       "name":"GetStage",
       "http":{
@@ -3098,6 +3125,32 @@
         }
       }
     },
+    "GetSdkTypeRequest":{
+      "type":"structure",
+      "required":["id"],
+      "members":{
+        "id":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"sdktype_id"
+        }
+      }
+    },
+    "GetSdkTypesRequest":{
+      "type":"structure",
+      "members":{
+        "position":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"position"
+        },
+        "limit":{
+          "shape":"NullableInteger",
+          "location":"querystring",
+          "locationName":"limit"
+        }
+      }
+    },
     "GetStageRequest":{
       "type":"structure",
       "required":[
@@ -3423,6 +3476,14 @@
       "type":"list",
       "member":{"shape":"RestApi"}
     },
+    "ListOfSdkConfigurationProperty":{
+      "type":"list",
+      "member":{"shape":"SdkConfigurationProperty"}
+    },
+    "ListOfSdkType":{
+      "type":"list",
+      "member":{"shape":"SdkType"}
+    },
     "ListOfStage":{
       "type":"list",
       "member":{"shape":"Stage"}
@@ -3505,6 +3566,7 @@
         "authorizationType":{"shape":"String"},
         "authorizerId":{"shape":"String"},
         "apiKeyRequired":{"shape":"NullableBoolean"},
+        "operationName":{"shape":"String"},
         "requestParameters":{"shape":"MapOfStringToBoolean"},
         "requestModels":{"shape":"MapOfStringToString"},
         "methodResponses":{"shape":"MapOfMethodResponse"},
@@ -3698,6 +3760,7 @@
         "authorizationType":{"shape":"String"},
         "authorizerId":{"shape":"String"},
         "apiKeyRequired":{"shape":"Boolean"},
+        "operationName":{"shape":"String"},
         "requestParameters":{"shape":"MapOfStringToBoolean"},
         "requestModels":{"shape":"MapOfStringToString"}
       }
@@ -3830,6 +3893,16 @@
         }
       }
     },
+    "SdkConfigurationProperty":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"String"},
+        "friendlyName":{"shape":"String"},
+        "description":{"shape":"String"},
+        "required":{"shape":"Boolean"},
+        "defaultValue":{"shape":"String"}
+      }
+    },
     "SdkResponse":{
       "type":"structure",
       "members":{
@@ -3846,6 +3919,25 @@
         "body":{"shape":"Blob"}
       },
       "payload":"body"
+    },
+    "SdkType":{
+      "type":"structure",
+      "members":{
+        "id":{"shape":"String"},
+        "friendlyName":{"shape":"String"},
+        "description":{"shape":"String"},
+        "configurationProperties":{"shape":"ListOfSdkConfigurationProperty"}
+      }
+    },
+    "SdkTypes":{
+      "type":"structure",
+      "members":{
+        "position":{"shape":"String"},
+        "items":{
+          "shape":"ListOfSdkType",
+          "locationName":"item"
+        }
+      }
     },
     "ServiceUnavailableException":{
       "type":"structure",

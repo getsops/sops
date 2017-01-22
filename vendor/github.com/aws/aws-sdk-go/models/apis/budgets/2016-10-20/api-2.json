@@ -8,7 +8,8 @@
     "serviceAbbreviation":"AWSBudgets",
     "serviceFullName":"AWS Budgets",
     "signatureVersion":"v4",
-    "targetPrefix":"AWSBudgetServiceGateway"
+    "targetPrefix":"AWSBudgetServiceGateway",
+    "uid":"budgets-2016-10-20"
   },
   "operations":{
     "CreateBudget":{

@@ -7,7 +7,8 @@
     "protocol":"json",
     "serviceFullName":"Amazon Cognito Identity Provider",
     "signatureVersion":"v4",
-    "targetPrefix":"AWSCognitoIdentityProviderService"
+    "targetPrefix":"AWSCognitoIdentityProviderService",
+    "uid":"cognito-idp-2016-04-18"
   },
   "operations":{
     "AddCustomAttributes":{
@@ -24,6 +25,22 @@
         {"shape":"TooManyRequestsException"},
         {"shape":"NotAuthorizedException"},
         {"shape":"UserImportInProgressException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
+    "AdminAddUserToGroup":{
+      "name":"AdminAddUserToGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AdminAddUserToGroupRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"UserNotFoundException"},
         {"shape":"InternalErrorException"}
       ]
     },
@@ -235,6 +252,39 @@
         {"shape":"TooManyRequestsException"},
         {"shape":"InternalErrorException"},
         {"shape":"NotAuthorizedException"}
+      ]
+    },
+    "AdminListGroupsForUser":{
+      "name":"AdminListGroupsForUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AdminListGroupsForUserRequest"},
+      "output":{"shape":"AdminListGroupsForUserResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"UserNotFoundException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
+    "AdminRemoveUserFromGroup":{
+      "name":"AdminRemoveUserFromGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AdminRemoveUserFromGroupRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"UserNotFoundException"},
+        {"shape":"InternalErrorException"}
       ]
     },
     "AdminResetUserPassword":{
@@ -458,6 +508,24 @@
       ],
       "authtype":"none"
     },
+    "CreateGroup":{
+      "name":"CreateGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateGroupRequest"},
+      "output":{"shape":"CreateGroupResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"GroupExistsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
     "CreateUserImportJob":{
       "name":"CreateUserImportJob",
       "http":{
@@ -492,6 +560,7 @@
         {"shape":"InvalidSmsRoleTrustRelationshipException"},
         {"shape":"InvalidEmailRoleAccessPolicyException"},
         {"shape":"NotAuthorizedException"},
+        {"shape":"UserPoolTaggingException"},
         {"shape":"InternalErrorException"}
       ]
     },
@@ -508,6 +577,21 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"TooManyRequestsException"},
         {"shape":"LimitExceededException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
+    "DeleteGroup":{
+      "name":"DeleteGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteGroupRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"TooManyRequestsException"},
         {"shape":"NotAuthorizedException"},
         {"shape":"InternalErrorException"}
       ]
@@ -611,6 +695,7 @@
         {"shape":"InvalidParameterException"},
         {"shape":"TooManyRequestsException"},
         {"shape":"NotAuthorizedException"},
+        {"shape":"UserPoolTaggingException"},
         {"shape":"InternalErrorException"}
       ]
     },
@@ -709,6 +794,22 @@
         {"shape":"PasswordResetRequiredException"},
         {"shape":"UserNotFoundException"},
         {"shape":"UserNotConfirmedException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
+    "GetGroup":{
+      "name":"GetGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetGroupRequest"},
+      "output":{"shape":"GetGroupResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotAuthorizedException"},
         {"shape":"InternalErrorException"}
       ]
     },
@@ -821,6 +922,22 @@
         {"shape":"InternalErrorException"}
       ]
     },
+    "ListGroups":{
+      "name":"ListGroups",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListGroupsRequest"},
+      "output":{"shape":"ListGroupsResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
     "ListUserImportJobs":{
       "name":"ListUserImportJobs",
       "http":{
@@ -876,6 +993,22 @@
       },
       "input":{"shape":"ListUsersRequest"},
       "output":{"shape":"ListUsersResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
+    "ListUsersInGroup":{
+      "name":"ListUsersInGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListUsersInGroupRequest"},
+      "output":{"shape":"ListUsersInGroupResponse"},
       "errors":[
         {"shape":"InvalidParameterException"},
         {"shape":"ResourceNotFoundException"},
@@ -1039,6 +1172,22 @@
         {"shape":"InternalErrorException"}
       ]
     },
+    "UpdateGroup":{
+      "name":"UpdateGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateGroupRequest"},
+      "output":{"shape":"UpdateGroupResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
     "UpdateUserAttributes":{
       "name":"UpdateUserAttributes",
       "http":{
@@ -1087,6 +1236,7 @@
         {"shape":"InternalErrorException"},
         {"shape":"InvalidSmsRoleAccessPolicyException"},
         {"shape":"InvalidSmsRoleTrustRelationshipException"},
+        {"shape":"UserPoolTaggingException"},
         {"shape":"InvalidEmailRoleAccessPolicyException"}
       ]
     },
@@ -1145,6 +1295,19 @@
     "AddCustomAttributesResponse":{
       "type":"structure",
       "members":{
+      }
+    },
+    "AdminAddUserToGroupRequest":{
+      "type":"structure",
+      "required":[
+        "UserPoolId",
+        "Username",
+        "GroupName"
+      ],
+      "members":{
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "Username":{"shape":"UsernameType"},
+        "GroupName":{"shape":"GroupNameType"}
       }
     },
     "AdminConfirmSignUpRequest":{
@@ -1359,6 +1522,39 @@
       "members":{
         "Devices":{"shape":"DeviceListType"},
         "PaginationToken":{"shape":"SearchPaginationTokenType"}
+      }
+    },
+    "AdminListGroupsForUserRequest":{
+      "type":"structure",
+      "required":[
+        "Username",
+        "UserPoolId"
+      ],
+      "members":{
+        "Username":{"shape":"UsernameType"},
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "Limit":{"shape":"QueryLimitType"},
+        "NextToken":{"shape":"PaginationKey"}
+      }
+    },
+    "AdminListGroupsForUserResponse":{
+      "type":"structure",
+      "members":{
+        "Groups":{"shape":"GroupListType"},
+        "NextToken":{"shape":"PaginationKey"}
+      }
+    },
+    "AdminRemoveUserFromGroupRequest":{
+      "type":"structure",
+      "required":[
+        "UserPoolId",
+        "Username",
+        "GroupName"
+      ],
+      "members":{
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "Username":{"shape":"UsernameType"},
+        "GroupName":{"shape":"GroupNameType"}
       }
     },
     "AdminResetUserPasswordRequest":{
@@ -1738,6 +1934,26 @@
       "min":1,
       "pattern":"[\\S]+"
     },
+    "CreateGroupRequest":{
+      "type":"structure",
+      "required":[
+        "GroupName",
+        "UserPoolId"
+      ],
+      "members":{
+        "GroupName":{"shape":"GroupNameType"},
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "Description":{"shape":"DescriptionType"},
+        "RoleArn":{"shape":"ArnType"},
+        "Precedence":{"shape":"PrecedenceType"}
+      }
+    },
+    "CreateGroupResponse":{
+      "type":"structure",
+      "members":{
+        "Group":{"shape":"GroupType"}
+      }
+    },
     "CreateUserImportJobRequest":{
       "type":"structure",
       "required":[
@@ -1796,6 +2012,7 @@
         "DeviceConfiguration":{"shape":"DeviceConfigurationType"},
         "EmailConfiguration":{"shape":"EmailConfigurationType"},
         "SmsConfiguration":{"shape":"SmsConfigurationType"},
+        "UserPoolTags":{"shape":"UserPoolTagsType"},
         "AdminCreateUserConfig":{"shape":"AdminCreateUserConfigType"},
         "Schema":{"shape":"SchemaAttributesListType"}
       }
@@ -1819,6 +2036,17 @@
       "min":1
     },
     "DateType":{"type":"timestamp"},
+    "DeleteGroupRequest":{
+      "type":"structure",
+      "required":[
+        "GroupName",
+        "UserPoolId"
+      ],
+      "members":{
+        "GroupName":{"shape":"GroupNameType"},
+        "UserPoolId":{"shape":"UserPoolIdType"}
+      }
+    },
     "DeleteUserAttributesRequest":{
       "type":"structure",
       "required":["UserAttributeNames"],
@@ -1913,6 +2141,10 @@
       "members":{
         "UserPool":{"shape":"UserPoolType"}
       }
+    },
+    "DescriptionType":{
+      "type":"string",
+      "max":2048
     },
     "DeviceConfigurationType":{
       "type":"structure",
@@ -2058,6 +2290,23 @@
         "Device":{"shape":"DeviceType"}
       }
     },
+    "GetGroupRequest":{
+      "type":"structure",
+      "required":[
+        "GroupName",
+        "UserPoolId"
+      ],
+      "members":{
+        "GroupName":{"shape":"GroupNameType"},
+        "UserPoolId":{"shape":"UserPoolIdType"}
+      }
+    },
+    "GetGroupResponse":{
+      "type":"structure",
+      "members":{
+        "Group":{"shape":"GroupType"}
+      }
+    },
     "GetUserAttributeVerificationCodeRequest":{
       "type":"structure",
       "required":["AttributeName"],
@@ -2099,6 +2348,35 @@
     "GlobalSignOutResponse":{
       "type":"structure",
       "members":{
+      }
+    },
+    "GroupExistsException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"MessageType"}
+      },
+      "exception":true
+    },
+    "GroupListType":{
+      "type":"list",
+      "member":{"shape":"GroupType"}
+    },
+    "GroupNameType":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+"
+    },
+    "GroupType":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"GroupNameType"},
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "Description":{"shape":"DescriptionType"},
+        "RoleArn":{"shape":"ArnType"},
+        "Precedence":{"shape":"PrecedenceType"},
+        "LastModifiedDate":{"shape":"DateType"},
+        "CreationDate":{"shape":"DateType"}
       }
     },
     "InitiateAuthRequest":{
@@ -2217,6 +2495,22 @@
         "PaginationToken":{"shape":"SearchPaginationTokenType"}
       }
     },
+    "ListGroupsRequest":{
+      "type":"structure",
+      "required":["UserPoolId"],
+      "members":{
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "Limit":{"shape":"QueryLimitType"},
+        "NextToken":{"shape":"PaginationKey"}
+      }
+    },
+    "ListGroupsResponse":{
+      "type":"structure",
+      "members":{
+        "Groups":{"shape":"GroupListType"},
+        "NextToken":{"shape":"PaginationKey"}
+      }
+    },
     "ListOfStringTypes":{
       "type":"list",
       "member":{"shape":"StringType"}
@@ -2269,6 +2563,26 @@
       "members":{
         "UserPools":{"shape":"UserPoolListType"},
         "NextToken":{"shape":"PaginationKeyType"}
+      }
+    },
+    "ListUsersInGroupRequest":{
+      "type":"structure",
+      "required":[
+        "UserPoolId",
+        "GroupName"
+      ],
+      "members":{
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "GroupName":{"shape":"GroupNameType"},
+        "Limit":{"shape":"QueryLimitType"},
+        "NextToken":{"shape":"PaginationKey"}
+      }
+    },
+    "ListUsersInGroupResponse":{
+      "type":"structure",
+      "members":{
+        "Users":{"shape":"UsersListType"},
+        "NextToken":{"shape":"PaginationKey"}
       }
     },
     "ListUsersRequest":{
@@ -2392,6 +2706,10 @@
     "PreSignedUrlType":{
       "type":"string",
       "max":2048,
+      "min":0
+    },
+    "PrecedenceType":{
+      "type":"integer",
       "min":0
     },
     "PreconditionNotMetException":{
@@ -2663,6 +2981,26 @@
       "members":{
       }
     },
+    "UpdateGroupRequest":{
+      "type":"structure",
+      "required":[
+        "GroupName",
+        "UserPoolId"
+      ],
+      "members":{
+        "GroupName":{"shape":"GroupNameType"},
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "Description":{"shape":"DescriptionType"},
+        "RoleArn":{"shape":"ArnType"},
+        "Precedence":{"shape":"PrecedenceType"}
+      }
+    },
+    "UpdateGroupResponse":{
+      "type":"structure",
+      "members":{
+        "Group":{"shape":"GroupType"}
+      }
+    },
     "UpdateUserAttributesRequest":{
       "type":"structure",
       "required":["UserAttributes"],
@@ -2715,6 +3053,7 @@
         "DeviceConfiguration":{"shape":"DeviceConfigurationType"},
         "EmailConfiguration":{"shape":"EmailConfigurationType"},
         "SmsConfiguration":{"shape":"SmsConfigurationType"},
+        "UserPoolTags":{"shape":"UserPoolTagsType"},
         "AdminCreateUserConfig":{"shape":"AdminCreateUserConfigType"}
       }
     },
@@ -2872,6 +3211,18 @@
         "PasswordPolicy":{"shape":"PasswordPolicyType"}
       }
     },
+    "UserPoolTaggingException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"MessageType"}
+      },
+      "exception":true
+    },
+    "UserPoolTagsType":{
+      "type":"map",
+      "key":{"shape":"StringType"},
+      "value":{"shape":"StringType"}
+    },
     "UserPoolType":{
       "type":"structure",
       "members":{
@@ -2894,6 +3245,7 @@
         "EstimatedNumberOfUsers":{"shape":"IntegerType"},
         "EmailConfiguration":{"shape":"EmailConfigurationType"},
         "SmsConfiguration":{"shape":"SmsConfigurationType"},
+        "UserPoolTags":{"shape":"UserPoolTagsType"},
         "SmsConfigurationFailure":{"shape":"StringType"},
         "EmailConfigurationFailure":{"shape":"StringType"},
         "AdminCreateUserConfig":{"shape":"AdminCreateUserConfigType"}

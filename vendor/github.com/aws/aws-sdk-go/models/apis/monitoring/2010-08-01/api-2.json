@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"monitoring-2010-08-01",
     "apiVersion":"2010-08-01",
     "endpointPrefix":"monitoring",
     "protocol":"query",

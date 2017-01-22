@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"iot-2015-05-28",
     "apiVersion":"2015-05-28",
     "endpointPrefix":"iot",
     "serviceFullName":"AWS IoT",

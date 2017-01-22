@@ -7,7 +7,8 @@
     "protocol":"rest-xml",
     "serviceAbbreviation":"CloudFront",
     "serviceFullName":"Amazon CloudFront",
-    "signatureVersion":"v4"
+    "signatureVersion":"v4",
+    "uid":"cloudfront-2016-09-07"
   },
   "operations":{
     "CreateCloudFrontOriginAccessIdentity":{

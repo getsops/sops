@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"es-2015-01-01",
     "apiVersion":"2015-01-01",
     "endpointPrefix":"es",
     "protocol":"rest-json",

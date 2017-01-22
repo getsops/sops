@@ -29,14 +29,14 @@
     },
     "DescribeInstanceStatus": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "InstanceStatuses"
     },
     "DescribeInstances": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "Reservations"
     },
     "DescribeInternetGateways": {
@@ -63,16 +63,16 @@
     "DescribeReservedInstancesListings": {
       "result_key": "ReservedInstancesListings"
     },
-    "DescribeReservedInstancesOfferings": {
-      "input_token": "NextToken",
-      "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "ReservedInstancesOfferings"
-    },
     "DescribeReservedInstancesModifications": {
       "input_token": "NextToken",
       "output_token": "NextToken",
       "result_key": "ReservedInstancesModifications"
+    },
+    "DescribeReservedInstancesOfferings": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
+      "result_key": "ReservedInstancesOfferings"
     },
     "DescribeRouteTables": {
       "result_key": "RouteTables"
@@ -82,23 +82,23 @@
     },
     "DescribeSnapshots": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "Snapshots"
+    },
+    "DescribeSpotFleetRequests": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
+      "result_key": "SpotFleetRequestConfigs"
     },
     "DescribeSpotInstanceRequests": {
       "result_key": "SpotInstanceRequests"
     },
-    "DescribeSpotFleetRequests": {
-      "input_token": "NextToken",
-      "output_token": "NextToken",
-      "limit_key": "MaxResults",
-      "result_key": "SpotFleetRequestConfigs"
-    },
     "DescribeSpotPriceHistory": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "SpotPriceHistory"
     },
     "DescribeSubnets": {
@@ -106,27 +106,27 @@
     },
     "DescribeTags": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "Tags"
     },
     "DescribeVolumeStatus": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "VolumeStatuses"
     },
     "DescribeVolumes": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "Volumes"
-    },
-    "DescribeVpcs": {
-      "result_key": "Vpcs"
     },
     "DescribeVpcPeeringConnections": {
       "result_key": "VpcPeeringConnections"
+    },
+    "DescribeVpcs": {
+      "result_key": "Vpcs"
     },
     "DescribeVpnConnections": {
       "result_key": "VpnConnections"

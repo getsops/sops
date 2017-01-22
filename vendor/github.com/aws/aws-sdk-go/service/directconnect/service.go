@@ -23,8 +23,9 @@ import (
 // example, you can provision a single connection to any AWS Direct Connect
 // location in the US and use it to access public AWS services in all US Regions
 // and AWS GovCloud (US).
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25
 type DirectConnect struct {
 	*client.Client
 }
@@ -35,8 +36,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "directconnect"
+// Service information constants
+const (
+	ServiceName = "directconnect" // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName     // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the DirectConnect client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -49,17 +53,18 @@ const ServiceName = "directconnect"
 //     // Create a DirectConnect client with additional configuration
 //     svc := directconnect.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *DirectConnect {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *DirectConnect {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *DirectConnect {
 	svc := &DirectConnect{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2012-10-25",

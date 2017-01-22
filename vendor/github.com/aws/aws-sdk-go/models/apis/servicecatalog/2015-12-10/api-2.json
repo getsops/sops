@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"servicecatalog-2015-12-10",
     "apiVersion":"2015-12-10",
     "endpointPrefix":"servicecatalog",
     "jsonVersion":"1.1",

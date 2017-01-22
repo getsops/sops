@@ -6,6 +6,7 @@
     "protocol":"query",
     "serviceFullName":"Auto Scaling",
     "signatureVersion":"v4",
+    "uid":"autoscaling-2011-01-01",
     "xmlNamespace":"http://autoscaling.amazonaws.com/doc/2011-01-01/"
   },
   "operations":{

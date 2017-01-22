@@ -8,7 +8,8 @@
     "serviceAbbreviation":"ACM",
     "serviceFullName":"AWS Certificate Manager",
     "signatureVersion":"v4",
-    "targetPrefix":"CertificateManager"
+    "targetPrefix":"CertificateManager",
+    "uid":"acm-2015-12-08"
   },
   "operations":{
     "AddTagsToCertificate":{
@@ -203,7 +204,8 @@
         "SignatureAlgorithm":{"shape":"String"},
         "InUseBy":{"shape":"InUseList"},
         "FailureReason":{"shape":"FailureReason"},
-        "Type":{"shape":"CertificateType"}
+        "Type":{"shape":"CertificateType"},
+        "RenewalSummary":{"shape":"RenewalSummary"}
       }
     },
     "CertificateStatus":{
@@ -272,13 +274,22 @@
       "min":1,
       "pattern":"^(\\*\\.)?(((?!-)[A-Za-z0-9-]{0,62}[A-Za-z0-9])\\.)+((?!-)[A-Za-z0-9-]{1,62}[A-Za-z0-9])$"
     },
+    "DomainStatus":{
+      "type":"string",
+      "enum":[
+        "PENDING_VALIDATION",
+        "SUCCESS",
+        "FAILED"
+      ]
+    },
     "DomainValidation":{
       "type":"structure",
       "required":["DomainName"],
       "members":{
         "DomainName":{"shape":"DomainNameString"},
         "ValidationEmails":{"shape":"ValidationEmailList"},
-        "ValidationDomain":{"shape":"DomainNameString"}
+        "ValidationDomain":{"shape":"DomainNameString"},
+        "ValidationStatus":{"shape":"DomainStatus"}
       }
     },
     "DomainValidationList":{
@@ -454,6 +465,26 @@
       "members":{
         "CertificateArn":{"shape":"Arn"},
         "Tags":{"shape":"TagList"}
+      }
+    },
+    "RenewalStatus":{
+      "type":"string",
+      "enum":[
+        "PENDING_AUTO_RENEWAL",
+        "PENDING_VALIDATION",
+        "SUCCESS",
+        "FAILED"
+      ]
+    },
+    "RenewalSummary":{
+      "type":"structure",
+      "required":[
+        "RenewalStatus",
+        "DomainValidationOptions"
+      ],
+      "members":{
+        "RenewalStatus":{"shape":"RenewalStatus"},
+        "DomainValidationOptions":{"shape":"DomainValidationList"}
       }
     },
     "RequestCertificateRequest":{

@@ -17,8 +17,9 @@ import (
 // publish messages over HTTP (Publish) and retrieve, update, and delete thing
 // shadows. A thing shadow is a persistent representation of your things and
 // their state in the AWS cloud.
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/iot-data-2015-05-28
 type IoTDataPlane struct {
 	*client.Client
 }
@@ -29,8 +30,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "data.iot"
+// Service information constants
+const (
+	ServiceName = "data.iot"  // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the IoTDataPlane client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -43,18 +47,21 @@ const ServiceName = "data.iot"
 //     // Create a IoTDataPlane client with additional configuration
 //     svc := iotdataplane.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *IoTDataPlane {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *IoTDataPlane {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *IoTDataPlane {
+	if len(signingName) == 0 {
+		signingName = "iotdata"
+	}
 	svc := &IoTDataPlane{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
-				SigningName:   "iotdata",
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2015-05-28",

@@ -67,6 +67,10 @@ type ECSAPI interface {
 
 	CreateService(*ecs.CreateServiceInput) (*ecs.CreateServiceOutput, error)
 
+	DeleteAttributesRequest(*ecs.DeleteAttributesInput) (*request.Request, *ecs.DeleteAttributesOutput)
+
+	DeleteAttributes(*ecs.DeleteAttributesInput) (*ecs.DeleteAttributesOutput, error)
+
 	DeleteClusterRequest(*ecs.DeleteClusterInput) (*request.Request, *ecs.DeleteClusterOutput)
 
 	DeleteCluster(*ecs.DeleteClusterInput) (*ecs.DeleteClusterOutput, error)
@@ -107,6 +111,10 @@ type ECSAPI interface {
 
 	DiscoverPollEndpoint(*ecs.DiscoverPollEndpointInput) (*ecs.DiscoverPollEndpointOutput, error)
 
+	ListAttributesRequest(*ecs.ListAttributesInput) (*request.Request, *ecs.ListAttributesOutput)
+
+	ListAttributes(*ecs.ListAttributesInput) (*ecs.ListAttributesOutput, error)
+
 	ListClustersRequest(*ecs.ListClustersInput) (*request.Request, *ecs.ListClustersOutput)
 
 	ListClusters(*ecs.ListClustersInput) (*ecs.ListClustersOutput, error)
@@ -142,6 +150,10 @@ type ECSAPI interface {
 	ListTasks(*ecs.ListTasksInput) (*ecs.ListTasksOutput, error)
 
 	ListTasksPages(*ecs.ListTasksInput, func(*ecs.ListTasksOutput, bool) bool) error
+
+	PutAttributesRequest(*ecs.PutAttributesInput) (*request.Request, *ecs.PutAttributesOutput)
+
+	PutAttributes(*ecs.PutAttributesInput) (*ecs.PutAttributesOutput, error)
 
 	RegisterContainerInstanceRequest(*ecs.RegisterContainerInstanceInput) (*request.Request, *ecs.RegisterContainerInstanceOutput)
 

@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"waf-2015-08-24",
     "apiVersion":"2015-08-24",
     "endpointPrefix":"waf",
     "jsonVersion":"1.1",
@@ -8,7 +9,8 @@
     "serviceAbbreviation":"WAF",
     "serviceFullName":"AWS WAF",
     "signatureVersion":"v4",
-    "targetPrefix":"AWSWAF_20150824"
+    "targetPrefix":"AWSWAF_20150824",
+    "uid":"waf-2015-08-24"
   },
   "operations":{
     "CreateByteMatchSet":{

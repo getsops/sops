@@ -87,6 +87,10 @@ type SSMAPI interface {
 
 	CreateMaintenanceWindow(*ssm.CreateMaintenanceWindowInput) (*ssm.CreateMaintenanceWindowOutput, error)
 
+	CreatePatchBaselineRequest(*ssm.CreatePatchBaselineInput) (*request.Request, *ssm.CreatePatchBaselineOutput)
+
+	CreatePatchBaseline(*ssm.CreatePatchBaselineInput) (*ssm.CreatePatchBaselineOutput, error)
+
 	DeleteActivationRequest(*ssm.DeleteActivationInput) (*request.Request, *ssm.DeleteActivationOutput)
 
 	DeleteActivation(*ssm.DeleteActivationInput) (*ssm.DeleteActivationOutput, error)
@@ -107,9 +111,17 @@ type SSMAPI interface {
 
 	DeleteParameter(*ssm.DeleteParameterInput) (*ssm.DeleteParameterOutput, error)
 
+	DeletePatchBaselineRequest(*ssm.DeletePatchBaselineInput) (*request.Request, *ssm.DeletePatchBaselineOutput)
+
+	DeletePatchBaseline(*ssm.DeletePatchBaselineInput) (*ssm.DeletePatchBaselineOutput, error)
+
 	DeregisterManagedInstanceRequest(*ssm.DeregisterManagedInstanceInput) (*request.Request, *ssm.DeregisterManagedInstanceOutput)
 
 	DeregisterManagedInstance(*ssm.DeregisterManagedInstanceInput) (*ssm.DeregisterManagedInstanceOutput, error)
+
+	DeregisterPatchBaselineForPatchGroupRequest(*ssm.DeregisterPatchBaselineForPatchGroupInput) (*request.Request, *ssm.DeregisterPatchBaselineForPatchGroupOutput)
+
+	DeregisterPatchBaselineForPatchGroup(*ssm.DeregisterPatchBaselineForPatchGroupInput) (*ssm.DeregisterPatchBaselineForPatchGroupOutput, error)
 
 	DeregisterTargetFromMaintenanceWindowRequest(*ssm.DeregisterTargetFromMaintenanceWindowInput) (*request.Request, *ssm.DeregisterTargetFromMaintenanceWindowOutput)
 
@@ -133,6 +145,10 @@ type SSMAPI interface {
 
 	DescribeAutomationExecutions(*ssm.DescribeAutomationExecutionsInput) (*ssm.DescribeAutomationExecutionsOutput, error)
 
+	DescribeAvailablePatchesRequest(*ssm.DescribeAvailablePatchesInput) (*request.Request, *ssm.DescribeAvailablePatchesOutput)
+
+	DescribeAvailablePatches(*ssm.DescribeAvailablePatchesInput) (*ssm.DescribeAvailablePatchesOutput, error)
+
 	DescribeDocumentRequest(*ssm.DescribeDocumentInput) (*request.Request, *ssm.DescribeDocumentOutput)
 
 	DescribeDocument(*ssm.DescribeDocumentInput) (*ssm.DescribeDocumentOutput, error)
@@ -145,6 +161,10 @@ type SSMAPI interface {
 
 	DescribeEffectiveInstanceAssociations(*ssm.DescribeEffectiveInstanceAssociationsInput) (*ssm.DescribeEffectiveInstanceAssociationsOutput, error)
 
+	DescribeEffectivePatchesForPatchBaselineRequest(*ssm.DescribeEffectivePatchesForPatchBaselineInput) (*request.Request, *ssm.DescribeEffectivePatchesForPatchBaselineOutput)
+
+	DescribeEffectivePatchesForPatchBaseline(*ssm.DescribeEffectivePatchesForPatchBaselineInput) (*ssm.DescribeEffectivePatchesForPatchBaselineOutput, error)
+
 	DescribeInstanceAssociationsStatusRequest(*ssm.DescribeInstanceAssociationsStatusInput) (*request.Request, *ssm.DescribeInstanceAssociationsStatusOutput)
 
 	DescribeInstanceAssociationsStatus(*ssm.DescribeInstanceAssociationsStatusInput) (*ssm.DescribeInstanceAssociationsStatusOutput, error)
@@ -154,6 +174,18 @@ type SSMAPI interface {
 	DescribeInstanceInformation(*ssm.DescribeInstanceInformationInput) (*ssm.DescribeInstanceInformationOutput, error)
 
 	DescribeInstanceInformationPages(*ssm.DescribeInstanceInformationInput, func(*ssm.DescribeInstanceInformationOutput, bool) bool) error
+
+	DescribeInstancePatchStatesRequest(*ssm.DescribeInstancePatchStatesInput) (*request.Request, *ssm.DescribeInstancePatchStatesOutput)
+
+	DescribeInstancePatchStates(*ssm.DescribeInstancePatchStatesInput) (*ssm.DescribeInstancePatchStatesOutput, error)
+
+	DescribeInstancePatchStatesForPatchGroupRequest(*ssm.DescribeInstancePatchStatesForPatchGroupInput) (*request.Request, *ssm.DescribeInstancePatchStatesForPatchGroupOutput)
+
+	DescribeInstancePatchStatesForPatchGroup(*ssm.DescribeInstancePatchStatesForPatchGroupInput) (*ssm.DescribeInstancePatchStatesForPatchGroupOutput, error)
+
+	DescribeInstancePatchesRequest(*ssm.DescribeInstancePatchesInput) (*request.Request, *ssm.DescribeInstancePatchesOutput)
+
+	DescribeInstancePatches(*ssm.DescribeInstancePatchesInput) (*ssm.DescribeInstancePatchesOutput, error)
 
 	DescribeMaintenanceWindowExecutionTaskInvocationsRequest(*ssm.DescribeMaintenanceWindowExecutionTaskInvocationsInput) (*request.Request, *ssm.DescribeMaintenanceWindowExecutionTaskInvocationsOutput)
 
@@ -183,6 +215,18 @@ type SSMAPI interface {
 
 	DescribeParameters(*ssm.DescribeParametersInput) (*ssm.DescribeParametersOutput, error)
 
+	DescribePatchBaselinesRequest(*ssm.DescribePatchBaselinesInput) (*request.Request, *ssm.DescribePatchBaselinesOutput)
+
+	DescribePatchBaselines(*ssm.DescribePatchBaselinesInput) (*ssm.DescribePatchBaselinesOutput, error)
+
+	DescribePatchGroupStateRequest(*ssm.DescribePatchGroupStateInput) (*request.Request, *ssm.DescribePatchGroupStateOutput)
+
+	DescribePatchGroupState(*ssm.DescribePatchGroupStateInput) (*ssm.DescribePatchGroupStateOutput, error)
+
+	DescribePatchGroupsRequest(*ssm.DescribePatchGroupsInput) (*request.Request, *ssm.DescribePatchGroupsOutput)
+
+	DescribePatchGroups(*ssm.DescribePatchGroupsInput) (*ssm.DescribePatchGroupsOutput, error)
+
 	GetAutomationExecutionRequest(*ssm.GetAutomationExecutionInput) (*request.Request, *ssm.GetAutomationExecutionOutput)
 
 	GetAutomationExecution(*ssm.GetAutomationExecutionInput) (*ssm.GetAutomationExecutionOutput, error)
@@ -190,6 +234,14 @@ type SSMAPI interface {
 	GetCommandInvocationRequest(*ssm.GetCommandInvocationInput) (*request.Request, *ssm.GetCommandInvocationOutput)
 
 	GetCommandInvocation(*ssm.GetCommandInvocationInput) (*ssm.GetCommandInvocationOutput, error)
+
+	GetDefaultPatchBaselineRequest(*ssm.GetDefaultPatchBaselineInput) (*request.Request, *ssm.GetDefaultPatchBaselineOutput)
+
+	GetDefaultPatchBaseline(*ssm.GetDefaultPatchBaselineInput) (*ssm.GetDefaultPatchBaselineOutput, error)
+
+	GetDeployablePatchSnapshotForInstanceRequest(*ssm.GetDeployablePatchSnapshotForInstanceInput) (*request.Request, *ssm.GetDeployablePatchSnapshotForInstanceOutput)
+
+	GetDeployablePatchSnapshotForInstance(*ssm.GetDeployablePatchSnapshotForInstanceInput) (*ssm.GetDeployablePatchSnapshotForInstanceOutput, error)
 
 	GetDocumentRequest(*ssm.GetDocumentInput) (*request.Request, *ssm.GetDocumentOutput)
 
@@ -222,6 +274,14 @@ type SSMAPI interface {
 	GetParametersRequest(*ssm.GetParametersInput) (*request.Request, *ssm.GetParametersOutput)
 
 	GetParameters(*ssm.GetParametersInput) (*ssm.GetParametersOutput, error)
+
+	GetPatchBaselineRequest(*ssm.GetPatchBaselineInput) (*request.Request, *ssm.GetPatchBaselineOutput)
+
+	GetPatchBaseline(*ssm.GetPatchBaselineInput) (*ssm.GetPatchBaselineOutput, error)
+
+	GetPatchBaselineForPatchGroupRequest(*ssm.GetPatchBaselineForPatchGroupInput) (*request.Request, *ssm.GetPatchBaselineForPatchGroupOutput)
+
+	GetPatchBaselineForPatchGroup(*ssm.GetPatchBaselineForPatchGroupInput) (*ssm.GetPatchBaselineForPatchGroupOutput, error)
 
 	ListAssociationsRequest(*ssm.ListAssociationsInput) (*request.Request, *ssm.ListAssociationsOutput)
 
@@ -271,6 +331,14 @@ type SSMAPI interface {
 
 	PutParameter(*ssm.PutParameterInput) (*ssm.PutParameterOutput, error)
 
+	RegisterDefaultPatchBaselineRequest(*ssm.RegisterDefaultPatchBaselineInput) (*request.Request, *ssm.RegisterDefaultPatchBaselineOutput)
+
+	RegisterDefaultPatchBaseline(*ssm.RegisterDefaultPatchBaselineInput) (*ssm.RegisterDefaultPatchBaselineOutput, error)
+
+	RegisterPatchBaselineForPatchGroupRequest(*ssm.RegisterPatchBaselineForPatchGroupInput) (*request.Request, *ssm.RegisterPatchBaselineForPatchGroupOutput)
+
+	RegisterPatchBaselineForPatchGroup(*ssm.RegisterPatchBaselineForPatchGroupInput) (*ssm.RegisterPatchBaselineForPatchGroupOutput, error)
+
 	RegisterTargetWithMaintenanceWindowRequest(*ssm.RegisterTargetWithMaintenanceWindowInput) (*request.Request, *ssm.RegisterTargetWithMaintenanceWindowOutput)
 
 	RegisterTargetWithMaintenanceWindow(*ssm.RegisterTargetWithMaintenanceWindowInput) (*ssm.RegisterTargetWithMaintenanceWindowOutput, error)
@@ -318,6 +386,10 @@ type SSMAPI interface {
 	UpdateManagedInstanceRoleRequest(*ssm.UpdateManagedInstanceRoleInput) (*request.Request, *ssm.UpdateManagedInstanceRoleOutput)
 
 	UpdateManagedInstanceRole(*ssm.UpdateManagedInstanceRoleInput) (*ssm.UpdateManagedInstanceRoleOutput, error)
+
+	UpdatePatchBaselineRequest(*ssm.UpdatePatchBaselineInput) (*request.Request, *ssm.UpdatePatchBaselineOutput)
+
+	UpdatePatchBaseline(*ssm.UpdatePatchBaselineInput) (*ssm.UpdatePatchBaselineOutput, error)
 }
 
 var _ SSMAPI = (*ssm.SSM)(nil)

@@ -94,7 +94,7 @@ func TestSessionClientConfig(t *testing.T) {
 	cfg := s.ClientConfig("s3", &aws.Config{Region: aws.String("us-west-2")})
 
 	assert.Equal(t, "https://s3-us-west-2.amazonaws.com", cfg.Endpoint)
-	assert.Empty(t, cfg.SigningRegion)
+	assert.Equal(t, "us-west-2", cfg.SigningRegion)
 	assert.Equal(t, "us-west-2", *cfg.Config.Region)
 }
 

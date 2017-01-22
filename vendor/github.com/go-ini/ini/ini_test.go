@@ -16,6 +16,8 @@ package ini
 
 import (
 	"bytes"
+	"io/ioutil"
+	"strings"
 	"testing"
 	"time"
 
@@ -113,13 +115,21 @@ func Test_Load(t *testing.T) {
 		})
 
 		Convey("Load with multiple data sources", func() {
-			cfg, err := Load([]byte(_CONF_DATA), "testdata/conf.ini")
+			cfg, err := Load([]byte(_CONF_DATA), "testdata/conf.ini", ioutil.NopCloser(bytes.NewReader([]byte(_CONF_DATA))))
 			So(err, ShouldBeNil)
 			So(cfg, ShouldNotBeNil)
 
 			f, err := Load([]byte(_CONF_DATA), "testdata/404.ini")
 			So(err, ShouldNotBeNil)
 			So(f, ShouldBeNil)
+		})
+
+		Convey("Load with io.ReadCloser", func() {
+			cfg, err := Load(ioutil.NopCloser(bytes.NewReader([]byte(_CONF_DATA))))
+			So(err, ShouldBeNil)
+			So(cfg, ShouldNotBeNil)
+
+			So(cfg.Section("").Key("NAME").String(), ShouldEqual, "ini")
 		})
 	})
 
@@ -197,16 +207,24 @@ key2=c\d\`))
 
 	Convey("Load with boolean type keys", t, func() {
 		cfg, err := LoadSources(LoadOptions{AllowBooleanKeys: true}, []byte(`key1=hello
-key2`))
+key2
+#key3
+key4
+key5`))
 		So(err, ShouldBeNil)
 		So(cfg, ShouldNotBeNil)
 
+		So(strings.Join(cfg.Section("").KeyStrings(), ","), ShouldEqual, "key1,key2,key4,key5")
 		So(cfg.Section("").Key("key2").MustBool(false), ShouldBeTrue)
 
 		var buf bytes.Buffer
 		cfg.WriteTo(&buf)
+		// there is always a trailing \n at the end of the section
 		So(buf.String(), ShouldEqual, `key1 = hello
 key2
+#key3
+key4
+key5
 `)
 	})
 }
@@ -353,6 +371,32 @@ NotFound, State, 50000"""
 	val w/ pound                       = `+"`"+`my#password`+"`"+`
 	`+"`"+`longest key has a colon : yes/no`+"`"+` = yes
 
+`)
+	})
+}
+
+func Test_File_WriteTo_SectionRaw(t *testing.T) {
+	Convey("Write a INI with a raw section", t, func() {
+		var buf bytes.Buffer
+		cfg, err := LoadSources(
+			LoadOptions{
+				UnparseableSections: []string{"CORE_LESSON", "COMMENTS"},
+			},
+			"testdata/aicc.ini")
+		So(err, ShouldBeNil)
+		So(cfg, ShouldNotBeNil)
+		cfg.WriteToIndent(&buf, "\t")
+		So(buf.String(), ShouldEqual, `[Core]
+	Lesson_Location = 87
+	Lesson_Status   = C
+	Score           = 3
+	Time            = 00:02:30
+
+[CORE_LESSON]
+my lesson state data – 1111111111111111111000000000000000001110000
+111111111111111111100000000000111000000000 – end my lesson state data
+[COMMENTS]
+<1><L.Slide#2> This slide has the fuel listed in the wrong units <e.1>
 `)
 	})
 }

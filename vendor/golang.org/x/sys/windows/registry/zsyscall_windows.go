@@ -46,6 +46,7 @@ var (
 	procRegEnumValueW             = modadvapi32.NewProc("RegEnumValueW")
 	procRegDeleteValueW           = modadvapi32.NewProc("RegDeleteValueW")
 	procRegLoadMUIStringW         = modadvapi32.NewProc("RegLoadMUIStringW")
+	procRegConnectRegistryW       = modadvapi32.NewProc("RegConnectRegistryW")
 	procExpandEnvironmentStringsW = modkernel32.NewProc("ExpandEnvironmentStringsW")
 )
 
@@ -91,6 +92,14 @@ func regDeleteValue(key syscall.Handle, name *uint16) (regerrno error) {
 
 func regLoadMUIString(key syscall.Handle, name *uint16, buf *uint16, buflen uint32, buflenCopied *uint32, flags uint32, dir *uint16) (regerrno error) {
 	r0, _, _ := syscall.Syscall9(procRegLoadMUIStringW.Addr(), 7, uintptr(key), uintptr(unsafe.Pointer(name)), uintptr(unsafe.Pointer(buf)), uintptr(buflen), uintptr(unsafe.Pointer(buflenCopied)), uintptr(flags), uintptr(unsafe.Pointer(dir)), 0, 0)
+	if r0 != 0 {
+		regerrno = syscall.Errno(r0)
+	}
+	return
+}
+
+func regConnectRegistry(machinename *uint16, key syscall.Handle, result *syscall.Handle) (regerrno error) {
+	r0, _, _ := syscall.Syscall(procRegConnectRegistryW.Addr(), 3, uintptr(unsafe.Pointer(machinename)), uintptr(key), uintptr(unsafe.Pointer(result)))
 	if r0 != 0 {
 		regerrno = syscall.Errno(r0)
 	}

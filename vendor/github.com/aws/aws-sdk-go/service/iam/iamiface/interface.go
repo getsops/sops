@@ -127,6 +127,10 @@ type IAMAPI interface {
 
 	CreateSAMLProvider(*iam.CreateSAMLProviderInput) (*iam.CreateSAMLProviderOutput, error)
 
+	CreateServiceSpecificCredentialRequest(*iam.CreateServiceSpecificCredentialInput) (*request.Request, *iam.CreateServiceSpecificCredentialOutput)
+
+	CreateServiceSpecificCredential(*iam.CreateServiceSpecificCredentialInput) (*iam.CreateServiceSpecificCredentialOutput, error)
+
 	CreateUserRequest(*iam.CreateUserInput) (*request.Request, *iam.CreateUserOutput)
 
 	CreateUser(*iam.CreateUserInput) (*iam.CreateUserOutput, error)
@@ -198,6 +202,10 @@ type IAMAPI interface {
 	DeleteServerCertificateRequest(*iam.DeleteServerCertificateInput) (*request.Request, *iam.DeleteServerCertificateOutput)
 
 	DeleteServerCertificate(*iam.DeleteServerCertificateInput) (*iam.DeleteServerCertificateOutput, error)
+
+	DeleteServiceSpecificCredentialRequest(*iam.DeleteServiceSpecificCredentialInput) (*request.Request, *iam.DeleteServiceSpecificCredentialOutput)
+
+	DeleteServiceSpecificCredential(*iam.DeleteServiceSpecificCredentialInput) (*iam.DeleteServiceSpecificCredentialOutput, error)
 
 	DeleteSigningCertificateRequest(*iam.DeleteSigningCertificateInput) (*request.Request, *iam.DeleteSigningCertificateOutput)
 
@@ -439,6 +447,10 @@ type IAMAPI interface {
 
 	ListServerCertificatesPages(*iam.ListServerCertificatesInput, func(*iam.ListServerCertificatesOutput, bool) bool) error
 
+	ListServiceSpecificCredentialsRequest(*iam.ListServiceSpecificCredentialsInput) (*request.Request, *iam.ListServiceSpecificCredentialsOutput)
+
+	ListServiceSpecificCredentials(*iam.ListServiceSpecificCredentialsInput) (*iam.ListServiceSpecificCredentialsOutput, error)
+
 	ListSigningCertificatesRequest(*iam.ListSigningCertificatesInput) (*request.Request, *iam.ListSigningCertificatesOutput)
 
 	ListSigningCertificates(*iam.ListSigningCertificatesInput) (*iam.ListSigningCertificatesOutput, error)
@@ -486,6 +498,10 @@ type IAMAPI interface {
 	RemoveUserFromGroupRequest(*iam.RemoveUserFromGroupInput) (*request.Request, *iam.RemoveUserFromGroupOutput)
 
 	RemoveUserFromGroup(*iam.RemoveUserFromGroupInput) (*iam.RemoveUserFromGroupOutput, error)
+
+	ResetServiceSpecificCredentialRequest(*iam.ResetServiceSpecificCredentialInput) (*request.Request, *iam.ResetServiceSpecificCredentialOutput)
+
+	ResetServiceSpecificCredential(*iam.ResetServiceSpecificCredentialInput) (*iam.ResetServiceSpecificCredentialOutput, error)
 
 	ResyncMFADeviceRequest(*iam.ResyncMFADeviceInput) (*request.Request, *iam.ResyncMFADeviceOutput)
 
@@ -542,6 +558,10 @@ type IAMAPI interface {
 	UpdateServerCertificateRequest(*iam.UpdateServerCertificateInput) (*request.Request, *iam.UpdateServerCertificateOutput)
 
 	UpdateServerCertificate(*iam.UpdateServerCertificateInput) (*iam.UpdateServerCertificateOutput, error)
+
+	UpdateServiceSpecificCredentialRequest(*iam.UpdateServiceSpecificCredentialInput) (*request.Request, *iam.UpdateServiceSpecificCredentialOutput)
+
+	UpdateServiceSpecificCredential(*iam.UpdateServiceSpecificCredentialInput) (*iam.UpdateServiceSpecificCredentialOutput, error)
 
 	UpdateSigningCertificateRequest(*iam.UpdateSigningCertificateInput) (*request.Request, *iam.UpdateSigningCertificateOutput)
 

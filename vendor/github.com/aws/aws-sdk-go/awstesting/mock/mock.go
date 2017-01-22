@@ -11,15 +11,17 @@ import (
 )
 
 // Session is a mock session which is used to hit the mock server
-var Session = session.Must(session.NewSession(&aws.Config{
-	DisableSSL: aws.Bool(true),
-	Endpoint:   aws.String(server.URL[7:]),
-}))
+var Session = func() *session.Session {
+	// server is the mock server that simply writes a 200 status back to the client
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
 
-// server is the mock server that simply writes a 200 status back to the client
-var server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-}))
+	return session.Must(session.NewSession(&aws.Config{
+		DisableSSL: aws.Bool(true),
+		Endpoint:   aws.String(server.URL),
+	}))
+}()
 
 // NewMockClient creates and initializes a client that will connect to the
 // mock server

@@ -7,6 +7,7 @@
     "serviceAbbreviation":"Amazon RDS",
     "serviceFullName":"Amazon Relational Database Service",
     "signatureVersion":"v4",
+    "uid":"rds-2014-10-31",
     "xmlNamespace":"http://rds.amazonaws.com/doc/2014-10-31/"
   },
   "operations":{
@@ -49,7 +50,8 @@
       "input":{"shape":"AddTagsToResourceMessage"},
       "errors":[
         {"shape":"DBInstanceNotFoundFault"},
-        {"shape":"DBSnapshotNotFoundFault"}
+        {"shape":"DBSnapshotNotFoundFault"},
+        {"shape":"DBClusterNotFoundFault"}
       ]
     },
     "ApplyPendingMaintenanceAction":{
@@ -196,6 +198,7 @@
         {"shape":"InvalidDBClusterStateFault"},
         {"shape":"InvalidDBSubnetGroupStateFault"},
         {"shape":"InvalidSubnet"},
+        {"shape":"InvalidDBInstanceStateFault"},
         {"shape":"DBClusterParameterGroupNotFoundFault"},
         {"shape":"KMSKeyNotAccessibleFault"},
         {"shape":"DBClusterNotFoundFault"}
@@ -993,7 +996,8 @@
       },
       "errors":[
         {"shape":"DBInstanceNotFoundFault"},
-        {"shape":"DBSnapshotNotFoundFault"}
+        {"shape":"DBSnapshotNotFoundFault"},
+        {"shape":"DBClusterNotFoundFault"}
       ]
     },
     "ModifyDBCluster":{
@@ -1275,7 +1279,8 @@
       "input":{"shape":"RemoveTagsFromResourceMessage"},
       "errors":[
         {"shape":"DBInstanceNotFoundFault"},
-        {"shape":"DBSnapshotNotFoundFault"}
+        {"shape":"DBSnapshotNotFoundFault"},
+        {"shape":"DBClusterNotFoundFault"}
       ]
     },
     "ResetDBClusterParameterGroup":{
@@ -1763,7 +1768,8 @@
         "TargetDBSnapshotIdentifier":{"shape":"String"},
         "KmsKeyId":{"shape":"String"},
         "Tags":{"shape":"TagList"},
-        "CopyTags":{"shape":"BooleanOptional"}
+        "CopyTags":{"shape":"BooleanOptional"},
+        "PreSignedUrl":{"shape":"String"}
       }
     },
     "CopyDBSnapshotResult":{
@@ -2085,6 +2091,7 @@
         "EarliestRestorableTime":{"shape":"TStamp"},
         "Endpoint":{"shape":"String"},
         "ReaderEndpoint":{"shape":"String"},
+        "MultiAZ":{"shape":"Boolean"},
         "Engine":{"shape":"String"},
         "EngineVersion":{"shape":"String"},
         "LatestRestorableTime":{"shape":"TStamp"},
@@ -2102,7 +2109,8 @@
         "KmsKeyId":{"shape":"String"},
         "DbClusterResourceId":{"shape":"String"},
         "DBClusterArn":{"shape":"String"},
-        "AssociatedRoles":{"shape":"DBClusterRoles"}
+        "AssociatedRoles":{"shape":"DBClusterRoles"},
+        "ClusterCreateTime":{"shape":"TStamp"}
       },
       "wrapper":true
     },
@@ -2416,6 +2424,7 @@
         "AutoMinorVersionUpgrade":{"shape":"Boolean"},
         "ReadReplicaSourceDBInstanceIdentifier":{"shape":"String"},
         "ReadReplicaDBInstanceIdentifiers":{"shape":"ReadReplicaDBInstanceIdentifierList"},
+        "ReadReplicaDBClusterIdentifiers":{"shape":"ReadReplicaDBClusterIdentifierList"},
         "LicenseModel":{"shape":"String"},
         "Iops":{"shape":"IntegerOptional"},
         "OptionGroupMemberships":{"shape":"OptionGroupMembershipList"},
@@ -4348,6 +4357,13 @@
       "type":"structure",
       "members":{
         "ReservedDBInstance":{"shape":"ReservedDBInstance"}
+      }
+    },
+    "ReadReplicaDBClusterIdentifierList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"ReadReplicaDBClusterIdentifier"
       }
     },
     "ReadReplicaDBInstanceIdentifierList":{

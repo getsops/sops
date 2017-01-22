@@ -7,6 +7,7 @@
     "serviceAbbreviation":"Amazon RDS",
     "serviceFullName":"Amazon Relational Database Service",
     "signatureVersion":"v4",
+    "uid":"rds-2013-02-12",
     "xmlNamespace":"http://rds.amazonaws.com/doc/2013-02-12/"
   },
   "operations":{

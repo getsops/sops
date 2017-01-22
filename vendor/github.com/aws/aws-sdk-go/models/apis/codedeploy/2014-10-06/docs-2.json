@@ -5,7 +5,7 @@
     "AddTagsToOnPremisesInstances": "<p>Adds tags to on-premises instances.</p>",
     "BatchGetApplicationRevisions": "<p>Gets information about one or more application revisions.</p>",
     "BatchGetApplications": "<p>Gets information about one or more applications.</p>",
-    "BatchGetDeploymentGroups": "<p>Get information about one or more deployment groups.</p>",
+    "BatchGetDeploymentGroups": "<p>Gets information about one or more deployment groups.</p>",
     "BatchGetDeploymentInstances": "<p>Gets information about one or more instance that are part of a deployment group.</p>",
     "BatchGetDeployments": "<p>Gets information about one or more deployments.</p>",
     "BatchGetOnPremisesInstances": "<p>Gets information about one or more on-premises instances.</p>",
@@ -32,7 +32,7 @@
     "ListDeployments": "<p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>",
     "ListOnPremisesInstances": "<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>",
     "RegisterApplicationRevision": "<p>Registers with AWS CodeDeploy a revision for the specified application.</p>",
-    "RegisterOnPremisesInstance": "<p>Registers an on-premises instance.</p>",
+    "RegisterOnPremisesInstance": "<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>",
     "RemoveTagsFromOnPremisesInstances": "<p>Removes one or more tags from one or more on-premises instances.</p>",
     "StopDeployment": "<p>Attempts to stop an ongoing deployment.</p>",
     "UpdateApplication": "<p>Changes the name of an application.</p>",
@@ -410,7 +410,7 @@
       "base": null,
       "refs": {
         "CreateDeploymentConfigInput$deploymentConfigName": "<p>The name of the deployment configuration to create.</p>",
-        "CreateDeploymentGroupInput$deploymentConfigName": "<p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <note> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> </note> <p>The predefined deployment configurations include the following:</p> <ul> <li> <p> <b>CodeDeployDefault.AllAtOnce</b> attempts to deploy an application revision to as many instances as possible at once. The status of the overall deployment will be displayed as <b>Succeeded</b> if the application revision is deployed to one or more of the instances. The status of the overall deployment will be displayed as <b>Failed</b> if the application revision is not deployed to any of the instances. Using an example of nine instances, CodeDeployDefault.AllAtOnce will attempt to deploy to all nine instances at once. The overall deployment will succeed if deployment to even a single instance is successful; it will fail only if deployments to all nine instances fail. </p> </li> <li> <p> <b>CodeDeployDefault.HalfAtATime</b> deploys to up to half of the instances at a time (with fractions rounded down). The overall deployment succeeds if the application revision is deployed to at least half of the instances (with fractions rounded up); otherwise, the deployment fails. In the example of nine instances, it will deploy to up to four instances at a time. The overall deployment succeeds if deployment to five or more instances succeed; otherwise, the deployment fails. The deployment may be successfully deployed to some instances even if the overall deployment fails.</p> </li> <li> <p> <b>CodeDeployDefault.OneAtATime</b> deploys the application revision to only one instance at a time.</p> <p>For deployment groups that contain more than one instance:</p> <ul> <li> <p>The overall deployment succeeds if the application revision is deployed to all of the instances. The exception to this rule is if deployment to the last instance fails, the overall deployment still succeeds. This is because AWS CodeDeploy allows only one instance at a time to be taken offline with the CodeDeployDefault.OneAtATime configuration.</p> </li> <li> <p>The overall deployment fails as soon as the application revision fails to be deployed to any but the last instance. The deployment may be successfully deployed to some instances even if the overall deployment fails.</p> </li> <li> <p>In an example using nine instances, it will deploy to one instance at a time. The overall deployment succeeds if deployment to the first eight instances is successful; the overall deployment fails if deployment to any of the first eight instances fails.</p> </li> </ul> <p>For deployment groups that contain only one instance, the overall deployment is successful only if deployment to the single instance is successful</p> </li> </ul>",
+        "CreateDeploymentGroupInput$deploymentConfigName": "<p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html\">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>",
         "CreateDeploymentInput$deploymentConfigName": "<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group will be used as the default. If the deployment group does not have a deployment configuration associated with it, then CodeDeployDefault.OneAtATime will be used by default.</p>",
         "DeleteDeploymentConfigInput$deploymentConfigName": "<p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>",
         "DeploymentConfigInfo$deploymentConfigName": "<p>The deployment configuration name.</p>",
@@ -653,7 +653,7 @@
       "base": "<p>Information about an application revision.</p>",
       "refs": {
         "GetApplicationRevisionOutput$revisionInfo": "<p>General information about the revision.</p>",
-        "RevisionInfo$genericRevisionInfo": null
+        "RevisionInfo$genericRevisionInfo": "<p>Information about an application revision, including usage details and currently associated deployment groups.</p>"
       }
     },
     "GetApplicationInput": {
@@ -729,7 +729,24 @@
     "GitHubLocation": {
       "base": "<p>Information about the location of application artifacts stored in GitHub.</p>",
       "refs": {
-        "RevisionLocation$gitHubLocation": null
+        "RevisionLocation$gitHubLocation": "<p>Information about the location of application artifacts stored in GitHub.</p>"
+      }
+    },
+    "IamArnRequiredException": {
+      "base": "<p>No IAM ARN was included in the request. You must use an IAM session ARN or IAM user ARN in the request.</p>",
+      "refs": {
+      }
+    },
+    "IamSessionArn": {
+      "base": null,
+      "refs": {
+        "InstanceInfo$iamSessionArn": "<p>The ARN of the IAM session associated with the on-premises instance.</p>",
+        "RegisterOnPremisesInstanceInput$iamSessionArn": "<p>The ARN of the IAM session to associate with the on-premises instance.</p>"
+      }
+    },
+    "IamSessionArnAlreadyRegisteredException": {
+      "base": "<p>The request included an IAM session ARN that has already been used to register a different instance.</p>",
+      "refs": {
       }
     },
     "IamUserArn": {
@@ -920,6 +937,11 @@
     },
     "InvalidEC2TagException": {
       "base": "<p>The tag was specified in an invalid format.</p>",
+      "refs": {
+      }
+    },
+    "InvalidIamSessionArnException": {
+      "base": "<p>The IAM session ARN was specified in an invalid format.</p>",
       "refs": {
       }
     },
@@ -1159,6 +1181,11 @@
         "MinimumHealthyHosts$value": "<p>The minimum healthy instance value.</p>"
       }
     },
+    "MultipleIamArnsProvidedException": {
+      "base": "<p>Both an IAM user ARN and an IAM session ARN were included in the request. Use only one ARN type.</p>",
+      "refs": {
+      }
+    },
     "NextToken": {
       "base": null,
       "refs": {
@@ -1237,7 +1264,7 @@
         "GetApplicationRevisionInput$revision": "<p>Information about the application revision to get, including type and location.</p>",
         "GetApplicationRevisionOutput$revision": "<p>Additional information about the revision, including type and location.</p>",
         "RegisterApplicationRevisionInput$revision": "<p>Information about the application revision to register, including type and location.</p>",
-        "RevisionInfo$revisionLocation": null,
+        "RevisionInfo$revisionLocation": "<p>Information about the location and type of an application revision.</p>",
         "RevisionLocationList$member": null
       }
     },
@@ -1295,7 +1322,7 @@
     "S3Location": {
       "base": "<p>Information about the location of application artifacts stored in Amazon S3.</p>",
       "refs": {
-        "RevisionLocation$s3Location": null
+        "RevisionLocation$s3Location": "<p>Information about the location of application artifacts stored in Amazon S3. </p>"
       }
     },
     "ScriptName": {

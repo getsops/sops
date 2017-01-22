@@ -37,6 +37,7 @@ const opDeleteLexicon = "DeleteLexicon"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexicon
 func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Request, output *DeleteLexiconOutput) {
 	op := &request.Operation{
 		Name:       opDeleteLexicon,
@@ -48,9 +49,8 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 		input = &DeleteLexiconInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteLexiconOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -81,6 +81,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 //   * ServiceFailureException
 //   An unknown condition has caused a service failure.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexicon
 func (c *Polly) DeleteLexicon(input *DeleteLexiconInput) (*DeleteLexiconOutput, error) {
 	req, out := c.DeleteLexiconRequest(input)
 	err := req.Send()
@@ -113,6 +114,7 @@ const opDescribeVoices = "DescribeVoices"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices
 func (c *Polly) DescribeVoicesRequest(input *DescribeVoicesInput) (req *request.Request, output *DescribeVoicesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeVoices,
@@ -124,9 +126,8 @@ func (c *Polly) DescribeVoicesRequest(input *DescribeVoicesInput) (req *request.
 		input = &DescribeVoicesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeVoicesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -165,6 +166,7 @@ func (c *Polly) DescribeVoicesRequest(input *DescribeVoicesInput) (req *request.
 //   * ServiceFailureException
 //   An unknown condition has caused a service failure.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices
 func (c *Polly) DescribeVoices(input *DescribeVoicesInput) (*DescribeVoicesOutput, error) {
 	req, out := c.DescribeVoicesRequest(input)
 	err := req.Send()
@@ -197,6 +199,7 @@ const opGetLexicon = "GetLexicon"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexicon
 func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request, output *GetLexiconOutput) {
 	op := &request.Operation{
 		Name:       opGetLexicon,
@@ -208,9 +211,8 @@ func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request,
 		input = &GetLexiconInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &GetLexiconOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -238,6 +240,7 @@ func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request,
 //   * ServiceFailureException
 //   An unknown condition has caused a service failure.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexicon
 func (c *Polly) GetLexicon(input *GetLexiconInput) (*GetLexiconOutput, error) {
 	req, out := c.GetLexiconRequest(input)
 	err := req.Send()
@@ -270,6 +273,7 @@ const opListLexicons = "ListLexicons"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexicons
 func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Request, output *ListLexiconsOutput) {
 	op := &request.Operation{
 		Name:       opListLexicons,
@@ -281,9 +285,8 @@ func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Requ
 		input = &ListLexiconsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &ListLexiconsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -307,6 +310,7 @@ func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Requ
 //   * ServiceFailureException
 //   An unknown condition has caused a service failure.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexicons
 func (c *Polly) ListLexicons(input *ListLexiconsInput) (*ListLexiconsOutput, error) {
 	req, out := c.ListLexiconsRequest(input)
 	err := req.Send()
@@ -339,6 +343,7 @@ const opPutLexicon = "PutLexicon"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexicon
 func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request, output *PutLexiconOutput) {
 	op := &request.Operation{
 		Name:       opPutLexicon,
@@ -350,9 +355,8 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 		input = &PutLexiconInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &PutLexiconOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -397,6 +401,7 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 //   * ServiceFailureException
 //   An unknown condition has caused a service failure.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexicon
 func (c *Polly) PutLexicon(input *PutLexiconInput) (*PutLexiconOutput, error) {
 	req, out := c.PutLexiconRequest(input)
 	err := req.Send()
@@ -429,6 +434,7 @@ const opSynthesizeSpeech = "SynthesizeSpeech"
 //        fmt.Println(resp)
 //    }
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeech
 func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *request.Request, output *SynthesizeSpeechOutput) {
 	op := &request.Operation{
 		Name:       opSynthesizeSpeech,
@@ -440,9 +446,8 @@ func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *requ
 		input = &SynthesizeSpeechInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &SynthesizeSpeechOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -485,12 +490,14 @@ func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *requ
 //   * ServiceFailureException
 //   An unknown condition has caused a service failure.
 //
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeech
 func (c *Polly) SynthesizeSpeech(input *SynthesizeSpeechInput) (*SynthesizeSpeechOutput, error) {
 	req, out := c.SynthesizeSpeechRequest(input)
 	err := req.Send()
 	return out, err
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexiconInput
 type DeleteLexiconInput struct {
 	_ struct{} `type:"structure"`
 
@@ -529,6 +536,7 @@ func (s *DeleteLexiconInput) SetName(v string) *DeleteLexiconInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexiconOutput
 type DeleteLexiconOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -543,6 +551,7 @@ func (s DeleteLexiconOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoicesInput
 type DescribeVoicesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -578,6 +587,7 @@ func (s *DescribeVoicesInput) SetNextToken(v string) *DescribeVoicesInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoicesOutput
 type DescribeVoicesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -611,6 +621,7 @@ func (s *DescribeVoicesOutput) SetVoices(v []*Voice) *DescribeVoicesOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexiconInput
 type GetLexiconInput struct {
 	_ struct{} `type:"structure"`
 
@@ -649,6 +660,7 @@ func (s *GetLexiconInput) SetName(v string) *GetLexiconInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexiconOutput
 type GetLexiconOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -685,6 +697,7 @@ func (s *GetLexiconOutput) SetLexiconAttributes(v *LexiconAttributes) *GetLexico
 
 // Provides lexicon name and lexicon content in string format. For more information,
 // see Pronunciation Lexicon Specification (PLS) Version 1.0 (https://www.w3.org/TR/pronunciation-lexicon/).
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/Lexicon
 type Lexicon struct {
 	_ struct{} `type:"structure"`
 
@@ -720,6 +733,7 @@ func (s *Lexicon) SetName(v string) *Lexicon {
 
 // Contains metadata describing the lexicon such as the number of lexemes, language
 // code, and so on. For more information, see Managing Lexicons (http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html).
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/LexiconAttributes
 type LexiconAttributes struct {
 	_ struct{} `type:"structure"`
 
@@ -791,6 +805,7 @@ func (s *LexiconAttributes) SetSize(v int64) *LexiconAttributes {
 }
 
 // Describes the content of the lexicon.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/LexiconDescription
 type LexiconDescription struct {
 	_ struct{} `type:"structure"`
 
@@ -823,6 +838,7 @@ func (s *LexiconDescription) SetName(v string) *LexiconDescription {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexiconsInput
 type ListLexiconsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -847,6 +863,7 @@ func (s *ListLexiconsInput) SetNextToken(v string) *ListLexiconsInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexiconsOutput
 type ListLexiconsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -880,6 +897,7 @@ func (s *ListLexiconsOutput) SetNextToken(v string) *ListLexiconsOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexiconInput
 type PutLexiconInput struct {
 	_ struct{} `type:"structure"`
 
@@ -934,6 +952,7 @@ func (s *PutLexiconInput) SetName(v string) *PutLexiconInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexiconOutput
 type PutLexiconOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -948,6 +967,7 @@ func (s PutLexiconOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeechInput
 type SynthesizeSpeechInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1053,6 +1073,7 @@ func (s *SynthesizeSpeechInput) SetVoiceId(v string) *SynthesizeSpeechInput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeechOutput
 type SynthesizeSpeechOutput struct {
 	_ struct{} `type:"structure" payload:"AudioStream"`
 
@@ -1069,7 +1090,8 @@ type SynthesizeSpeechOutput struct {
 	//    is audio/ogg.
 	//
 	//    *  If you request pcm as the OutputFormat, the ContentType returned is
-	//    audio/pcm.
+	//    audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format.
+	//
 	ContentType *string `location:"header" locationName:"Content-Type" type:"string"`
 
 	// Number of characters synthesized.
@@ -1105,6 +1127,7 @@ func (s *SynthesizeSpeechOutput) SetRequestCharacters(v int64) *SynthesizeSpeech
 }
 
 // Description of the voice.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/Voice
 type Voice struct {
 	_ struct{} `type:"structure"`
 

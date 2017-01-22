@@ -96,7 +96,11 @@ func ExampleECR_BatchGetImage() {
 			// More values...
 		},
 		RepositoryName: aws.String("RepositoryName"), // Required
-		RegistryId:     aws.String("RegistryId"),
+		AcceptedMediaTypes: []*string{
+			aws.String("MediaType"), // Required
+			// More values...
+		},
+		RegistryId: aws.String("RegistryId"),
 	}
 	resp, err := svc.BatchGetImage(params)
 
@@ -439,6 +443,7 @@ func ExampleECR_PutImage() {
 	params := &ecr.PutImageInput{
 		ImageManifest:  aws.String("ImageManifest"),  // Required
 		RepositoryName: aws.String("RepositoryName"), // Required
+		ImageTag:       aws.String("ImageTag"),
 		RegistryId:     aws.String("RegistryId"),
 	}
 	resp, err := svc.PutImage(params)

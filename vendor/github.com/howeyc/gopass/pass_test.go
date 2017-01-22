@@ -46,7 +46,6 @@ func TestGetPasswd(t *testing.T) {
 
 	// Redirecting output for tests as they print to os.Stdout but we want to
 	// capture and test the output.
-	origStdOut := os.Stdout
 	for _, masked := range []bool{true, false} {
 		for _, d := range ds {
 			pipeBytesToStdin(d.input)
@@ -55,10 +54,8 @@ func TestGetPasswd(t *testing.T) {
 			if err != nil {
 				t.Fatal(err.Error())
 			}
-			os.Stdout = w
 
-			result, err := getPasswd(masked)
-			os.Stdout = origStdOut
+			result, err := getPasswd("", masked, os.Stdin, w)
 			if err != nil {
 				t.Errorf("Error getting password: %s", err.Error())
 			}
@@ -178,7 +175,7 @@ func pipeBytesToStdin(b []byte) (int, error) {
 // TestGetPasswd_Err tests errors are properly handled from getch()
 func TestGetPasswd_Err(t *testing.T) {
 	var inBuffer *bytes.Buffer
-	getch = func() (byte, error) {
+	getch = func(io.Reader) (byte, error) {
 		b, err := inBuffer.ReadByte()
 		if err != nil {
 			return 13, err

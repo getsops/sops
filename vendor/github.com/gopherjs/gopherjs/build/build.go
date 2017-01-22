@@ -79,6 +79,11 @@ func importWithSrcDir(path string, srcDir string, mode build.ImportMode, install
 		return nil, err
 	}
 
+	// TODO: Resolve issue #415 and remove this temporary workaround.
+	if strings.HasSuffix(pkg.ImportPath, "/vendor/github.com/gopherjs/gopherjs/js") {
+		return nil, fmt.Errorf("vendoring github.com/gopherjs/gopherjs/js package is not supported, see https://github.com/gopherjs/gopherjs/issues/415")
+	}
+
 	switch path {
 	case "runtime":
 		pkg.GoFiles = []string{"error.go"}

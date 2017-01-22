@@ -35,7 +35,6 @@ const opBuildSuggesters = "BuildSuggesters"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) BuildSuggestersRequest(input *BuildSuggestersInput) (req *request.Request, output *BuildSuggestersOutput) {
 	op := &request.Operation{
 		Name:       opBuildSuggesters,
@@ -47,9 +46,8 @@ func (c *CloudSearch) BuildSuggestersRequest(input *BuildSuggestersInput) (req *
 		input = &BuildSuggestersInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &BuildSuggestersOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -109,7 +107,6 @@ const opCreateDomain = "CreateDomain"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) CreateDomainRequest(input *CreateDomainInput) (req *request.Request, output *CreateDomainOutput) {
 	op := &request.Operation{
 		Name:       opCreateDomain,
@@ -121,9 +118,8 @@ func (c *CloudSearch) CreateDomainRequest(input *CreateDomainInput) (req *reques
 		input = &CreateDomainInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &CreateDomainOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -182,7 +178,6 @@ const opDefineAnalysisScheme = "DefineAnalysisScheme"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DefineAnalysisSchemeRequest(input *DefineAnalysisSchemeInput) (req *request.Request, output *DefineAnalysisSchemeOutput) {
 	op := &request.Operation{
 		Name:       opDefineAnalysisScheme,
@@ -194,9 +189,8 @@ func (c *CloudSearch) DefineAnalysisSchemeRequest(input *DefineAnalysisSchemeInp
 		input = &DefineAnalysisSchemeInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DefineAnalysisSchemeOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -263,7 +257,6 @@ const opDefineExpression = "DefineExpression"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DefineExpressionRequest(input *DefineExpressionInput) (req *request.Request, output *DefineExpressionOutput) {
 	op := &request.Operation{
 		Name:       opDefineExpression,
@@ -275,9 +268,8 @@ func (c *CloudSearch) DefineExpressionRequest(input *DefineExpressionInput) (req
 		input = &DefineExpressionInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DefineExpressionOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -344,7 +336,6 @@ const opDefineIndexField = "DefineIndexField"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DefineIndexFieldRequest(input *DefineIndexFieldInput) (req *request.Request, output *DefineIndexFieldOutput) {
 	op := &request.Operation{
 		Name:       opDefineIndexField,
@@ -356,9 +347,8 @@ func (c *CloudSearch) DefineIndexFieldRequest(input *DefineIndexFieldInput) (req
 		input = &DefineIndexFieldInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DefineIndexFieldOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -429,7 +419,6 @@ const opDefineSuggester = "DefineSuggester"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DefineSuggesterRequest(input *DefineSuggesterInput) (req *request.Request, output *DefineSuggesterOutput) {
 	op := &request.Operation{
 		Name:       opDefineSuggester,
@@ -441,9 +430,8 @@ func (c *CloudSearch) DefineSuggesterRequest(input *DefineSuggesterInput) (req *
 		input = &DefineSuggesterInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DefineSuggesterOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -512,7 +500,6 @@ const opDeleteAnalysisScheme = "DeleteAnalysisScheme"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DeleteAnalysisSchemeRequest(input *DeleteAnalysisSchemeInput) (req *request.Request, output *DeleteAnalysisSchemeOutput) {
 	op := &request.Operation{
 		Name:       opDeleteAnalysisScheme,
@@ -524,9 +511,8 @@ func (c *CloudSearch) DeleteAnalysisSchemeRequest(input *DeleteAnalysisSchemeInp
 		input = &DeleteAnalysisSchemeInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteAnalysisSchemeOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -589,7 +575,6 @@ const opDeleteDomain = "DeleteDomain"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DeleteDomainRequest(input *DeleteDomainInput) (req *request.Request, output *DeleteDomainOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDomain,
@@ -601,9 +586,8 @@ func (c *CloudSearch) DeleteDomainRequest(input *DeleteDomainInput) (req *reques
 		input = &DeleteDomainInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteDomainOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -660,7 +644,6 @@ const opDeleteExpression = "DeleteExpression"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DeleteExpressionRequest(input *DeleteExpressionInput) (req *request.Request, output *DeleteExpressionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteExpression,
@@ -672,9 +655,8 @@ func (c *CloudSearch) DeleteExpressionRequest(input *DeleteExpressionInput) (req
 		input = &DeleteExpressionInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteExpressionOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -737,7 +719,6 @@ const opDeleteIndexField = "DeleteIndexField"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DeleteIndexFieldRequest(input *DeleteIndexFieldInput) (req *request.Request, output *DeleteIndexFieldOutput) {
 	op := &request.Operation{
 		Name:       opDeleteIndexField,
@@ -749,9 +730,8 @@ func (c *CloudSearch) DeleteIndexFieldRequest(input *DeleteIndexFieldInput) (req
 		input = &DeleteIndexFieldInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteIndexFieldOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -814,7 +794,6 @@ const opDeleteSuggester = "DeleteSuggester"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DeleteSuggesterRequest(input *DeleteSuggesterInput) (req *request.Request, output *DeleteSuggesterOutput) {
 	op := &request.Operation{
 		Name:       opDeleteSuggester,
@@ -826,9 +805,8 @@ func (c *CloudSearch) DeleteSuggesterRequest(input *DeleteSuggesterInput) (req *
 		input = &DeleteSuggesterInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DeleteSuggesterOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -891,7 +869,6 @@ const opDescribeAnalysisSchemes = "DescribeAnalysisSchemes"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeAnalysisSchemesRequest(input *DescribeAnalysisSchemesInput) (req *request.Request, output *DescribeAnalysisSchemesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAnalysisSchemes,
@@ -903,9 +880,8 @@ func (c *CloudSearch) DescribeAnalysisSchemesRequest(input *DescribeAnalysisSche
 		input = &DescribeAnalysisSchemesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeAnalysisSchemesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -969,7 +945,6 @@ const opDescribeAvailabilityOptions = "DescribeAvailabilityOptions"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeAvailabilityOptionsRequest(input *DescribeAvailabilityOptionsInput) (req *request.Request, output *DescribeAvailabilityOptionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAvailabilityOptions,
@@ -981,9 +956,8 @@ func (c *CloudSearch) DescribeAvailabilityOptionsRequest(input *DescribeAvailabi
 		input = &DescribeAvailabilityOptionsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeAvailabilityOptionsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1054,7 +1028,6 @@ const opDescribeDomains = "DescribeDomains"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeDomainsRequest(input *DescribeDomainsInput) (req *request.Request, output *DescribeDomainsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDomains,
@@ -1066,9 +1039,8 @@ func (c *CloudSearch) DescribeDomainsRequest(input *DescribeDomainsInput) (req *
 		input = &DescribeDomainsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeDomainsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1127,7 +1099,6 @@ const opDescribeExpressions = "DescribeExpressions"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeExpressionsRequest(input *DescribeExpressionsInput) (req *request.Request, output *DescribeExpressionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeExpressions,
@@ -1139,9 +1110,8 @@ func (c *CloudSearch) DescribeExpressionsRequest(input *DescribeExpressionsInput
 		input = &DescribeExpressionsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeExpressionsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1204,7 +1174,6 @@ const opDescribeIndexFields = "DescribeIndexFields"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeIndexFieldsRequest(input *DescribeIndexFieldsInput) (req *request.Request, output *DescribeIndexFieldsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeIndexFields,
@@ -1216,9 +1185,8 @@ func (c *CloudSearch) DescribeIndexFieldsRequest(input *DescribeIndexFieldsInput
 		input = &DescribeIndexFieldsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeIndexFieldsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1281,7 +1249,6 @@ const opDescribeScalingParameters = "DescribeScalingParameters"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeScalingParametersRequest(input *DescribeScalingParametersInput) (req *request.Request, output *DescribeScalingParametersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeScalingParameters,
@@ -1293,9 +1260,8 @@ func (c *CloudSearch) DescribeScalingParametersRequest(input *DescribeScalingPar
 		input = &DescribeScalingParametersInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeScalingParametersOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1356,7 +1322,6 @@ const opDescribeServiceAccessPolicies = "DescribeServiceAccessPolicies"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeServiceAccessPoliciesRequest(input *DescribeServiceAccessPoliciesInput) (req *request.Request, output *DescribeServiceAccessPoliciesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeServiceAccessPolicies,
@@ -1368,9 +1333,8 @@ func (c *CloudSearch) DescribeServiceAccessPoliciesRequest(input *DescribeServic
 		input = &DescribeServiceAccessPoliciesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeServiceAccessPoliciesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1433,7 +1397,6 @@ const opDescribeSuggesters = "DescribeSuggesters"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) DescribeSuggestersRequest(input *DescribeSuggestersInput) (req *request.Request, output *DescribeSuggestersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeSuggesters,
@@ -1445,9 +1408,8 @@ func (c *CloudSearch) DescribeSuggestersRequest(input *DescribeSuggestersInput) 
 		input = &DescribeSuggestersInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &DescribeSuggestersOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1511,7 +1473,6 @@ const opIndexDocuments = "IndexDocuments"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) IndexDocumentsRequest(input *IndexDocumentsInput) (req *request.Request, output *IndexDocumentsOutput) {
 	op := &request.Operation{
 		Name:       opIndexDocuments,
@@ -1523,9 +1484,8 @@ func (c *CloudSearch) IndexDocumentsRequest(input *IndexDocumentsInput) (req *re
 		input = &IndexDocumentsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &IndexDocumentsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1585,7 +1545,6 @@ const opListDomainNames = "ListDomainNames"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) ListDomainNamesRequest(input *ListDomainNamesInput) (req *request.Request, output *ListDomainNamesOutput) {
 	op := &request.Operation{
 		Name:       opListDomainNames,
@@ -1597,9 +1556,8 @@ func (c *CloudSearch) ListDomainNamesRequest(input *ListDomainNamesInput) (req *
 		input = &ListDomainNamesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &ListDomainNamesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1649,7 +1607,6 @@ const opUpdateAvailabilityOptions = "UpdateAvailabilityOptions"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) UpdateAvailabilityOptionsRequest(input *UpdateAvailabilityOptionsInput) (req *request.Request, output *UpdateAvailabilityOptionsOutput) {
 	op := &request.Operation{
 		Name:       opUpdateAvailabilityOptions,
@@ -1661,9 +1618,8 @@ func (c *CloudSearch) UpdateAvailabilityOptionsRequest(input *UpdateAvailability
 		input = &UpdateAvailabilityOptionsInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &UpdateAvailabilityOptionsOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1735,7 +1691,6 @@ const opUpdateScalingParameters = "UpdateScalingParameters"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) UpdateScalingParametersRequest(input *UpdateScalingParametersInput) (req *request.Request, output *UpdateScalingParametersOutput) {
 	op := &request.Operation{
 		Name:       opUpdateScalingParameters,
@@ -1747,9 +1702,8 @@ func (c *CloudSearch) UpdateScalingParametersRequest(input *UpdateScalingParamet
 		input = &UpdateScalingParametersInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &UpdateScalingParametersOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 
@@ -1820,7 +1774,6 @@ const opUpdateServiceAccessPolicies = "UpdateServiceAccessPolicies"
 //    if err == nil { // resp is now filled
 //        fmt.Println(resp)
 //    }
-//
 func (c *CloudSearch) UpdateServiceAccessPoliciesRequest(input *UpdateServiceAccessPoliciesInput) (req *request.Request, output *UpdateServiceAccessPoliciesOutput) {
 	op := &request.Operation{
 		Name:       opUpdateServiceAccessPolicies,
@@ -1832,9 +1785,8 @@ func (c *CloudSearch) UpdateServiceAccessPoliciesRequest(input *UpdateServiceAcc
 		input = &UpdateServiceAccessPoliciesInput{}
 	}
 
-	req = c.newRequest(op, input, output)
 	output = &UpdateServiceAccessPoliciesOutput{}
-	req.Data = output
+	req = c.newRequest(op, input, output)
 	return
 }
 

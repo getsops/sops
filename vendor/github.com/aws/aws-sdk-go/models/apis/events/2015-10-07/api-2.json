@@ -1,6 +1,7 @@
 {
   "version":"2.0",
   "metadata":{
+    "uid":"events-2015-10-07",
     "apiVersion":"2015-10-07",
     "endpointPrefix":"events",
     "jsonVersion":"1.1",

@@ -47,14 +47,14 @@ import (
 //    * UpdatePipeline, which updates a pipeline with edits or changes to the
 //    structure of the pipeline.
 //
-// Pipelines include stages, which are which are logical groupings of gates
-// and actions. Each stage contains one or more actions that must complete before
-// the next stage begins. A stage will result in success or failure. If a stage
-// fails, then the pipeline stops at that stage and will remain stopped until
-// either a new version of an artifact appears in the source location, or a
-// user takes action to re-run the most recent artifact through the pipeline.
-// You can call GetPipelineState, which displays the status of a pipeline, including
-// the status of stages in the pipeline, or GetPipeline, which returns the entire
+// Pipelines include stages, which are logical groupings of gates and actions.
+// Each stage contains one or more actions that must complete before the next
+// stage begins. A stage will result in success or failure. If a stage fails,
+// then the pipeline stops at that stage and will remain stopped until either
+// a new version of an artifact appears in the source location, or a user takes
+// action to re-run the most recent artifact through the pipeline. You can call
+// GetPipelineState, which displays the status of a pipeline, including the
+// status of stages in the pipeline, or GetPipeline, which returns the entire
 // structure of the pipeline, including the stages of that pipeline. For more
 // information about the structure of stages and actions, also refer to the
 // AWS CodePipeline Pipeline Structure Reference (http://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-structure.html).
@@ -120,8 +120,9 @@ import (
 //    and
 //
 //    * PutThirdPartyJobSuccessResult, which provides details of a job success.
-//The service client's operations are safe to be used concurrently.
+// The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09
 type CodePipeline struct {
 	*client.Client
 }
@@ -132,8 +133,11 @@ var initClient func(*client.Client)
 // Used for custom request initialization logic
 var initRequest func(*request.Request)
 
-// A ServiceName is the name of the service the client will make API calls to.
-const ServiceName = "codepipeline"
+// Service information constants
+const (
+	ServiceName = "codepipeline" // Service endpoint prefix API calls made to.
+	EndpointsID = ServiceName    // Service ID for Regions and Endpoints metadata.
+)
 
 // New creates a new instance of the CodePipeline client with a session.
 // If additional configuration is needed for the client instance use the optional
@@ -146,17 +150,18 @@ const ServiceName = "codepipeline"
 //     // Create a CodePipeline client with additional configuration
 //     svc := codepipeline.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *CodePipeline {
-	c := p.ClientConfig(ServiceName, cfgs...)
-	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion)
+	c := p.ClientConfig(EndpointsID, cfgs...)
+	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
 // newClient creates, initializes and returns a new service client instance.
-func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion string) *CodePipeline {
+func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *CodePipeline {
 	svc := &CodePipeline{
 		Client: client.New(
 			cfg,
 			metadata.ClientInfo{
 				ServiceName:   ServiceName,
+				SigningName:   signingName,
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "2015-07-09",

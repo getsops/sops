@@ -26,7 +26,7 @@ var serializer Serializer = new(noopSerializer)
 // are very helpful and can be rendered in a DIFF view. In that case, this function
 // will be called with a true value to enable the JSON serialization. By default,
 // the assertions in this package will not serializer a JSON result, making
-// standalone ussage more convenient.
+// standalone usage more convenient.
 func GoConveyMode(yes bool) {
 	if yes {
 		serializer = newSerializer()
