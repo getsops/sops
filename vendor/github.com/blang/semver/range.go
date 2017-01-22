@@ -164,20 +164,39 @@ func buildVersionRange(opStr, vStr string) (*versionRange, error) {
 
 }
 
-// splitAndTrim splits a range string by spaces and cleans leading and trailing spaces
+// inArray checks if a byte is contained in an array of bytes
+func inArray(s byte, list []byte) bool {
+	for _, el := range list {
+		if el == s {
+			return true
+		}
+	}
+	return false
+}
+
+// splitAndTrim splits a range string by spaces and cleans whitespaces
 func splitAndTrim(s string) (result []string) {
 	last := 0
+	var lastChar byte
+	excludeFromSplit := []byte{'>', '<', '='}
 	for i := 0; i < len(s); i++ {
-		if s[i] == ' ' {
+		if s[i] == ' ' && !inArray(lastChar, excludeFromSplit) {
 			if last < i-1 {
 				result = append(result, s[last:i])
 			}
 			last = i + 1
+		} else if s[i] != ' ' {
+			lastChar = s[i]
 		}
 	}
 	if last < len(s)-1 {
 		result = append(result, s[last:])
 	}
+
+	for i, v := range result {
+		result[i] = strings.Replace(v, " ", "", -1)
+	}
+
 	// parts := strings.Split(s, " ")
 	// for _, x := range parts {
 	// 	if s := strings.TrimSpace(x); len(s) != 0 {
