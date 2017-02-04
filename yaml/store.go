@@ -156,7 +156,8 @@ func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	if data, ok = data["sops"].(map[interface{}]interface{}); !ok {
 		return metadata, sops.MetadataNotFound
 	}
-	metadata.MessageAuthenticationCode = data["mac"].(string)
+	// Retrieve the MAC. If it's missing, the MAC is left empty in the metadata struct.
+	metadata.MessageAuthenticationCode, _ = data["mac"].(string)
 	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
 	if err != nil {
 		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
