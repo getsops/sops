@@ -472,7 +472,12 @@ func ToBytes(in interface{}) ([]byte, error) {
 // MapToMetadata tries to convert a map[string]interface{} obtained from an encrypted file into a Metadata struct.
 func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 	var metadata Metadata
-	metadata.MessageAuthenticationCode, _ = data["mac"].(string)
+	mac, ok := data["mac"].(string)
+	if !ok {
+		fmt.Println("WARNING: no MAC was found on the input file." +
+			"Verification will fail. You can use --ignore-mac to skip verification.")
+	}
+	metadata.MessageAuthenticationCode = mac
 	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
 	if err != nil {
 		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
