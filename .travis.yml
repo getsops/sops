@@ -1,5 +1,5 @@
 language: go
-go: 1.7.3
+go: 1.8
 go_import_path: go.mozilla.org/sops/
 
 addons:
