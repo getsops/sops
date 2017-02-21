@@ -1169,7 +1169,8 @@
       "required":["ResultToken"],
       "members":{
         "Evaluations":{"shape":"Evaluations"},
-        "ResultToken":{"shape":"String"}
+        "ResultToken":{"shape":"String"},
+        "TestMode":{"shape":"Boolean"}
       }
     },
     "PutEvaluationsResponse":{

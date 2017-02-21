@@ -45,6 +45,12 @@
     "DescribeKeyPairs": {
       "result_key": "KeyPairs"
     },
+    "DescribeNatGateways": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
+      "result_key": "NatGateways"
+    },
     "DescribeNetworkAcls": {
       "result_key": "NetworkAcls"
     },

@@ -6,6 +6,11 @@ import (
 	"testing"
 )
 
+type wildcardTypeTest struct {
+	input        string
+	wildcardType wildcardType
+}
+
 type comparatorTest struct {
 	input      string
 	comparator func(comparator) bool
@@ -192,6 +197,103 @@ func TestSplitORParts(t *testing.T) {
 	}
 }
 
+func TestGetWildcardType(t *testing.T) {
+	wildcardTypeTests := []wildcardTypeTest{
+		{"x", majorWildcard},
+		{"1.x", minorWildcard},
+		{"1.2.x", patchWildcard},
+		{"fo.o.b.ar", noneWildcard},
+	}
+
+	for _, tc := range wildcardTypeTests {
+		o := getWildcardType(tc.input)
+		if o != tc.wildcardType {
+			t.Errorf("Invalid for case: %q: Expected %q, got: %q", tc.input, tc.wildcardType, o)
+		}
+	}
+}
+
+func TestCreateVersionFromWildcard(t *testing.T) {
+	tests := []struct {
+		i string
+		s string
+	}{
+		{"1.2.x", "1.2.0"},
+		{"1.x", "1.0.0"},
+	}
+
+	for _, tc := range tests {
+		p := createVersionFromWildcard(tc.i)
+		if p != tc.s {
+			t.Errorf("Invalid for case %q: Expected %q, got: %q", tc.i, tc.s, p)
+		}
+	}
+}
+
+func TestIncrementMajorVersion(t *testing.T) {
+	tests := []struct {
+		i string
+		s string
+	}{
+		{"1.2.3", "2.2.3"},
+		{"1.2", "2.2"},
+		{"foo.bar", ""},
+	}
+
+	for _, tc := range tests {
+		p, _ := incrementMajorVersion(tc.i)
+		if p != tc.s {
+			t.Errorf("Invalid for case %q: Expected %q, got: %q", tc.i, tc.s, p)
+		}
+	}
+}
+
+func TestIncrementMinorVersion(t *testing.T) {
+	tests := []struct {
+		i string
+		s string
+	}{
+		{"1.2.3", "1.3.3"},
+		{"1.2", "1.3"},
+		{"foo.bar", ""},
+	}
+
+	for _, tc := range tests {
+		p, _ := incrementMinorVersion(tc.i)
+		if p != tc.s {
+			t.Errorf("Invalid for case %q: Expected %q, got: %q", tc.i, tc.s, p)
+		}
+	}
+}
+
+func TestExpandWildcardVersion(t *testing.T) {
+	tests := []struct {
+		i [][]string
+		o [][]string
+	}{
+		{[][]string{[]string{"foox"}}, nil},
+		{[][]string{[]string{">=1.2.x"}}, [][]string{[]string{">=1.2.0"}}},
+		{[][]string{[]string{"<=1.2.x"}}, [][]string{[]string{"<1.3.0"}}},
+		{[][]string{[]string{">1.2.x"}}, [][]string{[]string{">=1.3.0"}}},
+		{[][]string{[]string{"<1.2.x"}}, [][]string{[]string{"<1.2.0"}}},
+		{[][]string{[]string{"!=1.2.x"}}, [][]string{[]string{"<1.2.0", ">=1.3.0"}}},
+		{[][]string{[]string{">=1.x"}}, [][]string{[]string{">=1.0.0"}}},
+		{[][]string{[]string{"<=1.x"}}, [][]string{[]string{"<2.0.0"}}},
+		{[][]string{[]string{">1.x"}}, [][]string{[]string{">=2.0.0"}}},
+		{[][]string{[]string{"<1.x"}}, [][]string{[]string{"<1.0.0"}}},
+		{[][]string{[]string{"!=1.x"}}, [][]string{[]string{"<1.0.0", ">=2.0.0"}}},
+		{[][]string{[]string{"1.2.x"}}, [][]string{[]string{">=1.2.0", "<1.3.0"}}},
+		{[][]string{[]string{"1.x"}}, [][]string{[]string{">=1.0.0", "<2.0.0"}}},
+	}
+
+	for _, tc := range tests {
+		o, _ := expandWildcardVersion(tc.i)
+		if !reflect.DeepEqual(tc.o, o) {
+			t.Errorf("Invalid for case %q: Expected %q, got: %q", tc.i, tc.o, o)
+		}
+	}
+}
+
 func TestVersionRangeToRange(t *testing.T) {
 	vr := versionRange{
 		v: MustParse("1.2.3"),
@@ -311,7 +413,7 @@ func TestParseRange(t *testing.T) {
 		{"1.0", nil},
 		{"string", nil},
 		{"", nil},
-
+		{"fo.ob.ar.x", nil},
 		// AND Expressions
 		{">1.2.2 <1.2.4", []tv{
 			{"1.2.2", false},
@@ -347,6 +449,18 @@ func TestParseRange(t *testing.T) {
 			{"1.2.3", false},
 			{"1.2.4", false},
 		}},
+		// Wildcard expressions
+		{">1.x", []tv{
+			{"0.1.9", false},
+			{"1.2.6", false},
+			{"1.9.0", false},
+			{"2.0.0", true},
+		}},
+		{">1.2.x", []tv{
+			{"1.1.9", false},
+			{"1.2.6", false},
+			{"1.3.0", true},
+		}},
 		// Combined Expressions
 		{">1.2.2 <1.2.4 || >=2.0.0", []tv{
 			{"1.2.2", false},
@@ -354,6 +468,13 @@ func TestParseRange(t *testing.T) {
 			{"1.2.4", false},
 			{"2.0.0", true},
 			{"2.0.1", true},
+		}},
+		{"1.x || >=2.0.x <2.2.x", []tv{
+			{"0.9.2", false},
+			{"1.2.2", true},
+			{"2.0.0", true},
+			{"2.1.8", true},
+			{"2.2.0", false},
 		}},
 		{">1.2.2 <1.2.4 || >=2.0.0 <3.0.0", []tv{
 			{"1.2.2", false},

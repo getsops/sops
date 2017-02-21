@@ -10,8 +10,21 @@ a > img {
 	padding-top:8px;
 }
 
-.packages dd:nth-child(odd) {
-	background-color: #ececec;
+.packages {
+	margin:0;
+	padding:0;
+	display:inline;
+	text-align: left;
+	width: 100%;
+	list-style-type: none;
+}
+.packages li {
+	margin: 0;
+	line-height: 1.25;
+	font-size: larger;
+}
+.packages li:nth-child(odd) {
+	background-color: #eee;
 }
 
 body {
@@ -69,12 +82,6 @@ ul,
 ol {
 	display: inherit;
 	margin: 20px;
-}
-.packages {
-	display:inline;
-	margin: 0px;
-	text-align: left;
-	width: 100%;
 }
 pre {
 	background: #EFEFEF;

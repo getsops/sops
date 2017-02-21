@@ -54,9 +54,9 @@ func main() {
 		// http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
-			case "NoSuchBucket":
+			case s3.ErrCodeNoSuchBucket:
 				exitErrorf("bucket %s does not exist", os.Args[1])
-			case "NoSuchKey":
+			case s3.ErrCodeNoSuchKey:
 				exitErrorf("object with key %s does not exist in bucket %s", os.Args[2], os.Args[1])
 			}
 		}

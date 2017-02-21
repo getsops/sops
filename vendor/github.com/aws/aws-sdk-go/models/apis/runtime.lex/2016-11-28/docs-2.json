@@ -1,0 +1,189 @@
+{
+  "version": "2.0",
+  "service": "<p>Amazon Lex provides both build and runtime endpoints. Each endpoint provides a set of operations (API). Your application uses the runtime API to understand user utterances (user input text or voice). For example, suppose user says \"I want pizza\", your application sends this input to Amazon Lex using the runtime API. Amazon Lex recognizes that the user request is for the OrderPizza intent (one of the intents defined in the application). Then Amazon Lex engages in user conversation on behalf of the application to elicit required information (slot values, such as pizza size and crust type), and then performs fulfillment activity (that you configured when you created the application). You use the build-time API to create and manage your Amazon Lex applications. For a list of build-time operations, see the build-time API. . </p>",
+  "operations": {
+    "PostText": "<p>Sends user input text to Amazon Lex at runtime. Amazon Lex uses the machine learning model that the service built for the application to interpret user input. </p> <p> In response, Amazon Lex returns the next message to convey to the user (based on the context of the user interaction) and whether to expect a user response to the message (<code>dialogState</code>). For example, consider the following response messages: </p> <ul> <li> <p>\"What pizza toppings would you like?\" – In this case, the <code>dialogState</code> would be <code>ElicitSlot</code> (that is, a user response is expected). </p> </li> <li> <p>\"Your order has been placed.\" – In this case, Amazon Lex returns one of the following <code>dialogState</code> values depending on how the intent fulfillment is configured (see <code>fulfillmentActivity</code> in <code>CreateIntent</code>): </p> <ul> <li> <p> <code>FulFilled</code> – The intent fulfillment is configured through a Lambda function. </p> </li> <li> <p> <code>ReadyForFulfilment</code> – The intent's <code>fulfillmentActivity</code> is to simply return the intent data back to the client application. </p> </li> </ul> </li> </ul>"
+  },
+  "shapes": {
+    "BadGatewayException": {
+      "base": "<p>Either the Amazon Lex bot is still building, or one of the dependent services (Amazon Polly, AWS Lambda) failed with an internal service error.</p>",
+      "refs": {
+      }
+    },
+    "BadRequestException": {
+      "base": "<p> Request validation failed, there is no usable message in the context, or the bot build failed. </p>",
+      "refs": {
+      }
+    },
+    "BotAlias": {
+      "base": null,
+      "refs": {
+        "PostTextRequest$botAlias": "<p>Alias of the Amazon Lex bot.</p>"
+      }
+    },
+    "BotName": {
+      "base": null,
+      "refs": {
+        "PostTextRequest$botName": "<p>Name of the Amazon Lex bot.</p>"
+      }
+    },
+    "Button": {
+      "base": "<p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>",
+      "refs": {
+        "listOfButtons$member": null
+      }
+    },
+    "ButtonTextStringWithLength": {
+      "base": null,
+      "refs": {
+        "Button$text": "<p>Text visible to the user on the button.</p>"
+      }
+    },
+    "ButtonValueStringWithLength": {
+      "base": null,
+      "refs": {
+        "Button$value": "<p>Value sent to Amazon Lex when user clicks the button. For example, consider button text \"NYC\". When the user clicks the button, the value sent can be \"New York City\".</p>"
+      }
+    },
+    "ConflictException": {
+      "base": "<p> Two clients are using the same AWS account, Amazon Lex bot, and user ID. </p>",
+      "refs": {
+      }
+    },
+    "ContentType": {
+      "base": null,
+      "refs": {
+        "ResponseCard$contentType": "<p>Content type of the response.</p>"
+      }
+    },
+    "DependencyFailedException": {
+      "base": "<p> One of the downstream dependencies, such as AWS Lambda or Amazon Polly, threw an exception. For example, if Amazon Lex does not have sufficient permissions to call a Lambda function which results in AWS Lambda throwing an exception. </p>",
+      "refs": {
+      }
+    },
+    "DialogState": {
+      "base": null,
+      "refs": {
+        "PostTextResponse$dialogState": "<p>Represents the message type to be conveyed to the user. For example: </p> <ul> <li> <p> <code>ElicitIntent</code> – Amazon Lex wants to elicit user intent. For example, Amazon Lex did not understand the first utterances such as \"I want to order pizza\", which indicates the OrderPizza intent. If Amazon Lex doesn't understand the intent, it returns this <code>dialogState</code>. Another example is when your intent is configured with a follow up prompt. For example, after OrderPizza intent is fulfilled, the intent might have a follow up prompt such as \" Do you want to order a drink or desert?\" In this case, Amazon Lex returns this <code>dialogState</code>. </p> </li> <li> <p> <code>ConfirmIntent</code> – Amazon Lex is expecting a yes/no response from the user indicating whether to go ahead and fulfill the intent (for example, OK to go ahead and order the pizza). In addition to a yes/no reply, the user might provide a response with additional slot information (either new slot information or changes to the existing slot values). For example, \"Yes, but change to thick crust.\" Amazon Lex understands the additional information and updates the intent slots accordingly. </p> <p> Consider another example. Before fulfilling an order, your application might prompt for confirmation such as \"Do you want to place this pizza order?\" A user might reply with \"No, I want to order a drink.\" Amazon Lex recognizes the new OrderDrink intent. </p> </li> <li> <p> <code>ElicitSlot</code> – Amazon Lex is expecting a value of a slot for the current intent. For example, suppose Amazon Lex asks, \"What size pizza would you like?\" A user might reply with \"Medium pepperoni pizza.\" Amazon Lex recognizes the size and the topping as the two separate slot values. </p> </li> <li> <p> <code>Fulfilled</code> – Conveys that the Lambda function has successfully fulfilled the intent. If Lambda function returns a statement/message to convey the fulfillment result, Amazon Lex passes this string to the client. If not, Amazon Lex looks for <code>conclusionStatement</code> that you configured for the intent. </p> <p> If both the Lambda function statement and the <code>conclusionStatement</code> are missing, Amazon Lex throws a bad request exception. </p> </li> <li> <p> <code>ReadyForFulfillment</code> – conveys that the client has to do the fulfillment work for the intent. This is the case when the current intent is configured with <code>ReturnIntent</code> as the <code>fulfillmentActivity </code>, where Amazon Lex returns this state to client. </p> </li> <li> <p> <code>Failed</code> – Conversation with the user failed. Some of the reasons for this <code>dialogState</code> are: after the configured number of attempts the user didn't provide an appropriate response, or the Lambda function failed to fulfill an intent. </p> </li> </ul>"
+      }
+    },
+    "ErrorMessage": {
+      "base": null,
+      "refs": {
+        "BadGatewayException$Message": null,
+        "DependencyFailedException$Message": null,
+        "LoopDetectedException$Message": null
+      }
+    },
+    "GenericAttachment": {
+      "base": "<p>Represents an option rendered to the user when a prompt is shown. It could be an image, a button, a link, or text. </p>",
+      "refs": {
+        "genericAttachmentList$member": null
+      }
+    },
+    "IntentName": {
+      "base": null,
+      "refs": {
+        "PostTextResponse$intentName": "<p>Intent Amazon Lex inferred from the user input text. This is one of the intents configured for the bot. </p>"
+      }
+    },
+    "InternalFailureException": {
+      "base": "<p>Internal service error. Retry the call.</p>",
+      "refs": {
+      }
+    },
+    "LimitExceededException": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "LoopDetectedException": {
+      "base": "<p>Lambda fulfilment function returned <code>DelegateDialogAction</code> to Amazon Lex without changing any slot values. </p>",
+      "refs": {
+      }
+    },
+    "NotFoundException": {
+      "base": "<p>Resource (such as the Amazon Lex bot or an alias) referred is not found.</p>",
+      "refs": {
+      }
+    },
+    "PostTextRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "PostTextResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ResponseCard": {
+      "base": "<p>If you configure a response card when creating your bots, Amazon Lex substitutes the session attributes and slot values available, and then returns it. The response card can also come from a Lambda function ( <code>dialogCodeHook</code> and <code>fulfillmentActivity</code> on an intent).</p>",
+      "refs": {
+        "PostTextResponse$responseCard": "<p>Represents the options that the user has to respond to the current prompt. Amazon Lex sends this in the response only if the <code>dialogState</code> value indicates that a user response is expected. </p>"
+      }
+    },
+    "String": {
+      "base": null,
+      "refs": {
+        "BadRequestException$message": null,
+        "ConflictException$message": null,
+        "InternalFailureException$message": null,
+        "LimitExceededException$retryAfterSeconds": null,
+        "LimitExceededException$message": null,
+        "NotFoundException$message": null,
+        "PostTextResponse$slotToElicit": "<p>If <code>dialogState</code> value is <code>ElicitSlot</code>, returns the name of the slot for which Amazon Lex is eliciting a value. </p>",
+        "ResponseCard$version": "<p>Version of response card format.</p>",
+        "StringMap$key": null,
+        "StringMap$value": null
+      }
+    },
+    "StringMap": {
+      "base": null,
+      "refs": {
+        "PostTextRequest$sessionAttributes": "<p> A session represents the dialog between a user and Amazon Lex. At runtime, a client application can pass contextual information (session attributes) in the request. For example, <code>\"FirstName\" : \"Joe\"</code>. Amazon Lex passes these session attributes to the AWS Lambda functions configured for the intent (see <code>dialogCodeHook</code> and <code>fulfillmentActivity.codeHook</code> in <code>CreateIntent</code>). </p> <p>In your Lambda function, you can use the session attributes for customization. Some examples are:</p> <ul> <li> <p> In a pizza ordering application, if you can pass user location as a session attribute (for example, <code>\"Location\" : \"111 Maple street\"</code>), your Lambda function might use this information to determine the closest pizzeria to place the order. </p> </li> <li> <p> Use session attributes to personalize prompts. For example, you pass in user name as a session attribute (<code>\"FirstName\" : \"Joe\"</code>), you might configure subsequent prompts to refer to this attribute, as <code>$session.FirstName\"</code>. At runtime, Amazon Lex substitutes a real value when it generates a prompt, such as \"Hello Joe, what would you like to order?\" </p> </li> </ul> <note> <p> Amazon Lex does not persist session attributes. </p> <p> If the intent is configured without a Lambda function to process the intent (that is, the client application to process the intent), Amazon Lex simply returns the session attributes back to the client application. </p> <p> If the intent is configured with a Lambda function to process the intent, Amazon Lex passes the incoming session attributes to the Lambda function. The Lambda function must return these session attributes if you want Amazon Lex to return them back to the client. </p> </note>",
+        "PostTextResponse$slots": "<p> Intent slots (name/value pairs) Amazon Lex detected so far from the user input in the conversation. </p>",
+        "PostTextResponse$sessionAttributes": "<p>Map of key value pairs representing the session specific context information.</p>"
+      }
+    },
+    "StringUrlWithLength": {
+      "base": null,
+      "refs": {
+        "GenericAttachment$attachmentLinkUrl": null,
+        "GenericAttachment$imageUrl": "<p>URL of an image that is displayed to the user.</p>"
+      }
+    },
+    "StringWithLength": {
+      "base": null,
+      "refs": {
+        "GenericAttachment$title": "<p>Title of the option.</p>",
+        "GenericAttachment$subTitle": "<p>Subtitle shown below the title.</p>"
+      }
+    },
+    "Text": {
+      "base": null,
+      "refs": {
+        "PostTextRequest$inputText": "<p>Text user entered (Amazon Lex interprets this text).</p>",
+        "PostTextResponse$message": "<p> Prompt (or statement) to convey to the user. This is based on the application configuration and context. For example, if Amazon Lex did not understand the user intent, it sends the <code>clarificationPrompt</code> configured for the application. In another example, if the intent requires confirmation before taking the fulfillment action, it sends the <code>confirmationPrompt</code>. Suppose the Lambda function successfully fulfilled the intent, and sent a message to convey to the user. In that situation, Amazon Lex sends that message in the response. </p>"
+      }
+    },
+    "UserId": {
+      "base": null,
+      "refs": {
+        "PostTextRequest$userId": "<p>User ID of your client application. Typically, each of your application users should have a unique ID. Note the following considerations: </p> <ul> <li> <p> If you want a user to start a conversation on one mobile device and continue the conversation on another device, you might choose a user-specific identifier, such as a login or Amazon Cognito user ID (assuming your application is using Amazon Cognito). </p> </li> <li> <p> If you want the same user to be able to have two independent conversations on two different devices, you might choose a device-specific identifier, such as device ID, or some globally unique identifier. </p> </li> </ul>"
+      }
+    },
+    "genericAttachmentList": {
+      "base": null,
+      "refs": {
+        "ResponseCard$genericAttachments": "<p>An array of attachment objects representing options.</p>"
+      }
+    },
+    "listOfButtons": {
+      "base": null,
+      "refs": {
+        "GenericAttachment$buttons": "<p>List of options to show to the user.</p>"
+      }
+    }
+  }
+}

@@ -67,29 +67,29 @@ func (c *Shield) CreateProtectionRequest(input *CreateProtectionInput) (req *req
 // API operation CreateProtection for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * InvalidResourceException
+//   * ErrCodeInvalidResourceException "InvalidResourceException"
 //   Exception that indicates that the resource is invalid. You might not have
 //   access to the resource, or the resource might not exist.
 //
-//   * InvalidOperationException
+//   * ErrCodeInvalidOperationException "InvalidOperationException"
 //   Exception that indicates that the operation would not cause any change to
 //   occur.
 //
-//   * LimitsExceededException
+//   * ErrCodeLimitsExceededException "LimitsExceededException"
 //   Exception that indicates that the operation would exceed a limit.
 //
-//   * ResourceAlreadyExistsException
+//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
 //   Exception indicating the specified resource already exists.
 //
-//   * OptimisticLockException
+//   * ErrCodeOptimisticLockException "OptimisticLockException"
 //   Exception that indicates that the protection state has been modified by another
 //   client. You can retry the request.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Exception indicating the specified resource does not exist.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/CreateProtection
@@ -154,11 +154,11 @@ func (c *Shield) CreateSubscriptionRequest(input *CreateSubscriptionInput) (req 
 // API operation CreateSubscription for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * ResourceAlreadyExistsException
+//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
 //   Exception indicating the specified resource already exists.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/CreateSubscription
@@ -223,14 +223,14 @@ func (c *Shield) DeleteProtectionRequest(input *DeleteProtectionInput) (req *req
 // API operation DeleteProtection for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Exception indicating the specified resource does not exist.
 //
-//   * OptimisticLockException
+//   * ErrCodeOptimisticLockException "OptimisticLockException"
 //   Exception that indicates that the protection state has been modified by another
 //   client. You can retry the request.
 //
@@ -296,15 +296,15 @@ func (c *Shield) DeleteSubscriptionRequest(input *DeleteSubscriptionInput) (req 
 // API operation DeleteSubscription for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * LockedSubscriptionException
+//   * ErrCodeLockedSubscriptionException "LockedSubscriptionException"
 //   Exception that indicates that the subscription has been modified by another
 //   client. You can retry the request.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Exception indicating the specified resource does not exist.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/DeleteSubscription
@@ -369,11 +369,11 @@ func (c *Shield) DescribeAttackRequest(input *DescribeAttackInput) (req *request
 // API operation DescribeAttack for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Exception that indicates that the parameters passed to the API are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/DescribeAttack
@@ -438,11 +438,11 @@ func (c *Shield) DescribeProtectionRequest(input *DescribeProtectionInput) (req 
 // API operation DescribeProtection for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Exception indicating the specified resource does not exist.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/DescribeProtection
@@ -507,11 +507,11 @@ func (c *Shield) DescribeSubscriptionRequest(input *DescribeSubscriptionInput) (
 // API operation DescribeSubscription for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Exception indicating the specified resource does not exist.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/DescribeSubscription
@@ -577,14 +577,14 @@ func (c *Shield) ListAttacksRequest(input *ListAttacksInput) (req *request.Reque
 // API operation ListAttacks for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Exception that indicates that the parameters passed to the API are invalid.
 //
-//   * InvalidOperationException
+//   * ErrCodeInvalidOperationException "InvalidOperationException"
 //   Exception that indicates that the operation would not cause any change to
 //   occur.
 //
@@ -650,11 +650,11 @@ func (c *Shield) ListProtectionsRequest(input *ListProtectionsInput) (req *reque
 // API operation ListProtections for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Exception that indicates that a problem occurred with the service infrastructure.
 //   You can retry the request.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Exception indicating the specified resource does not exist.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02/ListProtections

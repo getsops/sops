@@ -33,7 +33,12 @@ func (a *API) customizationPasses() {
 	var svcCustomizations = map[string]func(*API){
 		"s3":         s3Customizations,
 		"cloudfront": cloudfrontCustomizations,
-		"rds":             rdsCustomizations,
+		"rds":        rdsCustomizations,
+
+		// Disable endpoint resolving for services that require customer
+		// to provide endpoint them selves.
+		"cloudsearchdomain": disableEndpointResolving,
+		"iotdataplane":      disableEndpointResolving,
 	}
 
 	for k, _ := range mergeServices {
@@ -145,6 +150,7 @@ func mergeServicesCustomizations(a *API) {
 func rdsCustomizations(a *API) {
 	inputs := []string{
 		"CopyDBSnapshotInput",
+		"CreateDBInstanceReadReplicaInput",
 	}
 	for _, input := range inputs {
 		if ref, ok := a.Shapes[input]; ok {
@@ -161,4 +167,8 @@ func rdsCustomizations(a *API) {
 			}
 		}
 	}
+}
+
+func disableEndpointResolving(a *API) {
+	a.Metadata.NoResolveEndpoint = true
 }

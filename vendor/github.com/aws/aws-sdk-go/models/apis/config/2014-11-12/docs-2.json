@@ -66,7 +66,8 @@
         "ComplianceContributorCount$CapExceeded": "<p>Indicates whether the maximum count is reached.</p>",
         "ConfigRuleEvaluationStatus$FirstEvaluationStarted": "<p>Indicates whether AWS Config has evaluated your resources against the rule at least once.</p> <ul> <li> <p> <code>true</code> - AWS Config has evaluated your AWS resources against the rule at least once.</p> </li> <li> <p> <code>false</code> - AWS Config has not once finished evaluating your AWS resources against the rule.</p> </li> </ul>",
         "ConfigurationRecorderStatus$recording": "<p>Specifies whether the recorder is currently recording or not.</p>",
-        "ListDiscoveredResourcesRequest$includeDeletedResources": "<p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>"
+        "ListDiscoveredResourcesRequest$includeDeletedResources": "<p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>",
+        "PutEvaluationsRequest$TestMode": "<p>Use this parameter to specify a test run for <code>PutEvaluations</code>. You can verify whether your AWS Lambda function will deliver evaluation results to AWS Config. No updates occur to your existing evaluations, and evaluation results are not sent to AWS Config.</p> <note> <p>When <code>TestMode</code> is <code>true</code>, <code>PutEvaluations</code> doesn't require a valid value for the <code>ResultToken</code> parameter, but the value cannot be null.</p> </note>"
       }
     },
     "ChannelName": {
@@ -627,7 +628,7 @@
       }
     },
     "InvalidResultTokenException": {
-      "base": "<p>The speNexcified token is invalid.</p>",
+      "base": "<p>The specified <code>ResultToken</code> is invalid.</p>",
       "refs": {
       }
     },

@@ -642,7 +642,7 @@
         },
         "description": "The example lists all vaults owned by the specified AWS account.",
         "id": "list-vaults-1481753006990",
-        "title": "To list all vaults owned by the calling user’s account"
+        "title": "To list all vaults owned by the calling user's account"
       }
     ],
     "PurchaseProvisionedCapacity": [

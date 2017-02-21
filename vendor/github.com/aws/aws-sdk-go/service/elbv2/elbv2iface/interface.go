@@ -169,6 +169,10 @@ type ELBV2API interface {
 
 	RemoveTags(*elbv2.RemoveTagsInput) (*elbv2.RemoveTagsOutput, error)
 
+	SetIpAddressTypeRequest(*elbv2.SetIpAddressTypeInput) (*request.Request, *elbv2.SetIpAddressTypeOutput)
+
+	SetIpAddressType(*elbv2.SetIpAddressTypeInput) (*elbv2.SetIpAddressTypeOutput, error)
+
 	SetRulePrioritiesRequest(*elbv2.SetRulePrioritiesInput) (*request.Request, *elbv2.SetRulePrioritiesOutput)
 
 	SetRulePriorities(*elbv2.SetRulePrioritiesInput) (*elbv2.SetRulePrioritiesOutput, error)

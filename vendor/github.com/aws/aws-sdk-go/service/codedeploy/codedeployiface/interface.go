@@ -87,6 +87,10 @@ type CodeDeployAPI interface {
 
 	BatchGetOnPremisesInstances(*codedeploy.BatchGetOnPremisesInstancesInput) (*codedeploy.BatchGetOnPremisesInstancesOutput, error)
 
+	ContinueDeploymentRequest(*codedeploy.ContinueDeploymentInput) (*request.Request, *codedeploy.ContinueDeploymentOutput)
+
+	ContinueDeployment(*codedeploy.ContinueDeploymentInput) (*codedeploy.ContinueDeploymentOutput, error)
+
 	CreateApplicationRequest(*codedeploy.CreateApplicationInput) (*request.Request, *codedeploy.CreateApplicationOutput)
 
 	CreateApplication(*codedeploy.CreateApplicationInput) (*codedeploy.CreateApplicationOutput, error)
@@ -151,37 +155,25 @@ type CodeDeployAPI interface {
 
 	ListApplicationRevisions(*codedeploy.ListApplicationRevisionsInput) (*codedeploy.ListApplicationRevisionsOutput, error)
 
-	ListApplicationRevisionsPages(*codedeploy.ListApplicationRevisionsInput, func(*codedeploy.ListApplicationRevisionsOutput, bool) bool) error
-
 	ListApplicationsRequest(*codedeploy.ListApplicationsInput) (*request.Request, *codedeploy.ListApplicationsOutput)
 
 	ListApplications(*codedeploy.ListApplicationsInput) (*codedeploy.ListApplicationsOutput, error)
-
-	ListApplicationsPages(*codedeploy.ListApplicationsInput, func(*codedeploy.ListApplicationsOutput, bool) bool) error
 
 	ListDeploymentConfigsRequest(*codedeploy.ListDeploymentConfigsInput) (*request.Request, *codedeploy.ListDeploymentConfigsOutput)
 
 	ListDeploymentConfigs(*codedeploy.ListDeploymentConfigsInput) (*codedeploy.ListDeploymentConfigsOutput, error)
 
-	ListDeploymentConfigsPages(*codedeploy.ListDeploymentConfigsInput, func(*codedeploy.ListDeploymentConfigsOutput, bool) bool) error
-
 	ListDeploymentGroupsRequest(*codedeploy.ListDeploymentGroupsInput) (*request.Request, *codedeploy.ListDeploymentGroupsOutput)
 
 	ListDeploymentGroups(*codedeploy.ListDeploymentGroupsInput) (*codedeploy.ListDeploymentGroupsOutput, error)
-
-	ListDeploymentGroupsPages(*codedeploy.ListDeploymentGroupsInput, func(*codedeploy.ListDeploymentGroupsOutput, bool) bool) error
 
 	ListDeploymentInstancesRequest(*codedeploy.ListDeploymentInstancesInput) (*request.Request, *codedeploy.ListDeploymentInstancesOutput)
 
 	ListDeploymentInstances(*codedeploy.ListDeploymentInstancesInput) (*codedeploy.ListDeploymentInstancesOutput, error)
 
-	ListDeploymentInstancesPages(*codedeploy.ListDeploymentInstancesInput, func(*codedeploy.ListDeploymentInstancesOutput, bool) bool) error
-
 	ListDeploymentsRequest(*codedeploy.ListDeploymentsInput) (*request.Request, *codedeploy.ListDeploymentsOutput)
 
 	ListDeployments(*codedeploy.ListDeploymentsInput) (*codedeploy.ListDeploymentsOutput, error)
-
-	ListDeploymentsPages(*codedeploy.ListDeploymentsInput, func(*codedeploy.ListDeploymentsOutput, bool) bool) error
 
 	ListOnPremisesInstancesRequest(*codedeploy.ListOnPremisesInstancesInput) (*request.Request, *codedeploy.ListOnPremisesInstancesOutput)
 
@@ -198,6 +190,10 @@ type CodeDeployAPI interface {
 	RemoveTagsFromOnPremisesInstancesRequest(*codedeploy.RemoveTagsFromOnPremisesInstancesInput) (*request.Request, *codedeploy.RemoveTagsFromOnPremisesInstancesOutput)
 
 	RemoveTagsFromOnPremisesInstances(*codedeploy.RemoveTagsFromOnPremisesInstancesInput) (*codedeploy.RemoveTagsFromOnPremisesInstancesOutput, error)
+
+	SkipWaitTimeForInstanceTerminationRequest(*codedeploy.SkipWaitTimeForInstanceTerminationInput) (*request.Request, *codedeploy.SkipWaitTimeForInstanceTerminationOutput)
+
+	SkipWaitTimeForInstanceTermination(*codedeploy.SkipWaitTimeForInstanceTerminationInput) (*codedeploy.SkipWaitTimeForInstanceTerminationOutput, error)
 
 	StopDeploymentRequest(*codedeploy.StopDeploymentInput) (*request.Request, *codedeploy.StopDeploymentOutput)
 

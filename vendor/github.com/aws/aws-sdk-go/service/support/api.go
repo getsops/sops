@@ -72,21 +72,21 @@ func (c *Support) AddAttachmentsToSetRequest(input *AddAttachmentsToSetInput) (r
 // API operation AddAttachmentsToSet for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
-//   * AttachmentSetIdNotFound
+//   * ErrCodeAttachmentSetIdNotFound "AttachmentSetIdNotFound"
 //   An attachment set with the specified ID could not be found.
 //
-//   * AttachmentSetExpired
+//   * ErrCodeAttachmentSetExpired "AttachmentSetExpired"
 //   The expiration time of the attachment set has passed. The set expires 1 hour
 //   after it is created.
 //
-//   * AttachmentSetSizeLimitExceeded
+//   * ErrCodeAttachmentSetSizeLimitExceeded "AttachmentSetSizeLimitExceeded"
 //   A limit for the size of an attachment set has been exceeded. The limits are
 //   3 attachments and 5 MB per attachment.
 //
-//   * AttachmentLimitExceeded
+//   * ErrCodeAttachmentLimitExceeded "AttachmentLimitExceeded"
 //   The limit for the number of attachment sets created in a short period of
 //   time has been exceeded.
 //
@@ -159,16 +159,16 @@ func (c *Support) AddCommunicationToCaseRequest(input *AddCommunicationToCaseInp
 // API operation AddCommunicationToCase for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
-//   * CaseIdNotFound
+//   * ErrCodeCaseIdNotFound "CaseIdNotFound"
 //   The requested caseId could not be located.
 //
-//   * AttachmentSetIdNotFound
+//   * ErrCodeAttachmentSetIdNotFound "AttachmentSetIdNotFound"
 //   An attachment set with the specified ID could not be found.
 //
-//   * AttachmentSetExpired
+//   * ErrCodeAttachmentSetExpired "AttachmentSetExpired"
 //   The expiration time of the attachment set has passed. The set expires 1 hour
 //   after it is created.
 //
@@ -277,16 +277,16 @@ func (c *Support) CreateCaseRequest(input *CreateCaseInput) (req *request.Reques
 // API operation CreateCase for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
-//   * CaseCreationLimitExceeded
+//   * ErrCodeCaseCreationLimitExceeded "CaseCreationLimitExceeded"
 //   The case creation limit for the account has been exceeded.
 //
-//   * AttachmentSetIdNotFound
+//   * ErrCodeAttachmentSetIdNotFound "AttachmentSetIdNotFound"
 //   An attachment set with the specified ID could not be found.
 //
-//   * AttachmentSetExpired
+//   * ErrCodeAttachmentSetExpired "AttachmentSetExpired"
 //   The expiration time of the attachment set has passed. The set expires 1 hour
 //   after it is created.
 //
@@ -355,14 +355,14 @@ func (c *Support) DescribeAttachmentRequest(input *DescribeAttachmentInput) (req
 // API operation DescribeAttachment for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
-//   * DescribeAttachmentLimitExceeded
+//   * ErrCodeDescribeAttachmentLimitExceeded "DescribeAttachmentLimitExceeded"
 //   The limit for the number of DescribeAttachment requests in a short period
 //   of time has been exceeded.
 //
-//   * AttachmentIdNotFound
+//   * ErrCodeAttachmentIdNotFound "AttachmentIdNotFound"
 //   An attachment with the specified ID could not be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeAttachment
@@ -447,10 +447,10 @@ func (c *Support) DescribeCasesRequest(input *DescribeCasesInput) (req *request.
 // API operation DescribeCases for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
-//   * CaseIdNotFound
+//   * ErrCodeCaseIdNotFound "CaseIdNotFound"
 //   The requested caseId could not be located.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeCases
@@ -555,10 +555,10 @@ func (c *Support) DescribeCommunicationsRequest(input *DescribeCommunicationsInp
 // API operation DescribeCommunications for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
-//   * CaseIdNotFound
+//   * ErrCodeCaseIdNotFound "CaseIdNotFound"
 //   The requested caseId could not be located.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeCommunications
@@ -658,7 +658,7 @@ func (c *Support) DescribeServicesRequest(input *DescribeServicesInput) (req *re
 // API operation DescribeServices for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeServices
@@ -725,7 +725,7 @@ func (c *Support) DescribeSeverityLevelsRequest(input *DescribeSeverityLevelsInp
 // API operation DescribeSeverityLevels for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeSeverityLevels
@@ -795,7 +795,7 @@ func (c *Support) DescribeTrustedAdvisorCheckRefreshStatusesRequest(input *Descr
 // API operation DescribeTrustedAdvisorCheckRefreshStatuses for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeTrustedAdvisorCheckRefreshStatuses
@@ -879,7 +879,7 @@ func (c *Support) DescribeTrustedAdvisorCheckResultRequest(input *DescribeTruste
 // API operation DescribeTrustedAdvisorCheckResult for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeTrustedAdvisorCheckResult
@@ -947,7 +947,7 @@ func (c *Support) DescribeTrustedAdvisorCheckSummariesRequest(input *DescribeTru
 // API operation DescribeTrustedAdvisorCheckSummaries for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeTrustedAdvisorCheckSummaries
@@ -1015,7 +1015,7 @@ func (c *Support) DescribeTrustedAdvisorChecksRequest(input *DescribeTrustedAdvi
 // API operation DescribeTrustedAdvisorChecks for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/DescribeTrustedAdvisorChecks
@@ -1096,7 +1096,7 @@ func (c *Support) RefreshTrustedAdvisorCheckRequest(input *RefreshTrustedAdvisor
 // API operation RefreshTrustedAdvisorCheck for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/RefreshTrustedAdvisorCheck
@@ -1162,10 +1162,10 @@ func (c *Support) ResolveCaseRequest(input *ResolveCaseInput) (req *request.Requ
 // API operation ResolveCase for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error occurred.
 //
-//   * CaseIdNotFound
+//   * ErrCodeCaseIdNotFound "CaseIdNotFound"
 //   The requested caseId could not be located.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/support-2013-04-15/ResolveCase

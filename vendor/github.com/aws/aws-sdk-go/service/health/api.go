@@ -79,10 +79,10 @@ func (c *Health) DescribeAffectedEntitiesRequest(input *DescribeAffectedEntities
 // API operation DescribeAffectedEntities for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidPaginationToken
+//   * ErrCodeInvalidPaginationToken "InvalidPaginationToken"
 //   The specified pagination token (nextToken) is not valid.
 //
-//   * UnsupportedLocale
+//   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeAffectedEntities
@@ -242,7 +242,7 @@ func (c *Health) DescribeEventAggregatesRequest(input *DescribeEventAggregatesIn
 // API operation DescribeEventAggregates for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidPaginationToken
+//   * ErrCodeInvalidPaginationToken "InvalidPaginationToken"
 //   The specified pagination token (nextToken) is not valid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventAggregates
@@ -339,7 +339,7 @@ func (c *Health) DescribeEventDetailsRequest(input *DescribeEventDetailsInput) (
 // API operation DescribeEventDetails for usage and error information.
 //
 // Returned Error Codes:
-//   * UnsupportedLocale
+//   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventDetails
@@ -411,10 +411,10 @@ func (c *Health) DescribeEventTypesRequest(input *DescribeEventTypesInput) (req 
 // API operation DescribeEventTypes for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidPaginationToken
+//   * ErrCodeInvalidPaginationToken "InvalidPaginationToken"
 //   The specified pagination token (nextToken) is not valid.
 //
-//   * UnsupportedLocale
+//   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEventTypes
@@ -517,10 +517,10 @@ func (c *Health) DescribeEventsRequest(input *DescribeEventsInput) (req *request
 // API operation DescribeEvents for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidPaginationToken
+//   * ErrCodeInvalidPaginationToken "InvalidPaginationToken"
 //   The specified pagination token (nextToken) is not valid.
 //
-//   * UnsupportedLocale
+//   * ErrCodeUnsupportedLocale "UnsupportedLocale"
 //   The specified locale is not supported.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/health-2016-08-04/DescribeEvents

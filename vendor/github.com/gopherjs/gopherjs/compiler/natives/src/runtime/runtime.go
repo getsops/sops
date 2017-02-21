@@ -79,7 +79,7 @@ func GOMAXPROCS(n int) int {
 
 func Gosched() {
 	c := make(chan struct{})
-	js.Global.Call("setTimeout", func() { close(c) }, 0)
+	js.Global.Call("$setTimeout", js.InternalObject(func() { close(c) }), 0)
 	<-c
 }
 
@@ -162,6 +162,11 @@ func FuncForPC(pc uintptr) *Func {
 var MemProfileRate int = 512 * 1024
 
 func SetBlockProfileRate(rate int) {
+}
+
+func SetMutexProfileFraction(rate int) int {
+	// TODO: Investigate this. If it's possible to implement, consider doing so, otherwise remove this comment.
+	return 0
 }
 
 func Stack(buf []byte, all bool) int {

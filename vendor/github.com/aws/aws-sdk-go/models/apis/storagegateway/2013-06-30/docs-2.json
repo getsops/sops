@@ -623,6 +623,14 @@
         "DescribeNFSFileSharesInput$FileShareARNList": "<p>An array containing the Amazon Resource Name (ARN) of each file share to be described. </p>"
       }
     },
+    "FileShareClientList": {
+      "base": "<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks. </p>",
+      "refs": {
+        "CreateNFSFileShareInput$ClientList": "<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks.</p>",
+        "NFSFileShareInfo$ClientList": null,
+        "UpdateNFSFileShareInput$ClientList": "<p>The list of clients that are allowed to access the file gateway. The list must contain either valid IP addresses or valid CIDR blocks.</p>"
+      }
+    },
     "FileShareId": {
       "base": "<p>The ID of the file share. </p>",
       "refs": {
@@ -793,6 +801,12 @@
         "DescribeSnapshotScheduleOutput$StartAt": null,
         "UpdateMaintenanceStartTimeInput$HourOfDay": "<p>The hour component of the maintenance start time represented as <i>hh</i>, where <i>hh</i> is the hour (00 to 23). The hour of the day is in the time zone of the gateway.</p>",
         "UpdateSnapshotScheduleInput$StartAt": "<p>The hour of the day at which the snapshot schedule begins represented as <i>hh</i>, where <i>hh</i> is the hour (0 to 23). The hour of the day is in the time zone of the gateway.</p>"
+      }
+    },
+    "IPV4AddressCIDR": {
+      "base": null,
+      "refs": {
+        "FileShareClientList$member": null
       }
     },
     "Initiator": {

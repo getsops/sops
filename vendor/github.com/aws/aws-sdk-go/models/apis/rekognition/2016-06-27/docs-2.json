@@ -20,6 +20,12 @@
       "refs": {
       }
     },
+    "AgeRange": {
+      "base": "<p>Structure containing the estimated age range, in years, for a face.</p> <p>Rekognition estimates an age-range for faces detected in the input image. Estimated age ranges can overlap; a face of a 5 year old may have an estimated range of 4-6 whilst the face of a 6 year old may have an estimated range of 4-8.</p>",
+      "refs": {
+        "FaceDetail$AgeRange": "<p>The estimated age range, in years, for the face. Low represents the lowest estimated age and High represents the highest estimated age.</p>"
+      }
+    },
     "Attribute": {
       "base": null,
       "refs": {
@@ -582,6 +588,8 @@
     "UInteger": {
       "base": null,
       "refs": {
+        "AgeRange$Low": "<p>The lowest estimated age.</p>",
+        "AgeRange$High": "<p>The highest estimated age.</p>",
         "CreateCollectionResponse$StatusCode": "<p>HTTP status code indicating the result of the operation.</p>",
         "DeleteCollectionResponse$StatusCode": "<p>HTTP status code that indicates the result of the operation.</p>",
         "DetectLabelsRequest$MaxLabels": "<p>Maximum number of labels you want the service to return in the response. The service returns the specified number of highest confidence labels. </p>"

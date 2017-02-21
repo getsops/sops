@@ -76,10 +76,10 @@ func (c *DynamoDBStreams) DescribeStreamRequest(input *DescribeStreamInput) (req
 // API operation DescribeStream for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The operation tried to access a nonexistent stream.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An error occurred on the server side.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/streams-dynamodb-2012-08-10/DescribeStream
@@ -154,10 +154,10 @@ func (c *DynamoDBStreams) GetRecordsRequest(input *GetRecordsInput) (req *reques
 // API operation GetRecords for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The operation tried to access a nonexistent stream.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   Your request rate is too high. The AWS SDKs for DynamoDB automatically retry
 //   requests that receive this exception. Your request is eventually successful,
 //   unless your retry queue is too large to finish. Reduce the frequency of requests
@@ -165,15 +165,15 @@ func (c *DynamoDBStreams) GetRecordsRequest(input *GetRecordsInput) (req *reques
 //   Exponential Backoff (http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#APIRetries)
 //   in the Amazon DynamoDB Developer Guide.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An error occurred on the server side.
 //
-//   * ExpiredIteratorException
+//   * ErrCodeExpiredIteratorException "ExpiredIteratorException"
 //   The shard iterator has expired and can no longer be used to retrieve stream
 //   records. A shard iterator expires 15 minutes after it is retrieved using
 //   the GetShardIterator action.
 //
-//   * TrimmedDataAccessException
+//   * ErrCodeTrimmedDataAccessException "TrimmedDataAccessException"
 //   The operation attempted to read past the oldest stream record in a shard.
 //
 //   In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records
@@ -253,13 +253,13 @@ func (c *DynamoDBStreams) GetShardIteratorRequest(input *GetShardIteratorInput) 
 // API operation GetShardIterator for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The operation tried to access a nonexistent stream.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An error occurred on the server side.
 //
-//   * TrimmedDataAccessException
+//   * ErrCodeTrimmedDataAccessException "TrimmedDataAccessException"
 //   The operation attempted to read past the oldest stream record in a shard.
 //
 //   In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records
@@ -339,10 +339,10 @@ func (c *DynamoDBStreams) ListStreamsRequest(input *ListStreamsInput) (req *requ
 // API operation ListStreams for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The operation tried to access a nonexistent stream.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An error occurred on the server side.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/streams-dynamodb-2012-08-10/ListStreams

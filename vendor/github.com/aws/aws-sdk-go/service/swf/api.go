@@ -89,12 +89,12 @@ func (c *SWF) CountClosedWorkflowExecutionsRequest(input *CountClosedWorkflowExe
 // API operation CountClosedWorkflowExecutions for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -180,12 +180,12 @@ func (c *SWF) CountOpenWorkflowExecutionsRequest(input *CountOpenWorkflowExecuti
 // API operation CountOpenWorkflowExecutions for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -269,12 +269,12 @@ func (c *SWF) CountPendingActivityTasksRequest(input *CountPendingActivityTasksI
 // API operation CountPendingActivityTasks for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -358,12 +358,12 @@ func (c *SWF) CountPendingDecisionTasksRequest(input *CountPendingDecisionTasksI
 // API operation CountPendingDecisionTasks for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -451,15 +451,15 @@ func (c *SWF) DeprecateActivityTypeRequest(input *DeprecateActivityTypeInput) (r
 // API operation DeprecateActivityType for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * TypeDeprecatedFault
+//   * ErrCodeTypeDeprecatedFault "TypeDeprecatedFault"
 //   Returned when the specified activity or workflow type was already deprecated.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -547,15 +547,15 @@ func (c *SWF) DeprecateDomainRequest(input *DeprecateDomainInput) (req *request.
 // API operation DeprecateDomain for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * DomainDeprecatedFault
+//   * ErrCodeDomainDeprecatedFault "DomainDeprecatedFault"
 //   Returned when the specified domain has been deprecated.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -644,15 +644,15 @@ func (c *SWF) DeprecateWorkflowTypeRequest(input *DeprecateWorkflowTypeInput) (r
 // API operation DeprecateWorkflowType for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * TypeDeprecatedFault
+//   * ErrCodeTypeDeprecatedFault "TypeDeprecatedFault"
 //   Returned when the specified activity or workflow type was already deprecated.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -737,12 +737,12 @@ func (c *SWF) DescribeActivityTypeRequest(input *DescribeActivityTypeInput) (req
 // API operation DescribeActivityType for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -823,12 +823,12 @@ func (c *SWF) DescribeDomainRequest(input *DescribeDomainInput) (req *request.Re
 // API operation DescribeDomain for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -910,12 +910,12 @@ func (c *SWF) DescribeWorkflowExecutionRequest(input *DescribeWorkflowExecutionI
 // API operation DescribeWorkflowExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -1000,12 +1000,12 @@ func (c *SWF) DescribeWorkflowTypeRequest(input *DescribeWorkflowTypeInput) (req
 // API operation DescribeWorkflowType for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -1094,12 +1094,12 @@ func (c *SWF) GetWorkflowExecutionHistoryRequest(input *GetWorkflowExecutionHist
 // API operation GetWorkflowExecutionHistory for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -1214,11 +1214,11 @@ func (c *SWF) ListActivityTypesRequest(input *ListActivityTypesInput) (req *requ
 // API operation ListActivityTypes for usage and error information.
 //
 // Returned Error Codes:
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
@@ -1338,12 +1338,12 @@ func (c *SWF) ListClosedWorkflowExecutionsRequest(input *ListClosedWorkflowExecu
 // API operation ListClosedWorkflowExecutions for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -1458,7 +1458,7 @@ func (c *SWF) ListDomainsRequest(input *ListDomainsInput) (req *request.Request,
 // API operation ListDomains for usage and error information.
 //
 // Returned Error Codes:
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -1577,12 +1577,12 @@ func (c *SWF) ListOpenWorkflowExecutionsRequest(input *ListOpenWorkflowExecution
 // API operation ListOpenWorkflowExecutions for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -1695,11 +1695,11 @@ func (c *SWF) ListWorkflowTypesRequest(input *ListWorkflowTypesInput) (req *requ
 // API operation ListWorkflowTypes for usage and error information.
 //
 // Returned Error Codes:
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
@@ -1814,16 +1814,16 @@ func (c *SWF) PollForActivityTaskRequest(input *PollForActivityTaskInput) (req *
 // API operation PollForActivityTask for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
-//   * LimitExceededFault
+//   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   Returned by any operation if a system imposed limitation has been reached.
 //   To address this fault you should either clean up unused resources or increase
 //   the limit by contacting AWS.
@@ -1927,16 +1927,16 @@ func (c *SWF) PollForDecisionTaskRequest(input *PollForDecisionTaskInput) (req *
 // API operation PollForDecisionTask for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
-//   * LimitExceededFault
+//   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   Returned by any operation if a system imposed limitation has been reached.
 //   To address this fault you should either clean up unused resources or increase
 //   the limit by contacting AWS.
@@ -2061,12 +2061,12 @@ func (c *SWF) RecordActivityTaskHeartbeatRequest(input *RecordActivityTaskHeartb
 // API operation RecordActivityTaskHeartbeat for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2155,23 +2155,23 @@ func (c *SWF) RegisterActivityTypeRequest(input *RegisterActivityTypeInput) (req
 // API operation RegisterActivityType for usage and error information.
 //
 // Returned Error Codes:
-//   * TypeAlreadyExistsFault
+//   * ErrCodeTypeAlreadyExistsFault "TypeAlreadyExistsFault"
 //   Returned if the type already exists in the specified domain. You will get
 //   this fault even if the existing type is in deprecated status. You can specify
 //   another version if the intent is to create a new distinct version of the
 //   type.
 //
-//   * LimitExceededFault
+//   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   Returned by any operation if a system imposed limitation has been reached.
 //   To address this fault you should either clean up unused resources or increase
 //   the limit by contacting AWS.
 //
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2254,16 +2254,16 @@ func (c *SWF) RegisterDomainRequest(input *RegisterDomainInput) (req *request.Re
 // API operation RegisterDomain for usage and error information.
 //
 // Returned Error Codes:
-//   * DomainAlreadyExistsFault
+//   * ErrCodeDomainAlreadyExistsFault "DomainAlreadyExistsFault"
 //   Returned if the specified domain already exists. You will get this fault
 //   even if the existing domain is in deprecated status.
 //
-//   * LimitExceededFault
+//   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   Returned by any operation if a system imposed limitation has been reached.
 //   To address this fault you should either clean up unused resources or increase
 //   the limit by contacting AWS.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2355,23 +2355,23 @@ func (c *SWF) RegisterWorkflowTypeRequest(input *RegisterWorkflowTypeInput) (req
 // API operation RegisterWorkflowType for usage and error information.
 //
 // Returned Error Codes:
-//   * TypeAlreadyExistsFault
+//   * ErrCodeTypeAlreadyExistsFault "TypeAlreadyExistsFault"
 //   Returned if the type already exists in the specified domain. You will get
 //   this fault even if the existing type is in deprecated status. You can specify
 //   another version if the intent is to create a new distinct version of the
 //   type.
 //
-//   * LimitExceededFault
+//   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   Returned by any operation if a system imposed limitation has been reached.
 //   To address this fault you should either clean up unused resources or increase
 //   the limit by contacting AWS.
 //
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2460,12 +2460,12 @@ func (c *SWF) RequestCancelWorkflowExecutionRequest(input *RequestCancelWorkflow
 // API operation RequestCancelWorkflowExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2559,12 +2559,12 @@ func (c *SWF) RespondActivityTaskCanceledRequest(input *RespondActivityTaskCance
 // API operation RespondActivityTaskCanceled for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2657,12 +2657,12 @@ func (c *SWF) RespondActivityTaskCompletedRequest(input *RespondActivityTaskComp
 // API operation RespondActivityTaskCompleted for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2752,12 +2752,12 @@ func (c *SWF) RespondActivityTaskFailedRequest(input *RespondActivityTaskFailedI
 // API operation RespondActivityTaskFailed for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2837,12 +2837,12 @@ func (c *SWF) RespondDecisionTaskCompletedRequest(input *RespondDecisionTaskComp
 // API operation RespondDecisionTaskCompleted for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -2929,12 +2929,12 @@ func (c *SWF) SignalWorkflowExecutionRequest(input *SignalWorkflowExecutionInput
 // API operation SignalWorkflowExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
@@ -3026,29 +3026,28 @@ func (c *SWF) StartWorkflowExecutionRequest(input *StartWorkflowExecutionInput) 
 // API operation StartWorkflowExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * TypeDeprecatedFault
+//   * ErrCodeTypeDeprecatedFault "TypeDeprecatedFault"
 //   Returned when the specified activity or workflow type was already deprecated.
 //
-//   * WorkflowExecutionAlreadyStartedFault
+//   * ErrCodeWorkflowExecutionAlreadyStartedFault "WorkflowExecutionAlreadyStartedFault"
 //   Returned by StartWorkflowExecution when an open execution with the same workflowId
 //   is already running in the specified domain.
 //
-//   * LimitExceededFault
+//   * ErrCodeLimitExceededFault "LimitExceededFault"
 //   Returned by any operation if a system imposed limitation has been reached.
 //   To address this fault you should either clean up unused resources or increase
 //   the limit by contacting AWS.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //
-//   * DefaultUndefinedFault
-
+//   * ErrCodeDefaultUndefinedFault "DefaultUndefinedFault"
 //
 func (c *SWF) StartWorkflowExecution(input *StartWorkflowExecutionInput) (*StartWorkflowExecutionOutput, error) {
 	req, out := c.StartWorkflowExecutionRequest(input)
@@ -3136,12 +3135,12 @@ func (c *SWF) TerminateWorkflowExecutionRequest(input *TerminateWorkflowExecutio
 // API operation TerminateWorkflowExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * UnknownResourceFault
+//   * ErrCodeUnknownResourceFault "UnknownResourceFault"
 //   Returned when the named resource cannot be found with in the scope of this
 //   operation (region or domain). This could happen if the named resource was
 //   never created or is no longer available for this operation.
 //
-//   * OperationNotPermittedFault
+//   * ErrCodeOperationNotPermittedFault "OperationNotPermittedFault"
 //   Returned when the caller does not have sufficient permissions to invoke the
 //   action.
 //

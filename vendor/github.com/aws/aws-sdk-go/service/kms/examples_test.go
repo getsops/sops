@@ -127,6 +127,13 @@ func ExampleKMS_CreateKey() {
 		KeyUsage:                       aws.String("KeyUsageType"),
 		Origin:                         aws.String("OriginType"),
 		Policy:                         aws.String("PolicyType"),
+		Tags: []*kms.Tag{
+			{ // Required
+				TagKey:   aws.String("TagKeyType"),   // Required
+				TagValue: aws.String("TagValueType"), // Required
+			},
+			// More values...
+		},
 	}
 	resp, err := svc.CreateKey(params)
 
@@ -695,6 +702,33 @@ func ExampleKMS_ListKeys() {
 	fmt.Println(resp)
 }
 
+func ExampleKMS_ListResourceTags() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := kms.New(sess)
+
+	params := &kms.ListResourceTagsInput{
+		KeyId:  aws.String("KeyIdType"), // Required
+		Limit:  aws.Int64(1),
+		Marker: aws.String("MarkerType"),
+	}
+	resp, err := svc.ListResourceTags(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleKMS_ListRetirableGrants() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -855,6 +889,67 @@ func ExampleKMS_ScheduleKeyDeletion() {
 		PendingWindowInDays: aws.Int64(1),
 	}
 	resp, err := svc.ScheduleKeyDeletion(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleKMS_TagResource() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := kms.New(sess)
+
+	params := &kms.TagResourceInput{
+		KeyId: aws.String("KeyIdType"), // Required
+		Tags: []*kms.Tag{ // Required
+			{ // Required
+				TagKey:   aws.String("TagKeyType"),   // Required
+				TagValue: aws.String("TagValueType"), // Required
+			},
+			// More values...
+		},
+	}
+	resp, err := svc.TagResource(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleKMS_UntagResource() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := kms.New(sess)
+
+	params := &kms.UntagResourceInput{
+		KeyId: aws.String("KeyIdType"), // Required
+		TagKeys: []*string{ // Required
+			aws.String("TagKeyType"), // Required
+			// More values...
+		},
+	}
+	resp, err := svc.UntagResource(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

@@ -44,6 +44,35 @@ func ExampleDirectConnect_AllocateConnectionOnInterconnect() {
 	fmt.Println(resp)
 }
 
+func ExampleDirectConnect_AllocateHostedConnection() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.AllocateHostedConnectionInput{
+		Bandwidth:      aws.String("Bandwidth"),      // Required
+		ConnectionId:   aws.String("ConnectionId"),   // Required
+		ConnectionName: aws.String("ConnectionName"), // Required
+		OwnerAccount:   aws.String("OwnerAccount"),   // Required
+		Vlan:           aws.Int64(1),                 // Required
+	}
+	resp, err := svc.AllocateHostedConnection(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleDirectConnect_AllocatePrivateVirtualInterface() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -108,6 +137,84 @@ func ExampleDirectConnect_AllocatePublicVirtualInterface() {
 		OwnerAccount: aws.String("OwnerAccount"), // Required
 	}
 	resp, err := svc.AllocatePublicVirtualInterface(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_AssociateConnectionWithLag() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.AssociateConnectionWithLagInput{
+		ConnectionId: aws.String("ConnectionId"), // Required
+		LagId:        aws.String("LagId"),        // Required
+	}
+	resp, err := svc.AssociateConnectionWithLag(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_AssociateHostedConnection() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.AssociateHostedConnectionInput{
+		ConnectionId:       aws.String("ConnectionId"), // Required
+		ParentConnectionId: aws.String("ConnectionId"), // Required
+	}
+	resp, err := svc.AssociateHostedConnection(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_AssociateVirtualInterface() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.AssociateVirtualInterfaceInput{
+		ConnectionId:       aws.String("ConnectionId"),       // Required
+		VirtualInterfaceId: aws.String("VirtualInterfaceId"), // Required
+	}
+	resp, err := svc.AssociateVirtualInterface(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -241,6 +348,7 @@ func ExampleDirectConnect_CreateConnection() {
 		Bandwidth:      aws.String("Bandwidth"),      // Required
 		ConnectionName: aws.String("ConnectionName"), // Required
 		Location:       aws.String("LocationCode"),   // Required
+		LagId:          aws.String("LagId"),
 	}
 	resp, err := svc.CreateConnection(params)
 
@@ -268,8 +376,38 @@ func ExampleDirectConnect_CreateInterconnect() {
 		Bandwidth:        aws.String("Bandwidth"),        // Required
 		InterconnectName: aws.String("InterconnectName"), // Required
 		Location:         aws.String("LocationCode"),     // Required
+		LagId:            aws.String("LagId"),
 	}
 	resp, err := svc.CreateInterconnect(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_CreateLag() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.CreateLagInput{
+		ConnectionsBandwidth: aws.String("Bandwidth"),    // Required
+		LagName:              aws.String("LagName"),      // Required
+		Location:             aws.String("LocationCode"), // Required
+		NumberOfConnections:  aws.Int64(1),               // Required
+		ConnectionId:         aws.String("ConnectionId"),
+	}
+	resp, err := svc.CreateLag(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -434,6 +572,31 @@ func ExampleDirectConnect_DeleteInterconnect() {
 	fmt.Println(resp)
 }
 
+func ExampleDirectConnect_DeleteLag() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.DeleteLagInput{
+		LagId: aws.String("LagId"), // Required
+	}
+	resp, err := svc.DeleteLag(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleDirectConnect_DeleteVirtualInterface() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -536,6 +699,31 @@ func ExampleDirectConnect_DescribeConnectionsOnInterconnect() {
 	fmt.Println(resp)
 }
 
+func ExampleDirectConnect_DescribeHostedConnections() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.DescribeHostedConnectionsInput{
+		ConnectionId: aws.String("ConnectionId"), // Required
+	}
+	resp, err := svc.DescribeHostedConnections(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleDirectConnect_DescribeInterconnectLoa() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -576,6 +764,58 @@ func ExampleDirectConnect_DescribeInterconnects() {
 		InterconnectId: aws.String("InterconnectId"),
 	}
 	resp, err := svc.DescribeInterconnects(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_DescribeLags() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.DescribeLagsInput{
+		LagId: aws.String("LagId"),
+	}
+	resp, err := svc.DescribeLags(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_DescribeLoa() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.DescribeLoaInput{
+		ConnectionId:   aws.String("ConnectionId"), // Required
+		LoaContentType: aws.String("LoaContentType"),
+		ProviderName:   aws.String("ProviderName"),
+	}
+	resp, err := svc.DescribeLoa(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
@@ -688,6 +928,32 @@ func ExampleDirectConnect_DescribeVirtualInterfaces() {
 	fmt.Println(resp)
 }
 
+func ExampleDirectConnect_DisassociateConnectionFromLag() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.DisassociateConnectionFromLagInput{
+		ConnectionId: aws.String("ConnectionId"), // Required
+		LagId:        aws.String("LagId"),        // Required
+	}
+	resp, err := svc.DisassociateConnectionFromLag(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
 func ExampleDirectConnect_TagResource() {
 	sess, err := session.NewSession()
 	if err != nil {
@@ -737,6 +1003,33 @@ func ExampleDirectConnect_UntagResource() {
 		},
 	}
 	resp, err := svc.UntagResource(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleDirectConnect_UpdateLag() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := directconnect.New(sess)
+
+	params := &directconnect.UpdateLagInput{
+		LagId:        aws.String("LagId"), // Required
+		LagName:      aws.String("LagName"),
+		MinimumLinks: aws.Int64(1),
+	}
+	resp, err := svc.UpdateLag(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and
