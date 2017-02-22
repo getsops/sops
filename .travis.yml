@@ -15,7 +15,7 @@ before_install:
   - source ~/.cargo/env
 
 script:
-  - make test
+  - make
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
