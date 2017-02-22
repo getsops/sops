@@ -106,7 +106,8 @@ func ExampleELBV2_CreateLoadBalancer() {
 			aws.String("SubnetId"), // Required
 			// More values...
 		},
-		Scheme: aws.String("LoadBalancerSchemeEnum"),
+		IpAddressType: aws.String("IpAddressType"),
+		Scheme:        aws.String("LoadBalancerSchemeEnum"),
 		SecurityGroups: []*string{
 			aws.String("SecurityGroupId"), // Required
 			// More values...
@@ -848,6 +849,32 @@ func ExampleELBV2_RemoveTags() {
 		},
 	}
 	resp, err := svc.RemoveTags(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleELBV2_SetIpAddressType() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := elbv2.New(sess)
+
+	params := &elbv2.SetIpAddressTypeInput{
+		IpAddressType:   aws.String("IpAddressType"),   // Required
+		LoadBalancerArn: aws.String("LoadBalancerArn"), // Required
+	}
+	resp, err := svc.SetIpAddressType(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

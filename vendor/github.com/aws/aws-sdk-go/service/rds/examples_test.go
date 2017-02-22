@@ -542,12 +542,16 @@ func ExampleRDS_CreateDBInstanceReadReplica() {
 		CopyTagsToSnapshot:         aws.Bool(true),
 		DBInstanceClass:            aws.String("String"),
 		DBSubnetGroupName:          aws.String("String"),
+		DestinationRegion:          aws.String("String"),
 		Iops:                       aws.Int64(1),
+		KmsKeyId:                   aws.String("String"),
 		MonitoringInterval:         aws.Int64(1),
 		MonitoringRoleArn:          aws.String("String"),
 		OptionGroupName:            aws.String("String"),
 		Port:                       aws.Int64(1),
+		PreSignedUrl:               aws.String("String"),
 		PubliclyAccessible:         aws.Bool(true),
+		SourceRegion:               aws.String("String"),
 		StorageType:                aws.String("String"),
 		Tags: []*rds.Tag{
 			{ // Required
@@ -2370,6 +2374,32 @@ func ExampleRDS_ModifyDBParameterGroup() {
 		},
 	}
 	resp, err := svc.ModifyDBParameterGroup(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleRDS_ModifyDBSnapshot() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := rds.New(sess)
+
+	params := &rds.ModifyDBSnapshotInput{
+		DBSnapshotIdentifier: aws.String("String"), // Required
+		EngineVersion:        aws.String("String"),
+	}
+	resp, err := svc.ModifyDBSnapshot(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

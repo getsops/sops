@@ -65,16 +65,16 @@ func (c *DeviceFarm) CreateDevicePoolRequest(input *CreateDevicePoolInput) (req 
 // API operation CreateDevicePool for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/CreateDevicePool
@@ -139,16 +139,16 @@ func (c *DeviceFarm) CreateProjectRequest(input *CreateProjectInput) (req *reque
 // API operation CreateProject for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/CreateProject
@@ -213,16 +213,16 @@ func (c *DeviceFarm) CreateRemoteAccessSessionRequest(input *CreateRemoteAccessS
 // API operation CreateRemoteAccessSession for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/CreateRemoteAccessSession
@@ -287,16 +287,16 @@ func (c *DeviceFarm) CreateUploadRequest(input *CreateUploadInput) (req *request
 // API operation CreateUpload for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/CreateUpload
@@ -362,16 +362,16 @@ func (c *DeviceFarm) DeleteDevicePoolRequest(input *DeleteDevicePoolInput) (req 
 // API operation DeleteDevicePool for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeleteDevicePool
@@ -438,16 +438,16 @@ func (c *DeviceFarm) DeleteProjectRequest(input *DeleteProjectInput) (req *reque
 // API operation DeleteProject for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeleteProject
@@ -512,16 +512,16 @@ func (c *DeviceFarm) DeleteRemoteAccessSessionRequest(input *DeleteRemoteAccessS
 // API operation DeleteRemoteAccessSession for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeleteRemoteAccessSession
@@ -588,16 +588,16 @@ func (c *DeviceFarm) DeleteRunRequest(input *DeleteRunInput) (req *request.Reque
 // API operation DeleteRun for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeleteRun
@@ -662,16 +662,16 @@ func (c *DeviceFarm) DeleteUploadRequest(input *DeleteUploadInput) (req *request
 // API operation DeleteUpload for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/DeleteUpload
@@ -737,16 +737,16 @@ func (c *DeviceFarm) GetAccountSettingsRequest(input *GetAccountSettingsInput) (
 // API operation GetAccountSettings for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetAccountSettings
@@ -811,16 +811,16 @@ func (c *DeviceFarm) GetDeviceRequest(input *GetDeviceInput) (req *request.Reque
 // API operation GetDevice for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetDevice
@@ -885,16 +885,16 @@ func (c *DeviceFarm) GetDevicePoolRequest(input *GetDevicePoolInput) (req *reque
 // API operation GetDevicePool for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetDevicePool
@@ -959,16 +959,16 @@ func (c *DeviceFarm) GetDevicePoolCompatibilityRequest(input *GetDevicePoolCompa
 // API operation GetDevicePoolCompatibility for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetDevicePoolCompatibility
@@ -1033,16 +1033,16 @@ func (c *DeviceFarm) GetJobRequest(input *GetJobInput) (req *request.Request, ou
 // API operation GetJob for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetJob
@@ -1118,20 +1118,20 @@ func (c *DeviceFarm) GetOfferingStatusRequest(input *GetOfferingStatusInput) (re
 // API operation GetOfferingStatus for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * NotEligibleException
+//   * ErrCodeNotEligibleException "NotEligibleException"
 //   Exception gets thrown when a user is not eligible to perform the specified
 //   transaction.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetOfferingStatus
@@ -1221,16 +1221,16 @@ func (c *DeviceFarm) GetProjectRequest(input *GetProjectInput) (req *request.Req
 // API operation GetProject for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetProject
@@ -1295,16 +1295,16 @@ func (c *DeviceFarm) GetRemoteAccessSessionRequest(input *GetRemoteAccessSession
 // API operation GetRemoteAccessSession for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetRemoteAccessSession
@@ -1369,16 +1369,16 @@ func (c *DeviceFarm) GetRunRequest(input *GetRunInput) (req *request.Request, ou
 // API operation GetRun for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetRun
@@ -1443,16 +1443,16 @@ func (c *DeviceFarm) GetSuiteRequest(input *GetSuiteInput) (req *request.Request
 // API operation GetSuite for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetSuite
@@ -1517,16 +1517,16 @@ func (c *DeviceFarm) GetTestRequest(input *GetTestInput) (req *request.Request, 
 // API operation GetTest for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetTest
@@ -1591,16 +1591,16 @@ func (c *DeviceFarm) GetUploadRequest(input *GetUploadInput) (req *request.Reque
 // API operation GetUpload for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/GetUpload
@@ -1667,16 +1667,16 @@ func (c *DeviceFarm) InstallToRemoteAccessSessionRequest(input *InstallToRemoteA
 // API operation InstallToRemoteAccessSession for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/InstallToRemoteAccessSession
@@ -1747,16 +1747,16 @@ func (c *DeviceFarm) ListArtifactsRequest(input *ListArtifactsInput) (req *reque
 // API operation ListArtifacts for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListArtifacts
@@ -1852,16 +1852,16 @@ func (c *DeviceFarm) ListDevicePoolsRequest(input *ListDevicePoolsInput) (req *r
 // API operation ListDevicePools for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListDevicePools
@@ -1957,16 +1957,16 @@ func (c *DeviceFarm) ListDevicesRequest(input *ListDevicesInput) (req *request.R
 // API operation ListDevices for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListDevices
@@ -2062,16 +2062,16 @@ func (c *DeviceFarm) ListJobsRequest(input *ListJobsInput) (req *request.Request
 // API operation ListJobs for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListJobs
@@ -2172,20 +2172,20 @@ func (c *DeviceFarm) ListOfferingTransactionsRequest(input *ListOfferingTransact
 // API operation ListOfferingTransactions for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * NotEligibleException
+//   * ErrCodeNotEligibleException "NotEligibleException"
 //   Exception gets thrown when a user is not eligible to perform the specified
 //   transaction.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListOfferingTransactions
@@ -2286,20 +2286,20 @@ func (c *DeviceFarm) ListOfferingsRequest(input *ListOfferingsInput) (req *reque
 // API operation ListOfferings for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * NotEligibleException
+//   * ErrCodeNotEligibleException "NotEligibleException"
 //   Exception gets thrown when a user is not eligible to perform the specified
 //   transaction.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListOfferings
@@ -2395,16 +2395,16 @@ func (c *DeviceFarm) ListProjectsRequest(input *ListProjectsInput) (req *request
 // API operation ListProjects for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListProjects
@@ -2494,16 +2494,16 @@ func (c *DeviceFarm) ListRemoteAccessSessionsRequest(input *ListRemoteAccessSess
 // API operation ListRemoteAccessSessions for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListRemoteAccessSessions
@@ -2574,16 +2574,16 @@ func (c *DeviceFarm) ListRunsRequest(input *ListRunsInput) (req *request.Request
 // API operation ListRuns for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListRuns
@@ -2679,16 +2679,16 @@ func (c *DeviceFarm) ListSamplesRequest(input *ListSamplesInput) (req *request.R
 // API operation ListSamples for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListSamples
@@ -2784,16 +2784,16 @@ func (c *DeviceFarm) ListSuitesRequest(input *ListSuitesInput) (req *request.Req
 // API operation ListSuites for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListSuites
@@ -2889,16 +2889,16 @@ func (c *DeviceFarm) ListTestsRequest(input *ListTestsInput) (req *request.Reque
 // API operation ListTests for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListTests
@@ -2994,16 +2994,16 @@ func (c *DeviceFarm) ListUniqueProblemsRequest(input *ListUniqueProblemsInput) (
 // API operation ListUniqueProblems for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListUniqueProblems
@@ -3099,16 +3099,16 @@ func (c *DeviceFarm) ListUploadsRequest(input *ListUploadsInput) (req *request.R
 // API operation ListUploads for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ListUploads
@@ -3203,20 +3203,20 @@ func (c *DeviceFarm) PurchaseOfferingRequest(input *PurchaseOfferingInput) (req 
 // API operation PurchaseOffering for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * NotEligibleException
+//   * ErrCodeNotEligibleException "NotEligibleException"
 //   Exception gets thrown when a user is not eligible to perform the specified
 //   transaction.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/PurchaseOffering
@@ -3285,20 +3285,20 @@ func (c *DeviceFarm) RenewOfferingRequest(input *RenewOfferingInput) (req *reque
 // API operation RenewOffering for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * NotEligibleException
+//   * ErrCodeNotEligibleException "NotEligibleException"
 //   Exception gets thrown when a user is not eligible to perform the specified
 //   transaction.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/RenewOffering
@@ -3363,19 +3363,19 @@ func (c *DeviceFarm) ScheduleRunRequest(input *ScheduleRunInput) (req *request.R
 // API operation ScheduleRun for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * IdempotencyException
+//   * ErrCodeIdempotencyException "IdempotencyException"
 //   An entity with the same name already exists.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/ScheduleRun
@@ -3440,16 +3440,16 @@ func (c *DeviceFarm) StopRemoteAccessSessionRequest(input *StopRemoteAccessSessi
 // API operation StopRemoteAccessSession for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/StopRemoteAccessSession
@@ -3519,16 +3519,16 @@ func (c *DeviceFarm) StopRunRequest(input *StopRunInput) (req *request.Request, 
 // API operation StopRun for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/StopRun
@@ -3595,16 +3595,16 @@ func (c *DeviceFarm) UpdateDevicePoolRequest(input *UpdateDevicePoolInput) (req 
 // API operation UpdateDevicePool for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/UpdateDevicePool
@@ -3669,16 +3669,16 @@ func (c *DeviceFarm) UpdateProjectRequest(input *UpdateProjectInput) (req *reque
 // API operation UpdateProject for usage and error information.
 //
 // Returned Error Codes:
-//   * ArgumentException
+//   * ErrCodeArgumentException "ArgumentException"
 //   An invalid argument was specified.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The specified entity was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   A limit was exceeded.
 //
-//   * ServiceAccountException
+//   * ErrCodeServiceAccountException "ServiceAccountException"
 //   There was a problem with the service account.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/devicefarm-2015-06-23/UpdateProject

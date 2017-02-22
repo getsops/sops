@@ -220,6 +220,13 @@
       },
       "exception":true
     },
+    "AgeRange":{
+      "type":"structure",
+      "members":{
+        "Low":{"shape":"UInteger"},
+        "High":{"shape":"UInteger"}
+      }
+    },
     "Attribute":{
       "type":"string",
       "enum":[
@@ -440,6 +447,7 @@
       "type":"structure",
       "members":{
         "BoundingBox":{"shape":"BoundingBox"},
+        "AgeRange":{"shape":"AgeRange"},
         "Smile":{"shape":"Smile"},
         "Eyeglasses":{"shape":"Eyeglasses"},
         "Sunglasses":{"shape":"Sunglasses"},

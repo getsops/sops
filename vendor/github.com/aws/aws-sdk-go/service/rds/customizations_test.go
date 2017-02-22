@@ -23,13 +23,17 @@ func TestPresignWithPresignNotSet(t *testing.T) {
 		req.Sign()
 	})
 
-	req, _ := svc.CopyDBSnapshotRequest(&CopyDBSnapshotInput{
+	reqs[opCopyDBSnapshot], _ = svc.CopyDBSnapshotRequest(&CopyDBSnapshotInput{
 		SourceRegion:               aws.String("us-west-1"),
 		SourceDBSnapshotIdentifier: aws.String("foo"),
 		TargetDBSnapshotIdentifier: aws.String("bar"),
 	})
 
-	reqs[opCopyDBSnapshot] = req
+	reqs[opCreateDBInstanceReadReplica], _ = svc.CreateDBInstanceReadReplicaRequest(&CreateDBInstanceReadReplicaInput{
+		SourceRegion:               aws.String("us-west-1"),
+		SourceDBInstanceIdentifier: aws.String("foo"),
+		DBInstanceIdentifier:       aws.String("bar"),
+	})
 
 	for op, req := range reqs {
 		req.Sign()
@@ -51,14 +55,19 @@ func TestPresignWithPresignSet(t *testing.T) {
 		req.Sign()
 	})
 
-	req, _ := svc.CopyDBSnapshotRequest(&CopyDBSnapshotInput{
+	reqs[opCopyDBSnapshot], _ = svc.CopyDBSnapshotRequest(&CopyDBSnapshotInput{
 		SourceRegion:               aws.String("us-west-1"),
 		SourceDBSnapshotIdentifier: aws.String("foo"),
 		TargetDBSnapshotIdentifier: aws.String("bar"),
 		PreSignedUrl:               aws.String("presignedURL"),
 	})
 
-	reqs[opCopyDBSnapshot] = req
+	reqs[opCreateDBInstanceReadReplica], _ = svc.CreateDBInstanceReadReplicaRequest(&CreateDBInstanceReadReplicaInput{
+		SourceRegion:               aws.String("us-west-1"),
+		SourceDBInstanceIdentifier: aws.String("foo"),
+		DBInstanceIdentifier:       aws.String("bar"),
+		PreSignedUrl:               aws.String("presignedURL"),
+	})
 
 	for _, req := range reqs {
 		req.Sign()

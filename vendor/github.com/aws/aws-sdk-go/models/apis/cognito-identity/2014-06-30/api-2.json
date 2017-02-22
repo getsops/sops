@@ -350,7 +350,11 @@
       "type":"structure",
       "members":{
         "ProviderName":{"shape":"CognitoIdentityProviderName"},
-        "ClientId":{"shape":"CognitoIdentityProviderClientId"}
+        "ClientId":{"shape":"CognitoIdentityProviderClientId"},
+        "ServerSideTokenCheck":{
+          "shape":"CognitoIdentityProviderTokenCheck",
+          "box":true
+        }
       }
     },
     "CognitoIdentityProviderClientId":{
@@ -369,6 +373,7 @@
       "min":1,
       "pattern":"[\\w._:/-]+"
     },
+    "CognitoIdentityProviderTokenCheck":{"type":"boolean"},
     "ConcurrentModificationException":{
       "type":"structure",
       "members":{

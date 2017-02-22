@@ -29,8 +29,9 @@ func ExampleCognitoIdentity_CreateIdentityPool() {
 		IdentityPoolName:               aws.String("IdentityPoolName"), // Required
 		CognitoIdentityProviders: []*cognitoidentity.Provider{
 			{ // Required
-				ClientId:     aws.String("ProviderClientId"),
-				ProviderName: aws.String("ProviderName"),
+				ClientId:             aws.String("ProviderClientId"),
+				ProviderName:         aws.String("ProviderName"),
+				ServerSideTokenCheck: aws.Bool(true),
 			},
 			// More values...
 		},
@@ -543,8 +544,9 @@ func ExampleCognitoIdentity_UpdateIdentityPool() {
 		IdentityPoolName:               aws.String("IdentityPoolName"), // Required
 		CognitoIdentityProviders: []*cognitoidentity.Provider{
 			{ // Required
-				ClientId:     aws.String("ProviderClientId"),
-				ProviderName: aws.String("ProviderName"),
+				ClientId:             aws.String("ProviderClientId"),
+				ProviderName:         aws.String("ProviderName"),
+				ServerSideTokenCheck: aws.Bool(true),
 			},
 			// More values...
 		},

@@ -697,6 +697,7 @@ func ExampleConfigService_PutEvaluations() {
 			},
 			// More values...
 		},
+		TestMode: aws.Bool(true),
 	}
 	resp, err := svc.PutEvaluations(params)
 

@@ -128,7 +128,7 @@ path               | ✅ yes       |
 reflect            | ✅ yes       | except StructOf (pending)
 regexp             | ✅ yes       |
 -- syntax          | ✅ yes       |
-runtime            | ☑️ partially |
+runtime            | ☑️ partially | SetMutexProfileFraction, SetFinalizer unsupported
 -- cgo             | ❌ no        |
 -- debug           | ❌ no        |
 -- pprof           | ❌ no        |

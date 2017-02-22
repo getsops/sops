@@ -75,6 +75,10 @@ type CodeCommitAPI interface {
 
 	DeleteRepository(*codecommit.DeleteRepositoryInput) (*codecommit.DeleteRepositoryOutput, error)
 
+	GetBlobRequest(*codecommit.GetBlobInput) (*request.Request, *codecommit.GetBlobOutput)
+
+	GetBlob(*codecommit.GetBlobInput) (*codecommit.GetBlobOutput, error)
+
 	GetBranchRequest(*codecommit.GetBranchInput) (*request.Request, *codecommit.GetBranchOutput)
 
 	GetBranch(*codecommit.GetBranchInput) (*codecommit.GetBranchOutput, error)
@@ -82,6 +86,12 @@ type CodeCommitAPI interface {
 	GetCommitRequest(*codecommit.GetCommitInput) (*request.Request, *codecommit.GetCommitOutput)
 
 	GetCommit(*codecommit.GetCommitInput) (*codecommit.GetCommitOutput, error)
+
+	GetDifferencesRequest(*codecommit.GetDifferencesInput) (*request.Request, *codecommit.GetDifferencesOutput)
+
+	GetDifferences(*codecommit.GetDifferencesInput) (*codecommit.GetDifferencesOutput, error)
+
+	GetDifferencesPages(*codecommit.GetDifferencesInput, func(*codecommit.GetDifferencesOutput, bool) bool) error
 
 	GetRepositoryRequest(*codecommit.GetRepositoryInput) (*request.Request, *codecommit.GetRepositoryOutput)
 

@@ -63,10 +63,10 @@ func (c *CostandUsageReportService) DeleteReportDefinitionRequest(input *DeleteR
 // API operation DeleteReportDefinition for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   This exception is thrown on a known dependency failure.
 //
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   This exception is thrown when providing an invalid input. eg. Put a report
 //   preference with an invalid report name, or Delete a report preference with
 //   an empty report name.
@@ -139,7 +139,7 @@ func (c *CostandUsageReportService) DescribeReportDefinitionsRequest(input *Desc
 // API operation DescribeReportDefinitions for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   This exception is thrown on a known dependency failure.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cur-2017-01-06/DescribeReportDefinitions
@@ -229,18 +229,18 @@ func (c *CostandUsageReportService) PutReportDefinitionRequest(input *PutReportD
 // API operation PutReportDefinition for usage and error information.
 //
 // Returned Error Codes:
-//   * DuplicateReportNameException
+//   * ErrCodeDuplicateReportNameException "DuplicateReportNameException"
 //   This exception is thrown when putting a report preference with a name that
 //   already exists.
 //
-//   * ReportLimitReachedException
+//   * ErrCodeReportLimitReachedException "ReportLimitReachedException"
 //   This exception is thrown when the number of report preference reaches max
 //   limit. The max number is 5.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   This exception is thrown on a known dependency failure.
 //
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   This exception is thrown when providing an invalid input. eg. Put a report
 //   preference with an invalid report name, or Delete a report preference with
 //   an empty report name.

@@ -70,7 +70,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 // API operation DeleteLexicon for usage and error information.
 //
 // Returned Error Codes:
-//   * LexiconNotFoundException
+//   * ErrCodeLexiconNotFoundException "LexiconNotFoundException"
 //   Amazon Polly can't find the specified lexicon. This could be caused by a
 //   lexicon that is missing, its name is misspelled or specifying a lexicon that
 //   is in a different region.
@@ -78,7 +78,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 //   Verify that the lexicon exists, is in the region (see ListLexicons) and that
 //   you spelled its name is spelled correctly. Then try again.
 //
-//   * ServiceFailureException
+//   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DeleteLexicon
@@ -159,11 +159,11 @@ func (c *Polly) DescribeVoicesRequest(input *DescribeVoicesInput) (req *request.
 // API operation DescribeVoices for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidNextTokenException
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
 //   The NextToken is invalid. Verify that it's spelled correctly, and then try
 //   again.
 //
-//   * ServiceFailureException
+//   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/DescribeVoices
@@ -229,7 +229,7 @@ func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request,
 // API operation GetLexicon for usage and error information.
 //
 // Returned Error Codes:
-//   * LexiconNotFoundException
+//   * ErrCodeLexiconNotFoundException "LexiconNotFoundException"
 //   Amazon Polly can't find the specified lexicon. This could be caused by a
 //   lexicon that is missing, its name is misspelled or specifying a lexicon that
 //   is in a different region.
@@ -237,7 +237,7 @@ func (c *Polly) GetLexiconRequest(input *GetLexiconInput) (req *request.Request,
 //   Verify that the lexicon exists, is in the region (see ListLexicons) and that
 //   you spelled its name is spelled correctly. Then try again.
 //
-//   * ServiceFailureException
+//   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/GetLexicon
@@ -303,11 +303,11 @@ func (c *Polly) ListLexiconsRequest(input *ListLexiconsInput) (req *request.Requ
 // API operation ListLexicons for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidNextTokenException
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
 //   The NextToken is invalid. Verify that it's spelled correctly, and then try
 //   again.
 //
-//   * ServiceFailureException
+//   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/ListLexicons
@@ -377,28 +377,28 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 // API operation PutLexicon for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidLexiconException
+//   * ErrCodeInvalidLexiconException "InvalidLexiconException"
 //   Amazon Polly can't find the specified lexicon. Verify that the lexicon's
 //   name is spelled correctly, and then try again.
 //
-//   * UnsupportedPlsAlphabetException
+//   * ErrCodeUnsupportedPlsAlphabetException "UnsupportedPlsAlphabetException"
 //   The alphabet specified by the lexicon is not a supported alphabet. Valid
 //   values are x-sampa and ipa.
 //
-//   * UnsupportedPlsLanguageException
+//   * ErrCodeUnsupportedPlsLanguageException "UnsupportedPlsLanguageException"
 //   The language specified in the lexicon is unsupported. For a list of supported
 //   languages, see Lexicon Attributes (http://docs.aws.amazon.com/polly/latest/dg/API_LexiconAttributes.html).
 //
-//   * LexiconSizeExceededException
+//   * ErrCodeLexiconSizeExceededException "LexiconSizeExceededException"
 //   The maximum size of the specified lexicon would be exceeded by this operation.
 //
-//   * MaxLexemeLengthExceededException
+//   * ErrCodeMaxLexemeLengthExceededException "MaxLexemeLengthExceededException"
 //   The maximum size of the lexeme would be exceeded by this operation.
 //
-//   * MaxLexiconsNumberExceededException
+//   * ErrCodeMaxLexiconsNumberExceededException "MaxLexiconsNumberExceededException"
 //   The maximum number of lexicons would be exceeded by this operation.
 //
-//   * ServiceFailureException
+//   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/PutLexicon
@@ -467,19 +467,19 @@ func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *requ
 // API operation SynthesizeSpeech for usage and error information.
 //
 // Returned Error Codes:
-//   * TextLengthExceededException
+//   * ErrCodeTextLengthExceededException "TextLengthExceededException"
 //   The value of the "Text" parameter is longer than the accepted limits. The
 //   limit for input text is a maximum of 3000 characters total, of which no more
 //   than 1500 can be billed characters. SSML tags are not counted as billed characters.
 //
-//   * InvalidSampleRateException
+//   * ErrCodeInvalidSampleRateException "InvalidSampleRateException"
 //   The specified sample rate is not valid.
 //
-//   * InvalidSsmlException
+//   * ErrCodeInvalidSsmlException "InvalidSsmlException"
 //   The SSML you provided is invalid. Verify the SSML syntax, spelling of tags
 //   and values, and then try again.
 //
-//   * LexiconNotFoundException
+//   * ErrCodeLexiconNotFoundException "LexiconNotFoundException"
 //   Amazon Polly can't find the specified lexicon. This could be caused by a
 //   lexicon that is missing, its name is misspelled or specifying a lexicon that
 //   is in a different region.
@@ -487,7 +487,7 @@ func (c *Polly) SynthesizeSpeechRequest(input *SynthesizeSpeechInput) (req *requ
 //   Verify that the lexicon exists, is in the region (see ListLexicons) and that
 //   you spelled its name is spelled correctly. Then try again.
 //
-//   * ServiceFailureException
+//   * ErrCodeServiceFailureException "ServiceFailureException"
 //   An unknown condition has caused a service failure.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/polly-2016-06-10/SynthesizeSpeech

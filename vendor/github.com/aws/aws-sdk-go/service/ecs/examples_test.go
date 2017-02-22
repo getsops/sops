@@ -470,6 +470,7 @@ func ExampleECS_ListContainerInstances() {
 		Filter:     aws.String("String"),
 		MaxResults: aws.Int64(1),
 		NextToken:  aws.String("String"),
+		Status:     aws.String("ContainerInstanceStatus"),
 	}
 	resp, err := svc.ListContainerInstances(params)
 
@@ -1053,6 +1054,36 @@ func ExampleECS_UpdateContainerAgent() {
 		Cluster:           aws.String("String"),
 	}
 	resp, err := svc.UpdateContainerAgent(params)
+
+	if err != nil {
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
+		return
+	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleECS_UpdateContainerInstancesState() {
+	sess, err := session.NewSession()
+	if err != nil {
+		fmt.Println("failed to create session,", err)
+		return
+	}
+
+	svc := ecs.New(sess)
+
+	params := &ecs.UpdateContainerInstancesStateInput{
+		ContainerInstances: []*string{ // Required
+			aws.String("String"), // Required
+			// More values...
+		},
+		Status:  aws.String("ContainerInstanceStatus"), // Required
+		Cluster: aws.String("String"),
+	}
+	resp, err := svc.UpdateContainerInstancesState(params)
 
 	if err != nil {
 		// Print the error, cast err to awserr.Error to get the Code and

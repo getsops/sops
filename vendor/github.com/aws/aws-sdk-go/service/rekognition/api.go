@@ -86,32 +86,32 @@ func (c *Rekognition) CompareFacesRequest(input *CompareFacesInput) (req *reques
 // API operation CompareFaces for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * InvalidS3ObjectException
+//   * ErrCodeInvalidS3ObjectException "InvalidS3ObjectException"
 //   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
+//   * ErrCodeImageTooLargeException "ImageTooLargeException"
 //   The input image size exceeds the allowed limit. For more information, see
 //   limits.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * InvalidImageFormatException
+//   * ErrCodeInvalidImageFormatException "InvalidImageFormatException"
 //   The provided image format is not supported.
 //
 func (c *Rekognition) CompareFaces(input *CompareFacesInput) (*CompareFacesOutput, error) {
@@ -184,25 +184,25 @@ func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req
 // API operation CreateCollection for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * ResourceAlreadyExistsException
+//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
 //   A collection with the specified ID already exists.
 //
 func (c *Rekognition) CreateCollection(input *CreateCollectionInput) (*CreateCollectionOutput, error) {
@@ -268,25 +268,25 @@ func (c *Rekognition) DeleteCollectionRequest(input *DeleteCollectionInput) (req
 // API operation DeleteCollection for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Collection specified in the request is not found.
 //
 func (c *Rekognition) DeleteCollection(input *DeleteCollectionInput) (*DeleteCollectionOutput, error) {
@@ -352,25 +352,25 @@ func (c *Rekognition) DeleteFacesRequest(input *DeleteFacesInput) (req *request.
 // API operation DeleteFaces for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Collection specified in the request is not found.
 //
 func (c *Rekognition) DeleteFaces(input *DeleteFacesInput) (*DeleteFacesOutput, error) {
@@ -449,32 +449,32 @@ func (c *Rekognition) DetectFacesRequest(input *DetectFacesInput) (req *request.
 // API operation DetectFaces for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidS3ObjectException
+//   * ErrCodeInvalidS3ObjectException "InvalidS3ObjectException"
 //   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * ImageTooLargeException
+//   * ErrCodeImageTooLargeException "ImageTooLargeException"
 //   The input image size exceeds the allowed limit. For more information, see
 //   limits.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * InvalidImageFormatException
+//   * ErrCodeInvalidImageFormatException "InvalidImageFormatException"
 //   The provided image format is not supported.
 //
 func (c *Rekognition) DetectFaces(input *DetectFacesInput) (*DetectFacesOutput, error) {
@@ -581,32 +581,32 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 // API operation DetectLabels for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidS3ObjectException
+//   * ErrCodeInvalidS3ObjectException "InvalidS3ObjectException"
 //   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * ImageTooLargeException
+//   * ErrCodeImageTooLargeException "ImageTooLargeException"
 //   The input image size exceeds the allowed limit. For more information, see
 //   limits.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * InvalidImageFormatException
+//   * ErrCodeInvalidImageFormatException "InvalidImageFormatException"
 //   The provided image format is not supported.
 //
 func (c *Rekognition) DetectLabels(input *DetectLabelsInput) (*DetectLabelsOutput, error) {
@@ -696,35 +696,35 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 // API operation IndexFaces for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidS3ObjectException
+//   * ErrCodeInvalidS3ObjectException "InvalidS3ObjectException"
 //   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * ImageTooLargeException
+//   * ErrCodeImageTooLargeException "ImageTooLargeException"
 //   The input image size exceeds the allowed limit. For more information, see
 //   limits.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Collection specified in the request is not found.
 //
-//   * InvalidImageFormatException
+//   * ErrCodeInvalidImageFormatException "InvalidImageFormatException"
 //   The provided image format is not supported.
 //
 func (c *Rekognition) IndexFaces(input *IndexFacesInput) (*IndexFacesOutput, error) {
@@ -799,28 +799,28 @@ func (c *Rekognition) ListCollectionsRequest(input *ListCollectionsInput) (req *
 // API operation ListCollections for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * InvalidPaginationTokenException
+//   * ErrCodeInvalidPaginationTokenException "InvalidPaginationTokenException"
 //   Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Collection specified in the request is not found.
 //
 func (c *Rekognition) ListCollections(input *ListCollectionsInput) (*ListCollectionsOutput, error) {
@@ -918,28 +918,28 @@ func (c *Rekognition) ListFacesRequest(input *ListFacesInput) (req *request.Requ
 // API operation ListFaces for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * InvalidPaginationTokenException
+//   * ErrCodeInvalidPaginationTokenException "InvalidPaginationTokenException"
 //   Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Collection specified in the request is not found.
 //
 func (c *Rekognition) ListFaces(input *ListFacesInput) (*ListFacesOutput, error) {
@@ -1043,25 +1043,25 @@ func (c *Rekognition) SearchFacesRequest(input *SearchFacesInput) (req *request.
 // API operation SearchFaces for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Collection specified in the request is not found.
 //
 func (c *Rekognition) SearchFaces(input *SearchFacesInput) (*SearchFacesOutput, error) {
@@ -1145,41 +1145,79 @@ func (c *Rekognition) SearchFacesByImageRequest(input *SearchFacesByImageInput) 
 // API operation SearchFacesByImage for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidS3ObjectException
+//   * ErrCodeInvalidS3ObjectException "InvalidS3ObjectException"
 //   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Input parameter violated a constraint. Validate your parameter before calling
 //   the API operation again.
 //
-//   * ImageTooLargeException
+//   * ErrCodeImageTooLargeException "ImageTooLargeException"
 //   The input image size exceeds the allowed limit. For more information, see
 //   limits.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   You are not authorized to perform the action.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
+//   * ErrCodeThrottlingException "ThrottlingException"
 //   Amazon Rekognition is temporarily unable to process the request. Try your
 //   call again.
 //
-//   * ProvisionedThroughputExceededException
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
 //   The number of requests exceeded your throughput limit. If you want to increase
 //   this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Collection specified in the request is not found.
 //
-//   * InvalidImageFormatException
+//   * ErrCodeInvalidImageFormatException "InvalidImageFormatException"
 //   The provided image format is not supported.
 //
 func (c *Rekognition) SearchFacesByImage(input *SearchFacesByImageInput) (*SearchFacesByImageOutput, error) {
 	req, out := c.SearchFacesByImageRequest(input)
 	err := req.Send()
 	return out, err
+}
+
+// Structure containing the estimated age range, in years, for a face.
+//
+// Rekognition estimates an age-range for faces detected in the input image.
+// Estimated age ranges can overlap; a face of a 5 year old may have an estimated
+// range of 4-6 whilst the face of a 6 year old may have an estimated range
+// of 4-8.
+type AgeRange struct {
+	_ struct{} `type:"structure"`
+
+	// The highest estimated age.
+	High *int64 `type:"integer"`
+
+	// The lowest estimated age.
+	Low *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s AgeRange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AgeRange) GoString() string {
+	return s.String()
+}
+
+// SetHigh sets the High field's value.
+func (s *AgeRange) SetHigh(v int64) *AgeRange {
+	s.High = &v
+	return s
+}
+
+// SetLow sets the Low field's value.
+func (s *AgeRange) SetLow(v int64) *AgeRange {
+	s.Low = &v
+	return s
 }
 
 // Indicates whether or not the face has a beard, and the confidence level in
@@ -2149,6 +2187,10 @@ func (s *Face) SetImageId(v string) *Face {
 type FaceDetail struct {
 	_ struct{} `type:"structure"`
 
+	// The estimated age range, in years, for the face. Low represents the lowest
+	// estimated age and High represents the highest estimated age.
+	AgeRange *AgeRange `type:"structure"`
+
 	// Indicates whether or not the face has a beard, and the confidence level in
 	// the determination.
 	Beard *Beard `type:"structure"`
@@ -2209,6 +2251,12 @@ func (s FaceDetail) String() string {
 // GoString returns the string representation
 func (s FaceDetail) GoString() string {
 	return s.String()
+}
+
+// SetAgeRange sets the AgeRange field's value.
+func (s *FaceDetail) SetAgeRange(v *AgeRange) *FaceDetail {
+	s.AgeRange = v
+	return s
 }
 
 // SetBeard sets the Beard field's value.

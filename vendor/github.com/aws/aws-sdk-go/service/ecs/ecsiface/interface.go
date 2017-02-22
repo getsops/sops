@@ -187,6 +187,10 @@ type ECSAPI interface {
 
 	UpdateContainerAgent(*ecs.UpdateContainerAgentInput) (*ecs.UpdateContainerAgentOutput, error)
 
+	UpdateContainerInstancesStateRequest(*ecs.UpdateContainerInstancesStateInput) (*request.Request, *ecs.UpdateContainerInstancesStateOutput)
+
+	UpdateContainerInstancesState(*ecs.UpdateContainerInstancesStateInput) (*ecs.UpdateContainerInstancesStateOutput, error)
+
 	UpdateServiceRequest(*ecs.UpdateServiceInput) (*request.Request, *ecs.UpdateServiceOutput)
 
 	UpdateService(*ecs.UpdateServiceInput) (*ecs.UpdateServiceOutput, error)

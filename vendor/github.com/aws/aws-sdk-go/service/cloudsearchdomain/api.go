@@ -83,7 +83,7 @@ func (c *CloudSearchDomain) SearchRequest(input *SearchInput) (req *request.Requ
 // API operation Search for usage and error information.
 //
 // Returned Error Codes:
-//   * SearchException
+//   * ErrCodeSearchException "SearchException"
 //   Information about any problems encountered while processing a search request.
 //
 func (c *CloudSearchDomain) Search(input *SearchInput) (*SearchOutput, error) {
@@ -161,7 +161,7 @@ func (c *CloudSearchDomain) SuggestRequest(input *SuggestInput) (req *request.Re
 // API operation Suggest for usage and error information.
 //
 // Returned Error Codes:
-//   * SearchException
+//   * ErrCodeSearchException "SearchException"
 //   Information about any problems encountered while processing a search request.
 //
 func (c *CloudSearchDomain) Suggest(input *SuggestInput) (*SuggestOutput, error) {
@@ -244,7 +244,7 @@ func (c *CloudSearchDomain) UploadDocumentsRequest(input *UploadDocumentsInput) 
 // API operation UploadDocuments for usage and error information.
 //
 // Returned Error Codes:
-//   * DocumentServiceException
+//   * ErrCodeDocumentServiceException "DocumentServiceException"
 //   Information about any problems encountered while processing an upload request.
 //
 func (c *CloudSearchDomain) UploadDocuments(input *UploadDocumentsInput) (*UploadDocumentsOutput, error) {

@@ -288,7 +288,7 @@
       "acceptors": [
         {
           "expected": true,
-          "matcher": "pathAll",
+          "matcher": "path",
           "state": "success",
           "argument": "length(KeyPairs[].KeyName) > `0`"
         },
@@ -586,6 +586,24 @@
           "matcher": "error",
           "expected": "InvalidVpcPeeringConnectionID.NotFound",
           "state": "retry"
+        }
+      ]
+    },
+    "VpcPeeringConnectionDeleted": {
+      "delay": 15,
+      "operation": "DescribeVpcPeeringConnections",
+      "maxAttempts": 40,
+      "acceptors": [
+        {
+          "expected": "deleted",
+          "matcher": "pathAll",
+          "state": "success",
+          "argument": "VpcPeeringConnections[].Status.Code"
+        },
+        {
+          "matcher": "error",
+          "expected": "InvalidVpcPeeringConnectionID.NotFound",
+          "state": "success"
         }
       ]
     }

@@ -258,10 +258,14 @@ func ExampleStorageGateway_CreateNFSFileShare() {
 	svc := storagegateway.New(sess)
 
 	params := &storagegateway.CreateNFSFileShareInput{
-		ClientToken:         aws.String("ClientToken"), // Required
-		GatewayARN:          aws.String("GatewayARN"),  // Required
-		LocationARN:         aws.String("LocationARN"), // Required
-		Role:                aws.String("Role"),        // Required
+		ClientToken: aws.String("ClientToken"), // Required
+		GatewayARN:  aws.String("GatewayARN"),  // Required
+		LocationARN: aws.String("LocationARN"), // Required
+		Role:        aws.String("Role"),        // Required
+		ClientList: []*string{
+			aws.String("IPV4AddressCIDR"), // Required
+			// More values...
+		},
 		DefaultStorageClass: aws.String("StorageClass"),
 		KMSEncrypted:        aws.Bool(true),
 		KMSKey:              aws.String("KMSKey"),
@@ -1593,7 +1597,11 @@ func ExampleStorageGateway_UpdateNFSFileShare() {
 	svc := storagegateway.New(sess)
 
 	params := &storagegateway.UpdateNFSFileShareInput{
-		FileShareARN:        aws.String("FileShareARN"), // Required
+		FileShareARN: aws.String("FileShareARN"), // Required
+		ClientList: []*string{
+			aws.String("IPV4AddressCIDR"), // Required
+			// More values...
+		},
 		DefaultStorageClass: aws.String("StorageClass"),
 		KMSEncrypted:        aws.Bool(true),
 		KMSKey:              aws.String("KMSKey"),

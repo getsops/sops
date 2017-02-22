@@ -623,7 +623,7 @@ func rangeCheck(pattern string, constantIndex, array bool) string {
 	if !constantIndex {
 		check = "(%2f < 0 || " + check + ")"
 	}
-	return "(" + check + ` ? $throwRuntimeError("index out of range") : ` + pattern + ")"
+	return "(" + check + ` ? ($throwRuntimeError("index out of range"), undefined) : ` + pattern + ")"
 }
 
 func endsWithReturn(stmts []ast.Stmt) bool {
