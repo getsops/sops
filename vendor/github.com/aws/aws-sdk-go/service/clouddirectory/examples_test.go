@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleCloudDirectory_AddFacetToObject() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -65,11 +61,7 @@ func ExampleCloudDirectory_AddFacetToObject() {
 }
 
 func ExampleCloudDirectory_ApplySchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -91,11 +83,7 @@ func ExampleCloudDirectory_ApplySchema() {
 }
 
 func ExampleCloudDirectory_AttachObject() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -123,11 +111,7 @@ func ExampleCloudDirectory_AttachObject() {
 }
 
 func ExampleCloudDirectory_AttachPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -154,11 +138,7 @@ func ExampleCloudDirectory_AttachPolicy() {
 }
 
 func ExampleCloudDirectory_AttachToIndex() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -185,11 +165,7 @@ func ExampleCloudDirectory_AttachToIndex() {
 }
 
 func ExampleCloudDirectory_BatchRead() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -230,11 +206,7 @@ func ExampleCloudDirectory_BatchRead() {
 }
 
 func ExampleCloudDirectory_BatchWrite() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -372,11 +344,7 @@ func ExampleCloudDirectory_BatchWrite() {
 }
 
 func ExampleCloudDirectory_CreateDirectory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -398,11 +366,7 @@ func ExampleCloudDirectory_CreateDirectory() {
 }
 
 func ExampleCloudDirectory_CreateFacet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -457,11 +421,7 @@ func ExampleCloudDirectory_CreateFacet() {
 }
 
 func ExampleCloudDirectory_CreateIndex() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -495,11 +455,7 @@ func ExampleCloudDirectory_CreateIndex() {
 }
 
 func ExampleCloudDirectory_CreateObject() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -548,11 +504,7 @@ func ExampleCloudDirectory_CreateObject() {
 }
 
 func ExampleCloudDirectory_CreateSchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -573,11 +525,7 @@ func ExampleCloudDirectory_CreateSchema() {
 }
 
 func ExampleCloudDirectory_DeleteDirectory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -598,11 +546,7 @@ func ExampleCloudDirectory_DeleteDirectory() {
 }
 
 func ExampleCloudDirectory_DeleteFacet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -624,11 +568,7 @@ func ExampleCloudDirectory_DeleteFacet() {
 }
 
 func ExampleCloudDirectory_DeleteObject() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -652,11 +592,7 @@ func ExampleCloudDirectory_DeleteObject() {
 }
 
 func ExampleCloudDirectory_DeleteSchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -677,11 +613,7 @@ func ExampleCloudDirectory_DeleteSchema() {
 }
 
 func ExampleCloudDirectory_DetachFromIndex() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -708,11 +640,7 @@ func ExampleCloudDirectory_DetachFromIndex() {
 }
 
 func ExampleCloudDirectory_DetachObject() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -737,11 +665,7 @@ func ExampleCloudDirectory_DetachObject() {
 }
 
 func ExampleCloudDirectory_DetachPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -768,11 +692,7 @@ func ExampleCloudDirectory_DetachPolicy() {
 }
 
 func ExampleCloudDirectory_DisableDirectory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -793,11 +713,7 @@ func ExampleCloudDirectory_DisableDirectory() {
 }
 
 func ExampleCloudDirectory_EnableDirectory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -818,11 +734,7 @@ func ExampleCloudDirectory_EnableDirectory() {
 }
 
 func ExampleCloudDirectory_GetDirectory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -843,11 +755,7 @@ func ExampleCloudDirectory_GetDirectory() {
 }
 
 func ExampleCloudDirectory_GetFacet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -869,11 +777,7 @@ func ExampleCloudDirectory_GetFacet() {
 }
 
 func ExampleCloudDirectory_GetObjectInformation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -898,11 +802,7 @@ func ExampleCloudDirectory_GetObjectInformation() {
 }
 
 func ExampleCloudDirectory_GetSchemaAsJson() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -923,11 +823,7 @@ func ExampleCloudDirectory_GetSchemaAsJson() {
 }
 
 func ExampleCloudDirectory_ListAppliedSchemaArns() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -950,11 +846,7 @@ func ExampleCloudDirectory_ListAppliedSchemaArns() {
 }
 
 func ExampleCloudDirectory_ListAttachedIndices() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -981,11 +873,7 @@ func ExampleCloudDirectory_ListAttachedIndices() {
 }
 
 func ExampleCloudDirectory_ListDevelopmentSchemaArns() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1007,11 +895,7 @@ func ExampleCloudDirectory_ListDevelopmentSchemaArns() {
 }
 
 func ExampleCloudDirectory_ListDirectories() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1034,11 +918,7 @@ func ExampleCloudDirectory_ListDirectories() {
 }
 
 func ExampleCloudDirectory_ListFacetAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1062,11 +942,7 @@ func ExampleCloudDirectory_ListFacetAttributes() {
 }
 
 func ExampleCloudDirectory_ListFacetNames() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1089,11 +965,7 @@ func ExampleCloudDirectory_ListFacetNames() {
 }
 
 func ExampleCloudDirectory_ListIndex() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1148,11 +1020,7 @@ func ExampleCloudDirectory_ListIndex() {
 }
 
 func ExampleCloudDirectory_ListObjectAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1179,11 +1047,7 @@ func ExampleCloudDirectory_ListObjectAttributes() {
 }
 
 func ExampleCloudDirectory_ListObjectChildren() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1210,11 +1074,7 @@ func ExampleCloudDirectory_ListObjectChildren() {
 }
 
 func ExampleCloudDirectory_ListObjectParents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1241,11 +1101,7 @@ func ExampleCloudDirectory_ListObjectParents() {
 }
 
 func ExampleCloudDirectory_ListObjectPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1272,11 +1128,7 @@ func ExampleCloudDirectory_ListObjectPolicies() {
 }
 
 func ExampleCloudDirectory_ListPolicyAttachments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1303,11 +1155,7 @@ func ExampleCloudDirectory_ListPolicyAttachments() {
 }
 
 func ExampleCloudDirectory_ListPublishedSchemaArns() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1329,11 +1177,7 @@ func ExampleCloudDirectory_ListPublishedSchemaArns() {
 }
 
 func ExampleCloudDirectory_ListTagsForResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1356,11 +1200,7 @@ func ExampleCloudDirectory_ListTagsForResource() {
 }
 
 func ExampleCloudDirectory_LookupPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1386,11 +1226,7 @@ func ExampleCloudDirectory_LookupPolicy() {
 }
 
 func ExampleCloudDirectory_PublishSchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1413,11 +1249,7 @@ func ExampleCloudDirectory_PublishSchema() {
 }
 
 func ExampleCloudDirectory_PutSchemaFromJson() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1439,11 +1271,7 @@ func ExampleCloudDirectory_PutSchemaFromJson() {
 }
 
 func ExampleCloudDirectory_RemoveFacetFromObject() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1471,11 +1299,7 @@ func ExampleCloudDirectory_RemoveFacetFromObject() {
 }
 
 func ExampleCloudDirectory_TagResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1503,11 +1327,7 @@ func ExampleCloudDirectory_TagResource() {
 }
 
 func ExampleCloudDirectory_UntagResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1532,11 +1352,7 @@ func ExampleCloudDirectory_UntagResource() {
 }
 
 func ExampleCloudDirectory_UpdateFacet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1594,11 +1410,7 @@ func ExampleCloudDirectory_UpdateFacet() {
 }
 
 func ExampleCloudDirectory_UpdateObjectAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 
@@ -1642,11 +1454,7 @@ func ExampleCloudDirectory_UpdateObjectAttributes() {
 }
 
 func ExampleCloudDirectory_UpdateSchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := clouddirectory.New(sess)
 

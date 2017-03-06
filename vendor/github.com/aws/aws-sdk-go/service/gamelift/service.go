@@ -11,148 +11,206 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
-// Welcome to the Amazon GameLift API Reference. Amazon GameLift is a managed
-// Amazon Web Services (AWS) service for developers who need a scalable, server-based
-// solution for multiplayer games. Amazon GameLift provides setup and deployment
-// of game servers, and handles infrastructure scaling and session management.
+// Amazon GameLift is a managed service for developers who need a scalable,
+// dedicated server solution for their multiplayer games. Amazon GameLift provides
+// tools to acquire computing resources and deploy game servers, scale game
+// server capacity to meed player demand, and track in-depth metrics on player
+// usage and server performance.
 //
-// This reference describes the low-level service API for GameLift. You can
-// call this API directly or use the AWS SDK (http://aws.amazon.com/tools/#sdk)
-// for your preferred language. The AWS SDK includes a set of high-level GameLift
-// actions multiplayer game sessions. Alternatively, you can use the AWS command-line
-// interface (http://aws.amazon.com/cli/) (CLI) tool, which includes commands
-// for GameLift. For administrative actions, you can also use the Amazon GameLift
-// console.
+// The Amazon GameLift service API includes important functionality to:
 //
-// More Resources
+//    * Find game sessions and match players to games – Retrieve information
+//    on available game sessions; create new game sessions; send player requests
+//    to join a game session.
 //
-//    * Amazon GameLift Developer Guide (http://docs.aws.amazon.com/gamelift/latest/developerguide/):
-//    Learn more about GameLift features and how to use them
+//    * Configure and manage game server resources – Manage builds, fleets,
+//    queues, and aliases; set autoscaling policies; retrieve logs and metrics.
 //
-//    * Lumberyard and GameLift Tutorials (https://gamedev.amazon.com/forums/tutorials):
-//    Get started fast with walkthroughs and sample projects
+// This reference guide describes the low-level service API for Amazon GameLift.
+// We recommend using either the Amazon Web Services software development kit
+// (AWS SDK (http://aws.amazon.com/tools/#sdk)), available in multiple languages,
+// or the AWS command-line interface (http://aws.amazon.com/cli/) (CLI) tool.
+// Both of these align with the low-level service API. In addition, you can
+// use the AWS Management Console (https://console.aws.amazon.com/gamelift/home)
+// for Amazon GameLift for many administrative actions.
 //
-//    * GameDev Blog (http://aws.amazon.com/blogs/gamedev/): Stay up to date
-//    with new features and techniques
+// MORE RESOURCES
 //
-//    * GameDev Forums (https://gamedev.amazon.com/forums/spaces/123/gamelift-discussion.html):
-//    Connect with the GameDev community
+//    * Amazon GameLift Developer Guide (http://docs.aws.amazon.com/gamelift/latest/developerguide/)
+//    – Learn more about Amazon GameLift features and how to use them.
 //
-// Manage Games and Players Through GameLift
+//    * Lumberyard and Amazon GameLift Tutorials (https://gamedev.amazon.com/forums/tutorials)
+//    – Get started fast with walkthroughs and sample projects.
 //
-// Call these actions from your game clients and/or services to create and manage
-// multiplayer game sessions and player sessions.
+//    * GameDev Blog (http://aws.amazon.com/blogs/gamedev/) – Stay up to date
+//    with new features and techniques.
 //
-//    * Game sessions:
+//    * GameDev Forums (https://gamedev.amazon.com/forums/spaces/123/gamelift-discussion.html)
+//    – Connect with the GameDev community.
 //
-// CreateGameSession
+//    * Amazon GameLift Document History (http://docs.aws.amazon.com/gamelift/latest/developerguide/doc-history.html)
+//    – See changes to the Amazon GameLift service, SDKs, and documentation,
+//    as well as links to release notes.
 //
-// DescribeGameSessions
+// API SUMMARY
 //
-// DescribeGameSessionDetails
+// This list offers a functional overview of the Amazon GameLift service API.
 //
-// UpdateGameSession
+// Finding Games and Joining Players
 //
-// SearchGameSessions
+// You can enable players to connect to game servers on Amazon GameLift from
+// a game client or through a game service (such as a matchmaking service).
+// You can use these operations to discover actively running game or start new
+// games. You can also match players to games, either singly or as a group.
 //
-//    * Player sessions:
+//    * Discover existing game sessions
 //
-// CreatePlayerSession
+// SearchGameSessions – Get all available game sessions or search for game sessions
+//    that match a set of criteria.
 //
-// CreatePlayerSessions
+//    * Start a new game session
 //
-// DescribePlayerSessions
+// Game session placement – Use a queue to process new game session requests
+//    and create game sessions on fleets designated for the queue.
 //
-//    * Other actions:
+// StartGameSessionPlacement – Request a new game session placement and add
+//    one or more players to it.
 //
-// GetGameSessionLogUrl
+// DescribeGameSessionPlacement – Get details on a placement request, including
+//    status.
 //
-// Set Up and Manage Game Servers
+// StopGameSessionPlacement – Cancel a placement request.
 //
-// Use these administrative actions to configure GameLift to host your game
-// servers. When setting up GameLift, you will need to (1) configure a build
-// for your game and upload build files, and (2) set up one or more fleets to
-// host game sessions. Once you've created and activated a fleet, you can assign
-// aliases to it, scale capacity, track performance and utilization, etc.
+// CreateGameSession – Start a new game session on a specific fleet.
 //
-//    * Game builds:
+//    * Manage game session objects
 //
-// ListBuilds
+// DescribeGameSessionDetails – Retrieve metadata and protection policies associated
+//    with one or more game sessions, including length of time active and current
+//    player count.
 //
-// CreateBuild
+// UpdateGameSession – Change game session settings, such as maximum player
+//    count and join policy.
 //
-// DescribeBuild
+// GetGameSessionLogUrl – Get the location of saved logs for a game session.
 //
-// UpdateBuild
+//    * Manage player sessions objects
 //
-// DeleteBuild
+// CreatePlayerSession – Send a request for a player to join a game session.
 //
-// RequestUploadCredentials
+// CreatePlayerSessions – Send a request for multiple players to join a game
+//    session.
 //
-//    * Fleets:
+// DescribePlayerSessions – Get details on player activity, including status,
+//    playing time, and player data.
 //
-// ListFleets
+// Setting Up and Managing Game Servers
 //
-// CreateFleet
+// When setting up Amazon GameLift, first create a game build and upload the
+// files to Amazon GameLift. Then use these operations to set up a fleet of
+// resources to run your game servers. Manage games to scale capacity, adjust
+// configuration settings, access raw utilization data, and more.
 //
-// Describe fleets:
+//    * Manage game builds
 //
-// DescribeFleetAttributes
+// CreateBuild – Create a new build by uploading files stored in an Amazon S3
+//    bucket. (To create a build stored at a local file location, use the AWS
+//    CLI command upload-build.)
 //
-// DescribeFleetCapacity
+// ListBuilds – Get a list of all builds uploaded to a Amazon GameLift region.
 //
-// DescribeFleetPortSettings
+// DescribeBuild – Retrieve information associated with a build.
 //
-// DescribeFleetUtilization
+// UpdateBuild – Change build metadata, including build name and version.
 //
-// DescribeEC2InstanceLimits
+// DeleteBuild – Remove a build from Amazon GameLift.
 //
-// DescribeFleetEvents
+//    * Manage fleets
 //
-// DescribeRuntimeConfiguration
+// CreateFleet – Configure and activate a new fleet to run a build's game servers.
 //
-// Update fleets:
+// DeleteFleet – Terminate a fleet that is no longer running game servers or
+//    hosting players.
 //
-// UpdateFleetAttributes
+// View / update fleet configurations.
 //
-// UpdateFleetCapacity
+// ListFleets – Get a list of all fleet IDs in a Amazon GameLift region (all
+//    statuses).
 //
-// UpdateFleetPortSettings
+// DescribeFleetAttributes / UpdateFleetAttributes – View or change a fleet's
+//    metadata and settings for game session protection and resource creation
+//    limits.
 //
-// UpdateRuntimeConfiguration
+// DescribeFleetPortSettings / UpdateFleetPortSettings – View or change the
+//    inbound permissions (IP address and port setting ranges) allowed for a
+//    fleet.
 //
-// DeleteFleet
+// DescribeRuntimeConfiguration / UpdateRuntimeConfiguration – View or change
+//    what server processes (and how many) to run on each instance in a fleet.
 //
-//    * Manage your instances:
+// DescribeInstances – Get information on each instance in a fleet, including
+//    instance ID, IP address, and status.
 //
-// DescribeInstances
+//    * Control fleet capacity
 //
-// GetInstanceAccess
+// DescribeEC2InstanceLimits – Retrieve maximum number of instances allowed
+//    for the current AWS account and the current usage level.
 //
-//    * Manage fleet aliases:
+// DescribeFleetCapacity / UpdateFleetCapacity – Retrieve the capacity settings
+//    and the current number of instances in a fleet; adjust fleet capacity
+//    settings to scale up or down.
 //
-// ListAliases
+// Autoscale – Manage autoscaling rules and apply them to a fleet.
 //
-// CreateAlias
+// PutScalingPolicy – Create a new autoscaling policy, or update an existing
+//    one.
 //
-// DescribeAlias
+// DescribeScalingPolicies – Retrieve an existing autoscaling policy.
 //
-// UpdateAlias
+// DeleteScalingPolicy – Delete an autoscaling policy and stop it from affecting
+//    a fleet's capacity.
 //
-// DeleteAlias
+//    * Access fleet activity statistics
 //
-// ResolveAlias
+// DescribeFleetUtilization – Get current data on the number of server processes,
+//    game sessions, and players currently active on a fleet.
 //
-//    * Manage autoscaling:
+// DescribeFleetEvents – Get a fleet's logged events for a specified time span.
 //
-// PutScalingPolicy
+// DescribeGameSessions – Retrieve metadata associated with one or more game
+//    sessions, including length of time active and current player count.
 //
-// DescribeScalingPolicies
+//    * Remotely access an instance
 //
-// DeleteScalingPolicy
+// GetInstanceAccess – Request access credentials needed to remotely connect
+//    to a specified instance on a fleet.
 //
-// To view changes to the API, see the GameLift Document History (http://docs.aws.amazon.com/gamelift/latest/developerguide/doc-history.html)
-// page.
+//    * Manage fleet aliases
+//
+// CreateAlias – Define a new alias and optionally assign it to a fleet.
+//
+// ListAliases – Get all fleet aliases defined in a Amazon GameLift region.
+//
+// DescribeAlias – Retrieve information on an existing alias.
+//
+// UpdateAlias – Change settings for a alias, such as redirecting it from one
+//    fleet to another.
+//
+// DeleteAlias – Remove an alias from the region.
+//
+// ResolveAlias – Get the fleet ID that a specified alias points to.
+//
+//    * Manage game session queues
+//
+// CreateGameSessionQueue – Create a queue for processing requests for new game
+//    sessions.
+//
+// DescribeGameSessionQueues – Get data on all game session queues defined in
+//    a Amazon GameLift region.
+//
+// UpdateGameSessionQueue – Change the configuration of a game session queue.
+//
+// DeleteGameSessionQueue – Remove a game session queue from the region.
 // The service client's operations are safe to be used concurrently.
 // It is not safe to mutate any of the client's properties though.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01

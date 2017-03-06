@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleELBV2_AddTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -51,11 +47,7 @@ func ExampleELBV2_AddTags() {
 }
 
 func ExampleELBV2_CreateListener() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -92,11 +84,7 @@ func ExampleELBV2_CreateListener() {
 }
 
 func ExampleELBV2_CreateLoadBalancer() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -134,11 +122,7 @@ func ExampleELBV2_CreateLoadBalancer() {
 }
 
 func ExampleELBV2_CreateRule() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -177,11 +161,7 @@ func ExampleELBV2_CreateRule() {
 }
 
 func ExampleELBV2_CreateTargetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -215,11 +195,7 @@ func ExampleELBV2_CreateTargetGroup() {
 }
 
 func ExampleELBV2_DeleteListener() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -240,11 +216,7 @@ func ExampleELBV2_DeleteListener() {
 }
 
 func ExampleELBV2_DeleteLoadBalancer() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -265,11 +237,7 @@ func ExampleELBV2_DeleteLoadBalancer() {
 }
 
 func ExampleELBV2_DeleteRule() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -290,11 +258,7 @@ func ExampleELBV2_DeleteRule() {
 }
 
 func ExampleELBV2_DeleteTargetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -315,11 +279,7 @@ func ExampleELBV2_DeleteTargetGroup() {
 }
 
 func ExampleELBV2_DeregisterTargets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -347,11 +307,7 @@ func ExampleELBV2_DeregisterTargets() {
 }
 
 func ExampleELBV2_DescribeListeners() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -378,11 +334,7 @@ func ExampleELBV2_DescribeListeners() {
 }
 
 func ExampleELBV2_DescribeLoadBalancerAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -403,11 +355,7 @@ func ExampleELBV2_DescribeLoadBalancerAttributes() {
 }
 
 func ExampleELBV2_DescribeLoadBalancers() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -437,11 +385,7 @@ func ExampleELBV2_DescribeLoadBalancers() {
 }
 
 func ExampleELBV2_DescribeRules() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -466,11 +410,7 @@ func ExampleELBV2_DescribeRules() {
 }
 
 func ExampleELBV2_DescribeSSLPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -496,11 +436,7 @@ func ExampleELBV2_DescribeSSLPolicies() {
 }
 
 func ExampleELBV2_DescribeTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -524,11 +460,7 @@ func ExampleELBV2_DescribeTags() {
 }
 
 func ExampleELBV2_DescribeTargetGroupAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -549,11 +481,7 @@ func ExampleELBV2_DescribeTargetGroupAttributes() {
 }
 
 func ExampleELBV2_DescribeTargetGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -584,11 +512,7 @@ func ExampleELBV2_DescribeTargetGroups() {
 }
 
 func ExampleELBV2_DescribeTargetHealth() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -616,11 +540,7 @@ func ExampleELBV2_DescribeTargetHealth() {
 }
 
 func ExampleELBV2_ModifyListener() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -657,11 +577,7 @@ func ExampleELBV2_ModifyListener() {
 }
 
 func ExampleELBV2_ModifyLoadBalancerAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -689,11 +605,7 @@ func ExampleELBV2_ModifyLoadBalancerAttributes() {
 }
 
 func ExampleELBV2_ModifyRule() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -731,11 +643,7 @@ func ExampleELBV2_ModifyRule() {
 }
 
 func ExampleELBV2_ModifyTargetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -766,11 +674,7 @@ func ExampleELBV2_ModifyTargetGroup() {
 }
 
 func ExampleELBV2_ModifyTargetGroupAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -798,11 +702,7 @@ func ExampleELBV2_ModifyTargetGroupAttributes() {
 }
 
 func ExampleELBV2_RegisterTargets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -830,11 +730,7 @@ func ExampleELBV2_RegisterTargets() {
 }
 
 func ExampleELBV2_RemoveTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -862,11 +758,7 @@ func ExampleELBV2_RemoveTags() {
 }
 
 func ExampleELBV2_SetIpAddressType() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -888,11 +780,7 @@ func ExampleELBV2_SetIpAddressType() {
 }
 
 func ExampleELBV2_SetRulePriorities() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -919,11 +807,7 @@ func ExampleELBV2_SetRulePriorities() {
 }
 
 func ExampleELBV2_SetSecurityGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 
@@ -948,11 +832,7 @@ func ExampleELBV2_SetSecurityGroups() {
 }
 
 func ExampleELBV2_SetSubnets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := elbv2.New(sess)
 

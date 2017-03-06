@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleEC2_AcceptReservedInstancesExchangeQuote() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -52,11 +48,7 @@ func ExampleEC2_AcceptReservedInstancesExchangeQuote() {
 }
 
 func ExampleEC2_AcceptVpcPeeringConnection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -78,11 +70,7 @@ func ExampleEC2_AcceptVpcPeeringConnection() {
 }
 
 func ExampleEC2_AllocateAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -104,11 +92,7 @@ func ExampleEC2_AllocateAddress() {
 }
 
 func ExampleEC2_AllocateHosts() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -133,11 +117,7 @@ func ExampleEC2_AllocateHosts() {
 }
 
 func ExampleEC2_AssignIpv6Addresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -163,11 +143,7 @@ func ExampleEC2_AssignIpv6Addresses() {
 }
 
 func ExampleEC2_AssignPrivateIpAddresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -194,11 +170,7 @@ func ExampleEC2_AssignPrivateIpAddresses() {
 }
 
 func ExampleEC2_AssociateAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -225,11 +197,7 @@ func ExampleEC2_AssociateAddress() {
 }
 
 func ExampleEC2_AssociateDhcpOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -252,11 +220,7 @@ func ExampleEC2_AssociateDhcpOptions() {
 }
 
 func ExampleEC2_AssociateIamInstanceProfile() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -281,11 +245,7 @@ func ExampleEC2_AssociateIamInstanceProfile() {
 }
 
 func ExampleEC2_AssociateRouteTable() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -308,11 +268,7 @@ func ExampleEC2_AssociateRouteTable() {
 }
 
 func ExampleEC2_AssociateSubnetCidrBlock() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -334,11 +290,7 @@ func ExampleEC2_AssociateSubnetCidrBlock() {
 }
 
 func ExampleEC2_AssociateVpcCidrBlock() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -360,11 +312,7 @@ func ExampleEC2_AssociateVpcCidrBlock() {
 }
 
 func ExampleEC2_AttachClassicLinkVpc() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -391,11 +339,7 @@ func ExampleEC2_AttachClassicLinkVpc() {
 }
 
 func ExampleEC2_AttachInternetGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -418,11 +362,7 @@ func ExampleEC2_AttachInternetGateway() {
 }
 
 func ExampleEC2_AttachNetworkInterface() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -446,11 +386,7 @@ func ExampleEC2_AttachNetworkInterface() {
 }
 
 func ExampleEC2_AttachVolume() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -474,11 +410,7 @@ func ExampleEC2_AttachVolume() {
 }
 
 func ExampleEC2_AttachVpnGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -501,11 +433,7 @@ func ExampleEC2_AttachVpnGateway() {
 }
 
 func ExampleEC2_AuthorizeSecurityGroupEgress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -570,11 +498,7 @@ func ExampleEC2_AuthorizeSecurityGroupEgress() {
 }
 
 func ExampleEC2_AuthorizeSecurityGroupIngress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -640,11 +564,7 @@ func ExampleEC2_AuthorizeSecurityGroupIngress() {
 }
 
 func ExampleEC2_BundleInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -675,11 +595,7 @@ func ExampleEC2_BundleInstance() {
 }
 
 func ExampleEC2_CancelBundleTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -701,11 +617,7 @@ func ExampleEC2_CancelBundleTask() {
 }
 
 func ExampleEC2_CancelConversionTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -728,11 +640,7 @@ func ExampleEC2_CancelConversionTask() {
 }
 
 func ExampleEC2_CancelExportTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -753,11 +661,7 @@ func ExampleEC2_CancelExportTask() {
 }
 
 func ExampleEC2_CancelImportTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -780,11 +684,7 @@ func ExampleEC2_CancelImportTask() {
 }
 
 func ExampleEC2_CancelReservedInstancesListing() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -805,11 +705,7 @@ func ExampleEC2_CancelReservedInstancesListing() {
 }
 
 func ExampleEC2_CancelSpotFleetRequests() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -835,11 +731,7 @@ func ExampleEC2_CancelSpotFleetRequests() {
 }
 
 func ExampleEC2_CancelSpotInstanceRequests() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -864,11 +756,7 @@ func ExampleEC2_CancelSpotInstanceRequests() {
 }
 
 func ExampleEC2_ConfirmProductInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -891,11 +779,7 @@ func ExampleEC2_ConfirmProductInstance() {
 }
 
 func ExampleEC2_CopyImage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -923,11 +807,7 @@ func ExampleEC2_CopyImage() {
 }
 
 func ExampleEC2_CopySnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -955,11 +835,7 @@ func ExampleEC2_CopySnapshot() {
 }
 
 func ExampleEC2_CreateCustomerGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -983,11 +859,7 @@ func ExampleEC2_CreateCustomerGateway() {
 }
 
 func ExampleEC2_CreateDhcpOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1018,11 +890,7 @@ func ExampleEC2_CreateDhcpOptions() {
 }
 
 func ExampleEC2_CreateEgressOnlyInternetGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1045,11 +913,7 @@ func ExampleEC2_CreateEgressOnlyInternetGateway() {
 }
 
 func ExampleEC2_CreateFlowLogs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1078,11 +942,7 @@ func ExampleEC2_CreateFlowLogs() {
 }
 
 func ExampleEC2_CreateImage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1123,11 +983,7 @@ func ExampleEC2_CreateImage() {
 }
 
 func ExampleEC2_CreateInstanceExportTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1156,11 +1012,7 @@ func ExampleEC2_CreateInstanceExportTask() {
 }
 
 func ExampleEC2_CreateInternetGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1181,11 +1033,7 @@ func ExampleEC2_CreateInternetGateway() {
 }
 
 func ExampleEC2_CreateKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1207,11 +1055,7 @@ func ExampleEC2_CreateKeyPair() {
 }
 
 func ExampleEC2_CreateNatGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1234,11 +1078,7 @@ func ExampleEC2_CreateNatGateway() {
 }
 
 func ExampleEC2_CreateNetworkAcl() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1260,11 +1100,7 @@ func ExampleEC2_CreateNetworkAcl() {
 }
 
 func ExampleEC2_CreateNetworkAclEntry() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1300,11 +1136,7 @@ func ExampleEC2_CreateNetworkAclEntry() {
 }
 
 func ExampleEC2_CreateNetworkInterface() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1347,11 +1179,7 @@ func ExampleEC2_CreateNetworkInterface() {
 }
 
 func ExampleEC2_CreatePlacementGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1374,11 +1202,7 @@ func ExampleEC2_CreatePlacementGroup() {
 }
 
 func ExampleEC2_CreateReservedInstancesListing() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1409,11 +1233,7 @@ func ExampleEC2_CreateReservedInstancesListing() {
 }
 
 func ExampleEC2_CreateRoute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1443,11 +1263,7 @@ func ExampleEC2_CreateRoute() {
 }
 
 func ExampleEC2_CreateRouteTable() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1469,11 +1285,7 @@ func ExampleEC2_CreateRouteTable() {
 }
 
 func ExampleEC2_CreateSecurityGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1497,11 +1309,7 @@ func ExampleEC2_CreateSecurityGroup() {
 }
 
 func ExampleEC2_CreateSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1524,11 +1332,7 @@ func ExampleEC2_CreateSnapshot() {
 }
 
 func ExampleEC2_CreateSpotDatafeedSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1551,11 +1355,7 @@ func ExampleEC2_CreateSpotDatafeedSubscription() {
 }
 
 func ExampleEC2_CreateSubnet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1580,11 +1380,7 @@ func ExampleEC2_CreateSubnet() {
 }
 
 func ExampleEC2_CreateTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1616,11 +1412,7 @@ func ExampleEC2_CreateTags() {
 }
 
 func ExampleEC2_CreateVolume() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1648,11 +1440,7 @@ func ExampleEC2_CreateVolume() {
 }
 
 func ExampleEC2_CreateVpc() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1676,11 +1464,7 @@ func ExampleEC2_CreateVpc() {
 }
 
 func ExampleEC2_CreateVpcEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1709,11 +1493,7 @@ func ExampleEC2_CreateVpcEndpoint() {
 }
 
 func ExampleEC2_CreateVpcPeeringConnection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1737,11 +1517,7 @@ func ExampleEC2_CreateVpcPeeringConnection() {
 }
 
 func ExampleEC2_CreateVpnConnection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1768,11 +1544,7 @@ func ExampleEC2_CreateVpnConnection() {
 }
 
 func ExampleEC2_CreateVpnConnectionRoute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1794,11 +1566,7 @@ func ExampleEC2_CreateVpnConnectionRoute() {
 }
 
 func ExampleEC2_CreateVpnGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1821,11 +1589,7 @@ func ExampleEC2_CreateVpnGateway() {
 }
 
 func ExampleEC2_DeleteCustomerGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1847,11 +1611,7 @@ func ExampleEC2_DeleteCustomerGateway() {
 }
 
 func ExampleEC2_DeleteDhcpOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1873,11 +1633,7 @@ func ExampleEC2_DeleteDhcpOptions() {
 }
 
 func ExampleEC2_DeleteEgressOnlyInternetGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1899,11 +1655,7 @@ func ExampleEC2_DeleteEgressOnlyInternetGateway() {
 }
 
 func ExampleEC2_DeleteFlowLogs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1927,11 +1679,7 @@ func ExampleEC2_DeleteFlowLogs() {
 }
 
 func ExampleEC2_DeleteInternetGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1953,11 +1701,7 @@ func ExampleEC2_DeleteInternetGateway() {
 }
 
 func ExampleEC2_DeleteKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -1979,11 +1723,7 @@ func ExampleEC2_DeleteKeyPair() {
 }
 
 func ExampleEC2_DeleteNatGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2004,11 +1744,7 @@ func ExampleEC2_DeleteNatGateway() {
 }
 
 func ExampleEC2_DeleteNetworkAcl() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2030,11 +1766,7 @@ func ExampleEC2_DeleteNetworkAcl() {
 }
 
 func ExampleEC2_DeleteNetworkAclEntry() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2058,11 +1790,7 @@ func ExampleEC2_DeleteNetworkAclEntry() {
 }
 
 func ExampleEC2_DeleteNetworkInterface() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2084,11 +1812,7 @@ func ExampleEC2_DeleteNetworkInterface() {
 }
 
 func ExampleEC2_DeletePlacementGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2110,11 +1834,7 @@ func ExampleEC2_DeletePlacementGroup() {
 }
 
 func ExampleEC2_DeleteRoute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2138,11 +1858,7 @@ func ExampleEC2_DeleteRoute() {
 }
 
 func ExampleEC2_DeleteRouteTable() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2164,11 +1880,7 @@ func ExampleEC2_DeleteRouteTable() {
 }
 
 func ExampleEC2_DeleteSecurityGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2191,11 +1903,7 @@ func ExampleEC2_DeleteSecurityGroup() {
 }
 
 func ExampleEC2_DeleteSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2217,11 +1925,7 @@ func ExampleEC2_DeleteSnapshot() {
 }
 
 func ExampleEC2_DeleteSpotDatafeedSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2242,11 +1946,7 @@ func ExampleEC2_DeleteSpotDatafeedSubscription() {
 }
 
 func ExampleEC2_DeleteSubnet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2268,11 +1968,7 @@ func ExampleEC2_DeleteSubnet() {
 }
 
 func ExampleEC2_DeleteTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2304,11 +2000,7 @@ func ExampleEC2_DeleteTags() {
 }
 
 func ExampleEC2_DeleteVolume() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2330,11 +2022,7 @@ func ExampleEC2_DeleteVolume() {
 }
 
 func ExampleEC2_DeleteVpc() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2356,11 +2044,7 @@ func ExampleEC2_DeleteVpc() {
 }
 
 func ExampleEC2_DeleteVpcEndpoints() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2385,11 +2069,7 @@ func ExampleEC2_DeleteVpcEndpoints() {
 }
 
 func ExampleEC2_DeleteVpcPeeringConnection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2411,11 +2091,7 @@ func ExampleEC2_DeleteVpcPeeringConnection() {
 }
 
 func ExampleEC2_DeleteVpnConnection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2437,11 +2113,7 @@ func ExampleEC2_DeleteVpnConnection() {
 }
 
 func ExampleEC2_DeleteVpnConnectionRoute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2463,11 +2135,7 @@ func ExampleEC2_DeleteVpnConnectionRoute() {
 }
 
 func ExampleEC2_DeleteVpnGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2489,11 +2157,7 @@ func ExampleEC2_DeleteVpnGateway() {
 }
 
 func ExampleEC2_DeregisterImage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2515,11 +2179,7 @@ func ExampleEC2_DeregisterImage() {
 }
 
 func ExampleEC2_DescribeAccountAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2544,11 +2204,7 @@ func ExampleEC2_DescribeAccountAttributes() {
 }
 
 func ExampleEC2_DescribeAddresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2587,11 +2243,7 @@ func ExampleEC2_DescribeAddresses() {
 }
 
 func ExampleEC2_DescribeAvailabilityZones() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2626,11 +2278,7 @@ func ExampleEC2_DescribeAvailabilityZones() {
 }
 
 func ExampleEC2_DescribeBundleTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2665,11 +2313,7 @@ func ExampleEC2_DescribeBundleTasks() {
 }
 
 func ExampleEC2_DescribeClassicLinkInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2706,11 +2350,7 @@ func ExampleEC2_DescribeClassicLinkInstances() {
 }
 
 func ExampleEC2_DescribeConversionTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2735,11 +2375,7 @@ func ExampleEC2_DescribeConversionTasks() {
 }
 
 func ExampleEC2_DescribeCustomerGateways() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2774,11 +2410,7 @@ func ExampleEC2_DescribeCustomerGateways() {
 }
 
 func ExampleEC2_DescribeDhcpOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2813,11 +2445,7 @@ func ExampleEC2_DescribeDhcpOptions() {
 }
 
 func ExampleEC2_DescribeEgressOnlyInternetGateways() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2844,11 +2472,7 @@ func ExampleEC2_DescribeEgressOnlyInternetGateways() {
 }
 
 func ExampleEC2_DescribeExportTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2872,11 +2496,7 @@ func ExampleEC2_DescribeExportTasks() {
 }
 
 func ExampleEC2_DescribeFlowLogs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2912,11 +2532,7 @@ func ExampleEC2_DescribeFlowLogs() {
 }
 
 func ExampleEC2_DescribeHostReservationOfferings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2951,11 +2567,7 @@ func ExampleEC2_DescribeHostReservationOfferings() {
 }
 
 func ExampleEC2_DescribeHostReservations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -2991,11 +2603,7 @@ func ExampleEC2_DescribeHostReservations() {
 }
 
 func ExampleEC2_DescribeHosts() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3031,11 +2639,7 @@ func ExampleEC2_DescribeHosts() {
 }
 
 func ExampleEC2_DescribeIamInstanceProfileAssociations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3071,11 +2675,7 @@ func ExampleEC2_DescribeIamInstanceProfileAssociations() {
 }
 
 func ExampleEC2_DescribeIdFormat() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3096,11 +2696,7 @@ func ExampleEC2_DescribeIdFormat() {
 }
 
 func ExampleEC2_DescribeIdentityIdFormat() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3122,11 +2718,7 @@ func ExampleEC2_DescribeIdentityIdFormat() {
 }
 
 func ExampleEC2_DescribeImageAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3149,11 +2741,7 @@ func ExampleEC2_DescribeImageAttribute() {
 }
 
 func ExampleEC2_DescribeImages() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3196,11 +2784,7 @@ func ExampleEC2_DescribeImages() {
 }
 
 func ExampleEC2_DescribeImportImageTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3237,11 +2821,7 @@ func ExampleEC2_DescribeImportImageTasks() {
 }
 
 func ExampleEC2_DescribeImportSnapshotTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3278,11 +2858,7 @@ func ExampleEC2_DescribeImportSnapshotTasks() {
 }
 
 func ExampleEC2_DescribeInstanceAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3305,11 +2881,7 @@ func ExampleEC2_DescribeInstanceAttribute() {
 }
 
 func ExampleEC2_DescribeInstanceStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3347,11 +2919,7 @@ func ExampleEC2_DescribeInstanceStatus() {
 }
 
 func ExampleEC2_DescribeInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3388,11 +2956,7 @@ func ExampleEC2_DescribeInstances() {
 }
 
 func ExampleEC2_DescribeInternetGateways() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3427,11 +2991,7 @@ func ExampleEC2_DescribeInternetGateways() {
 }
 
 func ExampleEC2_DescribeKeyPairs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3466,11 +3026,7 @@ func ExampleEC2_DescribeKeyPairs() {
 }
 
 func ExampleEC2_DescribeMovingAddresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3507,11 +3063,7 @@ func ExampleEC2_DescribeMovingAddresses() {
 }
 
 func ExampleEC2_DescribeNatGateways() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3547,11 +3099,7 @@ func ExampleEC2_DescribeNatGateways() {
 }
 
 func ExampleEC2_DescribeNetworkAcls() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3586,11 +3134,7 @@ func ExampleEC2_DescribeNetworkAcls() {
 }
 
 func ExampleEC2_DescribeNetworkInterfaceAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3613,11 +3157,7 @@ func ExampleEC2_DescribeNetworkInterfaceAttribute() {
 }
 
 func ExampleEC2_DescribeNetworkInterfaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3652,11 +3192,7 @@ func ExampleEC2_DescribeNetworkInterfaces() {
 }
 
 func ExampleEC2_DescribePlacementGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3691,11 +3227,7 @@ func ExampleEC2_DescribePlacementGroups() {
 }
 
 func ExampleEC2_DescribePrefixLists() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3732,11 +3264,7 @@ func ExampleEC2_DescribePrefixLists() {
 }
 
 func ExampleEC2_DescribeRegions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3771,11 +3299,7 @@ func ExampleEC2_DescribeRegions() {
 }
 
 func ExampleEC2_DescribeReservedInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3812,11 +3336,7 @@ func ExampleEC2_DescribeReservedInstances() {
 }
 
 func ExampleEC2_DescribeReservedInstancesListings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3848,11 +3368,7 @@ func ExampleEC2_DescribeReservedInstancesListings() {
 }
 
 func ExampleEC2_DescribeReservedInstancesModifications() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3887,11 +3403,7 @@ func ExampleEC2_DescribeReservedInstancesModifications() {
 }
 
 func ExampleEC2_DescribeReservedInstancesOfferings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3938,11 +3450,7 @@ func ExampleEC2_DescribeReservedInstancesOfferings() {
 }
 
 func ExampleEC2_DescribeRouteTables() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -3977,11 +3485,7 @@ func ExampleEC2_DescribeRouteTables() {
 }
 
 func ExampleEC2_DescribeScheduledInstanceAvailability() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4030,11 +3534,7 @@ func ExampleEC2_DescribeScheduledInstanceAvailability() {
 }
 
 func ExampleEC2_DescribeScheduledInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4075,11 +3575,7 @@ func ExampleEC2_DescribeScheduledInstances() {
 }
 
 func ExampleEC2_DescribeSecurityGroupReferences() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4104,11 +3600,7 @@ func ExampleEC2_DescribeSecurityGroupReferences() {
 }
 
 func ExampleEC2_DescribeSecurityGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4147,11 +3639,7 @@ func ExampleEC2_DescribeSecurityGroups() {
 }
 
 func ExampleEC2_DescribeSnapshotAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4174,11 +3662,7 @@ func ExampleEC2_DescribeSnapshotAttribute() {
 }
 
 func ExampleEC2_DescribeSnapshots() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4223,11 +3707,7 @@ func ExampleEC2_DescribeSnapshots() {
 }
 
 func ExampleEC2_DescribeSpotDatafeedSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4248,11 +3728,7 @@ func ExampleEC2_DescribeSpotDatafeedSubscription() {
 }
 
 func ExampleEC2_DescribeSpotFleetInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4276,11 +3752,7 @@ func ExampleEC2_DescribeSpotFleetInstances() {
 }
 
 func ExampleEC2_DescribeSpotFleetRequestHistory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4306,11 +3778,7 @@ func ExampleEC2_DescribeSpotFleetRequestHistory() {
 }
 
 func ExampleEC2_DescribeSpotFleetRequests() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4337,11 +3805,7 @@ func ExampleEC2_DescribeSpotFleetRequests() {
 }
 
 func ExampleEC2_DescribeSpotInstanceRequests() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4376,11 +3840,7 @@ func ExampleEC2_DescribeSpotInstanceRequests() {
 }
 
 func ExampleEC2_DescribeSpotPriceHistory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4424,11 +3884,7 @@ func ExampleEC2_DescribeSpotPriceHistory() {
 }
 
 func ExampleEC2_DescribeStaleSecurityGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4452,11 +3908,7 @@ func ExampleEC2_DescribeStaleSecurityGroups() {
 }
 
 func ExampleEC2_DescribeSubnets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4491,11 +3943,7 @@ func ExampleEC2_DescribeSubnets() {
 }
 
 func ExampleEC2_DescribeTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4528,11 +3976,7 @@ func ExampleEC2_DescribeTags() {
 }
 
 func ExampleEC2_DescribeVolumeAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4555,11 +3999,7 @@ func ExampleEC2_DescribeVolumeAttribute() {
 }
 
 func ExampleEC2_DescribeVolumeStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4596,11 +4036,7 @@ func ExampleEC2_DescribeVolumeStatus() {
 }
 
 func ExampleEC2_DescribeVolumes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4637,11 +4073,7 @@ func ExampleEC2_DescribeVolumes() {
 }
 
 func ExampleEC2_DescribeVolumesModifications() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4678,11 +4110,7 @@ func ExampleEC2_DescribeVolumesModifications() {
 }
 
 func ExampleEC2_DescribeVpcAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4705,11 +4133,7 @@ func ExampleEC2_DescribeVpcAttribute() {
 }
 
 func ExampleEC2_DescribeVpcClassicLink() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4744,11 +4168,7 @@ func ExampleEC2_DescribeVpcClassicLink() {
 }
 
 func ExampleEC2_DescribeVpcClassicLinkDnsSupport() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4774,11 +4194,7 @@ func ExampleEC2_DescribeVpcClassicLinkDnsSupport() {
 }
 
 func ExampleEC2_DescribeVpcEndpointServices() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4801,11 +4217,7 @@ func ExampleEC2_DescribeVpcEndpointServices() {
 }
 
 func ExampleEC2_DescribeVpcEndpoints() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4842,11 +4254,7 @@ func ExampleEC2_DescribeVpcEndpoints() {
 }
 
 func ExampleEC2_DescribeVpcPeeringConnections() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4881,11 +4289,7 @@ func ExampleEC2_DescribeVpcPeeringConnections() {
 }
 
 func ExampleEC2_DescribeVpcs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4920,11 +4324,7 @@ func ExampleEC2_DescribeVpcs() {
 }
 
 func ExampleEC2_DescribeVpnConnections() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4959,11 +4359,7 @@ func ExampleEC2_DescribeVpnConnections() {
 }
 
 func ExampleEC2_DescribeVpnGateways() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -4998,11 +4394,7 @@ func ExampleEC2_DescribeVpnGateways() {
 }
 
 func ExampleEC2_DetachClassicLinkVpc() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5025,11 +4417,7 @@ func ExampleEC2_DetachClassicLinkVpc() {
 }
 
 func ExampleEC2_DetachInternetGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5052,11 +4440,7 @@ func ExampleEC2_DetachInternetGateway() {
 }
 
 func ExampleEC2_DetachNetworkInterface() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5079,11 +4463,7 @@ func ExampleEC2_DetachNetworkInterface() {
 }
 
 func ExampleEC2_DetachVolume() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5108,11 +4488,7 @@ func ExampleEC2_DetachVolume() {
 }
 
 func ExampleEC2_DetachVpnGateway() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5135,11 +4511,7 @@ func ExampleEC2_DetachVpnGateway() {
 }
 
 func ExampleEC2_DisableVgwRoutePropagation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5161,11 +4533,7 @@ func ExampleEC2_DisableVgwRoutePropagation() {
 }
 
 func ExampleEC2_DisableVpcClassicLink() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5187,11 +4555,7 @@ func ExampleEC2_DisableVpcClassicLink() {
 }
 
 func ExampleEC2_DisableVpcClassicLinkDnsSupport() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5212,11 +4576,7 @@ func ExampleEC2_DisableVpcClassicLinkDnsSupport() {
 }
 
 func ExampleEC2_DisassociateAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5239,11 +4599,7 @@ func ExampleEC2_DisassociateAddress() {
 }
 
 func ExampleEC2_DisassociateIamInstanceProfile() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5264,11 +4620,7 @@ func ExampleEC2_DisassociateIamInstanceProfile() {
 }
 
 func ExampleEC2_DisassociateRouteTable() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5290,11 +4642,7 @@ func ExampleEC2_DisassociateRouteTable() {
 }
 
 func ExampleEC2_DisassociateSubnetCidrBlock() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5315,11 +4663,7 @@ func ExampleEC2_DisassociateSubnetCidrBlock() {
 }
 
 func ExampleEC2_DisassociateVpcCidrBlock() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5340,11 +4684,7 @@ func ExampleEC2_DisassociateVpcCidrBlock() {
 }
 
 func ExampleEC2_EnableVgwRoutePropagation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5366,11 +4706,7 @@ func ExampleEC2_EnableVgwRoutePropagation() {
 }
 
 func ExampleEC2_EnableVolumeIO() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5392,11 +4728,7 @@ func ExampleEC2_EnableVolumeIO() {
 }
 
 func ExampleEC2_EnableVpcClassicLink() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5418,11 +4750,7 @@ func ExampleEC2_EnableVpcClassicLink() {
 }
 
 func ExampleEC2_EnableVpcClassicLinkDnsSupport() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5443,11 +4771,7 @@ func ExampleEC2_EnableVpcClassicLinkDnsSupport() {
 }
 
 func ExampleEC2_GetConsoleOutput() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5469,11 +4793,7 @@ func ExampleEC2_GetConsoleOutput() {
 }
 
 func ExampleEC2_GetConsoleScreenshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5496,11 +4816,7 @@ func ExampleEC2_GetConsoleScreenshot() {
 }
 
 func ExampleEC2_GetHostReservationPurchasePreview() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5525,11 +4841,7 @@ func ExampleEC2_GetHostReservationPurchasePreview() {
 }
 
 func ExampleEC2_GetPasswordData() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5551,11 +4863,7 @@ func ExampleEC2_GetPasswordData() {
 }
 
 func ExampleEC2_GetReservedInstancesExchangeQuote() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5587,11 +4895,7 @@ func ExampleEC2_GetReservedInstancesExchangeQuote() {
 }
 
 func ExampleEC2_ImportImage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5639,11 +4943,7 @@ func ExampleEC2_ImportImage() {
 }
 
 func ExampleEC2_ImportInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5707,11 +5007,7 @@ func ExampleEC2_ImportInstance() {
 }
 
 func ExampleEC2_ImportKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5734,11 +5030,7 @@ func ExampleEC2_ImportKeyPair() {
 }
 
 func ExampleEC2_ImportSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5777,11 +5069,7 @@ func ExampleEC2_ImportSnapshot() {
 }
 
 func ExampleEC2_ImportVolume() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5812,11 +5100,7 @@ func ExampleEC2_ImportVolume() {
 }
 
 func ExampleEC2_ModifyHosts() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5841,11 +5125,7 @@ func ExampleEC2_ModifyHosts() {
 }
 
 func ExampleEC2_ModifyIdFormat() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5867,11 +5147,7 @@ func ExampleEC2_ModifyIdFormat() {
 }
 
 func ExampleEC2_ModifyIdentityIdFormat() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5894,11 +5170,7 @@ func ExampleEC2_ModifyIdentityIdFormat() {
 }
 
 func ExampleEC2_ModifyImageAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -5954,11 +5226,7 @@ func ExampleEC2_ModifyImageAttribute() {
 }
 
 func ExampleEC2_ModifyInstanceAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6028,11 +5296,7 @@ func ExampleEC2_ModifyInstanceAttribute() {
 }
 
 func ExampleEC2_ModifyInstancePlacement() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6056,11 +5320,7 @@ func ExampleEC2_ModifyInstancePlacement() {
 }
 
 func ExampleEC2_ModifyNetworkInterfaceAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6096,11 +5356,7 @@ func ExampleEC2_ModifyNetworkInterfaceAttribute() {
 }
 
 func ExampleEC2_ModifyReservedInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6135,11 +5391,7 @@ func ExampleEC2_ModifyReservedInstances() {
 }
 
 func ExampleEC2_ModifySnapshotAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6187,11 +5439,7 @@ func ExampleEC2_ModifySnapshotAttribute() {
 }
 
 func ExampleEC2_ModifySpotFleetRequest() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6214,11 +5462,7 @@ func ExampleEC2_ModifySpotFleetRequest() {
 }
 
 func ExampleEC2_ModifySubnetAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6245,11 +5489,7 @@ func ExampleEC2_ModifySubnetAttribute() {
 }
 
 func ExampleEC2_ModifyVolume() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6274,11 +5514,7 @@ func ExampleEC2_ModifyVolume() {
 }
 
 func ExampleEC2_ModifyVolumeAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6303,11 +5539,7 @@ func ExampleEC2_ModifyVolumeAttribute() {
 }
 
 func ExampleEC2_ModifyVpcAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6334,11 +5566,7 @@ func ExampleEC2_ModifyVpcAttribute() {
 }
 
 func ExampleEC2_ModifyVpcEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6370,11 +5598,7 @@ func ExampleEC2_ModifyVpcEndpoint() {
 }
 
 func ExampleEC2_ModifyVpcPeeringConnectionOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6406,11 +5630,7 @@ func ExampleEC2_ModifyVpcPeeringConnectionOptions() {
 }
 
 func ExampleEC2_MonitorInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6435,11 +5655,7 @@ func ExampleEC2_MonitorInstances() {
 }
 
 func ExampleEC2_MoveAddressToVpc() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6461,11 +5677,7 @@ func ExampleEC2_MoveAddressToVpc() {
 }
 
 func ExampleEC2_PurchaseHostReservation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6493,11 +5705,7 @@ func ExampleEC2_PurchaseHostReservation() {
 }
 
 func ExampleEC2_PurchaseReservedInstancesOffering() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6524,11 +5732,7 @@ func ExampleEC2_PurchaseReservedInstancesOffering() {
 }
 
 func ExampleEC2_PurchaseScheduledInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6557,11 +5761,7 @@ func ExampleEC2_PurchaseScheduledInstances() {
 }
 
 func ExampleEC2_RebootInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6586,17 +5786,17 @@ func ExampleEC2_RebootInstances() {
 }
 
 func ExampleEC2_RegisterImage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
 	params := &ec2.RegisterImageInput{
 		Name:         aws.String("String"), // Required
 		Architecture: aws.String("ArchitectureValues"),
+		BillingProducts: []*string{
+			aws.String("String"), // Required
+			// More values...
+		},
 		BlockDeviceMappings: []*ec2.BlockDeviceMapping{
 			{ // Required
 				DeviceName: aws.String("String"),
@@ -6637,11 +5837,7 @@ func ExampleEC2_RegisterImage() {
 }
 
 func ExampleEC2_RejectVpcPeeringConnection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6663,11 +5859,7 @@ func ExampleEC2_RejectVpcPeeringConnection() {
 }
 
 func ExampleEC2_ReleaseAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6690,11 +5882,7 @@ func ExampleEC2_ReleaseAddress() {
 }
 
 func ExampleEC2_ReleaseHosts() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6718,11 +5906,7 @@ func ExampleEC2_ReleaseHosts() {
 }
 
 func ExampleEC2_ReplaceIamInstanceProfileAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6747,11 +5931,7 @@ func ExampleEC2_ReplaceIamInstanceProfileAssociation() {
 }
 
 func ExampleEC2_ReplaceNetworkAclAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6774,11 +5954,7 @@ func ExampleEC2_ReplaceNetworkAclAssociation() {
 }
 
 func ExampleEC2_ReplaceNetworkAclEntry() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6814,11 +5990,7 @@ func ExampleEC2_ReplaceNetworkAclEntry() {
 }
 
 func ExampleEC2_ReplaceRoute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6848,11 +6020,7 @@ func ExampleEC2_ReplaceRoute() {
 }
 
 func ExampleEC2_ReplaceRouteTableAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6875,11 +6043,7 @@ func ExampleEC2_ReplaceRouteTableAssociation() {
 }
 
 func ExampleEC2_ReportInstanceStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -6912,11 +6076,7 @@ func ExampleEC2_ReportInstanceStatus() {
 }
 
 func ExampleEC2_RequestSpotFleet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7033,11 +6193,7 @@ func ExampleEC2_RequestSpotFleet() {
 }
 
 func ExampleEC2_RequestSpotInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7145,11 +6301,7 @@ func ExampleEC2_RequestSpotInstances() {
 }
 
 func ExampleEC2_ResetImageAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7172,11 +6324,7 @@ func ExampleEC2_ResetImageAttribute() {
 }
 
 func ExampleEC2_ResetInstanceAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7199,11 +6347,7 @@ func ExampleEC2_ResetInstanceAttribute() {
 }
 
 func ExampleEC2_ResetNetworkInterfaceAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7226,11 +6370,7 @@ func ExampleEC2_ResetNetworkInterfaceAttribute() {
 }
 
 func ExampleEC2_ResetSnapshotAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7253,11 +6393,7 @@ func ExampleEC2_ResetSnapshotAttribute() {
 }
 
 func ExampleEC2_RestoreAddressToClassic() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7279,11 +6415,7 @@ func ExampleEC2_RestoreAddressToClassic() {
 }
 
 func ExampleEC2_RevokeSecurityGroupEgress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7348,11 +6480,7 @@ func ExampleEC2_RevokeSecurityGroupEgress() {
 }
 
 func ExampleEC2_RevokeSecurityGroupIngress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7418,11 +6546,7 @@ func ExampleEC2_RevokeSecurityGroupIngress() {
 }
 
 func ExampleEC2_RunInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7534,11 +6658,7 @@ func ExampleEC2_RunInstances() {
 }
 
 func ExampleEC2_RunScheduledInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7634,11 +6754,7 @@ func ExampleEC2_RunScheduledInstances() {
 }
 
 func ExampleEC2_StartInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7664,11 +6780,7 @@ func ExampleEC2_StartInstances() {
 }
 
 func ExampleEC2_StopInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7694,11 +6806,7 @@ func ExampleEC2_StopInstances() {
 }
 
 func ExampleEC2_TerminateInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7723,11 +6831,7 @@ func ExampleEC2_TerminateInstances() {
 }
 
 func ExampleEC2_UnassignIpv6Addresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7752,11 +6856,7 @@ func ExampleEC2_UnassignIpv6Addresses() {
 }
 
 func ExampleEC2_UnassignPrivateIpAddresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 
@@ -7781,11 +6881,7 @@ func ExampleEC2_UnassignPrivateIpAddresses() {
 }
 
 func ExampleEC2_UnmonitorInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ec2.New(sess)
 

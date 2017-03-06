@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSMS_CreateReplicationJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -46,11 +42,7 @@ func ExampleSMS_CreateReplicationJob() {
 }
 
 func ExampleSMS_DeleteReplicationJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -71,11 +63,7 @@ func ExampleSMS_DeleteReplicationJob() {
 }
 
 func ExampleSMS_DeleteServerCatalog() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -94,11 +82,7 @@ func ExampleSMS_DeleteServerCatalog() {
 }
 
 func ExampleSMS_DisassociateConnector() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -119,11 +103,7 @@ func ExampleSMS_DisassociateConnector() {
 }
 
 func ExampleSMS_GetConnectors() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -145,11 +125,7 @@ func ExampleSMS_GetConnectors() {
 }
 
 func ExampleSMS_GetReplicationJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -172,11 +148,7 @@ func ExampleSMS_GetReplicationJobs() {
 }
 
 func ExampleSMS_GetReplicationRuns() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -199,11 +171,7 @@ func ExampleSMS_GetReplicationRuns() {
 }
 
 func ExampleSMS_GetServers() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -225,11 +193,7 @@ func ExampleSMS_GetServers() {
 }
 
 func ExampleSMS_ImportServerCatalog() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -248,11 +212,7 @@ func ExampleSMS_ImportServerCatalog() {
 }
 
 func ExampleSMS_StartOnDemandReplicationRun() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 
@@ -274,11 +234,7 @@ func ExampleSMS_StartOnDemandReplicationRun() {
 }
 
 func ExampleSMS_UpdateReplicationJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sms.New(sess)
 

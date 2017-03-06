@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleKMS_CancelKeyDeletion() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleKMS_CancelKeyDeletion() {
 }
 
 func ExampleKMS_CreateAlias() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -67,11 +59,7 @@ func ExampleKMS_CreateAlias() {
 }
 
 func ExampleKMS_CreateGrant() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -113,11 +101,7 @@ func ExampleKMS_CreateGrant() {
 }
 
 func ExampleKMS_CreateKey() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -149,11 +133,7 @@ func ExampleKMS_CreateKey() {
 }
 
 func ExampleKMS_Decrypt() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -182,11 +162,7 @@ func ExampleKMS_Decrypt() {
 }
 
 func ExampleKMS_DeleteAlias() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -207,11 +183,7 @@ func ExampleKMS_DeleteAlias() {
 }
 
 func ExampleKMS_DeleteImportedKeyMaterial() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -232,11 +204,7 @@ func ExampleKMS_DeleteImportedKeyMaterial() {
 }
 
 func ExampleKMS_DescribeKey() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -261,11 +229,7 @@ func ExampleKMS_DescribeKey() {
 }
 
 func ExampleKMS_DisableKey() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -286,11 +250,7 @@ func ExampleKMS_DisableKey() {
 }
 
 func ExampleKMS_DisableKeyRotation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -311,11 +271,7 @@ func ExampleKMS_DisableKeyRotation() {
 }
 
 func ExampleKMS_EnableKey() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -336,11 +292,7 @@ func ExampleKMS_EnableKey() {
 }
 
 func ExampleKMS_EnableKeyRotation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -361,11 +313,7 @@ func ExampleKMS_EnableKeyRotation() {
 }
 
 func ExampleKMS_Encrypt() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -395,11 +343,7 @@ func ExampleKMS_Encrypt() {
 }
 
 func ExampleKMS_GenerateDataKey() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -430,11 +374,7 @@ func ExampleKMS_GenerateDataKey() {
 }
 
 func ExampleKMS_GenerateDataKeyWithoutPlaintext() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -465,11 +405,7 @@ func ExampleKMS_GenerateDataKeyWithoutPlaintext() {
 }
 
 func ExampleKMS_GenerateRandom() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -490,11 +426,7 @@ func ExampleKMS_GenerateRandom() {
 }
 
 func ExampleKMS_GetKeyPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -516,11 +448,7 @@ func ExampleKMS_GetKeyPolicy() {
 }
 
 func ExampleKMS_GetKeyRotationStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -541,11 +469,7 @@ func ExampleKMS_GetKeyRotationStatus() {
 }
 
 func ExampleKMS_GetParametersForImport() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -568,11 +492,7 @@ func ExampleKMS_GetParametersForImport() {
 }
 
 func ExampleKMS_ImportKeyMaterial() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -597,11 +517,7 @@ func ExampleKMS_ImportKeyMaterial() {
 }
 
 func ExampleKMS_ListAliases() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -623,11 +539,7 @@ func ExampleKMS_ListAliases() {
 }
 
 func ExampleKMS_ListGrants() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -650,11 +562,7 @@ func ExampleKMS_ListGrants() {
 }
 
 func ExampleKMS_ListKeyPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -677,11 +585,7 @@ func ExampleKMS_ListKeyPolicies() {
 }
 
 func ExampleKMS_ListKeys() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -703,11 +607,7 @@ func ExampleKMS_ListKeys() {
 }
 
 func ExampleKMS_ListResourceTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -730,11 +630,7 @@ func ExampleKMS_ListResourceTags() {
 }
 
 func ExampleKMS_ListRetirableGrants() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -757,11 +653,7 @@ func ExampleKMS_ListRetirableGrants() {
 }
 
 func ExampleKMS_PutKeyPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -785,11 +677,7 @@ func ExampleKMS_PutKeyPolicy() {
 }
 
 func ExampleKMS_ReEncrypt() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -823,11 +711,7 @@ func ExampleKMS_ReEncrypt() {
 }
 
 func ExampleKMS_RetireGrant() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -850,11 +734,7 @@ func ExampleKMS_RetireGrant() {
 }
 
 func ExampleKMS_RevokeGrant() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -876,11 +756,7 @@ func ExampleKMS_RevokeGrant() {
 }
 
 func ExampleKMS_ScheduleKeyDeletion() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -902,11 +778,7 @@ func ExampleKMS_ScheduleKeyDeletion() {
 }
 
 func ExampleKMS_TagResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -934,11 +806,7 @@ func ExampleKMS_TagResource() {
 }
 
 func ExampleKMS_UntagResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -963,11 +831,7 @@ func ExampleKMS_UntagResource() {
 }
 
 func ExampleKMS_UpdateAlias() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 
@@ -989,11 +853,7 @@ func ExampleKMS_UpdateAlias() {
 }
 
 func ExampleKMS_UpdateKeyDescription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := kms.New(sess)
 

@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleLightsail_AllocateStaticIp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleLightsail_AllocateStaticIp() {
 }
 
 func ExampleLightsail_AttachStaticIp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -67,11 +59,7 @@ func ExampleLightsail_AttachStaticIp() {
 }
 
 func ExampleLightsail_CloseInstancePublicPorts() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -97,11 +85,7 @@ func ExampleLightsail_CloseInstancePublicPorts() {
 }
 
 func ExampleLightsail_CreateDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -122,11 +106,7 @@ func ExampleLightsail_CreateDomain() {
 }
 
 func ExampleLightsail_CreateDomainEntry() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -157,11 +137,7 @@ func ExampleLightsail_CreateDomainEntry() {
 }
 
 func ExampleLightsail_CreateInstanceSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -183,11 +159,7 @@ func ExampleLightsail_CreateInstanceSnapshot() {
 }
 
 func ExampleLightsail_CreateInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -217,11 +189,7 @@ func ExampleLightsail_CreateInstances() {
 }
 
 func ExampleLightsail_CreateInstancesFromSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -250,11 +218,7 @@ func ExampleLightsail_CreateInstancesFromSnapshot() {
 }
 
 func ExampleLightsail_CreateKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -275,11 +239,7 @@ func ExampleLightsail_CreateKeyPair() {
 }
 
 func ExampleLightsail_DeleteDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -300,11 +260,7 @@ func ExampleLightsail_DeleteDomain() {
 }
 
 func ExampleLightsail_DeleteDomainEntry() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -335,11 +291,7 @@ func ExampleLightsail_DeleteDomainEntry() {
 }
 
 func ExampleLightsail_DeleteInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -360,11 +312,7 @@ func ExampleLightsail_DeleteInstance() {
 }
 
 func ExampleLightsail_DeleteInstanceSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -385,11 +333,7 @@ func ExampleLightsail_DeleteInstanceSnapshot() {
 }
 
 func ExampleLightsail_DeleteKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -410,11 +354,7 @@ func ExampleLightsail_DeleteKeyPair() {
 }
 
 func ExampleLightsail_DetachStaticIp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -435,11 +375,7 @@ func ExampleLightsail_DetachStaticIp() {
 }
 
 func ExampleLightsail_DownloadDefaultKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -458,11 +394,7 @@ func ExampleLightsail_DownloadDefaultKeyPair() {
 }
 
 func ExampleLightsail_GetActiveNames() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -483,11 +415,7 @@ func ExampleLightsail_GetActiveNames() {
 }
 
 func ExampleLightsail_GetBlueprints() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -509,11 +437,7 @@ func ExampleLightsail_GetBlueprints() {
 }
 
 func ExampleLightsail_GetBundles() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -535,11 +459,7 @@ func ExampleLightsail_GetBundles() {
 }
 
 func ExampleLightsail_GetDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -560,11 +480,7 @@ func ExampleLightsail_GetDomain() {
 }
 
 func ExampleLightsail_GetDomains() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -585,11 +501,7 @@ func ExampleLightsail_GetDomains() {
 }
 
 func ExampleLightsail_GetInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -610,11 +522,7 @@ func ExampleLightsail_GetInstance() {
 }
 
 func ExampleLightsail_GetInstanceAccessDetails() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -636,11 +544,7 @@ func ExampleLightsail_GetInstanceAccessDetails() {
 }
 
 func ExampleLightsail_GetInstanceMetricData() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -670,11 +574,7 @@ func ExampleLightsail_GetInstanceMetricData() {
 }
 
 func ExampleLightsail_GetInstancePortStates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -695,11 +595,7 @@ func ExampleLightsail_GetInstancePortStates() {
 }
 
 func ExampleLightsail_GetInstanceSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -720,11 +616,7 @@ func ExampleLightsail_GetInstanceSnapshot() {
 }
 
 func ExampleLightsail_GetInstanceSnapshots() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -745,11 +637,7 @@ func ExampleLightsail_GetInstanceSnapshots() {
 }
 
 func ExampleLightsail_GetInstanceState() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -770,11 +658,7 @@ func ExampleLightsail_GetInstanceState() {
 }
 
 func ExampleLightsail_GetInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -795,11 +679,7 @@ func ExampleLightsail_GetInstances() {
 }
 
 func ExampleLightsail_GetKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -820,11 +700,7 @@ func ExampleLightsail_GetKeyPair() {
 }
 
 func ExampleLightsail_GetKeyPairs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -845,11 +721,7 @@ func ExampleLightsail_GetKeyPairs() {
 }
 
 func ExampleLightsail_GetOperation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -870,11 +742,7 @@ func ExampleLightsail_GetOperation() {
 }
 
 func ExampleLightsail_GetOperations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -895,11 +763,7 @@ func ExampleLightsail_GetOperations() {
 }
 
 func ExampleLightsail_GetOperationsForResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -921,11 +785,7 @@ func ExampleLightsail_GetOperationsForResource() {
 }
 
 func ExampleLightsail_GetRegions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -946,11 +806,7 @@ func ExampleLightsail_GetRegions() {
 }
 
 func ExampleLightsail_GetStaticIp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -971,11 +827,7 @@ func ExampleLightsail_GetStaticIp() {
 }
 
 func ExampleLightsail_GetStaticIps() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -996,11 +848,7 @@ func ExampleLightsail_GetStaticIps() {
 }
 
 func ExampleLightsail_ImportKeyPair() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1022,11 +870,7 @@ func ExampleLightsail_ImportKeyPair() {
 }
 
 func ExampleLightsail_IsVpcPeered() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1045,11 +889,7 @@ func ExampleLightsail_IsVpcPeered() {
 }
 
 func ExampleLightsail_OpenInstancePublicPorts() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1075,11 +915,7 @@ func ExampleLightsail_OpenInstancePublicPorts() {
 }
 
 func ExampleLightsail_PeerVpc() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1098,11 +934,7 @@ func ExampleLightsail_PeerVpc() {
 }
 
 func ExampleLightsail_RebootInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1123,11 +955,7 @@ func ExampleLightsail_RebootInstance() {
 }
 
 func ExampleLightsail_ReleaseStaticIp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1148,11 +976,7 @@ func ExampleLightsail_ReleaseStaticIp() {
 }
 
 func ExampleLightsail_StartInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1173,11 +997,7 @@ func ExampleLightsail_StartInstance() {
 }
 
 func ExampleLightsail_StopInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1198,11 +1018,7 @@ func ExampleLightsail_StopInstance() {
 }
 
 func ExampleLightsail_UnpeerVpc() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 
@@ -1221,11 +1037,7 @@ func ExampleLightsail_UnpeerVpc() {
 }
 
 func ExampleLightsail_UpdateDomainEntry() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := lightsail.New(sess)
 

@@ -45,7 +45,7 @@ import (
 //        // mock response/functionality
 //    }
 //
-//    TestMyFunc(t *testing.T) {
+//    func TestMyFunc(t *testing.T) {
 //        // Setup Test
 //        mockSvc := &mockGameLiftClient{}
 //
@@ -75,6 +75,10 @@ type GameLiftAPI interface {
 
 	CreateGameSession(*gamelift.CreateGameSessionInput) (*gamelift.CreateGameSessionOutput, error)
 
+	CreateGameSessionQueueRequest(*gamelift.CreateGameSessionQueueInput) (*request.Request, *gamelift.CreateGameSessionQueueOutput)
+
+	CreateGameSessionQueue(*gamelift.CreateGameSessionQueueInput) (*gamelift.CreateGameSessionQueueOutput, error)
+
 	CreatePlayerSessionRequest(*gamelift.CreatePlayerSessionInput) (*request.Request, *gamelift.CreatePlayerSessionOutput)
 
 	CreatePlayerSession(*gamelift.CreatePlayerSessionInput) (*gamelift.CreatePlayerSessionOutput, error)
@@ -94,6 +98,10 @@ type GameLiftAPI interface {
 	DeleteFleetRequest(*gamelift.DeleteFleetInput) (*request.Request, *gamelift.DeleteFleetOutput)
 
 	DeleteFleet(*gamelift.DeleteFleetInput) (*gamelift.DeleteFleetOutput, error)
+
+	DeleteGameSessionQueueRequest(*gamelift.DeleteGameSessionQueueInput) (*request.Request, *gamelift.DeleteGameSessionQueueOutput)
+
+	DeleteGameSessionQueue(*gamelift.DeleteGameSessionQueueInput) (*gamelift.DeleteGameSessionQueueOutput, error)
 
 	DeleteScalingPolicyRequest(*gamelift.DeleteScalingPolicyInput) (*request.Request, *gamelift.DeleteScalingPolicyOutput)
 
@@ -134,6 +142,14 @@ type GameLiftAPI interface {
 	DescribeGameSessionDetailsRequest(*gamelift.DescribeGameSessionDetailsInput) (*request.Request, *gamelift.DescribeGameSessionDetailsOutput)
 
 	DescribeGameSessionDetails(*gamelift.DescribeGameSessionDetailsInput) (*gamelift.DescribeGameSessionDetailsOutput, error)
+
+	DescribeGameSessionPlacementRequest(*gamelift.DescribeGameSessionPlacementInput) (*request.Request, *gamelift.DescribeGameSessionPlacementOutput)
+
+	DescribeGameSessionPlacement(*gamelift.DescribeGameSessionPlacementInput) (*gamelift.DescribeGameSessionPlacementOutput, error)
+
+	DescribeGameSessionQueuesRequest(*gamelift.DescribeGameSessionQueuesInput) (*request.Request, *gamelift.DescribeGameSessionQueuesOutput)
+
+	DescribeGameSessionQueues(*gamelift.DescribeGameSessionQueuesInput) (*gamelift.DescribeGameSessionQueuesOutput, error)
 
 	DescribeGameSessionsRequest(*gamelift.DescribeGameSessionsInput) (*request.Request, *gamelift.DescribeGameSessionsOutput)
 
@@ -191,6 +207,14 @@ type GameLiftAPI interface {
 
 	SearchGameSessions(*gamelift.SearchGameSessionsInput) (*gamelift.SearchGameSessionsOutput, error)
 
+	StartGameSessionPlacementRequest(*gamelift.StartGameSessionPlacementInput) (*request.Request, *gamelift.StartGameSessionPlacementOutput)
+
+	StartGameSessionPlacement(*gamelift.StartGameSessionPlacementInput) (*gamelift.StartGameSessionPlacementOutput, error)
+
+	StopGameSessionPlacementRequest(*gamelift.StopGameSessionPlacementInput) (*request.Request, *gamelift.StopGameSessionPlacementOutput)
+
+	StopGameSessionPlacement(*gamelift.StopGameSessionPlacementInput) (*gamelift.StopGameSessionPlacementOutput, error)
+
 	UpdateAliasRequest(*gamelift.UpdateAliasInput) (*request.Request, *gamelift.UpdateAliasOutput)
 
 	UpdateAlias(*gamelift.UpdateAliasInput) (*gamelift.UpdateAliasOutput, error)
@@ -214,6 +238,10 @@ type GameLiftAPI interface {
 	UpdateGameSessionRequest(*gamelift.UpdateGameSessionInput) (*request.Request, *gamelift.UpdateGameSessionOutput)
 
 	UpdateGameSession(*gamelift.UpdateGameSessionInput) (*gamelift.UpdateGameSessionOutput, error)
+
+	UpdateGameSessionQueueRequest(*gamelift.UpdateGameSessionQueueInput) (*request.Request, *gamelift.UpdateGameSessionQueueOutput)
+
+	UpdateGameSessionQueue(*gamelift.UpdateGameSessionQueueInput) (*gamelift.UpdateGameSessionQueueOutput, error)
 
 	UpdateRuntimeConfigurationRequest(*gamelift.UpdateRuntimeConfigurationInput) (*request.Request, *gamelift.UpdateRuntimeConfigurationOutput)
 

@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleApplicationAutoScaling_DeleteScalingPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationautoscaling.New(sess)
 
@@ -44,11 +40,7 @@ func ExampleApplicationAutoScaling_DeleteScalingPolicy() {
 }
 
 func ExampleApplicationAutoScaling_DeregisterScalableTarget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationautoscaling.New(sess)
 
@@ -71,11 +63,7 @@ func ExampleApplicationAutoScaling_DeregisterScalableTarget() {
 }
 
 func ExampleApplicationAutoScaling_DescribeScalableTargets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationautoscaling.New(sess)
 
@@ -103,11 +91,7 @@ func ExampleApplicationAutoScaling_DescribeScalableTargets() {
 }
 
 func ExampleApplicationAutoScaling_DescribeScalingActivities() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationautoscaling.New(sess)
 
@@ -132,11 +116,7 @@ func ExampleApplicationAutoScaling_DescribeScalingActivities() {
 }
 
 func ExampleApplicationAutoScaling_DescribeScalingPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationautoscaling.New(sess)
 
@@ -165,11 +145,7 @@ func ExampleApplicationAutoScaling_DescribeScalingPolicies() {
 }
 
 func ExampleApplicationAutoScaling_PutScalingPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationautoscaling.New(sess)
 
@@ -208,11 +184,7 @@ func ExampleApplicationAutoScaling_PutScalingPolicy() {
 }
 
 func ExampleApplicationAutoScaling_RegisterScalableTarget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationautoscaling.New(sess)
 

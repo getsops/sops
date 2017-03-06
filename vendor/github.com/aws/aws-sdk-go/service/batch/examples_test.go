@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleBatch_CancelJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -42,11 +38,7 @@ func ExampleBatch_CancelJob() {
 }
 
 func ExampleBatch_CreateComputeEnvironment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -96,11 +88,7 @@ func ExampleBatch_CreateComputeEnvironment() {
 }
 
 func ExampleBatch_CreateJobQueue() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -130,11 +118,7 @@ func ExampleBatch_CreateJobQueue() {
 }
 
 func ExampleBatch_DeleteComputeEnvironment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -155,11 +139,7 @@ func ExampleBatch_DeleteComputeEnvironment() {
 }
 
 func ExampleBatch_DeleteJobQueue() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -180,11 +160,7 @@ func ExampleBatch_DeleteJobQueue() {
 }
 
 func ExampleBatch_DeregisterJobDefinition() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -205,11 +181,7 @@ func ExampleBatch_DeregisterJobDefinition() {
 }
 
 func ExampleBatch_DescribeComputeEnvironments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -235,11 +207,7 @@ func ExampleBatch_DescribeComputeEnvironments() {
 }
 
 func ExampleBatch_DescribeJobDefinitions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -267,11 +235,7 @@ func ExampleBatch_DescribeJobDefinitions() {
 }
 
 func ExampleBatch_DescribeJobQueues() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -297,11 +261,7 @@ func ExampleBatch_DescribeJobQueues() {
 }
 
 func ExampleBatch_DescribeJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -325,11 +285,7 @@ func ExampleBatch_DescribeJobs() {
 }
 
 func ExampleBatch_ListJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -353,11 +309,7 @@ func ExampleBatch_ListJobs() {
 }
 
 func ExampleBatch_RegisterJobDefinition() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -428,11 +380,7 @@ func ExampleBatch_RegisterJobDefinition() {
 }
 
 func ExampleBatch_SubmitJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -480,11 +428,7 @@ func ExampleBatch_SubmitJob() {
 }
 
 func ExampleBatch_TerminateJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -506,11 +450,7 @@ func ExampleBatch_TerminateJob() {
 }
 
 func ExampleBatch_UpdateComputeEnvironment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 
@@ -538,11 +478,7 @@ func ExampleBatch_UpdateComputeEnvironment() {
 }
 
 func ExampleBatch_UpdateJobQueue() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := batch.New(sess)
 

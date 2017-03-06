@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleRedshift_AuthorizeClusterSecurityGroupIngress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -44,11 +40,7 @@ func ExampleRedshift_AuthorizeClusterSecurityGroupIngress() {
 }
 
 func ExampleRedshift_AuthorizeSnapshotAccess() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -71,11 +63,7 @@ func ExampleRedshift_AuthorizeSnapshotAccess() {
 }
 
 func ExampleRedshift_CopyClusterSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -98,11 +86,7 @@ func ExampleRedshift_CopyClusterSnapshot() {
 }
 
 func ExampleRedshift_CreateCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -164,11 +148,7 @@ func ExampleRedshift_CreateCluster() {
 }
 
 func ExampleRedshift_CreateClusterParameterGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -198,11 +178,7 @@ func ExampleRedshift_CreateClusterParameterGroup() {
 }
 
 func ExampleRedshift_CreateClusterSecurityGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -231,11 +207,7 @@ func ExampleRedshift_CreateClusterSecurityGroup() {
 }
 
 func ExampleRedshift_CreateClusterSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -264,11 +236,7 @@ func ExampleRedshift_CreateClusterSnapshot() {
 }
 
 func ExampleRedshift_CreateClusterSubnetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -301,11 +269,7 @@ func ExampleRedshift_CreateClusterSubnetGroup() {
 }
 
 func ExampleRedshift_CreateEventSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -345,11 +309,7 @@ func ExampleRedshift_CreateEventSubscription() {
 }
 
 func ExampleRedshift_CreateHsmClientCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -377,11 +337,7 @@ func ExampleRedshift_CreateHsmClientCertificate() {
 }
 
 func ExampleRedshift_CreateHsmConfiguration() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -414,11 +370,7 @@ func ExampleRedshift_CreateHsmConfiguration() {
 }
 
 func ExampleRedshift_CreateSnapshotCopyGrant() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -447,11 +399,7 @@ func ExampleRedshift_CreateSnapshotCopyGrant() {
 }
 
 func ExampleRedshift_CreateTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -479,11 +427,7 @@ func ExampleRedshift_CreateTags() {
 }
 
 func ExampleRedshift_DeleteCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -506,11 +450,7 @@ func ExampleRedshift_DeleteCluster() {
 }
 
 func ExampleRedshift_DeleteClusterParameterGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -531,11 +471,7 @@ func ExampleRedshift_DeleteClusterParameterGroup() {
 }
 
 func ExampleRedshift_DeleteClusterSecurityGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -556,11 +492,7 @@ func ExampleRedshift_DeleteClusterSecurityGroup() {
 }
 
 func ExampleRedshift_DeleteClusterSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -582,11 +514,7 @@ func ExampleRedshift_DeleteClusterSnapshot() {
 }
 
 func ExampleRedshift_DeleteClusterSubnetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -607,11 +535,7 @@ func ExampleRedshift_DeleteClusterSubnetGroup() {
 }
 
 func ExampleRedshift_DeleteEventSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -632,11 +556,7 @@ func ExampleRedshift_DeleteEventSubscription() {
 }
 
 func ExampleRedshift_DeleteHsmClientCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -657,11 +577,7 @@ func ExampleRedshift_DeleteHsmClientCertificate() {
 }
 
 func ExampleRedshift_DeleteHsmConfiguration() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -682,11 +598,7 @@ func ExampleRedshift_DeleteHsmConfiguration() {
 }
 
 func ExampleRedshift_DeleteSnapshotCopyGrant() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -707,11 +619,7 @@ func ExampleRedshift_DeleteSnapshotCopyGrant() {
 }
 
 func ExampleRedshift_DeleteTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -736,11 +644,7 @@ func ExampleRedshift_DeleteTags() {
 }
 
 func ExampleRedshift_DescribeClusterParameterGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -771,11 +675,7 @@ func ExampleRedshift_DescribeClusterParameterGroups() {
 }
 
 func ExampleRedshift_DescribeClusterParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -799,11 +699,7 @@ func ExampleRedshift_DescribeClusterParameters() {
 }
 
 func ExampleRedshift_DescribeClusterSecurityGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -834,11 +730,7 @@ func ExampleRedshift_DescribeClusterSecurityGroups() {
 }
 
 func ExampleRedshift_DescribeClusterSnapshots() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -874,11 +766,7 @@ func ExampleRedshift_DescribeClusterSnapshots() {
 }
 
 func ExampleRedshift_DescribeClusterSubnetGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -909,11 +797,7 @@ func ExampleRedshift_DescribeClusterSubnetGroups() {
 }
 
 func ExampleRedshift_DescribeClusterVersions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -937,11 +821,7 @@ func ExampleRedshift_DescribeClusterVersions() {
 }
 
 func ExampleRedshift_DescribeClusters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -972,11 +852,7 @@ func ExampleRedshift_DescribeClusters() {
 }
 
 func ExampleRedshift_DescribeDefaultClusterParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -999,11 +875,7 @@ func ExampleRedshift_DescribeDefaultClusterParameters() {
 }
 
 func ExampleRedshift_DescribeEventCategories() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1024,11 +896,7 @@ func ExampleRedshift_DescribeEventCategories() {
 }
 
 func ExampleRedshift_DescribeEventSubscriptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1051,11 +919,7 @@ func ExampleRedshift_DescribeEventSubscriptions() {
 }
 
 func ExampleRedshift_DescribeEvents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1082,11 +946,7 @@ func ExampleRedshift_DescribeEvents() {
 }
 
 func ExampleRedshift_DescribeHsmClientCertificates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1117,11 +977,7 @@ func ExampleRedshift_DescribeHsmClientCertificates() {
 }
 
 func ExampleRedshift_DescribeHsmConfigurations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1152,11 +1008,7 @@ func ExampleRedshift_DescribeHsmConfigurations() {
 }
 
 func ExampleRedshift_DescribeLoggingStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1177,11 +1029,7 @@ func ExampleRedshift_DescribeLoggingStatus() {
 }
 
 func ExampleRedshift_DescribeOrderableClusterOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1205,11 +1053,7 @@ func ExampleRedshift_DescribeOrderableClusterOptions() {
 }
 
 func ExampleRedshift_DescribeReservedNodeOfferings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1232,11 +1076,7 @@ func ExampleRedshift_DescribeReservedNodeOfferings() {
 }
 
 func ExampleRedshift_DescribeReservedNodes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1259,11 +1099,7 @@ func ExampleRedshift_DescribeReservedNodes() {
 }
 
 func ExampleRedshift_DescribeResize() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1284,11 +1120,7 @@ func ExampleRedshift_DescribeResize() {
 }
 
 func ExampleRedshift_DescribeSnapshotCopyGrants() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1319,11 +1151,7 @@ func ExampleRedshift_DescribeSnapshotCopyGrants() {
 }
 
 func ExampleRedshift_DescribeTableRestoreStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1347,11 +1175,7 @@ func ExampleRedshift_DescribeTableRestoreStatus() {
 }
 
 func ExampleRedshift_DescribeTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1383,11 +1207,7 @@ func ExampleRedshift_DescribeTags() {
 }
 
 func ExampleRedshift_DisableLogging() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1408,11 +1228,7 @@ func ExampleRedshift_DisableLogging() {
 }
 
 func ExampleRedshift_DisableSnapshotCopy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1433,11 +1249,7 @@ func ExampleRedshift_DisableSnapshotCopy() {
 }
 
 func ExampleRedshift_EnableLogging() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1460,11 +1272,7 @@ func ExampleRedshift_EnableLogging() {
 }
 
 func ExampleRedshift_EnableSnapshotCopy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1488,11 +1296,7 @@ func ExampleRedshift_EnableSnapshotCopy() {
 }
 
 func ExampleRedshift_ModifyCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1536,11 +1340,7 @@ func ExampleRedshift_ModifyCluster() {
 }
 
 func ExampleRedshift_ModifyClusterIamRoles() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1569,11 +1369,7 @@ func ExampleRedshift_ModifyClusterIamRoles() {
 }
 
 func ExampleRedshift_ModifyClusterParameterGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1608,11 +1404,7 @@ func ExampleRedshift_ModifyClusterParameterGroup() {
 }
 
 func ExampleRedshift_ModifyClusterSubnetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1638,11 +1430,7 @@ func ExampleRedshift_ModifyClusterSubnetGroup() {
 }
 
 func ExampleRedshift_ModifyEventSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1675,11 +1463,7 @@ func ExampleRedshift_ModifyEventSubscription() {
 }
 
 func ExampleRedshift_ModifySnapshotCopyRetentionPeriod() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1701,11 +1485,7 @@ func ExampleRedshift_ModifySnapshotCopyRetentionPeriod() {
 }
 
 func ExampleRedshift_PurchaseReservedNodeOffering() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1727,11 +1507,7 @@ func ExampleRedshift_PurchaseReservedNodeOffering() {
 }
 
 func ExampleRedshift_RebootCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1752,11 +1528,7 @@ func ExampleRedshift_RebootCluster() {
 }
 
 func ExampleRedshift_ResetClusterParameterGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1792,11 +1564,7 @@ func ExampleRedshift_ResetClusterParameterGroup() {
 }
 
 func ExampleRedshift_RestoreFromClusterSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1847,11 +1615,7 @@ func ExampleRedshift_RestoreFromClusterSnapshot() {
 }
 
 func ExampleRedshift_RestoreTableFromClusterSnapshot() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1879,11 +1643,7 @@ func ExampleRedshift_RestoreTableFromClusterSnapshot() {
 }
 
 func ExampleRedshift_RevokeClusterSecurityGroupIngress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1907,11 +1667,7 @@ func ExampleRedshift_RevokeClusterSecurityGroupIngress() {
 }
 
 func ExampleRedshift_RevokeSnapshotAccess() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 
@@ -1934,11 +1690,7 @@ func ExampleRedshift_RevokeSnapshotAccess() {
 }
 
 func ExampleRedshift_RotateEncryptionKey() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := redshift.New(sess)
 

@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleFirehose_CreateDeliveryStream() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := firehose.New(sess)
 
@@ -256,11 +252,7 @@ func ExampleFirehose_CreateDeliveryStream() {
 }
 
 func ExampleFirehose_DeleteDeliveryStream() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := firehose.New(sess)
 
@@ -281,11 +273,7 @@ func ExampleFirehose_DeleteDeliveryStream() {
 }
 
 func ExampleFirehose_DescribeDeliveryStream() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := firehose.New(sess)
 
@@ -308,11 +296,7 @@ func ExampleFirehose_DescribeDeliveryStream() {
 }
 
 func ExampleFirehose_ListDeliveryStreams() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := firehose.New(sess)
 
@@ -334,11 +318,7 @@ func ExampleFirehose_ListDeliveryStreams() {
 }
 
 func ExampleFirehose_PutRecord() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := firehose.New(sess)
 
@@ -362,11 +342,7 @@ func ExampleFirehose_PutRecord() {
 }
 
 func ExampleFirehose_PutRecordBatch() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := firehose.New(sess)
 
@@ -393,11 +369,7 @@ func ExampleFirehose_PutRecordBatch() {
 }
 
 func ExampleFirehose_UpdateDestination() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := firehose.New(sess)
 

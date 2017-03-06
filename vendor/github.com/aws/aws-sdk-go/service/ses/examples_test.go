@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSES_CloneReceiptRuleSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -42,11 +38,7 @@ func ExampleSES_CloneReceiptRuleSet() {
 }
 
 func ExampleSES_CreateConfigurationSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -69,11 +61,7 @@ func ExampleSES_CreateConfigurationSet() {
 }
 
 func ExampleSES_CreateConfigurationSetEventDestination() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -116,11 +104,7 @@ func ExampleSES_CreateConfigurationSetEventDestination() {
 }
 
 func ExampleSES_CreateReceiptFilter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -147,11 +131,7 @@ func ExampleSES_CreateReceiptFilter() {
 }
 
 func ExampleSES_CreateReceiptRule() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -222,11 +202,7 @@ func ExampleSES_CreateReceiptRule() {
 }
 
 func ExampleSES_CreateReceiptRuleSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -247,11 +223,7 @@ func ExampleSES_CreateReceiptRuleSet() {
 }
 
 func ExampleSES_DeleteConfigurationSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -272,11 +244,7 @@ func ExampleSES_DeleteConfigurationSet() {
 }
 
 func ExampleSES_DeleteConfigurationSetEventDestination() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -298,11 +266,7 @@ func ExampleSES_DeleteConfigurationSetEventDestination() {
 }
 
 func ExampleSES_DeleteIdentity() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -323,11 +287,7 @@ func ExampleSES_DeleteIdentity() {
 }
 
 func ExampleSES_DeleteIdentityPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -349,11 +309,7 @@ func ExampleSES_DeleteIdentityPolicy() {
 }
 
 func ExampleSES_DeleteReceiptFilter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -374,11 +330,7 @@ func ExampleSES_DeleteReceiptFilter() {
 }
 
 func ExampleSES_DeleteReceiptRule() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -400,11 +352,7 @@ func ExampleSES_DeleteReceiptRule() {
 }
 
 func ExampleSES_DeleteReceiptRuleSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -425,11 +373,7 @@ func ExampleSES_DeleteReceiptRuleSet() {
 }
 
 func ExampleSES_DeleteVerifiedEmailAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -450,11 +394,7 @@ func ExampleSES_DeleteVerifiedEmailAddress() {
 }
 
 func ExampleSES_DescribeActiveReceiptRuleSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -473,11 +413,7 @@ func ExampleSES_DescribeActiveReceiptRuleSet() {
 }
 
 func ExampleSES_DescribeConfigurationSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -502,11 +438,7 @@ func ExampleSES_DescribeConfigurationSet() {
 }
 
 func ExampleSES_DescribeReceiptRule() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -528,11 +460,7 @@ func ExampleSES_DescribeReceiptRule() {
 }
 
 func ExampleSES_DescribeReceiptRuleSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -553,11 +481,7 @@ func ExampleSES_DescribeReceiptRuleSet() {
 }
 
 func ExampleSES_GetIdentityDkimAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -581,11 +505,7 @@ func ExampleSES_GetIdentityDkimAttributes() {
 }
 
 func ExampleSES_GetIdentityMailFromDomainAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -609,11 +529,7 @@ func ExampleSES_GetIdentityMailFromDomainAttributes() {
 }
 
 func ExampleSES_GetIdentityNotificationAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -637,11 +553,7 @@ func ExampleSES_GetIdentityNotificationAttributes() {
 }
 
 func ExampleSES_GetIdentityPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -666,11 +578,7 @@ func ExampleSES_GetIdentityPolicies() {
 }
 
 func ExampleSES_GetIdentityVerificationAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -694,11 +602,7 @@ func ExampleSES_GetIdentityVerificationAttributes() {
 }
 
 func ExampleSES_GetSendQuota() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -717,11 +621,7 @@ func ExampleSES_GetSendQuota() {
 }
 
 func ExampleSES_GetSendStatistics() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -740,11 +640,7 @@ func ExampleSES_GetSendStatistics() {
 }
 
 func ExampleSES_ListConfigurationSets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -766,11 +662,7 @@ func ExampleSES_ListConfigurationSets() {
 }
 
 func ExampleSES_ListIdentities() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -793,11 +685,7 @@ func ExampleSES_ListIdentities() {
 }
 
 func ExampleSES_ListIdentityPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -818,11 +706,7 @@ func ExampleSES_ListIdentityPolicies() {
 }
 
 func ExampleSES_ListReceiptFilters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -841,11 +725,7 @@ func ExampleSES_ListReceiptFilters() {
 }
 
 func ExampleSES_ListReceiptRuleSets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -866,11 +746,7 @@ func ExampleSES_ListReceiptRuleSets() {
 }
 
 func ExampleSES_ListVerifiedEmailAddresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -889,11 +765,7 @@ func ExampleSES_ListVerifiedEmailAddresses() {
 }
 
 func ExampleSES_PutIdentityPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -916,11 +788,7 @@ func ExampleSES_PutIdentityPolicy() {
 }
 
 func ExampleSES_ReorderReceiptRuleSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -945,11 +813,7 @@ func ExampleSES_ReorderReceiptRuleSet() {
 }
 
 func ExampleSES_SendBounce() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1007,11 +871,7 @@ func ExampleSES_SendBounce() {
 }
 
 func ExampleSES_SendEmail() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1077,11 +937,7 @@ func ExampleSES_SendEmail() {
 }
 
 func ExampleSES_SendRawEmail() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1120,11 +976,7 @@ func ExampleSES_SendRawEmail() {
 }
 
 func ExampleSES_SetActiveReceiptRuleSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1145,11 +997,7 @@ func ExampleSES_SetActiveReceiptRuleSet() {
 }
 
 func ExampleSES_SetIdentityDkimEnabled() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1171,11 +1019,7 @@ func ExampleSES_SetIdentityDkimEnabled() {
 }
 
 func ExampleSES_SetIdentityFeedbackForwardingEnabled() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1197,11 +1041,7 @@ func ExampleSES_SetIdentityFeedbackForwardingEnabled() {
 }
 
 func ExampleSES_SetIdentityHeadersInNotificationsEnabled() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1224,11 +1064,7 @@ func ExampleSES_SetIdentityHeadersInNotificationsEnabled() {
 }
 
 func ExampleSES_SetIdentityMailFromDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1251,11 +1087,7 @@ func ExampleSES_SetIdentityMailFromDomain() {
 }
 
 func ExampleSES_SetIdentityNotificationTopic() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1278,11 +1110,7 @@ func ExampleSES_SetIdentityNotificationTopic() {
 }
 
 func ExampleSES_SetReceiptRulePosition() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1305,11 +1133,7 @@ func ExampleSES_SetReceiptRulePosition() {
 }
 
 func ExampleSES_UpdateConfigurationSetEventDestination() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1352,11 +1176,7 @@ func ExampleSES_UpdateConfigurationSetEventDestination() {
 }
 
 func ExampleSES_UpdateReceiptRule() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1426,11 +1246,7 @@ func ExampleSES_UpdateReceiptRule() {
 }
 
 func ExampleSES_VerifyDomainDkim() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1451,11 +1267,7 @@ func ExampleSES_VerifyDomainDkim() {
 }
 
 func ExampleSES_VerifyDomainIdentity() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1476,11 +1288,7 @@ func ExampleSES_VerifyDomainIdentity() {
 }
 
 func ExampleSES_VerifyEmailAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 
@@ -1501,11 +1309,7 @@ func ExampleSES_VerifyEmailAddress() {
 }
 
 func ExampleSES_VerifyEmailIdentity() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ses.New(sess)
 

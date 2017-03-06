@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleMarketplaceMetering_BatchMeterUsage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := marketplacemetering.New(sess)
 
@@ -50,11 +46,7 @@ func ExampleMarketplaceMetering_BatchMeterUsage() {
 }
 
 func ExampleMarketplaceMetering_MeterUsage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := marketplacemetering.New(sess)
 
@@ -79,11 +71,7 @@ func ExampleMarketplaceMetering_MeterUsage() {
 }
 
 func ExampleMarketplaceMetering_ResolveCustomer() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := marketplacemetering.New(sess)
 
