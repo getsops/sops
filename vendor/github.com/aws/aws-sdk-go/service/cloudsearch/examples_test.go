@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleCloudSearch_BuildSuggesters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleCloudSearch_BuildSuggesters() {
 }
 
 func ExampleCloudSearch_CreateDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -66,11 +58,7 @@ func ExampleCloudSearch_CreateDomain() {
 }
 
 func ExampleCloudSearch_DefineAnalysisScheme() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -102,11 +90,7 @@ func ExampleCloudSearch_DefineAnalysisScheme() {
 }
 
 func ExampleCloudSearch_DefineExpression() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -131,11 +115,7 @@ func ExampleCloudSearch_DefineExpression() {
 }
 
 func ExampleCloudSearch_DefineIndexField() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -243,11 +223,7 @@ func ExampleCloudSearch_DefineIndexField() {
 }
 
 func ExampleCloudSearch_DefineSuggester() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -276,11 +252,7 @@ func ExampleCloudSearch_DefineSuggester() {
 }
 
 func ExampleCloudSearch_DeleteAnalysisScheme() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -302,11 +274,7 @@ func ExampleCloudSearch_DeleteAnalysisScheme() {
 }
 
 func ExampleCloudSearch_DeleteDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -327,11 +295,7 @@ func ExampleCloudSearch_DeleteDomain() {
 }
 
 func ExampleCloudSearch_DeleteExpression() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -353,11 +317,7 @@ func ExampleCloudSearch_DeleteExpression() {
 }
 
 func ExampleCloudSearch_DeleteIndexField() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -379,11 +339,7 @@ func ExampleCloudSearch_DeleteIndexField() {
 }
 
 func ExampleCloudSearch_DeleteSuggester() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -405,11 +361,7 @@ func ExampleCloudSearch_DeleteSuggester() {
 }
 
 func ExampleCloudSearch_DescribeAnalysisSchemes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -435,11 +387,7 @@ func ExampleCloudSearch_DescribeAnalysisSchemes() {
 }
 
 func ExampleCloudSearch_DescribeAvailabilityOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -461,11 +409,7 @@ func ExampleCloudSearch_DescribeAvailabilityOptions() {
 }
 
 func ExampleCloudSearch_DescribeDomains() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -489,11 +433,7 @@ func ExampleCloudSearch_DescribeDomains() {
 }
 
 func ExampleCloudSearch_DescribeExpressions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -519,11 +459,7 @@ func ExampleCloudSearch_DescribeExpressions() {
 }
 
 func ExampleCloudSearch_DescribeIndexFields() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -549,11 +485,7 @@ func ExampleCloudSearch_DescribeIndexFields() {
 }
 
 func ExampleCloudSearch_DescribeScalingParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -574,11 +506,7 @@ func ExampleCloudSearch_DescribeScalingParameters() {
 }
 
 func ExampleCloudSearch_DescribeServiceAccessPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -600,11 +528,7 @@ func ExampleCloudSearch_DescribeServiceAccessPolicies() {
 }
 
 func ExampleCloudSearch_DescribeSuggesters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -630,11 +554,7 @@ func ExampleCloudSearch_DescribeSuggesters() {
 }
 
 func ExampleCloudSearch_IndexDocuments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -655,11 +575,7 @@ func ExampleCloudSearch_IndexDocuments() {
 }
 
 func ExampleCloudSearch_ListDomainNames() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -678,11 +594,7 @@ func ExampleCloudSearch_ListDomainNames() {
 }
 
 func ExampleCloudSearch_UpdateAvailabilityOptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -704,11 +616,7 @@ func ExampleCloudSearch_UpdateAvailabilityOptions() {
 }
 
 func ExampleCloudSearch_UpdateScalingParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 
@@ -734,11 +642,7 @@ func ExampleCloudSearch_UpdateScalingParameters() {
 }
 
 func ExampleCloudSearch_UpdateServiceAccessPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearch.New(sess)
 

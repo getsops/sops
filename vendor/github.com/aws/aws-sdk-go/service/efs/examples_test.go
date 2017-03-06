@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleEFS_CreateFileSystem() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -42,11 +38,7 @@ func ExampleEFS_CreateFileSystem() {
 }
 
 func ExampleEFS_CreateMountTarget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -73,11 +65,7 @@ func ExampleEFS_CreateMountTarget() {
 }
 
 func ExampleEFS_CreateTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -105,11 +93,7 @@ func ExampleEFS_CreateTags() {
 }
 
 func ExampleEFS_DeleteFileSystem() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -130,11 +114,7 @@ func ExampleEFS_DeleteFileSystem() {
 }
 
 func ExampleEFS_DeleteMountTarget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -155,11 +135,7 @@ func ExampleEFS_DeleteMountTarget() {
 }
 
 func ExampleEFS_DeleteTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -184,11 +160,7 @@ func ExampleEFS_DeleteTags() {
 }
 
 func ExampleEFS_DescribeFileSystems() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -212,11 +184,7 @@ func ExampleEFS_DescribeFileSystems() {
 }
 
 func ExampleEFS_DescribeMountTargetSecurityGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -237,11 +205,7 @@ func ExampleEFS_DescribeMountTargetSecurityGroups() {
 }
 
 func ExampleEFS_DescribeMountTargets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -265,11 +229,7 @@ func ExampleEFS_DescribeMountTargets() {
 }
 
 func ExampleEFS_DescribeTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 
@@ -292,11 +252,7 @@ func ExampleEFS_DescribeTags() {
 }
 
 func ExampleEFS_ModifyMountTargetSecurityGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := efs.New(sess)
 

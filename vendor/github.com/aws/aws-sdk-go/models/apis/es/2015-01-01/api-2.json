@@ -1,12 +1,12 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"es-2015-01-01",
     "apiVersion":"2015-01-01",
     "endpointPrefix":"es",
     "protocol":"rest-json",
     "serviceFullName":"Amazon Elasticsearch Service",
-    "signatureVersion":"v4"
+    "signatureVersion":"v4",
+    "uid":"es-2015-01-01"
   },
   "operations":{
     "AddTags":{
@@ -100,6 +100,23 @@
         {"shape":"ValidationException"}
       ]
     },
+    "DescribeElasticsearchInstanceTypeLimits":{
+      "name":"DescribeElasticsearchInstanceTypeLimits",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2015-01-01/es/instanceTypeLimits/{ElasticsearchVersion}/{InstanceType}"
+      },
+      "input":{"shape":"DescribeElasticsearchInstanceTypeLimitsRequest"},
+      "output":{"shape":"DescribeElasticsearchInstanceTypeLimitsResponse"},
+      "errors":[
+        {"shape":"BaseException"},
+        {"shape":"InternalException"},
+        {"shape":"InvalidTypeException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ValidationException"}
+      ]
+    },
     "ListDomainNames":{
       "name":"ListDomainNames",
       "http":{
@@ -109,6 +126,36 @@
       "output":{"shape":"ListDomainNamesResponse"},
       "errors":[
         {"shape":"BaseException"},
+        {"shape":"ValidationException"}
+      ]
+    },
+    "ListElasticsearchInstanceTypes":{
+      "name":"ListElasticsearchInstanceTypes",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2015-01-01/es/instanceTypes/{ElasticsearchVersion}"
+      },
+      "input":{"shape":"ListElasticsearchInstanceTypesRequest"},
+      "output":{"shape":"ListElasticsearchInstanceTypesResponse"},
+      "errors":[
+        {"shape":"BaseException"},
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ValidationException"}
+      ]
+    },
+    "ListElasticsearchVersions":{
+      "name":"ListElasticsearchVersions",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2015-01-01/es/versions"
+      },
+      "input":{"shape":"ListElasticsearchVersionsRequest"},
+      "output":{"shape":"ListElasticsearchVersionsResponse"},
+      "errors":[
+        {"shape":"BaseException"},
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"},
         {"shape":"ValidationException"}
       ]
     },
@@ -181,6 +228,17 @@
         "ARN":{"shape":"ARN"},
         "TagList":{"shape":"TagList"}
       }
+    },
+    "AdditionalLimit":{
+      "type":"structure",
+      "members":{
+        "LimitName":{"shape":"LimitName"},
+        "LimitValues":{"shape":"LimitValueList"}
+      }
+    },
+    "AdditionalLimitList":{
+      "type":"list",
+      "member":{"shape":"AdditionalLimit"}
     },
     "AdvancedOptions":{
       "type":"map",
@@ -292,6 +350,36 @@
         "DomainStatusList":{"shape":"ElasticsearchDomainStatusList"}
       }
     },
+    "DescribeElasticsearchInstanceTypeLimitsRequest":{
+      "type":"structure",
+      "required":[
+        "InstanceType",
+        "ElasticsearchVersion"
+      ],
+      "members":{
+        "DomainName":{
+          "shape":"DomainName",
+          "location":"querystring",
+          "locationName":"domainName"
+        },
+        "InstanceType":{
+          "shape":"ESPartitionInstanceType",
+          "location":"uri",
+          "locationName":"InstanceType"
+        },
+        "ElasticsearchVersion":{
+          "shape":"ElasticsearchVersionString",
+          "location":"uri",
+          "locationName":"ElasticsearchVersion"
+        }
+      }
+    },
+    "DescribeElasticsearchInstanceTypeLimitsResponse":{
+      "type":"structure",
+      "members":{
+        "LimitsByRole":{"shape":"LimitsByRole"}
+      }
+    },
     "DisabledOperationException":{
       "type":"structure",
       "members":{
@@ -365,7 +453,22 @@
         "r3.4xlarge.elasticsearch",
         "r3.8xlarge.elasticsearch",
         "i2.xlarge.elasticsearch",
-        "i2.2xlarge.elasticsearch"
+        "i2.2xlarge.elasticsearch",
+        "d2.xlarge.elasticsearch",
+        "d2.2xlarge.elasticsearch",
+        "d2.4xlarge.elasticsearch",
+        "d2.8xlarge.elasticsearch",
+        "c4.large.elasticsearch",
+        "c4.xlarge.elasticsearch",
+        "c4.2xlarge.elasticsearch",
+        "c4.4xlarge.elasticsearch",
+        "c4.8xlarge.elasticsearch",
+        "r4.large.elasticsearch",
+        "r4.xlarge.elasticsearch",
+        "r4.2xlarge.elasticsearch",
+        "r4.4xlarge.elasticsearch",
+        "r4.8xlarge.elasticsearch",
+        "r4.16xlarge.elasticsearch"
       ]
     },
     "ElasticsearchClusterConfig":{
@@ -429,6 +532,14 @@
       "type":"list",
       "member":{"shape":"ElasticsearchDomainStatus"}
     },
+    "ElasticsearchInstanceTypeList":{
+      "type":"list",
+      "member":{"shape":"ESPartitionInstanceType"}
+    },
+    "ElasticsearchVersionList":{
+      "type":"list",
+      "member":{"shape":"ElasticsearchVersionString"}
+    },
     "ElasticsearchVersionStatus":{
       "type":"structure",
       "required":[
@@ -442,6 +553,20 @@
     },
     "ElasticsearchVersionString":{"type":"string"},
     "ErrorMessage":{"type":"string"},
+    "InstanceCountLimits":{
+      "type":"structure",
+      "members":{
+        "MinimumInstanceCount":{"shape":"MinimumInstanceCount"},
+        "MaximumInstanceCount":{"shape":"MaximumInstanceCount"}
+      }
+    },
+    "InstanceLimits":{
+      "type":"structure",
+      "members":{
+        "InstanceCountLimits":{"shape":"InstanceCountLimits"}
+      }
+    },
+    "InstanceRole":{"type":"string"},
     "IntegerClass":{"type":"integer"},
     "InternalException":{
       "type":"structure",
@@ -464,10 +589,84 @@
       "error":{"httpStatusCode":409},
       "exception":true
     },
+    "LimitName":{"type":"string"},
+    "LimitValue":{"type":"string"},
+    "LimitValueList":{
+      "type":"list",
+      "member":{"shape":"LimitValue"}
+    },
+    "Limits":{
+      "type":"structure",
+      "members":{
+        "StorageTypes":{"shape":"StorageTypeList"},
+        "InstanceLimits":{"shape":"InstanceLimits"},
+        "AdditionalLimits":{"shape":"AdditionalLimitList"}
+      }
+    },
+    "LimitsByRole":{
+      "type":"map",
+      "key":{"shape":"InstanceRole"},
+      "value":{"shape":"Limits"}
+    },
     "ListDomainNamesResponse":{
       "type":"structure",
       "members":{
         "DomainNames":{"shape":"DomainInfoList"}
+      }
+    },
+    "ListElasticsearchInstanceTypesRequest":{
+      "type":"structure",
+      "required":["ElasticsearchVersion"],
+      "members":{
+        "ElasticsearchVersion":{
+          "shape":"ElasticsearchVersionString",
+          "location":"uri",
+          "locationName":"ElasticsearchVersion"
+        },
+        "DomainName":{
+          "shape":"DomainName",
+          "location":"querystring",
+          "locationName":"domainName"
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxResults"
+        },
+        "NextToken":{
+          "shape":"NextToken",
+          "location":"querystring",
+          "locationName":"nextToken"
+        }
+      }
+    },
+    "ListElasticsearchInstanceTypesResponse":{
+      "type":"structure",
+      "members":{
+        "ElasticsearchInstanceTypes":{"shape":"ElasticsearchInstanceTypeList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListElasticsearchVersionsRequest":{
+      "type":"structure",
+      "members":{
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxResults"
+        },
+        "NextToken":{
+          "shape":"NextToken",
+          "location":"querystring",
+          "locationName":"nextToken"
+        }
+      }
+    },
+    "ListElasticsearchVersionsResponse":{
+      "type":"structure",
+      "members":{
+        "ElasticsearchVersions":{"shape":"ElasticsearchVersionList"},
+        "NextToken":{"shape":"NextToken"}
       }
     },
     "ListTagsRequest":{
@@ -487,6 +686,13 @@
         "TagList":{"shape":"TagList"}
       }
     },
+    "MaxResults":{
+      "type":"integer",
+      "max":100
+    },
+    "MaximumInstanceCount":{"type":"integer"},
+    "MinimumInstanceCount":{"type":"integer"},
+    "NextToken":{"type":"string"},
     "OptionState":{
       "type":"string",
       "enum":[
@@ -554,6 +760,31 @@
         "Status":{"shape":"OptionStatus"}
       }
     },
+    "StorageSubTypeName":{"type":"string"},
+    "StorageType":{
+      "type":"structure",
+      "members":{
+        "StorageTypeName":{"shape":"StorageTypeName"},
+        "StorageSubTypeName":{"shape":"StorageSubTypeName"},
+        "StorageTypeLimits":{"shape":"StorageTypeLimitList"}
+      }
+    },
+    "StorageTypeLimit":{
+      "type":"structure",
+      "members":{
+        "LimitName":{"shape":"LimitName"},
+        "LimitValues":{"shape":"LimitValueList"}
+      }
+    },
+    "StorageTypeLimitList":{
+      "type":"list",
+      "member":{"shape":"StorageTypeLimit"}
+    },
+    "StorageTypeList":{
+      "type":"list",
+      "member":{"shape":"StorageType"}
+    },
+    "StorageTypeName":{"type":"string"},
     "String":{"type":"string"},
     "StringList":{
       "type":"list",

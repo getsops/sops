@@ -34,7 +34,7 @@
     "ListFacetAttributes": "<p>Retrieves attributes attached to the facet.</p>",
     "ListFacetNames": "<p>Retrieves the names of facets that exist in a schema.</p>",
     "ListIndex": "<p>Lists objects attached to the specified index.</p>",
-    "ListObjectAttributes": "<p>Lists all attributes associated with an object. This also supports common namespace prefix (key) listing. For example, if you want to retrieve all attributes associated with facet1, key can be <code>facet1</code>. If key is empty, all attributes are returned in a paginated list.</p>",
+    "ListObjectAttributes": "<p>Lists all attributes associated with an object. </p>",
     "ListObjectChildren": "<p>Returns a paginated list of child objects associated with a given object.</p>",
     "ListObjectParents": "<p>Lists parent objects associated with a given object in pagination fashion.</p>",
     "ListObjectPolicies": "<p>Returns policies attached to an object in pagination fashion.</p>",

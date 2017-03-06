@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleMarketplaceCommerceAnalytics_GenerateDataSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := marketplacecommerceanalytics.New(sess)
 
@@ -50,11 +46,7 @@ func ExampleMarketplaceCommerceAnalytics_GenerateDataSet() {
 }
 
 func ExampleMarketplaceCommerceAnalytics_StartSupportDataExport() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := marketplacecommerceanalytics.New(sess)
 

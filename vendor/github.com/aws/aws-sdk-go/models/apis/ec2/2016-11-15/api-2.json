@@ -2802,6 +2802,13 @@
         "modifying"
       ]
     },
+    "BillingProductList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"item"
+      }
+    },
     "Blob":{"type":"blob"},
     "BlobAttributeValue":{
       "type":"structure",
@@ -9404,6 +9411,12 @@
         "i2.2xlarge",
         "i2.4xlarge",
         "i2.8xlarge",
+        "i3.large",
+        "i3.xlarge",
+        "i3.2xlarge",
+        "i3.4xlarge",
+        "i3.8xlarge",
+        "i3.16xlarge",
         "hi1.4xlarge",
         "hs1.8xlarge",
         "c1.medium",
@@ -11384,6 +11397,10 @@
         "RamdiskId":{
           "shape":"String",
           "locationName":"ramdiskId"
+        },
+        "BillingProducts":{
+          "shape":"BillingProductList",
+          "locationName":"BillingProduct"
         },
         "RootDeviceName":{
           "shape":"String",

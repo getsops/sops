@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSFN_CreateActivity() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleSFN_CreateActivity() {
 }
 
 func ExampleSFN_CreateStateMachine() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -68,11 +60,7 @@ func ExampleSFN_CreateStateMachine() {
 }
 
 func ExampleSFN_DeleteActivity() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -93,11 +81,7 @@ func ExampleSFN_DeleteActivity() {
 }
 
 func ExampleSFN_DeleteStateMachine() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -118,11 +102,7 @@ func ExampleSFN_DeleteStateMachine() {
 }
 
 func ExampleSFN_DescribeActivity() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -143,11 +123,7 @@ func ExampleSFN_DescribeActivity() {
 }
 
 func ExampleSFN_DescribeExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -168,11 +144,7 @@ func ExampleSFN_DescribeExecution() {
 }
 
 func ExampleSFN_DescribeStateMachine() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -193,11 +165,7 @@ func ExampleSFN_DescribeStateMachine() {
 }
 
 func ExampleSFN_GetActivityTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -219,11 +187,7 @@ func ExampleSFN_GetActivityTask() {
 }
 
 func ExampleSFN_GetExecutionHistory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -247,11 +211,7 @@ func ExampleSFN_GetExecutionHistory() {
 }
 
 func ExampleSFN_ListActivities() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -273,11 +233,7 @@ func ExampleSFN_ListActivities() {
 }
 
 func ExampleSFN_ListExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -301,11 +257,7 @@ func ExampleSFN_ListExecutions() {
 }
 
 func ExampleSFN_ListStateMachines() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -327,11 +279,7 @@ func ExampleSFN_ListStateMachines() {
 }
 
 func ExampleSFN_SendTaskFailure() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -354,11 +302,7 @@ func ExampleSFN_SendTaskFailure() {
 }
 
 func ExampleSFN_SendTaskHeartbeat() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -379,11 +323,7 @@ func ExampleSFN_SendTaskHeartbeat() {
 }
 
 func ExampleSFN_SendTaskSuccess() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -405,11 +345,7 @@ func ExampleSFN_SendTaskSuccess() {
 }
 
 func ExampleSFN_StartExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 
@@ -432,11 +368,7 @@ func ExampleSFN_StartExecution() {
 }
 
 func ExampleSFN_StopExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sfn.New(sess)
 

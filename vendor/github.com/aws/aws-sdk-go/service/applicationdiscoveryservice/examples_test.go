@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleApplicationDiscoveryService_AssociateConfigurationItemsToApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -45,11 +41,7 @@ func ExampleApplicationDiscoveryService_AssociateConfigurationItemsToApplication
 }
 
 func ExampleApplicationDiscoveryService_CreateApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -71,11 +63,7 @@ func ExampleApplicationDiscoveryService_CreateApplication() {
 }
 
 func ExampleApplicationDiscoveryService_CreateTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -106,11 +94,7 @@ func ExampleApplicationDiscoveryService_CreateTags() {
 }
 
 func ExampleApplicationDiscoveryService_DeleteApplications() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -134,11 +118,7 @@ func ExampleApplicationDiscoveryService_DeleteApplications() {
 }
 
 func ExampleApplicationDiscoveryService_DeleteTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -169,11 +149,7 @@ func ExampleApplicationDiscoveryService_DeleteTags() {
 }
 
 func ExampleApplicationDiscoveryService_DescribeAgents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -210,11 +186,7 @@ func ExampleApplicationDiscoveryService_DescribeAgents() {
 }
 
 func ExampleApplicationDiscoveryService_DescribeConfigurations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -238,11 +210,7 @@ func ExampleApplicationDiscoveryService_DescribeConfigurations() {
 }
 
 func ExampleApplicationDiscoveryService_DescribeExportConfigurations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -268,11 +236,7 @@ func ExampleApplicationDiscoveryService_DescribeExportConfigurations() {
 }
 
 func ExampleApplicationDiscoveryService_DescribeTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -304,11 +268,7 @@ func ExampleApplicationDiscoveryService_DescribeTags() {
 }
 
 func ExampleApplicationDiscoveryService_DisassociateConfigurationItemsFromApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -333,11 +293,7 @@ func ExampleApplicationDiscoveryService_DisassociateConfigurationItemsFromApplic
 }
 
 func ExampleApplicationDiscoveryService_ExportConfigurations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -356,11 +312,7 @@ func ExampleApplicationDiscoveryService_ExportConfigurations() {
 }
 
 func ExampleApplicationDiscoveryService_GetDiscoverySummary() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -379,11 +331,7 @@ func ExampleApplicationDiscoveryService_GetDiscoverySummary() {
 }
 
 func ExampleApplicationDiscoveryService_ListConfigurations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -424,11 +372,7 @@ func ExampleApplicationDiscoveryService_ListConfigurations() {
 }
 
 func ExampleApplicationDiscoveryService_ListServerNeighbors() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -456,11 +400,7 @@ func ExampleApplicationDiscoveryService_ListServerNeighbors() {
 }
 
 func ExampleApplicationDiscoveryService_StartDataCollectionByAgentIds() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -484,11 +424,7 @@ func ExampleApplicationDiscoveryService_StartDataCollectionByAgentIds() {
 }
 
 func ExampleApplicationDiscoveryService_StopDataCollectionByAgentIds() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 
@@ -512,11 +448,7 @@ func ExampleApplicationDiscoveryService_StopDataCollectionByAgentIds() {
 }
 
 func ExampleApplicationDiscoveryService_UpdateApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := applicationdiscoveryservice.New(sess)
 

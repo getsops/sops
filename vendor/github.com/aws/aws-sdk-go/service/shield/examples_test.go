@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleShield_CreateProtection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -42,11 +38,7 @@ func ExampleShield_CreateProtection() {
 }
 
 func ExampleShield_CreateSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -65,11 +57,7 @@ func ExampleShield_CreateSubscription() {
 }
 
 func ExampleShield_DeleteProtection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -90,11 +78,7 @@ func ExampleShield_DeleteProtection() {
 }
 
 func ExampleShield_DeleteSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -113,11 +97,7 @@ func ExampleShield_DeleteSubscription() {
 }
 
 func ExampleShield_DescribeAttack() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -138,11 +118,7 @@ func ExampleShield_DescribeAttack() {
 }
 
 func ExampleShield_DescribeProtection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -163,11 +139,7 @@ func ExampleShield_DescribeProtection() {
 }
 
 func ExampleShield_DescribeSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -186,11 +158,7 @@ func ExampleShield_DescribeSubscription() {
 }
 
 func ExampleShield_ListAttacks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 
@@ -224,11 +192,7 @@ func ExampleShield_ListAttacks() {
 }
 
 func ExampleShield_ListProtections() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := shield.New(sess)
 

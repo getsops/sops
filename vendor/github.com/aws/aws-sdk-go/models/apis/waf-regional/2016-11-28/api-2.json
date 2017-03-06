@@ -1137,6 +1137,11 @@
         "Rule":{"shape":"Rule"}
       }
     },
+    "GetSampledRequestsMaxItems":{
+      "type":"long",
+      "max":500,
+      "min":1
+    },
     "GetSampledRequestsRequest":{
       "type":"structure",
       "required":[
@@ -1149,7 +1154,7 @@
         "WebAclId":{"shape":"ResourceId"},
         "RuleId":{"shape":"ResourceId"},
         "TimeWindow":{"shape":"TimeWindow"},
-        "MaxItems":{"shape":"ListMaxItems"}
+        "MaxItems":{"shape":"GetSampledRequestsMaxItems"}
       }
     },
     "GetSampledRequestsResponse":{
@@ -1344,11 +1349,6 @@
         "NextMarker":{"shape":"NextMarker"},
         "IPSets":{"shape":"IPSetSummaries"}
       }
-    },
-    "ListMaxItems":{
-      "type":"long",
-      "max":100,
-      "min":1
     },
     "ListResourcesForWebACLRequest":{
       "type":"structure",

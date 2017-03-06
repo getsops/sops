@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleIoTDataPlane_DeleteThingShadow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := iotdataplane.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleIoTDataPlane_DeleteThingShadow() {
 }
 
 func ExampleIoTDataPlane_GetThingShadow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := iotdataplane.New(sess)
 
@@ -66,11 +58,7 @@ func ExampleIoTDataPlane_GetThingShadow() {
 }
 
 func ExampleIoTDataPlane_Publish() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := iotdataplane.New(sess)
 
@@ -93,11 +81,7 @@ func ExampleIoTDataPlane_Publish() {
 }
 
 func ExampleIoTDataPlane_UpdateThingShadow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := iotdataplane.New(sess)
 

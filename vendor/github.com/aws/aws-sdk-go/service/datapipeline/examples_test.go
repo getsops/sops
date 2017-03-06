@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleDataPipeline_ActivatePipeline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -49,11 +45,7 @@ func ExampleDataPipeline_ActivatePipeline() {
 }
 
 func ExampleDataPipeline_AddTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -81,11 +73,7 @@ func ExampleDataPipeline_AddTags() {
 }
 
 func ExampleDataPipeline_CreatePipeline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -115,11 +103,7 @@ func ExampleDataPipeline_CreatePipeline() {
 }
 
 func ExampleDataPipeline_DeactivatePipeline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -141,11 +125,7 @@ func ExampleDataPipeline_DeactivatePipeline() {
 }
 
 func ExampleDataPipeline_DeletePipeline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -166,11 +146,7 @@ func ExampleDataPipeline_DeletePipeline() {
 }
 
 func ExampleDataPipeline_DescribeObjects() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -197,11 +173,7 @@ func ExampleDataPipeline_DescribeObjects() {
 }
 
 func ExampleDataPipeline_DescribePipelines() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -225,11 +197,7 @@ func ExampleDataPipeline_DescribePipelines() {
 }
 
 func ExampleDataPipeline_EvaluateExpression() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -252,11 +220,7 @@ func ExampleDataPipeline_EvaluateExpression() {
 }
 
 func ExampleDataPipeline_GetPipelineDefinition() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -278,11 +242,7 @@ func ExampleDataPipeline_GetPipelineDefinition() {
 }
 
 func ExampleDataPipeline_ListPipelines() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -303,11 +263,7 @@ func ExampleDataPipeline_ListPipelines() {
 }
 
 func ExampleDataPipeline_PollForTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -333,11 +289,7 @@ func ExampleDataPipeline_PollForTask() {
 }
 
 func ExampleDataPipeline_PutPipelineDefinition() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -393,11 +345,7 @@ func ExampleDataPipeline_PutPipelineDefinition() {
 }
 
 func ExampleDataPipeline_QueryObjects() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -436,11 +384,7 @@ func ExampleDataPipeline_QueryObjects() {
 }
 
 func ExampleDataPipeline_RemoveTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -465,11 +409,7 @@ func ExampleDataPipeline_RemoveTags() {
 }
 
 func ExampleDataPipeline_ReportTaskProgress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -498,11 +438,7 @@ func ExampleDataPipeline_ReportTaskProgress() {
 }
 
 func ExampleDataPipeline_ReportTaskRunnerHeartbeat() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -525,11 +461,7 @@ func ExampleDataPipeline_ReportTaskRunnerHeartbeat() {
 }
 
 func ExampleDataPipeline_SetStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -555,11 +487,7 @@ func ExampleDataPipeline_SetStatus() {
 }
 
 func ExampleDataPipeline_SetTaskStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 
@@ -584,11 +512,7 @@ func ExampleDataPipeline_SetTaskStatus() {
 }
 
 func ExampleDataPipeline_ValidatePipelineDefinition() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := datapipeline.New(sess)
 

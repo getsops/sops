@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleMachineLearning_AddTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -49,11 +45,7 @@ func ExampleMachineLearning_AddTags() {
 }
 
 func ExampleMachineLearning_CreateBatchPrediction() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -78,11 +70,7 @@ func ExampleMachineLearning_CreateBatchPrediction() {
 }
 
 func ExampleMachineLearning_CreateDataSourceFromRDS() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -128,11 +116,7 @@ func ExampleMachineLearning_CreateDataSourceFromRDS() {
 }
 
 func ExampleMachineLearning_CreateDataSourceFromRedshift() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -171,11 +155,7 @@ func ExampleMachineLearning_CreateDataSourceFromRedshift() {
 }
 
 func ExampleMachineLearning_CreateDataSourceFromS3() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -204,11 +184,7 @@ func ExampleMachineLearning_CreateDataSourceFromS3() {
 }
 
 func ExampleMachineLearning_CreateEvaluation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -232,11 +208,7 @@ func ExampleMachineLearning_CreateEvaluation() {
 }
 
 func ExampleMachineLearning_CreateMLModel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -266,11 +238,7 @@ func ExampleMachineLearning_CreateMLModel() {
 }
 
 func ExampleMachineLearning_CreateRealtimeEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -291,11 +259,7 @@ func ExampleMachineLearning_CreateRealtimeEndpoint() {
 }
 
 func ExampleMachineLearning_DeleteBatchPrediction() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -316,11 +280,7 @@ func ExampleMachineLearning_DeleteBatchPrediction() {
 }
 
 func ExampleMachineLearning_DeleteDataSource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -341,11 +301,7 @@ func ExampleMachineLearning_DeleteDataSource() {
 }
 
 func ExampleMachineLearning_DeleteEvaluation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -366,11 +322,7 @@ func ExampleMachineLearning_DeleteEvaluation() {
 }
 
 func ExampleMachineLearning_DeleteMLModel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -391,11 +343,7 @@ func ExampleMachineLearning_DeleteMLModel() {
 }
 
 func ExampleMachineLearning_DeleteRealtimeEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -416,11 +364,7 @@ func ExampleMachineLearning_DeleteRealtimeEndpoint() {
 }
 
 func ExampleMachineLearning_DeleteTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -446,11 +390,7 @@ func ExampleMachineLearning_DeleteTags() {
 }
 
 func ExampleMachineLearning_DescribeBatchPredictions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -481,11 +421,7 @@ func ExampleMachineLearning_DescribeBatchPredictions() {
 }
 
 func ExampleMachineLearning_DescribeDataSources() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -516,11 +452,7 @@ func ExampleMachineLearning_DescribeDataSources() {
 }
 
 func ExampleMachineLearning_DescribeEvaluations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -551,11 +483,7 @@ func ExampleMachineLearning_DescribeEvaluations() {
 }
 
 func ExampleMachineLearning_DescribeMLModels() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -586,11 +514,7 @@ func ExampleMachineLearning_DescribeMLModels() {
 }
 
 func ExampleMachineLearning_DescribeTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -612,11 +536,7 @@ func ExampleMachineLearning_DescribeTags() {
 }
 
 func ExampleMachineLearning_GetBatchPrediction() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -637,11 +557,7 @@ func ExampleMachineLearning_GetBatchPrediction() {
 }
 
 func ExampleMachineLearning_GetDataSource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -663,11 +579,7 @@ func ExampleMachineLearning_GetDataSource() {
 }
 
 func ExampleMachineLearning_GetEvaluation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -688,11 +600,7 @@ func ExampleMachineLearning_GetEvaluation() {
 }
 
 func ExampleMachineLearning_GetMLModel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -714,11 +622,7 @@ func ExampleMachineLearning_GetMLModel() {
 }
 
 func ExampleMachineLearning_Predict() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -744,11 +648,7 @@ func ExampleMachineLearning_Predict() {
 }
 
 func ExampleMachineLearning_UpdateBatchPrediction() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -770,11 +670,7 @@ func ExampleMachineLearning_UpdateBatchPrediction() {
 }
 
 func ExampleMachineLearning_UpdateDataSource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -796,11 +692,7 @@ func ExampleMachineLearning_UpdateDataSource() {
 }
 
 func ExampleMachineLearning_UpdateEvaluation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
@@ -822,11 +714,7 @@ func ExampleMachineLearning_UpdateEvaluation() {
 }
 
 func ExampleMachineLearning_UpdateMLModel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := machinelearning.New(sess)
 
