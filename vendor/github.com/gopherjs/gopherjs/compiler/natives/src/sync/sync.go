@@ -13,6 +13,11 @@ func runtime_Semacquire(s *uint32) {
 	*s--
 }
 
+// SemacquireMutex is like Semacquire, but for profiling contended Mutexes.
+// Mutex profiling is not supported, so just use the same implementation.
+// TODO: Investigate this. If it's possible to implement, consider doing so, otherwise remove this comment.
+var runtime_SemacquireMutex = runtime_Semacquire
+
 func runtime_Semrelease(s *uint32) {
 	*s++
 

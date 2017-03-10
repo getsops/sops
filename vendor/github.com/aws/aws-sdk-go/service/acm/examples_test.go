@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleACM_AddTagsToCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -48,11 +44,7 @@ func ExampleACM_AddTagsToCertificate() {
 }
 
 func ExampleACM_DeleteCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -73,11 +65,7 @@ func ExampleACM_DeleteCertificate() {
 }
 
 func ExampleACM_DescribeCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -98,11 +86,7 @@ func ExampleACM_DescribeCertificate() {
 }
 
 func ExampleACM_GetCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -123,11 +107,7 @@ func ExampleACM_GetCertificate() {
 }
 
 func ExampleACM_ImportCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -151,11 +131,7 @@ func ExampleACM_ImportCertificate() {
 }
 
 func ExampleACM_ListCertificates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -181,11 +157,7 @@ func ExampleACM_ListCertificates() {
 }
 
 func ExampleACM_ListTagsForCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -206,11 +178,7 @@ func ExampleACM_ListTagsForCertificate() {
 }
 
 func ExampleACM_RemoveTagsFromCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -238,11 +206,7 @@ func ExampleACM_RemoveTagsFromCertificate() {
 }
 
 func ExampleACM_RequestCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 
@@ -275,11 +239,7 @@ func ExampleACM_RequestCertificate() {
 }
 
 func ExampleACM_ResendValidationEmail() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := acm.New(sess)
 

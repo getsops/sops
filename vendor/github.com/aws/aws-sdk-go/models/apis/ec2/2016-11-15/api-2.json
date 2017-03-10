@@ -81,6 +81,15 @@
       },
       "input":{"shape":"AssociateDhcpOptionsRequest"}
     },
+    "AssociateIamInstanceProfile":{
+      "name":"AssociateIamInstanceProfile",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AssociateIamInstanceProfileRequest"},
+      "output":{"shape":"AssociateIamInstanceProfileResult"}
+    },
     "AssociateRouteTable":{
       "name":"AssociateRouteTable",
       "http":{
@@ -852,6 +861,15 @@
       "input":{"shape":"DescribeHostsRequest"},
       "output":{"shape":"DescribeHostsResult"}
     },
+    "DescribeIamInstanceProfileAssociations":{
+      "name":"DescribeIamInstanceProfileAssociations",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeIamInstanceProfileAssociationsRequest"},
+      "output":{"shape":"DescribeIamInstanceProfileAssociationsResult"}
+    },
     "DescribeIdFormat":{
       "name":"DescribeIdFormat",
       "http":{
@@ -1230,6 +1248,15 @@
       "input":{"shape":"DescribeVolumesRequest"},
       "output":{"shape":"DescribeVolumesResult"}
     },
+    "DescribeVolumesModifications":{
+      "name":"DescribeVolumesModifications",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeVolumesModificationsRequest"},
+      "output":{"shape":"DescribeVolumesModificationsResult"}
+    },
     "DescribeVpcAttribute":{
       "name":"DescribeVpcAttribute",
       "http":{
@@ -1386,6 +1413,15 @@
         "requestUri":"/"
       },
       "input":{"shape":"DisassociateAddressRequest"}
+    },
+    "DisassociateIamInstanceProfile":{
+      "name":"DisassociateIamInstanceProfile",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisassociateIamInstanceProfileRequest"},
+      "output":{"shape":"DisassociateIamInstanceProfileResult"}
     },
     "DisassociateRouteTable":{
       "name":"DisassociateRouteTable",
@@ -1629,6 +1665,15 @@
       },
       "input":{"shape":"ModifySubnetAttributeRequest"}
     },
+    "ModifyVolume":{
+      "name":"ModifyVolume",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ModifyVolumeRequest"},
+      "output":{"shape":"ModifyVolumeResult"}
+    },
     "ModifyVolumeAttribute":{
       "name":"ModifyVolumeAttribute",
       "http":{
@@ -1750,6 +1795,15 @@
       },
       "input":{"shape":"ReleaseHostsRequest"},
       "output":{"shape":"ReleaseHostsResult"}
+    },
+    "ReplaceIamInstanceProfileAssociation":{
+      "name":"ReplaceIamInstanceProfileAssociation",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ReplaceIamInstanceProfileAssociationRequest"},
+      "output":{"shape":"ReplaceIamInstanceProfileAssociationResult"}
     },
     "ReplaceNetworkAclAssociation":{
       "name":"ReplaceNetworkAclAssociation",
@@ -2051,6 +2105,10 @@
         "SpotInstanceRequestId":{
           "shape":"String",
           "locationName":"spotInstanceRequestId"
+        },
+        "InstanceHealth":{
+          "shape":"InstanceHealthStatus",
+          "locationName":"instanceHealth"
         }
       }
     },
@@ -2319,6 +2377,26 @@
         "VpcId":{"shape":"String"}
       }
     },
+    "AssociateIamInstanceProfileRequest":{
+      "type":"structure",
+      "required":[
+        "IamInstanceProfile",
+        "InstanceId"
+      ],
+      "members":{
+        "IamInstanceProfile":{"shape":"IamInstanceProfileSpecification"},
+        "InstanceId":{"shape":"String"}
+      }
+    },
+    "AssociateIamInstanceProfileResult":{
+      "type":"structure",
+      "members":{
+        "IamInstanceProfileAssociation":{
+          "shape":"IamInstanceProfileAssociation",
+          "locationName":"iamInstanceProfileAssociation"
+        }
+      }
+    },
     "AssociateRouteTableRequest":{
       "type":"structure",
       "required":[
@@ -2404,6 +2482,13 @@
           "shape":"VpcIpv6CidrBlockAssociation",
           "locationName":"ipv6CidrBlockAssociation"
         }
+      }
+    },
+    "AssociationIdList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"AssociationId"
       }
     },
     "AttachClassicLinkVpcRequest":{
@@ -2716,6 +2801,13 @@
         "cancelled_terminating",
         "modifying"
       ]
+    },
+    "BillingProductList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"item"
+      }
     },
     "Blob":{"type":"blob"},
     "BlobAttributeValue":{
@@ -4950,6 +5042,34 @@
         }
       }
     },
+    "DescribeIamInstanceProfileAssociationsRequest":{
+      "type":"structure",
+      "members":{
+        "AssociationIds":{
+          "shape":"AssociationIdList",
+          "locationName":"AssociationId"
+        },
+        "Filters":{
+          "shape":"FilterList",
+          "locationName":"Filter"
+        },
+        "MaxResults":{"shape":"MaxResults"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeIamInstanceProfileAssociationsResult":{
+      "type":"structure",
+      "members":{
+        "IamInstanceProfileAssociations":{
+          "shape":"IamInstanceProfileAssociationSet",
+          "locationName":"iamInstanceProfileAssociationSet"
+        },
+        "NextToken":{
+          "shape":"NextToken",
+          "locationName":"nextToken"
+        }
+      }
+    },
     "DescribeIdFormatRequest":{
       "type":"structure",
       "members":{
@@ -6208,6 +6328,35 @@
         }
       }
     },
+    "DescribeVolumesModificationsRequest":{
+      "type":"structure",
+      "members":{
+        "DryRun":{"shape":"Boolean"},
+        "VolumeIds":{
+          "shape":"VolumeIdStringList",
+          "locationName":"VolumeId"
+        },
+        "Filters":{
+          "shape":"FilterList",
+          "locationName":"Filter"
+        },
+        "NextToken":{"shape":"String"},
+        "MaxResults":{"shape":"Integer"}
+      }
+    },
+    "DescribeVolumesModificationsResult":{
+      "type":"structure",
+      "members":{
+        "VolumesModifications":{
+          "shape":"VolumeModificationList",
+          "locationName":"volumeModificationSet"
+        },
+        "NextToken":{
+          "shape":"String",
+          "locationName":"nextToken"
+        }
+      }
+    },
     "DescribeVolumesRequest":{
       "type":"structure",
       "members":{
@@ -6706,6 +6855,22 @@
         },
         "PublicIp":{"shape":"String"},
         "AssociationId":{"shape":"String"}
+      }
+    },
+    "DisassociateIamInstanceProfileRequest":{
+      "type":"structure",
+      "required":["AssociationId"],
+      "members":{
+        "AssociationId":{"shape":"String"}
+      }
+    },
+    "DisassociateIamInstanceProfileResult":{
+      "type":"structure",
+      "members":{
+        "IamInstanceProfileAssociation":{
+          "shape":"IamInstanceProfileAssociation",
+          "locationName":"iamInstanceProfileAssociation"
+        }
       }
     },
     "DisassociateRouteTableRequest":{
@@ -7704,6 +7869,47 @@
           "locationName":"id"
         }
       }
+    },
+    "IamInstanceProfileAssociation":{
+      "type":"structure",
+      "members":{
+        "AssociationId":{
+          "shape":"String",
+          "locationName":"associationId"
+        },
+        "InstanceId":{
+          "shape":"String",
+          "locationName":"instanceId"
+        },
+        "IamInstanceProfile":{
+          "shape":"IamInstanceProfile",
+          "locationName":"iamInstanceProfile"
+        },
+        "State":{
+          "shape":"IamInstanceProfileAssociationState",
+          "locationName":"state"
+        },
+        "Timestamp":{
+          "shape":"DateTime",
+          "locationName":"timestamp"
+        }
+      }
+    },
+    "IamInstanceProfileAssociationSet":{
+      "type":"list",
+      "member":{
+        "shape":"IamInstanceProfileAssociation",
+        "locationName":"item"
+      }
+    },
+    "IamInstanceProfileAssociationState":{
+      "type":"string",
+      "enum":[
+        "associating",
+        "associated",
+        "disassociating",
+        "disassociated"
+      ]
     },
     "IamInstanceProfileSpecification":{
       "type":"structure",
@@ -8735,6 +8941,13 @@
         }
       }
     },
+    "InstanceHealthStatus":{
+      "type":"string",
+      "enum":[
+        "healthy",
+        "unhealthy"
+      ]
+    },
     "InstanceIdSet":{
       "type":"list",
       "member":{
@@ -9198,6 +9411,12 @@
         "i2.2xlarge",
         "i2.4xlarge",
         "i2.8xlarge",
+        "i3.large",
+        "i3.xlarge",
+        "i3.2xlarge",
+        "i3.4xlarge",
+        "i3.8xlarge",
+        "i3.16xlarge",
         "hi1.4xlarge",
         "hs1.8xlarge",
         "c1.medium",
@@ -9868,6 +10087,26 @@
         },
         "VolumeId":{"shape":"String"},
         "AutoEnableIO":{"shape":"AttributeBooleanValue"}
+      }
+    },
+    "ModifyVolumeRequest":{
+      "type":"structure",
+      "required":["VolumeId"],
+      "members":{
+        "DryRun":{"shape":"Boolean"},
+        "VolumeId":{"shape":"String"},
+        "Size":{"shape":"Integer"},
+        "VolumeType":{"shape":"VolumeType"},
+        "Iops":{"shape":"Integer"}
+      }
+    },
+    "ModifyVolumeResult":{
+      "type":"structure",
+      "members":{
+        "VolumeModification":{
+          "shape":"VolumeModification",
+          "locationName":"volumeModification"
+        }
       }
     },
     "ModifyVpcAttributeRequest":{
@@ -11159,6 +11398,10 @@
           "shape":"String",
           "locationName":"ramdiskId"
         },
+        "BillingProducts":{
+          "shape":"BillingProductList",
+          "locationName":"BillingProduct"
+        },
         "RootDeviceName":{
           "shape":"String",
           "locationName":"rootDeviceName"
@@ -11244,6 +11487,26 @@
         "Unsuccessful":{
           "shape":"UnsuccessfulItemList",
           "locationName":"unsuccessful"
+        }
+      }
+    },
+    "ReplaceIamInstanceProfileAssociationRequest":{
+      "type":"structure",
+      "required":[
+        "IamInstanceProfile",
+        "AssociationId"
+      ],
+      "members":{
+        "IamInstanceProfile":{"shape":"IamInstanceProfileSpecification"},
+        "AssociationId":{"shape":"String"}
+      }
+    },
+    "ReplaceIamInstanceProfileAssociationResult":{
+      "type":"structure",
+      "members":{
+        "IamInstanceProfileAssociation":{
+          "shape":"IamInstanceProfileAssociation",
+          "locationName":"iamInstanceProfileAssociation"
         }
       }
     },
@@ -13372,6 +13635,10 @@
         "Type":{
           "shape":"FleetType",
           "locationName":"type"
+        },
+        "ReplaceUnhealthyInstances":{
+          "shape":"Boolean",
+          "locationName":"replaceUnhealthyInstances"
         }
       }
     },
@@ -14391,6 +14658,75 @@
         "shape":"Volume",
         "locationName":"item"
       }
+    },
+    "VolumeModification":{
+      "type":"structure",
+      "members":{
+        "VolumeId":{
+          "shape":"String",
+          "locationName":"volumeId"
+        },
+        "ModificationState":{
+          "shape":"VolumeModificationState",
+          "locationName":"modificationState"
+        },
+        "StatusMessage":{
+          "shape":"String",
+          "locationName":"statusMessage"
+        },
+        "TargetSize":{
+          "shape":"Integer",
+          "locationName":"targetSize"
+        },
+        "TargetIops":{
+          "shape":"Integer",
+          "locationName":"targetIops"
+        },
+        "TargetVolumeType":{
+          "shape":"VolumeType",
+          "locationName":"targetVolumeType"
+        },
+        "OriginalSize":{
+          "shape":"Integer",
+          "locationName":"originalSize"
+        },
+        "OriginalIops":{
+          "shape":"Integer",
+          "locationName":"originalIops"
+        },
+        "OriginalVolumeType":{
+          "shape":"VolumeType",
+          "locationName":"originalVolumeType"
+        },
+        "Progress":{
+          "shape":"Long",
+          "locationName":"progress"
+        },
+        "StartTime":{
+          "shape":"DateTime",
+          "locationName":"startTime"
+        },
+        "EndTime":{
+          "shape":"DateTime",
+          "locationName":"endTime"
+        }
+      }
+    },
+    "VolumeModificationList":{
+      "type":"list",
+      "member":{
+        "shape":"VolumeModification",
+        "locationName":"item"
+      }
+    },
+    "VolumeModificationState":{
+      "type":"string",
+      "enum":[
+        "modifying",
+        "optimizing",
+        "completed",
+        "failed"
+      ]
     },
     "VolumeState":{
       "type":"string",

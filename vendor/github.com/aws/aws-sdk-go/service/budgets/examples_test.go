@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleBudgets_CreateBudget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -93,11 +89,7 @@ func ExampleBudgets_CreateBudget() {
 }
 
 func ExampleBudgets_CreateNotification() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -131,11 +123,7 @@ func ExampleBudgets_CreateNotification() {
 }
 
 func ExampleBudgets_CreateSubscriber() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -166,11 +154,7 @@ func ExampleBudgets_CreateSubscriber() {
 }
 
 func ExampleBudgets_DeleteBudget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -192,11 +176,7 @@ func ExampleBudgets_DeleteBudget() {
 }
 
 func ExampleBudgets_DeleteNotification() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -223,11 +203,7 @@ func ExampleBudgets_DeleteNotification() {
 }
 
 func ExampleBudgets_DeleteSubscriber() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -258,11 +234,7 @@ func ExampleBudgets_DeleteSubscriber() {
 }
 
 func ExampleBudgets_DescribeBudget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -284,11 +256,7 @@ func ExampleBudgets_DescribeBudget() {
 }
 
 func ExampleBudgets_DescribeBudgets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -311,11 +279,7 @@ func ExampleBudgets_DescribeBudgets() {
 }
 
 func ExampleBudgets_DescribeNotificationsForBudget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -339,11 +303,7 @@ func ExampleBudgets_DescribeNotificationsForBudget() {
 }
 
 func ExampleBudgets_DescribeSubscribersForNotification() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -372,11 +332,7 @@ func ExampleBudgets_DescribeSubscribersForNotification() {
 }
 
 func ExampleBudgets_UpdateBudget() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -432,11 +388,7 @@ func ExampleBudgets_UpdateBudget() {
 }
 
 func ExampleBudgets_UpdateNotification() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 
@@ -468,11 +420,7 @@ func ExampleBudgets_UpdateNotification() {
 }
 
 func ExampleBudgets_UpdateSubscriber() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := budgets.New(sess)
 

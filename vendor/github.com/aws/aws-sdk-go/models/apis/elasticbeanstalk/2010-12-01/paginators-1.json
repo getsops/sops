@@ -14,8 +14,8 @@
     },
     "DescribeEvents": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxRecords",
+      "output_token": "NextToken",
       "result_key": "Events"
     },
     "ListAvailableSolutionStacks": {

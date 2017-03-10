@@ -45,7 +45,7 @@ import (
 //        // mock response/functionality
 //    }
 //
-//    TestMyFunc(t *testing.T) {
+//    func TestMyFunc(t *testing.T) {
 //        // Setup Test
 //        mockSvc := &mockELBV2Client{}
 //
@@ -168,6 +168,10 @@ type ELBV2API interface {
 	RemoveTagsRequest(*elbv2.RemoveTagsInput) (*request.Request, *elbv2.RemoveTagsOutput)
 
 	RemoveTags(*elbv2.RemoveTagsInput) (*elbv2.RemoveTagsOutput, error)
+
+	SetIpAddressTypeRequest(*elbv2.SetIpAddressTypeInput) (*request.Request, *elbv2.SetIpAddressTypeOutput)
+
+	SetIpAddressType(*elbv2.SetIpAddressTypeInput) (*elbv2.SetIpAddressTypeOutput, error)
 
 	SetRulePrioritiesRequest(*elbv2.SetRulePrioritiesInput) (*request.Request, *elbv2.SetRulePrioritiesOutput)
 

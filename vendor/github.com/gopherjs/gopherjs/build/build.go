@@ -21,7 +21,6 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/gopherjs/gopherjs/compiler"
 	"github.com/gopherjs/gopherjs/compiler/natives"
-	"github.com/kardianos/osext"
 	"github.com/neelance/sourcemap"
 )
 
@@ -85,6 +84,8 @@ func importWithSrcDir(path string, srcDir string, mode build.ImportMode, install
 	}
 
 	switch path {
+	case "os":
+		pkg.GoFiles = stripExecutable(pkg.GoFiles) // Need to strip executable implementation files, because some of them contain package scope variables that perform (indirectly) syscalls on init.
 	case "runtime":
 		pkg.GoFiles = []string{"error.go"}
 	case "runtime/internal/sys":
@@ -95,8 +96,6 @@ func importWithSrcDir(path string, srcDir string, mode build.ImportMode, install
 		pkg.GoFiles = []string{"rand.go", "util.go"}
 	case "crypto/x509":
 		pkg.CgoFiles = nil
-	case "hash/crc32":
-		pkg.GoFiles = []string{"crc32.go", "crc32_generic.go"}
 	}
 
 	if len(pkg.CgoFiles) > 0 {
@@ -122,6 +121,19 @@ func importWithSrcDir(path string, srcDir string, mode build.ImportMode, install
 	}
 
 	return &PackageData{Package: pkg, JSFiles: jsFiles}, nil
+}
+
+// stripExecutable strips all executable implementation .go files.
+// They have "executable_" prefix.
+func stripExecutable(goFiles []string) []string {
+	var s []string
+	for _, f := range goFiles {
+		if strings.HasPrefix(f, "executable_") {
+			continue
+		}
+		s = append(s, f)
+	}
+	return s
 }
 
 // ImportDir is like Import but processes the Go package found in the named
@@ -490,7 +502,7 @@ func (s *Session) BuildPackage(pkg *PackageData) (*compiler.Archive, error) {
 
 	if pkg.PkgObj != "" {
 		var fileInfo os.FileInfo
-		gopherjsBinary, err := osext.Executable()
+		gopherjsBinary, err := os.Executable()
 		if err == nil {
 			fileInfo, err = os.Stat(gopherjsBinary)
 			if err == nil {

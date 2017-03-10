@@ -1,5 +1,5 @@
 language: go
-go: 1.7.3
+go: 1.8
 go_import_path: go.mozilla.org/sops/
 
 addons:
@@ -15,7 +15,7 @@ before_install:
   - source ~/.cargo/env
 
 script:
-  - make test
+  - make
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

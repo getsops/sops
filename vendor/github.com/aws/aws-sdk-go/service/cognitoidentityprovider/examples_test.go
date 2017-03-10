@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleCognitoIdentityProvider_AddCustomAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -59,11 +55,7 @@ func ExampleCognitoIdentityProvider_AddCustomAttributes() {
 }
 
 func ExampleCognitoIdentityProvider_AdminAddUserToGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -86,11 +78,7 @@ func ExampleCognitoIdentityProvider_AdminAddUserToGroup() {
 }
 
 func ExampleCognitoIdentityProvider_AdminConfirmSignUp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -112,11 +100,7 @@ func ExampleCognitoIdentityProvider_AdminConfirmSignUp() {
 }
 
 func ExampleCognitoIdentityProvider_AdminCreateUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -159,11 +143,7 @@ func ExampleCognitoIdentityProvider_AdminCreateUser() {
 }
 
 func ExampleCognitoIdentityProvider_AdminDeleteUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -185,11 +165,7 @@ func ExampleCognitoIdentityProvider_AdminDeleteUser() {
 }
 
 func ExampleCognitoIdentityProvider_AdminDeleteUserAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -215,11 +191,7 @@ func ExampleCognitoIdentityProvider_AdminDeleteUserAttributes() {
 }
 
 func ExampleCognitoIdentityProvider_AdminDisableUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -241,11 +213,7 @@ func ExampleCognitoIdentityProvider_AdminDisableUser() {
 }
 
 func ExampleCognitoIdentityProvider_AdminEnableUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -267,11 +235,7 @@ func ExampleCognitoIdentityProvider_AdminEnableUser() {
 }
 
 func ExampleCognitoIdentityProvider_AdminForgetDevice() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -294,11 +258,7 @@ func ExampleCognitoIdentityProvider_AdminForgetDevice() {
 }
 
 func ExampleCognitoIdentityProvider_AdminGetDevice() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -321,11 +281,7 @@ func ExampleCognitoIdentityProvider_AdminGetDevice() {
 }
 
 func ExampleCognitoIdentityProvider_AdminGetUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -347,11 +303,7 @@ func ExampleCognitoIdentityProvider_AdminGetUser() {
 }
 
 func ExampleCognitoIdentityProvider_AdminInitiateAuth() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -382,11 +334,7 @@ func ExampleCognitoIdentityProvider_AdminInitiateAuth() {
 }
 
 func ExampleCognitoIdentityProvider_AdminListDevices() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -410,11 +358,7 @@ func ExampleCognitoIdentityProvider_AdminListDevices() {
 }
 
 func ExampleCognitoIdentityProvider_AdminListGroupsForUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -438,11 +382,7 @@ func ExampleCognitoIdentityProvider_AdminListGroupsForUser() {
 }
 
 func ExampleCognitoIdentityProvider_AdminRemoveUserFromGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -465,11 +405,7 @@ func ExampleCognitoIdentityProvider_AdminRemoveUserFromGroup() {
 }
 
 func ExampleCognitoIdentityProvider_AdminResetUserPassword() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -491,11 +427,7 @@ func ExampleCognitoIdentityProvider_AdminResetUserPassword() {
 }
 
 func ExampleCognitoIdentityProvider_AdminRespondToAuthChallenge() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -523,11 +455,7 @@ func ExampleCognitoIdentityProvider_AdminRespondToAuthChallenge() {
 }
 
 func ExampleCognitoIdentityProvider_AdminSetUserSettings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -556,11 +484,7 @@ func ExampleCognitoIdentityProvider_AdminSetUserSettings() {
 }
 
 func ExampleCognitoIdentityProvider_AdminUpdateDeviceStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -584,11 +508,7 @@ func ExampleCognitoIdentityProvider_AdminUpdateDeviceStatus() {
 }
 
 func ExampleCognitoIdentityProvider_AdminUpdateUserAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -617,11 +537,7 @@ func ExampleCognitoIdentityProvider_AdminUpdateUserAttributes() {
 }
 
 func ExampleCognitoIdentityProvider_AdminUserGlobalSignOut() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -643,11 +559,7 @@ func ExampleCognitoIdentityProvider_AdminUserGlobalSignOut() {
 }
 
 func ExampleCognitoIdentityProvider_ChangePassword() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -670,11 +582,7 @@ func ExampleCognitoIdentityProvider_ChangePassword() {
 }
 
 func ExampleCognitoIdentityProvider_ConfirmDevice() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -701,11 +609,7 @@ func ExampleCognitoIdentityProvider_ConfirmDevice() {
 }
 
 func ExampleCognitoIdentityProvider_ConfirmForgotPassword() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -730,11 +634,7 @@ func ExampleCognitoIdentityProvider_ConfirmForgotPassword() {
 }
 
 func ExampleCognitoIdentityProvider_ConfirmSignUp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -759,11 +659,7 @@ func ExampleCognitoIdentityProvider_ConfirmSignUp() {
 }
 
 func ExampleCognitoIdentityProvider_CreateGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -788,11 +684,7 @@ func ExampleCognitoIdentityProvider_CreateGroup() {
 }
 
 func ExampleCognitoIdentityProvider_CreateUserImportJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -815,11 +707,7 @@ func ExampleCognitoIdentityProvider_CreateUserImportJob() {
 }
 
 func ExampleCognitoIdentityProvider_CreateUserPool() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -915,11 +803,7 @@ func ExampleCognitoIdentityProvider_CreateUserPool() {
 }
 
 func ExampleCognitoIdentityProvider_CreateUserPoolClient() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -955,11 +839,7 @@ func ExampleCognitoIdentityProvider_CreateUserPoolClient() {
 }
 
 func ExampleCognitoIdentityProvider_DeleteGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -981,11 +861,7 @@ func ExampleCognitoIdentityProvider_DeleteGroup() {
 }
 
 func ExampleCognitoIdentityProvider_DeleteUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1006,11 +882,7 @@ func ExampleCognitoIdentityProvider_DeleteUser() {
 }
 
 func ExampleCognitoIdentityProvider_DeleteUserAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1035,11 +907,7 @@ func ExampleCognitoIdentityProvider_DeleteUserAttributes() {
 }
 
 func ExampleCognitoIdentityProvider_DeleteUserPool() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1060,11 +928,7 @@ func ExampleCognitoIdentityProvider_DeleteUserPool() {
 }
 
 func ExampleCognitoIdentityProvider_DeleteUserPoolClient() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1086,11 +950,7 @@ func ExampleCognitoIdentityProvider_DeleteUserPoolClient() {
 }
 
 func ExampleCognitoIdentityProvider_DescribeUserImportJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1112,11 +972,7 @@ func ExampleCognitoIdentityProvider_DescribeUserImportJob() {
 }
 
 func ExampleCognitoIdentityProvider_DescribeUserPool() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1137,11 +993,7 @@ func ExampleCognitoIdentityProvider_DescribeUserPool() {
 }
 
 func ExampleCognitoIdentityProvider_DescribeUserPoolClient() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1163,11 +1015,7 @@ func ExampleCognitoIdentityProvider_DescribeUserPoolClient() {
 }
 
 func ExampleCognitoIdentityProvider_ForgetDevice() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1189,11 +1037,7 @@ func ExampleCognitoIdentityProvider_ForgetDevice() {
 }
 
 func ExampleCognitoIdentityProvider_ForgotPassword() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1216,11 +1060,7 @@ func ExampleCognitoIdentityProvider_ForgotPassword() {
 }
 
 func ExampleCognitoIdentityProvider_GetCSVHeader() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1241,11 +1081,7 @@ func ExampleCognitoIdentityProvider_GetCSVHeader() {
 }
 
 func ExampleCognitoIdentityProvider_GetDevice() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1267,11 +1103,7 @@ func ExampleCognitoIdentityProvider_GetDevice() {
 }
 
 func ExampleCognitoIdentityProvider_GetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1293,11 +1125,7 @@ func ExampleCognitoIdentityProvider_GetGroup() {
 }
 
 func ExampleCognitoIdentityProvider_GetUser() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1318,11 +1146,7 @@ func ExampleCognitoIdentityProvider_GetUser() {
 }
 
 func ExampleCognitoIdentityProvider_GetUserAttributeVerificationCode() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1344,11 +1168,7 @@ func ExampleCognitoIdentityProvider_GetUserAttributeVerificationCode() {
 }
 
 func ExampleCognitoIdentityProvider_GlobalSignOut() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1369,11 +1189,7 @@ func ExampleCognitoIdentityProvider_GlobalSignOut() {
 }
 
 func ExampleCognitoIdentityProvider_InitiateAuth() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1403,11 +1219,7 @@ func ExampleCognitoIdentityProvider_InitiateAuth() {
 }
 
 func ExampleCognitoIdentityProvider_ListDevices() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1430,11 +1242,7 @@ func ExampleCognitoIdentityProvider_ListDevices() {
 }
 
 func ExampleCognitoIdentityProvider_ListGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1457,11 +1265,7 @@ func ExampleCognitoIdentityProvider_ListGroups() {
 }
 
 func ExampleCognitoIdentityProvider_ListUserImportJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1484,11 +1288,7 @@ func ExampleCognitoIdentityProvider_ListUserImportJobs() {
 }
 
 func ExampleCognitoIdentityProvider_ListUserPoolClients() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1511,11 +1311,7 @@ func ExampleCognitoIdentityProvider_ListUserPoolClients() {
 }
 
 func ExampleCognitoIdentityProvider_ListUserPools() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1537,11 +1333,7 @@ func ExampleCognitoIdentityProvider_ListUserPools() {
 }
 
 func ExampleCognitoIdentityProvider_ListUsers() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1569,11 +1361,7 @@ func ExampleCognitoIdentityProvider_ListUsers() {
 }
 
 func ExampleCognitoIdentityProvider_ListUsersInGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1597,11 +1385,7 @@ func ExampleCognitoIdentityProvider_ListUsersInGroup() {
 }
 
 func ExampleCognitoIdentityProvider_ResendConfirmationCode() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1624,11 +1408,7 @@ func ExampleCognitoIdentityProvider_ResendConfirmationCode() {
 }
 
 func ExampleCognitoIdentityProvider_RespondToAuthChallenge() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1655,11 +1435,7 @@ func ExampleCognitoIdentityProvider_RespondToAuthChallenge() {
 }
 
 func ExampleCognitoIdentityProvider_SetUserSettings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1687,11 +1463,7 @@ func ExampleCognitoIdentityProvider_SetUserSettings() {
 }
 
 func ExampleCognitoIdentityProvider_SignUp() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1729,11 +1501,7 @@ func ExampleCognitoIdentityProvider_SignUp() {
 }
 
 func ExampleCognitoIdentityProvider_StartUserImportJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1755,11 +1523,7 @@ func ExampleCognitoIdentityProvider_StartUserImportJob() {
 }
 
 func ExampleCognitoIdentityProvider_StopUserImportJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1781,11 +1545,7 @@ func ExampleCognitoIdentityProvider_StopUserImportJob() {
 }
 
 func ExampleCognitoIdentityProvider_UpdateDeviceStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1808,11 +1568,7 @@ func ExampleCognitoIdentityProvider_UpdateDeviceStatus() {
 }
 
 func ExampleCognitoIdentityProvider_UpdateGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1837,11 +1593,7 @@ func ExampleCognitoIdentityProvider_UpdateGroup() {
 }
 
 func ExampleCognitoIdentityProvider_UpdateUserAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1869,11 +1621,7 @@ func ExampleCognitoIdentityProvider_UpdateUserAttributes() {
 }
 
 func ExampleCognitoIdentityProvider_UpdateUserPool() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1947,11 +1695,7 @@ func ExampleCognitoIdentityProvider_UpdateUserPool() {
 }
 
 func ExampleCognitoIdentityProvider_UpdateUserPoolClient() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 
@@ -1987,11 +1731,7 @@ func ExampleCognitoIdentityProvider_UpdateUserPoolClient() {
 }
 
 func ExampleCognitoIdentityProvider_VerifyUserAttribute() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cognitoidentityprovider.New(sess)
 

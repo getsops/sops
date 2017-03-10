@@ -74,11 +74,11 @@ func (c *StorageGateway) ActivateGatewayRequest(input *ActivateGatewayInput) (re
 // API operation ActivateGateway for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -150,11 +150,11 @@ func (c *StorageGateway) AddCacheRequest(input *AddCacheInput) (req *request.Req
 // API operation AddCache for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -233,11 +233,11 @@ func (c *StorageGateway) AddTagsToResourceRequest(input *AddTagsToResourceInput)
 // API operation AddTagsToResource for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -309,11 +309,11 @@ func (c *StorageGateway) AddUploadBufferRequest(input *AddUploadBufferInput) (re
 // API operation AddUploadBuffer for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -389,11 +389,11 @@ func (c *StorageGateway) AddWorkingStorageRequest(input *AddWorkingStorageInput)
 // API operation AddWorkingStorage for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -460,11 +460,11 @@ func (c *StorageGateway) CancelArchivalRequest(input *CancelArchivalInput) (req 
 // API operation CancelArchival for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -532,11 +532,11 @@ func (c *StorageGateway) CancelRetrievalRequest(input *CancelRetrievalInput) (re
 // API operation CancelRetrieval for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -618,11 +618,11 @@ func (c *StorageGateway) CreateCachediSCSIVolumeRequest(input *CreateCachediSCSI
 // API operation CreateCachediSCSIVolume for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -690,11 +690,11 @@ func (c *StorageGateway) CreateNFSFileShareRequest(input *CreateNFSFileShareInpu
 // API operation CreateNFSFileShare for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -783,15 +783,15 @@ func (c *StorageGateway) CreateSnapshotRequest(input *CreateSnapshotInput) (req 
 // API operation CreateSnapshot for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
-//   * ServiceUnavailableError
+//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
 //   An internal server error has occurred because the service is unavailable.
 //   For more information, see the error and message fields.
 //
@@ -873,15 +873,15 @@ func (c *StorageGateway) CreateSnapshotFromVolumeRecoveryPointRequest(input *Cre
 // API operation CreateSnapshotFromVolumeRecoveryPoint for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
-//   * ServiceUnavailableError
+//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
 //   An internal server error has occurred because the service is unavailable.
 //   For more information, see the error and message fields.
 //
@@ -959,11 +959,11 @@ func (c *StorageGateway) CreateStorediSCSIVolumeRequest(input *CreateStorediSCSI
 // API operation CreateStorediSCSIVolume for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1033,11 +1033,11 @@ func (c *StorageGateway) CreateTapeWithBarcodeRequest(input *CreateTapeWithBarco
 // API operation CreateTapeWithBarcode for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1107,11 +1107,11 @@ func (c *StorageGateway) CreateTapesRequest(input *CreateTapesInput) (req *reque
 // API operation CreateTapes for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1181,11 +1181,11 @@ func (c *StorageGateway) DeleteBandwidthRateLimitRequest(input *DeleteBandwidthR
 // API operation DeleteBandwidthRateLimit for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1252,11 +1252,11 @@ func (c *StorageGateway) DeleteChapCredentialsRequest(input *DeleteChapCredentia
 // API operation DeleteChapCredentials for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1322,11 +1322,11 @@ func (c *StorageGateway) DeleteFileShareRequest(input *DeleteFileShareInput) (re
 // API operation DeleteFileShare for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1407,11 +1407,11 @@ func (c *StorageGateway) DeleteGatewayRequest(input *DeleteGatewayInput) (req *r
 // API operation DeleteGateway for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1486,11 +1486,11 @@ func (c *StorageGateway) DeleteSnapshotScheduleRequest(input *DeleteSnapshotSche
 // API operation DeleteSnapshotSchedule for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1556,11 +1556,11 @@ func (c *StorageGateway) DeleteTapeRequest(input *DeleteTapeInput) (req *request
 // API operation DeleteTape for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1626,11 +1626,11 @@ func (c *StorageGateway) DeleteTapeArchiveRequest(input *DeleteTapeArchiveInput)
 // API operation DeleteTapeArchive for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1709,11 +1709,11 @@ func (c *StorageGateway) DeleteVolumeRequest(input *DeleteVolumeInput) (req *req
 // API operation DeleteVolume for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1785,11 +1785,11 @@ func (c *StorageGateway) DescribeBandwidthRateLimitRequest(input *DescribeBandwi
 // API operation DescribeBandwidthRateLimit for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1859,11 +1859,11 @@ func (c *StorageGateway) DescribeCacheRequest(input *DescribeCacheInput) (req *r
 // API operation DescribeCache for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -1934,11 +1934,11 @@ func (c *StorageGateway) DescribeCachediSCSIVolumesRequest(input *DescribeCached
 // API operation DescribeCachediSCSIVolumes for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2005,11 +2005,11 @@ func (c *StorageGateway) DescribeChapCredentialsRequest(input *DescribeChapCrede
 // API operation DescribeChapCredentials for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2078,11 +2078,11 @@ func (c *StorageGateway) DescribeGatewayInformationRequest(input *DescribeGatewa
 // API operation DescribeGatewayInformation for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2149,11 +2149,11 @@ func (c *StorageGateway) DescribeMaintenanceStartTimeRequest(input *DescribeMain
 // API operation DescribeMaintenanceStartTime for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2219,11 +2219,11 @@ func (c *StorageGateway) DescribeNFSFileSharesRequest(input *DescribeNFSFileShar
 // API operation DescribeNFSFileShares for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2291,11 +2291,11 @@ func (c *StorageGateway) DescribeSnapshotScheduleRequest(input *DescribeSnapshot
 // API operation DescribeSnapshotSchedule for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2364,11 +2364,11 @@ func (c *StorageGateway) DescribeStorediSCSIVolumesRequest(input *DescribeStored
 // API operation DescribeStorediSCSIVolumes for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2444,11 +2444,11 @@ func (c *StorageGateway) DescribeTapeArchivesRequest(input *DescribeTapeArchives
 // API operation DescribeTapeArchives for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2550,11 +2550,11 @@ func (c *StorageGateway) DescribeTapeRecoveryPointsRequest(input *DescribeTapeRe
 // API operation DescribeTapeRecoveryPoints for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2653,11 +2653,11 @@ func (c *StorageGateway) DescribeTapesRequest(input *DescribeTapesInput) (req *r
 // API operation DescribeTapes for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2752,11 +2752,11 @@ func (c *StorageGateway) DescribeUploadBufferRequest(input *DescribeUploadBuffer
 // API operation DescribeUploadBuffer for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2831,11 +2831,11 @@ func (c *StorageGateway) DescribeVTLDevicesRequest(input *DescribeVTLDevicesInpu
 // API operation DescribeVTLDevices for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -2935,11 +2935,11 @@ func (c *StorageGateway) DescribeWorkingStorageRequest(input *DescribeWorkingSto
 // API operation DescribeWorkingStorage for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3011,11 +3011,11 @@ func (c *StorageGateway) DisableGatewayRequest(input *DisableGatewayInput) (req 
 // API operation DisableGateway for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3082,11 +3082,11 @@ func (c *StorageGateway) ListFileSharesRequest(input *ListFileSharesInput) (req 
 // API operation ListFileShares for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3168,11 +3168,11 @@ func (c *StorageGateway) ListGatewaysRequest(input *ListGatewaysInput) (req *req
 // API operation ListGateways for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3272,11 +3272,11 @@ func (c *StorageGateway) ListLocalDisksRequest(input *ListLocalDisksInput) (req 
 // API operation ListLocalDisks for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3342,11 +3342,11 @@ func (c *StorageGateway) ListTagsForResourceRequest(input *ListTagsForResourceIn
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3421,11 +3421,11 @@ func (c *StorageGateway) ListTapesRequest(input *ListTapesInput) (req *request.R
 // API operation ListTapes for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3492,11 +3492,11 @@ func (c *StorageGateway) ListVolumeInitiatorsRequest(input *ListVolumeInitiators
 // API operation ListVolumeInitiators for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3568,11 +3568,11 @@ func (c *StorageGateway) ListVolumeRecoveryPointsRequest(input *ListVolumeRecove
 // API operation ListVolumeRecoveryPoints for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3654,11 +3654,11 @@ func (c *StorageGateway) ListVolumesRequest(input *ListVolumesInput) (req *reque
 // API operation ListVolumes for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3749,11 +3749,11 @@ func (c *StorageGateway) RemoveTagsFromResourceRequest(input *RemoveTagsFromReso
 // API operation RemoveTagsFromResource for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3829,11 +3829,11 @@ func (c *StorageGateway) ResetCacheRequest(input *ResetCacheInput) (req *request
 // API operation ResetCache for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3906,11 +3906,11 @@ func (c *StorageGateway) RetrieveTapeArchiveRequest(input *RetrieveTapeArchiveIn
 // API operation RetrieveTapeArchive for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -3984,11 +3984,11 @@ func (c *StorageGateway) RetrieveTapeRecoveryPointRequest(input *RetrieveTapeRec
 // API operation RetrieveTapeRecoveryPoint for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4057,11 +4057,11 @@ func (c *StorageGateway) SetLocalConsolePasswordRequest(input *SetLocalConsolePa
 // API operation SetLocalConsolePassword for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4147,11 +4147,11 @@ func (c *StorageGateway) ShutdownGatewayRequest(input *ShutdownGatewayInput) (re
 // API operation ShutdownGateway for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4228,11 +4228,11 @@ func (c *StorageGateway) StartGatewayRequest(input *StartGatewayInput) (req *req
 // API operation StartGateway for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4307,11 +4307,11 @@ func (c *StorageGateway) UpdateBandwidthRateLimitRequest(input *UpdateBandwidthR
 // API operation UpdateBandwidthRateLimit for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4382,11 +4382,11 @@ func (c *StorageGateway) UpdateChapCredentialsRequest(input *UpdateChapCredentia
 // API operation UpdateChapCredentials for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4458,11 +4458,11 @@ func (c *StorageGateway) UpdateGatewayInformationRequest(input *UpdateGatewayInf
 // API operation UpdateGatewayInformation for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4542,11 +4542,11 @@ func (c *StorageGateway) UpdateGatewaySoftwareNowRequest(input *UpdateGatewaySof
 // API operation UpdateGatewaySoftwareNow for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4614,11 +4614,11 @@ func (c *StorageGateway) UpdateMaintenanceStartTimeRequest(input *UpdateMaintena
 // API operation UpdateMaintenanceStartTime for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4687,11 +4687,11 @@ func (c *StorageGateway) UpdateNFSFileShareRequest(input *UpdateNFSFileShareInpu
 // API operation UpdateNFSFileShare for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4765,11 +4765,11 @@ func (c *StorageGateway) UpdateSnapshotScheduleRequest(input *UpdateSnapshotSche
 // API operation UpdateSnapshotSchedule for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -4838,11 +4838,11 @@ func (c *StorageGateway) UpdateVTLDeviceTypeRequest(input *UpdateVTLDeviceTypeIn
 // API operation UpdateVTLDeviceType for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidGatewayRequestException
+//   * ErrCodeInvalidGatewayRequestException "InvalidGatewayRequestException"
 //   An exception occurred because an invalid gateway request was issued to the
 //   service. For more information, see the error and message fields.
 //
-//   * InternalServerError
+//   * ErrCodeInternalServerError "InternalServerError"
 //   An internal server error has occurred during the request. For more information,
 //   see the error and message fields.
 //
@@ -5888,6 +5888,10 @@ func (s *CreateCachediSCSIVolumeOutput) SetVolumeARN(v string) *CreateCachediSCS
 type CreateNFSFileShareInput struct {
 	_ struct{} `type:"structure"`
 
+	// The list of clients that are allowed to access the file gateway. The list
+	// must contain either valid IP addresses or valid CIDR blocks.
+	ClientList []*string `min:"1" type:"list"`
+
 	// A unique string value that you supply that is used by file gateway to ensure
 	// idempotent file share creation.
 	//
@@ -5941,6 +5945,9 @@ func (s CreateNFSFileShareInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateNFSFileShareInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateNFSFileShareInput"}
+	if s.ClientList != nil && len(s.ClientList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientList", 1))
+	}
 	if s.ClientToken == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClientToken"))
 	}
@@ -5981,6 +5988,12 @@ func (s *CreateNFSFileShareInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClientList sets the ClientList field's value.
+func (s *CreateNFSFileShareInput) SetClientList(v []*string) *CreateNFSFileShareInput {
+	s.ClientList = v
+	return s
 }
 
 // SetClientToken sets the ClientToken field's value.
@@ -10024,6 +10037,10 @@ func (s *NFSFileShareDefaults) SetOwnerId(v int64) *NFSFileShareDefaults {
 type NFSFileShareInfo struct {
 	_ struct{} `type:"structure"`
 
+	// The list of clients that are allowed to access the file gateway. The list
+	// must contain either valid IP addresses or valid CIDR blocks.
+	ClientList []*string `min:"1" type:"list"`
+
 	// The default storage class for objects put into an Amazon S3 bucket by file
 	// gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field
 	// is not populated, the default value S3_STANDARD is used. Optional.
@@ -10075,6 +10092,12 @@ func (s NFSFileShareInfo) String() string {
 // GoString returns the string representation
 func (s NFSFileShareInfo) GoString() string {
 	return s.String()
+}
+
+// SetClientList sets the ClientList field's value.
+func (s *NFSFileShareInfo) SetClientList(v []*string) *NFSFileShareInfo {
+	s.ClientList = v
+	return s
 }
 
 // SetDefaultStorageClass sets the DefaultStorageClass field's value.
@@ -11744,6 +11767,10 @@ func (s *UpdateMaintenanceStartTimeOutput) SetGatewayARN(v string) *UpdateMainte
 type UpdateNFSFileShareInput struct {
 	_ struct{} `type:"structure"`
 
+	// The list of clients that are allowed to access the file gateway. The list
+	// must contain either valid IP addresses or valid CIDR blocks.
+	ClientList []*string `min:"1" type:"list"`
+
 	// The default storage class for objects put into an Amazon S3 bucket by a file
 	// gateway. Possible values are S3_STANDARD or S3_STANDARD_IA. If this field
 	// is not populated, the default value S3_STANDARD is used. Optional.
@@ -11779,6 +11806,9 @@ func (s UpdateNFSFileShareInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateNFSFileShareInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateNFSFileShareInput"}
+	if s.ClientList != nil && len(s.ClientList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientList", 1))
+	}
 	if s.DefaultStorageClass != nil && len(*s.DefaultStorageClass) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("DefaultStorageClass", 5))
 	}
@@ -11801,6 +11831,12 @@ func (s *UpdateNFSFileShareInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClientList sets the ClientList field's value.
+func (s *UpdateNFSFileShareInput) SetClientList(v []*string) *UpdateNFSFileShareInput {
+	s.ClientList = v
+	return s
 }
 
 // SetDefaultStorageClass sets the DefaultStorageClass field's value.

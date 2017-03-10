@@ -87,6 +87,12 @@
         "CognitoIdentityProvider$ProviderName": "<p>The provider name for an Amazon Cognito Identity User Pool. For example, <code>cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789</code>.</p>"
       }
     },
+    "CognitoIdentityProviderTokenCheck": {
+      "base": null,
+      "refs": {
+        "CognitoIdentityProvider$ServerSideTokenCheck": "<p>TRUE if server-side token validation is enabled for the identity provider’s token.</p>"
+      }
+    },
     "ConcurrentModificationException": {
       "base": "<p>Thrown if there are parallel requests to modify a resource.</p>",
       "refs": {

@@ -10,11 +10,13 @@
     "CreateApplicationVersion": "<p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note>",
     "CreateConfigurationTemplate": "<p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul>",
     "CreateEnvironment": "<p>Launches an environment for the specified application using the specified configuration.</p>",
+    "CreatePlatformVersion": "<p>Create a new version of your custom platform.</p>",
     "CreateStorageLocation": "<p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>",
     "DeleteApplication": "<p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note>",
     "DeleteApplicationVersion": "<p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note>",
     "DeleteConfigurationTemplate": "<p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment's copy of the template without affecting the running environment.</p> </note>",
     "DeleteEnvironmentConfiguration": "<p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>",
+    "DeletePlatformVersion": "<p>Deletes the specified version of a custom platform.</p>",
     "DescribeApplicationVersions": "<p>Retrieve a list of application versions.</p>",
     "DescribeApplications": "<p>Returns the descriptions of existing applications.</p>",
     "DescribeConfigurationOptions": "<p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>",
@@ -26,7 +28,9 @@
     "DescribeEnvironments": "<p>Returns descriptions for existing environments.</p>",
     "DescribeEvents": "<p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note>",
     "DescribeInstancesHealth": "<p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html\">enhanced health reporting</a>.</p>",
-    "ListAvailableSolutionStacks": "<p>Returns a list of the available solution stack names.</p>",
+    "DescribePlatformVersion": "<p>Describes the version of the platform.</p>",
+    "ListAvailableSolutionStacks": "<p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>",
+    "ListPlatformVersions": "<p>Lists the available platforms.</p>",
     "RebuildEnvironment": "<p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>",
     "RequestEnvironmentInfo": "<p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul>",
     "RestartAppServer": "<p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>",
@@ -41,6 +45,12 @@
     "ValidateConfigurationSettings": "<p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>"
   },
   "shapes": {
+    "ARN": {
+      "base": null,
+      "refs": {
+        "Builder$ARN": "<p>The ARN of the builder.</p>"
+      }
+    },
     "AbortEnvironmentUpdateMessage": {
       "base": "<p/>",
       "refs": {
@@ -260,6 +270,12 @@
         "CreateApplicationVersionMessage$BuildConfiguration": "<p>Settings for an AWS CodeBuild build.</p>"
       }
     },
+    "Builder": {
+      "base": "<p>The builder used to build the custom platform.</p>",
+      "refs": {
+        "CreatePlatformVersionResult$Builder": "<p>The builder used to create the custom platform.</p>"
+      }
+    },
     "CPUUtilization": {
       "base": "<p>CPU utilization metrics for an instance.</p>",
       "refs": {
@@ -368,6 +384,7 @@
         "ConfigurationSettingsDescription$OptionSettings": "<p>A list of the configuration options and their values in this configuration set.</p>",
         "CreateConfigurationTemplateMessage$OptionSettings": "<p>If specified, AWS Elastic Beanstalk sets the specified configuration option to the requested value. The new value overrides the value obtained from the solution stack or the source configuration template.</p>",
         "CreateEnvironmentMessage$OptionSettings": "<p>If specified, AWS Elastic Beanstalk sets the specified configuration options to the requested value in the configuration set for the new environment. These override the values obtained from the solution stack or the configuration template.</p>",
+        "CreatePlatformVersionRequest$OptionSettings": "<p>The configuration option settings to apply to the builder environment.</p>",
         "UpdateConfigurationTemplateMessage$OptionSettings": "<p>A list of configuration option settings to update with the new specified option value.</p>",
         "UpdateEnvironmentMessage$OptionSettings": "<p>If specified, AWS Elastic Beanstalk updates the configuration set associated with the running environment and sets the specified configuration options to the requested value.</p>",
         "ValidateConfigurationSettingsMessage$OptionSettings": "<p>A list of the options and desired values to evaluate.</p>"
@@ -424,7 +441,7 @@
         "ConfigurationSettingsDescription$TemplateName": "<p> If not <code>null</code>, the name of the configuration template for this configuration set. </p>",
         "ConfigurationTemplateNamesList$member": null,
         "CreateConfigurationTemplateMessage$TemplateName": "<p>The name of the configuration template.</p> <p>Constraint: This name must be unique per application.</p> <p>Default: If a configuration template already exists with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>",
-        "CreateEnvironmentMessage$TemplateName": "<p> The name of the configuration template to use in deployment. If no configuration template is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p> Condition: You must specify either this parameter or a <code>SolutionStackName</code>, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns a <code>MissingRequiredParameter</code> error. </p>",
+        "CreateEnvironmentMessage$TemplateName": "<p> The name of the configuration template to use in deployment. If no configuration template is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>",
         "DeleteConfigurationTemplateMessage$TemplateName": "<p>The name of the configuration template to delete.</p>",
         "DescribeConfigurationOptionsMessage$TemplateName": "<p>The name of the configuration template whose configuration options you want to describe.</p>",
         "DescribeConfigurationSettingsMessage$TemplateName": "<p>The name of the configuration template to describe.</p> <p> Conditional: You must specify either this parameter or an EnvironmentName, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns a <code>MissingRequiredParameter</code> error. </p>",
@@ -463,6 +480,16 @@
       "refs": {
       }
     },
+    "CreatePlatformVersionRequest": {
+      "base": "<p>Request to create a new platform version.</p>",
+      "refs": {
+      }
+    },
+    "CreatePlatformVersionResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateStorageLocationResultMessage": {
       "base": "<p>Results of a <a>CreateStorageLocationResult</a> call.</p>",
       "refs": {
@@ -474,7 +501,20 @@
         "ApplicationDescription$DateCreated": "<p>The date when the application was created.</p>",
         "ApplicationVersionDescription$DateCreated": "<p>The creation date of the application version.</p>",
         "ConfigurationSettingsDescription$DateCreated": "<p>The date (in UTC time) when this configuration set was created.</p>",
-        "EnvironmentDescription$DateCreated": "<p>The creation date for this environment.</p>"
+        "EnvironmentDescription$DateCreated": "<p>The creation date for this environment.</p>",
+        "PlatformDescription$DateCreated": "<p>The date when the platform was created.</p>"
+      }
+    },
+    "CustomAmi": {
+      "base": "<p>A custom AMI available to platforms.</p>",
+      "refs": {
+        "CustomAmiList$member": null
+      }
+    },
+    "CustomAmiList": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$CustomAmiList": "<p>The custom AMIs supported by the platform.</p>"
       }
     },
     "DNSCname": {
@@ -511,6 +551,16 @@
       "refs": {
       }
     },
+    "DeletePlatformVersionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeletePlatformVersionResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteSourceBundle": {
       "base": null,
       "refs": {
@@ -540,7 +590,7 @@
       }
     },
     "DescribeConfigurationOptionsMessage": {
-      "base": "<p>Result message containig a list of application version descriptions.</p>",
+      "base": "<p>Result message containing a list of application version descriptions.</p>",
       "refs": {
       }
     },
@@ -604,6 +654,16 @@
       "refs": {
       }
     },
+    "DescribePlatformVersionRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribePlatformVersionResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "Description": {
       "base": null,
       "refs": {
@@ -615,6 +675,7 @@
         "CreateConfigurationTemplateMessage$Description": "<p>Describes this configuration.</p>",
         "CreateEnvironmentMessage$Description": "<p>Describes this environment.</p>",
         "EnvironmentDescription$Description": "<p>Describes this environment.</p>",
+        "PlatformDescription$Description": "<p>The description of the platform.</p>",
         "UpdateApplicationMessage$Description": "<p>A new description for the application.</p> <p>Default: If not specified, AWS Elastic Beanstalk does not update the description.</p>",
         "UpdateApplicationVersionMessage$Description": "<p>A new description for this version.</p>",
         "UpdateConfigurationTemplateMessage$Description": "<p>A new description for the configuration.</p>",
@@ -746,6 +807,7 @@
         "AbortEnvironmentUpdateMessage$EnvironmentName": "<p>This specifies the name of the environment with the in-progress update that you want to cancel.</p>",
         "ConfigurationSettingsDescription$EnvironmentName": "<p> If not <code>null</code>, the name of the environment for this configuration set. </p>",
         "CreateEnvironmentMessage$EnvironmentName": "<p>A unique name for the deployment environment. Used in the application URL.</p> <p>Constraint: Must be from 4 to 40 characters in length. The name can contain only letters, numbers, and hyphens. It cannot start or end with a hyphen. This name must be unique in your account. If the specified name already exists, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>Default: If the CNAME parameter is not specified, the environment name becomes part of the CNAME, and therefore part of the visible URL for your application.</p>",
+        "CreatePlatformVersionRequest$EnvironmentName": "<p>The name of the builder environment.</p>",
         "DeleteEnvironmentConfigurationMessage$EnvironmentName": "<p>The name of the environment to delete the draft configuration from.</p>",
         "DescribeConfigurationOptionsMessage$EnvironmentName": "<p>The name of the environment whose configuration options you want to describe.</p>",
         "DescribeConfigurationSettingsMessage$EnvironmentName": "<p>The name of the environment to describe.</p> <p> Condition: You must specify either this or a TemplateName, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>",
@@ -875,6 +937,12 @@
         "UpdateEnvironmentMessage$GroupName": "<p>The name of the group to which the target environment belongs. Specify a group name only if the environment's name is specified in an environment manifest and not with the environment name or environment ID parameters. See <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html\">Environment Manifest (env.yaml)</a> for details.</p>"
       }
     },
+    "ImageId": {
+      "base": null,
+      "refs": {
+        "CustomAmi$ImageId": "<p>THe ID of the image used to create the custom AMI.</p>"
+      }
+    },
     "IncludeDeleted": {
       "base": null,
       "refs": {
@@ -949,7 +1017,7 @@
     "Latency": {
       "base": "<p>Represents the average latency for the slowest X percent of requests over the last 10 seconds.</p>",
       "refs": {
-        "ApplicationMetrics$Latency": "<p>Represents the average latency for the slowest X percent of requests over the last 10 seconds. Latencies are in seconds with one milisecond resolution.</p>"
+        "ApplicationMetrics$Latency": "<p>Represents the average latency for the slowest X percent of requests over the last 10 seconds. Latencies are in seconds with one millisecond resolution.</p>"
       }
     },
     "LaunchConfiguration": {
@@ -975,6 +1043,16 @@
       "refs": {
       }
     },
+    "ListPlatformVersionsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListPlatformVersionsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "Listener": {
       "base": "<p>Describes the properties of a Listener for the LoadBalancer.</p>",
       "refs": {
@@ -984,7 +1062,7 @@
     "LoadAverage": {
       "base": null,
       "refs": {
-        "SystemStatus$LoadAverage": "<p>Load average in the last 1-minute and 5-minute periods. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-metrics.html#health-enhanced-metrics-os\">Operating System Metrics</a>.</p>"
+        "SystemStatus$LoadAverage": "<p>Load average in the last 1-minute, 5-minute, and 15-minute periods. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-metrics.html#health-enhanced-metrics-os\">Operating System Metrics</a>.</p>"
       }
     },
     "LoadAverageValue": {
@@ -1015,6 +1093,12 @@
       "base": null,
       "refs": {
         "LoadBalancerDescription$Listeners": "<p>A list of Listeners used by the LoadBalancer.</p>"
+      }
+    },
+    "Maintainer": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$Maintainer": "<p>Information about the maintainer of the platform.</p>"
       }
     },
     "ManagedAction": {
@@ -1129,6 +1213,20 @@
         "Deployment$DeploymentId": "<p>The ID of the deployment. This number increases by one each time that you deploy source code or change instance configuration settings.</p>"
       }
     },
+    "OperatingSystemName": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$OperatingSystemName": "<p>The operating system used by the platform.</p>",
+        "PlatformSummary$OperatingSystemName": "<p>The operating system used by the platform.</p>"
+      }
+    },
+    "OperatingSystemVersion": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$OperatingSystemVersion": "<p>The version of the operating system used by the platform.</p>",
+        "PlatformSummary$OperatingSystemVersion": "<p>The version of the operating system used by the platform.</p>"
+      }
+    },
     "OperationInProgressException": {
       "base": "<p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>",
       "refs": {
@@ -1180,6 +1278,150 @@
         "DescribeConfigurationOptionsMessage$Options": "<p>If specified, restricts the descriptions to only the specified options.</p>",
         "UpdateConfigurationTemplateMessage$OptionsToRemove": "<p>A list of configuration options to remove from the configuration set.</p> <p> Constraint: You can remove only <code>UserDefined</code> configuration options. </p>",
         "UpdateEnvironmentMessage$OptionsToRemove": "<p>A list of custom user-defined configuration options to remove from the configuration set for this environment.</p>"
+      }
+    },
+    "PlatformArn": {
+      "base": null,
+      "refs": {
+        "ConfigurationOptionsDescription$PlatformArn": "<p>The ARN of the custom platform.</p>",
+        "ConfigurationSettingsDescription$PlatformArn": "<p>The ARN of the custom platform.</p>",
+        "CreateConfigurationTemplateMessage$PlatformArn": "<p>The ARN of the custome platform.</p>",
+        "CreateEnvironmentMessage$PlatformArn": "<p>The ARN of the custom platform.</p>",
+        "DeletePlatformVersionRequest$PlatformArn": "<p>The ARN of the version of the custom platform.</p>",
+        "DescribeConfigurationOptionsMessage$PlatformArn": "<p>The ARN of the custom platform.</p>",
+        "DescribeEventsMessage$PlatformArn": "<p>The ARN of the version of the custom platform.</p>",
+        "DescribePlatformVersionRequest$PlatformArn": "<p>The ARN of the version of the platform.</p>",
+        "EnvironmentDescription$PlatformArn": "<p>The ARN of the custom platform.</p>",
+        "EventDescription$PlatformArn": "<p>The ARN of the custom platform.</p>",
+        "PlatformDescription$PlatformArn": "<p>The ARN of the platform.</p>",
+        "PlatformSummary$PlatformArn": "<p>The ARN of the platform.</p>",
+        "UpdateEnvironmentMessage$PlatformArn": "<p>The ARN of the platform, if used.</p>"
+      }
+    },
+    "PlatformCategory": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$PlatformCategory": "<p>The category of the platform.</p>",
+        "PlatformSummary$PlatformCategory": "<p>The category of platform.</p>"
+      }
+    },
+    "PlatformDescription": {
+      "base": "<p>Detailed information about a platform.</p>",
+      "refs": {
+        "DescribePlatformVersionResult$PlatformDescription": "<p>Detailed information about the version of the platform.</p>"
+      }
+    },
+    "PlatformFilter": {
+      "base": "<p>Specify criteria to restrict the results when listing custom platforms.</p> <p>The filter is evaluated as the expression:</p> <p> <code>Type</code> <code>Operator</code> <code>Values[i]</code> </p>",
+      "refs": {
+        "PlatformFilters$member": null
+      }
+    },
+    "PlatformFilterOperator": {
+      "base": null,
+      "refs": {
+        "PlatformFilter$Operator": "<p>The operator to apply to the <code>Type</code> with each of the <code>Values</code>.</p> <p> Valid Values: <code>=</code> (equal to) | <code>!=</code> (not equal to) | <code>&lt;</code> (less than) | <code>&lt;=</code> (less than or equal to) | <code>&gt;</code> (greater than) | <code>&gt;=</code> (greater than or equal to) | <code>contains</code> | <code>begins_with</code> | <code>ends_with</code> </p>"
+      }
+    },
+    "PlatformFilterType": {
+      "base": null,
+      "refs": {
+        "PlatformFilter$Type": "<p>The custom platform attribute to which the filter values are applied.</p> <p>Valid Values: <code>PlatformName</code> | <code>PlatformVersion</code> | <code>PlatformStatus</code> | <code>PlatformOwner</code> </p>"
+      }
+    },
+    "PlatformFilterValue": {
+      "base": null,
+      "refs": {
+        "PlatformFilterValueList$member": null
+      }
+    },
+    "PlatformFilterValueList": {
+      "base": null,
+      "refs": {
+        "PlatformFilter$Values": "<p>The list of values applied to the custom platform attribute.</p>"
+      }
+    },
+    "PlatformFilters": {
+      "base": null,
+      "refs": {
+        "ListPlatformVersionsRequest$Filters": "<p>List only the platforms where the platform member value relates to one of the supplied values.</p>"
+      }
+    },
+    "PlatformFramework": {
+      "base": "<p>A framework supported by the custom platform.</p>",
+      "refs": {
+        "PlatformFrameworks$member": null
+      }
+    },
+    "PlatformFrameworks": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$Frameworks": "<p>The frameworks supported by the platform.</p>"
+      }
+    },
+    "PlatformMaxRecords": {
+      "base": null,
+      "refs": {
+        "ListPlatformVersionsRequest$MaxRecords": "<p>The maximum number of platform values returned in one call.</p>"
+      }
+    },
+    "PlatformName": {
+      "base": null,
+      "refs": {
+        "CreatePlatformVersionRequest$PlatformName": "<p>The name of your custom platform.</p>",
+        "PlatformDescription$PlatformName": "<p>The name of the platform.</p>"
+      }
+    },
+    "PlatformOwner": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$PlatformOwner": "<p>The AWS account ID of the person who created the platform.</p>",
+        "PlatformSummary$PlatformOwner": "<p>The AWS account ID of the person who created the platform.</p>"
+      }
+    },
+    "PlatformProgrammingLanguage": {
+      "base": "<p>A programming language supported by the platform.</p>",
+      "refs": {
+        "PlatformProgrammingLanguages$member": null
+      }
+    },
+    "PlatformProgrammingLanguages": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$ProgrammingLanguages": "<p>The programming languages supported by the platform.</p>"
+      }
+    },
+    "PlatformStatus": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$PlatformStatus": "<p>The status of the platform.</p>",
+        "PlatformSummary$PlatformStatus": "<p>The status of the platform. You can create an environment from the platform once it is ready.</p>"
+      }
+    },
+    "PlatformSummary": {
+      "base": "<p>Detailed information about a platform.</p>",
+      "refs": {
+        "CreatePlatformVersionResult$PlatformSummary": "<p>Detailed information about the new version of the custom platform.</p>",
+        "DeletePlatformVersionResult$PlatformSummary": "<p>Detailed information about the version of the custom platform.</p>",
+        "PlatformSummaryList$member": null
+      }
+    },
+    "PlatformSummaryList": {
+      "base": null,
+      "refs": {
+        "ListPlatformVersionsResult$PlatformSummaryList": "<p>Detailed information about the platforms.</p>"
+      }
+    },
+    "PlatformVersion": {
+      "base": null,
+      "refs": {
+        "CreatePlatformVersionRequest$PlatformVersion": "<p>The number, such as 1.0.2, for the new platform version.</p>",
+        "PlatformDescription$PlatformVersion": "<p>The version of the platform.</p>"
+      }
+    },
+    "PlatformVersionStillReferencedException": {
+      "base": "<p>You cannot delete the platform version because there are still environments running on it.</p>",
+      "refs": {
       }
     },
     "Queue": {
@@ -1285,7 +1527,8 @@
       "base": "<p>The bucket and key of an item stored in Amazon S3.</p>",
       "refs": {
         "ApplicationVersionDescription$SourceBundle": "<p>The storage location of the application version's source bundle in Amazon S3.</p>",
-        "CreateApplicationVersionMessage$SourceBundle": "<p>The Amazon S3 bucket and key that identify the location of the source bundle for this version.</p> <note> <p>The Amazon S3 bucket must be in the same region as the environment.</p> </note> <p>Specify a source bundle in S3 or a commit in an AWS CodeCommit repository (with <code>SourceBuildInformation</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>"
+        "CreateApplicationVersionMessage$SourceBundle": "<p>The Amazon S3 bucket and key that identify the location of the source bundle for this version.</p> <note> <p>The Amazon S3 bucket must be in the same region as the environment.</p> </note> <p>Specify a source bundle in S3 or a commit in an AWS CodeCommit repository (with <code>SourceBuildInformation</code>), but not both. If neither <code>SourceBundle</code> nor <code>SourceBuildInformation</code> are provided, Elastic Beanstalk uses a sample application.</p>",
+        "CreatePlatformVersionRequest$PlatformDefinitionBundle": "<p>The location of the platform definition archive in Amazon S3.</p>"
       }
     },
     "S3LocationNotInServiceRegionException": {
@@ -1329,9 +1572,10 @@
         "ConfigurationOptionsDescription$SolutionStackName": "<p>The name of the solution stack these configuration options belong to.</p>",
         "ConfigurationSettingsDescription$SolutionStackName": "<p>The name of the solution stack this configuration set uses.</p>",
         "CreateConfigurationTemplateMessage$SolutionStackName": "<p>The name of the solution stack used by this configuration. The solution stack specifies the operating system, architecture, and application server for a configuration template. It determines the set of configuration options as well as the possible and default values.</p> <p> Use <a>ListAvailableSolutionStacks</a> to obtain a list of available solution stacks. </p> <p> A solution stack name or a source configuration parameter must be specified, otherwise AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>If a solution stack name is not specified and the source configuration parameter is specified, AWS Elastic Beanstalk uses the same solution stack as the source configuration template.</p>",
-        "CreateEnvironmentMessage$SolutionStackName": "<p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p> <p> Condition: You must specify either this or a <code>TemplateName</code>, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns a <code>MissingRequiredParameter</code> error. </p>",
+        "CreateEnvironmentMessage$SolutionStackName": "<p>This is an alternative to specifying a template name. If specified, AWS Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack.</p>",
         "DescribeConfigurationOptionsMessage$SolutionStackName": "<p>The name of the solution stack whose configuration options you want to describe.</p>",
         "EnvironmentDescription$SolutionStackName": "<p> The name of the <code>SolutionStack</code> deployed with this environment. </p>",
+        "PlatformDescription$SolutionStackName": "<p>The name of the solution stack used by the platform.</p>",
         "SolutionStackDescription$SolutionStackName": "<p>The name of the solution stack.</p>",
         "UpdateEnvironmentMessage$SolutionStackName": "<p>This specifies the platform version that the environment will run after the environment is updated.</p>"
       }
@@ -1411,12 +1655,42 @@
         "ManagedActionHistoryItem$ActionId": "<p>A unique identifier for the managed action.</p>",
         "ManagedActionHistoryItem$ActionDescription": "<p>A description of the managed action.</p>",
         "ManagedActionHistoryItem$FailureDescription": "<p>If the action failed, a description of the failure.</p>",
+        "PlatformFramework$Name": "<p>The name of the framework.</p>",
+        "PlatformFramework$Version": "<p>The version of the framework.</p>",
+        "PlatformProgrammingLanguage$Name": "<p>The name of the programming language.</p>",
+        "PlatformProgrammingLanguage$Version": "<p>The version of the programming language.</p>",
         "Queue$Name": "<p>The name of the queue.</p>",
         "Queue$URL": "<p>The URL of the queue.</p>",
         "SingleInstanceHealth$HealthStatus": "<p>Returns the health status of the specified instance. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>",
         "SingleInstanceHealth$Color": "<p>Represents the color indicator that gives you information about the health of the EC2 instance. For more information, see <a href=\"http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html\">Health Colors and Statuses</a>.</p>",
         "SingleInstanceHealth$AvailabilityZone": "<p>The availability zone in which the instance runs.</p>",
         "SingleInstanceHealth$InstanceType": "<p>The instance's type.</p>"
+      }
+    },
+    "SupportedAddon": {
+      "base": null,
+      "refs": {
+        "SupportedAddonList$member": null
+      }
+    },
+    "SupportedAddonList": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$SupportedAddonList": "<p>The additions supported by the platform.</p>",
+        "PlatformSummary$SupportedAddonList": "<p>The additions associated with the platform.</p>"
+      }
+    },
+    "SupportedTier": {
+      "base": null,
+      "refs": {
+        "SupportedTierList$member": null
+      }
+    },
+    "SupportedTierList": {
+      "base": null,
+      "refs": {
+        "PlatformDescription$SupportedTierList": "<p>The tiers supported by the platform.</p>",
+        "PlatformSummary$SupportedTierList": "<p>The tiers in which the platform runs.</p>"
       }
     },
     "SwapEnvironmentCNAMEsMessage": {
@@ -1497,7 +1771,9 @@
         "ApplicationVersionDescriptionsMessage$NextToken": "<p>For a paginated request, the token that you can pass in a subsequent request to get the next page.</p>",
         "DescribeApplicationVersionsMessage$NextToken": "<p>Specify a next token to retrieve the next page in a paginated request.</p>",
         "DescribeEventsMessage$NextToken": "<p>Pagination token. If specified, the events return the next batch of results.</p>",
-        "EventDescriptionsMessage$NextToken": "<p> If returned, this indicates that there are more results to obtain. Use this token in the next <a>DescribeEvents</a> call to get the next batch of events. </p>"
+        "EventDescriptionsMessage$NextToken": "<p> If returned, this indicates that there are more results to obtain. Use this token in the next <a>DescribeEvents</a> call to get the next batch of events. </p>",
+        "ListPlatformVersionsRequest$NextToken": "<p>The starting index into the remaining list of platforms. Use the <code>NextToken</code> value from a previous <code>ListPlatformVersion</code> call.</p>",
+        "ListPlatformVersionsResult$NextToken": "<p>The starting index into the remaining list of platforms. if this value is not <code>null</code>, you can use it in a subsequent <code>ListPlatformVersion</code> call. </p>"
       }
     },
     "TooManyApplicationVersionsException": {
@@ -1522,6 +1798,11 @@
     },
     "TooManyEnvironmentsException": {
       "base": "<p>The specified account has reached its limit of environments.</p>",
+      "refs": {
+      }
+    },
+    "TooManyPlatformsException": {
+      "base": "<p>You have exceeded the maximum number of allowed platforms associated with the account.</p>",
       "refs": {
       }
     },
@@ -1563,7 +1844,8 @@
         "ApplicationDescription$DateUpdated": "<p>The date when the application was last modified.</p>",
         "ApplicationVersionDescription$DateUpdated": "<p>The last modified date of the application version.</p>",
         "ConfigurationSettingsDescription$DateUpdated": "<p>The date (in UTC time) when this configuration set was last modified.</p>",
-        "EnvironmentDescription$DateUpdated": "<p>The last modified date for this environment.</p>"
+        "EnvironmentDescription$DateUpdated": "<p>The last modified date for this environment.</p>",
+        "PlatformDescription$DateUpdated": "<p>The date when the platform was last updated.</p>"
       }
     },
     "UpdateEnvironmentMessage": {
@@ -1634,6 +1916,12 @@
       "refs": {
         "ApplicationDescription$Versions": "<p>The names of the versions for this application.</p>",
         "DescribeApplicationVersionsMessage$VersionLabels": "<p>Specify a version label to show a specific application version.</p>"
+      }
+    },
+    "VirtualizationType": {
+      "base": null,
+      "refs": {
+        "CustomAmi$VirtualizationType": "<p>The type of virtualization used to create the custom AMI.</p>"
       }
     }
   }

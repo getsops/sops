@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleDatabaseMigrationService_AddTagsToResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -48,11 +44,7 @@ func ExampleDatabaseMigrationService_AddTagsToResource() {
 }
 
 func ExampleDatabaseMigrationService_CreateEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -91,11 +83,7 @@ func ExampleDatabaseMigrationService_CreateEndpoint() {
 }
 
 func ExampleDatabaseMigrationService_CreateReplicationInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -137,11 +125,7 @@ func ExampleDatabaseMigrationService_CreateReplicationInstance() {
 }
 
 func ExampleDatabaseMigrationService_CreateReplicationSubnetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -174,11 +158,7 @@ func ExampleDatabaseMigrationService_CreateReplicationSubnetGroup() {
 }
 
 func ExampleDatabaseMigrationService_CreateReplicationTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -213,11 +193,7 @@ func ExampleDatabaseMigrationService_CreateReplicationTask() {
 }
 
 func ExampleDatabaseMigrationService_DeleteCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -238,11 +214,7 @@ func ExampleDatabaseMigrationService_DeleteCertificate() {
 }
 
 func ExampleDatabaseMigrationService_DeleteEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -263,11 +235,7 @@ func ExampleDatabaseMigrationService_DeleteEndpoint() {
 }
 
 func ExampleDatabaseMigrationService_DeleteReplicationInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -288,11 +256,7 @@ func ExampleDatabaseMigrationService_DeleteReplicationInstance() {
 }
 
 func ExampleDatabaseMigrationService_DeleteReplicationSubnetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -313,11 +277,7 @@ func ExampleDatabaseMigrationService_DeleteReplicationSubnetGroup() {
 }
 
 func ExampleDatabaseMigrationService_DeleteReplicationTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -338,11 +298,7 @@ func ExampleDatabaseMigrationService_DeleteReplicationTask() {
 }
 
 func ExampleDatabaseMigrationService_DescribeAccountAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -361,11 +317,7 @@ func ExampleDatabaseMigrationService_DescribeAccountAttributes() {
 }
 
 func ExampleDatabaseMigrationService_DescribeCertificates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -397,11 +349,7 @@ func ExampleDatabaseMigrationService_DescribeCertificates() {
 }
 
 func ExampleDatabaseMigrationService_DescribeConnections() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -433,11 +381,7 @@ func ExampleDatabaseMigrationService_DescribeConnections() {
 }
 
 func ExampleDatabaseMigrationService_DescribeEndpointTypes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -469,11 +413,7 @@ func ExampleDatabaseMigrationService_DescribeEndpointTypes() {
 }
 
 func ExampleDatabaseMigrationService_DescribeEndpoints() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -505,11 +445,7 @@ func ExampleDatabaseMigrationService_DescribeEndpoints() {
 }
 
 func ExampleDatabaseMigrationService_DescribeOrderableReplicationInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -531,11 +467,7 @@ func ExampleDatabaseMigrationService_DescribeOrderableReplicationInstances() {
 }
 
 func ExampleDatabaseMigrationService_DescribeRefreshSchemasStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -556,11 +488,7 @@ func ExampleDatabaseMigrationService_DescribeRefreshSchemasStatus() {
 }
 
 func ExampleDatabaseMigrationService_DescribeReplicationInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -592,11 +520,7 @@ func ExampleDatabaseMigrationService_DescribeReplicationInstances() {
 }
 
 func ExampleDatabaseMigrationService_DescribeReplicationSubnetGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -628,11 +552,7 @@ func ExampleDatabaseMigrationService_DescribeReplicationSubnetGroups() {
 }
 
 func ExampleDatabaseMigrationService_DescribeReplicationTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -664,11 +584,7 @@ func ExampleDatabaseMigrationService_DescribeReplicationTasks() {
 }
 
 func ExampleDatabaseMigrationService_DescribeSchemas() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -691,11 +607,7 @@ func ExampleDatabaseMigrationService_DescribeSchemas() {
 }
 
 func ExampleDatabaseMigrationService_DescribeTableStatistics() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -718,11 +630,7 @@ func ExampleDatabaseMigrationService_DescribeTableStatistics() {
 }
 
 func ExampleDatabaseMigrationService_ImportCertificate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -745,11 +653,7 @@ func ExampleDatabaseMigrationService_ImportCertificate() {
 }
 
 func ExampleDatabaseMigrationService_ListTagsForResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -770,11 +674,7 @@ func ExampleDatabaseMigrationService_ListTagsForResource() {
 }
 
 func ExampleDatabaseMigrationService_ModifyEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -806,11 +706,7 @@ func ExampleDatabaseMigrationService_ModifyEndpoint() {
 }
 
 func ExampleDatabaseMigrationService_ModifyReplicationInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -844,11 +740,7 @@ func ExampleDatabaseMigrationService_ModifyReplicationInstance() {
 }
 
 func ExampleDatabaseMigrationService_ModifyReplicationSubnetGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -874,11 +766,7 @@ func ExampleDatabaseMigrationService_ModifyReplicationSubnetGroup() {
 }
 
 func ExampleDatabaseMigrationService_ModifyReplicationTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -904,11 +792,7 @@ func ExampleDatabaseMigrationService_ModifyReplicationTask() {
 }
 
 func ExampleDatabaseMigrationService_RefreshSchemas() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -930,11 +814,7 @@ func ExampleDatabaseMigrationService_RefreshSchemas() {
 }
 
 func ExampleDatabaseMigrationService_RemoveTagsFromResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -959,11 +839,7 @@ func ExampleDatabaseMigrationService_RemoveTagsFromResource() {
 }
 
 func ExampleDatabaseMigrationService_StartReplicationTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -986,11 +862,7 @@ func ExampleDatabaseMigrationService_StartReplicationTask() {
 }
 
 func ExampleDatabaseMigrationService_StopReplicationTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 
@@ -1011,11 +883,7 @@ func ExampleDatabaseMigrationService_StopReplicationTask() {
 }
 
 func ExampleDatabaseMigrationService_TestConnection() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := databasemigrationservice.New(sess)
 

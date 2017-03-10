@@ -3,6 +3,8 @@
 package os
 
 import (
+	"errors"
+
 	"github.com/gopherjs/gopherjs/js"
 )
 
@@ -24,3 +26,7 @@ func init() {
 }
 
 func runtime_beforeExit() {}
+
+func executable() (string, error) {
+	return "", errors.New("Executable not implemented for GOARCH=js")
+}

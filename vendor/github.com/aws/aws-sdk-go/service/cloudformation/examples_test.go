@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleCloudFormation_CancelUpdateStack() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleCloudFormation_CancelUpdateStack() {
 }
 
 func ExampleCloudFormation_ContinueUpdateRollback() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -71,11 +63,7 @@ func ExampleCloudFormation_ContinueUpdateRollback() {
 }
 
 func ExampleCloudFormation_CreateChangeSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -131,11 +119,7 @@ func ExampleCloudFormation_CreateChangeSet() {
 }
 
 func ExampleCloudFormation_CreateStack() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -191,11 +175,7 @@ func ExampleCloudFormation_CreateStack() {
 }
 
 func ExampleCloudFormation_DeleteChangeSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -217,11 +197,7 @@ func ExampleCloudFormation_DeleteChangeSet() {
 }
 
 func ExampleCloudFormation_DeleteStack() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -247,11 +223,7 @@ func ExampleCloudFormation_DeleteStack() {
 }
 
 func ExampleCloudFormation_DescribeAccountLimits() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -272,11 +244,7 @@ func ExampleCloudFormation_DescribeAccountLimits() {
 }
 
 func ExampleCloudFormation_DescribeChangeSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -299,11 +267,7 @@ func ExampleCloudFormation_DescribeChangeSet() {
 }
 
 func ExampleCloudFormation_DescribeStackEvents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -325,11 +289,7 @@ func ExampleCloudFormation_DescribeStackEvents() {
 }
 
 func ExampleCloudFormation_DescribeStackResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -351,11 +311,7 @@ func ExampleCloudFormation_DescribeStackResource() {
 }
 
 func ExampleCloudFormation_DescribeStackResources() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -378,11 +334,7 @@ func ExampleCloudFormation_DescribeStackResources() {
 }
 
 func ExampleCloudFormation_DescribeStacks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -404,11 +356,7 @@ func ExampleCloudFormation_DescribeStacks() {
 }
 
 func ExampleCloudFormation_EstimateTemplateCost() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -438,11 +386,7 @@ func ExampleCloudFormation_EstimateTemplateCost() {
 }
 
 func ExampleCloudFormation_ExecuteChangeSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -464,11 +408,7 @@ func ExampleCloudFormation_ExecuteChangeSet() {
 }
 
 func ExampleCloudFormation_GetStackPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -489,11 +429,7 @@ func ExampleCloudFormation_GetStackPolicy() {
 }
 
 func ExampleCloudFormation_GetTemplate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -516,11 +452,7 @@ func ExampleCloudFormation_GetTemplate() {
 }
 
 func ExampleCloudFormation_GetTemplateSummary() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -543,11 +475,7 @@ func ExampleCloudFormation_GetTemplateSummary() {
 }
 
 func ExampleCloudFormation_ListChangeSets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -569,11 +497,7 @@ func ExampleCloudFormation_ListChangeSets() {
 }
 
 func ExampleCloudFormation_ListExports() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -594,11 +518,7 @@ func ExampleCloudFormation_ListExports() {
 }
 
 func ExampleCloudFormation_ListImports() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -620,11 +540,7 @@ func ExampleCloudFormation_ListImports() {
 }
 
 func ExampleCloudFormation_ListStackResources() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -646,11 +562,7 @@ func ExampleCloudFormation_ListStackResources() {
 }
 
 func ExampleCloudFormation_ListStacks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -675,11 +587,7 @@ func ExampleCloudFormation_ListStacks() {
 }
 
 func ExampleCloudFormation_SetStackPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -702,11 +610,7 @@ func ExampleCloudFormation_SetStackPolicy() {
 }
 
 func ExampleCloudFormation_SignalResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -730,11 +634,7 @@ func ExampleCloudFormation_SignalResource() {
 }
 
 func ExampleCloudFormation_UpdateStack() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 
@@ -790,11 +690,7 @@ func ExampleCloudFormation_UpdateStack() {
 }
 
 func ExampleCloudFormation_ValidateTemplate() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudformation.New(sess)
 

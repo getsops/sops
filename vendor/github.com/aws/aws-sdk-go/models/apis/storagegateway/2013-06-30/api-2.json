@@ -1036,7 +1036,8 @@
         "KMSKey":{"shape":"KMSKey"},
         "Role":{"shape":"Role"},
         "LocationARN":{"shape":"LocationARN"},
-        "DefaultStorageClass":{"shape":"StorageClass"}
+        "DefaultStorageClass":{"shape":"StorageClass"},
+        "ClientList":{"shape":"FileShareClientList"}
       }
     },
     "CreateNFSFileShareOutput":{
@@ -1653,6 +1654,12 @@
       "max":10,
       "min":1
     },
+    "FileShareClientList":{
+      "type":"list",
+      "member":{"shape":"IPV4AddressCIDR"},
+      "max":100,
+      "min":1
+    },
     "FileShareId":{
       "type":"string",
       "max":30,
@@ -1734,6 +1741,10 @@
       "type":"integer",
       "max":23,
       "min":0
+    },
+    "IPV4AddressCIDR":{
+      "type":"string",
+      "pattern":"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))?$"
     },
     "Initiator":{
       "type":"string",
@@ -1944,7 +1955,8 @@
         "Path":{"shape":"Path"},
         "Role":{"shape":"Role"},
         "LocationARN":{"shape":"LocationARN"},
-        "DefaultStorageClass":{"shape":"StorageClass"}
+        "DefaultStorageClass":{"shape":"StorageClass"},
+        "ClientList":{"shape":"FileShareClientList"}
       }
     },
     "NFSFileShareInfoList":{
@@ -2390,7 +2402,8 @@
         "KMSEncrypted":{"shape":"Boolean"},
         "KMSKey":{"shape":"KMSKey"},
         "NFSFileShareDefaults":{"shape":"NFSFileShareDefaults"},
-        "DefaultStorageClass":{"shape":"StorageClass"}
+        "DefaultStorageClass":{"shape":"StorageClass"},
+        "ClientList":{"shape":"FileShareClientList"}
       }
     },
     "UpdateNFSFileShareOutput":{

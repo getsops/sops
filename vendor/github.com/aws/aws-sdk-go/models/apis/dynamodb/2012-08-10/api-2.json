@@ -111,6 +111,19 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "DescribeTimeToLive":{
+      "name":"DescribeTimeToLive",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeTimeToLiveInput"},
+      "output":{"shape":"DescribeTimeToLiveOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "GetItem":{
       "name":"GetItem",
       "http":{
@@ -246,6 +259,21 @@
       },
       "input":{"shape":"UpdateTableInput"},
       "output":{"shape":"UpdateTableOutput"},
+      "errors":[
+        {"shape":"ResourceInUseException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "UpdateTimeToLive":{
+      "name":"UpdateTimeToLive",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateTimeToLiveInput"},
+      "output":{"shape":"UpdateTimeToLiveOutput"},
       "errors":[
         {"shape":"ResourceInUseException"},
         {"shape":"ResourceNotFoundException"},
@@ -565,6 +593,19 @@
       "type":"structure",
       "members":{
         "Table":{"shape":"TableDescription"}
+      }
+    },
+    "DescribeTimeToLiveInput":{
+      "type":"structure",
+      "required":["TableName"],
+      "members":{
+        "TableName":{"shape":"TableName"}
+      }
+    },
+    "DescribeTimeToLiveOutput":{
+      "type":"structure",
+      "members":{
+        "TimeToLiveDescription":{"shape":"TimeToLiveDescription"}
       }
     },
     "ErrorMessage":{"type":"string"},
@@ -1228,6 +1269,39 @@
       "max":256,
       "min":0
     },
+    "TimeToLiveAttributeName":{
+      "type":"string",
+      "max":255,
+      "min":1
+    },
+    "TimeToLiveDescription":{
+      "type":"structure",
+      "members":{
+        "TimeToLiveStatus":{"shape":"TimeToLiveStatus"},
+        "AttributeName":{"shape":"TimeToLiveAttributeName"}
+      }
+    },
+    "TimeToLiveEnabled":{"type":"boolean"},
+    "TimeToLiveSpecification":{
+      "type":"structure",
+      "required":[
+        "Enabled",
+        "AttributeName"
+      ],
+      "members":{
+        "Enabled":{"shape":"TimeToLiveEnabled"},
+        "AttributeName":{"shape":"TimeToLiveAttributeName"}
+      }
+    },
+    "TimeToLiveStatus":{
+      "type":"string",
+      "enum":[
+        "ENABLING",
+        "DISABLING",
+        "ENABLED",
+        "DISABLED"
+      ]
+    },
     "UntagResourceInput":{
       "type":"structure",
       "required":[
@@ -1295,6 +1369,23 @@
       "type":"structure",
       "members":{
         "TableDescription":{"shape":"TableDescription"}
+      }
+    },
+    "UpdateTimeToLiveInput":{
+      "type":"structure",
+      "required":[
+        "TableName",
+        "TimeToLiveSpecification"
+      ],
+      "members":{
+        "TableName":{"shape":"TableName"},
+        "TimeToLiveSpecification":{"shape":"TimeToLiveSpecification"}
+      }
+    },
+    "UpdateTimeToLiveOutput":{
+      "type":"structure",
+      "members":{
+        "TimeToLiveSpecification":{"shape":"TimeToLiveSpecification"}
       }
     },
     "WriteRequest":{

@@ -43,6 +43,10 @@ func Cos(x float64) float64 {
 	return math.Call("cos", x).Float()
 }
 
+func Cosh(x float64) float64 {
+	return math.Call("cosh", x).Float()
+}
+
 func Dim(x, y float64) float64 {
 	return dim(x, y)
 }
@@ -172,6 +176,10 @@ func Sin(x float64) float64 {
 	return math.Call("sin", x).Float()
 }
 
+func Sinh(x float64) float64 {
+	return math.Call("sinh", x).Float()
+}
+
 func Sincos(x float64) (sin, cos float64) {
 	return Sin(x), Cos(x)
 }
@@ -182,6 +190,10 @@ func Sqrt(x float64) float64 {
 
 func Tan(x float64) float64 {
 	return math.Call("tan", x).Float()
+}
+
+func Tanh(x float64) float64 {
+	return math.Call("tanh", x).Float()
 }
 
 func Trunc(x float64) float64 {

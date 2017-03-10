@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExamplePinpoint_CreateCampaign() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -155,11 +151,7 @@ func ExamplePinpoint_CreateCampaign() {
 }
 
 func ExamplePinpoint_CreateImportJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -190,11 +182,7 @@ func ExamplePinpoint_CreateImportJob() {
 }
 
 func ExamplePinpoint_CreateSegment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -282,11 +270,7 @@ func ExamplePinpoint_CreateSegment() {
 }
 
 func ExamplePinpoint_DeleteApnsChannel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -307,11 +291,7 @@ func ExamplePinpoint_DeleteApnsChannel() {
 }
 
 func ExamplePinpoint_DeleteCampaign() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -333,11 +313,7 @@ func ExamplePinpoint_DeleteCampaign() {
 }
 
 func ExamplePinpoint_DeleteGcmChannel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -358,11 +334,7 @@ func ExamplePinpoint_DeleteGcmChannel() {
 }
 
 func ExamplePinpoint_DeleteSegment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -384,11 +356,7 @@ func ExamplePinpoint_DeleteSegment() {
 }
 
 func ExamplePinpoint_GetApnsChannel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -409,11 +377,7 @@ func ExamplePinpoint_GetApnsChannel() {
 }
 
 func ExamplePinpoint_GetApplicationSettings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -434,11 +398,7 @@ func ExamplePinpoint_GetApplicationSettings() {
 }
 
 func ExamplePinpoint_GetCampaign() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -460,11 +420,7 @@ func ExamplePinpoint_GetCampaign() {
 }
 
 func ExamplePinpoint_GetCampaignActivities() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -488,11 +444,7 @@ func ExamplePinpoint_GetCampaignActivities() {
 }
 
 func ExamplePinpoint_GetCampaignVersion() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -515,11 +467,7 @@ func ExamplePinpoint_GetCampaignVersion() {
 }
 
 func ExamplePinpoint_GetCampaignVersions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -543,11 +491,7 @@ func ExamplePinpoint_GetCampaignVersions() {
 }
 
 func ExamplePinpoint_GetCampaigns() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -570,11 +514,7 @@ func ExamplePinpoint_GetCampaigns() {
 }
 
 func ExamplePinpoint_GetEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -596,11 +536,7 @@ func ExamplePinpoint_GetEndpoint() {
 }
 
 func ExamplePinpoint_GetGcmChannel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -621,11 +557,7 @@ func ExamplePinpoint_GetGcmChannel() {
 }
 
 func ExamplePinpoint_GetImportJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -647,11 +579,7 @@ func ExamplePinpoint_GetImportJob() {
 }
 
 func ExamplePinpoint_GetImportJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -674,11 +602,7 @@ func ExamplePinpoint_GetImportJobs() {
 }
 
 func ExamplePinpoint_GetSegment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -700,11 +624,7 @@ func ExamplePinpoint_GetSegment() {
 }
 
 func ExamplePinpoint_GetSegmentImportJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -728,11 +648,7 @@ func ExamplePinpoint_GetSegmentImportJobs() {
 }
 
 func ExamplePinpoint_GetSegmentVersion() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -755,11 +671,7 @@ func ExamplePinpoint_GetSegmentVersion() {
 }
 
 func ExamplePinpoint_GetSegmentVersions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -783,11 +695,7 @@ func ExamplePinpoint_GetSegmentVersions() {
 }
 
 func ExamplePinpoint_GetSegments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -810,11 +718,7 @@ func ExamplePinpoint_GetSegments() {
 }
 
 func ExamplePinpoint_UpdateApnsChannel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -839,11 +743,7 @@ func ExamplePinpoint_UpdateApnsChannel() {
 }
 
 func ExamplePinpoint_UpdateApplicationSettings() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -874,11 +774,7 @@ func ExamplePinpoint_UpdateApplicationSettings() {
 }
 
 func ExamplePinpoint_UpdateCampaign() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -1014,11 +910,7 @@ func ExamplePinpoint_UpdateCampaign() {
 }
 
 func ExamplePinpoint_UpdateEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -1087,11 +979,7 @@ func ExamplePinpoint_UpdateEndpoint() {
 }
 
 func ExamplePinpoint_UpdateEndpointsBatch() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -1165,11 +1053,7 @@ func ExamplePinpoint_UpdateEndpointsBatch() {
 }
 
 func ExamplePinpoint_UpdateGcmChannel() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 
@@ -1193,11 +1077,7 @@ func ExamplePinpoint_UpdateGcmChannel() {
 }
 
 func ExamplePinpoint_UpdateSegment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := pinpoint.New(sess)
 

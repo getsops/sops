@@ -2530,6 +2530,7 @@
         "EvalDecision":{"shape":"PolicyEvaluationDecisionType"},
         "MatchedStatements":{"shape":"StatementListType"},
         "MissingContextValues":{"shape":"ContextKeyNamesResultListType"},
+        "OrganizationsDecisionDetail":{"shape":"OrganizationsDecisionDetail"},
         "EvalDecisionDetails":{"shape":"EvalDecisionDetailsType"},
         "ResourceSpecificResults":{"shape":"ResourceSpecificResultListType"}
       }
@@ -3511,6 +3512,12 @@
       "type":"string",
       "max":255,
       "min":1
+    },
+    "OrganizationsDecisionDetail":{
+      "type":"structure",
+      "members":{
+        "AllowedByOrganizations":{"shape":"booleanType"}
+      }
     },
     "PasswordPolicy":{
       "type":"structure",

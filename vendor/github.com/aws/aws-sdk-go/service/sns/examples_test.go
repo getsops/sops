@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSNS_AddPermission() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -50,11 +46,7 @@ func ExampleSNS_AddPermission() {
 }
 
 func ExampleSNS_CheckIfPhoneNumberIsOptedOut() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -75,11 +67,7 @@ func ExampleSNS_CheckIfPhoneNumberIsOptedOut() {
 }
 
 func ExampleSNS_ConfirmSubscription() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -102,11 +90,7 @@ func ExampleSNS_ConfirmSubscription() {
 }
 
 func ExampleSNS_CreatePlatformApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -132,11 +116,7 @@ func ExampleSNS_CreatePlatformApplication() {
 }
 
 func ExampleSNS_CreatePlatformEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -163,11 +143,7 @@ func ExampleSNS_CreatePlatformEndpoint() {
 }
 
 func ExampleSNS_CreateTopic() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -188,11 +164,7 @@ func ExampleSNS_CreateTopic() {
 }
 
 func ExampleSNS_DeleteEndpoint() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -213,11 +185,7 @@ func ExampleSNS_DeleteEndpoint() {
 }
 
 func ExampleSNS_DeletePlatformApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -238,11 +206,7 @@ func ExampleSNS_DeletePlatformApplication() {
 }
 
 func ExampleSNS_DeleteTopic() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -263,11 +227,7 @@ func ExampleSNS_DeleteTopic() {
 }
 
 func ExampleSNS_GetEndpointAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -288,11 +248,7 @@ func ExampleSNS_GetEndpointAttributes() {
 }
 
 func ExampleSNS_GetPlatformApplicationAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -313,11 +269,7 @@ func ExampleSNS_GetPlatformApplicationAttributes() {
 }
 
 func ExampleSNS_GetSMSAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -341,11 +293,7 @@ func ExampleSNS_GetSMSAttributes() {
 }
 
 func ExampleSNS_GetSubscriptionAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -366,11 +314,7 @@ func ExampleSNS_GetSubscriptionAttributes() {
 }
 
 func ExampleSNS_GetTopicAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -391,11 +335,7 @@ func ExampleSNS_GetTopicAttributes() {
 }
 
 func ExampleSNS_ListEndpointsByPlatformApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -417,11 +357,7 @@ func ExampleSNS_ListEndpointsByPlatformApplication() {
 }
 
 func ExampleSNS_ListPhoneNumbersOptedOut() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -442,11 +378,7 @@ func ExampleSNS_ListPhoneNumbersOptedOut() {
 }
 
 func ExampleSNS_ListPlatformApplications() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -467,11 +399,7 @@ func ExampleSNS_ListPlatformApplications() {
 }
 
 func ExampleSNS_ListSubscriptions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -492,11 +420,7 @@ func ExampleSNS_ListSubscriptions() {
 }
 
 func ExampleSNS_ListSubscriptionsByTopic() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -518,11 +442,7 @@ func ExampleSNS_ListSubscriptionsByTopic() {
 }
 
 func ExampleSNS_ListTopics() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -543,11 +463,7 @@ func ExampleSNS_ListTopics() {
 }
 
 func ExampleSNS_OptInPhoneNumber() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -568,11 +484,7 @@ func ExampleSNS_OptInPhoneNumber() {
 }
 
 func ExampleSNS_Publish() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -606,11 +518,7 @@ func ExampleSNS_Publish() {
 }
 
 func ExampleSNS_RemovePermission() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -632,11 +540,7 @@ func ExampleSNS_RemovePermission() {
 }
 
 func ExampleSNS_SetEndpointAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -661,11 +565,7 @@ func ExampleSNS_SetEndpointAttributes() {
 }
 
 func ExampleSNS_SetPlatformApplicationAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -690,11 +590,7 @@ func ExampleSNS_SetPlatformApplicationAttributes() {
 }
 
 func ExampleSNS_SetSMSAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -718,11 +614,7 @@ func ExampleSNS_SetSMSAttributes() {
 }
 
 func ExampleSNS_SetSubscriptionAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -745,11 +637,7 @@ func ExampleSNS_SetSubscriptionAttributes() {
 }
 
 func ExampleSNS_SetTopicAttributes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -772,11 +660,7 @@ func ExampleSNS_SetTopicAttributes() {
 }
 
 func ExampleSNS_Subscribe() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 
@@ -799,11 +683,7 @@ func ExampleSNS_Subscribe() {
 }
 
 func ExampleSNS_Unsubscribe() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := sns.New(sess)
 

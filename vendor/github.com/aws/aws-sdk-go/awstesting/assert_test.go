@@ -62,3 +62,28 @@ func TestAssertXML(t *testing.T) {
 		}
 	}
 }
+
+func TestAssertQuery(t *testing.T) {
+	cases := []struct {
+		e, a    string
+		asserts bool
+	}{
+		{
+			e:       `Action=OperationName&Version=2014-01-01&Foo=val1&Bar=val2`,
+			a:       `Action=OperationName&Version=2014-01-01&Foo=val2&Bar=val3`,
+			asserts: false,
+		},
+		{
+			e:       `Action=OperationName&Version=2014-01-01&Foo=val1&Bar=val2`,
+			a:       `Action=OperationName&Version=2014-01-01&Foo=val1&Bar=val2`,
+			asserts: true,
+		},
+	}
+
+	for i, c := range cases {
+		mockT := &testing.T{}
+		if awstesting.AssertQuery(mockT, c.e, c.a) != c.asserts {
+			t.Error("Assert Query result was not expected.", i)
+		}
+	}
+}

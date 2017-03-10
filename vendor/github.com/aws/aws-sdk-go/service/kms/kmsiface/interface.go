@@ -45,7 +45,7 @@ import (
 //        // mock response/functionality
 //    }
 //
-//    TestMyFunc(t *testing.T) {
+//    func TestMyFunc(t *testing.T) {
 //        // Setup Test
 //        mockSvc := &mockKMSClient{}
 //
@@ -163,6 +163,10 @@ type KMSAPI interface {
 
 	ListKeysPages(*kms.ListKeysInput, func(*kms.ListKeysOutput, bool) bool) error
 
+	ListResourceTagsRequest(*kms.ListResourceTagsInput) (*request.Request, *kms.ListResourceTagsOutput)
+
+	ListResourceTags(*kms.ListResourceTagsInput) (*kms.ListResourceTagsOutput, error)
+
 	ListRetirableGrantsRequest(*kms.ListRetirableGrantsInput) (*request.Request, *kms.ListGrantsResponse)
 
 	ListRetirableGrants(*kms.ListRetirableGrantsInput) (*kms.ListGrantsResponse, error)
@@ -186,6 +190,14 @@ type KMSAPI interface {
 	ScheduleKeyDeletionRequest(*kms.ScheduleKeyDeletionInput) (*request.Request, *kms.ScheduleKeyDeletionOutput)
 
 	ScheduleKeyDeletion(*kms.ScheduleKeyDeletionInput) (*kms.ScheduleKeyDeletionOutput, error)
+
+	TagResourceRequest(*kms.TagResourceInput) (*request.Request, *kms.TagResourceOutput)
+
+	TagResource(*kms.TagResourceInput) (*kms.TagResourceOutput, error)
+
+	UntagResourceRequest(*kms.UntagResourceInput) (*request.Request, *kms.UntagResourceOutput)
+
+	UntagResource(*kms.UntagResourceInput) (*kms.UntagResourceOutput, error)
 
 	UpdateAliasRequest(*kms.UpdateAliasInput) (*request.Request, *kms.UpdateAliasOutput)
 

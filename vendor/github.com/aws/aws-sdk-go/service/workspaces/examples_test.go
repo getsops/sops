@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleWorkSpaces_CreateTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -48,11 +44,7 @@ func ExampleWorkSpaces_CreateTags() {
 }
 
 func ExampleWorkSpaces_CreateWorkspaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -94,11 +86,7 @@ func ExampleWorkSpaces_CreateWorkspaces() {
 }
 
 func ExampleWorkSpaces_DeleteTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -123,11 +111,7 @@ func ExampleWorkSpaces_DeleteTags() {
 }
 
 func ExampleWorkSpaces_DescribeTags() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -148,11 +132,7 @@ func ExampleWorkSpaces_DescribeTags() {
 }
 
 func ExampleWorkSpaces_DescribeWorkspaceBundles() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -178,11 +158,7 @@ func ExampleWorkSpaces_DescribeWorkspaceBundles() {
 }
 
 func ExampleWorkSpaces_DescribeWorkspaceDirectories() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -207,11 +183,7 @@ func ExampleWorkSpaces_DescribeWorkspaceDirectories() {
 }
 
 func ExampleWorkSpaces_DescribeWorkspaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -240,11 +212,7 @@ func ExampleWorkSpaces_DescribeWorkspaces() {
 }
 
 func ExampleWorkSpaces_DescribeWorkspacesConnectionStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -269,11 +237,7 @@ func ExampleWorkSpaces_DescribeWorkspacesConnectionStatus() {
 }
 
 func ExampleWorkSpaces_ModifyWorkspaceProperties() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -298,11 +262,7 @@ func ExampleWorkSpaces_ModifyWorkspaceProperties() {
 }
 
 func ExampleWorkSpaces_RebootWorkspaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -328,11 +288,7 @@ func ExampleWorkSpaces_RebootWorkspaces() {
 }
 
 func ExampleWorkSpaces_RebuildWorkspaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -358,11 +314,7 @@ func ExampleWorkSpaces_RebuildWorkspaces() {
 }
 
 func ExampleWorkSpaces_StartWorkspaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -388,11 +340,7 @@ func ExampleWorkSpaces_StartWorkspaces() {
 }
 
 func ExampleWorkSpaces_StopWorkspaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 
@@ -418,11 +366,7 @@ func ExampleWorkSpaces_StopWorkspaces() {
 }
 
 func ExampleWorkSpaces_TerminateWorkspaces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := workspaces.New(sess)
 

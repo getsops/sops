@@ -69,12 +69,12 @@ func (c *Batch) CancelJobRequest(input *CancelJobInput) (req *request.Request, o
 // API operation CancelJob for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/CancelJob
@@ -160,12 +160,12 @@ func (c *Batch) CreateComputeEnvironmentRequest(input *CreateComputeEnvironmentI
 // API operation CreateComputeEnvironment for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/CreateComputeEnvironment
@@ -238,12 +238,12 @@ func (c *Batch) CreateJobQueueRequest(input *CreateJobQueueInput) (req *request.
 // API operation CreateJobQueue for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/CreateJobQueue
@@ -312,12 +312,12 @@ func (c *Batch) DeleteComputeEnvironmentRequest(input *DeleteComputeEnvironmentI
 // API operation DeleteComputeEnvironment for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/DeleteComputeEnvironment
@@ -387,12 +387,12 @@ func (c *Batch) DeleteJobQueueRequest(input *DeleteJobQueueInput) (req *request.
 // API operation DeleteJobQueue for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/DeleteJobQueue
@@ -457,12 +457,12 @@ func (c *Batch) DeregisterJobDefinitionRequest(input *DeregisterJobDefinitionInp
 // API operation DeregisterJobDefinition for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/DeregisterJobDefinition
@@ -531,12 +531,12 @@ func (c *Batch) DescribeComputeEnvironmentsRequest(input *DescribeComputeEnviron
 // API operation DescribeComputeEnvironments for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/DescribeComputeEnvironments
@@ -602,12 +602,12 @@ func (c *Batch) DescribeJobDefinitionsRequest(input *DescribeJobDefinitionsInput
 // API operation DescribeJobDefinitions for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/DescribeJobDefinitions
@@ -672,12 +672,12 @@ func (c *Batch) DescribeJobQueuesRequest(input *DescribeJobQueuesInput) (req *re
 // API operation DescribeJobQueues for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/DescribeJobQueues
@@ -742,12 +742,12 @@ func (c *Batch) DescribeJobsRequest(input *DescribeJobsInput) (req *request.Requ
 // API operation DescribeJobs for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/DescribeJobs
@@ -813,12 +813,12 @@ func (c *Batch) ListJobsRequest(input *ListJobsInput) (req *request.Request, out
 // API operation ListJobs for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/ListJobs
@@ -883,12 +883,12 @@ func (c *Batch) RegisterJobDefinitionRequest(input *RegisterJobDefinitionInput) 
 // API operation RegisterJobDefinition for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/RegisterJobDefinition
@@ -954,12 +954,12 @@ func (c *Batch) SubmitJobRequest(input *SubmitJobInput) (req *request.Request, o
 // API operation SubmitJob for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/SubmitJob
@@ -1026,12 +1026,12 @@ func (c *Batch) TerminateJobRequest(input *TerminateJobInput) (req *request.Requ
 // API operation TerminateJob for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/TerminateJob
@@ -1096,12 +1096,12 @@ func (c *Batch) UpdateComputeEnvironmentRequest(input *UpdateComputeEnvironmentI
 // API operation UpdateComputeEnvironment for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/UpdateComputeEnvironment
@@ -1166,12 +1166,12 @@ func (c *Batch) UpdateJobQueueRequest(input *UpdateJobQueueInput) (req *request.
 // API operation UpdateJobQueue for usage and error information.
 //
 // Returned Error Codes:
-//   * ClientException
+//   * ErrCodeClientException "ClientException"
 //   These errors are usually caused by a client action, such as using an action
 //   or resource on behalf of a user that doesn't have permission to use the action
 //   or resource, or specifying an identifier that is not valid.
 //
-//   * ServerException
+//   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server issue.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/batch-2016-08-10/UpdateJobQueue

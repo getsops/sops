@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleCodeDeploy_AddTagsToOnPremisesInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -51,11 +47,7 @@ func ExampleCodeDeploy_AddTagsToOnPremisesInstances() {
 }
 
 func ExampleCodeDeploy_BatchGetApplicationRevisions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -93,11 +85,7 @@ func ExampleCodeDeploy_BatchGetApplicationRevisions() {
 }
 
 func ExampleCodeDeploy_BatchGetApplications() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -121,11 +109,7 @@ func ExampleCodeDeploy_BatchGetApplications() {
 }
 
 func ExampleCodeDeploy_BatchGetDeploymentGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -150,11 +134,7 @@ func ExampleCodeDeploy_BatchGetDeploymentGroups() {
 }
 
 func ExampleCodeDeploy_BatchGetDeploymentInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -179,11 +159,7 @@ func ExampleCodeDeploy_BatchGetDeploymentInstances() {
 }
 
 func ExampleCodeDeploy_BatchGetDeployments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -207,11 +183,7 @@ func ExampleCodeDeploy_BatchGetDeployments() {
 }
 
 func ExampleCodeDeploy_BatchGetOnPremisesInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -234,12 +206,29 @@ func ExampleCodeDeploy_BatchGetOnPremisesInstances() {
 	fmt.Println(resp)
 }
 
-func ExampleCodeDeploy_CreateApplication() {
-	sess, err := session.NewSession()
+func ExampleCodeDeploy_ContinueDeployment() {
+	sess := session.Must(session.NewSession())
+
+	svc := codedeploy.New(sess)
+
+	params := &codedeploy.ContinueDeploymentInput{
+		DeploymentId: aws.String("DeploymentId"),
+	}
+	resp, err := svc.ContinueDeployment(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleCodeDeploy_CreateApplication() {
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -260,11 +249,7 @@ func ExampleCodeDeploy_CreateApplication() {
 }
 
 func ExampleCodeDeploy_CreateDeployment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -295,6 +280,20 @@ func ExampleCodeDeploy_CreateDeployment() {
 				Version:    aws.String("VersionId"),
 			},
 		},
+		TargetInstances: &codedeploy.TargetInstances{
+			AutoScalingGroups: []*string{
+				aws.String("AutoScalingGroupName"), // Required
+				// More values...
+			},
+			TagFilters: []*codedeploy.EC2TagFilter{
+				{ // Required
+					Key:   aws.String("Key"),
+					Type:  aws.String("EC2TagFilterType"),
+					Value: aws.String("Value"),
+				},
+				// More values...
+			},
+		},
 		UpdateOutdatedInstancesOnly: aws.Bool(true),
 	}
 	resp, err := svc.CreateDeployment(params)
@@ -311,11 +310,7 @@ func ExampleCodeDeploy_CreateDeployment() {
 }
 
 func ExampleCodeDeploy_CreateDeploymentConfig() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -340,11 +335,7 @@ func ExampleCodeDeploy_CreateDeploymentConfig() {
 }
 
 func ExampleCodeDeploy_CreateDeploymentGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -373,7 +364,24 @@ func ExampleCodeDeploy_CreateDeploymentGroup() {
 			aws.String("AutoScalingGroupName"), // Required
 			// More values...
 		},
+		BlueGreenDeploymentConfiguration: &codedeploy.BlueGreenDeploymentConfiguration{
+			DeploymentReadyOption: &codedeploy.DeploymentReadyOption{
+				ActionOnTimeout:   aws.String("DeploymentReadyAction"),
+				WaitTimeInMinutes: aws.Int64(1),
+			},
+			GreenFleetProvisioningOption: &codedeploy.GreenFleetProvisioningOption{
+				Action: aws.String("GreenFleetProvisioningAction"),
+			},
+			TerminateBlueInstancesOnDeploymentSuccess: &codedeploy.BlueInstanceTerminationOption{
+				Action: aws.String("InstanceAction"),
+				TerminationWaitTimeInMinutes: aws.Int64(1),
+			},
+		},
 		DeploymentConfigName: aws.String("DeploymentConfigName"),
+		DeploymentStyle: &codedeploy.DeploymentStyle{
+			DeploymentOption: aws.String("DeploymentOption"),
+			DeploymentType:   aws.String("DeploymentType"),
+		},
 		Ec2TagFilters: []*codedeploy.EC2TagFilter{
 			{ // Required
 				Key:   aws.String("Key"),
@@ -381,6 +389,14 @@ func ExampleCodeDeploy_CreateDeploymentGroup() {
 				Value: aws.String("Value"),
 			},
 			// More values...
+		},
+		LoadBalancerInfo: &codedeploy.LoadBalancerInfo{
+			ElbInfoList: []*codedeploy.ELBInfo{
+				{ // Required
+					Name: aws.String("ELBName"),
+				},
+				// More values...
+			},
 		},
 		OnPremisesInstanceTagFilters: []*codedeploy.TagFilter{
 			{ // Required
@@ -416,11 +432,7 @@ func ExampleCodeDeploy_CreateDeploymentGroup() {
 }
 
 func ExampleCodeDeploy_DeleteApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -441,11 +453,7 @@ func ExampleCodeDeploy_DeleteApplication() {
 }
 
 func ExampleCodeDeploy_DeleteDeploymentConfig() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -466,11 +474,7 @@ func ExampleCodeDeploy_DeleteDeploymentConfig() {
 }
 
 func ExampleCodeDeploy_DeleteDeploymentGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -492,11 +496,7 @@ func ExampleCodeDeploy_DeleteDeploymentGroup() {
 }
 
 func ExampleCodeDeploy_DeregisterOnPremisesInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -517,11 +517,7 @@ func ExampleCodeDeploy_DeregisterOnPremisesInstance() {
 }
 
 func ExampleCodeDeploy_GetApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -542,11 +538,7 @@ func ExampleCodeDeploy_GetApplication() {
 }
 
 func ExampleCodeDeploy_GetApplicationRevision() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -581,11 +573,7 @@ func ExampleCodeDeploy_GetApplicationRevision() {
 }
 
 func ExampleCodeDeploy_GetDeployment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -606,11 +594,7 @@ func ExampleCodeDeploy_GetDeployment() {
 }
 
 func ExampleCodeDeploy_GetDeploymentConfig() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -631,11 +615,7 @@ func ExampleCodeDeploy_GetDeploymentConfig() {
 }
 
 func ExampleCodeDeploy_GetDeploymentGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -657,11 +637,7 @@ func ExampleCodeDeploy_GetDeploymentGroup() {
 }
 
 func ExampleCodeDeploy_GetDeploymentInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -683,11 +659,7 @@ func ExampleCodeDeploy_GetDeploymentInstance() {
 }
 
 func ExampleCodeDeploy_GetOnPremisesInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -708,11 +680,7 @@ func ExampleCodeDeploy_GetOnPremisesInstance() {
 }
 
 func ExampleCodeDeploy_ListApplicationRevisions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -739,11 +707,7 @@ func ExampleCodeDeploy_ListApplicationRevisions() {
 }
 
 func ExampleCodeDeploy_ListApplications() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -764,11 +728,7 @@ func ExampleCodeDeploy_ListApplications() {
 }
 
 func ExampleCodeDeploy_ListDeploymentConfigs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -789,11 +749,7 @@ func ExampleCodeDeploy_ListDeploymentConfigs() {
 }
 
 func ExampleCodeDeploy_ListDeploymentGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -815,11 +771,7 @@ func ExampleCodeDeploy_ListDeploymentGroups() {
 }
 
 func ExampleCodeDeploy_ListDeploymentInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -827,6 +779,10 @@ func ExampleCodeDeploy_ListDeploymentInstances() {
 		DeploymentId: aws.String("DeploymentId"), // Required
 		InstanceStatusFilter: []*string{
 			aws.String("InstanceStatus"), // Required
+			// More values...
+		},
+		InstanceTypeFilter: []*string{
+			aws.String("InstanceType"), // Required
 			// More values...
 		},
 		NextToken: aws.String("NextToken"),
@@ -845,11 +801,7 @@ func ExampleCodeDeploy_ListDeploymentInstances() {
 }
 
 func ExampleCodeDeploy_ListDeployments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -880,11 +832,7 @@ func ExampleCodeDeploy_ListDeployments() {
 }
 
 func ExampleCodeDeploy_ListOnPremisesInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -914,11 +862,7 @@ func ExampleCodeDeploy_ListOnPremisesInstances() {
 }
 
 func ExampleCodeDeploy_RegisterApplicationRevision() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -954,11 +898,7 @@ func ExampleCodeDeploy_RegisterApplicationRevision() {
 }
 
 func ExampleCodeDeploy_RegisterOnPremisesInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -981,11 +921,7 @@ func ExampleCodeDeploy_RegisterOnPremisesInstance() {
 }
 
 func ExampleCodeDeploy_RemoveTagsFromOnPremisesInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -1015,12 +951,29 @@ func ExampleCodeDeploy_RemoveTagsFromOnPremisesInstances() {
 	fmt.Println(resp)
 }
 
-func ExampleCodeDeploy_StopDeployment() {
-	sess, err := session.NewSession()
+func ExampleCodeDeploy_SkipWaitTimeForInstanceTermination() {
+	sess := session.Must(session.NewSession())
+
+	svc := codedeploy.New(sess)
+
+	params := &codedeploy.SkipWaitTimeForInstanceTerminationInput{
+		DeploymentId: aws.String("DeploymentId"),
+	}
+	resp, err := svc.SkipWaitTimeForInstanceTermination(params)
+
 	if err != nil {
-		fmt.Println("failed to create session,", err)
+		// Print the error, cast err to awserr.Error to get the Code and
+		// Message from an error.
+		fmt.Println(err.Error())
 		return
 	}
+
+	// Pretty-print the response data.
+	fmt.Println(resp)
+}
+
+func ExampleCodeDeploy_StopDeployment() {
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -1042,11 +995,7 @@ func ExampleCodeDeploy_StopDeployment() {
 }
 
 func ExampleCodeDeploy_UpdateApplication() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -1068,11 +1017,7 @@ func ExampleCodeDeploy_UpdateApplication() {
 }
 
 func ExampleCodeDeploy_UpdateDeploymentGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := codedeploy.New(sess)
 
@@ -1100,7 +1045,24 @@ func ExampleCodeDeploy_UpdateDeploymentGroup() {
 			aws.String("AutoScalingGroupName"), // Required
 			// More values...
 		},
+		BlueGreenDeploymentConfiguration: &codedeploy.BlueGreenDeploymentConfiguration{
+			DeploymentReadyOption: &codedeploy.DeploymentReadyOption{
+				ActionOnTimeout:   aws.String("DeploymentReadyAction"),
+				WaitTimeInMinutes: aws.Int64(1),
+			},
+			GreenFleetProvisioningOption: &codedeploy.GreenFleetProvisioningOption{
+				Action: aws.String("GreenFleetProvisioningAction"),
+			},
+			TerminateBlueInstancesOnDeploymentSuccess: &codedeploy.BlueInstanceTerminationOption{
+				Action: aws.String("InstanceAction"),
+				TerminationWaitTimeInMinutes: aws.Int64(1),
+			},
+		},
 		DeploymentConfigName: aws.String("DeploymentConfigName"),
+		DeploymentStyle: &codedeploy.DeploymentStyle{
+			DeploymentOption: aws.String("DeploymentOption"),
+			DeploymentType:   aws.String("DeploymentType"),
+		},
 		Ec2TagFilters: []*codedeploy.EC2TagFilter{
 			{ // Required
 				Key:   aws.String("Key"),
@@ -1108,6 +1070,14 @@ func ExampleCodeDeploy_UpdateDeploymentGroup() {
 				Value: aws.String("Value"),
 			},
 			// More values...
+		},
+		LoadBalancerInfo: &codedeploy.LoadBalancerInfo{
+			ElbInfoList: []*codedeploy.ELBInfo{
+				{ // Required
+					Name: aws.String("ELBName"),
+				},
+				// More values...
+			},
 		},
 		NewDeploymentGroupName: aws.String("DeploymentGroupName"),
 		OnPremisesInstanceTagFilters: []*codedeploy.TagFilter{

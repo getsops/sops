@@ -78,7 +78,8 @@
         {"shape":"InvalidArnException"},
         {"shape":"UnsupportedOperationException"},
         {"shape":"KMSInternalException"},
-        {"shape":"LimitExceededException"}
+        {"shape":"LimitExceededException"},
+        {"shape":"TagException"}
       ]
     },
     "Decrypt":{
@@ -412,6 +413,21 @@
         {"shape":"InvalidMarkerException"}
       ]
     },
+    "ListResourceTags":{
+      "name":"ListResourceTags",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListResourceTagsRequest"},
+      "output":{"shape":"ListResourceTagsResponse"},
+      "errors":[
+        {"shape":"KMSInternalException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InvalidArnException"},
+        {"shape":"InvalidMarkerException"}
+      ]
+    },
     "ListRetirableGrants":{
       "name":"ListRetirableGrants",
       "http":{
@@ -512,6 +528,37 @@
         {"shape":"DependencyTimeoutException"},
         {"shape":"KMSInternalException"},
         {"shape":"KMSInvalidStateException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "errors":[
+        {"shape":"KMSInternalException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InvalidArnException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"TagException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "errors":[
+        {"shape":"KMSInternalException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InvalidArnException"},
+        {"shape":"KMSInvalidStateException"},
+        {"shape":"TagException"}
       ]
     },
     "UpdateAlias":{
@@ -644,7 +691,8 @@
         "Description":{"shape":"DescriptionType"},
         "KeyUsage":{"shape":"KeyUsageType"},
         "Origin":{"shape":"OriginType"},
-        "BypassPolicyLockoutSafetyCheck":{"shape":"BooleanType"}
+        "BypassPolicyLockoutSafetyCheck":{"shape":"BooleanType"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateKeyResponse":{
@@ -1060,7 +1108,7 @@
     },
     "KeyIdType":{
       "type":"string",
-      "max":256,
+      "max":2048,
       "min":1
     },
     "KeyList":{
@@ -1185,6 +1233,23 @@
       "type":"structure",
       "members":{
         "Keys":{"shape":"KeyList"},
+        "NextMarker":{"shape":"MarkerType"},
+        "Truncated":{"shape":"BooleanType"}
+      }
+    },
+    "ListResourceTagsRequest":{
+      "type":"structure",
+      "required":["KeyId"],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "Limit":{"shape":"LimitType"},
+        "Marker":{"shape":"MarkerType"}
+      }
+    },
+    "ListResourceTagsResponse":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"TagList"},
         "NextMarker":{"shape":"MarkerType"},
         "Truncated":{"shape":"BooleanType"}
       }
@@ -1332,12 +1397,70 @@
         "DeletionDate":{"shape":"DateType"}
       }
     },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "TagKey",
+        "TagValue"
+      ],
+      "members":{
+        "TagKey":{"shape":"TagKeyType"},
+        "TagValue":{"shape":"TagValueType"}
+      }
+    },
+    "TagException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessageType"}
+      },
+      "exception":true
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKeyType"}
+    },
+    "TagKeyType":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "KeyId",
+        "Tags"
+      ],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagValueType":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
     "UnsupportedOperationException":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessageType"}
       },
       "exception":true
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "KeyId",
+        "TagKeys"
+      ],
+      "members":{
+        "KeyId":{"shape":"KeyIdType"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
     },
     "UpdateAliasRequest":{
       "type":"structure",

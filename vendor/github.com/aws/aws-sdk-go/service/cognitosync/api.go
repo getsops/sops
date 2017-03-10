@@ -74,23 +74,23 @@ func (c *CognitoSync) BulkPublishRequest(input *BulkPublishInput) (req *request.
 // API operation BulkPublish for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * DuplicateRequestException
+//   * ErrCodeDuplicateRequestException "DuplicateRequestException"
 //   An exception thrown when there is an IN_PROGRESS bulk publish operation for
 //   the given identity pool.
 //
-//   * AlreadyStreamedException
+//   * ErrCodeAlreadyStreamedException "AlreadyStreamedException"
 //   An exception thrown when a bulk publish operation is requested less than
 //   24 hours after a previous bulk publish operation completed successfully.
 //
@@ -162,22 +162,22 @@ func (c *CognitoSync) DeleteDatasetRequest(input *DeleteDatasetInput) (req *requ
 // API operation DeleteDataset for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
-//   * ResourceConflictException
+//   * ErrCodeResourceConflictException "ResourceConflictException"
 //   Thrown if an update can't be applied because the resource was changed by
 //   another call and this would result in a conflict.
 //
@@ -249,19 +249,19 @@ func (c *CognitoSync) DescribeDatasetRequest(input *DescribeDatasetInput) (req *
 // API operation DescribeDataset for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeDataset
@@ -330,19 +330,19 @@ func (c *CognitoSync) DescribeIdentityPoolUsageRequest(input *DescribeIdentityPo
 // API operation DescribeIdentityPoolUsage for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityPoolUsage
@@ -411,19 +411,19 @@ func (c *CognitoSync) DescribeIdentityUsageRequest(input *DescribeIdentityUsageI
 // API operation DescribeIdentityUsage for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/DescribeIdentityUsage
@@ -491,16 +491,16 @@ func (c *CognitoSync) GetBulkPublishDetailsRequest(input *GetBulkPublishDetailsI
 // API operation GetBulkPublishDetails for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetBulkPublishDetails
@@ -569,19 +569,19 @@ func (c *CognitoSync) GetCognitoEventsRequest(input *GetCognitoEventsInput) (req
 // API operation GetCognitoEvents for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetCognitoEvents
@@ -649,19 +649,19 @@ func (c *CognitoSync) GetIdentityPoolConfigurationRequest(input *GetIdentityPool
 // API operation GetIdentityPoolConfiguration for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/GetIdentityPoolConfiguration
@@ -732,16 +732,16 @@ func (c *CognitoSync) ListDatasetsRequest(input *ListDatasetsInput) (req *reques
 // API operation ListDatasets for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListDatasets
@@ -810,16 +810,16 @@ func (c *CognitoSync) ListIdentityPoolUsageRequest(input *ListIdentityPoolUsageI
 // API operation ListIdentityPoolUsage for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListIdentityPoolUsage
@@ -891,16 +891,16 @@ func (c *CognitoSync) ListRecordsRequest(input *ListRecordsInput) (req *request.
 // API operation ListRecords for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/ListRecords
@@ -968,22 +968,21 @@ func (c *CognitoSync) RegisterDeviceRequest(input *RegisterDeviceInput) (req *re
 // API operation RegisterDevice for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * InvalidConfigurationException
-
+//   * ErrCodeInvalidConfigurationException "InvalidConfigurationException"
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/RegisterDevice
@@ -1056,19 +1055,19 @@ func (c *CognitoSync) SetCognitoEventsRequest(input *SetCognitoEventsInput) (req
 // API operation SetCognitoEvents for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetCognitoEvents
@@ -1136,22 +1135,22 @@ func (c *CognitoSync) SetIdentityPoolConfigurationRequest(input *SetIdentityPool
 // API operation SetIdentityPoolConfiguration for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
-//   * ConcurrentModificationException
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
 //   Thrown if there are parallel requests to modify a resource.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SetIdentityPoolConfiguration
@@ -1220,22 +1219,21 @@ func (c *CognitoSync) SubscribeToDatasetRequest(input *SubscribeToDatasetInput) 
 // API operation SubscribeToDataset for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * InvalidConfigurationException
-
+//   * ErrCodeInvalidConfigurationException "InvalidConfigurationException"
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/SubscribeToDataset
@@ -1304,22 +1302,21 @@ func (c *CognitoSync) UnsubscribeFromDatasetRequest(input *UnsubscribeFromDatase
 // API operation UnsubscribeFromDataset for usage and error information.
 //
 // Returned Error Codes:
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
-//   * InvalidConfigurationException
-
+//   * ErrCodeInvalidConfigurationException "InvalidConfigurationException"
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UnsubscribeFromDataset
@@ -1399,32 +1396,32 @@ func (c *CognitoSync) UpdateRecordsRequest(input *UpdateRecordsInput) (req *requ
 // API operation UpdateRecords for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   Thrown when a request parameter does not comply with the associated constraints.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   Thrown when the limit on the number of objects or operations has been exceeded.
 //
-//   * NotAuthorizedException
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
 //   Thrown when a user is not authorized to access the requested resource.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   Thrown if the resource doesn't exist.
 //
-//   * ResourceConflictException
+//   * ErrCodeResourceConflictException "ResourceConflictException"
 //   Thrown if an update can't be applied because the resource was changed by
 //   another call and this would result in a conflict.
 //
-//   * InvalidLambdaFunctionOutputException
+//   * ErrCodeInvalidLambdaFunctionOutputException "InvalidLambdaFunctionOutputException"
 //   The AWS Lambda function returned invalid output or an exception.
 //
-//   * LambdaThrottledException
+//   * ErrCodeLambdaThrottledException "LambdaThrottledException"
 //   AWS Lambda throttled your account, please contact AWS Support
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   Thrown if the request is throttled.
 //
-//   * InternalErrorException
+//   * ErrCodeInternalErrorException "InternalErrorException"
 //   Indicates an internal service error.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/cognito-sync-2014-06-30/UpdateRecords

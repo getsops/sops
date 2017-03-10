@@ -65,14 +65,14 @@ func (c *CloudSearch) BuildSuggestersRequest(input *BuildSuggestersInput) (req *
 // API operation BuildSuggesters for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -137,14 +137,14 @@ func (c *CloudSearch) CreateDomainRequest(input *CreateDomainInput) (req *reques
 // API operation CreateDomain for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
 func (c *CloudSearch) CreateDomain(input *CreateDomainInput) (*CreateDomainOutput, error) {
@@ -209,20 +209,20 @@ func (c *CloudSearch) DefineAnalysisSchemeRequest(input *DefineAnalysisSchemeInp
 // API operation DefineAnalysisScheme for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -288,20 +288,20 @@ func (c *CloudSearch) DefineExpressionRequest(input *DefineExpressionInput) (req
 // API operation DefineExpression for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -371,20 +371,20 @@ func (c *CloudSearch) DefineIndexFieldRequest(input *DefineIndexFieldInput) (req
 // API operation DefineIndexField for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -452,20 +452,20 @@ func (c *CloudSearch) DefineSuggesterRequest(input *DefineSuggesterInput) (req *
 // API operation DefineSuggester for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -530,17 +530,17 @@ func (c *CloudSearch) DeleteAnalysisSchemeRequest(input *DeleteAnalysisSchemeInp
 // API operation DeleteAnalysisScheme for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -606,10 +606,10 @@ func (c *CloudSearch) DeleteDomainRequest(input *DeleteDomainInput) (req *reques
 // API operation DeleteDomain for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
@@ -674,17 +674,17 @@ func (c *CloudSearch) DeleteExpressionRequest(input *DeleteExpressionInput) (req
 // API operation DeleteExpression for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -749,17 +749,17 @@ func (c *CloudSearch) DeleteIndexFieldRequest(input *DeleteIndexFieldInput) (req
 // API operation DeleteIndexField for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -824,17 +824,17 @@ func (c *CloudSearch) DeleteSuggesterRequest(input *DeleteSuggesterInput) (req *
 // API operation DeleteSuggester for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -903,14 +903,14 @@ func (c *CloudSearch) DescribeAnalysisSchemesRequest(input *DescribeAnalysisSche
 // API operation DescribeAnalysisSchemes for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -977,24 +977,24 @@ func (c *CloudSearch) DescribeAvailabilityOptionsRequest(input *DescribeAvailabi
 // API operation DescribeAvailabilityOptions for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
-//   * DisabledAction
+//   * ErrCodeDisabledOperationException "DisabledAction"
 //   The request was rejected because it attempted an operation which is not enabled.
 //
 func (c *CloudSearch) DescribeAvailabilityOptions(input *DescribeAvailabilityOptionsInput) (*DescribeAvailabilityOptionsOutput, error) {
@@ -1061,10 +1061,10 @@ func (c *CloudSearch) DescribeDomainsRequest(input *DescribeDomainsInput) (req *
 // API operation DescribeDomains for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
@@ -1132,14 +1132,14 @@ func (c *CloudSearch) DescribeExpressionsRequest(input *DescribeExpressionsInput
 // API operation DescribeExpressions for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -1207,14 +1207,14 @@ func (c *CloudSearch) DescribeIndexFieldsRequest(input *DescribeIndexFieldsInput
 // API operation DescribeIndexFields for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -1280,14 +1280,14 @@ func (c *CloudSearch) DescribeScalingParametersRequest(input *DescribeScalingPar
 // API operation DescribeScalingParameters for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -1355,14 +1355,14 @@ func (c *CloudSearch) DescribeServiceAccessPoliciesRequest(input *DescribeServic
 // API operation DescribeServiceAccessPolicies for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -1431,14 +1431,14 @@ func (c *CloudSearch) DescribeSuggestersRequest(input *DescribeSuggestersInput) 
 // API operation DescribeSuggesters for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -1503,14 +1503,14 @@ func (c *CloudSearch) IndexDocumentsRequest(input *IndexDocumentsInput) (req *re
 // API operation IndexDocuments for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
@@ -1573,7 +1573,7 @@ func (c *CloudSearch) ListDomainNamesRequest(input *ListDomainNamesInput) (req *
 // API operation ListDomainNames for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
 func (c *CloudSearch) ListDomainNames(input *ListDomainNamesInput) (*ListDomainNamesOutput, error) {
@@ -1640,24 +1640,24 @@ func (c *CloudSearch) UpdateAvailabilityOptionsRequest(input *UpdateAvailability
 // API operation UpdateAvailabilityOptions for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
-//   * DisabledAction
+//   * ErrCodeDisabledOperationException "DisabledAction"
 //   The request was rejected because it attempted an operation which is not enabled.
 //
 func (c *CloudSearch) UpdateAvailabilityOptions(input *UpdateAvailabilityOptionsInput) (*UpdateAvailabilityOptionsOutput, error) {
@@ -1726,21 +1726,21 @@ func (c *CloudSearch) UpdateScalingParametersRequest(input *UpdateScalingParamet
 // API operation UpdateScalingParameters for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
 func (c *CloudSearch) UpdateScalingParameters(input *UpdateScalingParametersInput) (*UpdateScalingParametersOutput, error) {
@@ -1804,21 +1804,21 @@ func (c *CloudSearch) UpdateServiceAccessPoliciesRequest(input *UpdateServiceAcc
 // API operation UpdateServiceAccessPolicies for usage and error information.
 //
 // Returned Error Codes:
-//   * BaseException
+//   * ErrCodeBaseException "BaseException"
 //   An error occurred while processing the request.
 //
-//   * InternalException
+//   * ErrCodeInternalException "InternalException"
 //   An internal error occurred while processing the request. If this problem
 //   persists, report an issue from the Service Health Dashboard (http://status.aws.amazon.com/).
 //
-//   * LimitExceeded
+//   * ErrCodeLimitExceededException "LimitExceeded"
 //   The request was rejected because a resource limit has already been met.
 //
-//   * ResourceNotFound
+//   * ErrCodeResourceNotFoundException "ResourceNotFound"
 //   The request was rejected because it attempted to reference a resource that
 //   does not exist.
 //
-//   * InvalidType
+//   * ErrCodeInvalidTypeException "InvalidType"
 //   The request was rejected because it specified an invalid type definition.
 //
 func (c *CloudSearch) UpdateServiceAccessPolicies(input *UpdateServiceAccessPoliciesInput) (*UpdateServiceAccessPoliciesOutput, error) {
