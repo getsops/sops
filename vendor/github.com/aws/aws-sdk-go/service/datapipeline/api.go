@@ -75,17 +75,17 @@ func (c *DataPipeline) ActivatePipelineRequest(input *ActivatePipelineInput) (re
 // API operation ActivatePipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -152,19 +152,19 @@ func (c *DataPipeline) AddTagsRequest(input *AddTagsInput) (req *request.Request
 // API operation AddTags for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/AddTags
@@ -230,10 +230,10 @@ func (c *DataPipeline) CreatePipelineRequest(input *CreatePipelineInput) (req *r
 // API operation CreatePipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -305,17 +305,17 @@ func (c *DataPipeline) DeactivatePipelineRequest(input *DeactivatePipelineInput)
 // API operation DeactivatePipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -391,14 +391,14 @@ func (c *DataPipeline) DeletePipelineRequest(input *DeletePipelineInput) (req *r
 // API operation DeletePipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -473,19 +473,19 @@ func (c *DataPipeline) DescribeObjectsRequest(input *DescribeObjectsInput) (req 
 // API operation DescribeObjects for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/DescribeObjects
@@ -583,17 +583,17 @@ func (c *DataPipeline) DescribePipelinesRequest(input *DescribePipelinesInput) (
 // API operation DescribePipelines for usage and error information.
 //
 // Returned Error Codes:
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -662,22 +662,22 @@ func (c *DataPipeline) EvaluateExpressionRequest(input *EvaluateExpressionInput)
 // API operation EvaluateExpression for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * TaskNotFoundException
+//   * ErrCodeTaskNotFoundException "TaskNotFoundException"
 //   The specified task was not found.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/EvaluateExpression
@@ -743,19 +743,19 @@ func (c *DataPipeline) GetPipelineDefinitionRequest(input *GetPipelineDefinition
 // API operation GetPipelineDefinition for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/GetPipelineDefinition
@@ -827,10 +827,10 @@ func (c *DataPipeline) ListPipelinesRequest(input *ListPipelinesInput) (req *req
 // API operation ListPipelines for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -935,15 +935,15 @@ func (c *DataPipeline) PollForTaskRequest(input *PollForTaskInput) (req *request
 // API operation PollForTask for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * TaskNotFoundException
+//   * ErrCodeTaskNotFoundException "TaskNotFoundException"
 //   The specified task was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/PollForTask
@@ -1021,19 +1021,19 @@ func (c *DataPipeline) PutPipelineDefinitionRequest(input *PutPipelineDefinition
 // API operation PutPipelineDefinition for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/PutPipelineDefinition
@@ -1105,17 +1105,17 @@ func (c *DataPipeline) QueryObjectsRequest(input *QueryObjectsInput) (req *reque
 // API operation QueryObjects for usage and error information.
 //
 // Returned Error Codes:
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -1207,19 +1207,19 @@ func (c *DataPipeline) RemoveTagsRequest(input *RemoveTagsInput) (req *request.R
 // API operation RemoveTags for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/RemoveTags
@@ -1295,22 +1295,22 @@ func (c *DataPipeline) ReportTaskProgressRequest(input *ReportTaskProgressInput)
 // API operation ReportTaskProgress for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * TaskNotFoundException
+//   * ErrCodeTaskNotFoundException "TaskNotFoundException"
 //   The specified task was not found.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/ReportTaskProgress
@@ -1379,10 +1379,10 @@ func (c *DataPipeline) ReportTaskRunnerHeartbeatRequest(input *ReportTaskRunnerH
 // API operation ReportTaskRunnerHeartbeat for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -1455,17 +1455,17 @@ func (c *DataPipeline) SetStatusRequest(input *SetStatusInput) (req *request.Req
 // API operation SetStatus for usage and error information.
 //
 // Returned Error Codes:
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
@@ -1536,22 +1536,22 @@ func (c *DataPipeline) SetTaskStatusRequest(input *SetTaskStatusInput) (req *req
 // API operation SetTaskStatus for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * TaskNotFoundException
+//   * ErrCodeTaskNotFoundException "TaskNotFoundException"
 //   The specified task was not found.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/SetTaskStatus
@@ -1617,19 +1617,19 @@ func (c *DataPipeline) ValidatePipelineDefinitionRequest(input *ValidatePipeline
 // API operation ValidatePipelineDefinition for usage and error information.
 //
 // Returned Error Codes:
-//   * InternalServiceError
+//   * ErrCodeInternalServiceError "InternalServiceError"
 //   An internal service error occurred.
 //
-//   * InvalidRequestException
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request was not valid. Verify that your request was properly formatted,
 //   that the signature was generated with the correct credentials, and that you
 //   haven't exceeded any of the service limits for your account.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was not found. Verify that you used the correct user
 //   and account identifiers.
 //
-//   * PipelineDeletedException
+//   * ErrCodePipelineDeletedException "PipelineDeletedException"
 //   The specified pipeline has been deleted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/datapipeline-2012-10-29/ValidatePipelineDefinition

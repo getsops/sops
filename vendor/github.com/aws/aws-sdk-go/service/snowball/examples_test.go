@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSnowball_CancelCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleSnowball_CancelCluster() {
 }
 
 func ExampleSnowball_CancelJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -66,11 +58,7 @@ func ExampleSnowball_CancelJob() {
 }
 
 func ExampleSnowball_CreateAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -105,11 +93,7 @@ func ExampleSnowball_CreateAddress() {
 }
 
 func ExampleSnowball_CreateCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -168,11 +152,7 @@ func ExampleSnowball_CreateCluster() {
 }
 
 func ExampleSnowball_CreateJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -233,11 +213,7 @@ func ExampleSnowball_CreateJob() {
 }
 
 func ExampleSnowball_DescribeAddress() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -258,11 +234,7 @@ func ExampleSnowball_DescribeAddress() {
 }
 
 func ExampleSnowball_DescribeAddresses() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -284,11 +256,7 @@ func ExampleSnowball_DescribeAddresses() {
 }
 
 func ExampleSnowball_DescribeCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -309,11 +277,7 @@ func ExampleSnowball_DescribeCluster() {
 }
 
 func ExampleSnowball_DescribeJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -334,11 +298,7 @@ func ExampleSnowball_DescribeJob() {
 }
 
 func ExampleSnowball_GetJobManifest() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -359,11 +319,7 @@ func ExampleSnowball_GetJobManifest() {
 }
 
 func ExampleSnowball_GetJobUnlockCode() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -384,11 +340,7 @@ func ExampleSnowball_GetJobUnlockCode() {
 }
 
 func ExampleSnowball_GetSnowballUsage() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -407,11 +359,7 @@ func ExampleSnowball_GetSnowballUsage() {
 }
 
 func ExampleSnowball_ListClusterJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -434,11 +382,7 @@ func ExampleSnowball_ListClusterJobs() {
 }
 
 func ExampleSnowball_ListClusters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -460,11 +404,7 @@ func ExampleSnowball_ListClusters() {
 }
 
 func ExampleSnowball_ListJobs() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -486,11 +426,7 @@ func ExampleSnowball_ListJobs() {
 }
 
 func ExampleSnowball_UpdateCluster() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 
@@ -547,11 +483,7 @@ func ExampleSnowball_UpdateCluster() {
 }
 
 func ExampleSnowball_UpdateJob() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := snowball.New(sess)
 

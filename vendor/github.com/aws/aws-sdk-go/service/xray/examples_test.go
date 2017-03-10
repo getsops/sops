@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleXRay_BatchGetTraces() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := xray.New(sess)
 
@@ -45,11 +41,7 @@ func ExampleXRay_BatchGetTraces() {
 }
 
 func ExampleXRay_GetServiceGraph() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := xray.New(sess)
 
@@ -72,11 +64,7 @@ func ExampleXRay_GetServiceGraph() {
 }
 
 func ExampleXRay_GetTraceGraph() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := xray.New(sess)
 
@@ -101,11 +89,7 @@ func ExampleXRay_GetTraceGraph() {
 }
 
 func ExampleXRay_GetTraceSummaries() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := xray.New(sess)
 
@@ -130,11 +114,7 @@ func ExampleXRay_GetTraceSummaries() {
 }
 
 func ExampleXRay_PutTelemetryRecords() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := xray.New(sess)
 
@@ -175,11 +155,7 @@ func ExampleXRay_PutTelemetryRecords() {
 }
 
 func ExampleXRay_PutTraceSegments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := xray.New(sess)
 

@@ -47,7 +47,12 @@ const (
 //     // Create a IoTDataPlane client with additional configuration
 //     svc := iotdataplane.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *IoTDataPlane {
-	c := p.ClientConfig(EndpointsID, cfgs...)
+	var c client.Config
+	if v, ok := p.(client.ConfigNoResolveEndpointProvider); ok {
+		c = v.ClientConfigNoResolveEndpoint(cfgs...)
+	} else {
+		c = p.ClientConfig(EndpointsID, cfgs...)
+	}
 	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 

@@ -33,10 +33,7 @@ func main() {
 	}
 
 	// Create the session that the DynamoDB service will use.
-	sess, err := session.NewSession(awscfg)
-	if err != nil {
-		exitWithError(fmt.Errorf("failed to create session, %v", err))
-	}
+	sess := session.Must(session.NewSession(awscfg))
 
 	// Create the DynamoDB service client to make the query request with.
 	svc := dynamodb.New(sess)

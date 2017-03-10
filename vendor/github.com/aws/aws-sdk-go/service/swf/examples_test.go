@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSWF_CountClosedWorkflowExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -62,11 +58,7 @@ func ExampleSWF_CountClosedWorkflowExecutions() {
 }
 
 func ExampleSWF_CountOpenWorkflowExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -101,11 +93,7 @@ func ExampleSWF_CountOpenWorkflowExecutions() {
 }
 
 func ExampleSWF_CountPendingActivityTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -129,11 +117,7 @@ func ExampleSWF_CountPendingActivityTasks() {
 }
 
 func ExampleSWF_CountPendingDecisionTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -157,11 +141,7 @@ func ExampleSWF_CountPendingDecisionTasks() {
 }
 
 func ExampleSWF_DeprecateActivityType() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -186,11 +166,7 @@ func ExampleSWF_DeprecateActivityType() {
 }
 
 func ExampleSWF_DeprecateDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -211,11 +187,7 @@ func ExampleSWF_DeprecateDomain() {
 }
 
 func ExampleSWF_DeprecateWorkflowType() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -240,11 +212,7 @@ func ExampleSWF_DeprecateWorkflowType() {
 }
 
 func ExampleSWF_DescribeActivityType() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -269,11 +237,7 @@ func ExampleSWF_DescribeActivityType() {
 }
 
 func ExampleSWF_DescribeDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -294,11 +258,7 @@ func ExampleSWF_DescribeDomain() {
 }
 
 func ExampleSWF_DescribeWorkflowExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -323,11 +283,7 @@ func ExampleSWF_DescribeWorkflowExecution() {
 }
 
 func ExampleSWF_DescribeWorkflowType() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -352,11 +308,7 @@ func ExampleSWF_DescribeWorkflowType() {
 }
 
 func ExampleSWF_GetWorkflowExecutionHistory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -384,11 +336,7 @@ func ExampleSWF_GetWorkflowExecutionHistory() {
 }
 
 func ExampleSWF_ListActivityTypes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -414,11 +362,7 @@ func ExampleSWF_ListActivityTypes() {
 }
 
 func ExampleSWF_ListClosedWorkflowExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -463,11 +407,7 @@ func ExampleSWF_ListClosedWorkflowExecutions() {
 }
 
 func ExampleSWF_ListDomains() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -491,11 +431,7 @@ func ExampleSWF_ListDomains() {
 }
 
 func ExampleSWF_ListOpenWorkflowExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -533,11 +469,7 @@ func ExampleSWF_ListOpenWorkflowExecutions() {
 }
 
 func ExampleSWF_ListWorkflowTypes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -563,11 +495,7 @@ func ExampleSWF_ListWorkflowTypes() {
 }
 
 func ExampleSWF_PollForActivityTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -592,11 +520,7 @@ func ExampleSWF_PollForActivityTask() {
 }
 
 func ExampleSWF_PollForDecisionTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -624,11 +548,7 @@ func ExampleSWF_PollForDecisionTask() {
 }
 
 func ExampleSWF_RecordActivityTaskHeartbeat() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -650,11 +570,7 @@ func ExampleSWF_RecordActivityTaskHeartbeat() {
 }
 
 func ExampleSWF_RegisterActivityType() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -686,11 +602,7 @@ func ExampleSWF_RegisterActivityType() {
 }
 
 func ExampleSWF_RegisterDomain() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -713,11 +625,7 @@ func ExampleSWF_RegisterDomain() {
 }
 
 func ExampleSWF_RegisterWorkflowType() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -749,11 +657,7 @@ func ExampleSWF_RegisterWorkflowType() {
 }
 
 func ExampleSWF_RequestCancelWorkflowExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -776,11 +680,7 @@ func ExampleSWF_RequestCancelWorkflowExecution() {
 }
 
 func ExampleSWF_RespondActivityTaskCanceled() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -802,11 +702,7 @@ func ExampleSWF_RespondActivityTaskCanceled() {
 }
 
 func ExampleSWF_RespondActivityTaskCompleted() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -828,11 +724,7 @@ func ExampleSWF_RespondActivityTaskCompleted() {
 }
 
 func ExampleSWF_RespondActivityTaskFailed() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -855,11 +747,7 @@ func ExampleSWF_RespondActivityTaskFailed() {
 }
 
 func ExampleSWF_RespondDecisionTaskCompleted() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -984,11 +872,7 @@ func ExampleSWF_RespondDecisionTaskCompleted() {
 }
 
 func ExampleSWF_SignalWorkflowExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -1013,11 +897,7 @@ func ExampleSWF_SignalWorkflowExecution() {
 }
 
 func ExampleSWF_StartWorkflowExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 
@@ -1056,11 +936,7 @@ func ExampleSWF_StartWorkflowExecution() {
 }
 
 func ExampleSWF_TerminateWorkflowExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := swf.New(sess)
 

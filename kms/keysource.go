@@ -11,6 +11,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
@@ -146,7 +147,11 @@ func (key MasterKey) createSession() (*session.Session, error) {
 		return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 	}
 	config := aws.Config{Region: aws.String(matches[1])}
-	sess, err := session.NewSession(&config)
+	opts := session.Options{
+		Config:                  config,
+		AssumeRoleTokenProvider: stscreds.StdinTokenProvider,
+	}
+	sess, err := session.NewSessionWithOptions(opts)
 	if err != nil {
 		return nil, err
 	}

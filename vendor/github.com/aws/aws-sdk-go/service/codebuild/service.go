@@ -11,11 +11,11 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
-// AWS CodeBuild is a fully-managed build service in the cloud. AWS CodeBuild
+// AWS CodeBuild is a fully managed build service in the cloud. AWS CodeBuild
 // compiles your source code, runs unit tests, and produces artifacts that are
 // ready to deploy. AWS CodeBuild eliminates the need to provision, manage,
 // and scale your own build servers. It provides prepackaged build environments
-// for the most popular programming languages and build tools such as Apach
+// for the most popular programming languages and build tools, such as Apach
 // Maven, Gradle, and more. You can also fully customize build environments
 // in AWS CodeBuild to use your own build tools. AWS CodeBuild scales automatically
 // to meet peak build requests, and you pay only for the build time you consume.

@@ -1,13 +1,13 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"elasticloadbalancingv2-2015-12-01",
     "apiVersion":"2015-12-01",
     "endpointPrefix":"elasticloadbalancing",
     "protocol":"query",
     "serviceAbbreviation":"Elastic Load Balancing v2",
     "serviceFullName":"Elastic Load Balancing",
     "signatureVersion":"v4",
+    "uid":"elasticloadbalancingv2-2015-12-01",
     "xmlNamespace":"http://elasticloadbalancing.amazonaws.com/doc/2015-12-01/"
   },
   "operations":{
@@ -464,6 +464,23 @@
         {"shape":"TooManyTagsException"}
       ]
     },
+    "SetIpAddressType":{
+      "name":"SetIpAddressType",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"SetIpAddressTypeInput"},
+      "output":{
+        "shape":"SetIpAddressTypeOutput",
+        "resultWrapper":"SetIpAddressTypeResult"
+      },
+      "errors":[
+        {"shape":"LoadBalancerNotFoundException"},
+        {"shape":"InvalidConfigurationRequestException"},
+        {"shape":"InvalidSubnetException"}
+      ]
+    },
     "SetRulePriorities":{
       "name":"SetRulePriorities",
       "http":{
@@ -638,7 +655,8 @@
         "Subnets":{"shape":"Subnets"},
         "SecurityGroups":{"shape":"SecurityGroups"},
         "Scheme":{"shape":"LoadBalancerSchemeEnum"},
-        "Tags":{"shape":"TagList"}
+        "Tags":{"shape":"TagList"},
+        "IpAddressType":{"shape":"IpAddressType"}
       }
     },
     "CreateLoadBalancerOutput":{
@@ -1031,6 +1049,13 @@
       },
       "exception":true
     },
+    "IpAddressType":{
+      "type":"string",
+      "enum":[
+        "ipv4",
+        "dualstack"
+      ]
+    },
     "IsDefault":{"type":"boolean"},
     "ListOfString":{
       "type":"list",
@@ -1081,7 +1106,8 @@
         "State":{"shape":"LoadBalancerState"},
         "Type":{"shape":"LoadBalancerTypeEnum"},
         "AvailabilityZones":{"shape":"AvailabilityZones"},
-        "SecurityGroups":{"shape":"SecurityGroups"}
+        "SecurityGroups":{"shape":"SecurityGroups"},
+        "IpAddressType":{"shape":"IpAddressType"}
       }
     },
     "LoadBalancerArn":{"type":"string"},
@@ -1416,6 +1442,23 @@
     "SecurityGroups":{
       "type":"list",
       "member":{"shape":"SecurityGroupId"}
+    },
+    "SetIpAddressTypeInput":{
+      "type":"structure",
+      "required":[
+        "LoadBalancerArn",
+        "IpAddressType"
+      ],
+      "members":{
+        "LoadBalancerArn":{"shape":"LoadBalancerArn"},
+        "IpAddressType":{"shape":"IpAddressType"}
+      }
+    },
+    "SetIpAddressTypeOutput":{
+      "type":"structure",
+      "members":{
+        "IpAddressType":{"shape":"IpAddressType"}
+      }
     },
     "SetRulePrioritiesInput":{
       "type":"structure",

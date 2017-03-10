@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"regexp"
 	"sort"
+	"strings"
 	"testing"
 )
 
@@ -39,6 +40,8 @@ func AssertURL(t *testing.T, expect, actual string, msgAndArgs ...interface{}) b
 	return AssertQuery(t, expectURL.Query().Encode(), actualURL.Query().Encode(), msgAndArgs...)
 }
 
+var queryMapKey = regexp.MustCompile("(.*?)\\.[0-9]+\\.key")
+
 // AssertQuery verifies the expect HTTP query string matches the actual.
 func AssertQuery(t *testing.T, expect, actual string, msgAndArgs ...interface{}) bool {
 	expectQ, err := url.ParseQuery(expect)
@@ -46,7 +49,7 @@ func AssertQuery(t *testing.T, expect, actual string, msgAndArgs ...interface{})
 		t.Errorf(errMsg("unable to parse expected Query", err, msgAndArgs))
 		return false
 	}
-	actualQ, err := url.ParseQuery(expect)
+	actualQ, err := url.ParseQuery(actual)
 	if err != nil {
 		t.Errorf(errMsg("unable to parse actual Query", err, msgAndArgs))
 		return false
@@ -57,11 +60,35 @@ func AssertQuery(t *testing.T, expect, actual string, msgAndArgs ...interface{})
 		return false
 	}
 
+	keys := map[string][]string{}
+	for key, v := range expectQ {
+		if queryMapKey.Match([]byte(key)) {
+			submatch := queryMapKey.FindStringSubmatch(key)
+			keys[submatch[1]] = append(keys[submatch[1]], v...)
+		}
+	}
+
+	for k, v := range keys {
+		// clear all keys that have prefix
+		for key := range expectQ {
+			if strings.HasPrefix(key, k) {
+				delete(expectQ, key)
+			}
+		}
+
+		sort.Strings(v)
+		for i, value := range v {
+			expectQ[fmt.Sprintf("%s.%d.key", k, i+1)] = []string{value}
+		}
+	}
+
 	for k, expectQVals := range expectQ {
 		sort.Strings(expectQVals)
 		actualQVals := actualQ[k]
 		sort.Strings(actualQVals)
-		equal(t, expectQVals, actualQVals, msgAndArgs...)
+		if !equal(t, expectQVals, actualQVals, msgAndArgs...) {
+			return false
+		}
 	}
 
 	return true

@@ -66,18 +66,18 @@ func (c *ApplicationDiscoveryService) AssociateConfigurationItemsToApplicationRe
 // API operation AssociateConfigurationItemsToApplication for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/AssociateConfigurationItemsToApplication
@@ -142,18 +142,18 @@ func (c *ApplicationDiscoveryService) CreateApplicationRequest(input *CreateAppl
 // API operation CreateApplication for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/CreateApplication
@@ -220,22 +220,22 @@ func (c *ApplicationDiscoveryService) CreateTagsRequest(input *CreateTagsInput) 
 // API operation CreateTags for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified configuration ID was not located. Verify the configuration
 //   ID and try again.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/CreateTags
@@ -301,18 +301,18 @@ func (c *ApplicationDiscoveryService) DeleteApplicationsRequest(input *DeleteApp
 // API operation DeleteApplications for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DeleteApplications
@@ -378,22 +378,22 @@ func (c *ApplicationDiscoveryService) DeleteTagsRequest(input *DeleteTagsInput) 
 // API operation DeleteTags for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified configuration ID was not located. Verify the configuration
 //   ID and try again.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DeleteTags
@@ -459,18 +459,18 @@ func (c *ApplicationDiscoveryService) DescribeAgentsRequest(input *DescribeAgent
 // API operation DescribeAgents for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeAgents
@@ -542,18 +542,18 @@ func (c *ApplicationDiscoveryService) DescribeConfigurationsRequest(input *Descr
 // API operation DescribeConfigurations for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeConfigurations
@@ -619,22 +619,22 @@ func (c *ApplicationDiscoveryService) DescribeExportConfigurationsRequest(input 
 // API operation DescribeExportConfigurations for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified configuration ID was not located. Verify the configuration
 //   ID and try again.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeExportConfigurations
@@ -700,22 +700,22 @@ func (c *ApplicationDiscoveryService) DescribeTagsRequest(input *DescribeTagsInp
 // API operation DescribeTags for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified configuration ID was not located. Verify the configuration
 //   ID and try again.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DescribeTags
@@ -780,18 +780,18 @@ func (c *ApplicationDiscoveryService) DisassociateConfigurationItemsFromApplicat
 // API operation DisassociateConfigurationItemsFromApplication for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/DisassociateConfigurationItemsFromApplication
@@ -860,21 +860,21 @@ func (c *ApplicationDiscoveryService) ExportConfigurationsRequest(input *ExportC
 // API operation ExportConfigurations for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
-//   * OperationNotPermittedException
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
 //   This operation is not permitted.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/ExportConfigurations
@@ -939,18 +939,18 @@ func (c *ApplicationDiscoveryService) GetDiscoverySummaryRequest(input *GetDisco
 // API operation GetDiscoverySummary for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/GetDiscoverySummary
@@ -1016,22 +1016,22 @@ func (c *ApplicationDiscoveryService) ListConfigurationsRequest(input *ListConfi
 // API operation ListConfigurations for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified configuration ID was not located. Verify the configuration
 //   ID and try again.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/ListConfigurations
@@ -1097,18 +1097,18 @@ func (c *ApplicationDiscoveryService) ListServerNeighborsRequest(input *ListServ
 // API operation ListServerNeighbors for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/ListServerNeighbors
@@ -1173,18 +1173,18 @@ func (c *ApplicationDiscoveryService) StartDataCollectionByAgentIdsRequest(input
 // API operation StartDataCollectionByAgentIds for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/StartDataCollectionByAgentIds
@@ -1249,18 +1249,18 @@ func (c *ApplicationDiscoveryService) StopDataCollectionByAgentIdsRequest(input 
 // API operation StopDataCollectionByAgentIds for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/StopDataCollectionByAgentIds
@@ -1325,18 +1325,18 @@ func (c *ApplicationDiscoveryService) UpdateApplicationRequest(input *UpdateAppl
 // API operation UpdateApplication for usage and error information.
 //
 // Returned Error Codes:
-//   * AuthorizationErrorException
+//   * ErrCodeAuthorizationErrorException "AuthorizationErrorException"
 //   The AWS user account does not have permission to perform the action. Check
 //   the IAM policy associated with this account.
 //
-//   * InvalidParameterException
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
 //   One or more parameters are not valid. Verify the parameters and try again.
 //
-//   * InvalidParameterValueException
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value of one or more parameters are either invalid or out of range. Verify
 //   the parameter values and try again.
 //
-//   * ServerInternalErrorException
+//   * ErrCodeServerInternalErrorException "ServerInternalErrorException"
 //   The server experienced an internal error. Try again.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/discovery-2015-11-01/UpdateApplication

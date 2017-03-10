@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleRoute53_AssociateVPCWithHostedZone() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -46,11 +42,7 @@ func ExampleRoute53_AssociateVPCWithHostedZone() {
 }
 
 func ExampleRoute53_ChangeResourceRecordSets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -107,11 +99,7 @@ func ExampleRoute53_ChangeResourceRecordSets() {
 }
 
 func ExampleRoute53_ChangeTagsForResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -144,11 +132,7 @@ func ExampleRoute53_ChangeTagsForResource() {
 }
 
 func ExampleRoute53_CreateHealthCheck() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -196,11 +180,7 @@ func ExampleRoute53_CreateHealthCheck() {
 }
 
 func ExampleRoute53_CreateHostedZone() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -231,11 +211,7 @@ func ExampleRoute53_CreateHostedZone() {
 }
 
 func ExampleRoute53_CreateReusableDelegationSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -257,11 +233,7 @@ func ExampleRoute53_CreateReusableDelegationSet() {
 }
 
 func ExampleRoute53_CreateTrafficPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -284,11 +256,7 @@ func ExampleRoute53_CreateTrafficPolicy() {
 }
 
 func ExampleRoute53_CreateTrafficPolicyInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -313,11 +281,7 @@ func ExampleRoute53_CreateTrafficPolicyInstance() {
 }
 
 func ExampleRoute53_CreateTrafficPolicyVersion() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -340,11 +304,7 @@ func ExampleRoute53_CreateTrafficPolicyVersion() {
 }
 
 func ExampleRoute53_CreateVPCAssociationAuthorization() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -369,11 +329,7 @@ func ExampleRoute53_CreateVPCAssociationAuthorization() {
 }
 
 func ExampleRoute53_DeleteHealthCheck() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -394,11 +350,7 @@ func ExampleRoute53_DeleteHealthCheck() {
 }
 
 func ExampleRoute53_DeleteHostedZone() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -419,11 +371,7 @@ func ExampleRoute53_DeleteHostedZone() {
 }
 
 func ExampleRoute53_DeleteReusableDelegationSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -444,11 +392,7 @@ func ExampleRoute53_DeleteReusableDelegationSet() {
 }
 
 func ExampleRoute53_DeleteTrafficPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -470,11 +414,7 @@ func ExampleRoute53_DeleteTrafficPolicy() {
 }
 
 func ExampleRoute53_DeleteTrafficPolicyInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -495,11 +435,7 @@ func ExampleRoute53_DeleteTrafficPolicyInstance() {
 }
 
 func ExampleRoute53_DeleteVPCAssociationAuthorization() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -524,11 +460,7 @@ func ExampleRoute53_DeleteVPCAssociationAuthorization() {
 }
 
 func ExampleRoute53_DisassociateVPCFromHostedZone() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -554,11 +486,7 @@ func ExampleRoute53_DisassociateVPCFromHostedZone() {
 }
 
 func ExampleRoute53_GetChange() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -579,11 +507,7 @@ func ExampleRoute53_GetChange() {
 }
 
 func ExampleRoute53_GetCheckerIpRanges() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -602,11 +526,7 @@ func ExampleRoute53_GetCheckerIpRanges() {
 }
 
 func ExampleRoute53_GetGeoLocation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -629,11 +549,7 @@ func ExampleRoute53_GetGeoLocation() {
 }
 
 func ExampleRoute53_GetHealthCheck() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -654,11 +570,7 @@ func ExampleRoute53_GetHealthCheck() {
 }
 
 func ExampleRoute53_GetHealthCheckCount() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -677,11 +589,7 @@ func ExampleRoute53_GetHealthCheckCount() {
 }
 
 func ExampleRoute53_GetHealthCheckLastFailureReason() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -702,11 +610,7 @@ func ExampleRoute53_GetHealthCheckLastFailureReason() {
 }
 
 func ExampleRoute53_GetHealthCheckStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -727,11 +631,7 @@ func ExampleRoute53_GetHealthCheckStatus() {
 }
 
 func ExampleRoute53_GetHostedZone() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -752,11 +652,7 @@ func ExampleRoute53_GetHostedZone() {
 }
 
 func ExampleRoute53_GetHostedZoneCount() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -775,11 +671,7 @@ func ExampleRoute53_GetHostedZoneCount() {
 }
 
 func ExampleRoute53_GetReusableDelegationSet() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -800,11 +692,7 @@ func ExampleRoute53_GetReusableDelegationSet() {
 }
 
 func ExampleRoute53_GetTrafficPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -826,11 +714,7 @@ func ExampleRoute53_GetTrafficPolicy() {
 }
 
 func ExampleRoute53_GetTrafficPolicyInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -851,11 +735,7 @@ func ExampleRoute53_GetTrafficPolicyInstance() {
 }
 
 func ExampleRoute53_GetTrafficPolicyInstanceCount() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -874,11 +754,7 @@ func ExampleRoute53_GetTrafficPolicyInstanceCount() {
 }
 
 func ExampleRoute53_ListGeoLocations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -902,11 +778,7 @@ func ExampleRoute53_ListGeoLocations() {
 }
 
 func ExampleRoute53_ListHealthChecks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -928,11 +800,7 @@ func ExampleRoute53_ListHealthChecks() {
 }
 
 func ExampleRoute53_ListHostedZones() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -955,11 +823,7 @@ func ExampleRoute53_ListHostedZones() {
 }
 
 func ExampleRoute53_ListHostedZonesByName() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -982,11 +846,7 @@ func ExampleRoute53_ListHostedZonesByName() {
 }
 
 func ExampleRoute53_ListResourceRecordSets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1011,11 +871,7 @@ func ExampleRoute53_ListResourceRecordSets() {
 }
 
 func ExampleRoute53_ListReusableDelegationSets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1037,11 +893,7 @@ func ExampleRoute53_ListReusableDelegationSets() {
 }
 
 func ExampleRoute53_ListTagsForResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1063,11 +915,7 @@ func ExampleRoute53_ListTagsForResource() {
 }
 
 func ExampleRoute53_ListTagsForResources() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1092,11 +940,7 @@ func ExampleRoute53_ListTagsForResources() {
 }
 
 func ExampleRoute53_ListTrafficPolicies() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1118,11 +962,7 @@ func ExampleRoute53_ListTrafficPolicies() {
 }
 
 func ExampleRoute53_ListTrafficPolicyInstances() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1146,11 +986,7 @@ func ExampleRoute53_ListTrafficPolicyInstances() {
 }
 
 func ExampleRoute53_ListTrafficPolicyInstancesByHostedZone() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1174,11 +1010,7 @@ func ExampleRoute53_ListTrafficPolicyInstancesByHostedZone() {
 }
 
 func ExampleRoute53_ListTrafficPolicyInstancesByPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1204,11 +1036,7 @@ func ExampleRoute53_ListTrafficPolicyInstancesByPolicy() {
 }
 
 func ExampleRoute53_ListTrafficPolicyVersions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1231,11 +1059,7 @@ func ExampleRoute53_ListTrafficPolicyVersions() {
 }
 
 func ExampleRoute53_ListVPCAssociationAuthorizations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1258,11 +1082,7 @@ func ExampleRoute53_ListVPCAssociationAuthorizations() {
 }
 
 func ExampleRoute53_TestDNSAnswer() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1288,11 +1108,7 @@ func ExampleRoute53_TestDNSAnswer() {
 }
 
 func ExampleRoute53_UpdateHealthCheck() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1336,11 +1152,7 @@ func ExampleRoute53_UpdateHealthCheck() {
 }
 
 func ExampleRoute53_UpdateHostedZoneComment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1362,11 +1174,7 @@ func ExampleRoute53_UpdateHostedZoneComment() {
 }
 
 func ExampleRoute53_UpdateTrafficPolicyComment() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 
@@ -1389,11 +1197,7 @@ func ExampleRoute53_UpdateTrafficPolicyComment() {
 }
 
 func ExampleRoute53_UpdateTrafficPolicyInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := route53.New(sess)
 

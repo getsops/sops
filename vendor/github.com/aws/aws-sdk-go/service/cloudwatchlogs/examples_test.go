@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleCloudWatchLogs_CancelExportTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -41,11 +37,7 @@ func ExampleCloudWatchLogs_CancelExportTask() {
 }
 
 func ExampleCloudWatchLogs_CreateExportTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -72,11 +64,7 @@ func ExampleCloudWatchLogs_CreateExportTask() {
 }
 
 func ExampleCloudWatchLogs_CreateLogGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -101,11 +89,7 @@ func ExampleCloudWatchLogs_CreateLogGroup() {
 }
 
 func ExampleCloudWatchLogs_CreateLogStream() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -127,11 +111,7 @@ func ExampleCloudWatchLogs_CreateLogStream() {
 }
 
 func ExampleCloudWatchLogs_DeleteDestination() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -152,11 +132,7 @@ func ExampleCloudWatchLogs_DeleteDestination() {
 }
 
 func ExampleCloudWatchLogs_DeleteLogGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -177,11 +153,7 @@ func ExampleCloudWatchLogs_DeleteLogGroup() {
 }
 
 func ExampleCloudWatchLogs_DeleteLogStream() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -203,11 +175,7 @@ func ExampleCloudWatchLogs_DeleteLogStream() {
 }
 
 func ExampleCloudWatchLogs_DeleteMetricFilter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -229,11 +197,7 @@ func ExampleCloudWatchLogs_DeleteMetricFilter() {
 }
 
 func ExampleCloudWatchLogs_DeleteRetentionPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -254,11 +218,7 @@ func ExampleCloudWatchLogs_DeleteRetentionPolicy() {
 }
 
 func ExampleCloudWatchLogs_DeleteSubscriptionFilter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -280,11 +240,7 @@ func ExampleCloudWatchLogs_DeleteSubscriptionFilter() {
 }
 
 func ExampleCloudWatchLogs_DescribeDestinations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -307,11 +263,7 @@ func ExampleCloudWatchLogs_DescribeDestinations() {
 }
 
 func ExampleCloudWatchLogs_DescribeExportTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -335,11 +287,7 @@ func ExampleCloudWatchLogs_DescribeExportTasks() {
 }
 
 func ExampleCloudWatchLogs_DescribeLogGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -362,11 +310,7 @@ func ExampleCloudWatchLogs_DescribeLogGroups() {
 }
 
 func ExampleCloudWatchLogs_DescribeLogStreams() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -392,11 +336,7 @@ func ExampleCloudWatchLogs_DescribeLogStreams() {
 }
 
 func ExampleCloudWatchLogs_DescribeMetricFilters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -422,11 +362,7 @@ func ExampleCloudWatchLogs_DescribeMetricFilters() {
 }
 
 func ExampleCloudWatchLogs_DescribeSubscriptionFilters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -450,11 +386,7 @@ func ExampleCloudWatchLogs_DescribeSubscriptionFilters() {
 }
 
 func ExampleCloudWatchLogs_FilterLogEvents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -485,11 +417,7 @@ func ExampleCloudWatchLogs_FilterLogEvents() {
 }
 
 func ExampleCloudWatchLogs_GetLogEvents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -516,11 +444,7 @@ func ExampleCloudWatchLogs_GetLogEvents() {
 }
 
 func ExampleCloudWatchLogs_ListTagsLogGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -541,11 +465,7 @@ func ExampleCloudWatchLogs_ListTagsLogGroup() {
 }
 
 func ExampleCloudWatchLogs_PutDestination() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -568,11 +488,7 @@ func ExampleCloudWatchLogs_PutDestination() {
 }
 
 func ExampleCloudWatchLogs_PutDestinationPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -594,11 +510,7 @@ func ExampleCloudWatchLogs_PutDestinationPolicy() {
 }
 
 func ExampleCloudWatchLogs_PutLogEvents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -628,11 +540,7 @@ func ExampleCloudWatchLogs_PutLogEvents() {
 }
 
 func ExampleCloudWatchLogs_PutMetricFilter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -664,11 +572,7 @@ func ExampleCloudWatchLogs_PutMetricFilter() {
 }
 
 func ExampleCloudWatchLogs_PutRetentionPolicy() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -690,11 +594,7 @@ func ExampleCloudWatchLogs_PutRetentionPolicy() {
 }
 
 func ExampleCloudWatchLogs_PutSubscriptionFilter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -720,11 +620,7 @@ func ExampleCloudWatchLogs_PutSubscriptionFilter() {
 }
 
 func ExampleCloudWatchLogs_TagLogGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -749,11 +645,7 @@ func ExampleCloudWatchLogs_TagLogGroup() {
 }
 
 func ExampleCloudWatchLogs_TestMetricFilter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 
@@ -778,11 +670,7 @@ func ExampleCloudWatchLogs_TestMetricFilter() {
 }
 
 func ExampleCloudWatchLogs_UntagLogGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudwatchlogs.New(sess)
 

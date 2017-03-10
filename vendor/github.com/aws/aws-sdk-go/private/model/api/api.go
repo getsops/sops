@@ -68,6 +68,8 @@ type Metadata struct {
 	Protocol            string
 	UID                 string
 	EndpointsID         string
+
+	NoResolveEndpoint bool
 }
 
 var serviceAliases map[string]string
@@ -185,10 +187,21 @@ func (a *API) ShapeList() []*Shape {
 	list := make([]*Shape, 0, len(a.Shapes))
 	for _, n := range a.ShapeNames() {
 		// Ignore error shapes in list
-		if a.Shapes[n].IsError {
-			continue
+		if s := a.Shapes[n]; !s.IsError {
+			list = append(list, s)
 		}
-		list = append(list, a.Shapes[n])
+	}
+	return list
+}
+
+// ShapeListErrors returns a list of the errors defined by the API model
+func (a *API) ShapeListErrors() []*Shape {
+	list := []*Shape{}
+	for _, n := range a.ShapeNames() {
+		// Ignore error shapes in list
+		if s := a.Shapes[n]; s.IsError {
+			list = append(list, s)
+		}
 	}
 	return list
 }
@@ -371,7 +384,16 @@ const (
 //     // Create a {{ .StructName }} client with additional configuration
 //     svc := {{ .PackageName }}.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *{{ .StructName }} {
-	c := p.ClientConfig({{ EndpointsIDValue . }}, cfgs...)
+	{{ if .Metadata.NoResolveEndpoint -}}
+		var c client.Config
+		if v, ok := p.(client.ConfigNoResolveEndpointProvider); ok {
+			c = v.ClientConfigNoResolveEndpoint(cfgs...)
+		} else {
+			c = p.ClientConfig({{ EndpointsIDValue . }}, cfgs...)
+		}
+	{{- else -}}
+		c := p.ClientConfig({{ EndpointsIDValue . }}, cfgs...)
+	{{- end }}
 	return newClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
 }
 
@@ -523,7 +545,7 @@ var tplInterface = template.Must(template.New("interface").Parse(`
 //        // mock response/functionality
 //    }
 //
-//    TestMyFunc(t *testing.T) {
+//    func TestMyFunc(t *testing.T) {
 //        // Setup Test
 //        mockSvc := &mock{{ .StructName }}Client{}
 //
@@ -637,4 +659,30 @@ func resolveShapeValidations(s *Shape, ancestry ...*Shape) {
 		}
 	}
 	ancestry = ancestry[:len(ancestry)-1]
+}
+
+// A tplAPIErrors is the top level template for the API
+var tplAPIErrors = template.Must(template.New("api").Parse(`
+const (
+{{ range $_, $s := $.ShapeListErrors }}
+	// {{ $s.ErrorCodeName }} for service response error code
+	// {{ printf "%q" $s.ErrorName }}.
+	{{ if $s.Docstring -}}
+	//
+	{{ $s.Docstring }}
+	{{ end -}}
+	{{ $s.ErrorCodeName }} = {{ printf "%q" $s.ErrorName }}
+{{ end }}
+)
+`))
+
+func (a *API) APIErrorsGoCode() string {
+	var buf bytes.Buffer
+	err := tplAPIErrors.Execute(&buf, a)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return strings.TrimSpace(buf.String())
 }

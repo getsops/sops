@@ -9,6 +9,7 @@
     "BatchGetDeploymentInstances": "<p>Gets information about one or more instance that are part of a deployment group.</p>",
     "BatchGetDeployments": "<p>Gets information about one or more deployments.</p>",
     "BatchGetOnPremisesInstances": "<p>Gets information about one or more on-premises instances.</p>",
+    "ContinueDeployment": "<p>Starts the process of rerouting traffic from instances in the original environment to instances in thereplacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>",
     "CreateApplication": "<p>Creates an application.</p>",
     "CreateDeployment": "<p>Deploys an application revision through the specified deployment group.</p>",
     "CreateDeploymentConfig": "<p>Creates a deployment configuration.</p>",
@@ -34,6 +35,7 @@
     "RegisterApplicationRevision": "<p>Registers with AWS CodeDeploy a revision for the specified application.</p>",
     "RegisterOnPremisesInstance": "<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>",
     "RemoveTagsFromOnPremisesInstances": "<p>Removes one or more tags from one or more on-premises instances.</p>",
+    "SkipWaitTimeForInstanceTermination": "<p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>",
     "StopDeployment": "<p>Attempts to stop an ongoing deployment.</p>",
     "UpdateApplication": "<p>Changes the name of an application.</p>",
     "UpdateDeploymentGroup": "<p>Changes information about a deployment group.</p>"
@@ -42,6 +44,12 @@
     "AddTagsToOnPremisesInstancesInput": {
       "base": "<p>Represents the input of, and adds tags to, an on-premises instance operation.</p>",
       "refs": {
+      }
+    },
+    "AdditionalDeploymentStatusInfo": {
+      "base": null,
+      "refs": {
+        "DeploymentInfo$additionalDeploymentStatusInfo": "<p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>"
       }
     },
     "Alarm": {
@@ -210,6 +218,7 @@
       "base": null,
       "refs": {
         "CreateDeploymentGroupInput$autoScalingGroups": "<p>A list of associated Auto Scaling groups.</p>",
+        "TargetInstances$autoScalingGroups": "<p>The names of one or more Auto Scaling groups to identify a replacement environment for a blue/green deployment.</p>",
         "UpdateDeploymentGroupInput$autoScalingGroups": "<p>The replacement list of Auto Scaling groups to be included in the deployment group, if you want to change them. To keep the Auto Scaling groups, enter their names. To remove Auto Scaling groups, do not enter any Auto Scaling group names.</p>"
       }
     },
@@ -278,6 +287,21 @@
       "refs": {
       }
     },
+    "BlueGreenDeploymentConfiguration": {
+      "base": "<p>Information about blue/green deployment options for a deployment group.</p>",
+      "refs": {
+        "CreateDeploymentGroupInput$blueGreenDeploymentConfiguration": "<p>Information about blue/green deployment options for a deployment group.</p>",
+        "DeploymentGroupInfo$blueGreenDeploymentConfiguration": "<p>Information about blue/green deployment options for a deployment group.</p>",
+        "DeploymentInfo$blueGreenDeploymentConfiguration": "<p>Information about blue/green deployment options for this deployment.</p>",
+        "UpdateDeploymentGroupInput$blueGreenDeploymentConfiguration": "<p>Information about blue/green deployment options for a deployment group.</p>"
+      }
+    },
+    "BlueInstanceTerminationOption": {
+      "base": "<p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful.</p>",
+      "refs": {
+        "BlueGreenDeploymentConfiguration$terminateBlueInstancesOnDeploymentSuccess": "<p>Information about whether to terminate instances in the original fleet during a blue/green deployment.</p>"
+      }
+    },
     "Boolean": {
       "base": null,
       "refs": {
@@ -288,7 +312,8 @@
         "CreateDeploymentInput$ignoreApplicationStopFailures": "<p>If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>",
         "CreateDeploymentInput$updateOutdatedInstancesOnly": "<p>Indicates whether to deploy to all instances or only to instances that are not running the latest application revision.</p>",
         "DeploymentInfo$ignoreApplicationStopFailures": "<p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>",
-        "DeploymentInfo$updateOutdatedInstancesOnly": "<p>Indicates whether only instances that are not running the latest application revision are to be deployed to.</p>"
+        "DeploymentInfo$updateOutdatedInstancesOnly": "<p>Indicates whether only instances that are not running the latest application revision are to be deployed to.</p>",
+        "DeploymentInfo$instanceTerminationWaitTimeStarted": "<p>Indicates whether the wait period set for the termination of instances in the original environment has started. Status is 'false' if the KEEP_ALIVE option is specified; otherwise, 'true' as soon as the termination wait period starts.</p>"
       }
     },
     "BucketNameFilterRequiredException": {
@@ -306,6 +331,11 @@
       "base": null,
       "refs": {
         "GitHubLocation$commitId": "<p>The SHA1 commit ID of the GitHub commit that represents the bundled artifacts for the application revision.</p>"
+      }
+    },
+    "ContinueDeploymentInput": {
+      "base": null,
+      "refs": {
       }
     },
     "CreateApplicationInput": {
@@ -510,6 +540,7 @@
       "base": null,
       "refs": {
         "BatchGetDeploymentInstancesInput$deploymentId": "<p>The unique ID of a deployment.</p>",
+        "ContinueDeploymentInput$deploymentId": "<p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>",
         "CreateDeploymentOutput$deploymentId": "<p>A unique deployment ID.</p>",
         "DeploymentInfo$deploymentId": "<p>The deployment ID.</p>",
         "DeploymentsList$member": null,
@@ -519,6 +550,7 @@
         "ListDeploymentInstancesInput$deploymentId": "<p>The unique ID of a deployment.</p>",
         "RollbackInfo$rollbackDeploymentId": "<p>The ID of the deployment rollback.</p>",
         "RollbackInfo$rollbackTriggeringDeploymentId": "<p>The deployment ID of the deployment that was underway and triggered a rollback deployment because it failed or was stopped.</p>",
+        "SkipWaitTimeForInstanceTerminationInput$deploymentId": "<p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>",
         "StopDeploymentInput$deploymentId": "<p>The unique ID of a deployment.</p>"
       }
     },
@@ -534,6 +566,11 @@
         "GetDeploymentOutput$deploymentInfo": "<p>Information about the deployment.</p>"
       }
     },
+    "DeploymentIsNotInReadyStateException": {
+      "base": "<p>The deployment does not have a status of Ready and can't continue yet.</p>",
+      "refs": {
+      }
+    },
     "DeploymentLimitExceededException": {
       "base": "<p>The number of allowed deployments was exceeded.</p>",
       "refs": {
@@ -544,10 +581,28 @@
       "refs": {
       }
     },
+    "DeploymentOption": {
+      "base": null,
+      "refs": {
+        "DeploymentStyle$deploymentOption": "<p>Indicates whether to route deployment traffic behind a load balancer.</p>"
+      }
+    },
     "DeploymentOverview": {
       "base": "<p>Information about the deployment status of the instances in the deployment.</p>",
       "refs": {
         "DeploymentInfo$deploymentOverview": "<p>A summary of the deployment status of the instances in the deployment.</p>"
+      }
+    },
+    "DeploymentReadyAction": {
+      "base": null,
+      "refs": {
+        "DeploymentReadyOption$actionOnTimeout": "<p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE_DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP_DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul>"
+      }
+    },
+    "DeploymentReadyOption": {
+      "base": "<p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>",
+      "refs": {
+        "BlueGreenDeploymentConfiguration$deploymentReadyOption": "<p>Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.</p>"
       }
     },
     "DeploymentStatus": {
@@ -561,6 +616,21 @@
       "base": null,
       "refs": {
         "ListDeploymentsInput$includeOnlyStatuses": "<p>A subset of deployments to list by status:</p> <ul> <li> <p>Created: Include created deployments in the resulting list.</p> </li> <li> <p>Queued: Include queued deployments in the resulting list.</p> </li> <li> <p>In Progress: Include in-progress deployments in the resulting list.</p> </li> <li> <p>Succeeded: Include successful deployments in the resulting list.</p> </li> <li> <p>Failed: Include failed deployments in the resulting list.</p> </li> <li> <p>Stopped: Include stopped deployments in the resulting list.</p> </li> </ul>"
+      }
+    },
+    "DeploymentStyle": {
+      "base": "<p>Information about the type of deployment, either standard or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>",
+      "refs": {
+        "CreateDeploymentGroupInput$deploymentStyle": "<p>Information about the type of deployment, standard or blue/green, that you want to run and whether to route deployment traffic behind a load balancer.</p>",
+        "DeploymentGroupInfo$deploymentStyle": "<p>Information about the type of deployment, either standard or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>",
+        "DeploymentInfo$deploymentStyle": "<p>Information about the type of deployment, either standard or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>",
+        "UpdateDeploymentGroupInput$deploymentStyle": "<p>Information about the type of deployment, either standard or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>"
+      }
+    },
+    "DeploymentType": {
+      "base": null,
+      "refs": {
+        "DeploymentStyle$deploymentType": "<p>Indicates whether to run a standard deployment or a blue/green deployment.</p>"
       }
     },
     "DeploymentsInfoList": {
@@ -602,6 +672,13 @@
         "LifecycleEvent$diagnostics": "<p>Diagnostic information about the deployment lifecycle event.</p>"
       }
     },
+    "Duration": {
+      "base": null,
+      "refs": {
+        "BlueInstanceTerminationOption$terminationWaitTimeInMinutes": "<p>The number of minutes to wait after a successful blue/green deployment before terminating instances from the original environment.</p>",
+        "DeploymentReadyOption$waitTimeInMinutes": "<p>The number of minutes to wait before the status of a blue/green deployment changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>"
+      }
+    },
     "EC2TagFilter": {
       "base": "<p>Information about a tag filter.</p>",
       "refs": {
@@ -613,6 +690,7 @@
       "refs": {
         "CreateDeploymentGroupInput$ec2TagFilters": "<p>The Amazon EC2 tags on which to filter.</p>",
         "DeploymentGroupInfo$ec2TagFilters": "<p>The Amazon EC2 tags on which to filter.</p>",
+        "TargetInstances$tagFilters": "<p>The tag filter key, type, and value used to identify Amazon EC2 instances in a replacement environment for a blue/green deployment.</p>",
         "UpdateDeploymentGroupInput$ec2TagFilters": "<p>The replacement set of Amazon EC2 tags on which to filter, if you want to change them. To keep the existing tags, enter their names. To remove tags, do not enter any tag names.</p>"
       }
     },
@@ -620,6 +698,24 @@
       "base": null,
       "refs": {
         "EC2TagFilter$Type": "<p>The tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>"
+      }
+    },
+    "ELBInfo": {
+      "base": "<p>Information about a load balancer in Elastic Load Balancing to use in a blue/green deployment.</p>",
+      "refs": {
+        "ELBInfoList$member": null
+      }
+    },
+    "ELBInfoList": {
+      "base": null,
+      "refs": {
+        "LoadBalancerInfo$elbInfoList": "<p>An array containing information about the load balancer in Elastic Load Balancing to use in a blue/green deployment.</p>"
+      }
+    },
+    "ELBName": {
+      "base": null,
+      "refs": {
+        "ELBInfo$name": "<p>The name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment.</p>"
       }
     },
     "ETag": {
@@ -631,7 +727,7 @@
     "ErrorCode": {
       "base": null,
       "refs": {
-        "ErrorInformation$code": "<p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>"
+        "ErrorInformation$code": "<p>For information about additional error codes, see <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html\">Error Codes for AWS CodeDeploy</a> in the <a href=\"http://docs.aws.amazon.com/codedeploy/latest/userguide\">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>"
       }
     },
     "ErrorInformation": {
@@ -653,7 +749,7 @@
       "base": "<p>Information about an application revision.</p>",
       "refs": {
         "GetApplicationRevisionOutput$revisionInfo": "<p>General information about the revision.</p>",
-        "RevisionInfo$genericRevisionInfo": "<p>Information about an application revision, including usage details and currently associated deployment groups.</p>"
+        "RevisionInfo$genericRevisionInfo": "<p>Information about an application revision, including usage details and associated deployment groups.</p>"
       }
     },
     "GetApplicationInput": {
@@ -732,6 +828,18 @@
         "RevisionLocation$gitHubLocation": "<p>Information about the location of application artifacts stored in GitHub.</p>"
       }
     },
+    "GreenFleetProvisioningAction": {
+      "base": null,
+      "refs": {
+        "GreenFleetProvisioningOption$action": "<p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER_EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY_AUTO_SCALING_GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul>"
+      }
+    },
+    "GreenFleetProvisioningOption": {
+      "base": "<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>",
+      "refs": {
+        "BlueGreenDeploymentConfiguration$greenFleetProvisioningOption": "<p>Information about how instances are provisioned for a replacement environment in a blue/green deployment.</p>"
+      }
+    },
     "IamArnRequiredException": {
       "base": "<p>No IAM ARN was included in the request. You must use an IAM session ARN or IAM user ARN in the request.</p>",
       "refs": {
@@ -766,6 +874,12 @@
       "refs": {
       }
     },
+    "InstanceAction": {
+      "base": null,
+      "refs": {
+        "BlueInstanceTerminationOption$action": "<p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul>"
+      }
+    },
     "InstanceArn": {
       "base": null,
       "refs": {
@@ -779,7 +893,8 @@
         "DeploymentOverview$InProgress": "<p>The number of instances in which the deployment is in progress.</p>",
         "DeploymentOverview$Succeeded": "<p>The number of instances in the deployment to which revisions have been successfully deployed.</p>",
         "DeploymentOverview$Failed": "<p>The number of instances in the deployment in a failed state.</p>",
-        "DeploymentOverview$Skipped": "<p>The number of instances in the deployment in a skipped state.</p>"
+        "DeploymentOverview$Skipped": "<p>The number of instances in the deployment in a skipped state.</p>",
+        "DeploymentOverview$Ready": "<p>The number of instances in a replacement environment ready to receive traffic in a blue/green deployment.</p>"
       }
     },
     "InstanceDoesNotExistException": {
@@ -878,6 +993,19 @@
         "BatchGetDeploymentInstancesOutput$instancesSummary": "<p>Information about the instance.</p>"
       }
     },
+    "InstanceType": {
+      "base": null,
+      "refs": {
+        "InstanceSummary$instanceType": "<p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul>",
+        "InstanceTypeList$member": null
+      }
+    },
+    "InstanceTypeList": {
+      "base": null,
+      "refs": {
+        "ListDeploymentInstancesInput$instanceTypeFilter": "<p>The set of instances in a blue/green deployment, either those in the original environment (\"BLUE\") or those in the replacement environment (\"GREEN\"), for which you want to view instance information.</p>"
+      }
+    },
     "InstancesList": {
       "base": null,
       "refs": {
@@ -902,6 +1030,11 @@
     },
     "InvalidAutoScalingGroupException": {
       "base": "<p>The Auto Scaling group was specified in an invalid format or does not exist.</p>",
+      "refs": {
+      }
+    },
+    "InvalidBlueGreenDeploymentConfigurationException": {
+      "base": "<p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>",
       "refs": {
       }
     },
@@ -935,6 +1068,11 @@
       "refs": {
       }
     },
+    "InvalidDeploymentStyleException": {
+      "base": "<p>An invalid deployment style was specified. Valid deployment types include \"IN_PLACE\" and \"BLUE_GREEN\". Valid deployment options for blue/green deployments include \"WITH_TRAFFIC_CONTROL\" and \"WITHOUT_TRAFFIC_CONTROL\".</p>",
+      "refs": {
+      }
+    },
     "InvalidEC2TagException": {
       "base": "<p>The tag was specified in an invalid format.</p>",
       "refs": {
@@ -960,8 +1098,18 @@
       "refs": {
       }
     },
+    "InvalidInstanceTypeException": {
+      "base": "<p>An invalid instance type was specified for instances in a blue/green deployment. Valid values include \"Blue\" for an original environment and \"Green\" for a replacement environment.</p>",
+      "refs": {
+      }
+    },
     "InvalidKeyPrefixFilterException": {
       "base": "<p>The specified key prefix filter was specified in an invalid format.</p>",
+      "refs": {
+      }
+    },
+    "InvalidLoadBalancerInfoException": {
+      "base": "<p>An invalid load balancer name, or no load balancer name, was specified.</p>",
       "refs": {
       }
     },
@@ -1012,6 +1160,11 @@
     },
     "InvalidTagFilterException": {
       "base": "<p>The specified tag filter was specified in an invalid format.</p>",
+      "refs": {
+      }
+    },
+    "InvalidTargetInstancesException": {
+      "base": "<p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul>",
       "refs": {
       }
     },
@@ -1148,6 +1301,15 @@
       "base": null,
       "refs": {
         "ListApplicationRevisionsInput$deployed": "<p>Whether to list revisions based on whether the revision is the target revision of an deployment group:</p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul>"
+      }
+    },
+    "LoadBalancerInfo": {
+      "base": "<p>Information about the load balancer used in a blue/green deployment.</p>",
+      "refs": {
+        "CreateDeploymentGroupInput$loadBalancerInfo": "<p>Information about the load balancer used in a blue/green deployment.</p>",
+        "DeploymentGroupInfo$loadBalancerInfo": "<p>Information about the load balancer to use in a blue/green deployment.</p>",
+        "DeploymentInfo$loadBalancerInfo": "<p>Information about the load balancer used in this blue/green deployment.</p>",
+        "UpdateDeploymentGroupInput$loadBalancerInfo": "<p>Information about the load balancer used in a blue/green deployment.</p>"
       }
     },
     "LogTail": {
@@ -1331,6 +1493,11 @@
         "Diagnostics$scriptName": "<p>The name of the script.</p>"
       }
     },
+    "SkipWaitTimeForInstanceTerminationInput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "SortOrder": {
       "base": null,
       "refs": {
@@ -1396,6 +1563,13 @@
     "TagRequiredException": {
       "base": "<p>A tag was not specified.</p>",
       "refs": {
+      }
+    },
+    "TargetInstances": {
+      "base": "<p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>",
+      "refs": {
+        "CreateDeploymentInput$targetInstances": "<p>Information about the instances that will belong to the replacement environment in a blue/green deployment.</p>",
+        "DeploymentInfo$targetInstances": "<p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>"
       }
     },
     "TimeRange": {
@@ -1464,6 +1638,11 @@
     },
     "TriggerTargetsLimitExceededException": {
       "base": "<p>The maximum allowed number of triggers was exceeded.</p>",
+      "refs": {
+      }
+    },
+    "UnsupportedActionForDeploymentTypeException": {
+      "base": "<p>A call was submitted that is not supported for the specified deployment type.</p>",
       "refs": {
       }
     },

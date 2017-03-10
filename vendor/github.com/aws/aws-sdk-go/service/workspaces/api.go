@@ -66,13 +66,13 @@ func (c *WorkSpaces) CreateTagsRequest(input *CreateTagsInput) (req *request.Req
 // API operation CreateTags for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The resource could not be found.
 //
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
-//   * ResourceLimitExceededException
+//   * ErrCodeResourceLimitExceededException "ResourceLimitExceededException"
 //   Your resource limits have been exceeded.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/CreateTags
@@ -139,10 +139,10 @@ func (c *WorkSpaces) CreateWorkspacesRequest(input *CreateWorkspacesInput) (req 
 // API operation CreateWorkspaces for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceLimitExceededException
+//   * ErrCodeResourceLimitExceededException "ResourceLimitExceededException"
 //   Your resource limits have been exceeded.
 //
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/CreateWorkspaces
@@ -207,10 +207,10 @@ func (c *WorkSpaces) DeleteTagsRequest(input *DeleteTagsInput) (req *request.Req
 // API operation DeleteTags for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The resource could not be found.
 //
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DeleteTags
@@ -275,7 +275,7 @@ func (c *WorkSpaces) DescribeTagsRequest(input *DescribeTagsInput) (req *request
 // API operation DescribeTags for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The resource could not be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeTags
@@ -355,7 +355,7 @@ func (c *WorkSpaces) DescribeWorkspaceBundlesRequest(input *DescribeWorkspaceBun
 // API operation DescribeWorkspaceBundles for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeWorkspaceBundles
@@ -458,7 +458,7 @@ func (c *WorkSpaces) DescribeWorkspaceDirectoriesRequest(input *DescribeWorkspac
 // API operation DescribeWorkspaceDirectories for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeWorkspaceDirectories
@@ -562,10 +562,10 @@ func (c *WorkSpaces) DescribeWorkspacesRequest(input *DescribeWorkspacesInput) (
 // API operation DescribeWorkspaces for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
-//   * ResourceUnavailableException
+//   * ErrCodeResourceUnavailableException "ResourceUnavailableException"
 //   The specified resource is not available.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeWorkspaces
@@ -655,7 +655,7 @@ func (c *WorkSpaces) DescribeWorkspacesConnectionStatusRequest(input *DescribeWo
 // API operation DescribeWorkspacesConnectionStatus for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/DescribeWorkspacesConnectionStatus
@@ -721,27 +721,26 @@ func (c *WorkSpaces) ModifyWorkspacePropertiesRequest(input *ModifyWorkspaceProp
 // API operation ModifyWorkspaceProperties for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParameterValuesException
+//   * ErrCodeInvalidParameterValuesException "InvalidParameterValuesException"
 //   One or more parameter values are not valid.
 //
-//   * InvalidResourceStateException
+//   * ErrCodeInvalidResourceStateException "InvalidResourceStateException"
 //   The specified WorkSpace has an invalid state for this operation.
 //
-//   * OperationInProgressException
+//   * ErrCodeOperationInProgressException "OperationInProgressException"
 //   The properties of this WorkSpace are currently being modified. Try again
 //   in a moment.
 //
-//   * UnsupportedWorkspaceConfigurationException
+//   * ErrCodeUnsupportedWorkspaceConfigurationException "UnsupportedWorkspaceConfigurationException"
 //   The WorkSpace does not have the supported configuration for this operation.
 //   For more information, see the Amazon WorkSpaces Administration Guide (http://docs.aws.amazon.com/workspaces/latest/adminguide).
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The resource could not be found.
 //
-//   * AccessDeniedException
-
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //
-//   * ResourceUnavailableException
+//   * ErrCodeResourceUnavailableException "ResourceUnavailableException"
 //   The specified resource is not available.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/workspaces-2015-04-08/ModifyWorkspaceProperties

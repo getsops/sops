@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleHealth_DescribeAffectedEntities() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := health.New(sess)
 
@@ -75,11 +71,7 @@ func ExampleHealth_DescribeAffectedEntities() {
 }
 
 func ExampleHealth_DescribeEntityAggregates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := health.New(sess)
 
@@ -103,11 +95,7 @@ func ExampleHealth_DescribeEntityAggregates() {
 }
 
 func ExampleHealth_DescribeEventAggregates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := health.New(sess)
 
@@ -196,11 +184,7 @@ func ExampleHealth_DescribeEventAggregates() {
 }
 
 func ExampleHealth_DescribeEventDetails() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := health.New(sess)
 
@@ -225,11 +209,7 @@ func ExampleHealth_DescribeEventDetails() {
 }
 
 func ExampleHealth_DescribeEventTypes() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := health.New(sess)
 
@@ -266,11 +246,7 @@ func ExampleHealth_DescribeEventTypes() {
 }
 
 func ExampleHealth_DescribeEvents() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := health.New(sess)
 

@@ -435,6 +435,21 @@
         {"shape":"MissingVersionException"}
       ]
     },
+    "UpdateContainerInstancesState":{
+      "name":"UpdateContainerInstancesState",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateContainerInstancesStateRequest"},
+      "output":{"shape":"UpdateContainerInstancesStateResponse"},
+      "errors":[
+        {"shape":"ServerException"},
+        {"shape":"ClientException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"ClusterNotFoundException"}
+      ]
+    },
     "UpdateService":{
       "name":"UpdateService",
       "http":{
@@ -598,6 +613,13 @@
         "agentUpdateStatus":{"shape":"AgentUpdateStatus"},
         "attributes":{"shape":"Attributes"}
       }
+    },
+    "ContainerInstanceStatus":{
+      "type":"string",
+      "enum":[
+        "ACTIVE",
+        "DRAINING"
+      ]
     },
     "ContainerInstances":{
       "type":"list",
@@ -938,7 +960,8 @@
         "cluster":{"shape":"String"},
         "filter":{"shape":"String"},
         "nextToken":{"shape":"String"},
-        "maxResults":{"shape":"BoxedInteger"}
+        "maxResults":{"shape":"BoxedInteger"},
+        "status":{"shape":"ContainerInstanceStatus"}
       }
     },
     "ListContainerInstancesResponse":{
@@ -1524,6 +1547,25 @@
       "type":"structure",
       "members":{
         "containerInstance":{"shape":"ContainerInstance"}
+      }
+    },
+    "UpdateContainerInstancesStateRequest":{
+      "type":"structure",
+      "required":[
+        "containerInstances",
+        "status"
+      ],
+      "members":{
+        "cluster":{"shape":"String"},
+        "containerInstances":{"shape":"StringList"},
+        "status":{"shape":"ContainerInstanceStatus"}
+      }
+    },
+    "UpdateContainerInstancesStateResponse":{
+      "type":"structure",
+      "members":{
+        "containerInstances":{"shape":"ContainerInstances"},
+        "failures":{"shape":"Failures"}
       }
     },
     "UpdateInProgressException":{

@@ -14,9 +14,9 @@
 				</div>
 				<ul class="packages" >
 				{{range .List}}
-				<dd style="margin: 0 0 0 0;line-height:1.25;font-size:larger;padding-left: {{multiply (add .Depth 1) 20}}px;">
+				<li style="padding-left: {{multiply (add .Depth 1) 20}}px;">
 					<a target="_parent" href="{{srcLink .Path}}/">{{html .Name}}</a>
-				</dd>
+				</li>
 				{{end}}
 				</ul>
 		</div>

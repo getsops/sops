@@ -8,7 +8,10 @@
     "DescribeElasticsearchDomain": "<p>Returns domain configuration information about the specified Elasticsearch domain, including the domain ID, domain endpoint, and domain ARN.</p>",
     "DescribeElasticsearchDomainConfig": "<p>Provides cluster configuration information about the specified Elasticsearch domain, such as the state, creation date, update version, and update date for cluster options.</p>",
     "DescribeElasticsearchDomains": "<p>Returns domain configuration information about the specified Elasticsearch domains, including the domain ID, domain endpoint, and domain ARN.</p>",
+    "DescribeElasticsearchInstanceTypeLimits": "<p> Describe Elasticsearch Limits for a given InstanceType and ElasticsearchVersion. When modifying existing Domain, specify the <code> <a>DomainName</a> </code> to know what Limits are supported for modifying. </p>",
     "ListDomainNames": "<p>Returns the name of all Elasticsearch domains owned by the current user's account. </p>",
+    "ListElasticsearchInstanceTypes": "<p>List all Elasticsearch instance types that are supported for given ElasticsearchVersion</p>",
+    "ListElasticsearchVersions": "<p>List all supported Elasticsearch versions</p>",
     "ListTags": "<p>Returns all tags for the given Elasticsearch domain.</p>",
     "RemoveTags": "<p>Removes the specified set of tags from the specified Elasticsearch domain.</p>",
     "UpdateElasticsearchDomainConfig": "<p>Modifies the cluster configuration of the specified Elasticsearch domain, setting as setting the instance type and the number of instances. </p>"
@@ -32,6 +35,18 @@
     "AddTagsRequest": {
       "base": "<p>Container for the parameters to the <code><a>AddTags</a></code> operation. Specify the tags that you want to attach to the Elasticsearch domain.</p>",
       "refs": {
+      }
+    },
+    "AdditionalLimit": {
+      "base": "<p> List of limits that are specific to a given InstanceType and for each of it's <code> <a>InstanceRole</a> </code> . </p>",
+      "refs": {
+        "AdditionalLimitList$member": null
+      }
+    },
+    "AdditionalLimitList": {
+      "base": null,
+      "refs": {
+        "Limits$AdditionalLimits": "<p> List of additional limits that are specific to a given InstanceType and for each of it's <code> <a>InstanceRole</a> </code> . </p>"
       }
     },
     "AdvancedOptions": {
@@ -116,6 +131,16 @@
       "refs": {
       }
     },
+    "DescribeElasticsearchInstanceTypeLimitsRequest": {
+      "base": "<p> Container for the parameters to <code> <a>DescribeElasticsearchInstanceTypeLimits</a> </code> operation. </p>",
+      "refs": {
+      }
+    },
+    "DescribeElasticsearchInstanceTypeLimitsResponse": {
+      "base": "<p> Container for the parameters received from <code> <a>DescribeElasticsearchInstanceTypeLimits</a> </code> operation. </p>",
+      "refs": {
+      }
+    },
     "DisabledOperationException": {
       "base": "<p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>",
       "refs": {
@@ -146,9 +171,11 @@
         "DeleteElasticsearchDomainRequest$DomainName": "<p>The name of the Elasticsearch domain that you want to permanently delete.</p>",
         "DescribeElasticsearchDomainConfigRequest$DomainName": "<p>The Elasticsearch domain that you want to get information about.</p>",
         "DescribeElasticsearchDomainRequest$DomainName": "<p>The name of the Elasticsearch domain for which you want information.</p>",
+        "DescribeElasticsearchInstanceTypeLimitsRequest$DomainName": "<p> DomainName represents the name of the Domain that we are trying to modify. This should be present only if we are querying for Elasticsearch <code> <a>Limits</a> </code> for existing domain. </p>",
         "DomainInfo$DomainName": "<p> Specifies the <code>DomainName</code>.</p>",
         "DomainNameList$member": null,
         "ElasticsearchDomainStatus$DomainName": "<p>The name of an Elasticsearch domain. Domain names are unique across the domains owned by an account within an AWS region. Domain names start with a letter or number and can contain the following characters: a-z (lowercase), 0-9, and - (hyphen).</p>",
+        "ListElasticsearchInstanceTypesRequest$DomainName": "<p>DomainName represents the name of the Domain that we are trying to modify. This should be present only if we are querying for list of available Elasticsearch instance types when modifying existing domain. </p>",
         "UpdateElasticsearchDomainConfigRequest$DomainName": "<p>The name of the Elasticsearch domain that you are updating. </p>"
       }
     },
@@ -176,8 +203,10 @@
     "ESPartitionInstanceType": {
       "base": null,
       "refs": {
+        "DescribeElasticsearchInstanceTypeLimitsRequest$InstanceType": "<p> The instance type for an Elasticsearch cluster for which Elasticsearch <code> <a>Limits</a> </code> are needed. </p>",
         "ElasticsearchClusterConfig$InstanceType": "<p>The instance type for an Elasticsearch cluster.</p>",
-        "ElasticsearchClusterConfig$DedicatedMasterType": "<p>The instance type for a dedicated master node.</p>"
+        "ElasticsearchClusterConfig$DedicatedMasterType": "<p>The instance type for a dedicated master node.</p>",
+        "ElasticsearchInstanceTypeList$member": null
       }
     },
     "ElasticsearchClusterConfig": {
@@ -217,6 +246,18 @@
         "DescribeElasticsearchDomainsResponse$DomainStatusList": "<p>The status of the domains requested in the <code>DescribeElasticsearchDomains</code> request.</p>"
       }
     },
+    "ElasticsearchInstanceTypeList": {
+      "base": "<p> List of instance types supported by Amazon Elasticsearch service. </p>",
+      "refs": {
+        "ListElasticsearchInstanceTypesResponse$ElasticsearchInstanceTypes": "<p> List of instance types supported by Amazon Elasticsearch service for given <code> <a>ElasticsearchVersion</a> </code> </p>"
+      }
+    },
+    "ElasticsearchVersionList": {
+      "base": "<p>List of supported elastic search versions. </p>",
+      "refs": {
+        "ListElasticsearchVersionsResponse$ElasticsearchVersions": null
+      }
+    },
     "ElasticsearchVersionStatus": {
       "base": "<p> Status of the Elasticsearch version options for the specified Elasticsearch domain.</p>",
       "refs": {
@@ -227,14 +268,35 @@
       "base": null,
       "refs": {
         "CreateElasticsearchDomainRequest$ElasticsearchVersion": "<p>String of format X.Y to specify version for the Elasticsearch domain eg. \"1.5\" or \"2.3\". For more information, see <a href=\"http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains\" target=\"_blank\">Creating Elasticsearch Domains</a> in the <i>Amazon Elasticsearch Service Developer Guide</i>.</p>",
+        "DescribeElasticsearchInstanceTypeLimitsRequest$ElasticsearchVersion": "<p> Version of Elasticsearch for which <code> <a>Limits</a> </code> are needed. </p>",
         "ElasticsearchDomainStatus$ElasticsearchVersion": null,
-        "ElasticsearchVersionStatus$Options": "<p> Specifies the Elasticsearch version for the specified Elasticsearch domain.</p>"
+        "ElasticsearchVersionList$member": null,
+        "ElasticsearchVersionStatus$Options": "<p> Specifies the Elasticsearch version for the specified Elasticsearch domain.</p>",
+        "ListElasticsearchInstanceTypesRequest$ElasticsearchVersion": "<p>Version of Elasticsearch for which list of supported elasticsearch instance types are needed. </p>"
       }
     },
     "ErrorMessage": {
       "base": null,
       "refs": {
         "BaseException$message": "<p>A description of the error.</p>"
+      }
+    },
+    "InstanceCountLimits": {
+      "base": "<p> InstanceCountLimits represents the limits on number of instances that be created in Amazon Elasticsearch for given InstanceType. </p>",
+      "refs": {
+        "InstanceLimits$InstanceCountLimits": null
+      }
+    },
+    "InstanceLimits": {
+      "base": "<p>InstanceLimits represents the list of instance related attributes that are available for given InstanceType. </p>",
+      "refs": {
+        "Limits$InstanceLimits": null
+      }
+    },
+    "InstanceRole": {
+      "base": null,
+      "refs": {
+        "LimitsByRole$key": null
       }
     },
     "IntegerClass": {
@@ -262,8 +324,60 @@
       "refs": {
       }
     },
+    "LimitName": {
+      "base": null,
+      "refs": {
+        "AdditionalLimit$LimitName": "<p> Name of Additional Limit is specific to a given InstanceType and for each of it's <code> <a>InstanceRole</a> </code> etc. <br/> Attributes and their details: <br/> <ul> <li>MaximumNumberOfDataNodesSupported</li> This attribute will be present in Master node only to specify how much data nodes upto which given <code> <a>ESPartitionInstanceType</a> </code> can support as master node. <li>MaximumNumberOfDataNodesWithoutMasterNode</li> This attribute will be present in Data node only to specify how much data nodes of given <code> <a>ESPartitionInstanceType</a> </code> upto which you don't need any master nodes to govern them. </ul> </p>",
+        "StorageTypeLimit$LimitName": "<p> Name of storage limits that are applicable for given storage type. If <code> <a>StorageType</a> </code> is ebs, following storage options are applicable <ol> <li>MinimumVolumeSize</li> Minimum amount of volume size that is applicable for given storage type.It can be empty if it is not applicable. <li>MaximumVolumeSize</li> Maximum amount of volume size that is applicable for given storage type.It can be empty if it is not applicable. <li>MaximumIops</li> Maximum amount of Iops that is applicable for given storage type.It can be empty if it is not applicable. <li>MinimumIops</li> Minimum amount of Iops that is applicable for given storage type.It can be empty if it is not applicable. </ol> </p>"
+      }
+    },
+    "LimitValue": {
+      "base": null,
+      "refs": {
+        "LimitValueList$member": null
+      }
+    },
+    "LimitValueList": {
+      "base": null,
+      "refs": {
+        "AdditionalLimit$LimitValues": "<p> Value for given <code> <a>AdditionalLimit$LimitName</a> </code> . </p>",
+        "StorageTypeLimit$LimitValues": "<p> Values for the <code> <a>StorageTypeLimit$LimitName</a> </code> . </p>"
+      }
+    },
+    "Limits": {
+      "base": "<p> Limits for given InstanceType and for each of it's role. <br/> Limits contains following <code> <a>StorageTypes,</a> </code> <code> <a>InstanceLimits</a> </code> and <code> <a>AdditionalLimits</a> </code> </p>",
+      "refs": {
+        "LimitsByRole$value": null
+      }
+    },
+    "LimitsByRole": {
+      "base": "<p> Map of Role of the Instance and Limits that are applicable. Role performed by given Instance in Elasticsearch can be one of the following: <ul> <li>Data: If the given InstanceType is used as Data node</li> <li>Master: If the given InstanceType is used as Master node</li> </ul> </p>",
+      "refs": {
+        "DescribeElasticsearchInstanceTypeLimitsResponse$LimitsByRole": null
+      }
+    },
     "ListDomainNamesResponse": {
       "base": "<p>The result of a <code>ListDomainNames</code> operation. Contains the names of all Elasticsearch domains owned by this account.</p>",
+      "refs": {
+      }
+    },
+    "ListElasticsearchInstanceTypesRequest": {
+      "base": "<p> Container for the parameters to the <code> <a>ListElasticsearchInstanceTypes</a> </code> operation. </p>",
+      "refs": {
+      }
+    },
+    "ListElasticsearchInstanceTypesResponse": {
+      "base": "<p> Container for the parameters returned by <code> <a>ListElasticsearchInstanceTypes</a> </code> operation. </p>",
+      "refs": {
+      }
+    },
+    "ListElasticsearchVersionsRequest": {
+      "base": "<p> Container for the parameters to the <code> <a>ListElasticsearchVersions</a> </code> operation. <p> Use <code> <a>MaxResults</a> </code> to control the maximum number of results to retrieve in a single call. </p> <p> Use <code> <a>NextToken</a> </code> in response to retrieve more results. If the received response does not contain a NextToken, then there are no more results to retrieve. </p> </p>",
+      "refs": {
+      }
+    },
+    "ListElasticsearchVersionsResponse": {
+      "base": "<p> Container for the parameters for response received from <code> <a>ListElasticsearchVersions</a> </code> operation. </p>",
       "refs": {
       }
     },
@@ -275,6 +389,34 @@
     "ListTagsResponse": {
       "base": "<p>The result of a <code>ListTags</code> operation. Contains tags for all requested Elasticsearch domains.</p>",
       "refs": {
+      }
+    },
+    "MaxResults": {
+      "base": "<p> Set this value to limit the number of results returned. </p>",
+      "refs": {
+        "ListElasticsearchInstanceTypesRequest$MaxResults": "<p> Set this value to limit the number of results returned. Value provided must be greater than 30 else it wont be honored. </p>",
+        "ListElasticsearchVersionsRequest$MaxResults": "<p> Set this value to limit the number of results returned. Value provided must be greater than 10 else it wont be honored. </p>"
+      }
+    },
+    "MaximumInstanceCount": {
+      "base": "<p> Maximum number of Instances that can be instantiated for given InstanceType. </p>",
+      "refs": {
+        "InstanceCountLimits$MaximumInstanceCount": null
+      }
+    },
+    "MinimumInstanceCount": {
+      "base": "<p> Minimum number of Instances that can be instantiated for given InstanceType. </p>",
+      "refs": {
+        "InstanceCountLimits$MinimumInstanceCount": null
+      }
+    },
+    "NextToken": {
+      "base": "<p> Paginated APIs accepts NextToken input to returns next page results and provides a NextToken output in the response which can be used by the client to retrieve more results. </p>",
+      "refs": {
+        "ListElasticsearchInstanceTypesRequest$NextToken": "<p>NextToken should be sent in case if earlier API call produced result containing NextToken. It is used for pagination. </p>",
+        "ListElasticsearchInstanceTypesResponse$NextToken": "<p>In case if there are more results available NextToken would be present, make further request to the same API with received NextToken to paginate remaining results. </p>",
+        "ListElasticsearchVersionsRequest$NextToken": null,
+        "ListElasticsearchVersionsResponse$NextToken": null
       }
     },
     "OptionState": {
@@ -337,6 +479,42 @@
       "base": "<p>Status of a daily automated snapshot.</p>",
       "refs": {
         "ElasticsearchDomainConfig$SnapshotOptions": "<p>Specifies the <code>SnapshotOptions</code> for the Elasticsearch domain.</p>"
+      }
+    },
+    "StorageSubTypeName": {
+      "base": "<p> SubType of the given storage type. List of available sub-storage options: For \"instance\" storageType we wont have any storageSubType, in case of \"ebs\" storageType we will have following valid storageSubTypes <ol> <li>standard</li> <li>gp2</li> <li>io1</li> </ol> Refer <code><a>VolumeType</a></code> for more information regarding above EBS storage options. </p>",
+      "refs": {
+        "StorageType$StorageSubTypeName": null
+      }
+    },
+    "StorageType": {
+      "base": "<p>StorageTypes represents the list of storage related types and their attributes that are available for given InstanceType. </p>",
+      "refs": {
+        "StorageTypeList$member": null
+      }
+    },
+    "StorageTypeLimit": {
+      "base": "<p>Limits that are applicable for given storage type. </p>",
+      "refs": {
+        "StorageTypeLimitList$member": null
+      }
+    },
+    "StorageTypeLimitList": {
+      "base": null,
+      "refs": {
+        "StorageType$StorageTypeLimits": "<p>List of limits that are applicable for given storage type. </p>"
+      }
+    },
+    "StorageTypeList": {
+      "base": null,
+      "refs": {
+        "Limits$StorageTypes": "<p>StorageType represents the list of storage related types and attributes that are available for given InstanceType. </p>"
+      }
+    },
+    "StorageTypeName": {
+      "base": "<p> Type of the storage. List of available storage options: <ol> <li>instance</li> Inbuilt storage available for the given Instance <li>ebs</li> Elastic block storage that would be attached to the given Instance </ol> </p>",
+      "refs": {
+        "StorageType$StorageTypeName": null
       }
     },
     "String": {

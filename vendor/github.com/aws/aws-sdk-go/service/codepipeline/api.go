@@ -69,13 +69,13 @@ func (c *CodePipeline) AcknowledgeJobRequest(input *AcknowledgeJobInput) (req *r
 // API operation AcknowledgeJob for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * InvalidNonceException
+//   * ErrCodeInvalidNonceException "InvalidNonceException"
 //   The specified nonce was specified in an invalid format.
 //
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/AcknowledgeJob
@@ -141,16 +141,16 @@ func (c *CodePipeline) AcknowledgeThirdPartyJobRequest(input *AcknowledgeThirdPa
 // API operation AcknowledgeThirdPartyJob for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * InvalidNonceException
+//   * ErrCodeInvalidNonceException "InvalidNonceException"
 //   The specified nonce was specified in an invalid format.
 //
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
-//   * InvalidClientTokenException
+//   * ErrCodeInvalidClientTokenException "InvalidClientTokenException"
 //   The client token was specified in an invalid format
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/AcknowledgeThirdPartyJob
@@ -216,10 +216,10 @@ func (c *CodePipeline) CreateCustomActionTypeRequest(input *CreateCustomActionTy
 // API operation CreateCustomActionType for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The number of pipelines associated with the AWS account has exceeded the
 //   limit allowed for the account.
 //
@@ -285,25 +285,25 @@ func (c *CodePipeline) CreatePipelineRequest(input *CreatePipelineInput) (req *r
 // API operation CreatePipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNameInUseException
+//   * ErrCodePipelineNameInUseException "PipelineNameInUseException"
 //   The specified pipeline name is already in use.
 //
-//   * InvalidStageDeclarationException
+//   * ErrCodeInvalidStageDeclarationException "InvalidStageDeclarationException"
 //   The specified stage declaration was specified in an invalid format.
 //
-//   * InvalidActionDeclarationException
+//   * ErrCodeInvalidActionDeclarationException "InvalidActionDeclarationException"
 //   The specified action declaration was specified in an invalid format.
 //
-//   * InvalidBlockerDeclarationException
+//   * ErrCodeInvalidBlockerDeclarationException "InvalidBlockerDeclarationException"
 //   Reserved for future use.
 //
-//   * InvalidStructureException
+//   * ErrCodeInvalidStructureException "InvalidStructureException"
 //   The specified structure was specified in an invalid format.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The number of pipelines associated with the AWS account has exceeded the
 //   limit allowed for the account.
 //
@@ -375,7 +375,7 @@ func (c *CodePipeline) DeleteCustomActionTypeRequest(input *DeleteCustomActionTy
 // API operation DeleteCustomActionType for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/DeleteCustomActionType
@@ -442,7 +442,7 @@ func (c *CodePipeline) DeletePipelineRequest(input *DeletePipelineInput) (req *r
 // API operation DeletePipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/DeletePipeline
@@ -510,13 +510,13 @@ func (c *CodePipeline) DisableStageTransitionRequest(input *DisableStageTransiti
 // API operation DisableStageTransition for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
-//   * StageNotFoundException
+//   * ErrCodeStageNotFoundException "StageNotFoundException"
 //   The specified stage was specified in an invalid format or cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/DisableStageTransition
@@ -583,13 +583,13 @@ func (c *CodePipeline) EnableStageTransitionRequest(input *EnableStageTransition
 // API operation EnableStageTransition for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
-//   * StageNotFoundException
+//   * ErrCodeStageNotFoundException "StageNotFoundException"
 //   The specified stage was specified in an invalid format or cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/EnableStageTransition
@@ -659,10 +659,10 @@ func (c *CodePipeline) GetJobDetailsRequest(input *GetJobDetailsInput) (req *req
 // API operation GetJobDetails for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/GetJobDetails
@@ -729,13 +729,13 @@ func (c *CodePipeline) GetPipelineRequest(input *GetPipelineInput) (req *request
 // API operation GetPipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
-//   * PipelineVersionNotFoundException
+//   * ErrCodePipelineVersionNotFoundException "PipelineVersionNotFoundException"
 //   The specified pipeline version was specified in an invalid format or cannot
 //   be found.
 //
@@ -803,13 +803,13 @@ func (c *CodePipeline) GetPipelineExecutionRequest(input *GetPipelineExecutionIn
 // API operation GetPipelineExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
-//   * PipelineExecutionNotFoundException
+//   * ErrCodePipelineExecutionNotFoundException "PipelineExecutionNotFoundException"
 //   The pipeline execution was specified in an invalid format or cannot be found,
 //   or an execution ID does not belong to the specified pipeline.
 //
@@ -876,10 +876,10 @@ func (c *CodePipeline) GetPipelineStateRequest(input *GetPipelineStateInput) (re
 // API operation GetPipelineState for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/GetPipelineState
@@ -950,16 +950,16 @@ func (c *CodePipeline) GetThirdPartyJobDetailsRequest(input *GetThirdPartyJobDet
 // API operation GetThirdPartyJobDetails for usage and error information.
 //
 // Returned Error Codes:
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * InvalidClientTokenException
+//   * ErrCodeInvalidClientTokenException "InvalidClientTokenException"
 //   The client token was specified in an invalid format
 //
-//   * InvalidJobException
+//   * ErrCodeInvalidJobException "InvalidJobException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/GetThirdPartyJobDetails
@@ -1025,10 +1025,10 @@ func (c *CodePipeline) ListActionTypesRequest(input *ListActionTypesInput) (req 
 // API operation ListActionTypes for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * InvalidNextTokenException
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
 //   The next token was specified in an invalid format. Make sure that the next
 //   token you provided is the token returned by a previous call.
 //
@@ -1094,7 +1094,7 @@ func (c *CodePipeline) ListPipelinesRequest(input *ListPipelinesInput) (req *req
 // API operation ListPipelines for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidNextTokenException
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
 //   The next token was specified in an invalid format. Make sure that the next
 //   token you provided is the token returned by a previous call.
 //
@@ -1165,10 +1165,10 @@ func (c *CodePipeline) PollForJobsRequest(input *PollForJobsInput) (req *request
 // API operation PollForJobs for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * ActionTypeNotFoundException
+//   * ErrCodeActionTypeNotFoundException "ActionTypeNotFoundException"
 //   The specified action type cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PollForJobs
@@ -1238,10 +1238,10 @@ func (c *CodePipeline) PollForThirdPartyJobsRequest(input *PollForThirdPartyJobs
 // API operation PollForThirdPartyJobs for usage and error information.
 //
 // Returned Error Codes:
-//   * ActionTypeNotFoundException
+//   * ErrCodeActionTypeNotFoundException "ActionTypeNotFoundException"
 //   The specified action type cannot be found.
 //
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PollForThirdPartyJobs
@@ -1306,16 +1306,16 @@ func (c *CodePipeline) PutActionRevisionRequest(input *PutActionRevisionInput) (
 // API operation PutActionRevision for usage and error information.
 //
 // Returned Error Codes:
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
-//   * StageNotFoundException
+//   * ErrCodeStageNotFoundException "StageNotFoundException"
 //   The specified stage was specified in an invalid format or cannot be found.
 //
-//   * ActionNotFoundException
+//   * ErrCodeActionNotFoundException "ActionNotFoundException"
 //   The specified action cannot be found.
 //
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PutActionRevision
@@ -1381,22 +1381,22 @@ func (c *CodePipeline) PutApprovalResultRequest(input *PutApprovalResultInput) (
 // API operation PutApprovalResult for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidApprovalTokenException
+//   * ErrCodeInvalidApprovalTokenException "InvalidApprovalTokenException"
 //   The approval request already received a response or has expired.
 //
-//   * ApprovalAlreadyCompletedException
+//   * ErrCodeApprovalAlreadyCompletedException "ApprovalAlreadyCompletedException"
 //   The approval action has already been approved or rejected.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
-//   * StageNotFoundException
+//   * ErrCodeStageNotFoundException "StageNotFoundException"
 //   The specified stage was specified in an invalid format or cannot be found.
 //
-//   * ActionNotFoundException
+//   * ErrCodeActionNotFoundException "ActionNotFoundException"
 //   The specified action cannot be found.
 //
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PutApprovalResult
@@ -1464,13 +1464,13 @@ func (c *CodePipeline) PutJobFailureResultRequest(input *PutJobFailureResultInpu
 // API operation PutJobFailureResult for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
-//   * InvalidJobStateException
+//   * ErrCodeInvalidJobStateException "InvalidJobStateException"
 //   The specified job state was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PutJobFailureResult
@@ -1538,13 +1538,13 @@ func (c *CodePipeline) PutJobSuccessResultRequest(input *PutJobSuccessResultInpu
 // API operation PutJobSuccessResult for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
-//   * InvalidJobStateException
+//   * ErrCodeInvalidJobStateException "InvalidJobStateException"
 //   The specified job state was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PutJobSuccessResult
@@ -1612,16 +1612,16 @@ func (c *CodePipeline) PutThirdPartyJobFailureResultRequest(input *PutThirdParty
 // API operation PutThirdPartyJobFailureResult for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
-//   * InvalidJobStateException
+//   * ErrCodeInvalidJobStateException "InvalidJobStateException"
 //   The specified job state was specified in an invalid format.
 //
-//   * InvalidClientTokenException
+//   * ErrCodeInvalidClientTokenException "InvalidClientTokenException"
 //   The client token was specified in an invalid format
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PutThirdPartyJobFailureResult
@@ -1689,16 +1689,16 @@ func (c *CodePipeline) PutThirdPartyJobSuccessResultRequest(input *PutThirdParty
 // API operation PutThirdPartyJobSuccessResult for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * JobNotFoundException
+//   * ErrCodeJobNotFoundException "JobNotFoundException"
 //   The specified job was specified in an invalid format or cannot be found.
 //
-//   * InvalidJobStateException
+//   * ErrCodeInvalidJobStateException "InvalidJobStateException"
 //   The specified job state was specified in an invalid format.
 //
-//   * InvalidClientTokenException
+//   * ErrCodeInvalidClientTokenException "InvalidClientTokenException"
 //   The client token was specified in an invalid format
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/PutThirdPartyJobSuccessResult
@@ -1763,22 +1763,22 @@ func (c *CodePipeline) RetryStageExecutionRequest(input *RetryStageExecutionInpu
 // API operation RetryStageExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
-//   * StageNotFoundException
+//   * ErrCodeStageNotFoundException "StageNotFoundException"
 //   The specified stage was specified in an invalid format or cannot be found.
 //
-//   * StageNotRetryableException
+//   * ErrCodeStageNotRetryableException "StageNotRetryableException"
 //   The specified stage can't be retried because the pipeline structure or stage
 //   state changed after the stage was not completed; the stage contains no failed
 //   actions; one or more actions are still in progress; or another retry attempt
 //   is already in progress.
 //
-//   * NotLatestPipelineExecutionException
+//   * ErrCodeNotLatestPipelineExecutionException "NotLatestPipelineExecutionException"
 //   The stage has failed in a later run of the pipeline and the pipelineExecutionId
 //   associated with the request is out of date.
 //
@@ -1845,10 +1845,10 @@ func (c *CodePipeline) StartPipelineExecutionRequest(input *StartPipelineExecuti
 // API operation StartPipelineExecution for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * PipelineNotFoundException
+//   * ErrCodePipelineNotFoundException "PipelineNotFoundException"
 //   The specified pipeline was specified in an invalid format or cannot be found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/StartPipelineExecution
@@ -1916,19 +1916,19 @@ func (c *CodePipeline) UpdatePipelineRequest(input *UpdatePipelineInput) (req *r
 // API operation UpdatePipeline for usage and error information.
 //
 // Returned Error Codes:
-//   * ValidationException
+//   * ErrCodeValidationException "ValidationException"
 //   The validation was specified in an invalid format.
 //
-//   * InvalidStageDeclarationException
+//   * ErrCodeInvalidStageDeclarationException "InvalidStageDeclarationException"
 //   The specified stage declaration was specified in an invalid format.
 //
-//   * InvalidActionDeclarationException
+//   * ErrCodeInvalidActionDeclarationException "InvalidActionDeclarationException"
 //   The specified action declaration was specified in an invalid format.
 //
-//   * InvalidBlockerDeclarationException
+//   * ErrCodeInvalidBlockerDeclarationException "InvalidBlockerDeclarationException"
 //   Reserved for future use.
 //
-//   * InvalidStructureException
+//   * ErrCodeInvalidStructureException "InvalidStructureException"
 //   The specified structure was specified in an invalid format.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codepipeline-2015-07-09/UpdatePipeline

@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleSSM_AddTagsToResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -49,11 +45,7 @@ func ExampleSSM_AddTagsToResource() {
 }
 
 func ExampleSSM_CancelCommand() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -78,11 +70,7 @@ func ExampleSSM_CancelCommand() {
 }
 
 func ExampleSSM_CreateActivation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -107,11 +95,7 @@ func ExampleSSM_CreateActivation() {
 }
 
 func ExampleSSM_CreateAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -159,11 +143,7 @@ func ExampleSSM_CreateAssociation() {
 }
 
 func ExampleSSM_CreateAssociationBatch() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -216,11 +196,7 @@ func ExampleSSM_CreateAssociationBatch() {
 }
 
 func ExampleSSM_CreateDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -243,11 +219,7 @@ func ExampleSSM_CreateDocument() {
 }
 
 func ExampleSSM_CreateMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -273,11 +245,7 @@ func ExampleSSM_CreateMaintenanceWindow() {
 }
 
 func ExampleSSM_CreatePatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -340,11 +308,7 @@ func ExampleSSM_CreatePatchBaseline() {
 }
 
 func ExampleSSM_DeleteActivation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -365,11 +329,7 @@ func ExampleSSM_DeleteActivation() {
 }
 
 func ExampleSSM_DeleteAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -392,11 +352,7 @@ func ExampleSSM_DeleteAssociation() {
 }
 
 func ExampleSSM_DeleteDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -417,11 +373,7 @@ func ExampleSSM_DeleteDocument() {
 }
 
 func ExampleSSM_DeleteMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -442,11 +394,7 @@ func ExampleSSM_DeleteMaintenanceWindow() {
 }
 
 func ExampleSSM_DeleteParameter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -467,11 +415,7 @@ func ExampleSSM_DeleteParameter() {
 }
 
 func ExampleSSM_DeletePatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -492,11 +436,7 @@ func ExampleSSM_DeletePatchBaseline() {
 }
 
 func ExampleSSM_DeregisterManagedInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -517,11 +457,7 @@ func ExampleSSM_DeregisterManagedInstance() {
 }
 
 func ExampleSSM_DeregisterPatchBaselineForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -543,11 +479,7 @@ func ExampleSSM_DeregisterPatchBaselineForPatchGroup() {
 }
 
 func ExampleSSM_DeregisterTargetFromMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -569,11 +501,7 @@ func ExampleSSM_DeregisterTargetFromMaintenanceWindow() {
 }
 
 func ExampleSSM_DeregisterTaskFromMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -595,11 +523,7 @@ func ExampleSSM_DeregisterTaskFromMaintenanceWindow() {
 }
 
 func ExampleSSM_DescribeActivations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -631,11 +555,7 @@ func ExampleSSM_DescribeActivations() {
 }
 
 func ExampleSSM_DescribeAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -658,11 +578,7 @@ func ExampleSSM_DescribeAssociation() {
 }
 
 func ExampleSSM_DescribeAutomationExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -694,11 +610,7 @@ func ExampleSSM_DescribeAutomationExecutions() {
 }
 
 func ExampleSSM_DescribeAvailablePatches() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -730,11 +642,7 @@ func ExampleSSM_DescribeAvailablePatches() {
 }
 
 func ExampleSSM_DescribeDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -756,11 +664,7 @@ func ExampleSSM_DescribeDocument() {
 }
 
 func ExampleSSM_DescribeDocumentPermission() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -782,11 +686,7 @@ func ExampleSSM_DescribeDocumentPermission() {
 }
 
 func ExampleSSM_DescribeEffectiveInstanceAssociations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -809,11 +709,7 @@ func ExampleSSM_DescribeEffectiveInstanceAssociations() {
 }
 
 func ExampleSSM_DescribeEffectivePatchesForPatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -836,11 +732,7 @@ func ExampleSSM_DescribeEffectivePatchesForPatchBaseline() {
 }
 
 func ExampleSSM_DescribeInstanceAssociationsStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -863,11 +755,7 @@ func ExampleSSM_DescribeInstanceAssociationsStatus() {
 }
 
 func ExampleSSM_DescribeInstanceInformation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -909,11 +797,7 @@ func ExampleSSM_DescribeInstanceInformation() {
 }
 
 func ExampleSSM_DescribeInstancePatchStates() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -939,11 +823,7 @@ func ExampleSSM_DescribeInstancePatchStates() {
 }
 
 func ExampleSSM_DescribeInstancePatchStatesForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -977,11 +857,7 @@ func ExampleSSM_DescribeInstancePatchStatesForPatchGroup() {
 }
 
 func ExampleSSM_DescribeInstancePatches() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1014,11 +890,7 @@ func ExampleSSM_DescribeInstancePatches() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowExecutionTaskInvocations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1052,11 +924,7 @@ func ExampleSSM_DescribeMaintenanceWindowExecutionTaskInvocations() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowExecutionTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1089,11 +957,7 @@ func ExampleSSM_DescribeMaintenanceWindowExecutionTasks() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowExecutions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1126,11 +990,7 @@ func ExampleSSM_DescribeMaintenanceWindowExecutions() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowTargets() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1163,11 +1023,7 @@ func ExampleSSM_DescribeMaintenanceWindowTargets() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindowTasks() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1200,11 +1056,7 @@ func ExampleSSM_DescribeMaintenanceWindowTasks() {
 }
 
 func ExampleSSM_DescribeMaintenanceWindows() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1236,11 +1088,7 @@ func ExampleSSM_DescribeMaintenanceWindows() {
 }
 
 func ExampleSSM_DescribeParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1272,11 +1120,7 @@ func ExampleSSM_DescribeParameters() {
 }
 
 func ExampleSSM_DescribePatchBaselines() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1308,11 +1152,7 @@ func ExampleSSM_DescribePatchBaselines() {
 }
 
 func ExampleSSM_DescribePatchGroupState() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1333,11 +1173,7 @@ func ExampleSSM_DescribePatchGroupState() {
 }
 
 func ExampleSSM_DescribePatchGroups() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1359,11 +1195,7 @@ func ExampleSSM_DescribePatchGroups() {
 }
 
 func ExampleSSM_GetAutomationExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1384,11 +1216,7 @@ func ExampleSSM_GetAutomationExecution() {
 }
 
 func ExampleSSM_GetCommandInvocation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1411,11 +1239,7 @@ func ExampleSSM_GetCommandInvocation() {
 }
 
 func ExampleSSM_GetDefaultPatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1434,11 +1258,7 @@ func ExampleSSM_GetDefaultPatchBaseline() {
 }
 
 func ExampleSSM_GetDeployablePatchSnapshotForInstance() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1460,11 +1280,7 @@ func ExampleSSM_GetDeployablePatchSnapshotForInstance() {
 }
 
 func ExampleSSM_GetDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1486,11 +1302,7 @@ func ExampleSSM_GetDocument() {
 }
 
 func ExampleSSM_GetInventory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1529,11 +1341,7 @@ func ExampleSSM_GetInventory() {
 }
 
 func ExampleSSM_GetInventorySchema() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1556,11 +1364,7 @@ func ExampleSSM_GetInventorySchema() {
 }
 
 func ExampleSSM_GetMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1581,11 +1385,7 @@ func ExampleSSM_GetMaintenanceWindow() {
 }
 
 func ExampleSSM_GetMaintenanceWindowExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1606,11 +1406,7 @@ func ExampleSSM_GetMaintenanceWindowExecution() {
 }
 
 func ExampleSSM_GetMaintenanceWindowExecutionTask() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1632,11 +1428,7 @@ func ExampleSSM_GetMaintenanceWindowExecutionTask() {
 }
 
 func ExampleSSM_GetParameterHistory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1660,11 +1452,7 @@ func ExampleSSM_GetParameterHistory() {
 }
 
 func ExampleSSM_GetParameters() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1689,11 +1477,7 @@ func ExampleSSM_GetParameters() {
 }
 
 func ExampleSSM_GetPatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1714,11 +1498,7 @@ func ExampleSSM_GetPatchBaseline() {
 }
 
 func ExampleSSM_GetPatchBaselineForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1739,11 +1519,7 @@ func ExampleSSM_GetPatchBaselineForPatchGroup() {
 }
 
 func ExampleSSM_ListAssociations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1772,11 +1548,7 @@ func ExampleSSM_ListAssociations() {
 }
 
 func ExampleSSM_ListCommandInvocations() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1808,11 +1580,7 @@ func ExampleSSM_ListCommandInvocations() {
 }
 
 func ExampleSSM_ListCommands() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1843,11 +1611,7 @@ func ExampleSSM_ListCommands() {
 }
 
 func ExampleSSM_ListDocumentVersions() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1870,11 +1634,7 @@ func ExampleSSM_ListDocumentVersions() {
 }
 
 func ExampleSSM_ListDocuments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1903,11 +1663,7 @@ func ExampleSSM_ListDocuments() {
 }
 
 func ExampleSSM_ListInventoryEntries() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1942,11 +1698,7 @@ func ExampleSSM_ListInventoryEntries() {
 }
 
 func ExampleSSM_ListTagsForResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -1968,11 +1720,7 @@ func ExampleSSM_ListTagsForResource() {
 }
 
 func ExampleSSM_ModifyDocumentPermission() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2002,11 +1750,7 @@ func ExampleSSM_ModifyDocumentPermission() {
 }
 
 func ExampleSSM_PutInventory() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2043,11 +1787,7 @@ func ExampleSSM_PutInventory() {
 }
 
 func ExampleSSM_PutParameter() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2073,11 +1813,7 @@ func ExampleSSM_PutParameter() {
 }
 
 func ExampleSSM_RegisterDefaultPatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2098,11 +1834,7 @@ func ExampleSSM_RegisterDefaultPatchBaseline() {
 }
 
 func ExampleSSM_RegisterPatchBaselineForPatchGroup() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2124,11 +1856,7 @@ func ExampleSSM_RegisterPatchBaselineForPatchGroup() {
 }
 
 func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2162,11 +1890,7 @@ func ExampleSSM_RegisterTargetWithMaintenanceWindow() {
 }
 
 func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2218,11 +1942,7 @@ func ExampleSSM_RegisterTaskWithMaintenanceWindow() {
 }
 
 func ExampleSSM_RemoveTagsFromResource() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2248,11 +1968,7 @@ func ExampleSSM_RemoveTagsFromResource() {
 }
 
 func ExampleSSM_SendCommand() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2312,11 +2028,7 @@ func ExampleSSM_SendCommand() {
 }
 
 func ExampleSSM_StartAutomationExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2345,11 +2057,7 @@ func ExampleSSM_StartAutomationExecution() {
 }
 
 func ExampleSSM_StopAutomationExecution() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2370,11 +2078,7 @@ func ExampleSSM_StopAutomationExecution() {
 }
 
 func ExampleSSM_UpdateAssociation() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2411,11 +2115,7 @@ func ExampleSSM_UpdateAssociation() {
 }
 
 func ExampleSSM_UpdateAssociationStatus() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2443,11 +2143,7 @@ func ExampleSSM_UpdateAssociationStatus() {
 }
 
 func ExampleSSM_UpdateDocument() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2470,11 +2166,7 @@ func ExampleSSM_UpdateDocument() {
 }
 
 func ExampleSSM_UpdateDocumentDefaultVersion() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2496,11 +2188,7 @@ func ExampleSSM_UpdateDocumentDefaultVersion() {
 }
 
 func ExampleSSM_UpdateMaintenanceWindow() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2527,11 +2215,7 @@ func ExampleSSM_UpdateMaintenanceWindow() {
 }
 
 func ExampleSSM_UpdateManagedInstanceRole() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 
@@ -2553,11 +2237,7 @@ func ExampleSSM_UpdateManagedInstanceRole() {
 }
 
 func ExampleSSM_UpdatePatchBaseline() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := ssm.New(sess)
 

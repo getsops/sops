@@ -64,11 +64,11 @@ func startTimer(t *runtimeTimer) {
 	}
 	t.timeout = js.Global.Call("$setTimeout", js.InternalObject(func() {
 		t.active = false
-		go t.f(t.arg, 0)
 		if t.period != 0 {
 			t.when += t.period
 			startTimer(t)
 		}
+		go t.f(t.arg, 0)
 	}), diff+1)
 }
 

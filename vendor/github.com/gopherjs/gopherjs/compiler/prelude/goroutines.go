@@ -111,8 +111,8 @@ var $recover = function() {
 };
 var $throw = function(err) { throw err; };
 
-var $dummyGoroutine = { asleep: false, exit: false, deferStack: [], panicStack: [], canBlock: false };
-var $curGoroutine = $dummyGoroutine, $totalGoroutines = 0, $awakeGoroutines = 0, $checkForDeadlock = true;
+var $noGoroutine = { asleep: false, exit: false, deferStack: [], panicStack: [] };
+var $curGoroutine = $noGoroutine, $totalGoroutines = 0, $awakeGoroutines = 0, $checkForDeadlock = true;
 var $mainFinished = false;
 var $go = function(fun, args, direct) {
   $totalGoroutines++;
@@ -132,7 +132,7 @@ var $go = function(fun, args, direct) {
         throw err;
       }
     } finally {
-      $curGoroutine = $dummyGoroutine;
+      $curGoroutine = $noGoroutine;
       if ($goroutine.exit) { /* also set by runtime.Goexit() */
         $totalGoroutines--;
         $goroutine.asleep = true;
@@ -152,39 +152,31 @@ var $go = function(fun, args, direct) {
   $goroutine.exit = false;
   $goroutine.deferStack = [];
   $goroutine.panicStack = [];
-  $goroutine.canBlock = true;
-  $schedule($goroutine, direct);
+  $schedule($goroutine);
 };
 
-var $scheduled = [], $schedulerActive = false;
+var $scheduled = [];
 var $runScheduled = function() {
   try {
     var r;
     while ((r = $scheduled.shift()) !== undefined) {
       r();
     }
-    $schedulerActive = false;
   } finally {
-    if ($schedulerActive) {
+    if ($scheduled.length > 0) {
       setTimeout($runScheduled, 0);
     }
   }
 };
-var $schedule = function(goroutine, direct) {
+
+var $schedule = function(goroutine) {
   if (goroutine.asleep) {
     goroutine.asleep = false;
     $awakeGoroutines++;
   }
-
-  if (direct) {
-    goroutine();
-    return;
-  }
-
   $scheduled.push(goroutine);
-  if (!$schedulerActive) {
-    $schedulerActive = true;
-    setTimeout($runScheduled, 0);
+  if ($curGoroutine === $noGoroutine) {
+    $runScheduled();
   }
 };
 
@@ -197,7 +189,7 @@ var $setTimeout = function(f, t) {
 };
 
 var $block = function() {
-  if (!$curGoroutine.canBlock) {
+  if ($curGoroutine === $noGoroutine) {
     $throwRuntimeError("cannot block in JavaScript callback, fix by wrapping code in goroutine");
   }
   $curGoroutine.asleep = true;

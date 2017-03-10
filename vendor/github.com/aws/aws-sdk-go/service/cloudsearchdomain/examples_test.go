@@ -16,11 +16,7 @@ var _ time.Duration
 var _ bytes.Buffer
 
 func ExampleCloudSearchDomain_Search() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearchdomain.New(sess)
 
@@ -54,11 +50,7 @@ func ExampleCloudSearchDomain_Search() {
 }
 
 func ExampleCloudSearchDomain_Suggest() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearchdomain.New(sess)
 
@@ -81,11 +73,7 @@ func ExampleCloudSearchDomain_Suggest() {
 }
 
 func ExampleCloudSearchDomain_UploadDocuments() {
-	sess, err := session.NewSession()
-	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
-	}
+	sess := session.Must(session.NewSession())
 
 	svc := cloudsearchdomain.New(sess)
 

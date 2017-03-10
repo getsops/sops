@@ -66,13 +66,13 @@ func (c *ServiceCatalog) AcceptPortfolioShareRequest(input *AcceptPortfolioShare
 // API operation AcceptPortfolioShare for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
@@ -138,13 +138,13 @@ func (c *ServiceCatalog) AssociatePrincipalWithPortfolioRequest(input *Associate
 // API operation AssociatePrincipalWithPortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
@@ -210,13 +210,13 @@ func (c *ServiceCatalog) AssociateProductWithPortfolioRequest(input *AssociatePr
 // API operation AssociateProductWithPortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
@@ -282,17 +282,17 @@ func (c *ServiceCatalog) CreateConstraintRequest(input *CreateConstraintInput) (
 // API operation CreateConstraint for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
-//   * DuplicateResourceException
+//   * ErrCodeDuplicateResourceException "DuplicateResourceException"
 //   The specified resource is a duplicate.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateConstraint
@@ -357,10 +357,10 @@ func (c *ServiceCatalog) CreatePortfolioRequest(input *CreatePortfolioInput) (re
 // API operation CreatePortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
@@ -426,14 +426,14 @@ func (c *ServiceCatalog) CreatePortfolioShareRequest(input *CreatePortfolioShare
 // API operation CreatePortfolioShare for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreatePortfolioShare
@@ -498,10 +498,10 @@ func (c *ServiceCatalog) CreateProductRequest(input *CreateProductInput) (req *r
 // API operation CreateProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
@@ -568,13 +568,13 @@ func (c *ServiceCatalog) CreateProvisioningArtifactRequest(input *CreateProvisio
 // API operation CreateProvisioningArtifact for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
@@ -640,10 +640,10 @@ func (c *ServiceCatalog) DeleteConstraintRequest(input *DeleteConstraintInput) (
 // API operation DeleteConstraint for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteConstraint
@@ -710,13 +710,13 @@ func (c *ServiceCatalog) DeletePortfolioRequest(input *DeletePortfolioInput) (re
 // API operation DeletePortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The operation was requested against a resource that is currently in use.
 //   Free the resource from use and retry the operation.
 //
@@ -782,7 +782,7 @@ func (c *ServiceCatalog) DeletePortfolioShareRequest(input *DeletePortfolioShare
 // API operation DeletePortfolioShare for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeletePortfolioShare
@@ -848,14 +848,14 @@ func (c *ServiceCatalog) DeleteProductRequest(input *DeleteProductInput) (req *r
 // API operation DeleteProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The operation was requested against a resource that is currently in use.
 //   Free the resource from use and retry the operation.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProduct
@@ -923,14 +923,14 @@ func (c *ServiceCatalog) DeleteProvisioningArtifactRequest(input *DeleteProvisio
 // API operation DeleteProvisioningArtifact for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The operation was requested against a resource that is currently in use.
 //   Free the resource from use and retry the operation.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProvisioningArtifact
@@ -995,7 +995,7 @@ func (c *ServiceCatalog) DescribeConstraintRequest(input *DescribeConstraintInpu
 // API operation DescribeConstraint for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeConstraint
@@ -1061,7 +1061,7 @@ func (c *ServiceCatalog) DescribePortfolioRequest(input *DescribePortfolioInput)
 // API operation DescribePortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolio
@@ -1129,10 +1129,10 @@ func (c *ServiceCatalog) DescribeProductRequest(input *DescribeProductInput) (re
 // API operation DescribeProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProduct
@@ -1197,7 +1197,7 @@ func (c *ServiceCatalog) DescribeProductAsAdminRequest(input *DescribeProductAsA
 // API operation DescribeProductAsAdmin for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProductAsAdmin
@@ -1265,10 +1265,10 @@ func (c *ServiceCatalog) DescribeProductViewRequest(input *DescribeProductViewIn
 // API operation DescribeProductView for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProductView
@@ -1333,7 +1333,7 @@ func (c *ServiceCatalog) DescribeProvisioningArtifactRequest(input *DescribeProv
 // API operation DescribeProvisioningArtifact for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisioningArtifact
@@ -1401,10 +1401,10 @@ func (c *ServiceCatalog) DescribeProvisioningParametersRequest(input *DescribePr
 // API operation DescribeProvisioningParameters for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisioningParameters
@@ -1471,7 +1471,7 @@ func (c *ServiceCatalog) DescribeRecordRequest(input *DescribeRecordInput) (req 
 // API operation DescribeRecord for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeRecord
@@ -1536,10 +1536,10 @@ func (c *ServiceCatalog) DisassociatePrincipalFromPortfolioRequest(input *Disass
 // API operation DisassociatePrincipalFromPortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociatePrincipalFromPortfolio
@@ -1604,10 +1604,10 @@ func (c *ServiceCatalog) DisassociateProductFromPortfolioRequest(input *Disassoc
 // API operation DisassociateProductFromPortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateProductFromPortfolio
@@ -1672,7 +1672,7 @@ func (c *ServiceCatalog) ListAcceptedPortfolioSharesRequest(input *ListAcceptedP
 // API operation ListAcceptedPortfolioShares for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListAcceptedPortfolioShares
@@ -1738,10 +1738,10 @@ func (c *ServiceCatalog) ListConstraintsForPortfolioRequest(input *ListConstrain
 // API operation ListConstraintsForPortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListConstraintsForPortfolio
@@ -1808,10 +1808,10 @@ func (c *ServiceCatalog) ListLaunchPathsRequest(input *ListLaunchPathsInput) (re
 // API operation ListLaunchPaths for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListLaunchPaths
@@ -1877,7 +1877,7 @@ func (c *ServiceCatalog) ListPortfolioAccessRequest(input *ListPortfolioAccessIn
 // API operation ListPortfolioAccess for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfolioAccess
@@ -1942,7 +1942,7 @@ func (c *ServiceCatalog) ListPortfoliosRequest(input *ListPortfoliosInput) (req 
 // API operation ListPortfolios for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfolios
@@ -2007,10 +2007,10 @@ func (c *ServiceCatalog) ListPortfoliosForProductRequest(input *ListPortfoliosFo
 // API operation ListPortfoliosForProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfoliosForProduct
@@ -2075,10 +2075,10 @@ func (c *ServiceCatalog) ListPrincipalsForPortfolioRequest(input *ListPrincipals
 // API operation ListPrincipalsForPortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPrincipalsForPortfolio
@@ -2143,10 +2143,10 @@ func (c *ServiceCatalog) ListProvisioningArtifactsRequest(input *ListProvisionin
 // API operation ListProvisioningArtifacts for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListProvisioningArtifacts
@@ -2212,7 +2212,7 @@ func (c *ServiceCatalog) ListRecordHistoryRequest(input *ListRecordHistoryInput)
 // API operation ListRecordHistory for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListRecordHistory
@@ -2282,13 +2282,13 @@ func (c *ServiceCatalog) ProvisionProductRequest(input *ProvisionProductInput) (
 // API operation ProvisionProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * DuplicateResourceException
+//   * ErrCodeDuplicateResourceException "DuplicateResourceException"
 //   The specified resource is a duplicate.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ProvisionProduct
@@ -2353,7 +2353,7 @@ func (c *ServiceCatalog) RejectPortfolioShareRequest(input *RejectPortfolioShare
 // API operation RejectPortfolioShare for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/RejectPortfolioShare
@@ -2419,7 +2419,7 @@ func (c *ServiceCatalog) ScanProvisionedProductsRequest(input *ScanProvisionedPr
 // API operation ScanProvisionedProducts for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ScanProvisionedProducts
@@ -2488,7 +2488,7 @@ func (c *ServiceCatalog) SearchProductsRequest(input *SearchProductsInput) (req 
 // API operation SearchProducts for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProducts
@@ -2556,10 +2556,10 @@ func (c *ServiceCatalog) SearchProductsAsAdminRequest(input *SearchProductsAsAdm
 // API operation SearchProductsAsAdmin for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProductsAsAdmin
@@ -2631,7 +2631,7 @@ func (c *ServiceCatalog) TerminateProvisionedProductRequest(input *TerminateProv
 // API operation TerminateProvisionedProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/TerminateProvisionedProduct
@@ -2696,10 +2696,10 @@ func (c *ServiceCatalog) UpdateConstraintRequest(input *UpdateConstraintInput) (
 // API operation UpdateConstraint for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateConstraint
@@ -2765,13 +2765,13 @@ func (c *ServiceCatalog) UpdatePortfolioRequest(input *UpdatePortfolioInput) (re
 // API operation UpdatePortfolio for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The current limits of the service would have been exceeded by this operation.
 //   Reduce the resource use or increase the service limits and retry the operation.
 //
@@ -2837,10 +2837,10 @@ func (c *ServiceCatalog) UpdateProductRequest(input *UpdateProductInput) (req *r
 // API operation UpdateProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProduct
@@ -2911,10 +2911,10 @@ func (c *ServiceCatalog) UpdateProvisionedProductRequest(input *UpdateProvisione
 // API operation UpdateProvisionedProduct for usage and error information.
 //
 // Returned Error Codes:
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisionedProduct
@@ -2981,10 +2981,10 @@ func (c *ServiceCatalog) UpdateProvisioningArtifactRequest(input *UpdateProvisio
 // API operation UpdateProvisioningArtifact for usage and error information.
 //
 // Returned Error Codes:
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
 //
-//   * InvalidParametersException
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
 //   One or more parameters provided to the operation are invalid.
 //
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisioningArtifact

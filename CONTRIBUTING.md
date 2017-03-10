@@ -20,6 +20,10 @@ Mozilla welcomes contributions from everyone. Here are a few guidelines and inst
 * Unless it's particularly hard, changes that fix a bug should have a regression test to make sure that the bug is not introduced again.
 * New features and changes to existing features should be documented, and, if possible, tested.
 
+# Regenerating mocks
+
+If you encounter an error like `kms/mocks/KMSAPI.go:1607: cannot use (*KMSAPI)(nil) (type *KMSAPI) as type kmsiface.KMSAPI in assignment: *KMSAPI does not implement kmsiface.KMSAPI (missing ListResourceTags method)`, you need to regenerate mocks, probably because the interface was changed by a vendoring update. There is a make command to do this for you. Simply run `make mock`, and the new mocks will be automatically generated.
+
 # Communication
 
 If you need any help contributing to sops, several contributors are on the `#go` channel on [Mozilla's IRC server](https://wiki.mozilla.org/IRC).
