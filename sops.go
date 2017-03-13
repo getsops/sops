@@ -474,7 +474,7 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 	var metadata Metadata
 	mac, ok := data["mac"].(string)
 	if !ok {
-		fmt.Println("WARNING: no MAC was found on the input file." +
+		fmt.Println("WARNING: no MAC was found on the input file. " +
 			"Verification will fail. You can use --ignore-mac to skip verification.")
 	}
 	metadata.MessageAuthenticationCode = mac
