@@ -35,8 +35,7 @@ mod tests {
 
     fn prepare_temp_file(name: &str, contents: &[u8]) -> String {
         let file_path = TMP_DIR.path().join(name);
-        let mut tmp_file = File::create(file_path.clone())
-            .expect("Unable to create temporary file");
+        let mut tmp_file = File::create(file_path.clone()).expect("Unable to create temporary file");
         tmp_file.write_all(&contents)
             .expect("Error writing to temporary file");
         file_path.to_string_lossy().into_owned()
@@ -94,9 +93,7 @@ bar: baz");
 
     #[test]
     fn set_json_file_update() {
-        let file_path = prepare_temp_file(
-            "test_set_update.json",
-            r#"{"a": 2, "b": "ba"}"#.as_bytes());
+        let file_path = prepare_temp_file("test_set_update.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());
         Command::new(SOPS_BINARY_PATH)
             .arg("-e")
             .arg("-i")
@@ -109,7 +106,9 @@ bar: baz");
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        println!("stdout: {}, stderr: {}", String::from_utf8_lossy(&output.stdout), String::from_utf8_lossy(&output.stderr));
+        println!("stdout: {}, stderr: {}",
+                 String::from_utf8_lossy(&output.stdout),
+                 String::from_utf8_lossy(&output.stderr));
         let mut s = String::new();
         File::open(file_path).unwrap().read_to_string(&mut s).unwrap();
         let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
@@ -122,12 +121,10 @@ bar: baz");
         }
         panic!("Output JSON does not have the expected structure");
     }
-    
+
     #[test]
     fn set_json_file_insert() {
-        let file_path = prepare_temp_file(
-            "test_set_insert.json",
-            r#"{"a": 2, "b": "ba"}"#.as_bytes());
+        let file_path = prepare_temp_file("test_set_insert.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());
         Command::new(SOPS_BINARY_PATH)
             .arg("-e")
             .arg("-i")
@@ -140,7 +137,9 @@ bar: baz");
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        println!("stdout: {}, stderr: {}", String::from_utf8_lossy(&output.stdout), String::from_utf8_lossy(&output.stderr));
+        println!("stdout: {}, stderr: {}",
+                 String::from_utf8_lossy(&output.stdout),
+                 String::from_utf8_lossy(&output.stderr));
         let mut s = String::new();
         File::open(file_path).unwrap().read_to_string(&mut s).unwrap();
         let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
@@ -154,13 +153,13 @@ bar: baz");
         panic!("Output JSON does not have the expected structure");
     }
 
-    
+
     #[test]
     fn set_yaml_file_update() {
-        let file_path = prepare_temp_file(
-            "test_set_update.yaml",
-            r#"a: 2
-b: ba"#.as_bytes());
+        let file_path = prepare_temp_file("test_set_update.yaml",
+                                          r#"a: 2
+b: ba"#
+                                              .as_bytes());
         Command::new(SOPS_BINARY_PATH)
             .arg("-e")
             .arg("-i")
@@ -173,7 +172,9 @@ b: ba"#.as_bytes());
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        println!("stdout: {}, stderr: {}", String::from_utf8_lossy(&output.stdout), String::from_utf8_lossy(&output.stderr));
+        println!("stdout: {}, stderr: {}",
+                 String::from_utf8_lossy(&output.stdout),
+                 String::from_utf8_lossy(&output.stderr));
         let mut s = String::new();
         File::open(file_path).unwrap().read_to_string(&mut s).unwrap();
         let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's JSON output");
@@ -186,13 +187,13 @@ b: ba"#.as_bytes());
         }
         panic!("Output JSON does not have the expected structure");
     }
-    
+
     #[test]
     fn set_yaml_file_insert() {
-        let file_path = prepare_temp_file(
-            "test_set_insert.yaml",
-            r#"a: 2
-b: ba"#.as_bytes());
+        let file_path = prepare_temp_file("test_set_insert.yaml",
+                                          r#"a: 2
+b: ba"#
+                                              .as_bytes());
         Command::new(SOPS_BINARY_PATH)
             .arg("-e")
             .arg("-i")
@@ -205,7 +206,9 @@ b: ba"#.as_bytes());
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        println!("stdout: {}, stderr: {}", String::from_utf8_lossy(&output.stdout), String::from_utf8_lossy(&output.stderr));
+        println!("stdout: {}, stderr: {}",
+                 String::from_utf8_lossy(&output.stdout),
+                 String::from_utf8_lossy(&output.stderr));
         let mut s = String::new();
         File::open(file_path).unwrap().read_to_string(&mut s).unwrap();
         let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's JSON output");
@@ -221,9 +224,8 @@ b: ba"#.as_bytes());
 
     #[test]
     fn decrypt_file_no_mac() {
-        let file_path = prepare_temp_file(
-            "test_decrypt_no_mac.yaml",
-            r#"
+        let file_path = prepare_temp_file("test_decrypt_no_mac.yaml",
+                                          r#"
 myapp1: ENC[AES256_GCM,data:QsGJGjvQOpoVCIlrYTcOQEfQzriw,iv:ShmgdRNV6UrOJ22Rgr7habB74Nd/YFxU4lDh6jy6n+8=,tag:8GT6U8lzrI27DcFc1+icgQ==,type:str]
 sops:
     pgp:
@@ -244,12 +246,25 @@ sops:
     version: 1.7
     attention: This section contains key material that should only be modified with
         extra care. See `sops -h`.
-"#.as_bytes());
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
-            .arg("--ignore-mac")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
+"#
+                                              .as_bytes());
+        assert!(!Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops")
+                    .status
+                    .success(),
+                "SOPS allowed decrypting a file with no MAC without --ignore-mac");
+
+        assert!(Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg("--ignore-mac")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops")
+                    .status
+                    .success(),
+                "SOPS failed to decrypt a file with no MAC with --ignore-mac passed in");
     }
 }
