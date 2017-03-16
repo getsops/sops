@@ -57,7 +57,7 @@ recommended to use at least two master keys in different regions.
 
 	export SOPS_KMS_ARN="arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e,arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
 
-Your AWS credentials must be present in `~/.aws/credentials`. sops uses boto3.
+Your AWS credentials must be present in `~/.aws/credentials`. sops uses aws-sdk-go.
 
 .. code::
 
