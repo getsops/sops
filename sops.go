@@ -303,7 +303,7 @@ type MasterKey interface {
 	Decrypt() ([]byte, error)
 	NeedsRotation() bool
 	ToString() string
-	ToMap() map[string]string
+	ToMap() map[string]interface{}
 }
 
 // Store provides a way to load and save the sops tree along with metadata
@@ -426,7 +426,7 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	out["mac"] = m.MessageAuthenticationCode
 	out["version"] = m.Version
 	for _, ks := range m.KeySources {
-		var keys []map[string]string
+		var keys []map[string]interface{}
 		for _, k := range ks.Keys {
 			keys = append(keys, k.ToMap())
 		}
@@ -550,7 +550,7 @@ func mapKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
 			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
 		}
 		if _, ok := entry["context"]; ok {
-			key.EncryptionContext = kms.ParseKMSContext(entry["context"].(string))
+			key.EncryptionContext = kms.ParseKMSContext(entry["context"])
 		}
 		key.CreationDate = creationDate
 		keysource.Keys = append(keysource.Keys, key)
