@@ -201,8 +201,8 @@ func (key *MasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]by
 }
 
 // ToMap converts the MasterKey into a map for serialization purposes
-func (key MasterKey) ToMap() map[string]string {
-	out := make(map[string]string)
+func (key MasterKey) ToMap() map[string]interface{} {
+	out := make(map[string]interface{})
 	out["fp"] = key.Fingerprint
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
