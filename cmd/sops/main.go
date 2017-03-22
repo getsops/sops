@@ -347,7 +347,11 @@ func decryptTree(tree sops.Tree, ignoreMac bool) (sops.Tree, map[string][]interf
 	}
 	fileMac, _, err := cipher.Decrypt(tree.Metadata.MessageAuthenticationCode, key, tree.Metadata.LastModified.Format(time.RFC3339))
 	if fileMac != computedMac && !ignoreMac {
-		return tree, nil, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", fileMac, computedMac), exitMacMismatch)
+		outputMac := fileMac
+		if outputMac == "" {
+			outputMac = "no MAC"
+		}
+		return tree, nil, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", outputMac, computedMac), exitMacMismatch)
 	}
 	return tree, stash, nil
 }
