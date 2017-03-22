@@ -189,16 +189,29 @@ func ParseKMSContext(in interface{}) map[string]*string {
 			return nil
 		}
 		for k, v := range in {
-			var v = v.(string)
-			out[k] = &v
+			value, ok := v.(string)
+			if !ok {
+				fmt.Printf("[WARNING]: KMS Encryption Context contains a non-string value, context will not be used")
+				return nil
+			}
+			out[k] = &value
 		}
 	case map[interface{}]interface{}:
 		if len(in) == 0 {
 			return nil
 		}
 		for k, v := range in {
-			var v = v.(string)
-			out[k.(string)] = &v
+			key, ok := k.(string)
+			if !ok {
+				fmt.Printf("[WARNING]: KMS Encryption Context contains a non-string key, context will not be used")
+				return nil
+			}
+			value, ok := v.(string)
+			if !ok {
+				fmt.Printf("[WARNING]: KMS Encryption Context contains a non-string value, context will not be used")
+				return nil
+			}
+			out[key] = &value
 		}
 	case string:
 		if in == "" {
@@ -207,6 +220,7 @@ func ParseKMSContext(in interface{}) map[string]*string {
 		for _, kv := range strings.Split(in, ",") {
 			kv := strings.Split(kv, ":")
 			if len(kv) != 2 {
+				fmt.Printf("[WARNING]: KMS Encryption Context could not be parsed, context will not be used")
 				return nil
 			}
 			out[kv[0]] = &kv[1]

@@ -83,6 +83,12 @@ func TestParseEncryptionContext(t *testing.T) {
 		"key2": &value2,
 	})
 	assert.Nil(t, ParseKMSContext(map[interface{}]interface{}{}))
+	assert.Nil(t, ParseKMSContext(map[interface{}]interface{}{
+		"key1": 1,
+	}))
+	assert.Nil(t, ParseKMSContext(map[interface{}]interface{}{
+		1: "value",
+	}))
 	// map from JSON
 	var jsonmap = map[string]interface{}{
 		"key1": value1,
@@ -93,6 +99,9 @@ func TestParseEncryptionContext(t *testing.T) {
 		"key2": &value2,
 	})
 	assert.Nil(t, ParseKMSContext(map[string]interface{}{}))
+	assert.Nil(t, ParseKMSContext(map[string]interface{}{
+		"key1": 1,
+	}))
 	// sops 2.0.x formatted encryption context as a comma-separated list of key:value pairs
 	assert.Equal(t, ParseKMSContext("key1:value1,key2:value2"), map[string]*string{
 		"key1": &value1,
