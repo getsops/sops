@@ -40,18 +40,18 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	// Load Sops metadata from the document and access the data key
 	metadata, err := store.UnmarshalMetadata(data)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to unmarshal sops metadata: %v", err)
+		return nil, err
 	}
 	key, err := metadata.GetDataKey()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get data key: %+v", err)
+		return nil, err
 	}
 
 	// Load the encrypted document and create a tree structure
 	// with the encrypted content and metadata
 	branch, err := store.Unmarshal(data)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal sops encrypted branch: %v", err)
+		return nil, err
 	}
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 
@@ -60,7 +60,7 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	stash := make(map[string][]interface{})
 	mac, err := tree.Decrypt(key, cipher, stash)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to decrypt tree: %v", err)
+		return nil, err
 	}
 
 	// Compute the hash of the cleartext tree and compare it with
