@@ -182,7 +182,12 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 		if _, ok := item.Key.(Comment); ok {
 			continue
 		}
-		newV, err := tree.walkValue(item.Value, append(path, item.Key.(string)), onLeaves)
+		key, ok := item.Key.(string)
+		if !ok {
+			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are" +
+				"supported", item.Key, item.Key)
+		}
+		newV, err := tree.walkValue(item.Value, append(path, key), onLeaves)
 		if err != nil {
 			return nil, err
 		}
@@ -298,7 +303,7 @@ type MasterKey interface {
 	Decrypt() ([]byte, error)
 	NeedsRotation() bool
 	ToString() string
-	ToMap() map[string]string
+	ToMap() map[string]interface{}
 }
 
 // Store provides a way to load and save the sops tree along with metadata
@@ -421,7 +426,7 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	out["mac"] = m.MessageAuthenticationCode
 	out["version"] = m.Version
 	for _, ks := range m.KeySources {
-		var keys []map[string]string
+		var keys []map[string]interface{}
 		for _, k := range ks.Keys {
 			keys = append(keys, k.ToMap())
 		}
@@ -467,4 +472,115 @@ func ToBytes(in interface{}) ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
 	}
+}
+
+// MapToMetadata tries to convert a map[string]interface{} obtained from an encrypted file into a Metadata struct.
+func MapToMetadata(data map[string]interface{}) (Metadata, error) {
+	var metadata Metadata
+	mac, ok := data["mac"].(string)
+	if !ok {
+		fmt.Println("WARNING: no MAC was found on the input file. " +
+			"Verification will fail. You can use --ignore-mac to skip verification.")
+	}
+	metadata.MessageAuthenticationCode = mac
+	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
+	if err != nil {
+		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
+	}
+	metadata.LastModified = lastModified
+	unencryptedSuffix, ok := data["unencrypted_suffix"].(string)
+	if !ok {
+		unencryptedSuffix = DefaultUnencryptedSuffix
+	}
+	metadata.UnencryptedSuffix = unencryptedSuffix
+	if metadata.Version, ok = data["version"].(string); !ok {
+		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
+	}
+	if k, ok := data["kms"].([]interface{}); ok {
+		ks, err := mapKMSEntriesToKeySource(k)
+		if err == nil {
+			metadata.KeySources = append(metadata.KeySources, ks)
+		}
+	}
+
+	if pgp, ok := data["pgp"].([]interface{}); ok {
+		ks, err := mapPGPEntriesToKeySource(pgp)
+		if err == nil {
+			metadata.KeySources = append(metadata.KeySources, ks)
+		}
+	}
+	return metadata, nil
+}
+
+func convertToMapStringInterface(in map[interface{}]interface{}) (map[string]interface{}, error) {
+	m := make(map[string]interface{})
+	for k, v := range in {
+		key, ok := k.(string)
+		if !ok {
+			return nil, fmt.Errorf("Map contains non-string-key (Type %T): %s", k, k)
+		}
+		m[key] = v
+	}
+	return m, nil
+}
+
+func mapKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
+	var keys []MasterKey
+	keysource := KeySource{Name: "kms", Keys: keys}
+	for _, v := range in {
+		entry, ok := v.(map[string]interface{})
+		if !ok {
+			m, ok := v.(map[interface{}]interface{})
+			var err error
+			entry, err = convertToMapStringInterface(m)
+			if !ok || err != nil {
+				fmt.Println("KMS entry has invalid format, skipping...")
+				continue
+			}
+		}
+		key := &kms.MasterKey{}
+		key.Arn = entry["arn"].(string)
+		key.EncryptedKey = entry["enc"].(string)
+		role, ok := entry["role"].(string)
+		if ok {
+			key.Role = role
+		}
+		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
+		if err != nil {
+			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+		}
+		if _, ok := entry["context"]; ok {
+			key.EncryptionContext = kms.ParseKMSContext(entry["context"])
+		}
+		key.CreationDate = creationDate
+		keysource.Keys = append(keysource.Keys, key)
+	}
+	return keysource, nil
+}
+
+func mapPGPEntriesToKeySource(in []interface{}) (KeySource, error) {
+	var keys []MasterKey
+	keysource := KeySource{Name: "pgp", Keys: keys}
+	for _, v := range in {
+		entry, ok := v.(map[string]interface{})
+		if !ok {
+			m, ok := v.(map[interface{}]interface{})
+			var err error
+			entry, err = convertToMapStringInterface(m)
+			if !ok || err != nil {
+				fmt.Println("PGP entry has invalid format, skipping...")
+				continue
+			}
+		}
+		key := &pgp.MasterKey{}
+		key.Fingerprint = entry["fp"].(string)
+		key.EncryptedKey = entry["enc"].(string)
+		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
+		if err != nil {
+			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+		}
+		key.CreationDate = creationDate
+		keysource.Keys = append(keysource.Keys, key)
+	}
+	return keysource, nil
 }

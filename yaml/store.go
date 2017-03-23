@@ -2,13 +2,8 @@ package yaml //import "go.mozilla.org/sops/yaml"
 
 import (
 	"fmt"
-	"strconv"
-	"time"
-
 	"github.com/mozilla-services/yaml"
 	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
 )
 
 // Store handles storage of YAML data
@@ -146,94 +141,20 @@ func (store Store) MarshalValue(v interface{}) ([]byte, error) {
 
 // UnmarshalMetadata takes a yaml document as a string and extracts sops' metadata from it
 func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
-	var metadata sops.Metadata
 	var ok bool
 	data := make(map[interface{}]interface{})
 	err := yaml.Unmarshal(in, &data)
 	if err != nil {
-		return metadata, fmt.Errorf("Error unmarshalling input yaml: %s", err)
+		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
-	if data, ok = data["sops"].(map[interface{}]interface{}); !ok {
-		return metadata, sops.MetadataNotFound
-	}
-	metadata.MessageAuthenticationCode = data["mac"].(string)
-	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
-	if err != nil {
-		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
-	}
-	metadata.LastModified = lastModified
-	unencryptedSuffix, ok := data["unencrypted_suffix"].(string)
+	data, ok = data["sops"].(map[interface{}]interface{})
 	if !ok {
-		unencryptedSuffix = sops.DefaultUnencryptedSuffix
+		return sops.Metadata{}, sops.MetadataNotFound
 	}
-	metadata.UnencryptedSuffix = unencryptedSuffix
-	if metadata.Version, ok = data["version"].(string); !ok {
-		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
+	metadataBranch := make(map[string]interface{})
+	for k, v := range data {
+		key, _ := k.(string)
+		metadataBranch[key] = v
 	}
-	if k, ok := data["kms"].([]interface{}); ok {
-		ks, err := store.kmsEntries(k)
-		if err == nil {
-			metadata.KeySources = append(metadata.KeySources, ks)
-		}
-
-	}
-
-	if pgp, ok := data["pgp"].([]interface{}); ok {
-		ks, err := store.pgpEntries(pgp)
-		if err == nil {
-			metadata.KeySources = append(metadata.KeySources, ks)
-		}
-	}
-	return metadata, nil
-}
-
-func (store *Store) kmsEntries(in []interface{}) (sops.KeySource, error) {
-	var keys []sops.MasterKey
-	keysource := sops.KeySource{Name: "kms", Keys: keys}
-	for _, v := range in {
-		entry, ok := v.(map[interface{}]interface{})
-		if !ok {
-			fmt.Println("KMS entry has invalid format, skipping...")
-			continue
-		}
-		key := &kms.MasterKey{}
-		key.Arn = entry["arn"].(string)
-		key.EncryptedKey = entry["enc"].(string)
-		role, ok := entry["role"].(string)
-		if ok {
-			key.Role = role
-		}
-		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
-		if err != nil {
-			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
-		}
-		key.CreationDate = creationDate
-		if _, ok := entry["context"]; ok {
-			key.EncryptionContext = kms.ParseKMSContext(entry["context"].(string))
-		}
-		keysource.Keys = append(keysource.Keys, key)
-	}
-	return keysource, nil
-}
-
-func (store *Store) pgpEntries(in []interface{}) (sops.KeySource, error) {
-	var keys []sops.MasterKey
-	keysource := sops.KeySource{Name: "pgp", Keys: keys}
-	for _, v := range in {
-		entry, ok := v.(map[interface{}]interface{})
-		if !ok {
-			fmt.Println("PGP entry has invalid format, skipping...")
-			continue
-		}
-		key := &pgp.MasterKey{}
-		key.Fingerprint = entry["fp"].(string)
-		key.EncryptedKey = entry["enc"].(string)
-		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
-		if err != nil {
-			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
-		}
-		key.CreationDate = creationDate
-		keysource.Keys = append(keysource.Keys, key)
-	}
-	return keysource, nil
+	return sops.MapToMetadata(metadataBranch)
 }

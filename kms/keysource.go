@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 
@@ -162,8 +161,8 @@ func (key MasterKey) createSession() (*session.Session, error) {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes
-func (key MasterKey) ToMap() map[string]string {
-	out := make(map[string]string)
+func (key MasterKey) ToMap() map[string]interface{} {
+	out := make(map[string]interface{})
 	out["arn"] = key.Arn
 	if key.Role != "" {
 		out["role"] = key.Role
@@ -171,28 +170,61 @@ func (key MasterKey) ToMap() map[string]string {
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	if key.EncryptionContext != nil {
-		var outContexts []string
+		outcontext := make(map[string]string)
 		for k, v := range key.EncryptionContext {
-			outContexts = append(outContexts, k+":"+*v)
+			outcontext[k] = *v
 		}
-		sort.Strings(outContexts)
-		out["context"] = strings.Join(outContexts, ",")
+		out["context"] = outcontext
 	}
 	return out
 }
 
-// ParseKMSContext takes a comma-separated list of KMS context key:value pairs and returns a map
-func ParseKMSContext(in string) map[string]*string {
-	if in == "" {
-		return nil
-	}
+// ParseKMSContext takes either a KMS context map or a comma-separated list of KMS context key:value pairs and returns a map
+func ParseKMSContext(in interface{}) map[string]*string {
 	out := make(map[string]*string)
-	for _, kv := range strings.Split(in, ",") {
-		kv := strings.Split(kv, ":")
-		if len(kv) != 2 {
+
+	switch in := in.(type) {
+	case map[string]interface{}:
+		if len(in) == 0 {
 			return nil
 		}
-		out[kv[0]] = &kv[1]
+		for k, v := range in {
+			value, ok := v.(string)
+			if !ok {
+				fmt.Println("[WARNING]: KMS Encryption Context contains a non-string value, context will not be used")
+				return nil
+			}
+			out[k] = &value
+		}
+	case map[interface{}]interface{}:
+		if len(in) == 0 {
+			return nil
+		}
+		for k, v := range in {
+			key, ok := k.(string)
+			if !ok {
+				fmt.Println("[WARNING]: KMS Encryption Context contains a non-string key, context will not be used")
+				return nil
+			}
+			value, ok := v.(string)
+			if !ok {
+				fmt.Println("[WARNING]: KMS Encryption Context contains a non-string value, context will not be used")
+				return nil
+			}
+			out[key] = &value
+		}
+	case string:
+		if in == "" {
+			return nil
+		}
+		for _, kv := range strings.Split(in, ",") {
+			kv := strings.Split(kv, ":")
+			if len(kv) != 2 {
+				fmt.Printf("[WARNING]: KMS Encryption Context could not be parsed, context will not be used")
+				return nil
+			}
+			out[kv[0]] = &kv[1]
+		}
 	}
 	return out
 }
