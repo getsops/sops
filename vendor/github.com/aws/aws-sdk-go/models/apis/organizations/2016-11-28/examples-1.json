@@ -763,24 +763,32 @@
             {
               "Arn": "arn:aws:organizations::111111111111:account/o-exampleorgid/111111111111",
               "Id": "111111111111",
+              "JoinedMethod": "INVITED",
+              "JoinedTimestamp": "20161215T193015Z",
               "Name": "Master Account",
               "Status": "ACTIVE"
             },
             {
               "Arn": "arn:aws:organizations::111111111111:account/o-exampleorgid/222222222222",
               "Id": "222222222222",
+              "JoinedMethod": "INVITED",
+              "JoinedTimestamp": "20161215T210221Z",
               "Name": "Developer Account",
               "Status": "ACTIVE"
             },
             {
               "Arn": "arn:aws:organizations::111111111111:account/o-exampleorgid/333333333333",
               "Id": "333333333333",
+              "JoinedMethod": "INVITED",
+              "JoinedTimestamp": "20161215T210347Z",
               "Name": "Test Account",
               "Status": "ACTIVE"
             },
             {
               "Arn": "arn:aws:organizations::111111111111:account/o-exampleorgid/444444444444",
               "Id": "444444444444",
+              "JoinedMethod": "INVITED",
+              "JoinedTimestamp": "20161215T210332Z",
               "Name": "Production Account",
               "Status": "ACTIVE"
             }

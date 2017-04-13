@@ -428,7 +428,7 @@ func (p *exporter) rawInt64(x int64) {
 func (p *exporter) tracef(format string, args ...interface{}) {
 	// rewrite format string to take care of indentation
 	const indent = ".  "
-	if strings.IndexAny(format, "{}\n") >= 0 {
+	if strings.ContainsAny(format, "{}\n") {
 		var buf bytes.Buffer
 		for i := 0; i < len(format); i++ {
 			// no need to deal with runes

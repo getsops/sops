@@ -265,7 +265,6 @@ var tplAPI = template.Must(template.New("api").Parse(`
 // APIGoCode renders the API in Go code. Returning it as a string
 func (a *API) APIGoCode() string {
 	a.resetImports()
-	delete(a.imports, "github.com/aws/aws-sdk-go/aws")
 	a.imports["github.com/aws/aws-sdk-go/aws/awsutil"] = true
 	a.imports["github.com/aws/aws-sdk-go/aws/request"] = true
 	if a.OperationHasOutputPlaceholder() {
@@ -311,7 +310,7 @@ var noCrossLinkServices = map[string]struct{}{
 
 func GetCrosslinkURL(baseURL, name, uid string, params ...string) string {
 	_, ok := noCrossLinkServices[strings.ToLower(name)]
-	if baseURL != "" && !ok {
+	if uid != "" && baseURL != "" && !ok {
 		return strings.Join(append([]string{baseURL, "goto", "WebAPI", uid}, params...), "/")
 	}
 	return ""
@@ -576,6 +575,7 @@ var _ {{ .StructName }}API = (*{{ .PackageName }}.{{ .StructName }})(nil)
 func (a *API) InterfaceGoCode() string {
 	a.resetImports()
 	a.imports = map[string]bool{
+		"github.com/aws/aws-sdk-go/aws":                   true,
 		"github.com/aws/aws-sdk-go/aws/request":           true,
 		path.Join(a.SvcClientImportPath, a.PackageName()): true,
 	}
@@ -638,6 +638,12 @@ func resolveShapeValidations(s *Shape, ancestry ...*Shape) {
 	ancestry = append(ancestry, s)
 	for _, name := range children {
 		ref := s.MemberRefs[name]
+		// Since this is a grab bag we will just continue since
+		// we can't validate because we don't know the valued shape.
+		if ref.JSONValue {
+			continue
+		}
+
 		nestedShape := ref.Shape.NestedShape()
 
 		var v *ShapeValidation

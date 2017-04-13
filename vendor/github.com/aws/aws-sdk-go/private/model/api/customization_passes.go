@@ -151,6 +151,8 @@ func rdsCustomizations(a *API) {
 	inputs := []string{
 		"CopyDBSnapshotInput",
 		"CreateDBInstanceReadReplicaInput",
+		"CopyDBClusterSnapshotInput",
+		"CreateDBClusterInput",
 	}
 	for _, input := range inputs {
 		if ref, ok := a.Shapes[input]; ok {

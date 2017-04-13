@@ -90,6 +90,8 @@ key3 = "one", "two", "three"
 [advance]
 value with quotes = "some value"
 value quote2 again = 'some value'
+includes comment sign = ` + "`" + "my#password" + "`" + `
+includes comment sign2 = ` + "`" + "my;password" + "`" + `
 true = 2+3=5
 "1+1=2" = true
 """6+1=7""" = true
@@ -205,6 +207,16 @@ key2=c\d\`))
 		So(cfg.Section("").Key("key2").String(), ShouldEqual, `c\d\`)
 	})
 
+	Convey("Load with ignoring inline comments", t, func() {
+		cfg, err := LoadSources(LoadOptions{IgnoreInlineComment: true}, []byte(`key1=value ;comment
+key2=value #comment2`))
+		So(err, ShouldBeNil)
+		So(cfg, ShouldNotBeNil)
+
+		So(cfg.Section("").Key("key1").String(), ShouldEqual, `value ;comment`)
+		So(cfg.Section("").Key("key2").String(), ShouldEqual, `value #comment2`)
+	})
+
 	Convey("Load with boolean type keys", t, func() {
 		cfg, err := LoadSources(LoadOptions{AllowBooleanKeys: true}, []byte(`key1=hello
 key2
@@ -226,6 +238,31 @@ key2
 key4
 key5
 `)
+	})
+}
+
+func Test_File_ChildSections(t *testing.T) {
+	Convey("Find child sections by parent name", t, func() {
+		cfg, err := Load([]byte(`
+[node]
+
+[node.biz1]
+
+[node.biz2]
+
+[node.biz3]
+
+[node.bizN]
+`))
+		So(err, ShouldBeNil)
+		So(cfg, ShouldNotBeNil)
+
+		children := cfg.ChildSections("node")
+		names := make([]string, len(children))
+		for i := range children {
+			names[i] = children[i].name
+		}
+		So(strings.Join(names, ","), ShouldEqual, "node.biz1,node.biz2,node.biz3,node.bizN")
 	})
 }
 
@@ -354,18 +391,20 @@ Good man.
 	key3 = "one", "two", "three"
 
 [advance]
-	value with quotes  = some value
-	value quote2 again = some value
-	true               = 2+3=5
-	`+"`"+`1+1=2`+"`"+`            = true
-	`+"`"+`6+1=7`+"`"+`            = true
-	"""`+"`"+`5+5`+"`"+`"""        = 10
-	`+"`"+`"6+6"`+"`"+`            = 12
-	`+"`"+`7-2=4`+"`"+`            = false
-	ADDRESS            = """404 road,
+	value with quotes      = some value
+	value quote2 again     = some value
+	includes comment sign  = `+"`"+"my#password"+"`"+`
+	includes comment sign2 = `+"`"+"my;password"+"`"+`
+	true                   = 2+3=5
+	`+"`"+`1+1=2`+"`"+`                = true
+	`+"`"+`6+1=7`+"`"+`                = true
+	"""`+"`"+`5+5`+"`"+`"""            = 10
+	`+"`"+`"6+6"`+"`"+`                = 12
+	`+"`"+`7-2=4`+"`"+`                = false
+	ADDRESS                = """404 road,
 NotFound, State, 50000"""
-	two_lines          = how about continuation lines?
-	lots_of_lines      = 1 2 3 4 
+	two_lines              = how about continuation lines?
+	lots_of_lines          = 1 2 3 4 
 
 [advanced]
 	val w/ pound                       = `+"`"+`my#password`+"`"+`

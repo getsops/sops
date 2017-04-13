@@ -221,6 +221,28 @@
     }
   },
   "shapes":{
+    "AttemptContainerDetail":{
+      "type":"structure",
+      "members":{
+        "containerInstanceArn":{"shape":"String"},
+        "taskArn":{"shape":"String"},
+        "exitCode":{"shape":"Integer"},
+        "reason":{"shape":"String"}
+      }
+    },
+    "AttemptDetail":{
+      "type":"structure",
+      "members":{
+        "container":{"shape":"AttemptContainerDetail"},
+        "startedAt":{"shape":"Long"},
+        "stoppedAt":{"shape":"Long"},
+        "statusReason":{"shape":"String"}
+      }
+    },
+    "AttemptDetails":{
+      "type":"list",
+      "member":{"shape":"AttemptDetail"}
+    },
     "Boolean":{"type":"boolean"},
     "CEState":{
       "type":"string",
@@ -333,6 +355,7 @@
         "maxvCpus":{"shape":"Integer"},
         "desiredvCpus":{"shape":"Integer"},
         "instanceTypes":{"shape":"StringList"},
+        "imageId":{"shape":"String"},
         "subnets":{"shape":"StringList"},
         "securityGroupIds":{"shape":"StringList"},
         "ec2KeyPair":{"shape":"String"},
@@ -367,7 +390,8 @@
         "user":{"shape":"String"},
         "exitCode":{"shape":"Integer"},
         "reason":{"shape":"String"},
-        "containerInstanceArn":{"shape":"String"}
+        "containerInstanceArn":{"shape":"String"},
+        "taskArn":{"shape":"String"}
       }
     },
     "ContainerOverrides":{
@@ -588,6 +612,7 @@
         "status":{"shape":"String"},
         "type":{"shape":"String"},
         "parameters":{"shape":"ParametersMap"},
+        "retryStrategy":{"shape":"RetryStrategy"},
         "containerProperties":{"shape":"ContainerProperties"}
       }
     },
@@ -624,8 +649,10 @@
         "jobId":{"shape":"String"},
         "jobQueue":{"shape":"String"},
         "status":{"shape":"JobStatus"},
+        "attempts":{"shape":"AttemptDetails"},
         "statusReason":{"shape":"String"},
         "createdAt":{"shape":"Long"},
+        "retryStrategy":{"shape":"RetryStrategy"},
         "startedAt":{"shape":"Long"},
         "stoppedAt":{"shape":"Long"},
         "dependsOn":{"shape":"JobDependencyList"},
@@ -741,7 +768,8 @@
         "jobDefinitionName":{"shape":"String"},
         "type":{"shape":"JobDefinitionType"},
         "parameters":{"shape":"ParametersMap"},
-        "containerProperties":{"shape":"ContainerProperties"}
+        "containerProperties":{"shape":"ContainerProperties"},
+        "retryStrategy":{"shape":"RetryStrategy"}
       }
     },
     "RegisterJobDefinitionResponse":{
@@ -755,6 +783,12 @@
         "jobDefinitionName":{"shape":"String"},
         "jobDefinitionArn":{"shape":"String"},
         "revision":{"shape":"Integer"}
+      }
+    },
+    "RetryStrategy":{
+      "type":"structure",
+      "members":{
+        "attempts":{"shape":"Integer"}
       }
     },
     "ServerException":{
@@ -784,7 +818,8 @@
         "dependsOn":{"shape":"JobDependencyList"},
         "jobDefinition":{"shape":"String"},
         "parameters":{"shape":"ParametersMap"},
-        "containerOverrides":{"shape":"ContainerOverrides"}
+        "containerOverrides":{"shape":"ContainerOverrides"},
+        "retryStrategy":{"shape":"RetryStrategy"}
       }
     },
     "SubmitJobResponse":{

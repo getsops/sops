@@ -26,7 +26,7 @@ func outer(ch chan struct{}, b bool) ([]byte, error) {
 func TestBlockingInDefer(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
-			t.Error("run time panic: %v", x)
+			t.Errorf("run time panic: %v", x)
 		}
 	}()
 
