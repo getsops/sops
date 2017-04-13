@@ -5,11 +5,10 @@
 package autocert
 
 import (
+	"context"
 	"crypto"
 	"sync"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 // maxRandRenew is a maximum deviation from Manager.RenewBefore.
@@ -83,7 +82,7 @@ func (dr *domainRenewal) renew() {
 func (dr *domainRenewal) do(ctx context.Context) (time.Duration, error) {
 	// a race is likely unavoidable in a distributed environment
 	// but we try nonetheless
-	if tlscert, err := dr.m.cacheGet(dr.domain); err == nil {
+	if tlscert, err := dr.m.cacheGet(ctx, dr.domain); err == nil {
 		next := dr.next(tlscert.Leaf.NotAfter)
 		if next > dr.m.renewBefore()+maxRandRenew {
 			return next, nil
@@ -103,7 +102,7 @@ func (dr *domainRenewal) do(ctx context.Context) (time.Duration, error) {
 	if err != nil {
 		return 0, err
 	}
-	dr.m.cachePut(dr.domain, tlscert)
+	dr.m.cachePut(ctx, dr.domain, tlscert)
 	dr.m.stateMu.Lock()
 	defer dr.m.stateMu.Unlock()
 	// m.state is guaranteed to be non-nil at this point

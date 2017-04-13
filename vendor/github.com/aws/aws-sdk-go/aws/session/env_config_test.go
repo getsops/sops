@@ -94,6 +94,7 @@ func TestLoadEnvConfig(t *testing.T) {
 	cases := []struct {
 		Env                 map[string]string
 		Region, Profile     string
+		CustomCABundle      string
 		UseSharedConfigCall bool
 	}{
 		{
@@ -182,6 +183,19 @@ func TestLoadEnvConfig(t *testing.T) {
 			Region: "default_region", Profile: "default_profile",
 			UseSharedConfigCall: true,
 		},
+		{
+			Env: map[string]string{
+				"AWS_CA_BUNDLE": "custom_ca_bundle",
+			},
+			CustomCABundle: "custom_ca_bundle",
+		},
+		{
+			Env: map[string]string{
+				"AWS_CA_BUNDLE": "custom_ca_bundle",
+			},
+			CustomCABundle:      "custom_ca_bundle",
+			UseSharedConfigCall: true,
+		},
 	}
 
 	for _, c := range cases {
@@ -200,6 +214,7 @@ func TestLoadEnvConfig(t *testing.T) {
 
 		assert.Equal(t, c.Region, cfg.Region)
 		assert.Equal(t, c.Profile, cfg.Profile)
+		assert.Equal(t, c.CustomCABundle, cfg.CustomCABundle)
 	}
 }
 

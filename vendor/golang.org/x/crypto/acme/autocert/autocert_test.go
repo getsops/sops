@@ -5,6 +5,7 @@
 package autocert
 
 import (
+	"context"
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/elliptic"
@@ -27,7 +28,6 @@ import (
 	"time"
 
 	"golang.org/x/crypto/acme"
-	"golang.org/x/net/context"
 )
 
 var discoTmpl = template.Must(template.New("disco").Parse(`{
@@ -150,7 +150,7 @@ func TestGetCertificate_ForceRSA(t *testing.T) {
 	hello := &tls.ClientHelloInfo{ServerName: "example.org"}
 	testGetCertificate(t, man, "example.org", hello)
 
-	cert, err := man.cacheGet("example.org")
+	cert, err := man.cacheGet(context.Background(), "example.org")
 	if err != nil {
 		t.Fatalf("man.cacheGet: %v", err)
 	}
@@ -335,10 +335,11 @@ func TestCache(t *testing.T) {
 
 	man := &Manager{Cache: newMemCache()}
 	defer man.stopRenew()
-	if err := man.cachePut("example.org", tlscert); err != nil {
+	ctx := context.Background()
+	if err := man.cachePut(ctx, "example.org", tlscert); err != nil {
 		t.Fatalf("man.cachePut: %v", err)
 	}
-	res, err := man.cacheGet("example.org")
+	res, err := man.cacheGet(ctx, "example.org")
 	if err != nil {
 		t.Fatalf("man.cacheGet: %v", err)
 	}

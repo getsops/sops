@@ -62,6 +62,25 @@
           "expected": "CANCELLED"
         }
       ]
+    },
+    "ClusterTerminated": {
+      "delay": 30,
+      "operation": "DescribeCluster",
+      "maxAttempts": 60,
+      "acceptors": [
+        {
+          "state": "success",
+          "matcher": "path",
+          "argument": "Cluster.Status.State",
+          "expected": "TERMINATED"
+        },
+        {
+          "state": "failure",
+          "matcher": "path",
+          "argument": "Cluster.Status.State",
+          "expected": "TERMINATED_WITH_ERRORS"
+        }
+      ]
     }
   }
 }

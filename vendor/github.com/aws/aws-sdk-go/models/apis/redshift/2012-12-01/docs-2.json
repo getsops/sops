@@ -50,6 +50,7 @@
     "DisableSnapshotCopy": "<p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>",
     "EnableLogging": "<p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>",
     "EnableSnapshotCopy": "<p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>",
+    "GetClusterCredentials": "<p>Returns a database user name and temporary password with temporary authorization to log in to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log in. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see Generating IAM Database User Credentials in the Amazon Redshift Cluster Management Guide.</p> <p>The IAM user or role that executes GetClusterCredentials must have an IAM policy attached that allows the <code>redshift:GetClusterCredentials</code> action with access to the <code>dbuser</code> resource on the cluster. The user name specified for <code>dbuser</code> in the IAM policy and the user name specified for the <code>DbUser</code> parameter must match.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>",
     "ModifyCluster": "<p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html\">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>",
     "ModifyClusterIamRoles": "<p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>",
     "ModifyClusterParameterGroup": "<p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html\">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>",
@@ -156,6 +157,7 @@
         "CreateClusterMessage$Encrypted": "<p>If <code>true</code>, the data in the cluster is encrypted at rest. </p> <p>Default: false</p>",
         "CreateClusterMessage$EnhancedVpcRouting": "<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>",
         "CreateEventSubscriptionMessage$Enabled": "<p>A Boolean value; set to <code>true</code> to activate the subscription, set to <code>false</code> to create the subscription but not active it. </p>",
+        "GetClusterCredentialsMessage$AutoCreate": "<p>Create a database user with the name specified for <code>DbUser</code> if one does not exist.</p>",
         "ModifyClusterMessage$AllowVersionUpgrade": "<p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>",
         "ModifyClusterMessage$PubliclyAccessible": "<p>If <code>true</code>, the cluster can be accessed from a public network. Only clusters in VPCs can be set to be publicly available.</p>",
         "ModifyClusterMessage$EnhancedVpcRouting": "<p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href=\"http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html\">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>",
@@ -190,6 +192,11 @@
     },
     "ClusterAlreadyExistsFault": {
       "base": "<p>The account already has a cluster with the given identifier.</p>",
+      "refs": {
+      }
+    },
+    "ClusterCredentials": {
+      "base": "<p>Temporary credentials with authorization to log in to an Amazon Redshift database. </p>",
       "refs": {
       }
     },
@@ -541,6 +548,12 @@
       "refs": {
       }
     },
+    "DbGroupList": {
+      "base": null,
+      "refs": {
+        "GetClusterCredentialsMessage$DbGroups": "<p>A list of the names of existing database groups that <code>DbUser</code> will join for the current session. If not specified, the new user is added only to PUBLIC.</p>"
+      }
+    },
     "DefaultClusterParameters": {
       "base": "<p>Describes the default cluster parameters for a parameter group family.</p>",
       "refs": {
@@ -609,6 +622,11 @@
     },
     "DependentServiceRequestThrottlingFault": {
       "base": "<p>The request cannot be completed because a dependent service is throttling requests made by Amazon Redshift on your behalf. Wait and retry the request.</p>",
+      "refs": {
+      }
+    },
+    "DependentServiceUnavailableFault": {
+      "base": "<p>Your request cannot be completed because a dependent internal service is temporarily unavailable. Wait 30 to 60 seconds and try again.</p>",
       "refs": {
       }
     },
@@ -877,6 +895,11 @@
       "refs": {
       }
     },
+    "GetClusterCredentialsMessage": {
+      "base": "<p>The request parameters to get cluster credentials.</p>",
+      "refs": {
+      }
+    },
     "HsmClientCertificate": {
       "base": "<p>Returns information about an HSM client certificate. The certificate is stored in a secure Hardware Storage Module (HSM), and used by the Amazon Redshift cluster to encrypt data files.</p>",
       "refs": {
@@ -1048,6 +1071,7 @@
         "DescribeTableRestoreStatusMessage$MaxRecords": "<p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p>",
         "DescribeTagsMessage$MaxRecords": "<p>The maximum number or response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned <code>marker</code> value. </p>",
         "EnableSnapshotCopyMessage$RetentionPeriod": "<p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>Default: 7.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>",
+        "GetClusterCredentialsMessage$DurationSeconds": "<p>The number of seconds until the returned temporary password expires.</p> <p>Constraint: minimum 900, maximum 3600.</p> <p>Default: 900</p>",
         "ModifyClusterMessage$NumberOfNodes": "<p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: Integer greater than <code>0</code>.</p>",
         "ModifyClusterMessage$AutomatedSnapshotRetentionPeriod": "<p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>",
         "PendingModifiedValues$NumberOfNodes": "<p>The pending or in-progress change of the number of nodes in the cluster.</p>",
@@ -1481,6 +1505,12 @@
       "refs": {
       }
     },
+    "SensitiveString": {
+      "base": null,
+      "refs": {
+        "ClusterCredentials$DbPassword": "<p>A temporary password that authorizes the user name returned by <code>DbUser</code> to log on to the database <code>DbName</code>. </p>"
+      }
+    },
     "Snapshot": {
       "base": "<p>Describes a snapshot.</p>",
       "refs": {
@@ -1575,13 +1605,14 @@
       "base": null,
       "refs": {
         "AccountWithRestoreAccess$AccountId": "<p>The identifier of an AWS customer account authorized to restore a snapshot.</p>",
+        "AccountWithRestoreAccess$AccountAlias": "<p>The identifier of an AWS support account authorized to restore a snapshot. For AWS support, the identifier is <code>amazon-redshift-support</code>. </p>",
         "AuthorizeClusterSecurityGroupIngressMessage$ClusterSecurityGroupName": "<p>The name of the security group to which the ingress rule is added.</p>",
         "AuthorizeClusterSecurityGroupIngressMessage$CIDRIP": "<p>The IP range to be added the Amazon Redshift security group.</p>",
         "AuthorizeClusterSecurityGroupIngressMessage$EC2SecurityGroupName": "<p>The EC2 security group to be added the Amazon Redshift security group.</p>",
         "AuthorizeClusterSecurityGroupIngressMessage$EC2SecurityGroupOwnerId": "<p>The AWS account number of the owner of the security group specified by the <i>EC2SecurityGroupName</i> parameter. The AWS Access Key ID is not an acceptable value. </p> <p>Example: <code>111122223333</code> </p>",
         "AuthorizeSnapshotAccessMessage$SnapshotIdentifier": "<p>The identifier of the snapshot the account is authorized to restore.</p>",
         "AuthorizeSnapshotAccessMessage$SnapshotClusterIdentifier": "<p>The identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p>",
-        "AuthorizeSnapshotAccessMessage$AccountWithRestoreAccess": "<p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p>",
+        "AuthorizeSnapshotAccessMessage$AccountWithRestoreAccess": "<p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p> <p>To share a snapshot with AWS support, specify amazon-redshift-support.</p>",
         "AvailabilityZone$Name": "<p>The name of the availability zone.</p>",
         "Cluster$ClusterIdentifier": "<p>The unique identifier of the cluster.</p>",
         "Cluster$NodeType": "<p>The node type for the nodes in the cluster.</p>",
@@ -1597,6 +1628,7 @@
         "Cluster$ClusterPublicKey": "<p>The public key for the cluster.</p>",
         "Cluster$ClusterRevisionNumber": "<p>The specific revision number of the database in the cluster.</p>",
         "Cluster$KmsKeyId": "<p>The AWS Key Management Service (AWS KMS) key ID of the encryption key used to encrypt data in the cluster.</p>",
+        "ClusterCredentials$DbUser": "<p>A database user name that is authorized to log on to the database <code>DbName</code> using the password <code>DbPassword</code>. If the <code>DbGroups</code> parameter is specifed, <code>DbUser</code> is added to the listed groups for the current session. The user name is prefixed with <code>IAM:</code> for an existing user name or <code>IAMA:</code> if the user was auto-created. </p>",
         "ClusterIamRole$IamRoleArn": "<p>The Amazon Resource Name (ARN) of the IAM role, for example, <code>arn:aws:iam::123456789012:role/RedshiftCopyUnload</code>. </p>",
         "ClusterIamRole$ApplyStatus": "<p>A value that describes the status of the IAM role's association with an Amazon Redshift cluster.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The role is available for use by the cluster.</p> </li> <li> <p> <code>adding</code>: The role is in the process of being associated with the cluster.</p> </li> <li> <p> <code>removing</code>: The role is in the process of being disassociated with the cluster.</p> </li> </ul>",
         "ClusterNode$NodeRole": "<p>Whether the node is a leader node or a compute node.</p>",
@@ -1674,6 +1706,7 @@
         "CreateSnapshotCopyGrantMessage$SnapshotCopyGrantName": "<p>The name of the snapshot copy grant. This name must be unique in the region for the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul>",
         "CreateSnapshotCopyGrantMessage$KmsKeyId": "<p>The unique identifier of the customer master key (CMK) to which to grant Amazon Redshift permission. If no key is specified, the default key is used.</p>",
         "CreateTagsMessage$ResourceName": "<p>The Amazon Resource Name (ARN) to which you want to add the tag or tags. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>. </p>",
+        "DbGroupList$member": null,
         "DefaultClusterParameters$ParameterGroupFamily": "<p>The name of the cluster parameter group family to which the engine default parameters apply.</p>",
         "DefaultClusterParameters$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
         "DeleteClusterMessage$ClusterIdentifier": "<p>The identifier of the cluster to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must contain lowercase characters.</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>",
@@ -1766,6 +1799,9 @@
         "EventSubscription$Severity": "<p>The event severity specified in the Amazon Redshift event notification subscription.</p> <p>Values: ERROR, INFO</p>",
         "EventSubscriptionsMessage$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
         "EventsMessage$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
+        "GetClusterCredentialsMessage$DbUser": "<p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn't exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn't exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn't exist in the database.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/http:/docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html\">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 128 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>",
+        "GetClusterCredentialsMessage$DbName": "<p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log in to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href=\"http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html\">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul>",
+        "GetClusterCredentialsMessage$ClusterIdentifier": "<p>The unique identifier of the cluster that contains the database for which your are requesting credentials. This parameter is case sensitive.</p>",
         "HsmClientCertificate$HsmClientCertificateIdentifier": "<p>The identifier of the HSM client certificate.</p>",
         "HsmClientCertificate$HsmClientCertificatePublicKey": "<p>The public key that the Amazon Redshift cluster will use to connect to the HSM. You must register the public key in the HSM.</p>",
         "HsmClientCertificateMessage$Marker": "<p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>",
@@ -1970,6 +2006,7 @@
       "base": null,
       "refs": {
         "Cluster$ClusterCreateTime": "<p>The date and time that the cluster was created.</p>",
+        "ClusterCredentials$Expiration": "<p>The date and time <code>DbPassword</code> expires.</p>",
         "DescribeClusterSnapshotsMessage$StartTime": "<p>A value that requests only snapshots created at or after the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>",
         "DescribeClusterSnapshotsMessage$EndTime": "<p>A time value that requests only snapshots created at or before the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>",
         "DescribeEventsMessage$StartTime": "<p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href=\"http://en.wikipedia.org/wiki/ISO_8601\">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>",

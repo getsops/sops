@@ -26,4 +26,6 @@ type CipherData struct {
 	MaterialDescription MaterialDescription
 	// EncryptedKey should be populated when calling GenerateCipherData
 	EncryptedKey []byte
+
+	Padder Padder
 }

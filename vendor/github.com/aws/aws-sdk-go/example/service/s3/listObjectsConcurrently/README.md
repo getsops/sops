@@ -1,6 +1,6 @@
 ## Example
 
-listObjectsConcurrentlv is an example using the AWS SDK for Go concurrently to list the encrypted objects in the S3 buckets owned by an account.
+This is an example using the AWS SDK for Go concurrently to list the encrypted objects in the S3 buckets owned by an account.
 
 ## Usage
 

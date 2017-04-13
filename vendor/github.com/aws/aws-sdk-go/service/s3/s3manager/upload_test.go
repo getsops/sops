@@ -17,6 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/awstesting"
 	"github.com/aws/aws-sdk-go/awstesting/unit"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -724,5 +725,31 @@ func TestSSE(t *testing.T) {
 
 	if err != nil {
 		t.Fatal("Expected no error, but received" + err.Error())
+	}
+}
+
+func TestUploadWithContextCanceled(t *testing.T) {
+	u := s3manager.NewUploader(unit.Session)
+
+	params := s3manager.UploadInput{
+		Bucket: aws.String("Bucket"),
+		Key:    aws.String("Key"),
+		Body:   bytes.NewReader(make([]byte, 0)),
+	}
+
+	ctx := &awstesting.FakeContext{DoneCh: make(chan struct{})}
+	ctx.Error = fmt.Errorf("context canceled")
+	close(ctx.DoneCh)
+
+	_, err := u.UploadWithContext(ctx, &params)
+	if err == nil {
+		t.Fatalf("expected error, did not get one")
+	}
+	aerr := err.(awserr.Error)
+	if e, a := request.CanceledErrorCode, aerr.Code(); e != a {
+		t.Errorf("expected error code %q, got %q", e, a)
+	}
+	if e, a := "canceled", aerr.Message(); !strings.Contains(a, e) {
+		t.Errorf("expected error message to contain %q, but did not %q", e, a)
 	}
 }

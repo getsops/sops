@@ -13,6 +13,11 @@
       "output_token": "Marker",
       "result_key": "Clusters"
     },
+    "ListInstanceFleets": {
+      "input_token": "Marker",
+      "output_token": "Marker",
+      "result_key": "InstanceFleets"
+    },
     "ListInstanceGroups": {
       "input_token": "Marker",
       "output_token": "Marker",

@@ -4090,7 +4090,11 @@
           "shape":"Boolean",
           "locationName":"encrypted"
         },
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "TagSpecifications":{
+          "shape":"TagSpecificationList",
+          "locationName":"TagSpecification"
+        }
       }
     },
     "CreateVpcEndpointRequest":{
@@ -12770,6 +12774,10 @@
         "EbsOptimized":{
           "shape":"Boolean",
           "locationName":"ebsOptimized"
+        },
+        "TagSpecifications":{
+          "shape":"TagSpecificationList",
+          "locationName":"TagSpecification"
         }
       }
     },
@@ -14186,6 +14194,26 @@
       "type":"list",
       "member":{
         "shape":"Tag",
+        "locationName":"item"
+      }
+    },
+    "TagSpecification":{
+      "type":"structure",
+      "members":{
+        "ResourceType":{
+          "shape":"ResourceType",
+          "locationName":"resourceType"
+        },
+        "Tags":{
+          "shape":"TagList",
+          "locationName":"Tag"
+        }
+      }
+    },
+    "TagSpecificationList":{
+      "type":"list",
+      "member":{
+        "shape":"TagSpecification",
         "locationName":"item"
       }
     },

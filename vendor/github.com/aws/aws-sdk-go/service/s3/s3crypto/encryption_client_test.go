@@ -3,14 +3,18 @@ package s3crypto_test
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/awstesting"
 	"github.com/aws/aws-sdk-go/awstesting/unit"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -64,4 +68,32 @@ func TestPutObject(t *testing.T) {
 	b, err := ioutil.ReadAll(req.HTTPRequest.Body)
 	assert.NoError(t, err)
 	assert.Equal(t, expected, b)
+}
+
+func TestPutObjectWithContext(t *testing.T) {
+	generator := mockGenerator{}
+	cb := mockCipherBuilder{generator}
+
+	c := s3crypto.NewEncryptionClient(unit.Session, cb)
+
+	ctx := &awstesting.FakeContext{DoneCh: make(chan struct{})}
+	ctx.Error = fmt.Errorf("context canceled")
+	close(ctx.DoneCh)
+
+	input := s3.PutObjectInput{
+		Bucket: aws.String("test"),
+		Key:    aws.String("test"),
+		Body:   bytes.NewReader([]byte{}),
+	}
+	_, err := c.PutObjectWithContext(ctx, &input)
+	if err == nil {
+		t.Fatalf("expected error, did not get one")
+	}
+	aerr := err.(awserr.Error)
+	if e, a := request.CanceledErrorCode, aerr.Code(); e != a {
+		t.Errorf("expected error code %q, got %q", e, a)
+	}
+	if e, a := "canceled", aerr.Message(); !strings.Contains(a, e) {
+		t.Errorf("expected error message to contain %q, but did not %q", e, a)
+	}
 }

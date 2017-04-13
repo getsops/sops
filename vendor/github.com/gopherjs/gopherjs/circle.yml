@@ -18,7 +18,7 @@ test:
     - go tool vet *.go                                                   # Go package in root directory.
     - for d in */; do echo $d; done | grep -v tests/ | grep -v third_party/ | xargs go tool vet # All subdirectories except "tests", "third_party".
     - >
-      gopherjs test --short --minify --run='^Test'
+      gopherjs test --short --minify
       github.com/gopherjs/gopherjs/tests
       github.com/gopherjs/gopherjs/tests/main
       github.com/gopherjs/gopherjs/js
