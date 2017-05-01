@@ -8,6 +8,8 @@
           "SubscriptionName": "mymysqleventsubscription"
         },
         "output": {
+          "EventSubscription": {
+          }
         },
         "comments": {
           "input": {
@@ -50,6 +52,8 @@
           "ResourceIdentifier": "arn:aws:rds:us-east-1:992648334831:db:mymysqlinstance"
         },
         "output": {
+          "ResourcePendingMaintenanceActions": {
+          }
         },
         "comments": {
           "input": {
@@ -69,6 +73,8 @@
           "DBSecurityGroupName": "mydbsecuritygroup"
         },
         "output": {
+          "DBSecurityGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -89,6 +95,8 @@
           "TargetDBClusterParameterGroupIdentifier": "mydbclusterparametergroup-copy"
         },
         "output": {
+          "DBClusterParameterGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -108,6 +116,8 @@
           "TargetDBClusterSnapshotIdentifier": "cluster-snapshot-copy-1"
         },
         "output": {
+          "DBClusterSnapshot": {
+          }
         },
         "comments": {
           "input": {
@@ -128,6 +138,8 @@
           "TargetDBParameterGroupIdentifier": "mymysqlparametergroup-copy"
         },
         "output": {
+          "DBParameterGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -147,6 +159,8 @@
           "TargetDBSnapshotIdentifier": "mydbsnapshot-copy"
         },
         "output": {
+          "DBSnapshot": {
+          }
         },
         "comments": {
           "input": {
@@ -167,6 +181,8 @@
           "TargetOptionGroupIdentifier": "mymysqloptiongroup-copy"
         },
         "output": {
+          "OptionGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -197,6 +213,8 @@
           "StorageEncrypted": true
         },
         "output": {
+          "DBCluster": {
+          }
         },
         "comments": {
           "input": {
@@ -217,6 +235,8 @@
           "Description": "My DB cluster parameter group"
         },
         "output": {
+          "DBClusterParameterGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -236,6 +256,8 @@
           "DBClusterSnapshotIdentifier": "mydbclustersnapshot"
         },
         "output": {
+          "DBClusterSnapshot": {
+          }
         },
         "comments": {
           "input": {
@@ -259,6 +281,8 @@
           "MasterUsername": "MyUser"
         },
         "output": {
+          "DBInstance": {
+          }
         },
         "comments": {
           "input": {
@@ -289,6 +313,8 @@
           ]
         },
         "output": {
+          "DBInstance": {
+          }
         },
         "comments": {
           "input": {
@@ -309,6 +335,8 @@
           "Description": "My MySQL parameter group"
         },
         "output": {
+          "DBParameterGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -328,6 +356,8 @@
           "DBSecurityGroupName": "mydbsecuritygroup"
         },
         "output": {
+          "DBSecurityGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -347,6 +377,8 @@
           "DBSnapshotIdentifier": "mydbsnapshot"
         },
         "output": {
+          "DBSnapshot": {
+          }
         },
         "comments": {
           "input": {
@@ -370,6 +402,8 @@
           ]
         },
         "output": {
+          "DBSubnetGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -397,6 +431,8 @@
           "SubscriptionName": "mymysqleventsubscription"
         },
         "output": {
+          "EventSubscription": {
+          }
         },
         "comments": {
           "input": {
@@ -418,6 +454,8 @@
           "OptionGroupName": "mymysqloptiongroup"
         },
         "output": {
+          "OptionGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -437,6 +475,8 @@
           "SkipFinalSnapshot": true
         },
         "output": {
+          "DBCluster": {
+          }
         },
         "comments": {
           "input": {
@@ -471,6 +511,8 @@
           "DBClusterSnapshotIdentifier": "mydbclustersnapshot"
         },
         "output": {
+          "DBClusterSnapshot": {
+          }
         },
         "comments": {
           "input": {
@@ -490,6 +532,8 @@
           "SkipFinalSnapshot": true
         },
         "output": {
+          "DBInstance": {
+          }
         },
         "comments": {
           "input": {
@@ -540,6 +584,8 @@
           "DBSnapshotIdentifier": "mydbsnapshot"
         },
         "output": {
+          "DBSnapshot": {
+          }
         },
         "comments": {
           "input": {
@@ -574,6 +620,8 @@
           "SubscriptionName": "myeventsubscription"
         },
         "output": {
+          "EventSubscription": {
+          }
         },
         "comments": {
           "input": {
@@ -681,6 +729,8 @@
           "DBClusterSnapshotIdentifier": "mydbclustersnapshot"
         },
         "output": {
+          "DBClusterSnapshotAttributesResult": {
+          }
         },
         "comments": {
           "input": {
@@ -853,6 +903,8 @@
           "DBSnapshotIdentifier": "mydbsnapshot"
         },
         "output": {
+          "DBSnapshotAttributesResult": {
+          }
         },
         "comments": {
           "input": {
@@ -910,6 +962,8 @@
           "DBParameterGroupFamily": "aurora5.6"
         },
         "output": {
+          "EngineDefaults": {
+          }
         },
         "comments": {
           "input": {
@@ -928,6 +982,8 @@
           "DBParameterGroupFamily": "mysql5.6"
         },
         "output": {
+          "EngineDefaults": {
+          }
         },
         "comments": {
           "input": {
@@ -1212,6 +1268,8 @@
           "TargetDBInstanceIdentifier": "myaurorareplica"
         },
         "output": {
+          "DBCluster": {
+          }
         },
         "comments": {
           "input": {
@@ -1253,6 +1311,8 @@
           "PreferredMaintenanceWindow": "Tue:05:00-Tue:05:30"
         },
         "output": {
+          "DBCluster": {
+          }
         },
         "comments": {
           "input": {
@@ -1304,6 +1364,8 @@
           ]
         },
         "output": {
+          "DBClusterSnapshotAttributesResult": {
+          }
         },
         "comments": {
           "input": {
@@ -1329,6 +1391,8 @@
           "PreferredMaintenanceWindow": "Tue:05:00-Tue:05:30"
         },
         "output": {
+          "DBInstance": {
+          }
         },
         "comments": {
           "input": {
@@ -1376,6 +1440,8 @@
           ]
         },
         "output": {
+          "DBSnapshotAttributesResult": {
+          }
         },
         "comments": {
           "input": {
@@ -1398,6 +1464,8 @@
           ]
         },
         "output": {
+          "DBSubnetGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -1422,6 +1490,8 @@
           "SubscriptionName": "mymysqleventsubscription"
         },
         "output": {
+          "EventSubscription": {
+          }
         },
         "comments": {
           "input": {
@@ -1449,6 +1519,8 @@
           ]
         },
         "output": {
+          "OptionGroup": {
+          }
         },
         "comments": {
           "input": {
@@ -1469,6 +1541,8 @@
           "PreferredBackupWindow": "03:30-04:00"
         },
         "output": {
+          "DBInstance": {
+          }
         },
         "comments": {
           "input": {
@@ -1488,6 +1562,8 @@
           "ReservedDBInstancesOfferingId": "fb29428a-646d-4390-850e-5fe89926e727"
         },
         "output": {
+          "ReservedDBInstance": {
+          }
         },
         "comments": {
           "input": {
@@ -1507,6 +1583,8 @@
           "ForceFailover": false
         },
         "output": {
+          "DBInstance": {
+          }
         },
         "comments": {
           "input": {
@@ -1526,6 +1604,8 @@
           "SubscriptionName": "myeventsubscription"
         },
         "output": {
+          "EventSubscription": {
+          }
         },
         "comments": {
           "input": {
@@ -1603,6 +1683,8 @@
           "SnapshotIdentifier": "sample-cluster-snapshot1"
         },
         "output": {
+          "DBCluster": {
+          }
         },
         "comments": {
           "input": {
@@ -1623,6 +1705,8 @@
           "SourceDBClusterIdentifier": "sample-cluster1"
         },
         "output": {
+          "DBCluster": {
+          }
         },
         "comments": {
           "input": {
@@ -1642,88 +1726,90 @@
           "DBSnapshotIdentifier": "rds:mysqldb-2014-04-22-08-15"
         },
         "output": {
-          "AllocatedStorage": 200,
-          "AutoMinorVersionUpgrade": true,
-          "AvailabilityZone": "us-west-2b",
-          "BackupRetentionPeriod": 7,
-          "CACertificateIdentifier": "rds-ca-2015",
-          "CopyTagsToSnapshot": false,
-          "DBInstanceArn": "arn:aws:rds:us-west-2:123456789012:db:mysqldb-restored",
-          "DBInstanceClass": "db.t2.small",
-          "DBInstanceIdentifier": "mysqldb-restored",
-          "DBInstanceStatus": "available",
-          "DBName": "sample",
-          "DBParameterGroups": [
-            {
-              "DBParameterGroupName": "default.mysql5.6",
-              "ParameterApplyStatus": "in-sync"
-            }
-          ],
-          "DBSecurityGroups": [
-
-          ],
-          "DBSubnetGroup": {
-            "DBSubnetGroupDescription": "default",
-            "DBSubnetGroupName": "default",
-            "SubnetGroupStatus": "Complete",
-            "Subnets": [
+          "DBInstance": {
+            "AllocatedStorage": 200,
+            "AutoMinorVersionUpgrade": true,
+            "AvailabilityZone": "us-west-2b",
+            "BackupRetentionPeriod": 7,
+            "CACertificateIdentifier": "rds-ca-2015",
+            "CopyTagsToSnapshot": false,
+            "DBInstanceArn": "arn:aws:rds:us-west-2:123456789012:db:mysqldb-restored",
+            "DBInstanceClass": "db.t2.small",
+            "DBInstanceIdentifier": "mysqldb-restored",
+            "DBInstanceStatus": "available",
+            "DBName": "sample",
+            "DBParameterGroups": [
               {
-                "SubnetAvailabilityZone": {
-                  "Name": "us-west-2a"
-                },
-                "SubnetIdentifier": "subnet-77e8db03",
-                "SubnetStatus": "Active"
-              },
-              {
-                "SubnetAvailabilityZone": {
-                  "Name": "us-west-2b"
-                },
-                "SubnetIdentifier": "subnet-c39989a1",
-                "SubnetStatus": "Active"
-              },
-              {
-                "SubnetAvailabilityZone": {
-                  "Name": "us-west-2c"
-                },
-                "SubnetIdentifier": "subnet-4b267b0d",
-                "SubnetStatus": "Active"
+                "DBParameterGroupName": "default.mysql5.6",
+                "ParameterApplyStatus": "in-sync"
               }
             ],
-            "VpcId": "vpc-c1c5b3a3"
-          },
-          "DbInstancePort": 0,
-          "DbiResourceId": "db-VNZUCCBTEDC4WR7THXNJO72HVQ",
-          "DomainMemberships": [
+            "DBSecurityGroups": [
 
-          ],
-          "Engine": "mysql",
-          "EngineVersion": "5.6.27",
-          "LicenseModel": "general-public-license",
-          "MasterUsername": "mymasteruser",
-          "MonitoringInterval": 0,
-          "MultiAZ": false,
-          "OptionGroupMemberships": [
-            {
-              "OptionGroupName": "default:mysql-5-6",
-              "Status": "in-sync"
-            }
-          ],
-          "PendingModifiedValues": {
-          },
-          "PreferredBackupWindow": "12:58-13:28",
-          "PreferredMaintenanceWindow": "tue:10:16-tue:10:46",
-          "PubliclyAccessible": true,
-          "ReadReplicaDBInstanceIdentifiers": [
+            ],
+            "DBSubnetGroup": {
+              "DBSubnetGroupDescription": "default",
+              "DBSubnetGroupName": "default",
+              "SubnetGroupStatus": "Complete",
+              "Subnets": [
+                {
+                  "SubnetAvailabilityZone": {
+                    "Name": "us-west-2a"
+                  },
+                  "SubnetIdentifier": "subnet-77e8db03",
+                  "SubnetStatus": "Active"
+                },
+                {
+                  "SubnetAvailabilityZone": {
+                    "Name": "us-west-2b"
+                  },
+                  "SubnetIdentifier": "subnet-c39989a1",
+                  "SubnetStatus": "Active"
+                },
+                {
+                  "SubnetAvailabilityZone": {
+                    "Name": "us-west-2c"
+                  },
+                  "SubnetIdentifier": "subnet-4b267b0d",
+                  "SubnetStatus": "Active"
+                }
+              ],
+              "VpcId": "vpc-c1c5b3a3"
+            },
+            "DbInstancePort": 0,
+            "DbiResourceId": "db-VNZUCCBTEDC4WR7THXNJO72HVQ",
+            "DomainMemberships": [
 
-          ],
-          "StorageEncrypted": false,
-          "StorageType": "gp2",
-          "VpcSecurityGroups": [
-            {
-              "Status": "active",
-              "VpcSecurityGroupId": "sg-e5e5b0d2"
-            }
-          ]
+            ],
+            "Engine": "mysql",
+            "EngineVersion": "5.6.27",
+            "LicenseModel": "general-public-license",
+            "MasterUsername": "mymasteruser",
+            "MonitoringInterval": 0,
+            "MultiAZ": false,
+            "OptionGroupMemberships": [
+              {
+                "OptionGroupName": "default:mysql-5-6",
+                "Status": "in-sync"
+              }
+            ],
+            "PendingModifiedValues": {
+            },
+            "PreferredBackupWindow": "12:58-13:28",
+            "PreferredMaintenanceWindow": "tue:10:16-tue:10:46",
+            "PubliclyAccessible": true,
+            "ReadReplicaDBInstanceIdentifiers": [
+
+            ],
+            "StorageEncrypted": false,
+            "StorageType": "gp2",
+            "VpcSecurityGroups": [
+              {
+                "Status": "active",
+                "VpcSecurityGroupId": "sg-e5e5b0d2"
+              }
+            ]
+          }
         },
         "comments": {
           "input": {
@@ -1744,88 +1830,90 @@
           "TargetDBInstanceIdentifier": "mysql-sample-restored"
         },
         "output": {
-          "AllocatedStorage": 200,
-          "AutoMinorVersionUpgrade": true,
-          "AvailabilityZone": "us-west-2b",
-          "BackupRetentionPeriod": 7,
-          "CACertificateIdentifier": "rds-ca-2015",
-          "CopyTagsToSnapshot": false,
-          "DBInstanceArn": "arn:aws:rds:us-west-2:123456789012:db:mysql-sample-restored",
-          "DBInstanceClass": "db.t2.small",
-          "DBInstanceIdentifier": "mysql-sample-restored",
-          "DBInstanceStatus": "available",
-          "DBName": "sample",
-          "DBParameterGroups": [
-            {
-              "DBParameterGroupName": "default.mysql5.6",
-              "ParameterApplyStatus": "in-sync"
-            }
-          ],
-          "DBSecurityGroups": [
-
-          ],
-          "DBSubnetGroup": {
-            "DBSubnetGroupDescription": "default",
-            "DBSubnetGroupName": "default",
-            "SubnetGroupStatus": "Complete",
-            "Subnets": [
+          "DBInstance": {
+            "AllocatedStorage": 200,
+            "AutoMinorVersionUpgrade": true,
+            "AvailabilityZone": "us-west-2b",
+            "BackupRetentionPeriod": 7,
+            "CACertificateIdentifier": "rds-ca-2015",
+            "CopyTagsToSnapshot": false,
+            "DBInstanceArn": "arn:aws:rds:us-west-2:123456789012:db:mysql-sample-restored",
+            "DBInstanceClass": "db.t2.small",
+            "DBInstanceIdentifier": "mysql-sample-restored",
+            "DBInstanceStatus": "available",
+            "DBName": "sample",
+            "DBParameterGroups": [
               {
-                "SubnetAvailabilityZone": {
-                  "Name": "us-west-2a"
-                },
-                "SubnetIdentifier": "subnet-77e8db03",
-                "SubnetStatus": "Active"
-              },
-              {
-                "SubnetAvailabilityZone": {
-                  "Name": "us-west-2b"
-                },
-                "SubnetIdentifier": "subnet-c39989a1",
-                "SubnetStatus": "Active"
-              },
-              {
-                "SubnetAvailabilityZone": {
-                  "Name": "us-west-2c"
-                },
-                "SubnetIdentifier": "subnet-4b267b0d",
-                "SubnetStatus": "Active"
+                "DBParameterGroupName": "default.mysql5.6",
+                "ParameterApplyStatus": "in-sync"
               }
             ],
-            "VpcId": "vpc-c1c5b3a3"
-          },
-          "DbInstancePort": 0,
-          "DbiResourceId": "db-VNZUCCBTEDC4WR7THXNJO72HVQ",
-          "DomainMemberships": [
+            "DBSecurityGroups": [
 
-          ],
-          "Engine": "mysql",
-          "EngineVersion": "5.6.27",
-          "LicenseModel": "general-public-license",
-          "MasterUsername": "mymasteruser",
-          "MonitoringInterval": 0,
-          "MultiAZ": false,
-          "OptionGroupMemberships": [
-            {
-              "OptionGroupName": "default:mysql-5-6",
-              "Status": "in-sync"
-            }
-          ],
-          "PendingModifiedValues": {
-          },
-          "PreferredBackupWindow": "12:58-13:28",
-          "PreferredMaintenanceWindow": "tue:10:16-tue:10:46",
-          "PubliclyAccessible": true,
-          "ReadReplicaDBInstanceIdentifiers": [
+            ],
+            "DBSubnetGroup": {
+              "DBSubnetGroupDescription": "default",
+              "DBSubnetGroupName": "default",
+              "SubnetGroupStatus": "Complete",
+              "Subnets": [
+                {
+                  "SubnetAvailabilityZone": {
+                    "Name": "us-west-2a"
+                  },
+                  "SubnetIdentifier": "subnet-77e8db03",
+                  "SubnetStatus": "Active"
+                },
+                {
+                  "SubnetAvailabilityZone": {
+                    "Name": "us-west-2b"
+                  },
+                  "SubnetIdentifier": "subnet-c39989a1",
+                  "SubnetStatus": "Active"
+                },
+                {
+                  "SubnetAvailabilityZone": {
+                    "Name": "us-west-2c"
+                  },
+                  "SubnetIdentifier": "subnet-4b267b0d",
+                  "SubnetStatus": "Active"
+                }
+              ],
+              "VpcId": "vpc-c1c5b3a3"
+            },
+            "DbInstancePort": 0,
+            "DbiResourceId": "db-VNZUCCBTEDC4WR7THXNJO72HVQ",
+            "DomainMemberships": [
 
-          ],
-          "StorageEncrypted": false,
-          "StorageType": "gp2",
-          "VpcSecurityGroups": [
-            {
-              "Status": "active",
-              "VpcSecurityGroupId": "sg-e5e5b0d2"
-            }
-          ]
+            ],
+            "Engine": "mysql",
+            "EngineVersion": "5.6.27",
+            "LicenseModel": "general-public-license",
+            "MasterUsername": "mymasteruser",
+            "MonitoringInterval": 0,
+            "MultiAZ": false,
+            "OptionGroupMemberships": [
+              {
+                "OptionGroupName": "default:mysql-5-6",
+                "Status": "in-sync"
+              }
+            ],
+            "PendingModifiedValues": {
+            },
+            "PreferredBackupWindow": "12:58-13:28",
+            "PreferredMaintenanceWindow": "tue:10:16-tue:10:46",
+            "PubliclyAccessible": true,
+            "ReadReplicaDBInstanceIdentifiers": [
+
+            ],
+            "StorageEncrypted": false,
+            "StorageType": "gp2",
+            "VpcSecurityGroups": [
+              {
+                "Status": "active",
+                "VpcSecurityGroupId": "sg-e5e5b0d2"
+              }
+            ]
+          }
         },
         "comments": {
           "input": {
@@ -1845,6 +1933,8 @@
           "DBSecurityGroupName": "mydbsecuritygroup"
         },
         "output": {
+          "DBSecurityGroup": {
+          }
         },
         "comments": {
           "input": {

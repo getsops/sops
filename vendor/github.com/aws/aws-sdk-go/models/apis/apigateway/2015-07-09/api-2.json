@@ -150,6 +150,23 @@
         {"shape":"TooManyRequestsException"}
       ]
     },
+    "CreateRequestValidator":{
+      "name":"CreateRequestValidator",
+      "http":{
+        "method":"POST",
+        "requestUri":"/restapis/{restapi_id}/requestvalidators",
+        "responseCode":201
+      },
+      "input":{"shape":"CreateRequestValidatorRequest"},
+      "output":{"shape":"RequestValidator"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
     "CreateResource":{
       "name":"CreateResource",
       "http":{
@@ -427,6 +444,22 @@
         "responseCode":202
       },
       "input":{"shape":"DeleteModelRequest"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"BadRequestException"},
+        {"shape":"ConflictException"}
+      ]
+    },
+    "DeleteRequestValidator":{
+      "name":"DeleteRequestValidator",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
+        "responseCode":202
+      },
+      "input":{"shape":"DeleteRequestValidatorRequest"},
       "errors":[
         {"shape":"UnauthorizedException"},
         {"shape":"NotFoundException"},
@@ -910,6 +943,35 @@
       },
       "input":{"shape":"GetModelsRequest"},
       "output":{"shape":"Models"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "GetRequestValidator":{
+      "name":"GetRequestValidator",
+      "http":{
+        "method":"GET",
+        "requestUri":"/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}"
+      },
+      "input":{"shape":"GetRequestValidatorRequest"},
+      "output":{"shape":"RequestValidator"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "GetRequestValidators":{
+      "name":"GetRequestValidators",
+      "http":{
+        "method":"GET",
+        "requestUri":"/restapis/{restapi_id}/requestvalidators"
+      },
+      "input":{"shape":"GetRequestValidatorsRequest"},
+      "output":{"shape":"RequestValidators"},
       "errors":[
         {"shape":"BadRequestException"},
         {"shape":"UnauthorizedException"},
@@ -1515,6 +1577,21 @@
         {"shape":"TooManyRequestsException"}
       ]
     },
+    "UpdateRequestValidator":{
+      "name":"UpdateRequestValidator",
+      "http":{
+        "method":"PATCH",
+        "requestUri":"/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}"
+      },
+      "input":{"shape":"UpdateRequestValidatorRequest"},
+      "output":{"shape":"RequestValidator"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"BadRequestException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
     "UpdateResource":{
       "name":"UpdateResource",
       "http":{
@@ -1873,19 +1950,14 @@
     },
     "CreateDomainNameRequest":{
       "type":"structure",
-      "required":[
-        "domainName",
-        "certificateName",
-        "certificateBody",
-        "certificatePrivateKey",
-        "certificateChain"
-      ],
+      "required":["domainName"],
       "members":{
         "domainName":{"shape":"String"},
         "certificateName":{"shape":"String"},
         "certificateBody":{"shape":"String"},
         "certificatePrivateKey":{"shape":"String"},
-        "certificateChain":{"shape":"String"}
+        "certificateChain":{"shape":"String"},
+        "certificateArn":{"shape":"String"}
       }
     },
     "CreateModelRequest":{
@@ -1905,6 +1977,20 @@
         "description":{"shape":"String"},
         "schema":{"shape":"String"},
         "contentType":{"shape":"String"}
+      }
+    },
+    "CreateRequestValidatorRequest":{
+      "type":"structure",
+      "required":["restApiId"],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "name":{"shape":"String"},
+        "validateRequestBody":{"shape":"Boolean"},
+        "validateRequestParameters":{"shape":"Boolean"}
       }
     },
     "CreateResourceRequest":{
@@ -2248,6 +2334,25 @@
         }
       }
     },
+    "DeleteRequestValidatorRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "requestValidatorId"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "requestValidatorId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"requestvalidator_id"
+        }
+      }
+    },
     "DeleteResourceRequest":{
       "type":"structure",
       "required":[
@@ -2426,6 +2531,7 @@
       "members":{
         "domainName":{"shape":"String"},
         "certificateName":{"shape":"String"},
+        "certificateArn":{"shape":"String"},
         "certificateUploadDate":{"shape":"Timestamp"},
         "distributionDomainName":{"shape":"String"}
       }
@@ -2675,6 +2781,11 @@
           "shape":"String",
           "location":"uri",
           "locationName":"deployment_id"
+        },
+        "embed":{
+          "shape":"ListOfString",
+          "location":"querystring",
+          "locationName":"embed"
         }
       }
     },
@@ -3030,6 +3141,46 @@
         }
       }
     },
+    "GetRequestValidatorRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "requestValidatorId"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "requestValidatorId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"requestvalidator_id"
+        }
+      }
+    },
+    "GetRequestValidatorsRequest":{
+      "type":"structure",
+      "required":["restApiId"],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "position":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"position"
+        },
+        "limit":{
+          "shape":"NullableInteger",
+          "location":"querystring",
+          "locationName":"limit"
+        }
+      }
+    },
     "GetResourceRequest":{
       "type":"structure",
       "required":[
@@ -3046,6 +3197,11 @@
           "shape":"String",
           "location":"uri",
           "locationName":"resource_id"
+        },
+        "embed":{
+          "shape":"ListOfString",
+          "location":"querystring",
+          "locationName":"embed"
         }
       }
     },
@@ -3067,6 +3223,11 @@
           "shape":"NullableInteger",
           "location":"querystring",
           "locationName":"limit"
+        },
+        "embed":{
+          "shape":"ListOfString",
+          "location":"querystring",
+          "locationName":"embed"
         }
       }
     },
@@ -3468,6 +3629,10 @@
       "type":"list",
       "member":{"shape":"PatchOperation"}
     },
+    "ListOfRequestValidator":{
+      "type":"list",
+      "member":{"shape":"RequestValidator"}
+    },
     "ListOfResource":{
       "type":"list",
       "member":{"shape":"Resource"}
@@ -3566,6 +3731,7 @@
         "authorizationType":{"shape":"String"},
         "authorizerId":{"shape":"String"},
         "apiKeyRequired":{"shape":"NullableBoolean"},
+        "requestValidatorId":{"shape":"String"},
         "operationName":{"shape":"String"},
         "requestParameters":{"shape":"MapOfStringToBoolean"},
         "requestModels":{"shape":"MapOfStringToString"},
@@ -3762,7 +3928,8 @@
         "apiKeyRequired":{"shape":"Boolean"},
         "operationName":{"shape":"String"},
         "requestParameters":{"shape":"MapOfStringToBoolean"},
-        "requestModels":{"shape":"MapOfStringToString"}
+        "requestModels":{"shape":"MapOfStringToString"},
+        "requestValidatorId":{"shape":"String"}
       }
     },
     "PutMethodResponseRequest":{
@@ -3849,6 +4016,25 @@
         "limit":{"shape":"Integer"},
         "offset":{"shape":"Integer"},
         "period":{"shape":"QuotaPeriodType"}
+      }
+    },
+    "RequestValidator":{
+      "type":"structure",
+      "members":{
+        "id":{"shape":"String"},
+        "name":{"shape":"String"},
+        "validateRequestBody":{"shape":"Boolean"},
+        "validateRequestParameters":{"shape":"Boolean"}
+      }
+    },
+    "RequestValidators":{
+      "type":"structure",
+      "members":{
+        "position":{"shape":"String"},
+        "items":{
+          "shape":"ListOfRequestValidator",
+          "locationName":"item"
+        }
       }
     },
     "Resource":{
@@ -4381,6 +4567,26 @@
           "shape":"String",
           "location":"uri",
           "locationName":"model_name"
+        },
+        "patchOperations":{"shape":"ListOfPatchOperation"}
+      }
+    },
+    "UpdateRequestValidatorRequest":{
+      "type":"structure",
+      "required":[
+        "restApiId",
+        "requestValidatorId"
+      ],
+      "members":{
+        "restApiId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"restapi_id"
+        },
+        "requestValidatorId":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"requestvalidator_id"
         },
         "patchOperations":{"shape":"ListOfPatchOperation"}
       }

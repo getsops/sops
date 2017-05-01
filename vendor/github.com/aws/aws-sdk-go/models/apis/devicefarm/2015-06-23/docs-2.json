@@ -3,10 +3,12 @@
   "service": "<p>AWS Device Farm is a service that enables mobile app developers to test Android, iOS, and Fire OS apps on physical phones, tablets, and other devices in the cloud.</p>",
   "operations": {
     "CreateDevicePool": "<p>Creates a device pool.</p>",
+    "CreateNetworkProfile": "<p>Creates a network profile.</p>",
     "CreateProject": "<p>Creates a new project.</p>",
     "CreateRemoteAccessSession": "<p>Specifies and starts a remote access session.</p>",
     "CreateUpload": "<p>Uploads an app or test scripts.</p>",
     "DeleteDevicePool": "<p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>",
+    "DeleteNetworkProfile": "<p>Deletes a network profile.</p>",
     "DeleteProject": "<p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>",
     "DeleteRemoteAccessSession": "<p>Deletes a completed remote access session and its results.</p>",
     "DeleteRun": "<p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>",
@@ -16,6 +18,7 @@
     "GetDevicePool": "<p>Gets information about a device pool.</p>",
     "GetDevicePoolCompatibility": "<p>Gets information about compatibility with a device pool.</p>",
     "GetJob": "<p>Gets information about a job.</p>",
+    "GetNetworkProfile": "<p>Returns information about a network profile.</p>",
     "GetOfferingStatus": "<p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>",
     "GetProject": "<p>Gets information about a project.</p>",
     "GetRemoteAccessSession": "<p>Returns a link to a currently running remote access session.</p>",
@@ -28,6 +31,8 @@
     "ListDevicePools": "<p>Gets information about device pools.</p>",
     "ListDevices": "<p>Gets information about unique device types.</p>",
     "ListJobs": "<p>Gets information about jobs.</p>",
+    "ListNetworkProfiles": "<p>Returns the list of available network profiles.</p>",
+    "ListOfferingPromotions": "<p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>",
     "ListOfferingTransactions": "<p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>",
     "ListOfferings": "<p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href=\"mailto:aws-devicefarm-support@amazon.com\">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>",
     "ListProjects": "<p>Gets information about projects.</p>",
@@ -44,6 +49,7 @@
     "StopRemoteAccessSession": "<p>Ends a specified remote access session.</p>",
     "StopRun": "<p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>",
     "UpdateDevicePool": "<p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>",
+    "UpdateNetworkProfile": "<p>Updates the network profile with specific settings.</p>",
     "UpdateProject": "<p>Modifies the specified project name, given the project ARN and a new name.</p>"
   },
   "shapes": {
@@ -56,7 +62,13 @@
     "AccountSettings": {
       "base": "<p>A container for account-level settings within AWS Device Farm.</p>",
       "refs": {
-        "GetAccountSettingsResult$accountSettings": null
+        "GetAccountSettingsResult$accountSettings": "<p>The account settings.</p>"
+      }
+    },
+    "AccountsCleanup": {
+      "base": null,
+      "refs": {
+        "ExecutionConfiguration$accountsCleanup": "<p>True if account cleanup is enabled at the beginning of the test; otherwise, false.</p>"
       }
     },
     "AmazonResourceName": {
@@ -65,10 +77,12 @@
         "AmazonResourceNames$member": null,
         "Artifact$arn": "<p>The artifact's ARN.</p>",
         "CreateDevicePoolRequest$projectArn": "<p>The ARN of the project for the device pool.</p>",
+        "CreateNetworkProfileRequest$projectArn": "<p>The Amazon Resource Name (ARN) of the project for which you want to create a network profile.</p>",
         "CreateRemoteAccessSessionRequest$projectArn": "<p>The Amazon Resource Name (ARN) of the project for which you want to create a remote access session.</p>",
         "CreateRemoteAccessSessionRequest$deviceArn": "<p>The Amazon Resource Name (ARN) of the device for which you want to create a remote access session.</p>",
         "CreateUploadRequest$projectArn": "<p>The ARN of the project for the upload.</p>",
         "DeleteDevicePoolRequest$arn": "<p>Represents the Amazon Resource Name (ARN) of the Device Farm device pool you wish to delete.</p>",
+        "DeleteNetworkProfileRequest$arn": "<p>The Amazon Resource Name (ARN) of the network profile you want to delete.</p>",
         "DeleteProjectRequest$arn": "<p>Represents the Amazon Resource Name (ARN) of the Device Farm project you wish to delete.</p>",
         "DeleteRemoteAccessSessionRequest$arn": "<p>The Amazon Resource Name (ARN) of the sesssion for which you want to delete remote access.</p>",
         "DeleteRunRequest$arn": "<p>The Amazon Resource Name (ARN) for the run you wish to delete.</p>",
@@ -80,6 +94,7 @@
         "GetDevicePoolRequest$arn": "<p>The device pool's ARN.</p>",
         "GetDeviceRequest$arn": "<p>The device type's ARN.</p>",
         "GetJobRequest$arn": "<p>The job's ARN.</p>",
+        "GetNetworkProfileRequest$arn": "<p>The Amazon Resource Name (ARN) of the network profile you want to return information about.</p>",
         "GetProjectRequest$arn": "<p>The project's ARN.</p>",
         "GetRemoteAccessSessionRequest$arn": "<p>The Amazon Resource Name (ARN) of the remote access session about which you want to get session information.</p>",
         "GetRunRequest$arn": "<p>The run's ARN.</p>",
@@ -93,6 +108,7 @@
         "ListDevicePoolsRequest$arn": "<p>The project ARN.</p>",
         "ListDevicesRequest$arn": "<p>The Amazon Resource Name (ARN) of the project.</p>",
         "ListJobsRequest$arn": "<p>The jobs' ARNs.</p>",
+        "ListNetworkProfilesRequest$arn": "<p>The Amazon Resource Name (ARN) of the project for which you want to list network profiles.</p>",
         "ListProjectsRequest$arn": "<p>Optional. If no Amazon Resource Name (ARN) is specified, then AWS Device Farm returns a list of all projects for the AWS account. You can also specify a project ARN.</p>",
         "ListRemoteAccessSessionsRequest$arn": "<p>The Amazon Resource Name (ARN) of the remote access session about which you are requesting information.</p>",
         "ListRunsRequest$arn": "<p>The Amazon Resource Name (ARN) of the project for which you want to list runs.</p>",
@@ -101,6 +117,7 @@
         "ListTestsRequest$arn": "<p>The tests' ARNs.</p>",
         "ListUniqueProblemsRequest$arn": "<p>The unique problems' ARNs.</p>",
         "ListUploadsRequest$arn": "<p>The Amazon Resource Name (ARN) of the project for which you want to list uploads.</p>",
+        "NetworkProfile$arn": "<p>The Amazon Resource Name (ARN) of the network profile.</p>",
         "ProblemDetail$arn": "<p>The problem detail's ARN.</p>",
         "Project$arn": "<p>The project's ARN.</p>",
         "RemoteAccessSession$arn": "<p>The Amazon Resource Name (ARN) of the remote access session.</p>",
@@ -117,6 +134,7 @@
         "Suite$arn": "<p>The suite's ARN.</p>",
         "Test$arn": "<p>The test's ARN.</p>",
         "UpdateDevicePoolRequest$arn": "<p>The Amazon Resourc Name (ARN) of the Device Farm device pool you wish to update.</p>",
+        "UpdateNetworkProfileRequest$arn": "<p>The Amazon Resource Name (ARN) of the project that you wish to update network profile settings.</p>",
         "UpdateProjectRequest$arn": "<p>The Amazon Resource Name (ARN) of the project whose name you wish to update.</p>",
         "Upload$arn": "<p>The upload's ARN.</p>"
       }
@@ -125,6 +143,12 @@
       "base": null,
       "refs": {
         "ScheduleRunConfiguration$auxiliaryApps": "<p>A list of auxiliary apps for the run.</p>"
+      }
+    },
+    "AppPackagesCleanup": {
+      "base": null,
+      "refs": {
+        "ExecutionConfiguration$appPackagesCleanup": "<p>True if app package cleanup is enabled at the beginning of the test; otherwise, false.</p>"
       }
     },
     "ArgumentException": {
@@ -208,6 +232,16 @@
       "refs": {
       }
     },
+    "CreateNetworkProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateNetworkProfileResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateProjectRequest": {
       "base": "<p>Represents a request to the create project operation.</p>",
       "refs": {
@@ -284,6 +318,16 @@
       "refs": {
       }
     },
+    "DeleteNetworkProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteNetworkProfileResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteProjectRequest": {
       "base": "<p>Represents a request to the delete project operation.</p>",
       "refs": {
@@ -327,19 +371,19 @@
     "Device": {
       "base": "<p>Represents a device type that an app is tested against.</p>",
       "refs": {
-        "DevicePoolCompatibilityResult$device": null,
+        "DevicePoolCompatibilityResult$device": "<p>The device (phone or tablet) that you wish to return information about.</p>",
         "Devices$member": null,
-        "GetDeviceResult$device": null,
-        "Job$device": null,
+        "GetDeviceResult$device": "<p>An object containing information about the requested device.</p>",
+        "Job$device": "<p>The device (phone or tablet).</p>",
         "Problem$device": "<p>Information about the associated device.</p>",
-        "RemoteAccessSession$device": null
+        "RemoteAccessSession$device": "<p>The device (phone or tablet) used in the remote access session.</p>"
       }
     },
     "DeviceAttribute": {
       "base": null,
       "refs": {
-        "IncompatibilityMessage$type": "<p>The type of incompatibility.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> </ul>",
-        "Rule$attribute": "<p>The rule's stringified attribute. For example, specify the value as <code>\"\\\"abc\\\"\"</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> </ul>"
+        "IncompatibilityMessage$type": "<p>The type of incompatibility.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>",
+        "Rule$attribute": "<p>The rule's stringified attribute. For example, specify the value as <code>\"\\\"abc\\\"\"</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM_FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE_ACCESS_ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM_VERSION: The Appium version for the test.</p> </li> </ul>"
       }
     },
     "DeviceFormFactor": {
@@ -352,7 +396,7 @@
       "base": "<p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>",
       "refs": {
         "Job$deviceMinutes": "<p>Represents the total (metered or unmetered) minutes used by the job.</p>",
-        "RemoteAccessSession$deviceMinutes": null,
+        "RemoteAccessSession$deviceMinutes": "<p>The number of minutes a device is used in a remote access sesssion (including setup and teardown minutes).</p>",
         "Run$deviceMinutes": "<p>Represents the total (metered or unmetered) minutes used by the test run.</p>",
         "Suite$deviceMinutes": "<p>Represents the total (metered or unmetered) minutes used by the test suite.</p>",
         "Test$deviceMinutes": "<p>Represents the total (metered or unmetered) minutes used by the test.</p>"
@@ -372,8 +416,8 @@
       "refs": {
         "CreateDevicePoolResult$devicePool": "<p>The newly created device pool.</p>",
         "DevicePools$member": null,
-        "GetDevicePoolResult$devicePool": null,
-        "UpdateDevicePoolResult$devicePool": null
+        "GetDevicePoolResult$devicePool": "<p>An object containing information about the requested device pool.</p>",
+        "UpdateDevicePoolResult$devicePool": "<p>The device pool you just updated.</p>"
       }
     },
     "DevicePoolCompatibilityResult": {
@@ -417,7 +461,15 @@
         "DeviceMinutes$unmetered": "<p>When specified, represents only the sum of unmetered minutes used by the resource to run tests.</p>",
         "Location$latitude": "<p>The latitude.</p>",
         "Location$longitude": "<p>The longitude.</p>",
-        "MonetaryAmount$amount": "<p>The numerical amount of an offering or transaction.</p>"
+        "MonetaryAmount$amount": "<p>The numerical amount of an offering or transaction.</p>",
+        "TrialMinutes$total": "<p>The total number of free trial minutes that the account started with.</p>",
+        "TrialMinutes$remaining": "<p>The number of free trial minutes remaining in the account.</p>"
+      }
+    },
+    "ExecutionConfiguration": {
+      "base": "<p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>",
+      "refs": {
+        "ScheduleRunRequest$executionConfiguration": "<p>Specifies configuration information about a test run, such as the execution timeout (in minutes).</p>"
       }
     },
     "ExecutionResult": {
@@ -495,6 +547,16 @@
     },
     "GetJobResult": {
       "base": "<p>Represents the result of a get job request.</p>",
+      "refs": {
+      }
+    },
+    "GetNetworkProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetNetworkProfileResult": {
+      "base": null,
       "refs": {
       }
     },
@@ -605,6 +667,7 @@
         "Counters$errored": "<p>The number of errored entities.</p>",
         "Counters$stopped": "<p>The number of stopped entities.</p>",
         "Counters$skipped": "<p>The number of skipped entities.</p>",
+        "MaxSlotMap$value": null,
         "OfferingStatus$quantity": "<p>The number of available devices in the offering.</p>",
         "PurchaseOfferingRequest$quantity": "<p>The number of device slots you wish to purchase in an offering request.</p>",
         "PurchasedDevicesMap$value": null,
@@ -618,8 +681,19 @@
     "Job": {
       "base": "<p>Represents a device.</p>",
       "refs": {
-        "GetJobResult$job": null,
+        "GetJobResult$job": "<p>An object containing information about the requested job.</p>",
         "Jobs$member": null
+      }
+    },
+    "JobTimeoutMinutes": {
+      "base": null,
+      "refs": {
+        "AccountSettings$maxJobTimeoutMinutes": "<p>The maximum number of minutes a test run will execute before it times out.</p>",
+        "AccountSettings$defaultJobTimeoutMinutes": "<p>The default number of minutes (at the account level) a test run will execute before it times out. Default value is 60 minutes.</p>",
+        "CreateProjectRequest$defaultJobTimeoutMinutes": "<p>Sets the execution timeout value (in minutes) for a project. All test runs in this project will use the specified execution timeout value unless overridden when scheduling a run.</p>",
+        "ExecutionConfiguration$jobTimeoutMinutes": "<p>The number of minutes a test run will execute before it times out.</p>",
+        "Project$defaultJobTimeoutMinutes": "<p>The default number of minutes (at the project level) a test run will execute before it times out. Default value is 60 minutes.</p>",
+        "UpdateProjectRequest$defaultJobTimeoutMinutes": "<p>The number of minutes a test run in the project will execute before it times out.</p>"
       }
     },
     "Jobs": {
@@ -670,6 +744,26 @@
     },
     "ListJobsResult": {
       "base": "<p>Represents the result of a list jobs request.</p>",
+      "refs": {
+      }
+    },
+    "ListNetworkProfilesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListNetworkProfilesResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListOfferingPromotionsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListOfferingPromotionsResult": {
+      "base": null,
       "refs": {
       }
     },
@@ -782,8 +876,32 @@
     "Long": {
       "base": null,
       "refs": {
+        "CreateNetworkProfileRequest$uplinkBandwidthBits": "<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>",
+        "CreateNetworkProfileRequest$downlinkBandwidthBits": "<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>",
+        "CreateNetworkProfileRequest$uplinkDelayMs": "<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>",
+        "CreateNetworkProfileRequest$downlinkDelayMs": "<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>",
+        "CreateNetworkProfileRequest$uplinkJitterMs": "<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>",
+        "CreateNetworkProfileRequest$downlinkJitterMs": "<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>",
         "Device$heapSize": "<p>The device's heap size, expressed in bytes.</p>",
-        "Device$memory": "<p>The device's total memory size, expressed in bytes.</p>"
+        "Device$memory": "<p>The device's total memory size, expressed in bytes.</p>",
+        "NetworkProfile$uplinkBandwidthBits": "<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>",
+        "NetworkProfile$downlinkBandwidthBits": "<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>",
+        "NetworkProfile$uplinkDelayMs": "<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>",
+        "NetworkProfile$downlinkDelayMs": "<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>",
+        "NetworkProfile$uplinkJitterMs": "<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>",
+        "NetworkProfile$downlinkJitterMs": "<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>",
+        "UpdateNetworkProfileRequest$uplinkBandwidthBits": "<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>",
+        "UpdateNetworkProfileRequest$downlinkBandwidthBits": "<p>The data throughput rate in bits per second, as an integer from 0 to 104857600.</p>",
+        "UpdateNetworkProfileRequest$uplinkDelayMs": "<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>",
+        "UpdateNetworkProfileRequest$downlinkDelayMs": "<p>Delay time for all packets to destination in milliseconds as an integer from 0 to 2000.</p>",
+        "UpdateNetworkProfileRequest$uplinkJitterMs": "<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>",
+        "UpdateNetworkProfileRequest$downlinkJitterMs": "<p>Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000.</p>"
+      }
+    },
+    "MaxSlotMap": {
+      "base": null,
+      "refs": {
+        "AccountSettings$maxSlots": "<p>The maximum number of device slots that the AWS account can purchase. Each maximum is expressed as an <code>offering-id:number</code> pair, where the <code>offering-id</code> represents one of the IDs returned by the <code>ListOfferings</code> command.</p>"
       }
     },
     "Message": {
@@ -791,14 +909,17 @@
       "refs": {
         "ArgumentException$message": "<p>Any additional information about the exception.</p>",
         "CreateDevicePoolRequest$description": "<p>The device pool's description.</p>",
+        "CreateNetworkProfileRequest$description": "<p>The description of the network profile.</p>",
         "DevicePool$description": "<p>The device pool's description.</p>",
         "IdempotencyException$message": "<p>Any additional information about the exception.</p>",
         "IncompatibilityMessage$message": "<p>A message about the incompatibility.</p>",
         "Job$message": "<p>A message about the job's result.</p>",
         "LimitExceededException$message": "<p>Any additional information about the exception.</p>",
+        "NetworkProfile$description": "<p>The description of the network profile.</p>",
         "NotEligibleException$message": "<p>The HTTP response code of a Not Eligible exception.</p>",
         "NotFoundException$message": "<p>Any additional information about the exception.</p>",
         "Offering$description": "<p>A string describing the offering.</p>",
+        "OfferingPromotion$description": "<p>A string describing the offering promotion.</p>",
         "Problem$message": "<p>A message about the problem's result.</p>",
         "RemoteAccessSession$message": "<p>A message about the remote access session.</p>",
         "Run$message": "<p>A message about the run's result.</p>",
@@ -807,6 +928,7 @@
         "Test$message": "<p>A message about the test's result.</p>",
         "UniqueProblem$message": "<p>A message about the unique problems' result.</p>",
         "UpdateDevicePoolRequest$description": "<p>A description of the device pool you wish to update.</p>",
+        "UpdateNetworkProfileRequest$description": "<p>The descriptoin of the network profile about which you are returning information.</p>",
         "Upload$message": "<p>A message about the upload's result.</p>"
       }
     },
@@ -828,12 +950,14 @@
       "refs": {
         "Artifact$name": "<p>The artifact's name.</p>",
         "CreateDevicePoolRequest$name": "<p>The device pool's name.</p>",
+        "CreateNetworkProfileRequest$name": "<p>The name you wish to specify for the new network profile.</p>",
         "CreateProjectRequest$name": "<p>The project's name.</p>",
         "CreateRemoteAccessSessionRequest$name": "<p>The name of the remote access session that you wish to create.</p>",
         "CreateUploadRequest$name": "<p>The upload's file name. The name should not contain the '/' character. If uploading an iOS app, the file name needs to end with the <code>.ipa</code> extension. If uploading an Android app, the file name needs to end with the <code>.apk</code> extension. For all others, the file name must end with the <code>.zip</code> file extension.</p>",
         "Device$name": "<p>The device's display name.</p>",
         "DevicePool$name": "<p>The device pool's name.</p>",
         "Job$name": "<p>The job's name.</p>",
+        "NetworkProfile$name": "<p>The name of the network profile.</p>",
         "ProblemDetail$name": "<p>The problem detail's name.</p>",
         "Project$name": "<p>The project's name.</p>",
         "RemoteAccessSession$name": "<p>The name of the remote access session.</p>",
@@ -842,8 +966,34 @@
         "Suite$name": "<p>The suite's name.</p>",
         "Test$name": "<p>The test's name.</p>",
         "UpdateDevicePoolRequest$name": "<p>A string representing the name of the device pool you wish to update.</p>",
+        "UpdateNetworkProfileRequest$name": "<p>The name of the network profile about which you are returning information.</p>",
         "UpdateProjectRequest$name": "<p>A string representing the new name of the project that you are updating.</p>",
         "Upload$name": "<p>The upload's file name.</p>"
+      }
+    },
+    "NetworkProfile": {
+      "base": "<p>An array of settings that describes characteristics of a network profile.</p>",
+      "refs": {
+        "CreateNetworkProfileResult$networkProfile": "<p>The network profile that is returned by the create network profile request.</p>",
+        "GetNetworkProfileResult$networkProfile": "<p>The network profile.</p>",
+        "NetworkProfiles$member": null,
+        "Run$networkProfile": "<p>The network profile being used for a test run.</p>",
+        "UpdateNetworkProfileResult$networkProfile": "<p>A list of the available network profiles.</p>"
+      }
+    },
+    "NetworkProfileType": {
+      "base": null,
+      "refs": {
+        "CreateNetworkProfileRequest$type": "<p>The type of network profile you wish to create. Valid values are listed below.</p>",
+        "ListNetworkProfilesRequest$type": "<p>The type of network profile you wish to return information about. Valid values are listed below.</p>",
+        "NetworkProfile$type": "<p>The type of network profile. Valid values are listed below.</p>",
+        "UpdateNetworkProfileRequest$type": "<p>The type of network profile you wish to return information about. Valid values are listed below.</p>"
+      }
+    },
+    "NetworkProfiles": {
+      "base": null,
+      "refs": {
+        "ListNetworkProfilesResult$networkProfiles": "<p>A list of the available network profiles.</p>"
       }
     },
     "NotEligibleException": {
@@ -870,6 +1020,26 @@
         "OfferingStatusMap$key": null,
         "PurchaseOfferingRequest$offeringId": "<p>The ID of the offering.</p>",
         "RenewOfferingRequest$offeringId": "<p>The ID of a request to renew an offering.</p>"
+      }
+    },
+    "OfferingPromotion": {
+      "base": "<p>Represents information about an offering promotion.</p>",
+      "refs": {
+        "OfferingPromotions$member": null
+      }
+    },
+    "OfferingPromotionIdentifier": {
+      "base": null,
+      "refs": {
+        "OfferingPromotion$id": "<p>The ID of the offering promotion.</p>",
+        "OfferingTransaction$offeringPromotionId": "<p>The ID that corresponds to a device offering promotion.</p>",
+        "PurchaseOfferingRequest$offeringPromotionId": "<p>The ID of the offering promotion to be applied to the purchase.</p>"
+      }
+    },
+    "OfferingPromotions": {
+      "base": null,
+      "refs": {
+        "ListOfferingPromotionsResult$offeringPromotions": "<p>Information about the offering promotions.</p>"
       }
     },
     "OfferingStatus": {
@@ -931,6 +1101,10 @@
         "ListDevicesResult$nextToken": "<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>",
         "ListJobsRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
         "ListJobsResult$nextToken": "<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>",
+        "ListNetworkProfilesRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListNetworkProfilesResult$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListOfferingPromotionsRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
+        "ListOfferingPromotionsResult$nextToken": "<p>An identifier to be used in the next call to this operation, to return the next set of items in the list.</p>",
         "ListOfferingTransactionsRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
         "ListOfferingTransactionsResult$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
         "ListOfferingsRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
@@ -951,6 +1125,17 @@
         "ListUniqueProblemsResult$nextToken": "<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>",
         "ListUploadsRequest$nextToken": "<p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>",
         "ListUploadsResult$nextToken": "<p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>"
+      }
+    },
+    "PercentInteger": {
+      "base": null,
+      "refs": {
+        "CreateNetworkProfileRequest$uplinkLossPercent": "<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>",
+        "CreateNetworkProfileRequest$downlinkLossPercent": "<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>",
+        "NetworkProfile$uplinkLossPercent": "<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>",
+        "NetworkProfile$downlinkLossPercent": "<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>",
+        "UpdateNetworkProfileRequest$uplinkLossPercent": "<p>Proportion of transmitted packets that fail to arrive from 0 to 100 percent.</p>",
+        "UpdateNetworkProfileRequest$downlinkLossPercent": "<p>Proportion of received packets that fail to arrive from 0 to 100 percent.</p>"
       }
     },
     "Problem": {
@@ -978,9 +1163,9 @@
       "base": "<p>Represents an operating-system neutral workspace for running and managing tests.</p>",
       "refs": {
         "CreateProjectResult$project": "<p>The newly created project.</p>",
-        "GetProjectResult$project": null,
+        "GetProjectResult$project": "<p>The project you wish to get information about.</p>",
         "Projects$member": null,
-        "UpdateProjectResult$project": null
+        "UpdateProjectResult$project": "<p>The project you wish to update.</p>"
       }
     },
     "Projects": {
@@ -1058,7 +1243,7 @@
     "Resolution": {
       "base": "<p>Represents the screen resolution of a device in height and width, expressed in pixels.</p>",
       "refs": {
-        "Device$resolution": null
+        "Device$resolution": "<p>The resolution of the device.</p>"
       }
     },
     "Rule": {
@@ -1070,7 +1255,7 @@
     "RuleOperator": {
       "base": null,
       "refs": {
-        "Rule$operator": "<p>The rule's operator.</p> <ul> <li> <p>EQUALS: The equals operator.</p> </li> <li> <p>GREATER_THAN: The greater-than operator.</p> </li> <li> <p>IN: The in operator.</p> </li> <li> <p>LESS_THAN: The less-than operator.</p> </li> <li> <p>NOT_IN: The not-in operator.</p> </li> </ul>"
+        "Rule$operator": "<p>The rule's operator.</p> <ul> <li> <p>EQUALS: The equals operator.</p> </li> <li> <p>GREATER_THAN: The greater-than operator.</p> </li> <li> <p>IN: The in operator.</p> </li> <li> <p>LESS_THAN: The less-than operator.</p> </li> <li> <p>NOT_IN: The not-in operator.</p> </li> <li> <p>CONTAINS: The contains operator.</p> </li> </ul>"
       }
     },
     "Rules": {
@@ -1084,10 +1269,10 @@
     "Run": {
       "base": "<p>Represents an app on a set of devices with a specific test and configuration.</p>",
       "refs": {
-        "GetRunResult$run": null,
+        "GetRunResult$run": "<p>The run you wish to get results from.</p>",
         "Runs$member": null,
         "ScheduleRunResult$run": "<p>Information about the scheduled run.</p>",
-        "StopRunResult$run": null
+        "StopRunResult$run": "<p>The run that was stopped.</p>"
       }
     },
     "Runs": {
@@ -1133,6 +1318,7 @@
     "ScheduleRunTest": {
       "base": "<p>Represents additional test settings.</p>",
       "refs": {
+        "GetDevicePoolCompatibilityRequest$test": "<p>Information about the uploaded test to be run against the device pool.</p>",
         "ScheduleRunRequest$test": "<p>Information about the test for the run to be scheduled.</p>"
       }
     },
@@ -1175,6 +1361,7 @@
         "Device$radio": "<p>The device's radio.</p>",
         "Device$fleetType": "<p>The type of fleet to which this device belongs. Possible values for fleet type are PRIVATE and PUBLIC.</p>",
         "Device$fleetName": "<p>The name of the fleet to which this device belongs.</p>",
+        "MaxSlotMap$key": null,
         "RemoteAccessSession$endpoint": "<p>The endpoint for the remote access sesssion.</p>",
         "Rule$value": "<p>The rule's value.</p>",
         "ScheduleRunConfiguration$locale": "<p>Information about the locale that is used for the run.</p>",
@@ -1185,7 +1372,7 @@
     "Suite": {
       "base": "<p>Represents a collection of one or more tests.</p>",
       "refs": {
-        "GetSuiteResult$suite": null,
+        "GetSuiteResult$suite": "<p>A collection of one or more tests.</p>",
         "Suites$member": null
       }
     },
@@ -1198,14 +1385,14 @@
     "Test": {
       "base": "<p>Represents a condition that is evaluated.</p>",
       "refs": {
-        "GetTestResult$test": null,
+        "GetTestResult$test": "<p>A test condition that is evaluated.</p>",
         "Tests$member": null
       }
     },
     "TestParameters": {
       "base": null,
       "refs": {
-        "ScheduleRunTest$parameters": "<p>The test's parameters, such as test framework parameters and fixture settings.</p>"
+        "ScheduleRunTest$parameters": "<p>The test's parameters, such as the following test framework parameters and fixture settings:</p> <p>For Calabash tests:</p> <ul> <li> <p>profile: A cucumber profile, for example, \"my_profile_name\".</p> </li> <li> <p>tags: You can limit execution to features or scenarios that have (or don't have) certain tags, for example, \"@smoke\" or \"@smoke,~@wip\".</p> </li> </ul> <p>For Appium tests (all types):</p> <ul> <li> <p>appium_version: The Appium version. Currently supported values are \"1.4.16\", \"1.6.3\", \"latest\", and \"default\".</p> <ul> <li> <p>“latest” will run the latest Appium version supported by Device Farm (1.6.3).</p> </li> <li> <p>For “default”, Device Farm will choose a compatible version of Appium for the device. The current behavior is to run 1.4.16 on Android devices and iOS 9 and earlier, 1.6.3 for iOS 10 and later.</p> </li> <li> <p>This behavior is subject to change.</p> </li> </ul> </li> </ul> <p>For Fuzz tests (Android only):</p> <ul> <li> <p>event_count: The number of events, between 1 and 10000, that the UI fuzz test should perform.</p> </li> <li> <p>throttle: The time, in ms, between 0 and 1000, that the UI fuzz test should wait between events.</p> </li> <li> <p>seed: A seed to use for randomizing the UI fuzz test. Using the same seed value between tests ensures identical event sequences.</p> </li> </ul> <p>For Explorer tests:</p> <ul> <li> <p>username: A username to use if the Explorer encounters a login form. If not supplied, no username will be inserted.</p> </li> <li> <p>password: A password to use if the Explorer encounters a login form. If not supplied, no password will be inserted.</p> </li> </ul> <p>For Instrumentation:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: \"com.android.abc.Test1\"</p> </li> <li> <p>Running a single test: \"com.android.abc.Test1#smoke\"</p> </li> <li> <p>Running multiple tests: \"com.android.abc.Test1,com.android.abc.Test2\"</p> </li> </ul> </li> </ul> <p>For XCTest and XCTestUI:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test class: \"LoginTests\"</p> </li> <li> <p>Running a multiple test classes: \"LoginTests,SmokeTests\"</p> </li> <li> <p>Running a single test: \"LoginTests/testValid\"</p> </li> <li> <p>Running multiple tests: \"LoginTests/testValid,LoginTests/testInvalid\"</p> </li> </ul> </li> </ul> <p>For UIAutomator:</p> <ul> <li> <p>filter: A test filter string. Examples:</p> <ul> <li> <p>Running a single test case: \"com.android.abc.Test1\"</p> </li> <li> <p>Running a single test: \"com.android.abc.Test1#smoke\"</p> </li> <li> <p>Running multiple tests: \"com.android.abc.Test1,com.android.abc.Test2\"</p> </li> </ul> </li> </ul>"
       }
     },
     "TestType": {
@@ -1229,6 +1416,12 @@
       "base": null,
       "refs": {
         "OfferingTransaction$transactionId": "<p>The transaction ID of the offering transaction.</p>"
+      }
+    },
+    "TrialMinutes": {
+      "base": "<p>Represents information about free trial device minutes for an AWS account.</p>",
+      "refs": {
+        "AccountSettings$trialMinutes": "<p>Information about an AWS account's usage of free trial device minutes.</p>"
       }
     },
     "URL": {
@@ -1267,6 +1460,16 @@
       "refs": {
       }
     },
+    "UpdateNetworkProfileRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateNetworkProfileResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "UpdateProjectRequest": {
       "base": "<p>Represents a request to the update project operation.</p>",
       "refs": {
@@ -1281,8 +1484,8 @@
       "base": "<p>An app or a set of one or more tests to upload or that have been uploaded.</p>",
       "refs": {
         "CreateUploadResult$upload": "<p>The newly created upload.</p>",
-        "GetUploadResult$upload": null,
-        "InstallToRemoteAccessSessionResult$appUpload": null,
+        "GetUploadResult$upload": "<p>An app or a set of one or more tests to upload or that have been uploaded.</p>",
+        "InstallToRemoteAccessSessionResult$appUpload": "<p>An app to upload or that has been uploaded.</p>",
         "Uploads$member": null
       }
     },

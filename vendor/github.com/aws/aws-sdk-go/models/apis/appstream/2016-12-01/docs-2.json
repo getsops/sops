@@ -10,7 +10,7 @@
     "DeleteStack": "<p>Deletes the stack. After this operation completes, the environment can no longer be activated, and any reservations made for the stack are released.</p>",
     "DescribeFleets": "<p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>",
     "DescribeImages": "<p>Describes the images. If a list of names is not provided, all images in your account are returned. This operation does not return a paginated result.</p>",
-    "DescribeSessions": "<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. Pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items.</p>",
+    "DescribeSessions": "<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. Pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. If an authentication type is not provided, the operation defaults to users authenticated using a streaming url.</p>",
     "DescribeStacks": "<p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. Pass the <code>nextToken</code> value in a subsequent call to this operation to retrieve the next set of items.</p>",
     "DisassociateFleet": "<p>Disassociates a fleet from a stack.</p>",
     "ExpireSession": "<p>This operation immediately stops a streaming session.</p>",
@@ -18,7 +18,7 @@
     "ListAssociatedStacks": "<p>Lists all stacks to which the specified fleet is associated.</p>",
     "StartFleet": "<p>Starts a fleet.</p>",
     "StopFleet": "<p>Stops a fleet.</p>",
-    "UpdateFleet": "<p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. Only <b>ComputeCapacity</b> and <b>ImageName</b> can be updated in any other state. </p>",
+    "UpdateFleet": "<p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>",
     "UpdateStack": "<p>Updates the specified fields in the stack with the specified name.</p>"
   },
   "shapes": {
@@ -53,11 +53,27 @@
       "refs": {
       }
     },
+    "AuthenticationType": {
+      "base": null,
+      "refs": {
+        "DescribeSessionsRequest$AuthenticationType": "<p>The authentication method of the user. It can be <code>API</code> for a user authenticated using a streaming url or <code>SAML</code> for a SAML federated user. If an authentication type is not provided, the operation defaults to users authenticated using a streaming url.</p>",
+        "Session$AuthenticationType": "<p>The authentication method of the user for whom the session was created. It can be <code>API</code> for a user authenticated using a streaming url or <code>SAML</code> for a SAML federated user.</p>"
+      }
+    },
     "Boolean": {
       "base": null,
       "refs": {
         "Application$Enabled": "<p>An application can be disabled after image creation if there is a problem.</p>",
+        "Image$ImageBuilderSupported": "<p>Indicates whether an image builder can be launched from this image.</p>",
         "UpdateFleetRequest$DeleteVpcConfig": "<p>Delete the VPC association for the specified fleet.</p>"
+      }
+    },
+    "BooleanObject": {
+      "base": null,
+      "refs": {
+        "CreateFleetRequest$EnableDefaultInternetAccess": "<p>Enable/Disable default Internet access from fleet.</p>",
+        "Fleet$EnableDefaultInternetAccess": "<p>Default Internet access from the fleet. True (Enabled), False (Disabled).</p>",
+        "UpdateFleetRequest$EnableDefaultInternetAccess": "<p>Enable/Disable default Internet access from fleet.</p>"
       }
     },
     "ComputeCapacity": {
@@ -71,6 +87,11 @@
       "base": "<p>The capacity information for the fleet.</p>",
       "refs": {
         "Fleet$ComputeCapacityStatus": "<p>The capacity information for the fleet.</p>"
+      }
+    },
+    "ConcurrentModificationException": {
+      "base": "<p>An API error occurred, please try again.</p>",
+      "refs": {
       }
     },
     "CreateFleetRequest": {
@@ -192,8 +213,10 @@
       }
     },
     "ErrorMessage": {
-      "base": null,
+      "base": "<p>The error message in the exception.</p>",
       "refs": {
+        "ConcurrentModificationException$Message": null,
+        "InvalidParameterCombinationException$Message": null,
         "InvalidRoleException$Message": null,
         "LimitExceededException$Message": null,
         "OperationNotPermittedException$Message": null,
@@ -296,6 +319,11 @@
         "Fleet$DisconnectTimeoutInSeconds": "<p>The time after disconnection when a session is considered to have ended. When a user reconnects after a disconnection, the user is connected to the same session and instance within this time interval.</p>",
         "UpdateFleetRequest$MaxUserDurationInSeconds": "<p>The maximum time during which a streaming session can run.</p>",
         "UpdateFleetRequest$DisconnectTimeoutInSeconds": "<p>The time after disconnection when a session is considered to have ended. When the user reconnects after a disconnection, the user is connected to the same instance within this time interval.</p>"
+      }
+    },
+    "InvalidParameterCombinationException": {
+      "base": "<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>",
+      "refs": {
       }
     },
     "InvalidRoleException": {
@@ -554,7 +582,7 @@
       }
     },
     "VpcConfig": {
-      "base": "<p>The VPC in which the fleet is launched.</p>",
+      "base": "<p>VPC configuration information.</p>",
       "refs": {
         "CreateFleetRequest$VpcConfig": "<p>The VPC configuration for the fleet.</p>",
         "Fleet$VpcConfig": "<p>The VPC configuration for the fleet.</p>",

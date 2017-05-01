@@ -16,12 +16,12 @@
     "DescribeLoadBalancerAttributes": "<p>Describes the attributes for the specified Application Load Balancer.</p>",
     "DescribeLoadBalancers": "<p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>",
     "DescribeRules": "<p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>",
-    "DescribeSSLPolicies": "<p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>Note that the only supported policy at this time is ELBSecurityPolicy-2015-05.</p>",
-    "DescribeTags": "<p>Describes the tags for the specified resources.</p>",
+    "DescribeSSLPolicies": "<p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies\">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>",
+    "DescribeTags": "<p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers and target groups.</p>",
     "DescribeTargetGroupAttributes": "<p>Describes the attributes for the specified target group.</p>",
     "DescribeTargetGroups": "<p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>",
     "DescribeTargetHealth": "<p>Describes the health of the specified targets or all of your targets.</p>",
-    "ModifyListener": "<p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy.</p>",
+    "ModifyListener": "<p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>",
     "ModifyLoadBalancerAttributes": "<p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>",
     "ModifyRule": "<p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>",
     "ModifyTargetGroup": "<p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>",
@@ -138,7 +138,7 @@
     "ConditionFieldName": {
       "base": null,
       "refs": {
-        "RuleCondition$Field": "<p>The only possible value is <code>path-pattern</code>.</p>"
+        "RuleCondition$Field": "<p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>"
       }
     },
     "CreateListenerInput": {
@@ -345,7 +345,7 @@
       }
     },
     "DuplicateLoadBalancerNameException": {
-      "base": "<p>A load balancer with the specified name already exists for this account.</p>",
+      "base": "<p>A load balancer with the specified name already exists.</p>",
       "refs": {
       }
     },
@@ -403,7 +403,7 @@
     "HttpCode": {
       "base": null,
       "refs": {
-        "Matcher$HttpCode": "<p>The HTTP codes. The default value is 200. You can specify multiple values (for example, \"200,202\") or a range of values (for example, \"200-299\").</p>"
+        "Matcher$HttpCode": "<p>The HTTP codes. You can specify values between 200 and 499. The default value is 200. You can specify multiple values (for example, \"200,202\") or a range of values (for example, \"200-299\").</p>"
       }
     },
     "IncompatibleProtocolsException": {
@@ -454,7 +454,7 @@
     "ListOfString": {
       "base": null,
       "refs": {
-        "RuleCondition$Values": "<p>The path pattern. You can specify a single path pattern.</p> <p>A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters in a path pattern.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>"
+        "RuleCondition$Values": "<p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/*). A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>"
       }
     },
     "Listener": {
@@ -519,7 +519,7 @@
     "LoadBalancerArns": {
       "base": null,
       "refs": {
-        "DescribeLoadBalancersInput$LoadBalancerArns": "<p>The Amazon Resource Names (ARN) of the load balancers.</p>",
+        "DescribeLoadBalancersInput$LoadBalancerArns": "<p>The Amazon Resource Names (ARN) of the load balancers. You can specify up to 20 load balancers in a single call.</p>",
         "TargetGroup$LoadBalancerArns": "<p>The Amazon Resource Names (ARN) of the load balancers that route traffic to this target group.</p>"
       }
     },
@@ -552,7 +552,7 @@
     "LoadBalancerName": {
       "base": null,
       "refs": {
-        "CreateLoadBalancerInput$Name": "<p>The name of the load balancer.</p> <p>This name must be unique within your AWS account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>",
+        "CreateLoadBalancerInput$Name": "<p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>",
         "LoadBalancer$LoadBalancerName": "<p>The name of the load balancer.</p>",
         "LoadBalancerNames$member": null
       }
@@ -793,7 +793,7 @@
     "RuleConditionList": {
       "base": null,
       "refs": {
-        "CreateRuleInput$Conditions": "<p>A condition. Each condition has the field <code>path-pattern</code> and specifies one path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters in a path pattern.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>",
+        "CreateRuleInput$Conditions": "<p>A condition. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ \" ' @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul>",
         "ModifyRuleInput$Conditions": "<p>The conditions.</p>",
         "Rule$Conditions": "<p>The conditions.</p>"
       }
@@ -908,7 +908,7 @@
       "refs": {
         "CreateListenerInput$SslPolicy": "<p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>",
         "Listener$SslPolicy": "<p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>",
-        "ModifyListenerInput$SslPolicy": "<p>The security policy that defines which ciphers and protocols are supported.</p>",
+        "ModifyListenerInput$SslPolicy": "<p>The security policy that defines which protocols and ciphers are supported. For more information, see <a href=\"http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies\">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>",
         "SslPolicy$Name": "<p>The name of the policy.</p>",
         "SslPolicyNames$member": null
       }
@@ -1089,7 +1089,7 @@
     "TargetGroupName": {
       "base": null,
       "refs": {
-        "CreateTargetGroupInput$Name": "<p>The name of the target group.</p>",
+        "CreateTargetGroupInput$Name": "<p>The name of the target group.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>",
         "TargetGroup$TargetGroupName": "<p>The name of the target group.</p>",
         "TargetGroupNames$member": null
       }

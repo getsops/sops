@@ -1,7 +1,8 @@
 package mocks
 
+import aws "github.com/aws/aws-sdk-go/aws"
 import kms "github.com/aws/aws-sdk-go/service/kms"
-import kmsiface "github.com/aws/aws-sdk-go/service/kms/kmsiface"
+
 import mock "github.com/stretchr/testify/mock"
 import request "github.com/aws/aws-sdk-go/aws/request"
 
@@ -58,6 +59,36 @@ func (_m *KMSAPI) CancelKeyDeletionRequest(_a0 *kms.CancelKeyDeletionInput) (*re
 	return r0, r1
 }
 
+// CancelKeyDeletionWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) CancelKeyDeletionWithContext(_a0 aws.Context, _a1 *kms.CancelKeyDeletionInput, _a2 ...request.Option) (*kms.CancelKeyDeletionOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.CancelKeyDeletionOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.CancelKeyDeletionInput, ...request.Option) *kms.CancelKeyDeletionOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.CancelKeyDeletionOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.CancelKeyDeletionInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // CreateAlias provides a mock function with given fields: _a0
 func (_m *KMSAPI) CreateAlias(_a0 *kms.CreateAliasInput) (*kms.CreateAliasOutput, error) {
 	ret := _m.Called(_a0)
@@ -101,6 +132,36 @@ func (_m *KMSAPI) CreateAliasRequest(_a0 *kms.CreateAliasInput) (*request.Reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.CreateAliasOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// CreateAliasWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) CreateAliasWithContext(_a0 aws.Context, _a1 *kms.CreateAliasInput, _a2 ...request.Option) (*kms.CreateAliasOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.CreateAliasOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.CreateAliasInput, ...request.Option) *kms.CreateAliasOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.CreateAliasOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.CreateAliasInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -154,6 +215,36 @@ func (_m *KMSAPI) CreateGrantRequest(_a0 *kms.CreateGrantInput) (*request.Reques
 	return r0, r1
 }
 
+// CreateGrantWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) CreateGrantWithContext(_a0 aws.Context, _a1 *kms.CreateGrantInput, _a2 ...request.Option) (*kms.CreateGrantOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.CreateGrantOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.CreateGrantInput, ...request.Option) *kms.CreateGrantOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.CreateGrantOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.CreateGrantInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // CreateKey provides a mock function with given fields: _a0
 func (_m *KMSAPI) CreateKey(_a0 *kms.CreateKeyInput) (*kms.CreateKeyOutput, error) {
 	ret := _m.Called(_a0)
@@ -197,6 +288,36 @@ func (_m *KMSAPI) CreateKeyRequest(_a0 *kms.CreateKeyInput) (*request.Request, *
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.CreateKeyOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// CreateKeyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) CreateKeyWithContext(_a0 aws.Context, _a1 *kms.CreateKeyInput, _a2 ...request.Option) (*kms.CreateKeyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.CreateKeyOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.CreateKeyInput, ...request.Option) *kms.CreateKeyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.CreateKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.CreateKeyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -250,6 +371,36 @@ func (_m *KMSAPI) DecryptRequest(_a0 *kms.DecryptInput) (*request.Request, *kms.
 	return r0, r1
 }
 
+// DecryptWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) DecryptWithContext(_a0 aws.Context, _a1 *kms.DecryptInput, _a2 ...request.Option) (*kms.DecryptOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.DecryptOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.DecryptInput, ...request.Option) *kms.DecryptOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.DecryptOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.DecryptInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // DeleteAlias provides a mock function with given fields: _a0
 func (_m *KMSAPI) DeleteAlias(_a0 *kms.DeleteAliasInput) (*kms.DeleteAliasOutput, error) {
 	ret := _m.Called(_a0)
@@ -293,6 +444,36 @@ func (_m *KMSAPI) DeleteAliasRequest(_a0 *kms.DeleteAliasInput) (*request.Reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.DeleteAliasOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// DeleteAliasWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) DeleteAliasWithContext(_a0 aws.Context, _a1 *kms.DeleteAliasInput, _a2 ...request.Option) (*kms.DeleteAliasOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.DeleteAliasOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.DeleteAliasInput, ...request.Option) *kms.DeleteAliasOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.DeleteAliasOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.DeleteAliasInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -346,6 +527,36 @@ func (_m *KMSAPI) DeleteImportedKeyMaterialRequest(_a0 *kms.DeleteImportedKeyMat
 	return r0, r1
 }
 
+// DeleteImportedKeyMaterialWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) DeleteImportedKeyMaterialWithContext(_a0 aws.Context, _a1 *kms.DeleteImportedKeyMaterialInput, _a2 ...request.Option) (*kms.DeleteImportedKeyMaterialOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.DeleteImportedKeyMaterialOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.DeleteImportedKeyMaterialInput, ...request.Option) *kms.DeleteImportedKeyMaterialOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.DeleteImportedKeyMaterialOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.DeleteImportedKeyMaterialInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // DescribeKey provides a mock function with given fields: _a0
 func (_m *KMSAPI) DescribeKey(_a0 *kms.DescribeKeyInput) (*kms.DescribeKeyOutput, error) {
 	ret := _m.Called(_a0)
@@ -389,6 +600,36 @@ func (_m *KMSAPI) DescribeKeyRequest(_a0 *kms.DescribeKeyInput) (*request.Reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.DescribeKeyOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// DescribeKeyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) DescribeKeyWithContext(_a0 aws.Context, _a1 *kms.DescribeKeyInput, _a2 ...request.Option) (*kms.DescribeKeyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.DescribeKeyOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.DescribeKeyInput, ...request.Option) *kms.DescribeKeyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.DescribeKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.DescribeKeyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -490,6 +731,66 @@ func (_m *KMSAPI) DisableKeyRotationRequest(_a0 *kms.DisableKeyRotationInput) (*
 	return r0, r1
 }
 
+// DisableKeyRotationWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) DisableKeyRotationWithContext(_a0 aws.Context, _a1 *kms.DisableKeyRotationInput, _a2 ...request.Option) (*kms.DisableKeyRotationOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.DisableKeyRotationOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.DisableKeyRotationInput, ...request.Option) *kms.DisableKeyRotationOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.DisableKeyRotationOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.DisableKeyRotationInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// DisableKeyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) DisableKeyWithContext(_a0 aws.Context, _a1 *kms.DisableKeyInput, _a2 ...request.Option) (*kms.DisableKeyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.DisableKeyOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.DisableKeyInput, ...request.Option) *kms.DisableKeyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.DisableKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.DisableKeyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // EnableKey provides a mock function with given fields: _a0
 func (_m *KMSAPI) EnableKey(_a0 *kms.EnableKeyInput) (*kms.EnableKeyOutput, error) {
 	ret := _m.Called(_a0)
@@ -586,6 +887,66 @@ func (_m *KMSAPI) EnableKeyRotationRequest(_a0 *kms.EnableKeyRotationInput) (*re
 	return r0, r1
 }
 
+// EnableKeyRotationWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) EnableKeyRotationWithContext(_a0 aws.Context, _a1 *kms.EnableKeyRotationInput, _a2 ...request.Option) (*kms.EnableKeyRotationOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.EnableKeyRotationOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.EnableKeyRotationInput, ...request.Option) *kms.EnableKeyRotationOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.EnableKeyRotationOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.EnableKeyRotationInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// EnableKeyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) EnableKeyWithContext(_a0 aws.Context, _a1 *kms.EnableKeyInput, _a2 ...request.Option) (*kms.EnableKeyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.EnableKeyOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.EnableKeyInput, ...request.Option) *kms.EnableKeyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.EnableKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.EnableKeyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Encrypt provides a mock function with given fields: _a0
 func (_m *KMSAPI) Encrypt(_a0 *kms.EncryptInput) (*kms.EncryptOutput, error) {
 	ret := _m.Called(_a0)
@@ -629,6 +990,36 @@ func (_m *KMSAPI) EncryptRequest(_a0 *kms.EncryptInput) (*request.Request, *kms.
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.EncryptOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// EncryptWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) EncryptWithContext(_a0 aws.Context, _a1 *kms.EncryptInput, _a2 ...request.Option) (*kms.EncryptOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.EncryptOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.EncryptInput, ...request.Option) *kms.EncryptOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.EncryptOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.EncryptInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -682,6 +1073,36 @@ func (_m *KMSAPI) GenerateDataKeyRequest(_a0 *kms.GenerateDataKeyInput) (*reques
 	return r0, r1
 }
 
+// GenerateDataKeyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GenerateDataKeyWithContext(_a0 aws.Context, _a1 *kms.GenerateDataKeyInput, _a2 ...request.Option) (*kms.GenerateDataKeyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GenerateDataKeyOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.GenerateDataKeyInput, ...request.Option) *kms.GenerateDataKeyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GenerateDataKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.GenerateDataKeyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GenerateDataKeyWithoutPlaintext provides a mock function with given fields: _a0
 func (_m *KMSAPI) GenerateDataKeyWithoutPlaintext(_a0 *kms.GenerateDataKeyWithoutPlaintextInput) (*kms.GenerateDataKeyWithoutPlaintextOutput, error) {
 	ret := _m.Called(_a0)
@@ -725,6 +1146,36 @@ func (_m *KMSAPI) GenerateDataKeyWithoutPlaintextRequest(_a0 *kms.GenerateDataKe
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.GenerateDataKeyWithoutPlaintextOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// GenerateDataKeyWithoutPlaintextWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GenerateDataKeyWithoutPlaintextWithContext(_a0 aws.Context, _a1 *kms.GenerateDataKeyWithoutPlaintextInput, _a2 ...request.Option) (*kms.GenerateDataKeyWithoutPlaintextOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GenerateDataKeyWithoutPlaintextOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.GenerateDataKeyWithoutPlaintextInput, ...request.Option) *kms.GenerateDataKeyWithoutPlaintextOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GenerateDataKeyWithoutPlaintextOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.GenerateDataKeyWithoutPlaintextInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -778,6 +1229,36 @@ func (_m *KMSAPI) GenerateRandomRequest(_a0 *kms.GenerateRandomInput) (*request.
 	return r0, r1
 }
 
+// GenerateRandomWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GenerateRandomWithContext(_a0 aws.Context, _a1 *kms.GenerateRandomInput, _a2 ...request.Option) (*kms.GenerateRandomOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GenerateRandomOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.GenerateRandomInput, ...request.Option) *kms.GenerateRandomOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GenerateRandomOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.GenerateRandomInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetKeyPolicy provides a mock function with given fields: _a0
 func (_m *KMSAPI) GetKeyPolicy(_a0 *kms.GetKeyPolicyInput) (*kms.GetKeyPolicyOutput, error) {
 	ret := _m.Called(_a0)
@@ -821,6 +1302,36 @@ func (_m *KMSAPI) GetKeyPolicyRequest(_a0 *kms.GetKeyPolicyInput) (*request.Requ
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.GetKeyPolicyOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// GetKeyPolicyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GetKeyPolicyWithContext(_a0 aws.Context, _a1 *kms.GetKeyPolicyInput, _a2 ...request.Option) (*kms.GetKeyPolicyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GetKeyPolicyOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.GetKeyPolicyInput, ...request.Option) *kms.GetKeyPolicyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GetKeyPolicyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.GetKeyPolicyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -874,6 +1385,36 @@ func (_m *KMSAPI) GetKeyRotationStatusRequest(_a0 *kms.GetKeyRotationStatusInput
 	return r0, r1
 }
 
+// GetKeyRotationStatusWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GetKeyRotationStatusWithContext(_a0 aws.Context, _a1 *kms.GetKeyRotationStatusInput, _a2 ...request.Option) (*kms.GetKeyRotationStatusOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GetKeyRotationStatusOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.GetKeyRotationStatusInput, ...request.Option) *kms.GetKeyRotationStatusOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GetKeyRotationStatusOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.GetKeyRotationStatusInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetParametersForImport provides a mock function with given fields: _a0
 func (_m *KMSAPI) GetParametersForImport(_a0 *kms.GetParametersForImportInput) (*kms.GetParametersForImportOutput, error) {
 	ret := _m.Called(_a0)
@@ -917,6 +1458,36 @@ func (_m *KMSAPI) GetParametersForImportRequest(_a0 *kms.GetParametersForImportI
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.GetParametersForImportOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// GetParametersForImportWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GetParametersForImportWithContext(_a0 aws.Context, _a1 *kms.GetParametersForImportInput, _a2 ...request.Option) (*kms.GetParametersForImportOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GetParametersForImportOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.GetParametersForImportInput, ...request.Option) *kms.GetParametersForImportOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GetParametersForImportOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.GetParametersForImportInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -970,6 +1541,36 @@ func (_m *KMSAPI) ImportKeyMaterialRequest(_a0 *kms.ImportKeyMaterialInput) (*re
 	return r0, r1
 }
 
+// ImportKeyMaterialWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ImportKeyMaterialWithContext(_a0 aws.Context, _a1 *kms.ImportKeyMaterialInput, _a2 ...request.Option) (*kms.ImportKeyMaterialOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ImportKeyMaterialOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ImportKeyMaterialInput, ...request.Option) *kms.ImportKeyMaterialOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ImportKeyMaterialOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ImportKeyMaterialInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ListAliases provides a mock function with given fields: _a0
 func (_m *KMSAPI) ListAliases(_a0 *kms.ListAliasesInput) (*kms.ListAliasesOutput, error) {
 	ret := _m.Called(_a0)
@@ -1007,6 +1608,27 @@ func (_m *KMSAPI) ListAliasesPages(_a0 *kms.ListAliasesInput, _a1 func(*kms.List
 	return r0
 }
 
+// ListAliasesPagesWithContext provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *KMSAPI) ListAliasesPagesWithContext(_a0 aws.Context, _a1 *kms.ListAliasesInput, _a2 func(*kms.ListAliasesOutput, bool) bool, _a3 ...request.Option) error {
+	_va := make([]interface{}, len(_a3))
+	for _i := range _a3 {
+		_va[_i] = _a3[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1, _a2)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListAliasesInput, func(*kms.ListAliasesOutput, bool) bool, ...request.Option) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3...)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // ListAliasesRequest provides a mock function with given fields: _a0
 func (_m *KMSAPI) ListAliasesRequest(_a0 *kms.ListAliasesInput) (*request.Request, *kms.ListAliasesOutput) {
 	ret := _m.Called(_a0)
@@ -1027,6 +1649,36 @@ func (_m *KMSAPI) ListAliasesRequest(_a0 *kms.ListAliasesInput) (*request.Reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.ListAliasesOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// ListAliasesWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ListAliasesWithContext(_a0 aws.Context, _a1 *kms.ListAliasesInput, _a2 ...request.Option) (*kms.ListAliasesOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ListAliasesOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListAliasesInput, ...request.Option) *kms.ListAliasesOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ListAliasesOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ListAliasesInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1069,6 +1721,27 @@ func (_m *KMSAPI) ListGrantsPages(_a0 *kms.ListGrantsInput, _a1 func(*kms.ListGr
 	return r0
 }
 
+// ListGrantsPagesWithContext provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *KMSAPI) ListGrantsPagesWithContext(_a0 aws.Context, _a1 *kms.ListGrantsInput, _a2 func(*kms.ListGrantsResponse, bool) bool, _a3 ...request.Option) error {
+	_va := make([]interface{}, len(_a3))
+	for _i := range _a3 {
+		_va[_i] = _a3[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1, _a2)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListGrantsInput, func(*kms.ListGrantsResponse, bool) bool, ...request.Option) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3...)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // ListGrantsRequest provides a mock function with given fields: _a0
 func (_m *KMSAPI) ListGrantsRequest(_a0 *kms.ListGrantsInput) (*request.Request, *kms.ListGrantsResponse) {
 	ret := _m.Called(_a0)
@@ -1089,6 +1762,36 @@ func (_m *KMSAPI) ListGrantsRequest(_a0 *kms.ListGrantsInput) (*request.Request,
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.ListGrantsResponse)
 		}
+	}
+
+	return r0, r1
+}
+
+// ListGrantsWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ListGrantsWithContext(_a0 aws.Context, _a1 *kms.ListGrantsInput, _a2 ...request.Option) (*kms.ListGrantsResponse, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ListGrantsResponse
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListGrantsInput, ...request.Option) *kms.ListGrantsResponse); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ListGrantsResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ListGrantsInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1131,6 +1834,27 @@ func (_m *KMSAPI) ListKeyPoliciesPages(_a0 *kms.ListKeyPoliciesInput, _a1 func(*
 	return r0
 }
 
+// ListKeyPoliciesPagesWithContext provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *KMSAPI) ListKeyPoliciesPagesWithContext(_a0 aws.Context, _a1 *kms.ListKeyPoliciesInput, _a2 func(*kms.ListKeyPoliciesOutput, bool) bool, _a3 ...request.Option) error {
+	_va := make([]interface{}, len(_a3))
+	for _i := range _a3 {
+		_va[_i] = _a3[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1, _a2)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListKeyPoliciesInput, func(*kms.ListKeyPoliciesOutput, bool) bool, ...request.Option) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3...)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // ListKeyPoliciesRequest provides a mock function with given fields: _a0
 func (_m *KMSAPI) ListKeyPoliciesRequest(_a0 *kms.ListKeyPoliciesInput) (*request.Request, *kms.ListKeyPoliciesOutput) {
 	ret := _m.Called(_a0)
@@ -1151,6 +1875,36 @@ func (_m *KMSAPI) ListKeyPoliciesRequest(_a0 *kms.ListKeyPoliciesInput) (*reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.ListKeyPoliciesOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// ListKeyPoliciesWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ListKeyPoliciesWithContext(_a0 aws.Context, _a1 *kms.ListKeyPoliciesInput, _a2 ...request.Option) (*kms.ListKeyPoliciesOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ListKeyPoliciesOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListKeyPoliciesInput, ...request.Option) *kms.ListKeyPoliciesOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ListKeyPoliciesOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ListKeyPoliciesInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1193,6 +1947,27 @@ func (_m *KMSAPI) ListKeysPages(_a0 *kms.ListKeysInput, _a1 func(*kms.ListKeysOu
 	return r0
 }
 
+// ListKeysPagesWithContext provides a mock function with given fields: _a0, _a1, _a2, _a3
+func (_m *KMSAPI) ListKeysPagesWithContext(_a0 aws.Context, _a1 *kms.ListKeysInput, _a2 func(*kms.ListKeysOutput, bool) bool, _a3 ...request.Option) error {
+	_va := make([]interface{}, len(_a3))
+	for _i := range _a3 {
+		_va[_i] = _a3[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1, _a2)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListKeysInput, func(*kms.ListKeysOutput, bool) bool, ...request.Option) error); ok {
+		r0 = rf(_a0, _a1, _a2, _a3...)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // ListKeysRequest provides a mock function with given fields: _a0
 func (_m *KMSAPI) ListKeysRequest(_a0 *kms.ListKeysInput) (*request.Request, *kms.ListKeysOutput) {
 	ret := _m.Called(_a0)
@@ -1213,6 +1988,36 @@ func (_m *KMSAPI) ListKeysRequest(_a0 *kms.ListKeysInput) (*request.Request, *km
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.ListKeysOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// ListKeysWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ListKeysWithContext(_a0 aws.Context, _a1 *kms.ListKeysInput, _a2 ...request.Option) (*kms.ListKeysOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ListKeysOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListKeysInput, ...request.Option) *kms.ListKeysOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ListKeysOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ListKeysInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1266,6 +2071,36 @@ func (_m *KMSAPI) ListResourceTagsRequest(_a0 *kms.ListResourceTagsInput) (*requ
 	return r0, r1
 }
 
+// ListResourceTagsWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ListResourceTagsWithContext(_a0 aws.Context, _a1 *kms.ListResourceTagsInput, _a2 ...request.Option) (*kms.ListResourceTagsOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ListResourceTagsOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListResourceTagsInput, ...request.Option) *kms.ListResourceTagsOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ListResourceTagsOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ListResourceTagsInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ListRetirableGrants provides a mock function with given fields: _a0
 func (_m *KMSAPI) ListRetirableGrants(_a0 *kms.ListRetirableGrantsInput) (*kms.ListGrantsResponse, error) {
 	ret := _m.Called(_a0)
@@ -1309,6 +2144,36 @@ func (_m *KMSAPI) ListRetirableGrantsRequest(_a0 *kms.ListRetirableGrantsInput) 
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.ListGrantsResponse)
 		}
+	}
+
+	return r0, r1
+}
+
+// ListRetirableGrantsWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ListRetirableGrantsWithContext(_a0 aws.Context, _a1 *kms.ListRetirableGrantsInput, _a2 ...request.Option) (*kms.ListGrantsResponse, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ListGrantsResponse
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ListRetirableGrantsInput, ...request.Option) *kms.ListGrantsResponse); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ListGrantsResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ListRetirableGrantsInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1362,6 +2227,36 @@ func (_m *KMSAPI) PutKeyPolicyRequest(_a0 *kms.PutKeyPolicyInput) (*request.Requ
 	return r0, r1
 }
 
+// PutKeyPolicyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) PutKeyPolicyWithContext(_a0 aws.Context, _a1 *kms.PutKeyPolicyInput, _a2 ...request.Option) (*kms.PutKeyPolicyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.PutKeyPolicyOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.PutKeyPolicyInput, ...request.Option) *kms.PutKeyPolicyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.PutKeyPolicyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.PutKeyPolicyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // ReEncrypt provides a mock function with given fields: _a0
 func (_m *KMSAPI) ReEncrypt(_a0 *kms.ReEncryptInput) (*kms.ReEncryptOutput, error) {
 	ret := _m.Called(_a0)
@@ -1405,6 +2300,36 @@ func (_m *KMSAPI) ReEncryptRequest(_a0 *kms.ReEncryptInput) (*request.Request, *
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.ReEncryptOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// ReEncryptWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ReEncryptWithContext(_a0 aws.Context, _a1 *kms.ReEncryptInput, _a2 ...request.Option) (*kms.ReEncryptOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ReEncryptOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ReEncryptInput, ...request.Option) *kms.ReEncryptOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ReEncryptOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ReEncryptInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1458,6 +2383,36 @@ func (_m *KMSAPI) RetireGrantRequest(_a0 *kms.RetireGrantInput) (*request.Reques
 	return r0, r1
 }
 
+// RetireGrantWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) RetireGrantWithContext(_a0 aws.Context, _a1 *kms.RetireGrantInput, _a2 ...request.Option) (*kms.RetireGrantOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.RetireGrantOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.RetireGrantInput, ...request.Option) *kms.RetireGrantOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.RetireGrantOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.RetireGrantInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // RevokeGrant provides a mock function with given fields: _a0
 func (_m *KMSAPI) RevokeGrant(_a0 *kms.RevokeGrantInput) (*kms.RevokeGrantOutput, error) {
 	ret := _m.Called(_a0)
@@ -1501,6 +2456,36 @@ func (_m *KMSAPI) RevokeGrantRequest(_a0 *kms.RevokeGrantInput) (*request.Reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.RevokeGrantOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// RevokeGrantWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) RevokeGrantWithContext(_a0 aws.Context, _a1 *kms.RevokeGrantInput, _a2 ...request.Option) (*kms.RevokeGrantOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.RevokeGrantOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.RevokeGrantInput, ...request.Option) *kms.RevokeGrantOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.RevokeGrantOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.RevokeGrantInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1554,6 +2539,36 @@ func (_m *KMSAPI) ScheduleKeyDeletionRequest(_a0 *kms.ScheduleKeyDeletionInput) 
 	return r0, r1
 }
 
+// ScheduleKeyDeletionWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ScheduleKeyDeletionWithContext(_a0 aws.Context, _a1 *kms.ScheduleKeyDeletionInput, _a2 ...request.Option) (*kms.ScheduleKeyDeletionOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ScheduleKeyDeletionOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.ScheduleKeyDeletionInput, ...request.Option) *kms.ScheduleKeyDeletionOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ScheduleKeyDeletionOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.ScheduleKeyDeletionInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // TagResource provides a mock function with given fields: _a0
 func (_m *KMSAPI) TagResource(_a0 *kms.TagResourceInput) (*kms.TagResourceOutput, error) {
 	ret := _m.Called(_a0)
@@ -1597,6 +2612,36 @@ func (_m *KMSAPI) TagResourceRequest(_a0 *kms.TagResourceInput) (*request.Reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.TagResourceOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// TagResourceWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) TagResourceWithContext(_a0 aws.Context, _a1 *kms.TagResourceInput, _a2 ...request.Option) (*kms.TagResourceOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.TagResourceOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.TagResourceInput, ...request.Option) *kms.TagResourceOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.TagResourceOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.TagResourceInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1650,6 +2695,36 @@ func (_m *KMSAPI) UntagResourceRequest(_a0 *kms.UntagResourceInput) (*request.Re
 	return r0, r1
 }
 
+// UntagResourceWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) UntagResourceWithContext(_a0 aws.Context, _a1 *kms.UntagResourceInput, _a2 ...request.Option) (*kms.UntagResourceOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.UntagResourceOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.UntagResourceInput, ...request.Option) *kms.UntagResourceOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.UntagResourceOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.UntagResourceInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateAlias provides a mock function with given fields: _a0
 func (_m *KMSAPI) UpdateAlias(_a0 *kms.UpdateAliasInput) (*kms.UpdateAliasOutput, error) {
 	ret := _m.Called(_a0)
@@ -1693,6 +2768,36 @@ func (_m *KMSAPI) UpdateAliasRequest(_a0 *kms.UpdateAliasInput) (*request.Reques
 		if ret.Get(1) != nil {
 			r1 = ret.Get(1).(*kms.UpdateAliasOutput)
 		}
+	}
+
+	return r0, r1
+}
+
+// UpdateAliasWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) UpdateAliasWithContext(_a0 aws.Context, _a1 *kms.UpdateAliasInput, _a2 ...request.Option) (*kms.UpdateAliasOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.UpdateAliasOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.UpdateAliasInput, ...request.Option) *kms.UpdateAliasOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.UpdateAliasOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.UpdateAliasInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
 	}
 
 	return r0, r1
@@ -1746,4 +2851,32 @@ func (_m *KMSAPI) UpdateKeyDescriptionRequest(_a0 *kms.UpdateKeyDescriptionInput
 	return r0, r1
 }
 
-var _ kmsiface.KMSAPI = (*KMSAPI)(nil)
+// UpdateKeyDescriptionWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) UpdateKeyDescriptionWithContext(_a0 aws.Context, _a1 *kms.UpdateKeyDescriptionInput, _a2 ...request.Option) (*kms.UpdateKeyDescriptionOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.UpdateKeyDescriptionOutput
+	if rf, ok := ret.Get(0).(func(aws.Context, *kms.UpdateKeyDescriptionInput, ...request.Option) *kms.UpdateKeyDescriptionOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.UpdateKeyDescriptionOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(aws.Context, *kms.UpdateKeyDescriptionInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}

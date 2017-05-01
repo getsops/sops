@@ -11,8 +11,8 @@
     },
     "DescribeEcsClusters": {
       "input_token": "NextToken",
-      "output_token": "NextToken",
       "limit_key": "MaxResults",
+      "output_token": "NextToken",
       "result_key": "EcsClusters"
     },
     "DescribeElasticIps": {

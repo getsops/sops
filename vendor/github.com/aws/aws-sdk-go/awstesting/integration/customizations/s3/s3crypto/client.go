@@ -16,7 +16,7 @@ func init() {
 	gucumber.Before("@s3crypto", func() {
 		sess := session.New((&aws.Config{
 			Region: aws.String("us-west-2"),
-		}).WithLogLevel(aws.LogDebugWithRequestRetries | aws.LogDebugWithRequestErrors))
+		}))
 		encryptionClient := s3crypto.NewEncryptionClient(sess, nil, func(c *s3crypto.EncryptionClient) {
 		})
 		gucumber.World["encryptionClient"] = encryptionClient

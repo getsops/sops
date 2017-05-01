@@ -119,9 +119,6 @@ var $substring = function(str, low, high) {
 };
 
 var $sliceToArray = function(slice) {
-  if (slice.$length === 0) {
-    return [];
-  }
   if (slice.$array.constructor !== Array) {
     return slice.$array.subarray(slice.$offset, slice.$offset + slice.$length);
   }

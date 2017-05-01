@@ -54,7 +54,7 @@ func TestCopyObjectError(t *testing.T) {
 func TestUploadPartCopySuccess(t *testing.T) {
 	const successMsg = `
 <?xml version="1.0" encoding="UTF-8"?>
-<UploadPartCopyResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LastModified>2009-11-23T0:00:00Z</LastModified><ETag>&quot;1da64c7f13d1e8dbeaea40b905fd586c&quot;</ETag></CopyObjectResult>`
+<UploadPartCopyResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LastModified>2009-11-23T0:00:00Z</LastModified><ETag>&quot;1da64c7f13d1e8dbeaea40b905fd586c&quot;</ETag></UploadPartCopyResult>`
 
 	res, err := newCopyTestSvc(successMsg).UploadPartCopy(&s3.UploadPartCopyInput{
 		Bucket:     aws.String("bucketname"),

@@ -8,6 +8,7 @@
     "DeleteFaces": "<p>Deletes faces from a collection. You specify a collection ID and an array of face IDs to remove from the collection.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteFaces</code> action.</p>",
     "DetectFaces": "<p>Detects faces within an image (JPEG or PNG) that is provided as input.</p> <p> For each face detected, the operation returns face details including a bounding box of the face, a confidence value (that the bounding box contains a face), and a fixed set of attributes such as facial landmarks (for example, coordinates of eye and mouth), gender, presence of beard, sunglasses, etc. </p> <p>The face-detection algorithm is most effective on frontal faces. For non-frontal or obscured faces, the algorithm may not detect the faces or might detect faces with lower confidence. </p> <note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> </note> <p>For an example, see <a>get-started-exercise-detect-faces</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectFaces</code> action. </p>",
     "DetectLabels": "<p>Detects instances of real-world labels within an image (JPEG or PNG) provided as input. This includes objects like flower, tree, and table; events like wedding, graduation, and birthday party; and concepts like landscape, evening, and nature. For an example, see <a>get-started-exercise-detect-labels</a>.</p> <p> For each object, scene, and concept the API returns one or more labels. Each label provides the object name, and the level of confidence that the image contains the object. For example, suppose the input image has a lighthouse, the sea, and a rock. The response will include all three labels, one for each object. </p> <p> <code>{Name: lighthouse, Confidence: 98.4629}</code> </p> <p> <code>{Name: rock,Confidence: 79.2097}</code> </p> <p> <code> {Name: sea,Confidence: 75.061}</code> </p> <p> In the preceding example, the operation returns one label for each of the three objects. The operation can also return multiple labels for the same object in the image. For example, if the input image shows a flower (for example, a tulip), the operation might return the following three labels. </p> <p> <code>{Name: flower,Confidence: 99.0562}</code> </p> <p> <code>{Name: plant,Confidence: 99.0562}</code> </p> <p> <code>{Name: tulip,Confidence: 99.0562}</code> </p> <p>In this example, the detection algorithm more precisely identifies the flower as a tulip.</p> <p>You can provide the input image as an S3 object or as base64-encoded bytes. In response, the API returns an array of labels. In addition, the response also includes the orientation correction. Optionally, you can specify <code>MinConfidence</code> to control the confidence threshold for the labels returned. The default is 50%. You can also add the <code>MaxLabels</code> parameter to limit the number of labels returned. </p> <note> <p>If the object detected is a person, the operation doesn't provide the same facial details that the <a>DetectFaces</a> operation provides.</p> </note> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectLabels</code> action. </p>",
+    "DetectModerationLabels": "<p>Detects explicit or suggestive adult content in a specified .jpeg or .png image. Use <code>DetectModerationLabels</code> to moderate images depending on your requirements. For example, you might want to filter images that contain nudity, but not images containing suggestive content.</p> <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to determine which types of content are appropriate. For information about moderation labels, see <a>howitworks-moderateimage</a>.</p>",
     "IndexFaces": "<p>Detects faces in the input image and adds them to the specified collection. </p> <p> Amazon Rekognition does not save the actual faces detected. Instead, the underlying detection algorithm first detects the faces in the input image, and for each face extracts facial features into a feature vector, and stores it in the back-end database. Amazon Rekognition uses feature vectors when performing face match and search operations using the and operations. </p> <p>If you provide the optional <code>externalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image. </p> <p>In response, the operation returns an array of metadata for all detected faces. This includes, the bounding box of the detected face, confidence value (indicating the bounding box contains a face), a face ID assigned by the service for each face that is detected and stored, and an image ID assigned by the service for the input image If you request all facial attributes (using the <code>detectionAttributes</code> parameter, Amazon Rekognition returns detailed facial attributes such as facial landmarks (for example, location of eye and mount) and other facial attributes such gender. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata. </p> <p>For an example, see <a>example2</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>",
     "ListCollections": "<p>Returns list of collection IDs in your account. If the result is truncated, the response also provides a <code>NextToken</code> that you can use in the subsequent request to fetch the next set of collection IDs.</p> <p>For an example, see <a>example1</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:ListCollections</code> action.</p>",
     "ListFaces": "<p>Returns metadata for faces in the specified collection. This metadata includes information such as the bounding box coordinates, the confidence (that the bounding box contains a face), and face ID. For an example, see <a>example3</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:ListFaces</code> action.</p>",
@@ -35,8 +36,8 @@
     "Attributes": {
       "base": null,
       "refs": {
-        "DetectFacesRequest$Attributes": "<p>A list of facial attributes you would like to be returned. By default, the API returns subset of facial attributes. </p> <p>For example, you can specify the value as, [\"ALL\"] or [\"DEFAULT\"]. If you provide both, [\"ALL\", \"DEFAULT\"], the service uses a logical AND operator to determine which attributes to return (in this case, it is all attributes). If you specify all attributes, Amazon Rekognition performs additional detection. </p>",
-        "IndexFacesRequest$DetectionAttributes": "<p>(Optional) Returns detailed attributes of indexed faces. By default, the operation returns a subset of the facial attributes. </p> <p>For example, you can specify the value as, [\"ALL\"] or [\"DEFAULT\"]. If you provide both, [\"ALL\", \"DEFAULT\"], Amazon Rekognition uses the logical AND operator to determine which attributes to return (in this case, it is all attributes). If you specify all attributes, the service performs additional detection, in addition to the default. </p>"
+        "DetectFacesRequest$Attributes": "<p>A list of facial attributes you want to be returned. This can be the default list of attributes or all attributes. If you don't specify a value for <code>Attributes</code> or if you specify <code>[\"DEFAULT\"]</code>, the API returns the following subset of facial attributes: <code>BoundingBox</code>, <code>Confidence</code>, <code>Pose</code>, <code>Quality</code> and <code>Landmarks</code>. If you provide <code>[\"ALL\"]</code>, all facial attributes are returned but the operation will take longer to complete.</p> <p>If you provide both, <code>[\"ALL\", \"DEFAULT\"]</code>, the service uses a logical AND operator to determine which attributes to return (in this case, all attributes). </p>",
+        "IndexFacesRequest$DetectionAttributes": "<p>A list of facial attributes that you want to be returned. This can be the default list of attributes or all attributes. If you don't specify a value for <code>Attributes</code> or if you specify <code>[\"DEFAULT\"]</code>, the API returns the following subset of facial attributes: <code>BoundingBox</code>, <code>Confidence</code>, <code>Pose</code>, <code>Quality</code> and <code>Landmarks</code>. If you provide <code>[\"ALL\"]</code>, all facial attributes are returned but the operation will take longer to complete.</p> <p>If you provide both, <code>[\"ALL\", \"DEFAULT\"]</code>, the service uses a logical AND operator to determine which attributes to return (in this case, all attributes). </p>"
       }
     },
     "Beard": {
@@ -74,7 +75,7 @@
         "CreateCollectionRequest$CollectionId": "<p>ID for the collection that you are creating.</p>",
         "DeleteCollectionRequest$CollectionId": "<p>ID of the collection to delete.</p>",
         "DeleteFacesRequest$CollectionId": "<p>Collection from which to remove the specific faces.</p>",
-        "IndexFacesRequest$CollectionId": "<p>ID of an existing collection to which you want to add the faces that are detected in the input images.</p>",
+        "IndexFacesRequest$CollectionId": "<p>The ID of an existing collection to which you want to add the faces that are detected in the input images.</p>",
         "ListFacesRequest$CollectionId": "<p>ID of the collection from which to list the faces.</p>",
         "SearchFacesByImageRequest$CollectionId": "<p>ID of the collection to search.</p>",
         "SearchFacesRequest$CollectionId": "<p>ID of the collection the face belongs to.</p>"
@@ -174,6 +175,16 @@
       }
     },
     "DetectLabelsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DetectModerationLabelsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DetectModerationLabelsResponse": {
       "base": null,
       "refs": {
       }
@@ -290,8 +301,8 @@
         "BoundingBox$Height": "<p>Height of the bounding box as a ratio of the overall image height.</p>",
         "BoundingBox$Left": "<p>Left coordinate of the bounding box as a ratio of overall image width.</p>",
         "BoundingBox$Top": "<p>Top coordinate of the bounding box as a ratio of overall image height.</p>",
-        "ImageQuality$Brightness": "<p>Value representing brightness of the face. The service returns a value between 0 and 1 (inclusive).</p>",
-        "ImageQuality$Sharpness": "<p>Value representing sharpness of the face.</p>",
+        "ImageQuality$Brightness": "<p>Value representing brightness of the face. The service returns a value between 0 and 100 (inclusive). A higher value indicates a brighter face image.</p>",
+        "ImageQuality$Sharpness": "<p>Value representing sharpness of the face. The service returns a value between 0 and 100 (inclusive). A higher value indicates a sharper face image.</p>",
         "Landmark$X": "<p>x-coordinate from the top left of the landmark expressed as the ration of the width of the image. For example, if the images is 700x200 and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>",
         "Landmark$Y": "<p>y-coordinate from the top left of the landmark expressed as the ration of the height of the image. For example, if the images is 700x200 and the y-coordinate of the landmark is at 100 pixels, this value is 0.5.</p>"
       }
@@ -315,6 +326,7 @@
         "CompareFacesRequest$TargetImage": "<p>Target image either as bytes or an S3 object</p>",
         "DetectFacesRequest$Image": "<p>The image in which you want to detect faces. You can specify a blob or an S3 object. </p>",
         "DetectLabelsRequest$Image": "<p>The input image. You can provide a blob of image bytes or an S3 object.</p>",
+        "DetectModerationLabelsRequest$Image": null,
         "IndexFacesRequest$Image": null,
         "SearchFacesByImageRequest$Image": null
       }
@@ -332,7 +344,7 @@
       }
     },
     "ImageQuality": {
-      "base": "<p>Identifies image brightness and sharpness. </p>",
+      "base": "<p>Identifies face image brightness and sharpness. </p>",
       "refs": {
         "FaceDetail$Quality": "<p>Identifies image brightness and sharpness.</p>"
       }
@@ -434,6 +446,18 @@
         "SearchFacesRequest$MaxFaces": "<p>Maximum number of faces to return. The operation returns the maximum number of faces with the highest confidence in the match.</p>"
       }
     },
+    "ModerationLabel": {
+      "base": "<p>Provides information about a single type of moderated content found in an image. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see <a>howitworks-moderateimage</a>.</p>",
+      "refs": {
+        "ModerationLabels$member": null
+      }
+    },
+    "ModerationLabels": {
+      "base": null,
+      "refs": {
+        "DetectModerationLabelsResponse$ModerationLabels": "<p>A list of labels for explicit or suggestive adult content found in the image. The list includes the top-level label and each child label detected in the image. This is useful for filtering specific categories of content. </p>"
+      }
+    },
     "MouthOpen": {
       "base": "<p>Indicates whether or not the mouth on the face is open, and the confidence level in the determination.</p>",
       "refs": {
@@ -477,7 +501,8 @@
         "CompareFacesRequest$SimilarityThreshold": "<p>The minimum level of confidence in the match you want included in the result.</p>",
         "ComparedFace$Confidence": "<p>Level of confidence that what the bounding box contains is a face.</p>",
         "ComparedSourceImageFace$Confidence": "<p>Confidence level that the selected bounding box contains a face.</p>",
-        "DetectLabelsRequest$MinConfidence": "<p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with confidence lower than this specified value.</p> <p>If <code>minConfidence</code> is not specified, the operation returns labels with a confidence values greater than or equal to 50 percent.</p>",
+        "DetectLabelsRequest$MinConfidence": "<p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with confidence lower than this specified value.</p> <p>If <code>MinConfidence</code> is not specified, the operation returns labels with a confidence values greater than or equal to 50 percent.</p>",
+        "DetectModerationLabelsRequest$MinConfidence": "<p>Specifies the minimum confidence level for the labels to return. Amazon Rekognition doesn't return any labels with a confidence level lower than this specified value.</p> <p>If you don't specify <code>MinConfidence</code>, the operation returns labels with confidence values greater than or equal to 50 percent.</p>",
         "Emotion$Confidence": "<p>Level of confidence in the determination.</p>",
         "EyeOpen$Confidence": "<p>Level of confidence in the determination.</p>",
         "Eyeglasses$Confidence": "<p>Level of confidence in the determination.</p>",
@@ -486,6 +511,7 @@
         "FaceMatch$Similarity": "<p>Confidence in the match of this face with the input face.</p>",
         "Gender$Confidence": "<p>Level of confidence in the determination.</p>",
         "Label$Confidence": "<p>Level of confidence.</p>",
+        "ModerationLabel$Confidence": "<p>Specifies the confidence that Amazon Rekognition has that the label has been correctly identified.</p> <p>If you don't specify the <code>MinConfidence</code> parameter in the call to <code>DetectModerationLabels</code>, the operation returns labels with a confidence value greater than or equal to 50 percent.</p>",
         "MouthOpen$Confidence": "<p>Level of confidence in the determination.</p>",
         "Mustache$Confidence": "<p>Level of confidence in the determination.</p>",
         "SearchFacesByImageRequest$FaceMatchThreshold": "<p>(Optional) Specifies the minimum confidence in the face match to return. For example, don't return any matches where confidence in matches is less than 70%.</p>",
@@ -571,7 +597,9 @@
       "refs": {
         "CreateCollectionResponse$CollectionArn": "<p>Amazon Resource Name (ARN) of the collection. You can use this to manage permissions on your resources. </p>",
         "Label$Name": "<p>The name (label) of the object.</p>",
-        "ListFacesResponse$NextToken": "<p>If the response is truncated, Amazon Rekognition returns this token that you can use in the subsequent request to retrieve the next set of faces.</p>"
+        "ListFacesResponse$NextToken": "<p>If the response is truncated, Amazon Rekognition returns this token that you can use in the subsequent request to retrieve the next set of faces.</p>",
+        "ModerationLabel$Name": "<p>The label name for the type of content detected in the image.</p>",
+        "ModerationLabel$ParentName": "<p>The name for the parent label. Labels at the top-level of the hierarchy have the parent label <code>\"\"</code>.</p>"
       }
     },
     "Sunglasses": {

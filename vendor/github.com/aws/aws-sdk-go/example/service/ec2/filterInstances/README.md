@@ -1,11 +1,11 @@
 # Example
 
-filter_ec2_by_tag is an example using the AWS SDK for Go to list ec2 instaces that match provided tag name filter.
+This is an example using the AWS SDK for Go to list ec2 instances that match provided tag name filter.
 
 
 # Usage
 
-The example uses the the bucket name provided, and lists all object keys in a bucket.
+The example uses the bucket name provided, and lists all object keys in a bucket.
 
 ```sh
 go run -tags example filter_ec2_by_tag.go <name_filter>

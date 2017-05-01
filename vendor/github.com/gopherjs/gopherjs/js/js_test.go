@@ -43,6 +43,9 @@ var dummys = js.Global.Call("eval", `({
 	call: function(f, a) {
 		f(a);
 	},
+	return: function(x) {
+		return x;
+	},
 })`)
 
 func TestBool(t *testing.T) {
@@ -556,5 +559,15 @@ func TestSurrogatePairs(t *testing.T) {
 	}
 	if str.String() != "\U0001F600" {
 		t.Fail()
+	}
+}
+
+func TestUint8Array(t *testing.T) {
+	uint8Array := js.Global.Get("Uint8Array")
+	if dummys.Call("return", []byte{}).Get("constructor") != uint8Array {
+		t.Errorf("Empty byte array is not externalized as a Uint8Array")
+	}
+	if dummys.Call("return", []byte{0x01}).Get("constructor") != uint8Array {
+		t.Errorf("Non-empty byte array is not externalized as a Uint8Array")
 	}
 }

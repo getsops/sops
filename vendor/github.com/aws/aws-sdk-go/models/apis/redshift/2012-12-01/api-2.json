@@ -1,12 +1,12 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"redshift-2012-12-01",
     "apiVersion":"2012-12-01",
     "endpointPrefix":"redshift",
     "protocol":"query",
     "serviceFullName":"Amazon Redshift",
     "signatureVersion":"v4",
+    "uid":"redshift-2012-12-01",
     "xmlNamespace":"http://redshift.amazonaws.com/doc/2012-12-01/"
   },
   "operations":{
@@ -632,7 +632,8 @@
       },
       "errors":[
         {"shape":"ReservedNodeOfferingNotFoundFault"},
-        {"shape":"UnsupportedOperationFault"}
+        {"shape":"UnsupportedOperationFault"},
+        {"shape":"DependentServiceUnavailableFault"}
       ]
     },
     "DescribeReservedNodes":{
@@ -647,7 +648,8 @@
         "resultWrapper":"DescribeReservedNodesResult"
       },
       "errors":[
-        {"shape":"ReservedNodeNotFoundFault"}
+        {"shape":"ReservedNodeNotFoundFault"},
+        {"shape":"DependentServiceUnavailableFault"}
       ]
     },
     "DescribeResize":{
@@ -790,6 +792,22 @@
         {"shape":"DependentServiceRequestThrottlingFault"}
       ]
     },
+    "GetClusterCredentials":{
+      "name":"GetClusterCredentials",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetClusterCredentialsMessage"},
+      "output":{
+        "shape":"ClusterCredentials",
+        "resultWrapper":"GetClusterCredentialsResult"
+      },
+      "errors":[
+        {"shape":"ClusterNotFoundFault"},
+        {"shape":"UnsupportedOperationFault"}
+      ]
+    },
     "ModifyCluster":{
       "name":"ModifyCluster",
       "http":{
@@ -806,6 +824,7 @@
         {"shape":"InvalidClusterSecurityGroupStateFault"},
         {"shape":"ClusterNotFoundFault"},
         {"shape":"NumberOfNodesQuotaExceededFault"},
+        {"shape":"NumberOfNodesPerClusterLimitExceededFault"},
         {"shape":"ClusterSecurityGroupNotFoundFault"},
         {"shape":"ClusterParameterGroupNotFoundFault"},
         {"shape":"InsufficientClusterCapacityFault"},
@@ -1085,7 +1104,8 @@
     "AccountWithRestoreAccess":{
       "type":"structure",
       "members":{
-        "AccountId":{"shape":"String"}
+        "AccountId":{"shape":"String"},
+        "AccountAlias":{"shape":"String"}
       }
     },
     "AccountsWithRestoreAccessList":{
@@ -1238,6 +1258,14 @@
         "senderFault":true
       },
       "exception":true
+    },
+    "ClusterCredentials":{
+      "type":"structure",
+      "members":{
+        "DbUser":{"shape":"String"},
+        "DbPassword":{"shape":"SensitiveString"},
+        "Expiration":{"shape":"TStamp"}
+      }
     },
     "ClusterIamRole":{
       "type":"structure",
@@ -1842,6 +1870,13 @@
         "Tags":{"shape":"TagList"}
       }
     },
+    "DbGroupList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"DbGroup"
+      }
+    },
     "DefaultClusterParameters":{
       "type":"structure",
       "members":{
@@ -1946,6 +1981,17 @@
       },
       "error":{
         "code":"DependentServiceRequestThrottlingFault",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "DependentServiceUnavailableFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"DependentServiceUnavailableFault",
         "httpStatusCode":400,
         "senderFault":true
       },
@@ -2349,6 +2395,21 @@
       "members":{
         "Marker":{"shape":"String"},
         "Events":{"shape":"EventList"}
+      }
+    },
+    "GetClusterCredentialsMessage":{
+      "type":"structure",
+      "required":[
+        "DbUser",
+        "ClusterIdentifier"
+      ],
+      "members":{
+        "DbUser":{"shape":"String"},
+        "DbName":{"shape":"String"},
+        "ClusterIdentifier":{"shape":"String"},
+        "DurationSeconds":{"shape":"IntegerOptional"},
+        "AutoCreate":{"shape":"BooleanOptional"},
+        "DbGroups":{"shape":"DbGroupList"}
       }
     },
     "HsmClientCertificate":{
@@ -3334,6 +3395,10 @@
         "senderFault":true
       },
       "exception":true
+    },
+    "SensitiveString":{
+      "type":"string",
+      "sensitive":true
     },
     "Snapshot":{
       "type":"structure",

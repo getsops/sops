@@ -96,6 +96,94 @@ func TestAfterRetryRefreshCreds(t *testing.T) {
 	assert.True(t, credProvider.retrieveCalled)
 }
 
+func TestAfterRetryWithContextCanceled(t *testing.T) {
+	c := awstesting.NewClient()
+
+	req := c.NewRequest(&request.Operation{Name: "Operation"}, nil, nil)
+
+	ctx := &awstesting.FakeContext{DoneCh: make(chan struct{}, 0)}
+	req.SetContext(ctx)
+
+	req.Error = fmt.Errorf("some error")
+	req.Retryable = aws.Bool(true)
+	req.HTTPResponse = &http.Response{
+		StatusCode: 500,
+	}
+
+	close(ctx.DoneCh)
+	ctx.Error = fmt.Errorf("context canceled")
+
+	corehandlers.AfterRetryHandler.Fn(req)
+
+	if req.Error == nil {
+		t.Fatalf("expect error but didn't receive one")
+	}
+
+	aerr := req.Error.(awserr.Error)
+
+	if e, a := request.CanceledErrorCode, aerr.Code(); e != a {
+		t.Errorf("expect %q, error code got %q", e, a)
+	}
+}
+
+func TestAfterRetryWithContext(t *testing.T) {
+	c := awstesting.NewClient()
+
+	req := c.NewRequest(&request.Operation{Name: "Operation"}, nil, nil)
+
+	ctx := &awstesting.FakeContext{DoneCh: make(chan struct{}, 0)}
+	req.SetContext(ctx)
+
+	req.Error = fmt.Errorf("some error")
+	req.Retryable = aws.Bool(true)
+	req.HTTPResponse = &http.Response{
+		StatusCode: 500,
+	}
+
+	corehandlers.AfterRetryHandler.Fn(req)
+
+	if req.Error != nil {
+		t.Fatalf("expect no error, got %v", req.Error)
+	}
+	if e, a := 1, req.RetryCount; e != a {
+		t.Errorf("expect retry count to be %d, got %d", e, a)
+	}
+}
+
+func TestSendWithContextCanceled(t *testing.T) {
+	c := awstesting.NewClient(&aws.Config{
+		SleepDelay: func(dur time.Duration) {
+			t.Errorf("SleepDelay should not be called")
+		},
+	})
+
+	req := c.NewRequest(&request.Operation{Name: "Operation"}, nil, nil)
+
+	ctx := &awstesting.FakeContext{DoneCh: make(chan struct{}, 0)}
+	req.SetContext(ctx)
+
+	req.Error = fmt.Errorf("some error")
+	req.Retryable = aws.Bool(true)
+	req.HTTPResponse = &http.Response{
+		StatusCode: 500,
+	}
+
+	close(ctx.DoneCh)
+	ctx.Error = fmt.Errorf("context canceled")
+
+	corehandlers.SendHandler.Fn(req)
+
+	if req.Error == nil {
+		t.Fatalf("expect error but didn't receive one")
+	}
+
+	aerr := req.Error.(awserr.Error)
+
+	if e, a := request.CanceledErrorCode, aerr.Code(); e != a {
+		t.Errorf("expect %q, error code got %q", e, a)
+	}
+}
+
 type testSendHandlerTransport struct{}
 
 func (t *testSendHandlerTransport) RoundTrip(r *http.Request) (*http.Response, error) {
@@ -116,6 +204,39 @@ func TestSendHandlerError(t *testing.T) {
 
 	assert.Error(t, r.Error)
 	assert.NotNil(t, r.HTTPResponse)
+}
+
+func TestSendWithoutFollowRedirects(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/original":
+			w.Header().Set("Location", "/redirected")
+			w.WriteHeader(301)
+		case "/redirected":
+			t.Fatalf("expect not to redirect, but was")
+		}
+	}))
+
+	svc := awstesting.NewClient(&aws.Config{
+		DisableSSL: aws.Bool(true),
+		Endpoint:   aws.String(server.URL),
+	})
+	svc.Handlers.Clear()
+	svc.Handlers.Send.PushBackNamed(corehandlers.SendHandler)
+
+	r := svc.NewRequest(&request.Operation{
+		Name:     "Operation",
+		HTTPPath: "/original",
+	}, nil, nil)
+	r.DisableFollowRedirects = true
+
+	err := r.Send()
+	if err != nil {
+		t.Errorf("expect no error, got %v", err)
+	}
+	if e, a := 301, r.HTTPResponse.StatusCode; e != a {
+		t.Errorf("expect %d status code, got %d", e, a)
+	}
 }
 
 func TestValidateReqSigHandler(t *testing.T) {

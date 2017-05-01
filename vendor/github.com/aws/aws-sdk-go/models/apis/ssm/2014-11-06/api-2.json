@@ -1592,8 +1592,8 @@
         "OutputS3Region":{"shape":"S3Region"},
         "OutputS3BucketName":{"shape":"S3BucketName"},
         "OutputS3KeyPrefix":{"shape":"S3KeyPrefix"},
-        "MaxConcurrency":{"shape":"VelocityConstraint"},
-        "MaxErrors":{"shape":"VelocityConstraint"},
+        "MaxConcurrency":{"shape":"MaxConcurrency"},
+        "MaxErrors":{"shape":"MaxErrors"},
         "TargetCount":{"shape":"TargetCount"},
         "CompletedCount":{"shape":"CompletedCount"},
         "ErrorCount":{"shape":"ErrorCount"},
@@ -2925,8 +2925,8 @@
         "Type":{"shape":"MaintenanceWindowTaskType"},
         "TaskParameters":{"shape":"MaintenanceWindowTaskParametersList"},
         "Priority":{"shape":"MaintenanceWindowTaskPriority"},
-        "MaxConcurrency":{"shape":"VelocityConstraint"},
-        "MaxErrors":{"shape":"VelocityConstraint"},
+        "MaxConcurrency":{"shape":"MaxConcurrency"},
+        "MaxErrors":{"shape":"MaxErrors"},
         "Status":{"shape":"MaintenanceWindowExecutionStatus"},
         "StatusDetails":{"shape":"MaintenanceWindowExecutionStatusDetails"},
         "StartTime":{"shape":"DateTime"},
@@ -3428,6 +3428,7 @@
     "InvalidNextToken":{
       "type":"structure",
       "members":{
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -4101,8 +4102,8 @@
         "Priority":{"shape":"MaintenanceWindowTaskPriority"},
         "LoggingInfo":{"shape":"LoggingInfo"},
         "ServiceRoleArn":{"shape":"ServiceRole"},
-        "MaxConcurrency":{"shape":"VelocityConstraint"},
-        "MaxErrors":{"shape":"VelocityConstraint"}
+        "MaxConcurrency":{"shape":"MaxConcurrency"},
+        "MaxErrors":{"shape":"MaxErrors"}
       }
     },
     "MaintenanceWindowTaskArn":{
@@ -4170,12 +4171,24 @@
       "type":"string",
       "pattern":"^mi-[0-9a-f]{17}$"
     },
+    "MaxConcurrency":{
+      "type":"string",
+      "max":7,
+      "min":1,
+      "pattern":"^([1-9][0-9]*|[1-9][0-9]%|[1-9]%|100%)$"
+    },
     "MaxDocumentSizeExceeded":{
       "type":"structure",
       "members":{
         "Message":{"shape":"String"}
       },
       "exception":true
+    },
+    "MaxErrors":{
+      "type":"string",
+      "max":7,
+      "min":1,
+      "pattern":"^([1-9][0-9]*|[0]|[1-9][0-9]%|[0-9]%|100%)$"
     },
     "MaxResults":{
       "type":"integer",
@@ -4256,7 +4269,7 @@
     },
     "PSParameterValue":{
       "type":"string",
-      "max":1024,
+      "max":4096,
       "min":1,
       "pattern":"^(?:(?!(\\{\\{.*\\}\\})).)*$"
     },
@@ -4780,8 +4793,8 @@
           "shape":"MaintenanceWindowTaskPriority",
           "box":true
         },
-        "MaxConcurrency":{"shape":"VelocityConstraint"},
-        "MaxErrors":{"shape":"VelocityConstraint"},
+        "MaxConcurrency":{"shape":"MaxConcurrency"},
+        "MaxErrors":{"shape":"MaxErrors"},
         "LoggingInfo":{"shape":"LoggingInfo"},
         "ClientToken":{
           "shape":"ClientToken",
@@ -4922,8 +4935,8 @@
         "OutputS3Region":{"shape":"S3Region"},
         "OutputS3BucketName":{"shape":"S3BucketName"},
         "OutputS3KeyPrefix":{"shape":"S3KeyPrefix"},
-        "MaxConcurrency":{"shape":"VelocityConstraint"},
-        "MaxErrors":{"shape":"VelocityConstraint"},
+        "MaxConcurrency":{"shape":"MaxConcurrency"},
+        "MaxErrors":{"shape":"MaxErrors"},
         "ServiceRoleArn":{"shape":"ServiceRole"},
         "NotificationConfig":{"shape":"NotificationConfig"}
       }
@@ -5099,6 +5112,7 @@
     "TooManyUpdates":{
       "type":"structure",
       "members":{
+        "Message":{"shape":"String"}
       },
       "exception":true
     },
@@ -5282,12 +5296,6 @@
       }
     },
     "Url":{"type":"string"},
-    "VelocityConstraint":{
-      "type":"string",
-      "max":7,
-      "min":1,
-      "pattern":"^[1-9]\\d*$|[0-9][%]|[1-9][0-9][%]|[1][0][0][%]|[0-9]?"
-    },
     "Version":{
       "type":"string",
       "pattern":"^[0-9]{1,6}(\\.[0-9]{1,6}){2,3}$"
