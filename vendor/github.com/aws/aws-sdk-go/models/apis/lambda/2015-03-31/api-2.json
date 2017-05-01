@@ -311,6 +311,21 @@
         {"shape":"TooManyRequestsException"}
       ]
     },
+    "ListTags":{
+      "name":"ListTags",
+      "http":{
+        "method":"GET",
+        "requestUri":"/2017-03-31/tags/{ARN}"
+      },
+      "input":{"shape":"ListTagsRequest"},
+      "output":{"shape":"ListTagsResponse"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
     "ListVersionsByFunction":{
       "name":"ListVersionsByFunction",
       "http":{
@@ -352,6 +367,36 @@
         "responseCode":204
       },
       "input":{"shape":"RemovePermissionRequest"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2017-03-31/tags/{ARN}",
+        "responseCode":204
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "errors":[
+        {"shape":"ServiceException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"TooManyRequestsException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/2017-03-31/tags/{ARN}",
+        "responseCode":204
+      },
+      "input":{"shape":"UntagResourceRequest"},
       "errors":[
         {"shape":"ServiceException"},
         {"shape":"ResourceNotFoundException"},
@@ -582,7 +627,9 @@
         "VpcConfig":{"shape":"VpcConfig"},
         "DeadLetterConfig":{"shape":"DeadLetterConfig"},
         "Environment":{"shape":"Environment"},
-        "KMSKeyArn":{"shape":"KMSKeyArn"}
+        "KMSKeyArn":{"shape":"KMSKeyArn"},
+        "TracingConfig":{"shape":"TracingConfig"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "Date":{"type":"timestamp"},
@@ -786,7 +833,8 @@
         "VpcConfig":{"shape":"VpcConfigResponse"},
         "DeadLetterConfig":{"shape":"DeadLetterConfig"},
         "Environment":{"shape":"EnvironmentResponse"},
-        "KMSKeyArn":{"shape":"KMSKeyArn"}
+        "KMSKeyArn":{"shape":"KMSKeyArn"},
+        "TracingConfig":{"shape":"TracingConfigResponse"}
       }
     },
     "FunctionList":{
@@ -877,7 +925,8 @@
       "type":"structure",
       "members":{
         "Configuration":{"shape":"FunctionConfiguration"},
-        "Code":{"shape":"FunctionCodeLocation"}
+        "Code":{"shape":"FunctionCodeLocation"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "GetPolicyRequest":{
@@ -1170,6 +1219,23 @@
         "Functions":{"shape":"FunctionList"}
       }
     },
+    "ListTagsRequest":{
+      "type":"structure",
+      "required":["Resource"],
+      "members":{
+        "Resource":{
+          "shape":"FunctionArn",
+          "location":"uri",
+          "locationName":"ARN"
+        }
+      }
+    },
+    "ListTagsResponse":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"Tags"}
+      }
+    },
     "ListVersionsByFunctionRequest":{
       "type":"structure",
       "required":["FunctionName"],
@@ -1312,8 +1378,10 @@
       "enum":[
         "nodejs",
         "nodejs4.3",
+        "nodejs6.10",
         "java8",
         "python2.7",
+        "python3.6",
         "dotnetcore1.0",
         "nodejs4.3-edge"
       ]
@@ -1379,6 +1447,32 @@
       "member":{"shape":"SubnetId"},
       "max":16
     },
+    "TagKey":{"type":"string"},
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"}
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "Resource",
+        "Tags"
+      ],
+      "members":{
+        "Resource":{
+          "shape":"FunctionArn",
+          "location":"uri",
+          "locationName":"ARN"
+        },
+        "Tags":{"shape":"Tags"}
+      }
+    },
+    "TagValue":{"type":"string"},
+    "Tags":{
+      "type":"map",
+      "key":{"shape":"TagKey"},
+      "value":{"shape":"TagValue"}
+    },
     "ThrottleReason":{
       "type":"string",
       "enum":[
@@ -1407,6 +1501,25 @@
       "error":{"httpStatusCode":429},
       "exception":true
     },
+    "TracingConfig":{
+      "type":"structure",
+      "members":{
+        "Mode":{"shape":"TracingMode"}
+      }
+    },
+    "TracingConfigResponse":{
+      "type":"structure",
+      "members":{
+        "Mode":{"shape":"TracingMode"}
+      }
+    },
+    "TracingMode":{
+      "type":"string",
+      "enum":[
+        "Active",
+        "PassThrough"
+      ]
+    },
     "UnsupportedMediaTypeException":{
       "type":"structure",
       "members":{
@@ -1415,6 +1528,25 @@
       },
       "error":{"httpStatusCode":415},
       "exception":true
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "Resource",
+        "TagKeys"
+      ],
+      "members":{
+        "Resource":{
+          "shape":"FunctionArn",
+          "location":"uri",
+          "locationName":"ARN"
+        },
+        "TagKeys":{
+          "shape":"TagKeyList",
+          "location":"querystring",
+          "locationName":"tagKeys"
+        }
+      }
     },
     "UpdateAliasRequest":{
       "type":"structure",
@@ -1485,7 +1617,8 @@
         "Environment":{"shape":"Environment"},
         "Runtime":{"shape":"Runtime"},
         "DeadLetterConfig":{"shape":"DeadLetterConfig"},
-        "KMSKeyArn":{"shape":"KMSKeyArn"}
+        "KMSKeyArn":{"shape":"KMSKeyArn"},
+        "TracingConfig":{"shape":"TracingConfig"}
       }
     },
     "Version":{

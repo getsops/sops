@@ -78,7 +78,7 @@ var $externalize = function(v, t) {
     }
     return $sliceToArray(v);
   case $kindString:
-    if (v.search(/^[\x00-\x7F]*$/) !== -1) {
+    if ($isASCII(v)) {
       return v;
     }
     var s = "", r;
@@ -322,7 +322,7 @@ var $internalize = function(v, t, recv) {
     return new t($mapArray(v, function(e) { return $internalize(e, t.elem); }));
   case $kindString:
     v = String(v);
-    if (v.search(/^[\x00-\x7F]*$/) !== -1) {
+    if ($isASCII(v)) {
       return v;
     }
     var s = "";
@@ -371,5 +371,15 @@ var $internalize = function(v, t, recv) {
     }
   }
   $throwRuntimeError("cannot internalize " + t.string);
+};
+
+/* $isASCII reports whether string s contains only ASCII characters. */
+var $isASCII = function(s) {
+  for (var i = 0; i < s.length; i++) {
+    if (s.charCodeAt(i) >= 128) {
+      return false;
+    }
+  }
+  return true;
 };
 `

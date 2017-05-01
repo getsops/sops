@@ -69,7 +69,8 @@
         "customer_profile_by_industry",
         "customer_profile_by_revenue",
         "customer_profile_by_geography",
-        "sales_compensation_billed_revenue"
+        "sales_compensation_billed_revenue",
+        "us_sales_and_use_tax_records"
       ],
       "max":255,
       "min":1

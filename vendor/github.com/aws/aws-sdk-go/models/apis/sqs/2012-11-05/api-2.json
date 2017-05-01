@@ -760,7 +760,9 @@
         "ReceiveMessageWaitTimeSeconds",
         "RedrivePolicy",
         "FifoQueue",
-        "ContentBasedDeduplication"
+        "ContentBasedDeduplication",
+        "KmsMasterKeyId",
+        "KmsDataKeyReusePeriodSeconds"
       ]
     },
     "QueueDeletedRecently":{

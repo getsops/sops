@@ -4,7 +4,7 @@
   "operations": {
     "AddFacetToObject": "<p>Adds a new <a>Facet</a> to an object.</p>",
     "ApplySchema": "<p>Copies input published schema into <a>Directory</a> with same name and version as that of published schema .</p>",
-    "AttachObject": "<p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using ObjectIdentifier</p> </li> </ol>",
+    "AttachObject": "<p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol>",
     "AttachPolicy": "<p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>",
     "AttachToIndex": "<p>Attaches the specified object to the specified index.</p>",
     "BatchRead": "<p>Performs all the read operations in a batch. </p>",
@@ -36,18 +36,19 @@
     "ListIndex": "<p>Lists objects attached to the specified index.</p>",
     "ListObjectAttributes": "<p>Lists all attributes associated with an object. </p>",
     "ListObjectChildren": "<p>Returns a paginated list of child objects associated with a given object.</p>",
+    "ListObjectParentPaths": "<p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure\">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to directory root are ignored from the target object.</p>",
     "ListObjectParents": "<p>Lists parent objects associated with a given object in pagination fashion.</p>",
     "ListObjectPolicies": "<p>Returns policies attached to an object in pagination fashion.</p>",
-    "ListPolicyAttachments": "<p>Returns all of the ObjectIdentifiers to which a given policy is attached.</p>",
+    "ListPolicyAttachments": "<p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>",
     "ListPublishedSchemaArns": "<p>Retrieves published schema ARNs.</p>",
     "ListTagsForResource": "<p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>",
-    "LookupPolicy": "<p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the objectIdentifier for such objects. If policies are present, it returns objectIdentifier, policyId, and policyType. Paths that don't lead to the root from the target object are ignored.</p>",
+    "LookupPolicy": "<p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored.</p>",
     "PublishSchema": "<p>Publishes a development schema with a version. If description and attributes are specified, PublishSchema overrides the development schema description and attributes. If not, the development schema description and attributes are used.</p>",
     "PutSchemaFromJson": "<p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat\">JSON Schema Format</a> for more information.</p>",
     "RemoveFacetFromObject": "<p>Removes the specified facet from the specified object.</p>",
     "TagResource": "<p>API for adding tags to a resource.</p>",
     "UntagResource": "<p>API for removing tags from a resource.</p>",
-    "UpdateFacet": "<p>Does the following:</p> <ol> <li> <p>Adds new Attributes, Rules, or ObjectTypes.</p> </li> <li> <p>Updates existing Attributes, Rules, or ObjectTypes.</p> </li> <li> <p>Deletes existing Attributes, Rules, or ObjectTypes.</p> </li> </ol>",
+    "UpdateFacet": "<p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol>",
     "UpdateObjectAttributes": "<p>Updates a given object's attributes.</p>",
     "UpdateSchema": "<p>Updates the schema name with a new name. Only development schema names can be updated.</p>"
   },
@@ -121,6 +122,7 @@
         "ListIndexRequest$DirectoryArn": "<p>The ARN of the directory that the index exists in.</p>",
         "ListObjectAttributesRequest$DirectoryArn": "<p>ARN associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>",
         "ListObjectChildrenRequest$DirectoryArn": "<p>ARN associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>",
+        "ListObjectParentPathsRequest$DirectoryArn": "<p>The ARN of the directory to which the parent path applies.</p>",
         "ListObjectParentsRequest$DirectoryArn": "<p>ARN associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>",
         "ListObjectPoliciesRequest$DirectoryArn": "<p>ARN associated with the <a>Directory</a> where objects reside. For more information, see <a>arns</a>.</p>",
         "ListPolicyAttachmentsRequest$DirectoryArn": "<p>ARN associated with the <a>Directory</a> where objects reside. For more information, see <a>arns</a>.</p>",
@@ -199,7 +201,7 @@
         "AddFacetToObjectRequest$ObjectAttributeList": "<p>Attributes on the facet you are adding to the object.</p>",
         "BatchAddFacetToObject$ObjectAttributeList": "<p>The attributes to set on the object.</p>",
         "BatchCreateObject$ObjectAttributeList": "<p>Attribute map, which contains an attribute ARN as the key and attribute value as the map value.</p>",
-        "BatchListObjectAttributesResponse$Attributes": "<p>Attributes map associated with the object. AttributeArn is the key; attribute value is the value.</p>",
+        "BatchListObjectAttributesResponse$Attributes": "<p>Attributes map associated with the object. <code>AttributeArn</code> is the key; attribute value is the value.</p>",
         "CreateObjectRequest$ObjectAttributeList": "<p>Attribute map whose attribute ARN contains the key and attribute value as the map value.</p>",
         "IndexAttachment$IndexedAttributes": "<p>The indexed attribute values.</p>",
         "ListObjectAttributesResponse$Attributes": "<p>Attributes map associated with the object. AttributeArn is the key, and attribute value is the value.</p>"
@@ -250,55 +252,55 @@
       }
     },
     "BatchCreateObjectResponse": {
-      "base": "<p>Represents the output of a CreateObject response operation.</p>",
+      "base": "<p>Represents the output of a <code>CreateObject</code> response operation.</p>",
       "refs": {
         "BatchWriteOperationResponse$CreateObject": "<p>Creates an object in a <a>Directory</a>.</p>"
       }
     },
     "BatchDeleteObject": {
-      "base": "<p>Represents the output of a DeleteObject operation.</p>",
+      "base": "<p>Represents the output of a <code>DeleteObject</code> operation.</p>",
       "refs": {
         "BatchWriteOperation$DeleteObject": "<p>Deletes an object in a <a>Directory</a>.</p>"
       }
     },
     "BatchDeleteObjectResponse": {
-      "base": "<p>Represents the output of a DeleteObject response operation.</p>",
+      "base": "<p>Represents the output of a <code>DeleteObject</code> response operation.</p>",
       "refs": {
         "BatchWriteOperationResponse$DeleteObject": "<p>Deletes an object in a <a>Directory</a>.</p>"
       }
     },
     "BatchDetachObject": {
-      "base": "<p>Represents the output of a DetachObject operation.</p>",
+      "base": "<p>Represents the output of a <code>DetachObject</code> operation.</p>",
       "refs": {
         "BatchWriteOperation$DetachObject": "<p>Detaches an object from a <a>Directory</a>.</p>"
       }
     },
     "BatchDetachObjectResponse": {
-      "base": "<p>Represents the output of a DetachObject response operation.</p>",
+      "base": "<p>Represents the output of a <code>DetachObject</code> response operation.</p>",
       "refs": {
         "BatchWriteOperationResponse$DetachObject": "<p>Detaches an object from a <a>Directory</a>.</p>"
       }
     },
     "BatchListObjectAttributes": {
-      "base": "<p>Represents the output of a ListObjectAttributes operation.</p>",
+      "base": "<p>Represents the output of a <code>ListObjectAttributes</code> operation.</p>",
       "refs": {
         "BatchReadOperation$ListObjectAttributes": "<p>Lists all attributes associated with an object.</p>"
       }
     },
     "BatchListObjectAttributesResponse": {
-      "base": "<p>Represents the output of a ListObjectAttributes response operation.</p>",
+      "base": "<p>Represents the output of a <code>ListObjectAttributes</code> response operation.</p>",
       "refs": {
         "BatchReadSuccessfulResponse$ListObjectAttributes": "<p>Lists all attributes associated with an object.</p>"
       }
     },
     "BatchListObjectChildren": {
-      "base": "<p>Represents the output of a ListObjectChildren operation.</p>",
+      "base": "<p>Represents the output of a <code>ListObjectChildren</code> operation.</p>",
       "refs": {
         "BatchReadOperation$ListObjectChildren": "<p>Returns a paginated list of child objects that are associated with a given object.</p>"
       }
     },
     "BatchListObjectChildrenResponse": {
-      "base": "<p>Represents the output of a ListObjectChildren response operation.</p>",
+      "base": "<p>Represents the output of a <code>ListObjectChildren</code> response operation.</p>",
       "refs": {
         "BatchReadSuccessfulResponse$ListObjectChildren": "<p>Returns a paginated list of child objects associated with a given object.</p>"
       }
@@ -318,11 +320,11 @@
     "BatchReadExceptionType": {
       "base": null,
       "refs": {
-        "BatchReadException$Type": "<p>Type of exception, such as InvalidArnException.</p>"
+        "BatchReadException$Type": "<p>Type of exception, such as <code>InvalidArnException</code>.</p>"
       }
     },
     "BatchReadOperation": {
-      "base": "<p>Represents the output of a BatchRead operation.</p>",
+      "base": "<p>Represents the output of a <code>BatchRead</code> operation.</p>",
       "refs": {
         "BatchReadOperationList$member": null
       }
@@ -334,7 +336,7 @@
       }
     },
     "BatchReadOperationResponse": {
-      "base": "<p>Represents the output of a BatchRead response operation.</p>",
+      "base": "<p>Represents the output of a <code>BatchRead</code> response operation.</p>",
       "refs": {
         "BatchReadOperationResponseList$member": null
       }
@@ -356,7 +358,7 @@
       }
     },
     "BatchReadSuccessfulResponse": {
-      "base": "<p>Represents the output of a BatchRead success response operation.</p>",
+      "base": "<p>Represents the output of a <code>BatchRead</code> success response operation.</p>",
       "refs": {
         "BatchReadOperationResponse$SuccessfulResponse": "<p>Identifies which operation in a batch has succeeded.</p>"
       }
@@ -381,19 +383,19 @@
       }
     },
     "BatchUpdateObjectAttributes": {
-      "base": "<p>Represents the output of a BatchUpdate operation. </p>",
+      "base": "<p>Represents the output of a <code>BatchUpdate</code> operation. </p>",
       "refs": {
         "BatchWriteOperation$UpdateObjectAttributes": "<p>Update a given object's attributes.</p>"
       }
     },
     "BatchUpdateObjectAttributesResponse": {
-      "base": "<p>Represents the output of a BatchUpdate response operation.</p>",
+      "base": "<p>Represents the output of a <code>BatchUpdate</code> response operation.</p>",
       "refs": {
         "BatchWriteOperationResponse$UpdateObjectAttributes": "<p>Updates a given object’s attributes.</p>"
       }
     },
     "BatchWriteException": {
-      "base": "<p>A BatchWrite exception has occurred.</p>",
+      "base": "<p>A <code>BatchWrite</code> exception has occurred.</p>",
       "refs": {
       }
     },
@@ -404,7 +406,7 @@
       }
     },
     "BatchWriteOperation": {
-      "base": "<p>Represents the output of a BatchWrite operation. </p>",
+      "base": "<p>Represents the output of a <code>BatchWrite</code> operation. </p>",
       "refs": {
         "BatchWriteOperationList$member": null
       }
@@ -416,7 +418,7 @@
       }
     },
     "BatchWriteOperationResponse": {
-      "base": "<p>Represents the output of a BatchWrite response operation.</p>",
+      "base": "<p>Represents the output of a <code>BatchWrite</code> response operation.</p>",
       "refs": {
         "BatchWriteOperationResponseList$member": null
       }
@@ -659,7 +661,7 @@
     "DirectoryState": {
       "base": null,
       "refs": {
-        "Directory$State": "<p>The state of the directory. Can be either Enabled, Disabled, or Deleted.</p>",
+        "Directory$State": "<p>The state of the directory. Can be either <code>Enabled</code>, <code>Disabled</code>, or <code>Deleted</code>.</p>",
         "ListDirectoriesRequest$state": "<p>The state of the directories in the list. Can be either Enabled, Disabled, or Deleted.</p>"
       }
     },
@@ -724,7 +726,7 @@
       }
     },
     "Facet": {
-      "base": "<p>A structure that contains Name, ARN, Attributes, <a>Rule</a>s, and ObjectTypes.</p>",
+      "base": "<p>A structure that contains <code>Name</code>, <code>ARN</code>, <code>Attributes</code>, <a>Rule</a>s, and <code>ObjectTypes</code>.</p>",
       "refs": {
         "GetFacetResponse$Facet": "<p> <a>Facet</a> structure associated with the facet.</p>"
       }
@@ -893,7 +895,7 @@
       }
     },
     "InvalidNextTokenException": {
-      "base": "<p>Indicates that the NextToken value is not valid.</p>",
+      "base": "<p>Indicates that the <code>NextToken</code> value is not valid.</p>",
       "refs": {
       }
     },
@@ -903,7 +905,7 @@
       }
     },
     "InvalidSchemaDocException": {
-      "base": "<p>Indicates that the provided SchemaDoc value is not valid.</p>",
+      "base": "<p>Indicates that the provided <code>SchemaDoc</code> value is not valid.</p>",
       "refs": {
       }
     },
@@ -939,8 +941,8 @@
     "LinkNameToObjectIdentifierMap": {
       "base": null,
       "refs": {
-        "BatchListObjectChildrenResponse$Children": "<p>Children structure, which is a map with key as the LinkName and ObjectIdentifier as the value.</p>",
-        "ListObjectChildrenResponse$Children": "<p>Children structure, which is a map with key as the LinkName and ObjectIdentifier as the value.</p>"
+        "BatchListObjectChildrenResponse$Children": "<p>Children structure, which is a map with key as the <code>LinkName</code> and <code>ObjectIdentifier</code> as the value.</p>",
+        "ListObjectChildrenResponse$Children": "<p>Children structure, which is a map with key as the LinkName and <code>ObjectIdentifier</code> as the value.</p>"
       }
     },
     "ListAppliedSchemaArnsRequest": {
@@ -1033,6 +1035,16 @@
       "refs": {
       }
     },
+    "ListObjectParentPathsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListObjectParentPathsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListObjectParentsRequest": {
       "base": null,
       "refs": {
@@ -1096,10 +1108,10 @@
     "NextToken": {
       "base": null,
       "refs": {
-        "BatchListObjectAttributes$NextToken": "<p>Token used for pagination.</p>",
-        "BatchListObjectAttributesResponse$NextToken": "<p>Token used for pagination.</p>",
-        "BatchListObjectChildren$NextToken": "<p>Token used for pagination.</p>",
-        "BatchListObjectChildrenResponse$NextToken": "<p>Token used for pagination.</p>",
+        "BatchListObjectAttributes$NextToken": "<p>The pagination token.</p>",
+        "BatchListObjectAttributesResponse$NextToken": "<p>The pagination token.</p>",
+        "BatchListObjectChildren$NextToken": "<p>The pagination token.</p>",
+        "BatchListObjectChildrenResponse$NextToken": "<p>The pagination token.</p>",
         "ListAppliedSchemaArnsRequest$NextToken": "<p>The pagination token.</p>",
         "ListAppliedSchemaArnsResponse$NextToken": "<p>The pagination token.</p>",
         "ListAttachedIndicesRequest$NextToken": "<p>The pagination token.</p>",
@@ -1114,22 +1126,24 @@
         "ListFacetNamesResponse$NextToken": "<p>The pagination token.</p>",
         "ListIndexRequest$NextToken": "<p>The pagination token.</p>",
         "ListIndexResponse$NextToken": "<p>The pagination token.</p>",
-        "ListObjectAttributesRequest$NextToken": "<p>Token used for pagination.</p>",
-        "ListObjectAttributesResponse$NextToken": "<p>Token used for pagination.</p>",
-        "ListObjectChildrenRequest$NextToken": "<p>Token used for pagination.</p>",
-        "ListObjectChildrenResponse$NextToken": "<p>Token used for pagination.</p>",
-        "ListObjectParentsRequest$NextToken": "<p>Token used for pagination.</p>",
-        "ListObjectParentsResponse$NextToken": "<p>Token used for pagination.</p>",
-        "ListObjectPoliciesRequest$NextToken": "<p>Token used for pagination.</p>",
-        "ListObjectPoliciesResponse$NextToken": "<p>Token used for pagination.</p>",
-        "ListPolicyAttachmentsRequest$NextToken": "<p>Token used for pagination.</p>",
-        "ListPolicyAttachmentsResponse$NextToken": "<p>Token used for pagination.</p>",
+        "ListObjectAttributesRequest$NextToken": "<p>The pagination token.</p>",
+        "ListObjectAttributesResponse$NextToken": "<p>The pagination token.</p>",
+        "ListObjectChildrenRequest$NextToken": "<p>The pagination token.</p>",
+        "ListObjectChildrenResponse$NextToken": "<p>The pagination token.</p>",
+        "ListObjectParentPathsRequest$NextToken": "<p>The pagination token.</p>",
+        "ListObjectParentPathsResponse$NextToken": "<p>The pagination token.</p>",
+        "ListObjectParentsRequest$NextToken": "<p>The pagination token.</p>",
+        "ListObjectParentsResponse$NextToken": "<p>The pagination token.</p>",
+        "ListObjectPoliciesRequest$NextToken": "<p>The pagination token.</p>",
+        "ListObjectPoliciesResponse$NextToken": "<p>The pagination token.</p>",
+        "ListPolicyAttachmentsRequest$NextToken": "<p>The pagination token.</p>",
+        "ListPolicyAttachmentsResponse$NextToken": "<p>The pagination token.</p>",
         "ListPublishedSchemaArnsRequest$NextToken": "<p>The pagination token.</p>",
         "ListPublishedSchemaArnsResponse$NextToken": "<p>The pagination token.</p>",
-        "ListTagsForResourceRequest$NextToken": "<p>Next token used for pagination. This is for future use. Currently pagination is not supported for tagging.</p>",
+        "ListTagsForResourceRequest$NextToken": "<p>The pagination token. This is for future use. Currently pagination is not supported for tagging.</p>",
         "ListTagsForResourceResponse$NextToken": "<p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>",
         "LookupPolicyRequest$NextToken": "<p>The token to request the next page of results.</p>",
-        "LookupPolicyResponse$NextToken": "<p>Token used for pagination.</p>"
+        "LookupPolicyResponse$NextToken": "<p>The pagination token.</p>"
       }
     },
     "NotIndexException": {
@@ -1138,7 +1152,7 @@
       }
     },
     "NotNodeException": {
-      "base": "<p>Occurs when any invalid operations are performed on an object which is not a node, such as calling ListObjectChildren for a leaf node object.</p>",
+      "base": "<p>Occurs when any invalid operations are performed on an object which is not a node, such as calling <code>ListObjectChildren</code> for a leaf node object.</p>",
       "refs": {
       }
     },
@@ -1167,6 +1181,7 @@
         "ListIndexRequest$MaxResults": "<p>The maximum number of results to retrieve from the index.</p>",
         "ListObjectAttributesRequest$MaxResults": "<p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>",
         "ListObjectChildrenRequest$MaxResults": "<p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>",
+        "ListObjectParentPathsRequest$MaxResults": "<p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>",
         "ListObjectParentsRequest$MaxResults": "<p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>",
         "ListObjectPoliciesRequest$MaxResults": "<p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>",
         "ListPolicyAttachmentsRequest$MaxResults": "<p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>",
@@ -1213,38 +1228,39 @@
     "ObjectIdentifier": {
       "base": null,
       "refs": {
-        "AttachObjectResponse$AttachedObjectIdentifier": "<p>Attached ObjectIdentifier, which is the child ObjectIdentifier.</p>",
-        "AttachToIndexResponse$AttachedObjectIdentifier": "<p>The ObjectIdentifier of the object that was attached to the index.</p>",
-        "BatchAttachObjectResponse$attachedObjectIdentifier": "<p>The ObjectIdentifier of the object that has been attached.</p>",
+        "AttachObjectResponse$AttachedObjectIdentifier": "<p>Attached <code>ObjectIdentifier</code>, which is the child <code>ObjectIdentifier</code>.</p>",
+        "AttachToIndexResponse$AttachedObjectIdentifier": "<p>The <code>ObjectIdentifier</code> of the object that was attached to the index.</p>",
+        "BatchAttachObjectResponse$attachedObjectIdentifier": "<p>The <code>ObjectIdentifier</code> of the object that has been attached.</p>",
         "BatchCreateObjectResponse$ObjectIdentifier": "<p>ID associated with the object.</p>",
-        "BatchDetachObjectResponse$detachedObjectIdentifier": "<p>The ObjectIdentifier of the detached object.</p>",
+        "BatchDetachObjectResponse$detachedObjectIdentifier": "<p>The <code>ObjectIdentifier</code> of the detached object.</p>",
         "BatchUpdateObjectAttributesResponse$ObjectIdentifier": "<p>ID associated with the object.</p>",
         "CreateDirectoryResponse$ObjectIdentifier": "<p>The root object node of the created directory.</p>",
-        "CreateIndexResponse$ObjectIdentifier": "<p>The ObjectIdentifier of the index created by this operation.</p>",
+        "CreateIndexResponse$ObjectIdentifier": "<p>The <code>ObjectIdentifier</code> of the index created by this operation.</p>",
         "CreateObjectResponse$ObjectIdentifier": "<p>Identifier associated with the object.</p>",
-        "DetachFromIndexResponse$DetachedObjectIdentifier": "<p>The ObjectIdentifier of the object that was detached from the index.</p>",
-        "DetachObjectResponse$DetachedObjectIdentifier": "<p>The ObjectIdentifier that was detached from the object.</p>",
-        "GetObjectInformationResponse$ObjectIdentifier": "<p>The ObjectIdentifier of the specified object.</p>",
-        "IndexAttachment$ObjectIdentifier": "<p>The ObjectIdentifier of the object attached to the index.</p>",
+        "DetachFromIndexResponse$DetachedObjectIdentifier": "<p>The <code>ObjectIdentifier</code> of the object that was detached from the index.</p>",
+        "DetachObjectResponse$DetachedObjectIdentifier": "<p>The <code>ObjectIdentifier</code> that was detached from the object.</p>",
+        "GetObjectInformationResponse$ObjectIdentifier": "<p>The <code>ObjectIdentifier</code> of the specified object.</p>",
+        "IndexAttachment$ObjectIdentifier": "<p>The <code>ObjectIdentifier</code> of the object attached to the index.</p>",
         "LinkNameToObjectIdentifierMap$value": null,
         "ObjectIdentifierList$member": null,
         "ObjectIdentifierToLinkNameMap$key": null,
-        "PolicyAttachment$PolicyId": "<p>The ID of PolicyAttachment.</p>",
-        "PolicyAttachment$ObjectIdentifier": "<p>The ObjectIdentifier associated with PolicyAttachment.</p>",
-        "UpdateObjectAttributesResponse$ObjectIdentifier": "<p>ObjectIdentifier of the updated object.</p>"
+        "PolicyAttachment$PolicyId": "<p>The ID of <code>PolicyAttachment</code>.</p>",
+        "PolicyAttachment$ObjectIdentifier": "<p>The <code>ObjectIdentifier</code> associated with <code>PolicyAttachment</code>.</p>",
+        "UpdateObjectAttributesResponse$ObjectIdentifier": "<p> <code>ObjectIdentifier</code> of the updated object.</p>"
       }
     },
     "ObjectIdentifierList": {
       "base": null,
       "refs": {
-        "ListObjectPoliciesResponse$AttachedPolicyIds": "<p>List of policy ObjectIdentifiers, that are attached to the object.</p>",
-        "ListPolicyAttachmentsResponse$ObjectIdentifiers": "<p>List of ObjectIdentifiers to which the policy is attached.</p>"
+        "ListObjectPoliciesResponse$AttachedPolicyIds": "<p>List of policy <code>ObjectIdentifiers</code>, that are attached to the object.</p>",
+        "ListPolicyAttachmentsResponse$ObjectIdentifiers": "<p>List of <code>ObjectIdentifiers</code> to which the policy is attached.</p>",
+        "PathToObjectIdentifiers$ObjectIdentifiers": "<p>Lists <code>ObjectIdentifiers</code> starting from directory root to the object in the request.</p>"
       }
     },
     "ObjectIdentifierToLinkNameMap": {
       "base": null,
       "refs": {
-        "ListObjectParentsResponse$Parents": "<p>Parent structure, which is a map with key as the ObjectIdentifier and LinkName as the value.</p>"
+        "ListObjectParentsResponse$Parents": "<p>Parent structure, which is a map with key as the <code>ObjectIdentifier</code> and LinkName as the value.</p>"
       }
     },
     "ObjectNotDetachedException": {
@@ -1285,6 +1301,7 @@
         "ListIndexRequest$IndexReference": "<p>The reference to the index to list.</p>",
         "ListObjectAttributesRequest$ObjectReference": "<p>Reference that identifies the object whose attributes will be listed.</p>",
         "ListObjectChildrenRequest$ObjectReference": "<p>Reference that identifies the object for which child objects are being listed.</p>",
+        "ListObjectParentPathsRequest$ObjectReference": "<p>Reference that identifies the object whose parent paths are listed.</p>",
         "ListObjectParentsRequest$ObjectReference": "<p>Reference that identifies the object for which parent objects are being listed.</p>",
         "ListObjectPoliciesRequest$ObjectReference": "<p>Reference that identifies the object for which policies will be listed.</p>",
         "ListPolicyAttachmentsRequest$PolicyReference": "<p>Reference that identifies the policy object.</p>",
@@ -1304,11 +1321,24 @@
     "PathString": {
       "base": null,
       "refs": {
+        "PathToObjectIdentifiers$Path": "<p>The path used to identify the object starting from directory root.</p>",
         "PolicyToPath$Path": "<p>The path that is referenced from the root.</p>"
       }
     },
+    "PathToObjectIdentifiers": {
+      "base": "<p>Returns the path to the <code>ObjectIdentifiers</code> associated with the directory.</p>",
+      "refs": {
+        "PathToObjectIdentifiersList$member": null
+      }
+    },
+    "PathToObjectIdentifiersList": {
+      "base": null,
+      "refs": {
+        "ListObjectParentPathsResponse$PathToObjectIdentifiersList": "<p>Returns the path to the <code>ObjectIdentifiers</code> associated with the directory.</p>"
+      }
+    },
     "PolicyAttachment": {
-      "base": "<p>Contains the PolicyType, PolicyId, and the ObjectIdentifier to which it is attached.</p>",
+      "base": "<p>Contains the <code>PolicyType</code>, <code>PolicyId</code>, and the <code>ObjectIdentifier</code> to which it is attached.</p>",
       "refs": {
         "PolicyAttachmentList$member": null
       }
@@ -1328,13 +1358,13 @@
     "PolicyToPathList": {
       "base": null,
       "refs": {
-        "LookupPolicyResponse$PolicyToPathList": "<p>Provides list of path to policies. Policies contain PolicyId, ObjectIdentifier, and PolicyType.</p>"
+        "LookupPolicyResponse$PolicyToPathList": "<p>Provides list of path to policies. Policies contain <code>PolicyId</code>, <code>ObjectIdentifier</code>, and <code>PolicyType</code>.</p>"
       }
     },
     "PolicyType": {
       "base": null,
       "refs": {
-        "PolicyAttachment$PolicyType": "<p>The type of policy that can be associated with PolicyAttachment.</p>"
+        "PolicyAttachment$PolicyType": "<p>The type of policy that can be associated with <code>PolicyAttachment</code>.</p>"
       }
     },
     "PublishSchemaRequest": {
@@ -1377,7 +1407,7 @@
     "RequiredAttributeBehavior": {
       "base": null,
       "refs": {
-        "FacetAttribute$RequiredBehavior": "<p>The required behavior of the FacetAttribute.</p>"
+        "FacetAttribute$RequiredBehavior": "<p>The required behavior of the <code>FacetAttribute</code>.</p>"
       }
     },
     "ResourceNotFoundException": {
@@ -1447,7 +1477,9 @@
       "refs": {
         "AddFacetToObjectRequest$SchemaFacet": "<p>Identifiers for the facet that you are adding to the object.</p>",
         "BatchAddFacetToObject$SchemaFacet": "<p>Represents the facet being added to the object.</p>",
+        "BatchListObjectAttributes$FacetFilter": "<p>Used to filter the list of object attributes associated with a certain facet.</p>",
         "BatchRemoveFacetFromObject$SchemaFacet": "<p>The facet to remove from the object.</p>",
+        "ListObjectAttributesRequest$FacetFilter": "<p>Used to filter the list of object attributes associated with a certain facet.</p>",
         "RemoveFacetFromObjectRequest$SchemaFacet": "<p>The facet to remove.</p>",
         "SchemaFacetList$member": null
       }
@@ -1479,7 +1511,7 @@
     "SelectorObjectReference": {
       "base": null,
       "refs": {
-        "ObjectReference$Selector": "<p>Allows you to specify an object. You can identify an object in one of the following ways:</p> <ul> <li> <p> <i>$ObjectIdentifier</i> - Identifies the object by ObjectIdentifier</p> </li> <li> <p> <i>/some/path</i> - Identifies the object based on path</p> </li> <li> <p> <i>#SomeBatchReference</i> - Identifies the object in a batch call</p> </li> </ul>"
+        "ObjectReference$Selector": "<p>Allows you to specify an object. You can identify an object in one of the following ways:</p> <ul> <li> <p> <i>$ObjectIdentifier</i> - Identifies the object by <code>ObjectIdentifier</code> </p> </li> <li> <p> <i>/some/path</i> - Identifies the object based on path</p> </li> <li> <p> <i>#SomeBatchReference</i> - Identifies the object in a batch call</p> </li> </ul>"
       }
     },
     "StillContainsLinksException": {

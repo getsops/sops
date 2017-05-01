@@ -3,11 +3,18 @@
 	overflow:hidden;
 }
 
-a > img {
-	max-height:70%; 
-	float:left;
-	padding-left:22px;
-	padding-top:8px;
+div.deprecated {
+  background-color: #a39f9f;
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline;
+  padding: 2px;
+  overflow: auto;
+  color: 	#ffffff;
+  font-family: "Georgia", Times, serif;
+  text-align: center;
+  font-size: small;
+	margin-left: 5px;
 }
 
 .packages {
@@ -756,13 +763,6 @@ a.error {
 	div#topbar {
 		height: 30px;
 		padding: 10px;
-	}
-
-	a > img {
-		max-height:100%; 
-		float:left;
-		padding-left:10px;
-		padding-top:2px;
 	}
 
 	div#mobile-nav {

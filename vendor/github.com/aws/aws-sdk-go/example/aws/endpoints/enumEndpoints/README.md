@@ -1,7 +1,7 @@
 Enumerate Regions and Endpoints Example
 ===
 
-Demostrates how the SDK's endpoints can be enumerated over to discover regions, services, and endpoints defined by the SDK's Regions and Endpoints metadata.
+Demonstrates how the SDK's endpoints can be enumerated over to discover regions, services, and endpoints defined by the SDK's Regions and Endpoints metadata.
 
 Usage
 ---
@@ -10,7 +10,7 @@ The following parameters can be used to enumerate the SDK's partition metadata.
 
 Example:
 
-    go run enumEndpoints.go -p aws -services -r us-west-2
+    go run -tags example enumEndpoints.go -p aws -services -r us-west-2
 
 Output:
 

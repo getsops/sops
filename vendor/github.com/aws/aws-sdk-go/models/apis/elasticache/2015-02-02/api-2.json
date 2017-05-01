@@ -710,9 +710,42 @@
         {"shape":"InvalidParameterValueException"},
         {"shape":"InvalidParameterCombinationException"}
       ]
+    },
+    "TestFailover":{
+      "name":"TestFailover",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TestFailoverMessage"},
+      "output":{
+        "shape":"TestFailoverResult",
+        "resultWrapper":"TestFailoverResult"
+      },
+      "errors":[
+        {"shape":"APICallRateForCustomerExceededFault"},
+        {"shape":"InvalidCacheClusterStateFault"},
+        {"shape":"InvalidReplicationGroupStateFault"},
+        {"shape":"NodeGroupNotFoundFault"},
+        {"shape":"ReplicationGroupNotFoundFault"},
+        {"shape":"TestFailoverNotAvailableFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
     }
   },
   "shapes":{
+    "APICallRateForCustomerExceededFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"APICallRateForCustomerExceeded",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "AZMode":{
       "type":"string",
       "enum":[
@@ -1446,7 +1479,8 @@
         "CacheClusterId":{"shape":"String"},
         "MaxRecords":{"shape":"IntegerOptional"},
         "Marker":{"shape":"String"},
-        "ShowCacheNodeInfo":{"shape":"BooleanOptional"}
+        "ShowCacheNodeInfo":{"shape":"BooleanOptional"},
+        "ShowCacheClustersNotInReplicationGroups":{"shape":"BooleanOptional"}
       }
     },
     "DescribeCacheEngineVersionsMessage":{
@@ -1847,7 +1881,8 @@
         "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
         "SnapshotRetentionLimit":{"shape":"IntegerOptional"},
         "SnapshotWindow":{"shape":"String"},
-        "CacheNodeType":{"shape":"String"}
+        "CacheNodeType":{"shape":"String"},
+        "NodeGroupId":{"shape":"String"}
       }
     },
     "ModifyReplicationGroupResult":{
@@ -1905,6 +1940,17 @@
         "shape":"NodeGroupMember",
         "locationName":"NodeGroupMember"
       }
+    },
+    "NodeGroupNotFoundFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"NodeGroupNotFoundFault",
+        "httpStatusCode":404,
+        "senderFault":true
+      },
+      "exception":true
     },
     "NodeGroupsPerReplicationGroupQuotaExceededFault":{
       "type":"structure",
@@ -2099,7 +2145,9 @@
         "AutomaticFailover":{"shape":"AutomaticFailoverStatus"},
         "ConfigurationEndpoint":{"shape":"Endpoint"},
         "SnapshotRetentionLimit":{"shape":"IntegerOptional"},
-        "SnapshotWindow":{"shape":"String"}
+        "SnapshotWindow":{"shape":"String"},
+        "ClusterEnabled":{"shape":"BooleanOptional"},
+        "CacheNodeType":{"shape":"String"}
       },
       "wrapper":true
     },
@@ -2469,6 +2517,34 @@
         "senderFault":true
       },
       "exception":true
+    },
+    "TestFailoverMessage":{
+      "type":"structure",
+      "required":[
+        "ReplicationGroupId",
+        "NodeGroupId"
+      ],
+      "members":{
+        "ReplicationGroupId":{"shape":"String"},
+        "NodeGroupId":{"shape":"String"}
+      }
+    },
+    "TestFailoverNotAvailableFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"TestFailoverNotAvailableFault",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "TestFailoverResult":{
+      "type":"structure",
+      "members":{
+        "ReplicationGroup":{"shape":"ReplicationGroup"}
+      }
     }
   }
 }

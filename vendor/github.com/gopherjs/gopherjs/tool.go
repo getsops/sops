@@ -59,43 +59,41 @@ func init() {
 }
 
 func main() {
-	options := &gbuild.Options{CreateMapFile: true}
-	var pkgObj string
+	var (
+		options = &gbuild.Options{CreateMapFile: true}
+		pkgObj  string
+		tags    string
+	)
 
-	pflag.BoolVarP(&options.Verbose, "verbose", "v", false, "print the names of packages as they are compiled")
-	flagVerbose := pflag.Lookup("verbose")
-	pflag.BoolVarP(&options.Quiet, "quiet", "q", false, "suppress non-fatal warnings")
-	flagQuiet := pflag.Lookup("quiet")
-	pflag.BoolVarP(&options.Watch, "watch", "w", false, "watch for changes to the source files")
-	flagWatch := pflag.Lookup("watch")
-	pflag.BoolVarP(&options.Minify, "minify", "m", false, "minify generated code")
-	flagMinify := pflag.Lookup("minify")
-	pflag.BoolVar(&options.Color, "color", terminal.IsTerminal(int(os.Stderr.Fd())) && os.Getenv("TERM") != "dumb", "colored output")
-	flagColor := pflag.Lookup("color")
-	tags := pflag.String("tags", "", "a list of build tags to consider satisfied during the build")
-	flagTags := pflag.Lookup("tags")
+	flagVerbose := pflag.NewFlagSet("", 0)
+	flagVerbose.BoolVarP(&options.Verbose, "verbose", "v", false, "print the names of packages as they are compiled")
+	flagQuiet := pflag.NewFlagSet("", 0)
+	flagQuiet.BoolVarP(&options.Quiet, "quiet", "q", false, "suppress non-fatal warnings")
 
-	pflag.BoolVar(&options.MapToLocalDisk, "localmap", false, "use local paths for sourcemap")
-	flagLocalMap := pflag.Lookup("localmap")
+	compilerFlags := pflag.NewFlagSet("", 0)
+	compilerFlags.BoolVarP(&options.Minify, "minify", "m", false, "minify generated code")
+	compilerFlags.BoolVar(&options.Color, "color", terminal.IsTerminal(int(os.Stderr.Fd())) && os.Getenv("TERM") != "dumb", "colored output")
+	compilerFlags.StringVar(&tags, "tags", "", "a list of build tags to consider satisfied during the build")
+	compilerFlags.BoolVar(&options.MapToLocalDisk, "localmap", false, "use local paths for sourcemap")
+
+	flagWatch := pflag.NewFlagSet("", 0)
+	flagWatch.BoolVarP(&options.Watch, "watch", "w", false, "watch for changes to the source files")
 
 	cmdBuild := &cobra.Command{
 		Use:   "build [packages]",
 		Short: "compile packages and dependencies",
 	}
 	cmdBuild.Flags().StringVarP(&pkgObj, "output", "o", "", "output file")
-	cmdBuild.Flags().AddFlag(flagVerbose)
-	cmdBuild.Flags().AddFlag(flagQuiet)
-	cmdBuild.Flags().AddFlag(flagWatch)
-	cmdBuild.Flags().AddFlag(flagMinify)
-	cmdBuild.Flags().AddFlag(flagColor)
-	cmdBuild.Flags().AddFlag(flagTags)
-	cmdBuild.Flags().AddFlag(flagLocalMap)
+	cmdBuild.Flags().AddFlagSet(flagVerbose)
+	cmdBuild.Flags().AddFlagSet(flagQuiet)
+	cmdBuild.Flags().AddFlagSet(compilerFlags)
+	cmdBuild.Flags().AddFlagSet(flagWatch)
 	cmdBuild.Run = func(cmd *cobra.Command, args []string) {
-		options.BuildTags = strings.Fields(*tags)
+		options.BuildTags = strings.Fields(tags)
 		for {
 			s := gbuild.NewSession(options)
 
-			exitCode := handleError(func() error {
+			err := func() error {
 				if len(args) == 0 {
 					return s.BuildDir(currentDirectory, currentDirectory, pkgObj)
 				}
@@ -151,7 +149,8 @@ func main() {
 					}
 				}
 				return nil
-			}, options, nil)
+			}()
+			exitCode := handleError(err, options, nil)
 
 			if s.Watcher == nil {
 				os.Exit(exitCode)
@@ -164,19 +163,16 @@ func main() {
 		Use:   "install [packages]",
 		Short: "compile and install packages and dependencies",
 	}
-	cmdInstall.Flags().AddFlag(flagVerbose)
-	cmdInstall.Flags().AddFlag(flagQuiet)
-	cmdInstall.Flags().AddFlag(flagWatch)
-	cmdInstall.Flags().AddFlag(flagMinify)
-	cmdInstall.Flags().AddFlag(flagColor)
-	cmdInstall.Flags().AddFlag(flagTags)
-	cmdInstall.Flags().AddFlag(flagLocalMap)
+	cmdInstall.Flags().AddFlagSet(flagVerbose)
+	cmdInstall.Flags().AddFlagSet(flagQuiet)
+	cmdInstall.Flags().AddFlagSet(compilerFlags)
+	cmdInstall.Flags().AddFlagSet(flagWatch)
 	cmdInstall.Run = func(cmd *cobra.Command, args []string) {
-		options.BuildTags = strings.Fields(*tags)
+		options.BuildTags = strings.Fields(tags)
 		for {
 			s := gbuild.NewSession(options)
 
-			exitCode := handleError(func() error {
+			err := func() error {
 				pkgs := args
 				if len(pkgs) == 0 {
 					firstGopathWorkspace := filepath.SplitList(build.Default.GOPATH)[0] // TODO: The GOPATH workspace that contains the package source should be chosen.
@@ -224,7 +220,8 @@ func main() {
 					}
 				}
 				return nil
-			}, options, nil)
+			}()
+			exitCode := handleError(err, options, nil)
 
 			if s.Watcher == nil {
 				os.Exit(exitCode)
@@ -238,17 +235,12 @@ func main() {
 		Short: "display documentation for the requested, package, method or symbol",
 	}
 	cmdDoc.Run = func(cmd *cobra.Command, args []string) {
-		exitCode := handleError(func() error {
-			goDoc := exec.Command("go", append([]string{"doc"}, args...)...)
-			goDoc.Stdout = os.Stdout
-			goDoc.Stderr = os.Stderr
-			goDoc.Env = append(os.Environ(), "GOARCH=js")
-			if err := goDoc.Run(); err != nil {
-				return err
-			}
-			return nil
-		}, options, nil)
-
+		goDoc := exec.Command("go", append([]string{"doc"}, args...)...)
+		goDoc.Stdout = os.Stdout
+		goDoc.Stderr = os.Stderr
+		goDoc.Env = append(os.Environ(), "GOARCH=js")
+		err := goDoc.Run()
+		exitCode := handleError(err, options, nil)
 		os.Exit(exitCode)
 	}
 
@@ -256,21 +248,20 @@ func main() {
 		Use:   "get [packages]",
 		Short: "download and install packages and dependencies",
 	}
-	cmdGet.Flags().AddFlag(flagVerbose)
-	cmdGet.Flags().AddFlag(flagQuiet)
-	cmdGet.Flags().AddFlag(flagWatch)
-	cmdGet.Flags().AddFlag(flagMinify)
-	cmdGet.Flags().AddFlag(flagColor)
-	cmdGet.Flags().AddFlag(flagTags)
-	cmdGet.Flags().AddFlag(flagLocalMap)
+	cmdGet.Flags().AddFlagSet(flagVerbose)
+	cmdGet.Flags().AddFlagSet(flagQuiet)
+	cmdGet.Flags().AddFlagSet(compilerFlags)
 	cmdGet.Run = cmdInstall.Run
 
 	cmdRun := &cobra.Command{
 		Use:   "run [gofiles...] [arguments...]",
 		Short: "compile and run Go program",
 	}
+	cmdRun.Flags().AddFlagSet(flagVerbose)
+	cmdRun.Flags().AddFlagSet(flagQuiet)
+	cmdRun.Flags().AddFlagSet(compilerFlags)
 	cmdRun.Run = func(cmd *cobra.Command, args []string) {
-		os.Exit(handleError(func() error {
+		err := func() error {
 			lastSourceArg := 0
 			for {
 				if lastSourceArg == len(args) || !(strings.HasSuffix(args[lastSourceArg], ".go") || strings.HasSuffix(args[lastSourceArg], ".inc.js")) {
@@ -302,7 +293,10 @@ func main() {
 				return err
 			}
 			return nil
-		}, options, nil))
+		}()
+		exitCode := handleError(err, options, nil)
+
+		os.Exit(exitCode)
 	}
 
 	cmdTest := &cobra.Command{
@@ -316,13 +310,10 @@ func main() {
 	verbose := cmdTest.Flags().BoolP("verbose", "v", false, "Log all tests as they are run. Also print all text from Log and Logf calls even if the test succeeds.")
 	compileOnly := cmdTest.Flags().BoolP("compileonly", "c", false, "Compile the test binary to pkg.test.js but do not run it (where pkg is the last element of the package's import path). The file name can be changed with the -o flag.")
 	outputFilename := cmdTest.Flags().StringP("output", "o", "", "Compile the test binary to the named file. The test still runs (unless -c is specified).")
-	cmdTest.Flags().AddFlag(flagMinify)
-	cmdTest.Flags().AddFlag(flagColor)
-	cmdTest.Flags().AddFlag(flagTags)
-	cmdTest.Flags().AddFlag(flagLocalMap)
+	cmdTest.Flags().AddFlagSet(compilerFlags)
 	cmdTest.Run = func(cmd *cobra.Command, args []string) {
-		options.BuildTags = strings.Fields(*tags)
-		os.Exit(handleError(func() error {
+		options.BuildTags = strings.Fields(tags)
+		err := func() error {
 			pkgs := make([]*gbuild.PackageData, len(args))
 			for i, pkgPath := range args {
 				pkgPath = filepath.ToSlash(pkgPath)
@@ -412,7 +403,7 @@ func main() {
 					return err
 				}
 
-				buf := bytes.NewBuffer(nil)
+				buf := new(bytes.Buffer)
 				if err := testmainTmpl.Execute(buf, tests); err != nil {
 					return err
 				}
@@ -494,26 +485,26 @@ func main() {
 					exitErr = err
 					status = "FAIL"
 				}
-				fmt.Printf("%s\t%s\t%.3fs\n", status, pkg.ImportPath, time.Now().Sub(start).Seconds())
+				fmt.Printf("%s\t%s\t%.3fs\n", status, pkg.ImportPath, time.Since(start).Seconds())
 			}
 			return exitErr
-		}, options, nil))
+		}()
+		exitCode := handleError(err, options, nil)
+
+		os.Exit(exitCode)
 	}
 
 	cmdServe := &cobra.Command{
 		Use:   "serve [root]",
 		Short: "compile on-the-fly and serve",
 	}
-	cmdServe.Flags().AddFlag(flagVerbose)
-	cmdServe.Flags().AddFlag(flagQuiet)
-	cmdServe.Flags().AddFlag(flagMinify)
-	cmdServe.Flags().AddFlag(flagColor)
-	cmdServe.Flags().AddFlag(flagTags)
-	cmdServe.Flags().AddFlag(flagLocalMap)
+	cmdServe.Flags().AddFlagSet(flagVerbose)
+	cmdServe.Flags().AddFlagSet(flagQuiet)
+	cmdServe.Flags().AddFlagSet(compilerFlags)
 	var addr string
 	cmdServe.Flags().StringVarP(&addr, "http", "", ":8080", "HTTP bind address to serve")
 	cmdServe.Run = func(cmd *cobra.Command, args []string) {
-		options.BuildTags = strings.Fields(*tags)
+		options.BuildTags = strings.Fields(tags)
 		dirs := append(filepath.SplitList(build.Default.GOPATH), build.Default.GOROOT)
 		var root string
 
@@ -617,9 +608,9 @@ func (fs serveCommandFileSystem) Open(requestName string) (http.File, error) {
 
 		switch {
 		case isPkg:
-			buf := bytes.NewBuffer(nil)
-			browserErrors := bytes.NewBuffer(nil)
-			exitCode := handleError(func() error {
+			buf := new(bytes.Buffer)
+			browserErrors := new(bytes.Buffer)
+			err := func() error {
 				archive, err := s.BuildPackage(pkg)
 				if err != nil {
 					return err
@@ -637,14 +628,15 @@ func (fs serveCommandFileSystem) Open(requestName string) (http.File, error) {
 					return err
 				}
 
-				mapBuf := bytes.NewBuffer(nil)
+				mapBuf := new(bytes.Buffer)
 				m.WriteTo(mapBuf)
 				buf.WriteString("//# sourceMappingURL=" + base + ".js.map\n")
 				fs.sourceMaps[name+".map"] = mapBuf.Bytes()
 
 				return nil
-			}, fs.options, browserErrors)
-			if exitCode != 0 {
+			}()
+			handleError(err, fs.options, browserErrors)
+			if err != nil {
 				buf = browserErrors
 			}
 			return newFakeFile(base+".js", buf.Bytes()), nil
@@ -725,9 +717,10 @@ func (f *fakeFile) Sys() interface{} {
 	return nil
 }
 
+// handleError handles err and returns an appropriate exit code.
 // If browserErrors is non-nil, errors are written for presentation in browser.
-func handleError(f func() error, options *gbuild.Options, browserErrors *bytes.Buffer) int {
-	switch err := f().(type) {
+func handleError(err error, options *gbuild.Options, browserErrors *bytes.Buffer) int {
+	switch err := err.(type) {
 	case nil:
 		return 0
 	case compiler.ErrorList:
@@ -740,6 +733,15 @@ func handleError(f func() error, options *gbuild.Options, browserErrors *bytes.B
 	default:
 		printError(err, options, browserErrors)
 		return 1
+	}
+}
+
+// printError prints err to Stderr with options. If browserErrors is non-nil, errors are also written for presentation in browser.
+func printError(err error, options *gbuild.Options, browserErrors *bytes.Buffer) {
+	e := sprintError(err)
+	options.PrintError("%s\n", e)
+	if browserErrors != nil {
+		fmt.Fprintln(browserErrors, `console.error("`+template.JSEscapeString(e)+`");`)
 	}
 }
 
@@ -763,22 +765,13 @@ func sprintError(err error) string {
 	}
 }
 
-// printError prints err to Stderr with options. If browserErrors is non-nil, errors are also written for presentation in browser.
-func printError(err error, options *gbuild.Options, browserErrors *bytes.Buffer) {
-	e := sprintError(err)
-	options.PrintError("%s\n", e)
-	if browserErrors != nil {
-		fmt.Fprintln(browserErrors, `console.error("`+template.JSEscapeString(e)+`");`)
-	}
-}
-
 func runNode(script string, args []string, dir string, quiet bool) error {
 	var allArgs []string
 	if b, _ := strconv.ParseBool(os.Getenv("SOURCE_MAP_SUPPORT")); os.Getenv("SOURCE_MAP_SUPPORT") == "" || b {
 		allArgs = []string{"--require", "source-map-support/register"}
 		if err := exec.Command("node", "--require", "source-map-support/register", "--eval", "").Run(); err != nil {
 			if !quiet {
-				fmt.Fprintln(os.Stderr, "gopherjs: Source maps disabled. Use Node.js 4.x with source-map-support module for nice stack traces.")
+				fmt.Fprintln(os.Stderr, "gopherjs: Source maps disabled. Install source-map-support module for nice stack traces. See https://github.com/gopherjs/gopherjs#gopherjs-run-gopherjs-test.")
 			}
 			allArgs = []string{}
 		}

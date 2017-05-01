@@ -1300,5 +1300,67 @@
         }
       }
     ]
+  },
+  {
+    "description": "JSON value trait",
+    "metadata": {
+      "protocol": "rest-json",
+      "apiVersion": "2014-01-01"
+    },
+    "shapes": {
+      "InputShape": {
+        "type": "structure",
+        "members": {
+          "Attr": {
+            "shape": "StringType",
+              "jsonvalue": true,
+              "location": "header",
+              "locationName": "X-Amz-Foo"
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "input": {
+            "shape": "InputShape"
+          },
+          "http": {
+            "method": "POST"
+          },
+          "name": "OperationName"
+        },
+        "params": {
+          "Attr": {"Foo":"Bar"}
+        },
+        "serialized": {
+          "uri": "/",
+          "headers": {"X-Amz-Foo": "eyJGb28iOiJCYXIifQ=="},
+          "body": ""
+        }
+      },
+      {
+        "given": {
+          "input": {
+            "shape": "InputShape"
+          },
+          "http": {
+            "method": "POST"
+          },
+          "name": "OperationName"
+        },
+        "params": {
+        },
+        "serialized": {
+          "uri": "/",
+          "headers": {},
+          "body": ""
+        }
+      }
+    ]
   }
 ]

@@ -7,6 +7,8 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/awstesting/unit"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 func TestHandlerList(t *testing.T) {
@@ -84,4 +86,72 @@ func TestStopHandlers(t *testing.T) {
 	l.Run(&request.Request{})
 
 	assert.Equal(t, 2, called, "Expect only two handlers to be called")
+}
+
+func BenchmarkNewRequest(b *testing.B) {
+	svc := s3.New(unit.Session)
+
+	for i := 0; i < b.N; i++ {
+		r, _ := svc.GetObjectRequest(nil)
+		if r == nil {
+			b.Fatal("r should not be nil")
+		}
+	}
+}
+
+func BenchmarkHandlersCopy(b *testing.B) {
+	handlers := request.Handlers{}
+
+	handlers.Validate.PushBack(func(r *request.Request) {})
+	handlers.Validate.PushBack(func(r *request.Request) {})
+	handlers.Build.PushBack(func(r *request.Request) {})
+	handlers.Build.PushBack(func(r *request.Request) {})
+	handlers.Send.PushBack(func(r *request.Request) {})
+	handlers.Send.PushBack(func(r *request.Request) {})
+	handlers.Unmarshal.PushBack(func(r *request.Request) {})
+	handlers.Unmarshal.PushBack(func(r *request.Request) {})
+
+	for i := 0; i < b.N; i++ {
+		h := handlers.Copy()
+		if e, a := handlers.Validate.Len(), h.Validate.Len(); e != a {
+			b.Fatalf("expected %d handlers got %d", e, a)
+		}
+	}
+}
+
+func BenchmarkHandlersPushBack(b *testing.B) {
+	handlers := request.Handlers{}
+
+	for i := 0; i < b.N; i++ {
+		h := handlers.Copy()
+		h.Validate.PushBack(func(r *request.Request) {})
+		h.Validate.PushBack(func(r *request.Request) {})
+		h.Validate.PushBack(func(r *request.Request) {})
+		h.Validate.PushBack(func(r *request.Request) {})
+	}
+}
+
+func BenchmarkHandlersPushFront(b *testing.B) {
+	handlers := request.Handlers{}
+
+	for i := 0; i < b.N; i++ {
+		h := handlers.Copy()
+		h.Validate.PushFront(func(r *request.Request) {})
+		h.Validate.PushFront(func(r *request.Request) {})
+		h.Validate.PushFront(func(r *request.Request) {})
+		h.Validate.PushFront(func(r *request.Request) {})
+	}
+}
+
+func BenchmarkHandlersClear(b *testing.B) {
+	handlers := request.Handlers{}
+
+	for i := 0; i < b.N; i++ {
+		h := handlers.Copy()
+		h.Validate.PushFront(func(r *request.Request) {})
+		h.Validate.PushFront(func(r *request.Request) {})
+		h.Validate.PushFront(func(r *request.Request) {})
+		h.Validate.PushFront(func(r *request.Request) {})
+		h.Clear()
+	}
 }

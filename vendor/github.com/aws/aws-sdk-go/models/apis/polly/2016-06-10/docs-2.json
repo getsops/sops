@@ -25,7 +25,7 @@
     "ContentType": {
       "base": null,
       "refs": {
-        "SynthesizeSpeechOutput$ContentType": "<p> Specifies the type audio stream. This should reflect the <code>OutputFormat</code> parameter in your request. </p> <ul> <li> <p> If you request <code>mp3</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/mpeg. </p> </li> <li> <p> If you request <code>ogg_vorbis</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/ogg. </p> </li> <li> <p> If you request <code>pcm</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p> </li> </ul> <p> </p>"
+        "SynthesizeSpeechOutput$ContentType": "<p> Specifies the type audio stream. This should reflect the <code>OutputFormat</code> parameter in your request. </p> <ul> <li> <p> If you request <code>mp3</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/mpeg. </p> </li> <li> <p> If you request <code>ogg_vorbis</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/ogg. </p> </li> <li> <p> If you request <code>pcm</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p> </li> <li> <p>If you request <code>json</code> as the <code>OutputFormat</code>, the <code>ContentType</code> returned is audio/json.</p> </li> </ul> <p> </p>"
       }
     },
     "DeleteLexiconInput": {
@@ -57,9 +57,11 @@
         "InvalidSsmlException$message": null,
         "LexiconNotFoundException$message": null,
         "LexiconSizeExceededException$message": null,
+        "MarksNotSupportedForFormatException$message": null,
         "MaxLexemeLengthExceededException$message": null,
         "MaxLexiconsNumberExceededException$message": null,
         "ServiceFailureException$message": null,
+        "SsmlMarksNotSupportedForTextTypeException$message": null,
         "TextLengthExceededException$message": null,
         "UnsupportedPlsAlphabetException$message": null,
         "UnsupportedPlsLanguageException$message": null
@@ -202,6 +204,11 @@
       "refs": {
       }
     },
+    "MarksNotSupportedForFormatException": {
+      "base": "<p>Speech marks are not supported for the <code>OutputFormat</code> selected. Speech marks are only available for content in <code>json</code> format.</p>",
+      "refs": {
+      }
+    },
     "MaxLexemeLengthExceededException": {
       "base": "<p>The maximum size of the lexeme would be exceeded by this operation.</p>",
       "refs": {
@@ -224,7 +231,7 @@
     "OutputFormat": {
       "base": null,
       "refs": {
-        "SynthesizeSpeechInput$OutputFormat": "<p> The audio format in which the resulting stream will be encoded. </p>"
+        "SynthesizeSpeechInput$OutputFormat": "<p> The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>"
       }
     },
     "PutLexiconInput": {
@@ -258,6 +265,23 @@
       "base": null,
       "refs": {
         "LexiconAttributes$Size": "<p>Total size of the lexicon, in characters.</p>"
+      }
+    },
+    "SpeechMarkType": {
+      "base": null,
+      "refs": {
+        "SpeechMarkTypeList$member": null
+      }
+    },
+    "SpeechMarkTypeList": {
+      "base": null,
+      "refs": {
+        "SynthesizeSpeechInput$SpeechMarkTypes": "<p>The type of speech marks returned for the input text.</p>"
+      }
+    },
+    "SsmlMarksNotSupportedForTextTypeException": {
+      "base": "<p>SSML speech marks are not supported for plain text-type input.</p>",
+      "refs": {
       }
     },
     "SynthesizeSpeechInput": {

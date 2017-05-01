@@ -604,5 +604,45 @@
         }
       }
     ]
+  },
+  {
+    "description": "JSON value trait",
+    "metadata": {
+      "protocol": "rest-json"
+    },
+    "shapes": {
+      "OutputShape": {
+        "type": "structure",
+        "members": {
+          "Attr": {
+            "shape": "StringType",
+              "jsonvalue": true,
+              "location": "header",
+              "locationName": "X-Amz-Foo"
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "output": {
+            "shape": "OutputShape"
+          },
+          "name": "OperationName"
+        },
+        "result": {
+          "Attr": {"Foo":"Bar"}
+        },
+        "response": {
+          "status_code": 200,
+          "headers": {"X-Amz-Foo": "eyJGb28iOiJCYXIifQ=="},
+          "body": ""
+        }
+      }
+    ]
   }
 ]

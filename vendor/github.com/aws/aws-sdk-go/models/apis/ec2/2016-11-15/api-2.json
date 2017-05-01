@@ -310,6 +310,15 @@
       "input":{"shape":"CreateFlowLogsRequest"},
       "output":{"shape":"CreateFlowLogsResult"}
     },
+    "CreateFpgaImage":{
+      "name":"CreateFpgaImage",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateFpgaImageRequest"},
+      "output":{"shape":"CreateFpgaImageResult"}
+    },
     "CreateImage":{
       "name":"CreateImage",
       "http":{
@@ -3544,6 +3553,31 @@
         }
       }
     },
+    "CreateFpgaImageRequest":{
+      "type":"structure",
+      "required":["InputStorageLocation"],
+      "members":{
+        "DryRun":{"shape":"Boolean"},
+        "InputStorageLocation":{"shape":"StorageLocation"},
+        "LogsStorageLocation":{"shape":"StorageLocation"},
+        "Description":{"shape":"String"},
+        "Name":{"shape":"String"},
+        "ClientToken":{"shape":"String"}
+      }
+    },
+    "CreateFpgaImageResult":{
+      "type":"structure",
+      "members":{
+        "FpgaImageId":{
+          "shape":"String",
+          "locationName":"fpgaImageId"
+        },
+        "FpgaImageGlobalId":{
+          "shape":"String",
+          "locationName":"fpgaImageGlobalId"
+        }
+      }
+    },
     "CreateImageRequest":{
       "type":"structure",
       "required":[
@@ -4090,7 +4124,11 @@
           "shape":"Boolean",
           "locationName":"encrypted"
         },
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "TagSpecifications":{
+          "shape":"TagSpecificationList",
+          "locationName":"TagSpecification"
+        }
       }
     },
     "CreateVpcEndpointRequest":{
@@ -12770,6 +12808,10 @@
         "EbsOptimized":{
           "shape":"Boolean",
           "locationName":"ebsOptimized"
+        },
+        "TagSpecifications":{
+          "shape":"TagSpecificationList",
+          "locationName":"TagSpecification"
         }
       }
     },
@@ -14012,6 +14054,13 @@
         "S3":{"shape":"S3Storage"}
       }
     },
+    "StorageLocation":{
+      "type":"structure",
+      "members":{
+        "Bucket":{"shape":"String"},
+        "Key":{"shape":"String"}
+      }
+    },
     "String":{"type":"string"},
     "Subnet":{
       "type":"structure",
@@ -14186,6 +14235,26 @@
       "type":"list",
       "member":{
         "shape":"Tag",
+        "locationName":"item"
+      }
+    },
+    "TagSpecification":{
+      "type":"structure",
+      "members":{
+        "ResourceType":{
+          "shape":"ResourceType",
+          "locationName":"resourceType"
+        },
+        "Tags":{
+          "shape":"TagList",
+          "locationName":"Tag"
+        }
+      }
+    },
+    "TagSpecificationList":{
+      "type":"list",
+      "member":{
+        "shape":"TagSpecification",
         "locationName":"item"
       }
     },

@@ -37,6 +37,7 @@
         {"shape":"NoSuchEntityException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"LimitExceededException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -78,6 +79,7 @@
         {"shape":"NoSuchEntityException"},
         {"shape":"LimitExceededException"},
         {"shape":"InvalidInputException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -264,6 +266,7 @@
       },
       "errors":[
         {"shape":"LimitExceededException"},
+        {"shape":"InvalidInputException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"MalformedPolicyDocumentException"},
         {"shape":"ServiceFailureException"}
@@ -284,6 +287,24 @@
         {"shape":"InvalidInputException"},
         {"shape":"EntityAlreadyExistsException"},
         {"shape":"LimitExceededException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "CreateServiceLinkedRole":{
+      "name":"CreateServiceLinkedRole",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateServiceLinkedRoleRequest"},
+      "output":{
+        "shape":"CreateServiceLinkedRoleResponse",
+        "resultWrapper":"CreateServiceLinkedRoleResult"
+      },
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"NoSuchEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -500,6 +521,7 @@
         {"shape":"NoSuchEntityException"},
         {"shape":"DeleteConflictException"},
         {"shape":"LimitExceededException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -513,6 +535,7 @@
       "errors":[
         {"shape":"NoSuchEntityException"},
         {"shape":"LimitExceededException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -645,6 +668,7 @@
         {"shape":"NoSuchEntityException"},
         {"shape":"LimitExceededException"},
         {"shape":"InvalidInputException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -1444,6 +1468,7 @@
         {"shape":"LimitExceededException"},
         {"shape":"MalformedPolicyDocumentException"},
         {"shape":"NoSuchEntityException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -1484,6 +1509,7 @@
       "errors":[
         {"shape":"NoSuchEntityException"},
         {"shape":"LimitExceededException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -1614,6 +1640,7 @@
         {"shape":"NoSuchEntityException"},
         {"shape":"MalformedPolicyDocumentException"},
         {"shape":"LimitExceededException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -1656,6 +1683,23 @@
       "errors":[
         {"shape":"InvalidInputException"},
         {"shape":"NoSuchEntityException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "UpdateRoleDescription":{
+      "name":"UpdateRoleDescription",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateRoleDescriptionRequest"},
+      "output":{
+        "shape":"UpdateRoleDescriptionResponse",
+        "resultWrapper":"UpdateRoleDescriptionResult"
+      },
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"UnmodifiableEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -2114,7 +2158,8 @@
       "members":{
         "Path":{"shape":"pathType"},
         "RoleName":{"shape":"roleNameType"},
-        "AssumeRolePolicyDocument":{"shape":"policyDocumentType"}
+        "AssumeRolePolicyDocument":{"shape":"policyDocumentType"},
+        "Description":{"shape":"roleDescriptionType"}
       }
     },
     "CreateRoleResponse":{
@@ -2139,6 +2184,21 @@
       "type":"structure",
       "members":{
         "SAMLProviderArn":{"shape":"arnType"}
+      }
+    },
+    "CreateServiceLinkedRoleRequest":{
+      "type":"structure",
+      "required":["AWSServiceName"],
+      "members":{
+        "AWSServiceName":{"shape":"groupNameType"},
+        "Description":{"shape":"roleDescriptionType"},
+        "CustomSuffix":{"shape":"customSuffixType"}
+      }
+    },
+    "CreateServiceLinkedRoleResponse":{
+      "type":"structure",
+      "members":{
+        "Role":{"shape":"Role"}
       }
     },
     "CreateServiceSpecificCredentialRequest":{
@@ -3811,7 +3871,8 @@
         "RoleId":{"shape":"idType"},
         "Arn":{"shape":"arnType"},
         "CreateDate":{"shape":"dateType"},
-        "AssumeRolePolicyDocument":{"shape":"policyDocumentType"}
+        "AssumeRolePolicyDocument":{"shape":"policyDocumentType"},
+        "Description":{"shape":"roleDescriptionType"}
       }
     },
     "RoleDetail":{
@@ -4075,6 +4136,18 @@
       "type":"list",
       "member":{"shape":"Statement"}
     },
+    "UnmodifiableEntityException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"unmodifiableEntityMessage"}
+      },
+      "error":{
+        "code":"UnmodifiableEntity",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "UnrecognizedPublicKeyEncodingException":{
       "type":"structure",
       "members":{
@@ -4151,6 +4224,23 @@
       "members":{
         "OpenIDConnectProviderArn":{"shape":"arnType"},
         "ThumbprintList":{"shape":"thumbprintListType"}
+      }
+    },
+    "UpdateRoleDescriptionRequest":{
+      "type":"structure",
+      "required":[
+        "RoleName",
+        "Description"
+      ],
+      "members":{
+        "RoleName":{"shape":"roleNameType"},
+        "Description":{"shape":"roleDescriptionType"}
+      }
+    },
+    "UpdateRoleDescriptionResponse":{
+      "type":"structure",
+      "members":{
+        "Role":{"shape":"Role"}
       }
     },
     "UpdateSAMLProviderRequest":{
@@ -4407,6 +4497,12 @@
     "credentialReportExpiredExceptionMessage":{"type":"string"},
     "credentialReportNotPresentExceptionMessage":{"type":"string"},
     "credentialReportNotReadyExceptionMessage":{"type":"string"},
+    "customSuffixType":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"[\\w+=,.@-]+"
+    },
     "dateType":{"type":"timestamp"},
     "deleteConflictMessage":{"type":"string"},
     "duplicateCertificateMessage":{"type":"string"},
@@ -4600,6 +4696,11 @@
       "min":1,
       "pattern":"[\\u0009\\u000A\\u000D\\u0020-\\u00FF]+"
     },
+    "roleDescriptionType":{
+      "type":"string",
+      "max":1000,
+      "pattern":"[\\p{L}\\p{M}\\p{Z}\\p{S}\\p{N}\\p{P}]*"
+    },
     "roleDetailListType":{
       "type":"list",
       "member":{"shape":"RoleDetail"}
@@ -4702,6 +4803,7 @@
       "max":40,
       "min":40
     },
+    "unmodifiableEntityMessage":{"type":"string"},
     "unrecognizedPublicKeyEncodingMessage":{"type":"string"},
     "userDetailListType":{
       "type":"list",

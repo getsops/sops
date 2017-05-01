@@ -237,7 +237,8 @@
       "type":"structure",
       "required":[
         "ServerName",
-        "NodeName"
+        "NodeName",
+        "EngineAttributes"
       ],
       "members":{
         "ServerName":{"shape":"ServerName"},
@@ -274,8 +275,14 @@
         "KeyPair":{"shape":"String"},
         "PreferredBackupWindow":{"shape":"TimeWindowDefinition"},
         "PreferredMaintenanceWindow":{"shape":"TimeWindowDefinition"},
-        "S3DataSize":{"shape":"Integer"},
-        "S3DataUrl":{"shape":"String"},
+        "S3DataSize":{
+          "shape":"Integer",
+          "deprecated":true
+        },
+        "S3DataUrl":{
+          "shape":"String",
+          "deprecated":true
+        },
         "S3LogUrl":{"shape":"String"},
         "SecurityGroupIds":{"shape":"Strings"},
         "ServerName":{"shape":"ServerName"},
@@ -335,9 +342,11 @@
       "required":[
         "ServerName",
         "InstanceProfileArn",
+        "InstanceType",
         "ServiceRoleArn"
       ],
       "members":{
+        "AssociatePublicIpAddress":{"shape":"Boolean"},
         "DisableAutomatedBackup":{"shape":"Boolean"},
         "Engine":{"shape":"String"},
         "EngineModel":{"shape":"String"},
@@ -482,9 +491,14 @@
     "EngineAttribute":{
       "type":"structure",
       "members":{
-        "Name":{"shape":"String"},
-        "Value":{"shape":"String"}
+        "Name":{"shape":"EngineAttributeName"},
+        "Value":{"shape":"EngineAttributeValue"}
       }
+    },
+    "EngineAttributeName":{"type":"string"},
+    "EngineAttributeValue":{
+      "type":"string",
+      "sensitive":true
     },
     "EngineAttributes":{
       "type":"list",
@@ -577,9 +591,11 @@
     "Server":{
       "type":"structure",
       "members":{
+        "AssociatePublicIpAddress":{"shape":"Boolean"},
         "BackupRetentionCount":{"shape":"Integer"},
         "ServerName":{"shape":"String"},
         "CreatedAt":{"shape":"Timestamp"},
+        "CloudFormationStackArn":{"shape":"String"},
         "DisableAutomatedBackup":{"shape":"Boolean"},
         "Endpoint":{"shape":"String"},
         "Engine":{"shape":"String"},
@@ -630,9 +646,11 @@
         "FAILED",
         "HEALTHY",
         "RUNNING",
+        "RESTORING",
         "SETUP",
         "UNDER_MAINTENANCE",
-        "UNHEALTHY"
+        "UNHEALTHY",
+        "TERMINATED"
       ]
     },
     "Servers":{

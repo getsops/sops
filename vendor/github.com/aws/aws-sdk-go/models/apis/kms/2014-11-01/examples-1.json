@@ -824,6 +824,48 @@
         "title": "To schedule a customer master key (CMK) for deletion"
       }
     ],
+    "TagResource": [
+      {
+        "input": {
+          "KeyId": "1234abcd-12ab-34cd-56ef-1234567890ab",
+          "Tags": [
+            {
+              "TagKey": "Purpose",
+              "TagValue": "Test"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+            "KeyId": "The identifier of the CMK you are tagging. You can use the key ID or the Amazon Resource Name (ARN) of the CMK.",
+            "Tags": "A list of tags."
+          }
+        },
+        "description": "The following example tags a CMK.",
+        "id": "to-tag-a-cmk-1483997246518",
+        "title": "To tag a customer master key (CMK)"
+      }
+    ],
+    "UntagResource": [
+      {
+        "input": {
+          "KeyId": "1234abcd-12ab-34cd-56ef-1234567890ab",
+          "TagKeys": [
+            "Purpose",
+            "CostCenter"
+          ]
+        },
+        "comments": {
+          "input": {
+            "KeyId": "The identifier of the CMK whose tags you are removing.",
+            "TagKeys": "A list of tag keys. Provide only the tag keys, not the tag values."
+          }
+        },
+        "description": "The following example removes tags from a CMK.",
+        "id": "to-remove-tags-from-a-cmk-1483997590962",
+        "title": "To remove tags from a customer master key (CMK)"
+      }
+    ],
     "UpdateAlias": [
       {
         "input": {

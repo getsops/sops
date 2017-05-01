@@ -10,6 +10,7 @@
     "CreateDocumentationVersion": null,
     "CreateDomainName": "<p>Creates a new domain name.</p>",
     "CreateModel": "<p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>",
+    "CreateRequestValidator": "<p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>",
     "CreateResource": "<p>Creates a <a>Resource</a> resource.</p>",
     "CreateRestApi": "<p>Creates a new <a>RestApi</a> resource.</p>",
     "CreateStage": "<p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>",
@@ -28,6 +29,7 @@
     "DeleteMethod": "<p>Deletes an existing <a>Method</a> resource.</p>",
     "DeleteMethodResponse": "<p>Deletes an existing <a>MethodResponse</a> resource.</p>",
     "DeleteModel": "<p>Deletes a model.</p>",
+    "DeleteRequestValidator": "<p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>",
     "DeleteResource": "<p>Deletes a <a>Resource</a> resource.</p>",
     "DeleteRestApi": "<p>Deletes the specified API.</p>",
     "DeleteStage": "<p>Deletes a <a>Stage</a> resource.</p>",
@@ -61,6 +63,8 @@
     "GetModel": "<p>Describes an existing model defined for a <a>RestApi</a> resource.</p>",
     "GetModelTemplate": "<p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>",
     "GetModels": "<p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>",
+    "GetRequestValidator": "<p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>",
+    "GetRequestValidators": "<p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>",
     "GetResource": "<p>Lists information about a resource.</p>",
     "GetResources": "<p>Lists information about a collection of <a>Resource</a> resources.</p>",
     "GetRestApi": "<p>Lists the <a>RestApi</a> resource in the collection.</p>",
@@ -99,6 +103,7 @@
     "UpdateMethod": "<p>Updates an existing <a>Method</a> resource.</p>",
     "UpdateMethodResponse": "<p>Updates an existing <a>MethodResponse</a> resource.</p>",
     "UpdateModel": "<p>Changes information about a model.</p>",
+    "UpdateRequestValidator": "<p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>",
     "UpdateResource": "<p>Changes information about a <a>Resource</a> resource.</p>",
     "UpdateRestApi": "<p>Changes information about the specified API.</p>",
     "UpdateStage": "<p>Changes information about a <a>Stage</a> resource.</p>",
@@ -190,6 +195,8 @@
         "ApiKey$enabled": "<p>Specifies whether the API Key can be used by callers.</p>",
         "CreateApiKeyRequest$enabled": "<p>Specifies whether the <a>ApiKey</a> can be used by callers.</p>",
         "CreateApiKeyRequest$generateDistinctId": "<p>Specifies whether (<code>true</code>) or not (<code>false</code>) the key identifier is distinct from the created API key value.</p>",
+        "CreateRequestValidatorRequest$validateRequestBody": "<p>A Boolean flag to indicate whether to validate request body according to the configured model schema for the method (<code>true</code>) or not (<code>false</code>).</p>",
+        "CreateRequestValidatorRequest$validateRequestParameters": "<p>A Boolean flag to indicate whether to validate request parameters, <code>true</code>, or not <code>false</code>.</p>",
         "CreateStageRequest$cacheClusterEnabled": "<p>Whether cache clustering is enabled for the stage.</p>",
         "GetModelRequest$flatten": "<p>A query parameter of a Boolean value to resolve (<code>true</code>) all external model references and returns a flattened model schema or not (<code>false</code>) The default is <code>false</code>.</p>",
         "ImportApiKeysRequest$failOnWarnings": "<p>A query parameter to indicate whether to rollback <a>ApiKey</a> importation (<code>true</code>) or not (<code>false</code>) when error is encountered.</p>",
@@ -203,6 +210,8 @@
         "MethodSnapshot$apiKeyRequired": "<p>Specifies whether the method requires a valid <a>ApiKey</a>.</p>",
         "PutMethodRequest$apiKeyRequired": "<p>Specifies whether the method required a valid <a>ApiKey</a>.</p>",
         "PutRestApiRequest$failOnWarnings": "<p>A query parameter to indicate whether to rollback the API update (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>",
+        "RequestValidator$validateRequestBody": "<p>A Boolean flag to indicate whether to validate a request body according to the configured <a>Model</a> schema.</p>",
+        "RequestValidator$validateRequestParameters": "<p>A Boolean flag to indicate whether to validate request parameters (<code>true</code>) or not (<code>false</code>).</p>",
         "SdkConfigurationProperty$required": "<p>A boolean flag of an <a>SdkType</a> configuration property to indicate if the associated SDK configuration property is required (<code>true</code>) or not (<code>false</code>).</p>",
         "Stage$cacheClusterEnabled": "<p>Specifies whether a cache cluster is enabled for the stage.</p>"
       }
@@ -283,6 +292,11 @@
     },
     "CreateModelRequest": {
       "base": "<p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>",
+      "refs": {
+      }
+    },
+    "CreateRequestValidatorRequest": {
+      "base": "<p>Creates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>",
       "refs": {
       }
     },
@@ -376,6 +390,11 @@
       "refs": {
       }
     },
+    "DeleteRequestValidatorRequest": {
+      "base": "<p>Deletes a specified <a>RequestValidator</a> of a given <a>RestApi</a>.</p>",
+      "refs": {
+      }
+    },
     "DeleteResourceRequest": {
       "base": "<p>Request to delete a <a>Resource</a>.</p>",
       "refs": {
@@ -439,7 +458,7 @@
     "DocumentationPartType": {
       "base": null,
       "refs": {
-        "DocumentationPartLocation$type": "<p>The type of API entity to which the documentation content applies. It is a valid and required field for API entity types of <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHROZER</code>, <code>MODEL</code>, or <code>RESOURCE</code> type.</p>",
+        "DocumentationPartLocation$type": "<p>The type of API entity to which the documentation content applies. It is a valid and required field for API entity types of <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHROZER</code>, <code>METHOD</code>, <code>MODEL</code>, <code>REQUEST_BODY</code>, or <code>RESOURCE</code> type.</p>",
         "GetDocumentationPartsRequest$type": "<p>The type of API entities of the to-be-retrieved documentation parts. </p>"
       }
     },
@@ -619,6 +638,16 @@
     },
     "GetModelsRequest": {
       "base": "<p>Request to list existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>",
+      "refs": {
+      }
+    },
+    "GetRequestValidatorRequest": {
+      "base": "<p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>",
+      "refs": {
+      }
+    },
+    "GetRequestValidatorsRequest": {
+      "base": "<p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>",
       "refs": {
       }
     },
@@ -834,11 +863,18 @@
         "UpdateMethodRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateMethodResponseRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateModelRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
+        "UpdateRequestValidatorRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateResourceRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateRestApiRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateStageRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateUsagePlanRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>",
         "UpdateUsageRequest$patchOperations": "<p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>"
+      }
+    },
+    "ListOfRequestValidator": {
+      "base": null,
+      "refs": {
+        "RequestValidators$items": "<p>The current page of <a>RequestValidator</a> resources in the <a>RequestValidators</a> collection.</p>"
       }
     },
     "ListOfResource": {
@@ -888,6 +924,9 @@
         "CreateRestApiRequest$binaryMediaTypes": "<p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>",
         "DocumentationPartIds$ids": "<p>A list of the returned documentation part identifiers.</p>",
         "DocumentationPartIds$warnings": "<p>A list of warning messages reported during import of documentation parts.</p>",
+        "GetDeploymentRequest$embed": "<p>A query parameter to retrieve the specified embedded resources of the returned <a>Deployment</a> resource in the response. In a REST API call, this <code>embed</code> parameter value is a list of comma-separated strings, as in <code>GET /restapis/{restapi_id}/deployments/{deployment_id}?embed=var1,var2</code>. The SDK and other platform-dependent libraries might use a different format for the list. Currently, this request supports only retrieval of the embedded API summary this way. Hence, the parameter value must be a single-valued list containing only the <code>\"apisummary\"</code> string. For example, <code>GET /restapis/{restapi_id}/deployments/{deployment_id}?embed=apisummary</code>.</p>",
+        "GetResourceRequest$embed": "<p>A query parameter to retrieve the specified resources embedded in the returned <a>Resource</a> representation in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>\"methods\"</code> string. For example, <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code>.</p>",
+        "GetResourcesRequest$embed": "<p>A query parameter used to retrieve the specified resources embedded in the returned <a>Resources</a> resource in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>\"methods\"</code> string. For example, <code>GET /restapis/{restapi_id}/resources?embed=methods</code>.</p>",
         "Integration$cacheKeyParameters": "<p>Specifies the integration's cache key parameters.</p>",
         "MapOfStringToList$value": null,
         "PutIntegrationRequest$cacheKeyParameters": "<p>Specifies a put integration input's cache key parameters.</p>",
@@ -944,7 +983,7 @@
     "MapOfMethod": {
       "base": null,
       "refs": {
-        "Resource$resourceMethods": "<p>Gets an API resource's method of a given HTTP verb.</p> <div class=\"remarks\"> <p>The resource methods are a map of methods indexed by methods' HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi_id}/resources/{resource_id}</code> or <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160608T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160608/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html\", \"name\": \"method\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\", \"name\": \"GET\", \"title\": \"GET\" }, \"integration:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"method:integration\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"method:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"methodresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}\", \"templated\": true } }, \"apiKeyRequired\": false, \"authorizationType\": \"NONE\", \"httpMethod\": \"GET\", \"_embedded\": { \"method:integration\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"3kzxbg5sa2\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestParameters\": { \"integration.request.header.Content-Type\": \"'application/x-amz-json-1.1'\" }, \"requestTemplates\": { \"application/json\": \"{\\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-east-1:kinesis:action/ListStreams\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.Content-Type\": \"'application/xml'\" }, \"responseTemplates\": { \"application/json\": \"$util.urlDecode(\\\"%3CkinesisStreams%3E#foreach($stream in $input.path('$.StreamNames'))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E\\\")\\n\" }, \"statusCode\": \"200\" } } }, \"method:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.Content-Type\": false }, \"statusCode\": \"200\" } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class=\"seeAlso\"> </div>"
+        "Resource$resourceMethods": "<p>Gets an API resource's method of a given HTTP verb.</p> <div class=\"remarks\"> <p>The resource methods are a map of methods indexed by methods' HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi_id}/resources/{resource_id}</code> or <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20170223T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20170223/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <pre><code>{ \"_links\": { \"curies\": [ { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html\", \"name\": \"integration\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html\", \"name\": \"integrationresponse\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html\", \"name\": \"method\", \"templated\": true }, { \"href\": \"http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html\", \"name\": \"methodresponse\", \"templated\": true } ], \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\", \"name\": \"GET\", \"title\": \"GET\" }, \"integration:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"method:integration\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"method:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"method:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET\" }, \"methodresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}\", \"templated\": true } }, \"apiKeyRequired\": false, \"authorizationType\": \"NONE\", \"httpMethod\": \"GET\", \"_embedded\": { \"method:integration\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integration:responses\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integration:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration\" }, \"integrationresponse:put\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}\", \"templated\": true } }, \"cacheKeyParameters\": [], \"cacheNamespace\": \"3kzxbg5sa2\", \"credentials\": \"arn:aws:iam::123456789012:role/apigAwsProxyRole\", \"httpMethod\": \"POST\", \"passthroughBehavior\": \"WHEN_NO_MATCH\", \"requestParameters\": { \"integration.request.header.Content-Type\": \"'application/x-amz-json-1.1'\" }, \"requestTemplates\": { \"application/json\": \"{\\n}\" }, \"type\": \"AWS\", \"uri\": \"arn:aws:apigateway:us-east-1:kinesis:action/ListStreams\", \"_embedded\": { \"integration:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"integrationresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" }, \"integrationresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200\" } }, \"responseParameters\": { \"method.response.header.Content-Type\": \"'application/xml'\" }, \"responseTemplates\": { \"application/json\": \"$util.urlDecode(\\\"%3CkinesisStreams%3E#foreach($stream in $input.path('$.StreamNames'))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E\\\")\\n\" }, \"statusCode\": \"200\" } } }, \"method:responses\": { \"_links\": { \"self\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\", \"name\": \"200\", \"title\": \"200\" }, \"methodresponse:delete\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" }, \"methodresponse:update\": { \"href\": \"/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200\" } }, \"responseModels\": { \"application/json\": \"Empty\" }, \"responseParameters\": { \"method.response.header.Content-Type\": false }, \"statusCode\": \"200\" } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class=\"seeAlso\"> </div>"
       }
     },
     "MapOfMethodResponse": {
@@ -1064,20 +1103,21 @@
         "Authorizer$authorizerResultTtlInSeconds": "<p>The TTL in seconds of cached authorizer results. If greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>",
         "CreateAuthorizerRequest$authorizerResultTtlInSeconds": "<p>The TTL of cached authorizer results.</p>",
         "GetApiKeysRequest$limit": "<p>The maximum number of <a>ApiKeys</a> to get information about.</p>",
-        "GetAuthorizersRequest$limit": "<p>Limit the number of <a>Authorizer</a> resources in the response.</p>",
-        "GetBasePathMappingsRequest$limit": "<p>The maximum number of <a>BasePathMapping</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
-        "GetClientCertificatesRequest$limit": "<p>The maximum number of <a>ClientCertificate</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
-        "GetDeploymentsRequest$limit": "<p>The maximum number of <a>Deployment</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
-        "GetDocumentationPartsRequest$limit": "<p>The size of the paged results.</p>",
-        "GetDocumentationVersionsRequest$limit": "<p>The page size of the returned documentation versions.</p>",
-        "GetDomainNamesRequest$limit": "<p>The maximum number of <a>DomainName</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
-        "GetModelsRequest$limit": "<p>The maximum number of models in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
-        "GetResourcesRequest$limit": "<p>The maximum number of <a>Resource</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
-        "GetRestApisRequest$limit": "<p>The maximum number of <a>RestApi</a> resources in the collection to get information about. The default limit is 25. It should be an integer between 1 - 500.</p>",
-        "GetSdkTypesRequest$limit": "<p>The maximum number of <a>SdkType</a> instances to be returned. </p>",
-        "GetUsagePlanKeysRequest$limit": "<p>A query parameter specifying the maximum number usage plan keys returned by the GET request.</p>",
-        "GetUsagePlansRequest$limit": "<p>The number of <a>UsagePlan</a> resources to be returned as the result.</p>",
-        "GetUsageRequest$limit": "<p>The maximum number of results to be returned.</p>"
+        "GetAuthorizersRequest$limit": "<p>The maximum number of returned results per page.</p>",
+        "GetBasePathMappingsRequest$limit": "<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>",
+        "GetClientCertificatesRequest$limit": "<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>",
+        "GetDeploymentsRequest$limit": "<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>",
+        "GetDocumentationPartsRequest$limit": "<p>The maximum number of returned results per page.</p>",
+        "GetDocumentationVersionsRequest$limit": "<p>The maximum number of returned results per page.</p>",
+        "GetDomainNamesRequest$limit": "<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>",
+        "GetModelsRequest$limit": "<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>",
+        "GetRequestValidatorsRequest$limit": "<p>The maximum number of returned results per page.</p>",
+        "GetResourcesRequest$limit": "<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>",
+        "GetRestApisRequest$limit": "<p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>",
+        "GetSdkTypesRequest$limit": "<p>The maximum number of returned results per page.</p>",
+        "GetUsagePlanKeysRequest$limit": "<p>The maximum number of returned results per page.</p>",
+        "GetUsagePlansRequest$limit": "<p>The maximum number of returned results per page.</p>",
+        "GetUsageRequest$limit": "<p>The maximum number of returned results per page.</p>"
       }
     },
     "Op": {
@@ -1147,6 +1187,17 @@
       "refs": {
         "CreateUsagePlanRequest$quota": "<p>The quota of the usage plan.</p>",
         "UsagePlan$quota": "<p>The maximum number of permitted requests per a given unit time interval.</p>"
+      }
+    },
+    "RequestValidator": {
+      "base": "<p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class=\"remarks\"> <p>In Swagger, a <a>RequestValidator</a> of an API is defined by the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html\">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator\">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html\">Enable Basic Request Validation in API Gateway</a></div>",
+      "refs": {
+        "ListOfRequestValidator$member": null
+      }
+    },
+    "RequestValidators": {
+      "base": "<p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class=\"remarks\"> <p>In Swagger, the <a>RequestValidators</a> of an API is defined by the <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html\">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html\">Enable Basic Request Validation in API Gateway</a></div>",
+      "refs": {
       }
     },
     "Resource": {
@@ -1286,16 +1337,19 @@
         "CreateDocumentationVersionRequest$documentationVersion": "<p>[Required] The version identifier of the new snapshot.</p>",
         "CreateDocumentationVersionRequest$stageName": "<p>The stage name to be associated with the new documentation snapshot.</p>",
         "CreateDocumentationVersionRequest$description": "<p>A description about the new documentation snapshot.</p>",
-        "CreateDomainNameRequest$domainName": "<p>The name of the <a>DomainName</a> resource.</p>",
-        "CreateDomainNameRequest$certificateName": "<p>The name of the certificate.</p>",
-        "CreateDomainNameRequest$certificateBody": "<p>The body of the server certificate provided by your certificate authority.</p>",
-        "CreateDomainNameRequest$certificatePrivateKey": "<p>Your certificate's private key.</p>",
-        "CreateDomainNameRequest$certificateChain": "<p>The intermediate certificates and optionally the root certificate, one after the other without any blank lines. If you include the root certificate, your certificate chain must start with intermediate certificates and end with the root certificate. Use the intermediate certificates that were provided by your certificate authority. Do not include any intermediaries that are not in the chain of trust path.</p>",
+        "CreateDomainNameRequest$domainName": "<p>(Required) The name of the <a>DomainName</a> resource.</p>",
+        "CreateDomainNameRequest$certificateName": "<p>The user-friendly name of the certificate.</p>",
+        "CreateDomainNameRequest$certificateBody": "<p>[Deprecated] The body of the server certificate provided by your certificate authority.</p>",
+        "CreateDomainNameRequest$certificatePrivateKey": "<p>[Deprecated] Your certificate's private key.</p>",
+        "CreateDomainNameRequest$certificateChain": "<p>[Deprecated] The intermediate certificates and optionally the root certificate, one after the other without any blank lines. If you include the root certificate, your certificate chain must start with intermediate certificates and end with the root certificate. Use the intermediate certificates that were provided by your certificate authority. Do not include any intermediaries that are not in the chain of trust path.</p>",
+        "CreateDomainNameRequest$certificateArn": "<p>The reference to an AWS-managed certificate. AWS Certificate Manager is the only supported source.</p>",
         "CreateModelRequest$restApiId": "<p>The <a>RestApi</a> identifier under which the <a>Model</a> will be created.</p>",
         "CreateModelRequest$name": "<p>The name of the model.</p>",
         "CreateModelRequest$description": "<p>The description of the model.</p>",
         "CreateModelRequest$schema": "<p>The schema for the model. For <code>application/json</code> models, this should be <a href=\"http://json-schema.org/documentation.html\" target=\"_blank\">JSON-schema draft v4</a> model.</p>",
         "CreateModelRequest$contentType": "<p>The content-type for the model.</p>",
+        "CreateRequestValidatorRequest$restApiId": "<p>[Required] The identifier of the <a>RestApi</a> for which the <a>RequestValidator</a> is created.</p>",
+        "CreateRequestValidatorRequest$name": "<p>The name of the to-be-created <a>RequestValidator</a>.</p>",
         "CreateResourceRequest$restApiId": "<p>The identifier of the <a>RestApi</a> for the resource. </p>",
         "CreateResourceRequest$parentId": "<p>The parent resource's identifier.</p>",
         "CreateResourceRequest$pathPart": "<p>The last path segment for this resource.</p>",
@@ -1340,6 +1394,8 @@
         "DeleteMethodResponseRequest$httpMethod": "<p>The HTTP verb of the <a>Method</a> resource.</p>",
         "DeleteModelRequest$restApiId": "<p>The <a>RestApi</a> under which the model will be deleted.</p>",
         "DeleteModelRequest$modelName": "<p>The name of the model to delete.</p>",
+        "DeleteRequestValidatorRequest$restApiId": "<p>[Required] The identifier of the <a>RestApi</a> from which the given <a>RequestValidator</a> is deleted.</p>",
+        "DeleteRequestValidatorRequest$requestValidatorId": "<p>[Required] The identifier of the <a>RequestValidator</a> to be deleted.</p>",
         "DeleteResourceRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Resource</a> resource.</p>",
         "DeleteResourceRequest$resourceId": "<p>The identifier of the <a>Resource</a> resource.</p>",
         "DeleteRestApiRequest$restApiId": "<p>The ID of the <a>RestApi</a> you want to delete.</p>",
@@ -1362,6 +1418,7 @@
         "DocumentationVersions$position": null,
         "DomainName$domainName": "<p>The name of the <a>DomainName</a> resource.</p>",
         "DomainName$certificateName": "<p>The name of the certificate.</p>",
+        "DomainName$certificateArn": "<p>The reference to an AWS-managed certificate. AWS Certificate Manager is the only supported source.</p>",
         "DomainName$distributionDomainName": "<p>The domain name of the Amazon CloudFront distribution. For more information, see the <a href=\"http://aws.amazon.com/documentation/cloudfront/\" target=\"_blank\">Amazon CloudFront documentation</a>.</p>",
         "DomainNames$position": null,
         "ExportResponse$contentType": "<p>The content-type header value in the HTTP response. This will correspond to a valid 'accept' type in the request.</p>",
@@ -1372,35 +1429,35 @@
         "FlushStageCacheRequest$stageName": "<p>The name of the stage to flush its cache.</p>",
         "GenerateClientCertificateRequest$description": "<p>The description of the <a>ClientCertificate</a>.</p>",
         "GetApiKeyRequest$apiKey": "<p>The identifier of the <a>ApiKey</a> resource.</p>",
-        "GetApiKeysRequest$position": "<p>The position of the current <a>ApiKeys</a> resource to get information about.</p>",
+        "GetApiKeysRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetApiKeysRequest$nameQuery": "<p>The name of queried API keys.</p>",
         "GetApiKeysRequest$customerId": "<p>The identifier of a customer in AWS Marketplace or an external system, such as a developer portal.</p>",
         "GetAuthorizerRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Authorizer</a> resource.</p>",
         "GetAuthorizerRequest$authorizerId": "<p>The identifier of the <a>Authorizer</a> resource.</p>",
         "GetAuthorizersRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Authorizers</a> resource.</p>",
-        "GetAuthorizersRequest$position": "<p>If not all <a>Authorizer</a> resources in the response were present, the position will specify where to start the next page of results.</p>",
+        "GetAuthorizersRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetBasePathMappingRequest$domainName": "<p>The domain name of the <a>BasePathMapping</a> resource to be described.</p>",
         "GetBasePathMappingRequest$basePath": "<p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify any base path name after the domain name.</p>",
         "GetBasePathMappingsRequest$domainName": "<p>The domain name of a <a>BasePathMapping</a> resource.</p>",
-        "GetBasePathMappingsRequest$position": "<p>The position of the current <a>BasePathMapping</a> resource in the collection to get information about.</p>",
+        "GetBasePathMappingsRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetClientCertificateRequest$clientCertificateId": "<p>The identifier of the <a>ClientCertificate</a> resource to be described.</p>",
-        "GetClientCertificatesRequest$position": "<p>The position of the current <a>ClientCertificate</a> resource in the collection to get information about.</p>",
+        "GetClientCertificatesRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetDeploymentRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource for the <a>Deployment</a> resource to get information about.</p>",
         "GetDeploymentRequest$deploymentId": "<p>The identifier of the <a>Deployment</a> resource to get information about.</p>",
         "GetDeploymentsRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource for the collection of <a>Deployment</a> resources to get information about.</p>",
-        "GetDeploymentsRequest$position": "<p>The position of the current <a>Deployment</a> resource in the collection to get information about.</p>",
+        "GetDeploymentsRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetDocumentationPartRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-retrieved documentation part.</p>",
         "GetDocumentationPartRequest$documentationPartId": "<p>[Required] The identifier of the to-be-retrieved documentation part.</p>",
         "GetDocumentationPartsRequest$restApiId": "<p>[Required] The identifier of the API of the to-be-retrieved documentation parts.</p>",
         "GetDocumentationPartsRequest$nameQuery": "<p>The name of API entities of the to-be-retrieved documentation parts.</p>",
         "GetDocumentationPartsRequest$path": "<p>The path of API entities of the to-be-retrieved documentation parts.</p>",
-        "GetDocumentationPartsRequest$position": "<p>The position of the to-be-retrieved documentation part in the <a>DocumentationParts</a> collection.</p>",
+        "GetDocumentationPartsRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetDocumentationVersionRequest$restApiId": "<p>[Required] The identifier of the API of the to-be-retrieved documentation snapshot.</p>",
         "GetDocumentationVersionRequest$documentationVersion": "<p>[Required] The version identifier of the to-be-retrieved documentation snapshot.</p>",
         "GetDocumentationVersionsRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-retrieved documentation versions.</p>",
-        "GetDocumentationVersionsRequest$position": "<p>The position of the returned <code>DocumentationVersion</code> in the <a>DocumentationVersions</a> collection.</p>",
+        "GetDocumentationVersionsRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetDomainNameRequest$domainName": "<p>The name of the <a>DomainName</a> resource.</p>",
-        "GetDomainNamesRequest$position": "<p>The position of the current domain names to get information about.</p>",
+        "GetDomainNamesRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetExportRequest$restApiId": "<p>The identifier of the <a>RestApi</a> to be exported.</p>",
         "GetExportRequest$stageName": "<p>The name of the <a>Stage</a> that will be exported.</p>",
         "GetExportRequest$exportType": "<p>The type of export. Currently only 'swagger' is supported.</p>",
@@ -1422,18 +1479,22 @@
         "GetModelTemplateRequest$restApiId": "<p>The ID of the <a>RestApi</a> under which the model exists.</p>",
         "GetModelTemplateRequest$modelName": "<p>The name of the model for which to generate a template.</p>",
         "GetModelsRequest$restApiId": "<p>The <a>RestApi</a> identifier.</p>",
-        "GetModelsRequest$position": "<p>The position of the next set of results in the <a>Models</a> resource to get information about.</p>",
+        "GetModelsRequest$position": "<p>The current pagination position in the paged result set.</p>",
+        "GetRequestValidatorRequest$restApiId": "<p>[Required] The identifier of the <a>RestApi</a> to which the specified <a>RequestValidator</a> belongs.</p>",
+        "GetRequestValidatorRequest$requestValidatorId": "<p>[Required] The identifier of the <a>RequestValidator</a> to be retrieved.</p>",
+        "GetRequestValidatorsRequest$restApiId": "<p>[Required] The identifier of a <a>RestApi</a> to which the <a>RequestValidators</a> collection belongs.</p>",
+        "GetRequestValidatorsRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetResourceRequest$restApiId": "<p>The <a>RestApi</a> identifier for the resource.</p>",
         "GetResourceRequest$resourceId": "<p>The identifier for the <a>Resource</a> resource.</p>",
         "GetResourcesRequest$restApiId": "<p>The <a>RestApi</a> identifier for the Resource.</p>",
-        "GetResourcesRequest$position": "<p>The position of the next set of results in the current <a>Resources</a> resource to get information about.</p>",
+        "GetResourcesRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetRestApiRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource.</p>",
-        "GetRestApisRequest$position": "<p>The position of the current <a>RestApis</a> resource in the collection to get information about.</p>",
+        "GetRestApisRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetSdkRequest$restApiId": "<p>The identifier of the <a>RestApi</a> that the SDK will use.</p>",
         "GetSdkRequest$stageName": "<p>The name of the <a>Stage</a> that the SDK will use.</p>",
         "GetSdkRequest$sdkType": "<p>The language for the generated SDK. Currently <code>javascript</code>, <code>android</code>, and <code>objectivec</code> (for iOS) are supported.</p>",
         "GetSdkTypeRequest$id": "<p>The identifier of the queried <a>SdkType</a> instance.</p>",
-        "GetSdkTypesRequest$position": "<p>The position of the last fetched element in the <a>SdkTypes</a> collection.</p>",
+        "GetSdkTypesRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetStageRequest$restApiId": "<p>The identifier of the <a>RestApi</a> resource for the <a>Stage</a> resource to get information about.</p>",
         "GetStageRequest$stageName": "<p>The name of the <a>Stage</a> resource to get information about.</p>",
         "GetStagesRequest$restApiId": "<p>The stages' API identifiers.</p>",
@@ -1441,16 +1502,16 @@
         "GetUsagePlanKeyRequest$usagePlanId": "<p>The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>",
         "GetUsagePlanKeyRequest$keyId": "<p>The key Id of the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>",
         "GetUsagePlanKeysRequest$usagePlanId": "<p>The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>",
-        "GetUsagePlanKeysRequest$position": "<p>A query parameter specifying the zero-based index specifying the position of a usage plan key.</p>",
+        "GetUsagePlanKeysRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetUsagePlanKeysRequest$nameQuery": "<p>A query parameter specifying the name of the to-be-returned usage plan keys.</p>",
         "GetUsagePlanRequest$usagePlanId": "<p>The identifier of the <a>UsagePlan</a> resource to be retrieved.</p>",
-        "GetUsagePlansRequest$position": "<p>The zero-based array index specifying the position of the to-be-retrieved <a>UsagePlan</a> resource.</p>",
+        "GetUsagePlansRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "GetUsagePlansRequest$keyId": "<p>The identifier of the API key associated with the usage plans.</p>",
         "GetUsageRequest$usagePlanId": "<p>The Id of the usage plan associated with the usage data.</p>",
         "GetUsageRequest$keyId": "<p>The Id of the API key associated with the resultant usage data.</p>",
         "GetUsageRequest$startDate": "<p>The starting date (e.g., 2016-01-01) of the usage data.</p>",
         "GetUsageRequest$endDate": "<p>The ending date (e.g., 2016-12-31) of the usage data.</p>",
-        "GetUsageRequest$position": "<p>Position</p>",
+        "GetUsageRequest$position": "<p>The current pagination position in the paged result set.</p>",
         "ImportDocumentationPartsRequest$restApiId": "<p>[Required] The identifier of an API of the to-be-imported documentation parts.</p>",
         "Integration$httpMethod": "<p>Specifies the integration's HTTP method type.</p>",
         "Integration$uri": "<p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href=\"https://en.wikipedia.org/wiki/Uniform_Resource_Identifier\" target=\"_blank\">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>",
@@ -1474,11 +1535,12 @@
         "MapOfStringToString$key": null,
         "MapOfStringToString$value": null,
         "Method$httpMethod": "<p>The method's HTTP verb.</p>",
-        "Method$authorizationType": "<p>The method's authorization type.</p>",
+        "Method$authorizationType": "<p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>",
         "Method$authorizerId": "<p>The identifier of an <a>Authorizer</a> to use on this method. The <code>authorizationType</code> must be <code>CUSTOM</code>.</p>",
+        "Method$requestValidatorId": "<p>The identifier of a <a>RequestValidator</a> for request validation.</p>",
         "Method$operationName": "<p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href=\"http://petstore-demo-endpoint.execute-api.com/petstore/pets\">PetStore</a> example.</p>",
         "MethodSetting$loggingLevel": "<p>Specifies the logging level for this method, which effects the log entries pushed to Amazon CloudWatch Logs. The PATCH path for this setting is <code>/{method_setting_key}/logging/loglevel</code>, and the available levels are <code>OFF</code>, <code>ERROR</code>, and <code>INFO</code>.</p>",
-        "MethodSnapshot$authorizationType": "<p>Specifies the type of authorization used for the method.</p>",
+        "MethodSnapshot$authorizationType": "<p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>",
         "Model$id": "<p>The identifier for the model resource.</p>",
         "Model$name": "<p>The name of the model.</p>",
         "Model$description": "<p>The description of the model.</p>",
@@ -1487,7 +1549,7 @@
         "Models$position": null,
         "NotFoundException$message": null,
         "PatchOperation$path": "<p>The <code>op</code> operation's target, as identified by a <a href=\"https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-08\">JSON Pointer</a> value that references a location within the targeted resource. For example, if the target resource has an updateable property of <code>{\"name\":\"value\"}</code>, the path for this property is <code>/name</code>. If the <code>name</code> property value is a JSON object (e.g., <code>{\"name\": {\"child/name\": \"child-value\"}}</code>), the path for the <code>child/name</code> property will be <code>/name/child~1name</code>. Any slash (\"/\") character appearing in path names must be escaped with \"~1\", as shown in the example above. Each <code>op</code> operation can have only one <code>path</code> associated with it.</p>",
-        "PatchOperation$value": "<p>The new target value of the update operation. </p>",
+        "PatchOperation$value": "<p>The new target value of the update operation. When using AWS CLI to update a property of a JSON value, enclose the JSON object with a pair of single quotes in a Linux shell, e.g., '{\"a\": ...}'. In a Windows shell, see <a href=\"http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json\">Using JSON for Parameters</a>.</p>",
         "PatchOperation$from": "<p> Not supported.</p>",
         "PathToMapOfMethodSnapshot$key": null,
         "PutIntegrationRequest$restApiId": "<p>Specifies a put integration request's API identifier.</p>",
@@ -1505,13 +1567,17 @@
         "PutMethodRequest$restApiId": "<p>The <a>RestApi</a> identifier for the new <a>Method</a> resource.</p>",
         "PutMethodRequest$resourceId": "<p>The <a>Resource</a> identifier for the new <a>Method</a> resource.</p>",
         "PutMethodRequest$httpMethod": "<p>Specifies the method request's HTTP method type.</p>",
-        "PutMethodRequest$authorizationType": "<p>Specifies the type of authorization used for the method.</p>",
+        "PutMethodRequest$authorizationType": "<p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>",
         "PutMethodRequest$authorizerId": "<p>Specifies the identifier of an <a>Authorizer</a> to use on this Method, if the type is CUSTOM.</p>",
         "PutMethodRequest$operationName": "<p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href=\"http://petstore-demo-endpoint.execute-api.com/petstore/pets\">PetStore</a> example.</p>",
+        "PutMethodRequest$requestValidatorId": "<p>The identifier of a <a>RequestValidator</a> for validating the method request.</p>",
         "PutMethodResponseRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Method</a> resource.</p>",
         "PutMethodResponseRequest$resourceId": "<p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>",
         "PutMethodResponseRequest$httpMethod": "<p>The HTTP verb of the <a>Method</a> resource.</p>",
         "PutRestApiRequest$restApiId": "<p>The identifier of the <a>RestApi</a> to be updated. </p>",
+        "RequestValidator$id": "<p>The identifier of this <a>RequestValidator</a>.</p>",
+        "RequestValidator$name": "<p>The name of this <a>RequestValidator</a></p>",
+        "RequestValidators$position": null,
         "Resource$id": "<p>The resource's identifier.</p>",
         "Resource$parentId": "<p>The parent resource's identifier.</p>",
         "Resource$pathPart": "<p>The last path segment for this resource.</p>",
@@ -1587,6 +1653,8 @@
         "UpdateMethodResponseRequest$httpMethod": "<p>The HTTP verb of the <a>Method</a> resource.</p>",
         "UpdateModelRequest$restApiId": "<p>The <a>RestApi</a> identifier under which the model exists.</p>",
         "UpdateModelRequest$modelName": "<p>The name of the model to update.</p>",
+        "UpdateRequestValidatorRequest$restApiId": "<p>[Required] The identifier of the <a>RestApi</a> for which the given <a>RequestValidator</a> is updated.</p>",
+        "UpdateRequestValidatorRequest$requestValidatorId": "<p>[Required] The identifier of <a>RequestValidator</a> to be updated.</p>",
         "UpdateResourceRequest$restApiId": "<p>The <a>RestApi</a> identifier for the <a>Resource</a> resource.</p>",
         "UpdateResourceRequest$resourceId": "<p>The identifier of the <a>Resource</a> resource.</p>",
         "UpdateRestApiRequest$restApiId": "<p>The ID of the <a>RestApi</a> you want to update.</p>",
@@ -1647,16 +1715,16 @@
     "Timestamp": {
       "base": null,
       "refs": {
-        "ApiKey$createdDate": "<p>The date when the API Key was created, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
-        "ApiKey$lastUpdatedDate": "<p>When the API Key was last updated, in ISO 8601 format.</p>",
-        "ClientCertificate$createdDate": "<p>The date when the client certificate was created, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
-        "ClientCertificate$expirationDate": "<p>The date when the client certificate will expire, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
+        "ApiKey$createdDate": "<p>The timestamp when the API Key was created.</p>",
+        "ApiKey$lastUpdatedDate": "<p>The timestamp when the API Key was last updated.</p>",
+        "ClientCertificate$createdDate": "<p>The timestamp when the client certificate was created.</p>",
+        "ClientCertificate$expirationDate": "<p>The timestamp when the client certificate will expire.</p>",
         "Deployment$createdDate": "<p>The date and time that the deployment resource was created.</p>",
         "DocumentationVersion$createdDate": "<p>The date when the API documentation snapshot is created.</p>",
-        "DomainName$certificateUploadDate": "<p>The date when the certificate was uploaded, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
-        "RestApi$createdDate": "<p>The date when the API was created, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
-        "Stage$createdDate": "<p>The date and time that the stage was created, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>",
-        "Stage$lastUpdatedDate": "<p>The date and time that information about the stage was last updated, in <a href=\"http://www.iso.org/iso/home/standards/iso8601.htm\" target=\"_blank\">ISO 8601 format</a>.</p>"
+        "DomainName$certificateUploadDate": "<p>The timestamp when the certificate was uploaded.</p>",
+        "RestApi$createdDate": "<p>The timestamp when the API was created.</p>",
+        "Stage$createdDate": "<p>The timestamp when the stage was created.</p>",
+        "Stage$lastUpdatedDate": "<p>The timestamp when the stage last updated.</p>"
       }
     },
     "TooManyRequestsException": {
@@ -1742,6 +1810,11 @@
     },
     "UpdateModelRequest": {
       "base": "<p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>",
+      "refs": {
+      }
+    },
+    "UpdateRequestValidatorRequest": {
+      "base": "<p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>",
       "refs": {
       }
     },

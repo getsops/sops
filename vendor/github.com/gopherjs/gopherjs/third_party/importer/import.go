@@ -52,9 +52,7 @@ func ImportData(imports map[string]*types.Package, data []byte) (int, *types.Pac
 	}
 
 	// populate typList with predeclared types
-	for _, t := range predeclared {
-		p.typList = append(p.typList, t)
-	}
+	p.typList = append(p.typList, predeclared...)
 
 	if v := p.string(); v != version {
 		return 0, nil, fmt.Errorf("unknown version: got %s; want %s", v, version)

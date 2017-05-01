@@ -494,3 +494,36 @@ func TestDecodeBooleanOverlay(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, BooleanOverlay(true), v)
 }
+
+func TestDecodeUnixTime(t *testing.T) {
+	type A struct {
+		Normal time.Time
+		Tagged time.Time `dynamodbav:",unixtime"`
+		Typed  UnixTime
+	}
+
+	expect := A{
+		Normal: time.Unix(123, 0).UTC(),
+		Tagged: time.Unix(456, 0),
+		Typed:  UnixTime(time.Unix(789, 0)),
+	}
+
+	input := &dynamodb.AttributeValue{
+		M: map[string]*dynamodb.AttributeValue{
+			"Normal": {
+				S: aws.String("1970-01-01T00:02:03Z"),
+			},
+			"Tagged": {
+				N: aws.String("456"),
+			},
+			"Typed": {
+				N: aws.String("789"),
+			},
+		},
+	}
+	actual := A{}
+
+	err := Unmarshal(input, &actual)
+	assert.NoError(t, err)
+	assert.Equal(t, expect, actual)
+}

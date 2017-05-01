@@ -13,6 +13,7 @@ type Item struct {
 	Data map[string]interface{}
 }
 ```
+Use Go tags to define what the name is of the attribute in your DynamoDB table. See [AWS SDK for Go API Reference: Marshal](https://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/dynamodbattribute/#Marshal) for more information.
 
 In DynamoDB the structure of the item to be returned will be:
 ```json
@@ -28,12 +29,12 @@ In DynamoDB the structure of the item to be returned will be:
 
 ## Usage
 
-`scanItems.go -table "<table_name>" -region "<optional_region>"`
+`go run -tags example scanItems.go -table "<table_name>" -region "<optional_region>"`
 
 ## Output
 
 ```
-0: Key: 123, Desc: An item in the DynamoDB table 
+0: Key: 123, Desc: An item in the DynamoDB table
 	Num Data Values: 0
 1: Key: 2, Desc: Second ddb item
 	Num Data Values: 2

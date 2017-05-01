@@ -77,7 +77,9 @@
 				{{ if (not (is_paginator .)) }}
 				{{ if (ne .Name "Validate") }}
 					{{$name_html := html .Name}}
+					{{ if not (is_op_deprecated $.PDoc.Name .Name) -}}
 					<dd><a href="#{{$tname_html}}.{{$name_html}}">{{client_html $ .Decl false | sanitize}}</a></dd>
+					{{ end -}}
 				{{end}}
 				{{end}}
 				{{end}}
@@ -254,7 +256,11 @@
 
 			{{range .Methods}}
 				{{$name_html := html .Name}}
+				{{ if is_op_deprecated $.PDoc.Name .Name -}}
+				<h3 id="{{$tname_html}}.{{$name_html}}">func ({{html .Recv}}) <a href="{{posLink_url $ .Decl}}">{{$name_html}}</a><div class="deprecated">Deprecated</div></h3>
+				{{ else }}
 				<h3 id="{{$tname_html}}.{{$name_html}}">func ({{html .Recv}}) <a href="{{posLink_url $ .Decl}}">{{$name_html}}</a></h3>
+				{{ end -}}
 				<pre>{{node_html $ .Decl true}}</pre>
 				{{comment_html .Doc}}
 				{{$name := printf "%s_%s" $tname .Name}}

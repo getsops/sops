@@ -1,6 +1,6 @@
 // +build integration
 
-// Package s3manager provides
+// Package s3manager provides integration tests for the service/s3/s3manager package
 package s3manager
 
 import (
@@ -9,12 +9,13 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
+	"strings"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/awstesting/integration"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -26,45 +27,64 @@ var integMD512MB = fmt.Sprintf("%x", md5.Sum(integBuf12MB))
 var bucketName *string
 
 func TestMain(m *testing.M) {
-	setup()
-	defer teardown() // only called if we panic
-	result := m.Run()
-	teardown()
-	os.Exit(result)
+	if err := setup(); err != nil {
+		panic(fmt.Sprintf("failed to setup integration test, %v", err))
+	}
+
+	var result int
+
+	defer func() {
+		if err := teardown(); err != nil {
+			fmt.Fprintf(os.Stderr, "teardown failed, %v", err)
+		}
+		if r := recover(); r != nil {
+			fmt.Println("S3Manager integration test hit a panic,", r)
+			result = 1
+		}
+		os.Exit(result)
+	}()
+
+	result = m.Run()
 }
 
-func setup() {
-	// Create a bucket for testing
+func setup() error {
 	svc := s3.New(integration.Session)
+
+	// Create a bucket for testing
 	bucketName = aws.String(
 		fmt.Sprintf("aws-sdk-go-integration-%d-%s", time.Now().Unix(), integration.UniqueID()))
 
-	for i := 0; i < 10; i++ {
-		_, err := svc.CreateBucket(&s3.CreateBucketInput{Bucket: bucketName})
-		if err == nil {
-			break
-		}
+	_, err := svc.CreateBucket(&s3.CreateBucketInput{Bucket: bucketName})
+	if err != nil {
+		return fmt.Errorf("failed to create bucket %q, %v", *bucketName, err)
 	}
 
-	for {
-		_, err := svc.HeadBucket(&s3.HeadBucketInput{Bucket: bucketName})
-		if err == nil {
-			break
-		}
-		time.Sleep(1 * time.Second)
+	err = svc.WaitUntilBucketExists(&s3.HeadBucketInput{Bucket: bucketName})
+	if err != nil {
+		return fmt.Errorf("failed to wait for bucket %q to exist, %v", bucketName, err)
 	}
+
+	return nil
 }
 
 // Delete the bucket
-func teardown() {
+func teardown() error {
 	svc := s3.New(integration.Session)
 
-	objs, _ := svc.ListObjects(&s3.ListObjectsInput{Bucket: bucketName})
+	objs, err := svc.ListObjects(&s3.ListObjectsInput{Bucket: bucketName})
+	if err != nil {
+		return fmt.Errorf("failed to list bucket %q objects, %v", bucketName, err)
+	}
+
 	for _, o := range objs.Contents {
 		svc.DeleteObject(&s3.DeleteObjectInput{Bucket: bucketName, Key: o.Key})
 	}
 
-	uploads, _ := svc.ListMultipartUploads(&s3.ListMultipartUploadsInput{Bucket: bucketName})
+	uploads, err := svc.ListMultipartUploads(&s3.ListMultipartUploadsInput{Bucket: bucketName})
+	if err != nil {
+		return fmt.Errorf("failed to list bucket %q multipart objects, %v", bucketName, err)
+	}
+
 	for _, u := range uploads.Uploads {
 		svc.AbortMultipartUpload(&s3.AbortMultipartUploadInput{
 			Bucket:   bucketName,
@@ -73,7 +93,12 @@ func teardown() {
 		})
 	}
 
-	svc.DeleteBucket(&s3.DeleteBucketInput{Bucket: bucketName})
+	_, err = svc.DeleteBucket(&s3.DeleteBucketInput{Bucket: bucketName})
+	if err != nil {
+		return fmt.Errorf("failed to delete bucket %q, %v", bucketName, err)
+	}
+
+	return nil
 }
 
 type dlwriter struct {
@@ -106,8 +131,12 @@ func validate(t *testing.T, key string, md5value string) {
 
 	w := newDLWriter(1024 * 1024 * 20)
 	n, err := mgr.Download(w, params)
-	assert.NoError(t, err)
-	assert.Equal(t, md5value, fmt.Sprintf("%x", md5.Sum(w.buf[0:n])))
+	if err != nil {
+		t.Fatalf("expect no error, got %v", err)
+	}
+	if e, a := md5value, fmt.Sprintf("%x", md5.Sum(w.buf[0:n])); e != a {
+		t.Errorf("expect %s md5 value, got %s", e, a)
+	}
 }
 
 func TestUploadConcurrently(t *testing.T) {
@@ -119,9 +148,17 @@ func TestUploadConcurrently(t *testing.T) {
 		Body:   bytes.NewReader(integBuf12MB),
 	})
 
-	assert.NoError(t, err)
-	assert.NotEqual(t, "", out.UploadID)
-	assert.Regexp(t, `^https?://.+/`+key+`$`, out.Location)
+	if err != nil {
+		t.Fatalf("expect no error, got %v", err)
+	}
+	if len(out.UploadID) == 0 {
+		t.Errorf("expect upload ID but was empty")
+	}
+
+	re := regexp.MustCompile(`^https?://.+/` + key + `$`)
+	if e, a := re.String(), out.Location; !re.MatchString(a) {
+		t.Errorf("expect %s to match URL regexp %q, did not", e, a)
+	}
 
 	validate(t, key, integMD512MB)
 }
@@ -149,15 +186,25 @@ func TestUploadFailCleanup(t *testing.T) {
 		Key:    &key,
 		Body:   bytes.NewReader(integBuf12MB),
 	})
-	assert.Error(t, err)
-	assert.NotContains(t, err.Error(), "MissingRegion")
-	uploadID := ""
-	if merr, ok := err.(s3manager.MultiUploadFailure); ok {
-		uploadID = merr.UploadID()
+	if err == nil {
+		t.Fatalf("expect error, but did not get one")
 	}
-	assert.NotEmpty(t, uploadID)
+
+	aerr := err.(awserr.Error)
+	if e, a := "MissingRegion", aerr.Code(); strings.Contains(a, e) {
+		t.Errorf("expect %q to not be in error code %q", e, a)
+	}
+
+	uploadID := ""
+	merr := err.(s3manager.MultiUploadFailure)
+	if uploadID = merr.UploadID(); len(uploadID) == 0 {
+		t.Errorf("expect upload ID to not be empty, but was")
+	}
 
 	_, err = svc.ListParts(&s3.ListPartsInput{
-		Bucket: bucketName, Key: &key, UploadId: &uploadID})
-	assert.Error(t, err)
+		Bucket: bucketName, Key: &key, UploadId: &uploadID,
+	})
+	if err == nil {
+		t.Errorf("expect error for list parts, but got none")
+	}
 }

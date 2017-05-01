@@ -1,7 +1,6 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"kinesis-2013-12-02",
     "apiVersion":"2013-12-02",
     "endpointPrefix":"kinesis",
     "jsonVersion":"1.1",
@@ -9,7 +8,8 @@
     "serviceAbbreviation":"Kinesis",
     "serviceFullName":"Amazon Kinesis",
     "signatureVersion":"v4",
-    "targetPrefix":"Kinesis_20131202"
+    "targetPrefix":"Kinesis_20131202",
+    "uid":"kinesis-2013-12-02"
   },
   "operations":{
     "AddTagsToStream":{

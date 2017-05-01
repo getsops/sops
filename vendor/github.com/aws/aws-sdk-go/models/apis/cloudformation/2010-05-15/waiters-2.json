@@ -152,6 +152,31 @@
           "state": "failure"
         }
       ]
+    },
+    "ChangeSetCreateComplete": {
+      "delay": 30,
+      "operation": "DescribeChangeSet",
+      "maxAttempts": 120,
+      "description": "Wait until change set status is CREATE_COMPLETE.",
+      "acceptors": [
+        {
+          "argument": "Status",
+          "expected": "CREATE_COMPLETE",
+          "matcher": "path",
+          "state": "success"
+        },
+        {
+          "argument": "Status",
+          "expected": "FAILED",
+          "matcher": "path",
+          "state": "failure"
+        },
+        {
+          "expected": "ValidationError",
+          "matcher": "error",
+          "state": "failure"
+        }
+      ]
     }
   }
 }

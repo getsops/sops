@@ -2,6 +2,7 @@ package awstesting
 
 import (
 	"io"
+	"time"
 
 	"github.com/aws/aws-sdk-go/private/util"
 )
@@ -64,4 +65,30 @@ func (r *ReadCloser) Close() error {
 // SortedKeys returns a sorted slice of keys of a map.
 func SortedKeys(m map[string]interface{}) []string {
 	return util.SortedKeys(m)
+}
+
+// A FakeContext provides a simple stub implementation of a Context
+type FakeContext struct {
+	Error  error
+	DoneCh chan struct{}
+}
+
+// Deadline always will return not set
+func (c *FakeContext) Deadline() (deadline time.Time, ok bool) {
+	return time.Time{}, false
+}
+
+// Done returns a read channel for listening to the Done event
+func (c *FakeContext) Done() <-chan struct{} {
+	return c.DoneCh
+}
+
+// Err returns the error, is nil if not set.
+func (c *FakeContext) Err() error {
+	return c.Error
+}
+
+// Value ignores the Value and always returns nil
+func (c *FakeContext) Value(key interface{}) interface{} {
+	return nil
 }

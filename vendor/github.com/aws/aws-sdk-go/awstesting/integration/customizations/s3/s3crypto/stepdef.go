@@ -75,14 +75,10 @@ func init() {
 			}
 
 			// We don't support wrap, so skip it
-			if *ctObj.Metadata["X-Amz-Wrap-Alg"] != "kms" {
+			if ctObj.Metadata["X-Amz-Wrap-Alg"] == nil || *ctObj.Metadata["X-Amz-Wrap-Alg"] != "kms" {
 				continue
 			}
-			//masterkeyB64 := ctObj.Metadata["Masterkey"]
-			//masterkey, err := base64.StdEncoding.DecodeString(*masterkeyB64)
-			//assert.NoError(T, err)
 
-			//s3CryptoClient.Config.MasterKey = masterkey
 			ctObj, err = s3CryptoClient.GetObject(&s3.GetObjectInput{
 				Bucket: aws.String(bucket),
 				Key:    &cipherKey,
@@ -94,12 +90,12 @@ func init() {
 			assert.NoError(gucumber.T, err)
 			ciphertexts[caseKey] = ciphertext
 		}
-		gucumber.World["ciphertexts"] = ciphertexts
+		gucumber.World["decrypted"] = ciphertexts
 	})
 
 	gucumber.And(`^I compare the decrypted ciphertext to the plaintext$`, func() {
 		plaintexts := gucumber.World["plaintexts"].(map[string][]byte)
-		ciphertexts := gucumber.World["ciphertexts"].(map[string][]byte)
+		ciphertexts := gucumber.World["decrypted"].(map[string][]byte)
 		for caseKey, ciphertext := range ciphertexts {
 			assert.Equal(gucumber.T, len(plaintexts[caseKey]), len(ciphertext))
 			assert.True(gucumber.T, bytes.Equal(plaintexts[caseKey], ciphertext))
@@ -129,6 +125,8 @@ func init() {
 		switch cek {
 		case "aes_gcm":
 			builder = s3crypto.AESGCMContentCipherBuilder(handler)
+		case "aes_cbc":
+			builder = s3crypto.AESCBCContentCipherBuilder(handler, s3crypto.AESCBCPadder)
 		default:
 			gucumber.T.Skip()
 		}

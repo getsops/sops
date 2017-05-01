@@ -45,6 +45,11 @@
       "output_token": "NextToken",
       "limit_key": "MaxResults"
     },
+    "ListObjectParentPaths": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
     "ListObjectParents": {
       "input_token": "NextToken",
       "output_token": "NextToken",

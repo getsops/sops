@@ -86,17 +86,17 @@ func (t *XHRTransport) RoundTrip(req *Request) (*Response, error) {
 			xhr.Call("setRequestHeader", key, value)
 		}
 	}
-	var body []byte
-	if req.Body != nil {
-		var err error
-		body, err = ioutil.ReadAll(req.Body)
+	if req.Body == nil {
+		xhr.Call("send")
+	} else {
+		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
 			req.Body.Close() // RoundTrip must always close the body, including on errors.
 			return nil, err
 		}
 		req.Body.Close()
+		xhr.Call("send", body)
 	}
-	xhr.Call("send", body)
 
 	select {
 	case resp := <-respCh:
