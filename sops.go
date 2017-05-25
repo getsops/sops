@@ -43,7 +43,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/vault/shamir"
+	"go.mozilla.org/sops/shamir"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 )
