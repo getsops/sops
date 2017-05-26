@@ -473,6 +473,8 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	out["unencrypted_suffix"] = m.UnencryptedSuffix
 	out["mac"] = m.MessageAuthenticationCode
 	out["version"] = m.Version
+	out["shamir"] = m.Shamir
+	out["shamir_quorum"] = m.ShamirQuorum
 	for _, ks := range m.KeySources {
 		var keys []map[string]interface{}
 		for _, k := range ks.Keys {
@@ -489,7 +491,7 @@ func (m Metadata) getDataKeyShamir() ([]byte, error) {
 		for _, k := range ks.Keys {
 			key, err := k.Decrypt()
 			if err != nil {
-				//
+				fmt.Printf("Key error: %s %s\n", k.ToString(), err)
 			}
 			parts = append(parts, key)
 		}
@@ -497,7 +499,11 @@ func (m Metadata) getDataKeyShamir() ([]byte, error) {
 	if len(parts) < m.ShamirQuorum {
 		return nil, fmt.Errorf("Not enough parts to recover data key with Shamir. Need %d, have %d.", m.ShamirQuorum, len(parts))
 	}
-	return shamir.Combine(parts)
+	dataKey, err := shamir.Combine(parts)
+	if err != nil {
+		return nil, fmt.Errorf("Could not get data key from shamir parts: %s", err)
+	}
+	return dataKey, nil
 }
 
 // getFirstDataKey retrieves the data key from the first MasterKey in the
@@ -570,6 +576,14 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 	metadata.UnencryptedSuffix = unencryptedSuffix
 	if metadata.Version, ok = data["version"].(string); !ok {
 		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
+	}
+	shamir, ok := data["shamir"].(bool)
+	if ok {
+		metadata.Shamir = shamir
+	}
+	shamirQuorum, ok := data["shamir_quorum"].(float64)
+	if ok {
+		metadata.ShamirQuorum = int(shamirQuorum)
 	}
 	if k, ok := data["kms"].([]interface{}); ok {
 		ks, err := mapKMSEntriesToKeySource(k)
