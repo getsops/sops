@@ -207,11 +207,11 @@ func main() {
 			Usage: `set a specific key or branch in the input JSON or YAML document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 		},
 		cli.BoolFlag{
-			Name: "shamir",
+			Name:  "shamir-secret-sharing, sss",
 			Usage: "use Shamir's secret sharing to split the data key among all the master keys",
 		},
 		cli.IntFlag{
-			Name: "shamir-quorum",
+			Name:  "shamir-secret-sharing-quorum, sss-quorum",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
 	}

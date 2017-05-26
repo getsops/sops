@@ -102,6 +102,7 @@ func TestShamirRoundtripNotEnoughKeys(t *testing.T) {
 	assert.NoError(t, err)
 	m := Metadata{
 		Shamir: true,
+		ShamirQuorum: 4,
 		KeySources: []KeySource{
 			{
 				Name: "mock",

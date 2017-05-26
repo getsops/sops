@@ -291,12 +291,12 @@ type Metadata struct {
 	MessageAuthenticationCode string
 	Version                   string
 	KeySources                []KeySource
-	// Shamir specifies if the data key this file is encrypted with was
-	// split between all key sources using Shamir's Secret Sharing.
-	Shamir                    bool
-	// ShamirQuorum is the number of parts required to recover the original
-	// data key
-	ShamirQuorum              int
+	// Shamir is true when the data key is split across multiple master keys
+	// according to shamir's secret sharing algorithm
+	Shamir bool
+	// ShamirQuorum is the number of master keys required to recover the
+	// original data key
+	ShamirQuorum int
 }
 
 // KeySource is a collection of MasterKeys with a Name.
@@ -380,10 +380,9 @@ func (m *Metadata) updateMasterKeysShamir(dataKey []byte) (errs []error) {
 			keyCount++
 		}
 	}
-	defaultQuorum := (keyCount / 2) + 1
-	// If the quorum wasn't set, default to half the keys plus one
+	// If the quorum wasn't set, default to 2
 	if m.ShamirQuorum == 0 {
-		m.ShamirQuorum = defaultQuorum
+		m.ShamirQuorum = 2
 	}
 	parts, err := shamir.Split(dataKey, keyCount, m.ShamirQuorum)
 	if err != nil {
