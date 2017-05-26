@@ -69,6 +69,9 @@ func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes 
 	if c.Bool("shamir") {
 		tree.Metadata.Shamir = true
 	}
+	if quorum := c.Int("shamir-quorum"); quorum != 0 {
+		tree.Metadata.ShamirQuorum = quorum
+	}
 	tree.GenerateDataKey()
 	return
 }
@@ -206,6 +209,10 @@ func main() {
 		cli.BoolFlag{
 			Name: "shamir",
 			Usage: "use Shamir's secret sharing to split the data key among all the master keys",
+		},
+		cli.IntFlag{
+			Name: "shamir-quorum",
+			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
 	}
 
@@ -555,6 +562,9 @@ func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	tree.Metadata.KeySources = ks
 	if c.Bool("shamir") {
 		tree.Metadata.Shamir = true
+	}
+	if quorum := c.Int("shamir-quorum"); quorum != 0 {
+		tree.Metadata.ShamirQuorum = quorum
 	}
 	key, errs := tree.GenerateDataKey()
 	if len(errs) > 0 {

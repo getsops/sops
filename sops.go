@@ -53,7 +53,9 @@ const DefaultUnencryptedSuffix = "_unencrypted"
 
 type sopsError string
 
-func (e sopsError) Error() string { return string(e) }
+func (e sopsError) Error() string {
+	return string(e)
+}
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
 const MacMismatch = sopsError("MAC mismatch")
@@ -106,10 +108,10 @@ type Tree struct {
 
 // TrimTreePathComponent trimps a tree path component so that it's a valid tree key
 func TrimTreePathComponent(component string) (string, error) {
-	if component[len(component)-1] != ']' {
+	if component[len(component) - 1] != ']' {
 		return "", fmt.Errorf("Invalid component")
 	}
-	component = component[:len(component)-1]
+	component = component[:len(component) - 1]
 	component = strings.Replace(component, `"`, "", 2)
 	component = strings.Replace(component, `'`, "", 2)
 	return component, nil
@@ -185,7 +187,7 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 		}
 		key, ok := item.Key.(string)
 		if !ok {
-			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
+			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are" +
 				"supported", item.Key, item.Key)
 		}
 		newV, err := tree.walkValue(item.Value, append(path, key), onLeaves)
@@ -291,10 +293,10 @@ type Metadata struct {
 	KeySources                []KeySource
 	// Shamir specifies if the data key this file is encrypted with was
 	// split between all key sources using Shamir's Secret Sharing.
-	Shamir bool
+	Shamir                    bool
 	// ShamirQuorum is the number of parts required to recover the original
 	// data key
-	ShamirQuorum int
+	ShamirQuorum              int
 }
 
 // KeySource is a collection of MasterKeys with a Name.
@@ -378,9 +380,12 @@ func (m *Metadata) updateMasterKeysShamir(dataKey []byte) (errs []error) {
 			keyCount++
 		}
 	}
-	quorum := (keyCount / 2) + 1
-	m.ShamirQuorum = quorum
-	parts, err := shamir.Split(dataKey, keyCount, quorum)
+	defaultQuorum := (keyCount / 2) + 1
+	// If the quorum wasn't set, default to half the keys plus one
+	if m.ShamirQuorum == 0 {
+		m.ShamirQuorum = defaultQuorum
+	}
+	parts, err := shamir.Split(dataKey, keyCount, m.ShamirQuorum)
 	if err != nil {
 		errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
 		return
