@@ -496,8 +496,9 @@ func (m Metadata) getDataKeyShamir() ([]byte, error) {
 			key, err := k.Decrypt()
 			if err != nil {
 				fmt.Printf("Key error: %s %s\n", k.ToString(), err)
+			} else {
+				parts = append(parts, key)
 			}
-			parts = append(parts, key)
 		}
 	}
 	if len(parts) < m.ShamirQuorum {
@@ -585,9 +586,10 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 	if ok {
 		metadata.Shamir = shamir
 	}
-	shamirQuorum, ok := data["shamir_quorum"].(float64)
-	if ok {
+	if shamirQuorum, ok := data["shamir_quorum"].(float64); ok {
 		metadata.ShamirQuorum = int(shamirQuorum)
+	} else if shamirQuorum, ok := data["shamir_quorum"].(int); ok {
+		metadata.ShamirQuorum = shamirQuorum
 	}
 	if k, ok := data["kms"].([]interface{}); ok {
 		ks, err := mapKMSEntriesToKeySource(k)

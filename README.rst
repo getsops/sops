@@ -405,8 +405,7 @@ method, the data key is split into several parts, one for each master key, and
 
 You can enable this mode by passing `--shamir-secret-sharing` to the encrypt
 mode or by passing it to the edit mode for new files. You can set `quorum` with
-`--shamir-secret-sharing-quorum number`. The shorthands for both of these flags
-are `--sss` and `--sss-quorum`, respectively. The quorum must be lower or
+`--shamir-secret-sharing-quorum number`. The quorum must be lower or
 equal to the number of master keys.
 
 `quorum` defaults to 2.
