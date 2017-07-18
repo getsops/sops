@@ -301,7 +301,8 @@ func runEditor(path string) error {
 		if err != nil {
 			return fmt.Errorf("Invalid $EDITOR: %s", editor)
 		}
-		cmd = exec.Command(parts[0], parts...)
+		parts = append(parts, path)
+		cmd = exec.Command(parts[0], parts[1:]...)
 	}
 
 	cmd.Stdin = os.Stdin
