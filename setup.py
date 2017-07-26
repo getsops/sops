@@ -22,7 +22,7 @@ setup(
     install_requires=[
         'ruamel.yaml==0.11.7',
         'boto3>=1.1.3',
-        'cryptography==1.4',
+        'cryptography>=1.4',
         'setuptools>=18.8.1',
         'ordereddict>=1.1',
         'simplejson>=3.8'],
