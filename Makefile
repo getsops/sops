@@ -77,7 +77,7 @@ functional-tests-once:
 	dd if=/dev/urandom of=/tmp/testdata-randomfile bs=1024 count=1024 2>&1 1>/dev/null
 	python sops/__init__.py -e -p "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A" /tmp/testdata-randomfile > /tmp/testdata-randomfile.enc
 	python sops/__init__.py -d /tmp/testdata-randomfile.enc > /tmp/testdata-randomfile.dec
-	if [ $$(sha256sum /tmp/testdata-randomfile | cut -d ' ' -f 1) != $$(sha256sum /tmp/testdata-randomfile.dec | cut -d ' ' -f 1) ]; then \
+	if [ $$(shasum -a 256 /tmp/testdata-randomfile | cut -d ' ' -f 1) != $$(shasum -a 256 /tmp/testdata-randomfile.dec | cut -d ' ' -f 1) ]; then \
 		echo "Binary file roundtrip failed, checksum doesn't match"; exit 0; \
 	else \
 		echo "Binary file roundtrip succeeded"; \
