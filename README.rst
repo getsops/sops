@@ -920,6 +920,12 @@ Backward compatibility
 improvements brought to the 1.X and 2.X branches (current) will maintain the
 file format introduced in **1.0**.
 
+Security
+--------
+
+Please report security issues to jvehent at mozilla dot com, or by using one
+of the contact method available on keybase: https://keybase.io/jvehent
+
 License
 -------
 Mozilla Public License Version 2.0
