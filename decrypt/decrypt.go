@@ -1,6 +1,8 @@
 package decrypt // import "go.mozilla.org/sops/decrypt"
 
 import (
+	"crypto/subtle"
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"time"
@@ -71,7 +73,18 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 		key,
 		metadata.LastModified.Format(time.RFC3339),
 	)
-	if originalMac != mac {
+
+	computedMacBytes, err := hex.DecodeString(mac)
+	if err != nil {
+		return nil, err
+	}
+	originalMacBytes, err := hex.DecodeString(originalMac.(string))
+	if err != nil {
+		return nil, err
+	}
+
+	// Use a constant-time MAC tag comparison to avoid timing attacks: https://codahale.com/a-lesson-in-timing-attacks/
+	if subtle.ConstantTimeCompare(computedMacBytes, originalMacBytes) != 1 {
 		return nil, fmt.Errorf("Failed to verify data integrity. expected mac %q, got %q", originalMac, mac)
 	}
 
