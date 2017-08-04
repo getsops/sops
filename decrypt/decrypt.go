@@ -3,6 +3,7 @@ package decrypt // import "go.mozilla.org/sops/decrypt"
 import (
 	"crypto/subtle"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"time"
@@ -12,6 +13,9 @@ import (
 	sopsjson "go.mozilla.org/sops/json"
 	sopsyaml "go.mozilla.org/sops/yaml"
 )
+
+// Constant indicating a MAC tag mismatch.
+var errMacMismatch error = errors.New("Failed to verify data integrity.")
 
 // File is a wrapper around Data that reads a local encrypted
 // file and returns its cleartext data in an []byte
@@ -85,7 +89,7 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 
 	// Use a constant-time MAC tag comparison to avoid timing attacks: https://codahale.com/a-lesson-in-timing-attacks/
 	if subtle.ConstantTimeCompare(computedMacBytes, originalMacBytes) != 1 {
-		return nil, fmt.Errorf("Failed to verify data integrity. expected mac %q, got %q", originalMac, mac)
+		return nil, errMacMismatch
 	}
 
 	return store.Marshal(tree.Branch)
