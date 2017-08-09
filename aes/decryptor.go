@@ -18,8 +18,7 @@ type encryptedValue struct {
 	datatype string
 }
 
-// AES-GCM standard nonce size is 96-bits (12 bytes)
-const nonceSize int = 12
+const nonceSize int = 32
 
 type stashData struct {
 	iv        []byte
