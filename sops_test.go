@@ -2,12 +2,30 @@ package sops
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/kms"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"go.mozilla.org/sops/kms"
 )
+
+type Cipher struct{}
+
+// reverse returns its argument string reversed rune-wise left to right.
+func reverse(s string) string {
+	r := []rune(s)
+	for i, j := 0, len(r)-1; i < len(r)/2; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return string(r)
+}
+
+func (c Cipher) Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error) {
+	return reverse(value.(string)), nil
+}
+func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, stashValue interface{}, err error) {
+	return reverse(value), nil, nil
+}
 
 func TestUnencryptedSuffix(t *testing.T) {
 	branch := TreeBranch{
@@ -41,7 +59,7 @@ func TestUnencryptedSuffix(t *testing.T) {
 			},
 		},
 	}
-	cipher := aes.Cipher{}
+	cipher := Cipher{}
 	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher, nil)
 	if err != nil {
 		t.Errorf("Encrypting the tree failed: %s", err)
@@ -236,7 +254,6 @@ func TestRemoveMasterKeys(t *testing.T) {
 	}, m.KeySources[0].Keys)
 }
 
-
 func TestInsertOrReplaceValue(t *testing.T) {
 	tree := TreeBranch{
 		TreeItem{
@@ -300,7 +317,7 @@ func TestInsertOrReplaceValue(t *testing.T) {
 			},
 		},
 		TreeItem{
-			Key: "foobar",
+			Key:   "foobar",
 			Value: 100,
 		},
 	})

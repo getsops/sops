@@ -38,6 +38,7 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
+	"log"
 	"reflect"
 	"strconv"
 	"strings"
@@ -154,6 +155,8 @@ func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in
 		return onLeaves(in, path)
 	case float64:
 		return onLeaves(in, path)
+	case Comment:
+		return onLeaves(in, path)
 	case TreeBranch:
 		return tree.walkBranch(in, path, onLeaves)
 	case []interface{}:
@@ -165,9 +168,6 @@ func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in
 
 func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
 	for i, v := range in {
-		if _, ok := v.(Comment); ok {
-			continue
-		}
 		newV, err := tree.walkValue(v, path, onLeaves)
 		if err != nil {
 			return nil, err
@@ -180,11 +180,23 @@ func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(
 func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
 	for i, item := range in {
 		if _, ok := item.Key.(Comment); ok {
-			continue
+			enc, err := tree.walkValue(item.Key, path, onLeaves)
+			if err != nil {
+				return nil, err
+			}
+			if encComment, ok := enc.(Comment); ok {
+				in[i].Key = encComment
+				continue
+			} else if comment, ok := enc.(string); ok {
+				in[i].Key = Comment{Value: comment}
+				continue
+			} else {
+				return nil, fmt.Errorf("walkValue of Comment should be either Comment or string, was %T", enc)
+			}
 		}
 		key, ok := item.Key.(string)
 		if !ok {
-			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are" +
+			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
 				"supported", item.Key, item.Key)
 		}
 		newV, err := tree.walkValue(item.Value, append(path, key), onLeaves)
@@ -200,14 +212,21 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		bytes, err := ToBytes(in)
-		unencrypted := false
+		// Only add to MAC if not a comment
+		if _, ok := in.(Comment); !ok {
+			bytes, err := ToBytes(in)
+			if err != nil {
+				return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+			}
+			hash.Write(bytes)
+		}
+		encrypted := true
 		for _, v := range path {
 			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
-				unencrypted = true
+				encrypted = false
 			}
 		}
-		if !unencrypted {
+		if encrypted {
 			var err error
 			pathString := strings.Join(path, ":") + ":"
 			// Pop from the left of the stash
@@ -222,11 +241,7 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 				return nil, fmt.Errorf("Could not encrypt value: %s", err)
 			}
 		}
-		if err != nil {
-			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
-		}
-		hash.Write(bytes)
-		return in, err
+		return in, nil
 	})
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
@@ -238,31 +253,40 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		var v interface{}
-		unencrypted := false
-		for _, v := range path {
-			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
-				unencrypted = true
+		encrypted := true
+		for _, p := range path {
+			if strings.HasSuffix(p, tree.Metadata.UnencryptedSuffix) {
+				encrypted = false
 			}
 		}
-		if !unencrypted {
+		if encrypted {
 			var err error
 			var stashValue interface{}
 			pathString := strings.Join(path, ":") + ":"
-			v, stashValue, err = cipher.Decrypt(in.(string), key, pathString)
-			if err != nil {
-				return nil, fmt.Errorf("Could not decrypt value: %s", err)
+			if c, ok := in.(Comment); ok {
+				in, stashValue, err = cipher.Decrypt(c.Value, key, pathString)
+				if err != nil {
+					// Assume the comment was not encrypted in the first place
+					log.Printf("[WARNING] Found possibly unencrypted comment in file (#%s). This is to be expected if the file being decrypted was created with an older version of SOPS.", c.Value)
+					in = c
+				}
+			} else {
+				in, stashValue, err = cipher.Decrypt(in.(string), key, pathString)
+				if err != nil {
+					return nil, fmt.Errorf("Could not decrypt value: %s", err)
+				}
 			}
 			stash[pathString] = append(stash[pathString], stashValue)
-		} else {
-			v = in
 		}
-		bytes, err := ToBytes(v)
-		if err != nil {
-			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+		// Only add to MAC if not a comment
+		if _, ok := in.(Comment); !ok {
+			bytes, err := ToBytes(in)
+			if err != nil {
+				return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+			}
+			hash.Write(bytes)
 		}
-		hash.Write(bytes)
-		return v, err
+		return in, nil
 	})
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
@@ -469,6 +493,8 @@ func ToBytes(in interface{}) ([]byte, error) {
 		return []byte(strings.Title(strconv.FormatBool(in))), nil
 	case []byte:
 		return in, nil
+	case Comment:
+		return ToBytes(in.Value)
 	default:
 		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
 	}
