@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+message Key {
+	oneof key_type {
+		KmsKey kms_key = 1;
+		GpgKey gpg_key = 2;
+	}
+}
+
+message GpgKey {
+	string fingerprint = 1;
+}
+
+message KmsKey {
+	string arn = 1;
+	string role = 2;
+	map<string, string> context = 3;
+}
+
+message EncryptRequest {
+	Key key = 1;
+	bytes plaintext = 2;
+}
+
+message EncryptResponse {
+	bytes ciphertext = 1;
+}
+
+message DecryptRequest {
+	Key key = 1;
+	bytes ciphertext = 2;
+}
+
+message DecryptResponse {
+	bytes plaintext = 1;
+}
+
+service KeyService {
+	rpc Encrypt (EncryptRequest) returns (EncryptResponse) {}
+	rpc Decrypt (DecryptRequest) returns (DecryptResponse) {}
+}
