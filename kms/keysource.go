@@ -140,13 +140,12 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 }
 
 func (key MasterKey) createSession() (*session.Session, error) {
-	// possible partitions in $1: aws, aws-cn, aws-us-gov
-	re := regexp.MustCompile(`^arn:(aws[\w-]*):kms:(.+):([0-9]+):key/(.+)$`)
+	re := regexp.MustCompile(`^arn:aws[\w-]*:kms:(.+):[0-9]+:key/.+$`)
 	matches := re.FindStringSubmatch(key.Arn)
 	if matches == nil {
 		return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 	}
-	config := aws.Config{Region: aws.String(matches[2])}
+	config := aws.Config{Region: aws.String(matches[1])}
 	opts := session.Options{
 		Config:                  config,
 		AssumeRoleTokenProvider: stscreds.StdinTokenProvider,
