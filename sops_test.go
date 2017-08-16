@@ -2,6 +2,7 @@ package sops
 
 import (
 	"bytes"
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -21,9 +22,16 @@ func reverse(s string) string {
 }
 
 func (c Cipher) Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error) {
-	return reverse(value.(string)), nil
+	b, err := ToBytes(value)
+	if err != nil {
+		return "", err
+	}
+	return reverse(string(b)), nil
 }
 func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, stashValue interface{}, err error) {
+	if value == "error" {
+		return nil, nil, fmt.Errorf("Error")
+	}
 	return reverse(value), nil, nil
 }
 
@@ -321,4 +329,47 @@ func TestInsertOrReplaceValue(t *testing.T) {
 			Value: 100,
 		},
 	})
+}
+
+func TestEncryptComments(t *testing.T) {
+	tree := Tree{
+		Branch: TreeBranch{
+			TreeItem{
+				Key:   Comment{"foo"},
+				Value: nil,
+			},
+		},
+		Metadata: Metadata{},
+	}
+	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), Cipher{}, make(map[string][]interface{}))
+	assert.NotEqual(t, "foo", tree.Branch[0].Key.(Comment).Value)
+}
+
+func TestDecryptComments(t *testing.T) {
+	tree := Tree{
+		Branch: TreeBranch{
+			TreeItem{
+				Key:   Comment{"oof"},
+				Value: nil,
+			},
+		},
+		Metadata: Metadata{},
+	}
+	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), Cipher{}, make(map[string][]interface{}))
+	assert.Equal(t, "foo", tree.Branch[0].Key.(Comment).Value)
+}
+
+func TestDecryptUnencryptedComments(t *testing.T) {
+	tree := Tree{
+		Branch: TreeBranch{
+			TreeItem{
+				// We use `error` to simulate an error decrypting, the fake cipher will error in this case
+				Key:   Comment{"error"},
+				Value: nil,
+			},
+		},
+		Metadata: Metadata{},
+	}
+	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), Cipher{}, make(map[string][]interface{}))
+	assert.Equal(t, "error", tree.Branch[0].Key.(Comment).Value)
 }
