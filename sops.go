@@ -284,6 +284,16 @@ func (tree Tree) GenerateDataKey() ([]byte, []error) {
 	return newKey, tree.Metadata.UpdateMasterKeys(newKey)
 }
 
+// GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
+func (tree Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, []error) {
+	newKey := make([]byte, 32)
+	_, err := rand.Read(newKey)
+	if err != nil {
+		return nil, []error{fmt.Errorf("Could not generate random key: %s", err)}
+	}
+	return newKey, tree.Metadata.UpdateMasterKeysWithKeyServices(newKey, svcs)
+}
+
 // Metadata holds information about a file encrypted by sops
 type Metadata struct {
 	LastModified              time.Time
@@ -350,7 +360,7 @@ func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
 	return
 }
 
-func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceServer) (errs []error) {
+func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
 	if len(svcs) == 0 {
 		return []error{
 			fmt.Errorf("No key services provided, can not update master keys."),
@@ -366,6 +376,7 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 				})
 				if err != nil {
 					errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
+					continue
 				}
 				key.SetEncryptedDataKey(rsp.Ciphertext)
 				// Only need to encrypt the key successfully with one service
@@ -378,8 +389,8 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 
 // UpdateMasterKeys encrypts the data key with all master keys
 func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
-	return m.UpdateMasterKeysWithKeyServices(dataKey, []keyservice.KeyServiceServer{
-		keyservice.Server{},
+	return m.UpdateMasterKeysWithKeyServices(dataKey, []keyservice.KeyServiceClient{
+		keyservice.NewLocalClient(),
 	})
 }
 
@@ -450,7 +461,7 @@ func (m *Metadata) ToMap() map[string]interface{} {
 
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
-func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceServer) ([]byte, error) {
+func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	errMsg := "Could not decrypt the data key with any of the master keys:\n"
 	for _, keysource := range m.KeySources {
 		for _, key := range keysource.Keys {
@@ -476,7 +487,9 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceServer) 
 // GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it,
 // using the local KeyService
 func (m Metadata) GetDataKey() ([]byte, error) {
-	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceServer{keyservice.Server{}})
+	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceClient{
+		keyservice.NewLocalClient(),
+	})
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.

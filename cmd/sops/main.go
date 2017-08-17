@@ -1,6 +1,12 @@
 package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
+	"log"
+	"net"
+	"net/url"
+
+	"google.golang.org/grpc"
+
 	"go.mozilla.org/sops"
 
 	"bufio"
@@ -23,6 +29,7 @@ import (
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/json"
 	"go.mozilla.org/sops/keys"
+	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/yaml"
@@ -54,7 +61,7 @@ const (
 	exitFailedToCompareVersions                int = 202
 )
 
-func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes []byte) (tree sops.Tree, err error) {
+func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes []byte, svcs []keyservice.KeyServiceClient) (tree sops.Tree, err error) {
 	branch, err := store.Unmarshal(fileBytes)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
@@ -69,7 +76,7 @@ func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes 
 		Version:           version,
 		KeySources:        ks,
 	}
-	tree.GenerateDataKey()
+	tree.GenerateDataKeyWithKeyServices(svcs)
 	return
 }
 
@@ -203,6 +210,14 @@ func main() {
 			Name:  "set",
 			Usage: `set a specific key or branch in the input JSON or YAML document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 		},
+		cli.BoolTFlag{
+			Name:  "enable-local-keyservice",
+			Usage: "use local key service",
+		},
+		cli.StringSliceFlag{
+			Name:  "keyservice",
+			Usage: "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
@@ -221,12 +236,13 @@ func main() {
 
 		inputStore := inputStore(c, fileName)
 		outputStore := outputStore(c, fileName)
+		svcs := keyservices(c)
 
 		// Instead of checking for errors after each operation here, we
 		// just continue and let each command decide which errors can
 		// be handled and which can't.
 		fileBytes, readFileErr := ioutil.ReadFile(fileName)
-		plainTree, loadPlainFileErr := loadPlainFile(c, inputStore, fileName, fileBytes)
+		plainTree, loadPlainFileErr := loadPlainFile(c, inputStore, fileName, fileBytes, svcs)
 		encryptedTree, loadEncryptedFileErr := loadEncryptedFile(c, inputStore, fileBytes)
 
 		var output []byte
@@ -238,7 +254,7 @@ func main() {
 			if loadPlainFileErr != nil {
 				return loadPlainFileErr
 			}
-			output, err = encrypt(c, plainTree, outputStore)
+			output, err = encrypt(c, plainTree, outputStore, svcs)
 		}
 
 		if c.Bool("decrypt") {
@@ -248,7 +264,7 @@ func main() {
 			if loadEncryptedFileErr != nil {
 				return loadEncryptedFileErr
 			}
-			output, err = decrypt(c, encryptedTree, outputStore)
+			output, err = decrypt(c, encryptedTree, outputStore, svcs)
 		}
 		if c.Bool("rotate") {
 			if readFileErr != nil {
@@ -257,12 +273,12 @@ func main() {
 			if loadEncryptedFileErr != nil {
 				return loadEncryptedFileErr
 			}
-			output, err = rotate(c, encryptedTree, outputStore)
+			output, err = rotate(c, encryptedTree, outputStore, svcs)
 		}
 
 		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate")
 		if isEditMode {
-			output, err = edit(c, fileName, fileBytes)
+			output, err = edit(c, fileName, fileBytes, svcs)
 		}
 
 		if err != nil {
@@ -285,6 +301,36 @@ func main() {
 		return nil
 	}
 	app.Run(os.Args)
+}
+
+func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
+	if c.Bool("enable-local-keyservice") {
+		svcs = append(svcs, keyservice.NewLocalClient())
+	}
+	uris := c.StringSlice("keyservice")
+	for _, uri := range uris {
+		url, err := url.Parse(uri)
+		if err != nil {
+			log.Printf("Error parsing keyservice URI %s, skipping", uri)
+			continue
+		}
+		addr := url.Host
+		if url.Scheme == "unix" {
+			addr = url.Path
+		}
+		var opts []grpc.DialOption
+		opts = append(opts, grpc.WithInsecure())
+		opts = append(opts, grpc.WithDialer(func(addr string, timeout time.Duration) (net.Conn, error) {
+			return net.DialTimeout(url.Scheme, addr, timeout)
+		}))
+		log.Printf("Connecting to key service %s://%s", url.Scheme, addr)
+		conn, err := grpc.Dial(addr, opts...)
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		}
+		svcs = append(svcs, keyservice.NewKeyServiceClient(conn))
+	}
+	return
 }
 
 func runEditor(path string) error {
@@ -342,10 +388,10 @@ func defaultStore(path string) sops.Store {
 	return &json.BinaryStore{}
 }
 
-func decryptTree(tree sops.Tree, ignoreMac bool) (sops.Tree, map[string][]interface{}, error) {
+func decryptTree(tree sops.Tree, ignoreMac bool, svcs []keyservice.KeyServiceClient) (sops.Tree, map[string][]interface{}, error) {
 	cipher := aes.Cipher{}
 	stash := make(map[string][]interface{})
-	key, err := tree.Metadata.GetDataKey()
+	key, err := tree.Metadata.GetDataKeyWithKeyServices(svcs)
 	if err != nil {
 		return tree, nil, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
@@ -364,8 +410,8 @@ func decryptTree(tree sops.Tree, ignoreMac bool) (sops.Tree, map[string][]interf
 	return tree, stash, nil
 }
 
-func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, error) {
-	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"))
+func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"), svcs)
 	if err != nil {
 		return nil, err
 	}
@@ -432,9 +478,9 @@ func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
 	return []sops.KeySource{kmsKs, pgpKs}, nil
 }
 
-func encryptTree(tree sops.Tree, stash map[string][]interface{}) (sops.Tree, error) {
+func encryptTree(tree sops.Tree, stash map[string][]interface{}, svcs []keyservice.KeyServiceClient) (sops.Tree, error) {
 	cipher := aes.Cipher{}
-	key, err := tree.Metadata.GetDataKey()
+	key, err := tree.Metadata.GetDataKeyWithKeyServices(svcs)
 	if err != nil {
 		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
@@ -451,8 +497,8 @@ func encryptTree(tree sops.Tree, stash map[string][]interface{}) (sops.Tree, err
 	return tree, nil
 }
 
-func encrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, error) {
-	tree, err := encryptTree(tree, nil)
+func encrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+	tree, err := encryptTree(tree, nil, svcs)
 	if err != nil {
 		return nil, err
 	}
@@ -463,8 +509,8 @@ func encrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, er
 	return out, err
 }
 
-func rotate(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, error) {
-	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"))
+func rotate(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"), svcs)
 	if err != nil {
 		return nil, err
 	}
@@ -476,11 +522,11 @@ func rotate(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, err
 	tree.Metadata.AddPGPMasterKeys(c.String("add-pgp"))
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
-	_, errs := tree.GenerateDataKey()
+	_, errs := tree.GenerateDataKeyWithKeyServices(svcs)
 	if len(errs) > 0 {
 		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
 	}
-	tree, err = encryptTree(tree, nil)
+	tree, err = encryptTree(tree, nil, svcs)
 	if err != nil {
 		return nil, err
 	}
@@ -531,7 +577,7 @@ var exampleTree = sops.TreeBranch{
 	},
 }
 
-func loadExample(c *cli.Context, file string) (sops.Tree, error) {
+func loadExample(c *cli.Context, file string, svcs []keyservice.KeyServiceClient) (sops.Tree, error) {
 	var in []byte
 	var tree sops.Tree
 	fileStore := inputStore(c, file)
@@ -554,11 +600,11 @@ func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
 	tree.Metadata.Version = version
 	tree.Metadata.KeySources = ks
-	key, errs := tree.GenerateDataKey()
+	key, errs := tree.GenerateDataKeyWithKeyServices(svcs)
 	if len(errs) > 0 {
 		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
 	}
-	tree.Metadata.UpdateMasterKeys(key)
+	tree.Metadata.UpdateMasterKeysWithKeyServices(key, svcs)
 	return tree, nil
 }
 
@@ -605,18 +651,18 @@ func extractSetArguments(set string) (path string, key string, valueToInsert int
 	return path, key, valueToInsert, nil
 }
 
-func edit(c *cli.Context, file string, fileBytes []byte) ([]byte, error) {
+func edit(c *cli.Context, file string, fileBytes []byte, svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	var tree sops.Tree
 	var stash map[string][]interface{}
 	var err error
 	if fileBytes == nil {
-		tree, err = loadExample(c, file)
+		tree, err = loadExample(c, file, svcs)
 	} else {
 		tree, err = loadEncryptedFile(c, inputStore(c, file), fileBytes)
 		if err != nil {
 			return nil, err
 		}
-		tree, stash, err = decryptTree(tree, c.Bool("ignore-mac"))
+		tree, stash, err = decryptTree(tree, c.Bool("ignore-mac"), svcs)
 		if err != nil {
 			return nil, err
 		}
@@ -709,7 +755,7 @@ func edit(c *cli.Context, file string, fileBytes []byte) ([]byte, error) {
 			break
 		}
 	}
-	tree, err = encryptTree(tree, stash)
+	tree, err = encryptTree(tree, stash, svcs)
 	if err != nil {
 		return nil, err
 	}
