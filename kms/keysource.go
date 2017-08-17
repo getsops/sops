@@ -31,6 +31,14 @@ type MasterKey struct {
 	EncryptionContext map[string]*string
 }
 
+func (key *MasterKey) EncryptedDataKey() []byte {
+	return []byte(key.EncryptedKey)
+}
+
+func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
+	key.EncryptedKey = string(enc)
+}
+
 // Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	// isMocked is set by unit test to indicate that the KMS service

@@ -4,6 +4,8 @@ package keys
 type MasterKey interface {
 	Encrypt(dataKey []byte) error
 	EncryptIfNeeded(dataKey []byte) error
+	EncryptedDataKey() []byte
+	SetEncryptedDataKey([]byte)
 	Decrypt() ([]byte, error)
 	NeedsRotation() bool
 	ToString() string

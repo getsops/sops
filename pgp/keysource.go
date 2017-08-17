@@ -24,6 +24,14 @@ type MasterKey struct {
 	CreationDate time.Time
 }
 
+func (key *MasterKey) EncryptedDataKey() []byte {
+	return []byte(key.EncryptedKey)
+}
+
+func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
+	key.EncryptedKey = string(enc)
+}
+
 // Encrypt encrypts the data key with the PGP key with the same fingerprint as the MasterKey. It looks for PGP public keys in $PGPHOME/pubring.gpg.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	ring, err := key.pubRing()

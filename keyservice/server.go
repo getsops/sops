@@ -87,7 +87,6 @@ func (ks Server) Encrypt(ctx context.Context,
 
 func (ks Server) Decrypt(ctx context.Context,
 	req *DecryptRequest) (*DecryptResponse, error) {
-
 	key := *req.Key
 	switch k := key.KeyType.(type) {
 	case *Key_GpgKey:

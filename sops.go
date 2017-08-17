@@ -44,8 +44,10 @@ import (
 	"time"
 
 	"go.mozilla.org/sops/keys"
+	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"golang.org/x/net/context"
 )
 
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
@@ -348,17 +350,37 @@ func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
 	return
 }
 
-// UpdateMasterKeys encrypts the data key with all master keys
-func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
-	for _, ks := range m.KeySources {
-		for _, k := range ks.Keys {
-			err := k.Encrypt(dataKey)
-			if err != nil {
-				errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", k.ToString(), err))
+func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceServer) (errs []error) {
+	if len(svcs) == 0 {
+		return []error{
+			fmt.Errorf("No key services provided, can not update master keys."),
+		}
+	}
+	for _, keysource := range m.KeySources {
+		for _, key := range keysource.Keys {
+			svcKey := keyservice.KeyFromMasterKey(key)
+			for _, svc := range svcs {
+				rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
+					Key:       &svcKey,
+					Plaintext: dataKey,
+				})
+				if err != nil {
+					errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
+				}
+				key.SetEncryptedDataKey(rsp.Ciphertext)
+				// Only need to encrypt the key successfully with one service
+				break
 			}
 		}
 	}
 	return
+}
+
+// UpdateMasterKeys encrypts the data key with all master keys
+func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
+	return m.UpdateMasterKeysWithKeyServices(dataKey, []keyservice.KeyServiceServer{
+		keyservice.Server{},
+	})
 }
 
 // AddPGPMasterKeys parses the input comma separated string of GPG fingerprints, generates a PGP MasterKey for each fingerprint, and adds the keys to the PGP KeySource
@@ -426,25 +448,35 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	return out
 }
 
-// GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it.
-func (m Metadata) GetDataKey() ([]byte, error) {
+// GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
+// MasterKey in the Metadata's KeySources until one of them succeeds.
+func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceServer) ([]byte, error) {
 	errMsg := "Could not decrypt the data key with any of the master keys:\n"
-	for _, ks := range m.KeySources {
-		for _, k := range ks.Keys {
-			key, err := k.Decrypt()
-			if err == nil {
-				return key, nil
+	for _, keysource := range m.KeySources {
+		for _, key := range keysource.Keys {
+			svcKey := keyservice.KeyFromMasterKey(key)
+			for _, svc := range svcs {
+				rsp, err := svc.Decrypt(
+					context.Background(),
+					&keyservice.DecryptRequest{
+						Ciphertext: key.EncryptedDataKey(),
+						Key:        &svcKey,
+					})
+				if err != nil {
+					errMsg += fmt.Sprintf("\t%s: %s", key.ToString(), err)
+					continue
+				}
+				return rsp.Plaintext, nil
 			}
-			keyType := "Unknown"
-			if _, ok := k.(*pgp.MasterKey); ok {
-				keyType = "GPG"
-			} else if _, ok := k.(*kms.MasterKey); ok {
-				keyType = "KMS"
-			}
-			errMsg += fmt.Sprintf("\t[%s]: %s:\t%s\n", keyType, k.ToString(), err)
 		}
 	}
-	return nil, fmt.Errorf(errMsg)
+	return nil, fmt.Errorf("%s", errMsg)
+}
+
+// GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it,
+// using the local KeyService
+func (m Metadata) GetDataKey() ([]byte, error) {
+	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceServer{keyservice.Server{}})
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
