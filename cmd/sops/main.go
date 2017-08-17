@@ -22,6 +22,7 @@ import (
 
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/json"
+	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/yaml"
@@ -391,8 +392,8 @@ func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, er
 }
 
 func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
-	var kmsKeys []sops.MasterKey
-	var pgpKeys []sops.MasterKey
+	var kmsKeys []keys.MasterKey
+	var pgpKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, cli.NewExitError("Invalid KMS encryption context format", exitErrorInvalidKMSEncryptionContextFormat)

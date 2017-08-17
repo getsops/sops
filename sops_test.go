@@ -2,11 +2,13 @@ package sops
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/kms"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/keys"
+	"go.mozilla.org/sops/kms"
 )
 
 func TestUnencryptedSuffix(t *testing.T) {
@@ -208,7 +210,7 @@ func TestRemoveMasterKeys(t *testing.T) {
 		KeySources: []KeySource{
 			KeySource{
 				Name: "kms",
-				Keys: []MasterKey{
+				Keys: []keys.MasterKey{
 					&kms.MasterKey{
 						Arn: "foo",
 					}, &kms.MasterKey{
@@ -221,7 +223,7 @@ func TestRemoveMasterKeys(t *testing.T) {
 			},
 		},
 	}
-	m.RemoveMasterKeys([]MasterKey{
+	m.RemoveMasterKeys([]keys.MasterKey{
 		&kms.MasterKey{
 			Arn: "bar",
 		},
@@ -229,13 +231,12 @@ func TestRemoveMasterKeys(t *testing.T) {
 			Arn: "foobar",
 		},
 	})
-	assert.Equal(t, []MasterKey{
+	assert.Equal(t, []keys.MasterKey{
 		&kms.MasterKey{
 			Arn: "foo",
 		},
 	}, m.KeySources[0].Keys)
 }
-
 
 func TestInsertOrReplaceValue(t *testing.T) {
 	tree := TreeBranch{
@@ -300,7 +301,7 @@ func TestInsertOrReplaceValue(t *testing.T) {
 			},
 		},
 		TreeItem{
-			Key: "foobar",
+			Key:   "foobar",
 			Value: 100,
 		},
 	})

@@ -43,6 +43,7 @@ import (
 	"strings"
 	"time"
 
+	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 )
@@ -184,7 +185,7 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 		}
 		key, ok := item.Key.(string)
 		if !ok {
-			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are" +
+			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
 				"supported", item.Key, item.Key)
 		}
 		newV, err := tree.walkValue(item.Value, append(path, key), onLeaves)
@@ -293,17 +294,7 @@ type Metadata struct {
 // KeySource is a collection of MasterKeys with a Name.
 type KeySource struct {
 	Name string
-	Keys []MasterKey
-}
-
-// MasterKey provides a way of securing the key used to encrypt the Tree by encrypting and decrypting said key.
-type MasterKey interface {
-	Encrypt(dataKey []byte) error
-	EncryptIfNeeded(dataKey []byte) error
-	Decrypt() ([]byte, error)
-	NeedsRotation() bool
-	ToString() string
-	ToMap() map[string]interface{}
+	Keys []keys.MasterKey
 }
 
 // Store provides a way to load and save the sops tree along with metadata
@@ -325,12 +316,12 @@ func (m *Metadata) MasterKeyCount() int {
 }
 
 // RemoveMasterKeys removes all of the provided keys from the metadata's KeySources, if they exist there.
-func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
+func (m *Metadata) RemoveMasterKeys(masterKeys []keys.MasterKey) {
 	for j, ks := range m.KeySources {
-		var newKeys []MasterKey
+		var newKeys []keys.MasterKey
 		for _, k := range ks.Keys {
 			matchFound := false
-			for _, keyToRemove := range keys {
+			for _, keyToRemove := range masterKeys {
 				if k.ToString() == keyToRemove.ToString() {
 					matchFound = true
 					break
@@ -374,7 +365,7 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
 	for i, ks := range m.KeySources {
 		if ks.Name == "pgp" {
-			var keys []MasterKey
+			var keys []keys.MasterKey
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
 				keys = append(keys, k)
 				fmt.Printf("Adding new PGP master key: %X\n", k.Fingerprint)
@@ -389,7 +380,7 @@ func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
 func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) {
 	for i, ks := range m.KeySources {
 		if ks.Name == "kms" {
-			var keys []MasterKey
+			var keys []keys.MasterKey
 			for _, k := range kms.MasterKeysFromArnString(kmsArns, context) {
 				keys = append(keys, k)
 				fmt.Printf("Adding new KMS master key: %s\n", k.Arn)
@@ -402,7 +393,7 @@ func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) 
 
 // RemovePGPMasterKeys takes a comma separated string of PGP fingerprints and removes the keys corresponding to those fingerprints from the metadata's KeySources
 func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
-	var keys []MasterKey
+	var keys []keys.MasterKey
 	for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
 		keys = append(keys, k)
 	}
@@ -411,7 +402,7 @@ func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
 
 // RemoveKMSMasterKeys takes a comma separated string of AWS KMS ARNs and removes the keys corresponding to those ARNs from the metadata's KeySources
 func (m *Metadata) RemoveKMSMasterKeys(arns string) {
-	var keys []MasterKey
+	var keys []keys.MasterKey
 	for _, k := range kms.MasterKeysFromArnString(arns, nil) {
 		keys = append(keys, k)
 	}
@@ -525,7 +516,7 @@ func convertToMapStringInterface(in map[interface{}]interface{}) (map[string]int
 }
 
 func mapKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
-	var keys []MasterKey
+	var keys []keys.MasterKey
 	keysource := KeySource{Name: "kms", Keys: keys}
 	for _, v := range in {
 		entry, ok := v.(map[string]interface{})
@@ -559,7 +550,7 @@ func mapKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
 }
 
 func mapPGPEntriesToKeySource(in []interface{}) (KeySource, error) {
-	var keys []MasterKey
+	var keys []keys.MasterKey
 	keysource := KeySource{Name: "pgp", Keys: keys}
 	for _, v := range in {
 		entry, ok := v.(map[string]interface{})
