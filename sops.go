@@ -347,17 +347,34 @@ func (m *Metadata) RemoveMasterKeys(masterKeys []keys.MasterKey) {
 	}
 }
 
-// UpdateMasterKeysIfNeeded encrypts the data key with all master keys if it's needed
-func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
+func (m *Metadata) UpdateMasterKeysIfNeededWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
 	for _, ks := range m.KeySources {
-		for _, k := range ks.Keys {
-			err := k.EncryptIfNeeded(dataKey)
-			if err != nil {
-				errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", k.ToString(), err))
+		for _, key := range ks.Keys {
+			svcKey := keyservice.KeyFromMasterKey(key)
+			for _, svc := range svcs {
+				if len(key.EncryptedDataKey()) == 0 {
+					rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
+						Key:       &svcKey,
+						Plaintext: dataKey,
+					})
+					if err != nil {
+						errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
+						continue
+					}
+					key.SetEncryptedDataKey(rsp.Ciphertext)
+					break
+				}
 			}
 		}
 	}
 	return
+}
+
+// UpdateMasterKeysIfNeeded encrypts the data key with all master keys if it's needed
+func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
+	return m.UpdateMasterKeysIfNeededWithKeyServices(dataKey, []keyservice.KeyServiceClient{
+		keyservice.NewLocalClient(),
+	})
 }
 
 func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
