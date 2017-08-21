@@ -82,6 +82,8 @@ func (store Store) treeValueToYamlValue(in interface{}) interface{} {
 	switch in := in.(type) {
 	case sops.TreeBranch:
 		return store.treeBranchToYamlMap(in)
+	case sops.Comment:
+		return yaml.Comment{in.Value}
 	case []interface{}:
 		var out []interface{}
 		for _, v := range in {
@@ -98,7 +100,7 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	for _, item := range in {
 		if comment, ok := item.Key.(sops.Comment); ok {
 			branch = append(branch, yaml.MapItem{
-				Key:   yaml.Comment{Value: comment.Value},
+				Key:   store.treeValueToYamlValue(comment),
 				Value: nil,
 			})
 		} else {
@@ -137,7 +139,6 @@ func (store Store) MarshalValue(v interface{}) ([]byte, error) {
 	v = store.treeValueToYamlValue(v)
 	return (&yaml.YAMLMarshaler{Indent: 4}).Marshal(v)
 }
-
 
 // UnmarshalMetadata takes a yaml document as a string and extracts sops' metadata from it
 func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
