@@ -76,6 +76,12 @@ func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes 
 		Version:           version,
 		KeySources:        ks,
 	}
+	if c.Bool("shamir-secret-sharing") {
+		tree.Metadata.Shamir = true
+	}
+	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
+		tree.Metadata.ShamirQuorum = quorum
+	}
 	tree.GenerateDataKeyWithKeyServices(svcs)
 	return
 }
@@ -217,6 +223,14 @@ func main() {
 		cli.StringSliceFlag{
 			Name:  "keyservice",
 			Usage: "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
+		},
+		cli.BoolFlag{
+			Name:  "shamir-secret-sharing",
+			Usage: "use Shamir's secret sharing to split the data key among all the master keys",
+		},
+		cli.IntFlag{
+			Name:  "shamir-secret-sharing-quorum",
+			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
 	}
 
@@ -600,6 +614,12 @@ func loadExample(c *cli.Context, file string, svcs []keyservice.KeyServiceClient
 	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
 	tree.Metadata.Version = version
 	tree.Metadata.KeySources = ks
+	if c.Bool("shamir-secret-sharing") {
+		tree.Metadata.Shamir = true
+	}
+	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
+		tree.Metadata.ShamirQuorum = quorum
+	}
 	key, errs := tree.GenerateDataKeyWithKeyServices(svcs)
 	if len(errs) > 0 {
 		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)

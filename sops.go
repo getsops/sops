@@ -47,6 +47,7 @@ import (
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/shamir"
 	"golang.org/x/net/context"
 )
 
@@ -55,7 +56,9 @@ const DefaultUnencryptedSuffix = "_unencrypted"
 
 type sopsError string
 
-func (e sopsError) Error() string { return string(e) }
+func (e sopsError) Error() string {
+	return string(e)
+}
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
 const MacMismatch = sopsError("MAC mismatch")
@@ -301,6 +304,12 @@ type Metadata struct {
 	MessageAuthenticationCode string
 	Version                   string
 	KeySources                []KeySource
+	// Shamir is true when the data key is split across multiple master keys
+	// according to shamir's secret sharing algorithm
+	Shamir bool
+	// ShamirQuorum is the number of master keys required to recover the
+	// original data key
+	ShamirQuorum int
 }
 
 // KeySource is a collection of MasterKeys with a Name.
@@ -348,6 +357,11 @@ func (m *Metadata) RemoveMasterKeys(masterKeys []keys.MasterKey) {
 }
 
 func (m *Metadata) UpdateMasterKeysIfNeededWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
+	// If we're using Shamir and we've added or removed keys, we must
+	// generate Shamir parts again and reencrypt with all keys
+	if m.Shamir {
+		return m.updateMasterKeysShamir(dataKey, svcs)
+	}
 	for _, ks := range m.KeySources {
 		for _, key := range ks.Keys {
 			svcKey := keyservice.KeyFromMasterKey(key)
@@ -383,6 +397,9 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			fmt.Errorf("No key services provided, can not update master keys."),
 		}
 	}
+	if m.Shamir {
+		return m.updateMasterKeysShamir(dataKey, svcs)
+	}
 	for _, keysource := range m.KeySources {
 		for _, key := range keysource.Keys {
 			svcKey := keyservice.KeyFromMasterKey(key)
@@ -399,6 +416,52 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 				// Only need to encrypt the key successfully with one service
 				break
 			}
+		}
+	}
+	return
+}
+
+// updateMasterKeysShamir splits the data key into parts using Shamir's Secret
+// Sharing algorithm and encrypts each part with a master key
+func (m *Metadata) updateMasterKeysShamir(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
+	keyCount := 0
+	for _, ks := range m.KeySources {
+		for range ks.Keys {
+			keyCount++
+		}
+	}
+	// If the quorum wasn't set, default to 2
+	if m.ShamirQuorum == 0 {
+		m.ShamirQuorum = 2
+	}
+	parts, err := shamir.Split(dataKey, keyCount, m.ShamirQuorum)
+	if err != nil {
+		errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
+		return
+	}
+	if len(parts) != keyCount {
+		errs = append(errs, fmt.Errorf("Not enough parts obtained from Shamir. Need %d, got %d", keyCount, len(parts)))
+		return
+	}
+	counter := 0
+	for _, ks := range m.KeySources {
+		for _, key := range ks.Keys {
+			shamirPart := parts[counter]
+			svcKey := keyservice.KeyFromMasterKey(key)
+			for _, svc := range svcs {
+				rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
+					Key:       &svcKey,
+					Plaintext: shamirPart,
+				})
+				if err != nil {
+					errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
+					continue
+				}
+				key.SetEncryptedDataKey(rsp.Ciphertext)
+				// Only need to encrypt the key successfully with one service
+				break
+			}
+			counter++
 		}
 	}
 	return
@@ -466,6 +529,8 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	out["unencrypted_suffix"] = m.UnencryptedSuffix
 	out["mac"] = m.MessageAuthenticationCode
 	out["version"] = m.Version
+	out["shamir"] = m.Shamir
+	out["shamir_quorum"] = m.ShamirQuorum
 	for _, ks := range m.KeySources {
 		var keys []map[string]interface{}
 		for _, k := range ks.Keys {
@@ -476,9 +541,31 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	return out
 }
 
-// GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
-// MasterKey in the Metadata's KeySources until one of them succeeds.
-func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func (m Metadata) getDataKeyShamir() ([]byte, error) {
+	var parts [][]byte
+	for _, ks := range m.KeySources {
+		for _, k := range ks.Keys {
+			key, err := k.Decrypt()
+			if err != nil {
+				fmt.Printf("Key error: %s %s\n", k.ToString(), err)
+			} else {
+				parts = append(parts, key)
+			}
+		}
+	}
+	if len(parts) < m.ShamirQuorum {
+		return nil, fmt.Errorf("Not enough parts to recover data key with Shamir. Need %d, have %d.", m.ShamirQuorum, len(parts))
+	}
+	dataKey, err := shamir.Combine(parts)
+	if err != nil {
+		return nil, fmt.Errorf("Could not get data key from shamir parts: %s", err)
+	}
+	return dataKey, nil
+}
+
+// getFirstDataKey retrieves the data key from the first MasterKey in the
+// Metadata's KeySources that's able to return it.
+func (m Metadata) getFirstDataKey(svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	errMsg := "Could not decrypt the data key with any of the master keys:\n"
 	for _, keysource := range m.KeySources {
 		for _, key := range keysource.Keys {
@@ -507,6 +594,16 @@ func (m Metadata) GetDataKey() ([]byte, error) {
 	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceClient{
 		keyservice.NewLocalClient(),
 	})
+}
+
+// GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
+// MasterKey in the Metadata's KeySources until one of them succeeds.
+func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
+	if m.Shamir {
+		return m.getDataKeyShamir()
+	} else {
+		return m.getFirstDataKey(svcs)
+	}
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
@@ -548,6 +645,15 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 	metadata.UnencryptedSuffix = unencryptedSuffix
 	if metadata.Version, ok = data["version"].(string); !ok {
 		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
+	}
+	shamir, ok := data["shamir"].(bool)
+	if ok {
+		metadata.Shamir = shamir
+	}
+	if shamirQuorum, ok := data["shamir_quorum"].(float64); ok {
+		metadata.ShamirQuorum = int(shamirQuorum)
+	} else if shamirQuorum, ok := data["shamir_quorum"].(int); ok {
+		metadata.ShamirQuorum = shamirQuorum
 	}
 	if k, ok := data["kms"].([]interface{}); ok {
 		ks, err := mapKMSEntriesToKeySource(k)
