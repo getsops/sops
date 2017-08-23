@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"log"
+
 	"github.com/howeyc/gopass"
 	gpgagent "go.mozilla.org/gopgagent"
 	"golang.org/x/crypto/openpgp"
@@ -82,6 +84,7 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 
 // Decrypt uses PGP to obtain the data key from the EncryptedKey store in the MasterKey and returns it
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	log.Printf("Attempting decryption of GPG MasterKey with fingerprint %s", key.Fingerprint)
 	ring, err := key.secRing()
 	if err != nil {
 		return nil, fmt.Errorf("Could not load secring: %s", err)
@@ -95,6 +98,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, fmt.Errorf("Reading PGP message failed: %s", err)
 	}
 	if b, err := ioutil.ReadAll(md.UnverifiedBody); err == nil {
+		log.Printf("Decryption of GPG MasterKey with fingerprint %s successful", key.Fingerprint)
 		return b, nil
 	}
 	return nil, fmt.Errorf("The key could not be decrypted with any of the GPG entries")
@@ -177,8 +181,8 @@ func (key *MasterKey) fingerprintMap(ring openpgp.EntityList) map[string]openpgp
 func (key *MasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 	conn, err := gpgagent.NewConn()
 	if err == gpgagent.ErrNoAgent {
-		fmt.Println("gpg-agent not found, continuing with manual passphrase input...")
-		fmt.Print("Enter PGP key passphrase: ")
+		log.Printf("gpg-agent not found, continuing with manual passphrase input...")
+		log.Print("Enter PGP key passphrase: ")
 		pass, err := gopass.GetPasswd()
 		if err != nil {
 			return nil, err

@@ -74,10 +74,7 @@ func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes 
 	tree.Metadata = sops.Metadata{
 		UnencryptedSuffix: c.String("unencrypted-suffix"),
 		Version:           version,
-		KeySources:        ks,
-	}
-	if c.Bool("shamir-secret-sharing") {
-		tree.Metadata.Shamir = true
+		KeyGroups:         ks,
 	}
 	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
 		tree.Metadata.ShamirQuorum = quorum
@@ -223,10 +220,6 @@ func main() {
 		cli.StringSliceFlag{
 			Name:  "keyservice",
 			Usage: "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
-		},
-		cli.BoolFlag{
-			Name:  "shamir-secret-sharing",
-			Usage: "use Shamir's secret sharing to split the data key among all the master keys",
 		},
 		cli.IntFlag{
 			Name:  "shamir-secret-sharing-quorum",
@@ -451,7 +444,19 @@ func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keys
 	return out, nil
 }
 
-func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
+func getKeySources(c *cli.Context, file string) ([]sops.KeyGroup, error) {
+	return []sops.KeyGroup{
+		{
+			&pgp.MasterKey{
+				Fingerprint: "9E663A144258C7BC6913CB181D2886732A51DF60",
+			},
+		},
+		{
+			&pgp.MasterKey{
+				Fingerprint: "525D602281B152ECBC6030CB6744C84113051EB5",
+			},
+		},
+	}, nil
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
@@ -487,23 +492,21 @@ func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
 			}
 		}
 	}
-	kmsKs := sops.KeySource{Name: "kms", Keys: kmsKeys}
-	pgpKs := sops.KeySource{Name: "pgp", Keys: pgpKeys}
-	return []sops.KeySource{kmsKs, pgpKs}, nil
+	return []sops.KeyGroup{append(kmsKeys, pgpKeys...)}, nil
 }
 
 func encryptTree(tree sops.Tree, stash map[string][]interface{}, svcs []keyservice.KeyServiceClient) (sops.Tree, error) {
 	cipher := aes.Cipher{}
-	key, err := tree.Metadata.GetDataKeyWithKeyServices(svcs)
+	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(svcs)
 	if err != nil {
 		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
 	}
-	computedMac, err := tree.Encrypt(key, cipher, stash)
+	computedMac, err := tree.Encrypt(dataKey, cipher, stash)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
 	tree.Metadata.LastModified = time.Now().UTC()
-	encryptedMac, err := cipher.Encrypt(computedMac, key, tree.Metadata.LastModified.Format(time.RFC3339), nil)
+	encryptedMac, err := cipher.Encrypt(computedMac, dataKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
 		return tree, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
 	}
@@ -613,10 +616,7 @@ func loadExample(c *cli.Context, file string, svcs []keyservice.KeyServiceClient
 	}
 	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
 	tree.Metadata.Version = version
-	tree.Metadata.KeySources = ks
-	if c.Bool("shamir-secret-sharing") {
-		tree.Metadata.Shamir = true
-	}
+	tree.Metadata.KeyGroups = ks
 	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
 		tree.Metadata.ShamirQuorum = quorum
 	}

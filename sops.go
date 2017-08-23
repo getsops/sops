@@ -43,6 +43,8 @@ import (
 	"strings"
 	"time"
 
+	"log"
+
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -303,20 +305,13 @@ type Metadata struct {
 	UnencryptedSuffix         string
 	MessageAuthenticationCode string
 	Version                   string
-	KeySources                []KeySource
-	// Shamir is true when the data key is split across multiple master keys
-	// according to shamir's secret sharing algorithm
-	Shamir bool
-	// ShamirQuorum is the number of master keys required to recover the
+	KeyGroups                 []KeyGroup
+	// ShamirQuorum is the number of key groups required to recover the
 	// original data key
 	ShamirQuorum int
 }
 
-// KeySource is a collection of MasterKeys with a Name.
-type KeySource struct {
-	Name string
-	Keys []keys.MasterKey
-}
+type KeyGroup []keys.MasterKey
 
 // Store provides a way to load and save the sops tree along with metadata
 type Store interface {
@@ -330,30 +325,40 @@ type Store interface {
 // MasterKeyCount returns the number of master keys available
 func (m *Metadata) MasterKeyCount() int {
 	count := 0
-	for _, ks := range m.KeySources {
-		count += len(ks.Keys)
+	for _, group := range m.KeyGroups {
+		count += len(group)
 	}
 	return count
 }
 
 // RemoveMasterKeys removes all of the provided keys from the metadata's KeySources, if they exist there.
 func (m *Metadata) RemoveMasterKeys(masterKeys []keys.MasterKey) {
-	for j, ks := range m.KeySources {
-		var newKeys []keys.MasterKey
-		for _, k := range ks.Keys {
-			matchFound := false
-			for _, keyToRemove := range masterKeys {
-				if k.ToString() == keyToRemove.ToString() {
-					matchFound = true
-					break
-				}
-			}
-			if !matchFound {
-				newKeys = append(newKeys, k)
-			}
-		}
-		m.KeySources[j].Keys = newKeys
-	}
+	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
+	panic("Unimplemented")
+}
+
+// AddPGPMasterKeys parses the input comma separated string of GPG fingerprints, generates a PGP MasterKey for each fingerprint, and adds the keys to the PGP KeySource
+func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
+	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
+	panic("Unimplemented")
+}
+
+// AddKMSMasterKeys parses the input comma separated string of AWS KMS ARNs, generates a KMS MasterKey for each ARN, and then adds the keys to the KMS KeySource
+func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) {
+	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
+	panic("Unimplemented")
+}
+
+// RemovePGPMasterKeys takes a comma separated string of PGP fingerprints and removes the keys corresponding to those fingerprints from the metadata's KeySources
+func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
+	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
+	panic("Unimplemented")
+}
+
+// RemoveKMSMasterKeys takes a comma separated string of AWS KMS ARNs and removes the keys corresponding to those ARNs from the metadata's KeySources
+func (m *Metadata) RemoveKMSMasterKeys(arns string) {
+	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
+	panic("Unimplemented")
 }
 
 func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
@@ -362,16 +367,35 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			fmt.Errorf("No key services provided, can not update master keys."),
 		}
 	}
-	if m.Shamir {
-		return m.updateMasterKeysShamir(dataKey, svcs)
+	var parts [][]byte
+	if len(m.KeyGroups) == 1 {
+		// If there's only one key group, we can't do Shamir. All keys
+		// in the group encrypt the whole data key.
+		parts = append(parts, dataKey)
+	} else {
+		var err error
+		if m.ShamirQuorum == 0 {
+			m.ShamirQuorum = len(m.KeyGroups)
+		}
+		log.Printf("Multiple KeyGroups found, proceeding with Shamir with quorum %d", m.ShamirQuorum)
+		parts, err = shamir.Split(dataKey, len(m.KeyGroups), m.ShamirQuorum)
+		if err != nil {
+			errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
+			return
+		}
+		if len(parts) != len(m.KeyGroups) {
+			errs = append(errs, fmt.Errorf("Not enough parts obtained from Shamir. Need %d, got %d", len(m.KeyGroups), len(parts)))
+			return
+		}
 	}
-	for _, keysource := range m.KeySources {
-		for _, key := range keysource.Keys {
+	for i, group := range m.KeyGroups {
+		part := parts[i]
+		for _, key := range group {
 			svcKey := keyservice.KeyFromMasterKey(key)
 			for _, svc := range svcs {
 				rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
 					Key:       &svcKey,
-					Plaintext: dataKey,
+					Plaintext: part,
 				})
 				if err != nil {
 					errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
@@ -381,52 +405,6 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 				// Only need to encrypt the key successfully with one service
 				break
 			}
-		}
-	}
-	return
-}
-
-// updateMasterKeysShamir splits the data key into parts using Shamir's Secret
-// Sharing algorithm and encrypts each part with a master key
-func (m *Metadata) updateMasterKeysShamir(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
-	keyCount := 0
-	for _, ks := range m.KeySources {
-		for range ks.Keys {
-			keyCount++
-		}
-	}
-	// If the quorum wasn't set, default to 2
-	if m.ShamirQuorum == 0 {
-		m.ShamirQuorum = 2
-	}
-	parts, err := shamir.Split(dataKey, keyCount, m.ShamirQuorum)
-	if err != nil {
-		errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
-		return
-	}
-	if len(parts) != keyCount {
-		errs = append(errs, fmt.Errorf("Not enough parts obtained from Shamir. Need %d, got %d", keyCount, len(parts)))
-		return
-	}
-	counter := 0
-	for _, ks := range m.KeySources {
-		for _, key := range ks.Keys {
-			shamirPart := parts[counter]
-			svcKey := keyservice.KeyFromMasterKey(key)
-			for _, svc := range svcs {
-				rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
-					Key:       &svcKey,
-					Plaintext: shamirPart,
-				})
-				if err != nil {
-					errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
-					continue
-				}
-				key.SetEncryptedDataKey(rsp.Ciphertext)
-				// Only need to encrypt the key successfully with one service
-				break
-			}
-			counter++
 		}
 	}
 	return
@@ -439,101 +417,52 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 	})
 }
 
-// AddPGPMasterKeys parses the input comma separated string of GPG fingerprints, generates a PGP MasterKey for each fingerprint, and adds the keys to the PGP KeySource
-func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
-	for i, ks := range m.KeySources {
-		if ks.Name == "pgp" {
-			var keys []keys.MasterKey
-			for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
-				keys = append(keys, k)
-				fmt.Printf("Adding new PGP master key: %X\n", k.Fingerprint)
-			}
-			ks.Keys = append(ks.Keys, keys...)
-			m.KeySources[i] = ks
-		}
-	}
-}
-
-// AddKMSMasterKeys parses the input comma separated string of AWS KMS ARNs, generates a KMS MasterKey for each ARN, and then adds the keys to the KMS KeySource
-func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) {
-	for i, ks := range m.KeySources {
-		if ks.Name == "kms" {
-			var keys []keys.MasterKey
-			for _, k := range kms.MasterKeysFromArnString(kmsArns, context) {
-				keys = append(keys, k)
-				fmt.Printf("Adding new KMS master key: %s\n", k.Arn)
-			}
-			ks.Keys = append(ks.Keys, keys...)
-			m.KeySources[i] = ks
-		}
-	}
-}
-
-// RemovePGPMasterKeys takes a comma separated string of PGP fingerprints and removes the keys corresponding to those fingerprints from the metadata's KeySources
-func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
-	var keys []keys.MasterKey
-	for _, k := range pgp.MasterKeysFromFingerprintString(pgpFps) {
-		keys = append(keys, k)
-	}
-	m.RemoveMasterKeys(keys)
-}
-
-// RemoveKMSMasterKeys takes a comma separated string of AWS KMS ARNs and removes the keys corresponding to those ARNs from the metadata's KeySources
-func (m *Metadata) RemoveKMSMasterKeys(arns string) {
-	var keys []keys.MasterKey
-	for _, k := range kms.MasterKeysFromArnString(arns, nil) {
-		keys = append(keys, k)
-	}
-	m.RemoveMasterKeys(keys)
-}
-
 // ToMap converts the Metadata to a map for serialization purposes
 func (m *Metadata) ToMap() map[string]interface{} {
+	// TODO: This doesn't belong here. This is serialization logic.
+	// It should probably be rewritten so that sops.Metadata gets mapped to some sort of stores.Metadata struct,
+	// which then gets serialized directly
 	out := make(map[string]interface{})
 	out["lastmodified"] = m.LastModified.Format(time.RFC3339)
 	out["unencrypted_suffix"] = m.UnencryptedSuffix
 	out["mac"] = m.MessageAuthenticationCode
 	out["version"] = m.Version
-	out["shamir"] = m.Shamir
 	out["shamir_quorum"] = m.ShamirQuorum
-	for _, ks := range m.KeySources {
-		var keys []map[string]interface{}
-		for _, k := range ks.Keys {
-			keys = append(keys, k.ToMap())
+	if len(m.KeyGroups) == 1 {
+		for k, v := range m.keyGroupToMap(m.KeyGroups[0]) {
+			out[k] = v
 		}
-		out[ks.Name] = keys
+	} else {
+		// This is very bad and I should feel bad
+		var groups []map[string][]map[string]interface{}
+		for _, group := range m.KeyGroups {
+			groups = append(groups, m.keyGroupToMap(group))
+		}
+		out["key_groups"] = groups
 	}
 	return out
 }
 
-func (m Metadata) getDataKeyShamir() ([]byte, error) {
-	var parts [][]byte
-	for _, ks := range m.KeySources {
-		for _, k := range ks.Keys {
-			key, err := k.Decrypt()
-			if err != nil {
-				fmt.Printf("Key error: %s %s\n", k.ToString(), err)
-			} else {
-				parts = append(parts, key)
-			}
+func (m *Metadata) keyGroupToMap(group KeyGroup) (keys map[string][]map[string]interface{}) {
+	keys = make(map[string][]map[string]interface{})
+	for _, k := range group {
+		switch k := k.(type) {
+		case *pgp.MasterKey:
+			keys["pgp"] = append(keys["pgp"], k.ToMap())
+		case *kms.MasterKey:
+			keys["kms"] = append(keys["kms"], k.ToMap())
 		}
 	}
-	if len(parts) < m.ShamirQuorum {
-		return nil, fmt.Errorf("Not enough parts to recover data key with Shamir. Need %d, have %d.", m.ShamirQuorum, len(parts))
-	}
-	dataKey, err := shamir.Combine(parts)
-	if err != nil {
-		return nil, fmt.Errorf("Could not get data key from shamir parts: %s", err)
-	}
-	return dataKey, nil
+	return
 }
 
-// getFirstDataKey retrieves the data key from the first MasterKey in the
-// Metadata's KeySources that's able to return it.
-func (m Metadata) getFirstDataKey(svcs []keyservice.KeyServiceClient) ([]byte, error) {
+// GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
+// MasterKey in the Metadata's KeySources until one of them succeeds.
+func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	errMsg := "Could not decrypt the data key with any of the master keys:\n"
-	for _, keysource := range m.KeySources {
-		for _, key := range keysource.Keys {
+	var parts [][]byte
+	for _, group := range m.KeyGroups {
+		for _, key := range group {
 			svcKey := keyservice.KeyFromMasterKey(key)
 			for _, svc := range svcs {
 				rsp, err := svc.Decrypt(
@@ -546,11 +475,28 @@ func (m Metadata) getFirstDataKey(svcs []keyservice.KeyServiceClient) ([]byte, e
 					errMsg += fmt.Sprintf("\t%s: %s", key.ToString(), err)
 					continue
 				}
-				return rsp.Plaintext, nil
+				parts = append(parts, rsp.Plaintext)
+				break
 			}
 		}
 	}
-	return nil, fmt.Errorf("%s", errMsg)
+	var dataKey []byte
+	if len(m.KeyGroups) > 1 {
+		if len(parts) < m.ShamirQuorum {
+			return nil, fmt.Errorf("Not enough parts to recover data key with Shamir. Need %d, have %d.", m.ShamirQuorum, len(parts))
+		}
+		var err error
+		dataKey, err = shamir.Combine(parts)
+		if err != nil {
+			return nil, fmt.Errorf("Could not get data key from shamir parts: %s", err)
+		}
+	} else {
+		if len(parts) != 1 {
+			return nil, fmt.Errorf("%s", errMsg)
+		}
+		dataKey = parts[0]
+	}
+	return dataKey, nil
 }
 
 // GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it,
@@ -559,16 +505,6 @@ func (m Metadata) GetDataKey() ([]byte, error) {
 	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceClient{
 		keyservice.NewLocalClient(),
 	})
-}
-
-// GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
-// MasterKey in the Metadata's KeySources until one of them succeeds.
-func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	if m.Shamir {
-		return m.getDataKeyShamir()
-	} else {
-		return m.getFirstDataKey(svcs)
-	}
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
@@ -591,6 +527,10 @@ func ToBytes(in interface{}) ([]byte, error) {
 
 // MapToMetadata tries to convert a map[string]interface{} obtained from an encrypted file into a Metadata struct.
 func MapToMetadata(data map[string]interface{}) (Metadata, error) {
+	// TODO: This doesn't belong here. This is serialization logic.
+	// It should probably be rewritten so that the YAML/JSON gets mapped to a struct which then gets mapped to a
+	// sops.Metadata
+	// TODO: Use KeyGroups
 	var metadata Metadata
 	mac, ok := data["mac"].(string)
 	if !ok {
@@ -611,32 +551,55 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 	if metadata.Version, ok = data["version"].(string); !ok {
 		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
 	}
-	shamir, ok := data["shamir"].(bool)
-	if ok {
-		metadata.Shamir = shamir
-	}
 	if shamirQuorum, ok := data["shamir_quorum"].(float64); ok {
 		metadata.ShamirQuorum = int(shamirQuorum)
 	} else if shamirQuorum, ok := data["shamir_quorum"].(int); ok {
 		metadata.ShamirQuorum = shamirQuorum
 	}
-	if k, ok := data["kms"].([]interface{}); ok {
-		ks, err := mapKMSEntriesToKeySource(k)
-		if err == nil {
-			metadata.KeySources = append(metadata.KeySources, ks)
+	if keyGroups, ok := data["key_groups"]; ok {
+		var kgs []KeyGroup
+		if gs, ok := keyGroups.([]interface{}); ok {
+			for _, g := range gs {
+				g := g.(map[interface{}]interface{})
+				var group KeyGroup
+				if k, ok := g["kms"].([]interface{}); ok {
+					ks, err := mapKMSEntriesToKeySlice(k)
+					if err == nil {
+						group = append(group, ks...)
+					}
+				}
+				if pgp, ok := g["pgp"].([]interface{}); ok {
+					ks, err := mapPGPEntriesToKeySlice(pgp)
+					if err == nil {
+						group = append(group, ks...)
+					}
+				}
+				kgs = append(kgs, group)
+			}
 		}
-	}
-
-	if pgp, ok := data["pgp"].([]interface{}); ok {
-		ks, err := mapPGPEntriesToKeySource(pgp)
-		if err == nil {
-			metadata.KeySources = append(metadata.KeySources, ks)
+		metadata.KeyGroups = kgs
+	} else {
+		// Old data format, just one KeyGroup
+		var group KeyGroup
+		if k, ok := data["kms"].([]interface{}); ok {
+			ks, err := mapKMSEntriesToKeySlice(k)
+			if err == nil {
+				group = append(group, ks...)
+			}
 		}
+		if pgp, ok := data["pgp"].([]interface{}); ok {
+			ks, err := mapPGPEntriesToKeySlice(pgp)
+			if err == nil {
+				group = append(group, ks...)
+			}
+		}
+		metadata.KeyGroups = []KeyGroup{group}
 	}
 	return metadata, nil
 }
 
 func convertToMapStringInterface(in map[interface{}]interface{}) (map[string]interface{}, error) {
+	// TODO: This doesn't belong here. This is serialization logic.
 	m := make(map[string]interface{})
 	for k, v := range in {
 		key, ok := k.(string)
@@ -648,9 +611,9 @@ func convertToMapStringInterface(in map[interface{}]interface{}) (map[string]int
 	return m, nil
 }
 
-func mapKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
+func mapKMSEntriesToKeySlice(in []interface{}) ([]keys.MasterKey, error) {
+	// TODO: This doesn't belong here. This is serialization logic.
 	var keys []keys.MasterKey
-	keysource := KeySource{Name: "kms", Keys: keys}
 	for _, v := range in {
 		entry, ok := v.(map[string]interface{})
 		if !ok {
@@ -671,20 +634,20 @@ func mapKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
 		}
 		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
 		if err != nil {
-			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+			return keys, fmt.Errorf("Could not parse creation date: %s", err)
 		}
 		if _, ok := entry["context"]; ok {
 			key.EncryptionContext = kms.ParseKMSContext(entry["context"])
 		}
 		key.CreationDate = creationDate
-		keysource.Keys = append(keysource.Keys, key)
+		keys = append(keys, key)
 	}
-	return keysource, nil
+	return keys, nil
 }
 
-func mapPGPEntriesToKeySource(in []interface{}) (KeySource, error) {
+func mapPGPEntriesToKeySlice(in []interface{}) ([]keys.MasterKey, error) {
+	// TODO: This doesn't belong here. This is serialization logic.
 	var keys []keys.MasterKey
-	keysource := KeySource{Name: "pgp", Keys: keys}
 	for _, v := range in {
 		entry, ok := v.(map[string]interface{})
 		if !ok {
@@ -701,10 +664,10 @@ func mapPGPEntriesToKeySource(in []interface{}) (KeySource, error) {
 		key.EncryptedKey = entry["enc"].(string)
 		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
 		if err != nil {
-			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+			return keys, fmt.Errorf("Could not parse creation date: %s", err)
 		}
 		key.CreationDate = creationDate
-		keysource.Keys = append(keysource.Keys, key)
+		keys = append(keys, key)
 	}
-	return keysource, nil
+	return keys, nil
 }
