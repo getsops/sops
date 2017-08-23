@@ -1,11 +1,13 @@
-package json //import "go.mozilla.org/sops/json"
+package json //import "go.mozilla.org/sops/stores/json"
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
+
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/stores"
 )
 
 // Store handles storage of JSON data.
@@ -52,7 +54,7 @@ func (store BinaryStore) Unmarshal(in []byte) (sops.TreeBranch, error) {
 }
 
 // UnmarshalMetadata takes a binary format sops file and extracts sops' metadata from it
-func (store BinaryStore) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
+func (store BinaryStore) UnmarshalMetadata(in []byte) (*sops.Metadata, error) {
 	return store.store.UnmarshalMetadata(in)
 }
 
@@ -228,7 +230,7 @@ func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 
 // MarshalWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
 func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
-	tree = append(tree, sops.TreeItem{Key: "sops", Value: metadata.ToMap()})
+	tree = append(tree, sops.TreeItem{Key: "sops", Value: stores.MetadataFromInternal(metadata)})
 	out, err := store.jsonFromTreeBranch(tree)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
@@ -246,14 +248,11 @@ func (store Store) MarshalValue(v interface{}) ([]byte, error) {
 }
 
 // UnmarshalMetadata takes a json string and extracts sops' metadata from it
-func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
-	var ok bool
-	data := make(map[string]interface{})
-	if err := json.Unmarshal(in, &data); err != nil {
-		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input json: %s", err)
+func (store Store) UnmarshalMetadata(in []byte) (*sops.Metadata, error) {
+	file := stores.SopsFile{}
+	err := json.Unmarshal(in, &file)
+	if err != nil {
+		return nil, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
-	if data, ok = data["sops"].(map[string]interface{}); !ok {
-		return sops.Metadata{}, sops.MetadataNotFound
-	}
-	return sops.MapToMetadata(data)
+	return file.Metadata.ToInternal()
 }

@@ -1,9 +1,11 @@
-package yaml //import "go.mozilla.org/sops/yaml"
+package yaml //import "go.mozilla.org/sops/stores/yaml"
 
 import (
 	"fmt"
+
 	"github.com/mozilla-services/yaml"
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/stores"
 )
 
 // Store handles storage of YAML data
@@ -124,7 +126,7 @@ func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 // MarshalWithMetadata takes a sops tree branch and metadata and marshals them into a yaml document
 func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
 	yamlMap := store.treeBranchToYamlMap(tree)
-	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: metadata.ToMap()})
+	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: stores.MetadataFromInternal(metadata)})
 	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
@@ -138,23 +140,12 @@ func (store Store) MarshalValue(v interface{}) ([]byte, error) {
 	return (&yaml.YAMLMarshaler{Indent: 4}).Marshal(v)
 }
 
-
 // UnmarshalMetadata takes a yaml document as a string and extracts sops' metadata from it
-func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
-	var ok bool
-	data := make(map[interface{}]interface{})
-	err := yaml.Unmarshal(in, &data)
+func (s *Store) UnmarshalMetadata(in []byte) (*sops.Metadata, error) {
+	file := stores.SopsFile{}
+	err := yaml.Unmarshal(in, &file)
 	if err != nil {
-		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input yaml: %s", err)
+		return nil, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
-	data, ok = data["sops"].(map[interface{}]interface{})
-	if !ok {
-		return sops.Metadata{}, sops.MetadataNotFound
-	}
-	metadataBranch := make(map[string]interface{})
-	for k, v := range data {
-		key, _ := k.(string)
-		metadataBranch[key] = v
-	}
-	return sops.MapToMetadata(metadataBranch)
+	return file.Metadata.ToInternal()
 }

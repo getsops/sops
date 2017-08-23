@@ -47,8 +47,6 @@ import (
 
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/shamir"
 	"golang.org/x/net/context"
 )
@@ -244,6 +242,7 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
+	log.Print("Decrypting SOPS tree")
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		var v interface{}
@@ -318,7 +317,7 @@ type KeyGroup []keys.MasterKey
 // Store provides a way to load and save the sops tree along with metadata
 type Store interface {
 	Unmarshal(in []byte) (TreeBranch, error)
-	UnmarshalMetadata(in []byte) (Metadata, error)
+	UnmarshalMetadata(in []byte) (*Metadata, error)
 	Marshal(TreeBranch) ([]byte, error)
 	MarshalWithMetadata(TreeBranch, Metadata) ([]byte, error)
 	MarshalValue(interface{}) ([]byte, error)
@@ -420,45 +419,6 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 	})
 }
 
-// ToMap converts the Metadata to a map for serialization purposes
-func (m *Metadata) ToMap() map[string]interface{} {
-	// TODO: This doesn't belong here. This is serialization logic.
-	// It should probably be rewritten so that sops.Metadata gets mapped to some sort of stores.Metadata struct,
-	// which then gets serialized directly
-	out := make(map[string]interface{})
-	out["lastmodified"] = m.LastModified.Format(time.RFC3339)
-	out["unencrypted_suffix"] = m.UnencryptedSuffix
-	out["mac"] = m.MessageAuthenticationCode
-	out["version"] = m.Version
-	out["shamir_quorum"] = m.ShamirQuorum
-	if len(m.KeyGroups) == 1 {
-		for k, v := range m.keyGroupToMap(m.KeyGroups[0]) {
-			out[k] = v
-		}
-	} else {
-		// This is very bad and I should feel bad
-		var groups []map[string][]map[string]interface{}
-		for _, group := range m.KeyGroups {
-			groups = append(groups, m.keyGroupToMap(group))
-		}
-		out["key_groups"] = groups
-	}
-	return out
-}
-
-func (m *Metadata) keyGroupToMap(group KeyGroup) (keys map[string][]map[string]interface{}) {
-	keys = make(map[string][]map[string]interface{})
-	for _, k := range group {
-		switch k := k.(type) {
-		case *pgp.MasterKey:
-			keys["pgp"] = append(keys["pgp"], k.ToMap())
-		case *kms.MasterKey:
-			keys["kms"] = append(keys["kms"], k.ToMap())
-		}
-	}
-	return
-}
-
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
 func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
@@ -530,151 +490,4 @@ func ToBytes(in interface{}) ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
 	}
-}
-
-// MapToMetadata tries to convert a map[string]interface{} obtained from an encrypted file into a Metadata struct.
-func MapToMetadata(data map[string]interface{}) (Metadata, error) {
-	// TODO: This doesn't belong here. This is serialization logic.
-	// It should probably be rewritten so that the YAML/JSON gets mapped to a struct which then gets mapped to a
-	// sops.Metadata
-	// TODO: Use KeyGroups
-	var metadata Metadata
-	mac, ok := data["mac"].(string)
-	if !ok {
-		fmt.Println("WARNING: no MAC was found on the input file. " +
-			"Verification will fail. You can use --ignore-mac to skip verification.")
-	}
-	metadata.MessageAuthenticationCode = mac
-	lastModified, err := time.Parse(time.RFC3339, data["lastmodified"].(string))
-	if err != nil {
-		return metadata, fmt.Errorf("Could not parse last modified date: %s", err)
-	}
-	metadata.LastModified = lastModified
-	unencryptedSuffix, ok := data["unencrypted_suffix"].(string)
-	if !ok {
-		unencryptedSuffix = DefaultUnencryptedSuffix
-	}
-	metadata.UnencryptedSuffix = unencryptedSuffix
-	if metadata.Version, ok = data["version"].(string); !ok {
-		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
-	}
-	if shamirQuorum, ok := data["shamir_quorum"].(float64); ok {
-		metadata.ShamirQuorum = int(shamirQuorum)
-	} else if shamirQuorum, ok := data["shamir_quorum"].(int); ok {
-		metadata.ShamirQuorum = shamirQuorum
-	}
-	if keyGroups, ok := data["key_groups"]; ok {
-		var kgs []KeyGroup
-		if gs, ok := keyGroups.([]interface{}); ok {
-			for _, g := range gs {
-				g := g.(map[interface{}]interface{})
-				var group KeyGroup
-				if k, ok := g["kms"].([]interface{}); ok {
-					ks, err := mapKMSEntriesToKeySlice(k)
-					if err == nil {
-						group = append(group, ks...)
-					}
-				}
-				if pgp, ok := g["pgp"].([]interface{}); ok {
-					ks, err := mapPGPEntriesToKeySlice(pgp)
-					if err == nil {
-						group = append(group, ks...)
-					}
-				}
-				kgs = append(kgs, group)
-			}
-		}
-		metadata.KeyGroups = kgs
-	} else {
-		// Old data format, just one KeyGroup
-		var group KeyGroup
-		if k, ok := data["kms"].([]interface{}); ok {
-			ks, err := mapKMSEntriesToKeySlice(k)
-			if err == nil {
-				group = append(group, ks...)
-			}
-		}
-		if pgp, ok := data["pgp"].([]interface{}); ok {
-			ks, err := mapPGPEntriesToKeySlice(pgp)
-			if err == nil {
-				group = append(group, ks...)
-			}
-		}
-		metadata.KeyGroups = []KeyGroup{group}
-	}
-	return metadata, nil
-}
-
-func convertToMapStringInterface(in map[interface{}]interface{}) (map[string]interface{}, error) {
-	// TODO: This doesn't belong here. This is serialization logic.
-	m := make(map[string]interface{})
-	for k, v := range in {
-		key, ok := k.(string)
-		if !ok {
-			return nil, fmt.Errorf("Map contains non-string-key (Type %T): %s", k, k)
-		}
-		m[key] = v
-	}
-	return m, nil
-}
-
-func mapKMSEntriesToKeySlice(in []interface{}) ([]keys.MasterKey, error) {
-	// TODO: This doesn't belong here. This is serialization logic.
-	var keys []keys.MasterKey
-	for _, v := range in {
-		entry, ok := v.(map[string]interface{})
-		if !ok {
-			m, ok := v.(map[interface{}]interface{})
-			var err error
-			entry, err = convertToMapStringInterface(m)
-			if !ok || err != nil {
-				fmt.Println("KMS entry has invalid format, skipping...")
-				continue
-			}
-		}
-		key := &kms.MasterKey{}
-		key.Arn = entry["arn"].(string)
-		key.EncryptedKey = entry["enc"].(string)
-		role, ok := entry["role"].(string)
-		if ok {
-			key.Role = role
-		}
-		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
-		if err != nil {
-			return keys, fmt.Errorf("Could not parse creation date: %s", err)
-		}
-		if _, ok := entry["context"]; ok {
-			key.EncryptionContext = kms.ParseKMSContext(entry["context"])
-		}
-		key.CreationDate = creationDate
-		keys = append(keys, key)
-	}
-	return keys, nil
-}
-
-func mapPGPEntriesToKeySlice(in []interface{}) ([]keys.MasterKey, error) {
-	// TODO: This doesn't belong here. This is serialization logic.
-	var keys []keys.MasterKey
-	for _, v := range in {
-		entry, ok := v.(map[string]interface{})
-		if !ok {
-			m, ok := v.(map[interface{}]interface{})
-			var err error
-			entry, err = convertToMapStringInterface(m)
-			if !ok || err != nil {
-				fmt.Println("PGP entry has invalid format, skipping...")
-				continue
-			}
-		}
-		key := &pgp.MasterKey{}
-		key.Fingerprint = entry["fp"].(string)
-		key.EncryptedKey = entry["enc"].(string)
-		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
-		if err != nil {
-			return keys, fmt.Errorf("Could not parse creation date: %s", err)
-		}
-		key.CreationDate = creationDate
-		keys = append(keys, key)
-	}
-	return keys, nil
 }

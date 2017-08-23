@@ -7,8 +7,8 @@ import (
 
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/aes"
-	sopsjson "go.mozilla.org/sops/json"
-	sopsyaml "go.mozilla.org/sops/yaml"
+	sopsjson "go.mozilla.org/sops/stores/json"
+	sopsyaml "go.mozilla.org/sops/stores/yaml"
 )
 
 // File is a wrapper around Data that reads a local encrypted
@@ -53,7 +53,7 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-	tree := sops.Tree{Branch: branch, Metadata: metadata}
+	tree := sops.Tree{Branch: branch, Metadata: *metadata}
 
 	// Decrypt the tree
 	cipher := aes.Cipher{}

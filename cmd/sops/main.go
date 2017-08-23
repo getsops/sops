@@ -27,11 +27,12 @@ import (
 	"github.com/google/shlex"
 
 	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/json"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/stores/json"
+	yamlstores "go.mozilla.org/sops/stores/yaml"
 	"go.mozilla.org/sops/yaml"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -98,7 +99,7 @@ func loadEncryptedFile(c *cli.Context, store sops.Store, fileBytes []byte) (tree
 	}
 	return sops.Tree{
 		Branch:   branch,
-		Metadata: metadata,
+		Metadata: *metadata,
 	}, nil
 }
 
@@ -251,9 +252,12 @@ func main() {
 
 		var output []byte
 		var err error
+		var encryptedTree sops.Tree
+		var fileBytes []byte
 		if c.Bool("encrypt") {
 			fileBytes, err := ioutil.ReadFile(fileName)
 			if err != nil {
+				panic(err)
 				return err
 			}
 			plainTree, err := loadPlainFile(c, inputStore, fileName, fileBytes, svcs)
@@ -264,22 +268,22 @@ func main() {
 		}
 
 		if c.Bool("decrypt") {
-			fileBytes, err := ioutil.ReadFile(fileName)
+			fileBytes, err = ioutil.ReadFile(fileName)
 			if err != nil {
 				return err
 			}
-			encryptedTree, err := loadEncryptedFile(c, inputStore, fileBytes)
+			encryptedTree, err = loadEncryptedFile(c, inputStore, fileBytes)
 			if err != nil {
 				return err
 			}
 			output, err = decrypt(c, encryptedTree, outputStore, svcs)
 		}
 		if c.Bool("rotate") {
-			fileBytes, err := ioutil.ReadFile(fileName)
+			fileBytes, err = ioutil.ReadFile(fileName)
 			if err != nil {
 				return err
 			}
-			encryptedTree, err := loadEncryptedFile(c, inputStore, fileBytes)
+			encryptedTree, err = loadEncryptedFile(c, inputStore, fileBytes)
 			if err != nil {
 				return err
 			}
@@ -288,10 +292,7 @@ func main() {
 
 		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate")
 		if isEditMode {
-			fileBytes, err := ioutil.ReadFile(fileName)
-			if err != nil {
-				return err
-			}
+			fileBytes, _ := ioutil.ReadFile(fileName)
 			output, err = edit(c, fileName, fileBytes, svcs)
 		}
 
@@ -375,7 +376,7 @@ func runEditor(path string) error {
 func inputStore(context *cli.Context, path string) sops.Store {
 	switch context.String("input-type") {
 	case "yaml":
-		return &yaml.Store{}
+		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
 	default:
@@ -385,7 +386,7 @@ func inputStore(context *cli.Context, path string) sops.Store {
 func outputStore(context *cli.Context, path string) sops.Store {
 	switch context.String("output-type") {
 	case "yaml":
-		return &yaml.Store{}
+		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
 	default:
@@ -395,7 +396,7 @@ func outputStore(context *cli.Context, path string) sops.Store {
 
 func defaultStore(path string) sops.Store {
 	if strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml") {
-		return &yaml.Store{}
+		return &yamlstores.Store{}
 	} else if strings.HasSuffix(path, ".json") {
 		return &json.Store{}
 	}
@@ -763,7 +764,7 @@ func edit(c *cli.Context, file string, fileBytes []byte, svcs []keyservice.KeySe
 					bufio.NewReader(os.Stdin).ReadByte()
 					continue
 				}
-				tree.Metadata = metadata
+				tree.Metadata = *metadata
 			}
 			tree.Branch = newBranch
 			needVersionUpdated, err := AIsNewerThanB(version, tree.Metadata.Version)
