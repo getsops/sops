@@ -79,7 +79,11 @@ func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes 
 	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
 		tree.Metadata.ShamirQuorum = quorum
 	}
-	tree.GenerateDataKeyWithKeyServices(svcs)
+	_, errs := tree.GenerateDataKeyWithKeyServices(svcs)
+	if len(errs) > 0 {
+		err = fmt.Errorf("Could not generate data key: %s", errs)
+		return
+	}
 	return
 }
 
@@ -620,11 +624,10 @@ func loadExample(c *cli.Context, file string, svcs []keyservice.KeyServiceClient
 	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
 		tree.Metadata.ShamirQuorum = quorum
 	}
-	key, errs := tree.GenerateDataKeyWithKeyServices(svcs)
+	_, errs := tree.GenerateDataKeyWithKeyServices(svcs)
 	if len(errs) > 0 {
 		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
 	}
-	tree.Metadata.UpdateMasterKeysWithKeyServices(key, svcs)
 	return tree, nil
 }
 

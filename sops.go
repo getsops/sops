@@ -290,7 +290,7 @@ func (tree Tree) GenerateDataKey() ([]byte, []error) {
 }
 
 // GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
-func (tree Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, []error) {
+func (tree *Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, []error) {
 	newKey := make([]byte, 32)
 	_, err := rand.Read(newKey)
 	if err != nil {
@@ -309,6 +309,8 @@ type Metadata struct {
 	// ShamirQuorum is the number of key groups required to recover the
 	// original data key
 	ShamirQuorum int
+	// DataKey caches the decrypted data key so it doesn't have to be decrypted with a master key every time it's needed
+	DataKey []byte
 }
 
 type KeyGroup []keys.MasterKey
@@ -407,6 +409,7 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			}
 		}
 	}
+	m.DataKey = dataKey
 	return
 }
 
@@ -459,6 +462,9 @@ func (m *Metadata) keyGroupToMap(group KeyGroup) (keys map[string][]map[string]i
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
 func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
+	if m.DataKey != nil {
+		return m.DataKey, nil
+	}
 	errMsg := "Could not decrypt the data key with any of the master keys:\n"
 	var parts [][]byte
 	for _, group := range m.KeyGroups {
@@ -496,6 +502,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 		}
 		dataKey = parts[0]
 	}
+	m.DataKey = dataKey
 	return dataKey, nil
 }
 
