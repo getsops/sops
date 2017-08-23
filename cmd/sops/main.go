@@ -452,12 +452,12 @@ func getKeySources(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	return []sops.KeyGroup{
 		{
 			&pgp.MasterKey{
-				Fingerprint: "9E663A144258C7BC6913CB181D2886732A51DF60",
+				Fingerprint: "12EE3273F4F41BB7E6F34E4AD9B452CB733E4A16",
 			},
 		},
 		{
 			&pgp.MasterKey{
-				Fingerprint: "525D602281B152ECBC6030CB6744C84113051EB5",
+				Fingerprint: "12EE3273F4F41BB7E6F34E4AD9B452CB733E4A16",
 			},
 		},
 	}, nil

@@ -13,6 +13,8 @@ import (
 
 	"log"
 
+	"os/exec"
+
 	"github.com/howeyc/gopass"
 	gpgagent "go.mozilla.org/gopgagent"
 	"golang.org/x/crypto/openpgp"
@@ -34,8 +36,40 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
 
-// Encrypt encrypts the data key with the PGP key with the same fingerprint as the MasterKey. It looks for PGP public keys in $PGPHOME/pubring.gpg.
-func (key *MasterKey) Encrypt(dataKey []byte) error {
+func gpgBinary() string {
+	binary := "gpg"
+	if envBinary := os.Getenv("SOPS_GPG_EXEC"); envBinary != "" {
+		binary = envBinary
+	}
+	return binary
+}
+
+func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
+	args := []string{
+		"--no-default-recipient",
+		"--yes",
+		"--encrypt",
+		"-a",
+		"-r",
+		key.Fingerprint,
+		"--trusted-key",
+		key.Fingerprint[len(key.Fingerprint)-16:],
+		"--no-encrypt-to",
+	}
+	cmd := exec.Command(gpgBinary(), args...)
+	var stdout, stderr bytes.Buffer
+	cmd.Stdin = bytes.NewReader(dataKey)
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	if err != nil {
+		return err
+	}
+	key.EncryptedKey = stdout.String()
+	return nil
+}
+
+func (key *MasterKey) encryptWithCryptoOpenpgp(dataKey []byte) error {
 	ring, err := key.pubRing()
 	if err != nil {
 		return err
@@ -74,6 +108,23 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	return nil
 }
 
+// Encrypt encrypts the data key with the PGP key with the same fingerprint as the MasterKey. It looks for PGP public keys in $PGPHOME/pubring.gpg.
+func (key *MasterKey) Encrypt(dataKey []byte) error {
+	log.Printf("Attempting encryption of GPG MasterKey with fingerprint %s", key.Fingerprint)
+	openpgpErr := key.encryptWithCryptoOpenpgp(dataKey)
+	if openpgpErr == nil {
+		return nil
+	}
+	log.Print("Encryption with golang's openpgp package failed, falling back to the GPG binary")
+	binaryErr := key.encryptWithGPGBinary(dataKey)
+	if binaryErr == nil {
+		return nil
+	}
+	return fmt.Errorf(`could not encrypt data key with PGP key.
+	\tgolang.org/x/crypto/openpgp error: %s
+	\tGPG binary error: %s`, openpgpErr, binaryErr)
+}
+
 // EncryptIfNeeded encrypts the data key with PGP only if it's needed, that is, if it hasn't been encrypted already
 func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
@@ -82,9 +133,24 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	return nil
 }
 
-// Decrypt uses PGP to obtain the data key from the EncryptedKey store in the MasterKey and returns it
-func (key *MasterKey) Decrypt() ([]byte, error) {
-	log.Printf("Attempting decryption of GPG MasterKey with fingerprint %s", key.Fingerprint)
+func (key *MasterKey) decryptWithGPGBinary() ([]byte, error) {
+	args := []string{
+		"--use-agent",
+		"-d",
+	}
+	cmd := exec.Command(gpgBinary(), args...)
+	var stdout, stderr bytes.Buffer
+	cmd.Stdin = strings.NewReader(key.EncryptedKey)
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	if err != nil {
+		return nil, err
+	}
+	return stdout.Bytes(), nil
+}
+
+func (key *MasterKey) decryptWithCryptoOpenpgp() ([]byte, error) {
 	ring, err := key.secRing()
 	if err != nil {
 		return nil, fmt.Errorf("Could not load secring: %s", err)
@@ -102,6 +168,23 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return b, nil
 	}
 	return nil, fmt.Errorf("The key could not be decrypted with any of the GPG entries")
+}
+
+// Decrypt uses PGP to obtain the data key from the EncryptedKey store in the MasterKey and returns it
+func (key *MasterKey) Decrypt() ([]byte, error) {
+	log.Printf("Attempting decryption of GPG MasterKey with fingerprint %s", key.Fingerprint)
+	dataKey, openpgpErr := key.decryptWithCryptoOpenpgp()
+	if openpgpErr == nil {
+		return dataKey, nil
+	}
+	log.Print("Decryption with golang's openpgp package failed, falling back to the GPG binary")
+	dataKey, binaryErr := key.decryptWithGPGBinary()
+	if binaryErr == nil {
+		return dataKey, nil
+	}
+	return nil, fmt.Errorf(`could not encrypt data key with PGP key.
+	\tgolang.org/x/crypto/openpgp error: %s
+	\tGPG binary error: %s`, openpgpErr, binaryErr)
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not
