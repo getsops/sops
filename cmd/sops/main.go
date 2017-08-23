@@ -249,46 +249,49 @@ func main() {
 		outputStore := outputStore(c, fileName)
 		svcs := keyservices(c)
 
-		// Instead of checking for errors after each operation here, we
-		// just continue and let each command decide which errors can
-		// be handled and which can't.
-		fileBytes, readFileErr := ioutil.ReadFile(fileName)
-		plainTree, loadPlainFileErr := loadPlainFile(c, inputStore, fileName, fileBytes, svcs)
-		encryptedTree, loadEncryptedFileErr := loadEncryptedFile(c, inputStore, fileBytes)
-
 		var output []byte
 		var err error
 		if c.Bool("encrypt") {
-			if readFileErr != nil {
-				return readFileErr
+			fileBytes, err := ioutil.ReadFile(fileName)
+			if err != nil {
+				return err
 			}
-			if loadPlainFileErr != nil {
-				return loadPlainFileErr
+			plainTree, err := loadPlainFile(c, inputStore, fileName, fileBytes, svcs)
+			if err != nil {
+				return err
 			}
 			output, err = encrypt(c, plainTree, outputStore, svcs)
 		}
 
 		if c.Bool("decrypt") {
-			if readFileErr != nil {
-				return readFileErr
+			fileBytes, err := ioutil.ReadFile(fileName)
+			if err != nil {
+				return err
 			}
-			if loadEncryptedFileErr != nil {
-				return loadEncryptedFileErr
+			encryptedTree, err := loadEncryptedFile(c, inputStore, fileBytes)
+			if err != nil {
+				return err
 			}
 			output, err = decrypt(c, encryptedTree, outputStore, svcs)
 		}
 		if c.Bool("rotate") {
-			if readFileErr != nil {
-				return readFileErr
+			fileBytes, err := ioutil.ReadFile(fileName)
+			if err != nil {
+				return err
 			}
-			if loadEncryptedFileErr != nil {
-				return loadEncryptedFileErr
+			encryptedTree, err := loadEncryptedFile(c, inputStore, fileBytes)
+			if err != nil {
+				return err
 			}
 			output, err = rotate(c, encryptedTree, outputStore, svcs)
 		}
 
 		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate")
 		if isEditMode {
+			fileBytes, err := ioutil.ReadFile(fileName)
+			if err != nil {
+				return err
+			}
 			output, err = edit(c, fileName, fileBytes, svcs)
 		}
 
