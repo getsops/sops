@@ -206,7 +206,7 @@ func main() {
 		var output []byte
 		var err error
 		if c.Bool("encrypt") {
-			keyGroups, err := getKeySources(c, fileName)
+			keyGroups, err := keyGroups(c, fileName)
 			if err != nil {
 				return err
 			}
@@ -244,7 +244,22 @@ func main() {
 			}
 		}
 		if c.Bool("rotate") {
-			// TODO: Implement AddMasterKeys and RemoveMasterKeys
+			var addMasterKeys []keys.MasterKey
+			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
+			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext) {
+				addMasterKeys = append(addMasterKeys, k)
+			}
+			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
+				addMasterKeys = append(addMasterKeys, k)
+			}
+
+			var rmMasterKeys []keys.MasterKey
+			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext) {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
 			output, err = Rotate(RotateOpts{
 				OutputStore:      outputStore,
 				InputStore:       inputStore,
@@ -252,8 +267,8 @@ func main() {
 				Cipher:           aes.Cipher{},
 				KeyServices:      svcs,
 				IgnoreMAC:        c.Bool("ignore-mac"),
-				AddMasterKeys:    nil,
-				RemoveMasterKeys: nil,
+				AddMasterKeys:    addMasterKeys,
+				RemoveMasterKeys: rmMasterKeys,
 			})
 			if err != nil {
 				return err
@@ -297,7 +312,7 @@ func main() {
 				output, err = Edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
-				keyGroups, err := getKeySources(c, fileName)
+				keyGroups, err := keyGroups(c, fileName)
 				if err != nil {
 					return err
 				}
@@ -419,19 +434,7 @@ func parseTreePath(arg string) ([]interface{}, error) {
 	return path, nil
 }
 
-func getKeySources(c *cli.Context, file string) ([]sops.KeyGroup, error) {
-	return []sops.KeyGroup{
-		{
-			&pgp.MasterKey{
-				Fingerprint: "12EE3273F4F41BB7E6F34E4AD9B452CB733E4A16",
-			},
-		},
-		{
-			&pgp.MasterKey{
-				Fingerprint: "12EE3273F4F41BB7E6F34E4AD9B452CB733E4A16",
-			},
-		},
-	}, nil
+func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))

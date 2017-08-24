@@ -326,36 +326,6 @@ func (m *Metadata) MasterKeyCount() int {
 	return count
 }
 
-// RemoveMasterKeys removes all of the provided keys from the metadata's KeySources, if they exist there.
-func (m *Metadata) RemoveMasterKeys(masterKeys []keys.MasterKey) {
-	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
-	panic("Unimplemented")
-}
-
-// AddPGPMasterKeys parses the input comma separated string of GPG fingerprints, generates a PGP MasterKey for each fingerprint, and adds the keys to the PGP KeySource
-func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
-	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
-	panic("Unimplemented")
-}
-
-// AddKMSMasterKeys parses the input comma separated string of AWS KMS ARNs, generates a KMS MasterKey for each ARN, and then adds the keys to the KMS KeySource
-func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) {
-	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
-	panic("Unimplemented")
-}
-
-// RemovePGPMasterKeys takes a comma separated string of PGP fingerprints and removes the keys corresponding to those fingerprints from the metadata's KeySources
-func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
-	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
-	panic("Unimplemented")
-}
-
-// RemoveKMSMasterKeys takes a comma separated string of AWS KMS ARNs and removes the keys corresponding to those ARNs from the metadata's KeySources
-func (m *Metadata) RemoveKMSMasterKeys(arns string) {
-	// TODO: Reimplement this with KeyGroups. It's unclear how it should behave.
-	panic("Unimplemented")
-}
-
 func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
 	if len(svcs) == 0 {
 		return []error{

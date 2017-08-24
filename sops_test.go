@@ -7,8 +7,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/keys"
-	"go.mozilla.org/sops/kms"
 )
 
 func TestUnencryptedSuffix(t *testing.T) {
@@ -207,38 +205,6 @@ func TestTruncateTree(t *testing.T) {
 	})
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expected, result)
-}
-
-func TestRemoveMasterKeys(t *testing.T) {
-	// TODO: Make this test work again
-	return
-	m := Metadata{
-		KeyGroups: []KeyGroup{
-			{
-				&kms.MasterKey{
-					Arn: "foo",
-				}, &kms.MasterKey{
-					Arn: "bar",
-				},
-				&kms.MasterKey{
-					Arn: "foobar",
-				},
-			},
-		},
-	}
-	m.RemoveMasterKeys([]keys.MasterKey{
-		&kms.MasterKey{
-			Arn: "bar",
-		},
-		&kms.MasterKey{
-			Arn: "foobar",
-		},
-	})
-	assert.Equal(t, []keys.MasterKey{
-		&kms.MasterKey{
-			Arn: "foo",
-		},
-	}, m.KeyGroups[0])
 }
 
 func TestInsertOrReplaceValue(t *testing.T) {

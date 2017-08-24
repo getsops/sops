@@ -10,20 +10,14 @@ import (
 )
 
 type RotateOpts struct {
-	Cipher        sops.DataKeyCipher
-	InputStore    sops.Store
-	OutputStore   sops.Store
-	InputPath     string
-	IgnoreMAC     bool
-	AddMasterKeys []struct {
-		Key     keys.MasterKey
-		ToGroup uint
-	}
-	RemoveMasterKeys []struct {
-		Key       keys.MasterKey
-		FromGroup uint
-	}
-	KeyServices []keyservice.KeyServiceClient
+	Cipher           sops.DataKeyCipher
+	InputStore       sops.Store
+	OutputStore      sops.Store
+	InputPath        string
+	IgnoreMAC        bool
+	AddMasterKeys    []keys.MasterKey
+	RemoveMasterKeys []keys.MasterKey
+	KeyServices      []keyservice.KeyServiceClient
 }
 
 func Rotate(opts RotateOpts) ([]byte, error) {
@@ -40,7 +34,19 @@ func Rotate(opts RotateOpts) ([]byte, error) {
 		return nil, err
 	}
 
-	// TODO: Add and remove master keys
+	// Add new master keys
+	for _, key := range opts.AddMasterKeys {
+		tree.Metadata.KeyGroups[0] = append(tree.Metadata.KeyGroups[0], key)
+	}
+	// Remove master keys
+	for _, rmKey := range opts.RemoveMasterKeys {
+		for i, groupKey := range tree.Metadata.KeyGroups[0] {
+			if rmKey.ToString() == groupKey.ToString() {
+				tree.Metadata.KeyGroups[0] = append(tree.Metadata.KeyGroups[0][:i], tree.Metadata.KeyGroups[0][i+1:]...)
+			}
+		}
+	}
+
 	// Create a new data key
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
