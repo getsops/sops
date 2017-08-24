@@ -111,40 +111,32 @@ type Tree struct {
 	Metadata Metadata
 }
 
-// TrimTreePathComponent trimps a tree path component so that it's a valid tree key
-func TrimTreePathComponent(component string) (string, error) {
-	if component[len(component)-1] != ']' {
-		return "", fmt.Errorf("Invalid component")
-	}
-	component = component[:len(component)-1]
-	component = strings.Replace(component, `"`, "", 2)
-	component = strings.Replace(component, `'`, "", 2)
-	return component, nil
-}
-
-// Truncate truncates the tree following Python dictionary access syntax, for example, ["foo"][2].
-func (tree TreeBranch) Truncate(path string) (interface{}, error) {
-	components := strings.Split(path, "[")
+// Truncate truncates the tree to the path specified
+func (tree TreeBranch) Truncate(path []interface{}) (interface{}, error) {
+	log.Printf("Truncating tree to %s", path)
 	var current interface{} = tree
-	for _, component := range components {
-		if component == "" {
-			continue
-		}
-		component, err := TrimTreePathComponent(component)
-		if err != nil {
-			return nil, fmt.Errorf("Invalid tree path format string: %s", path)
-		}
-		i, err := strconv.Atoi(component)
-		if err != nil {
+	for _, component := range path {
+		switch component := component.(type) {
+		case string:
+			found := false
 			for _, item := range current.(TreeBranch) {
 				if item.Key == component {
 					current = item.Value
+					found = true
 					break
 				}
 			}
-		} else {
-			v := reflect.ValueOf(current)
-			current = v.Index(i).Interface()
+			if !found {
+				return nil, fmt.Errorf("component ['%s'] not found", component)
+			}
+		case int:
+			if reflect.ValueOf(current).Kind() != reflect.Slice {
+				return nil, fmt.Errorf("component [%d] is integer, but tree part is not a slice", component)
+			}
+			if reflect.ValueOf(current).Len() <= component {
+				return nil, fmt.Errorf("component [%d] accesses out of bounds", component)
+			}
+			current = reflect.ValueOf(current).Index(component).Interface()
 		}
 	}
 	return current, nil

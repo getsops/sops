@@ -200,7 +200,11 @@ func TestTruncateTree(t *testing.T) {
 		},
 	}
 	expected := 3
-	result, err := tree.Truncate(`["bar"]["foobar"][2]`)
+	result, err := tree.Truncate([]interface{}{
+		"bar",
+		"foobar",
+		2,
+	})
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expected, result)
 }

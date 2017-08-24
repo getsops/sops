@@ -26,6 +26,8 @@ import (
 
 	"github.com/google/shlex"
 
+	"strconv"
+
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
@@ -255,28 +257,42 @@ func main() {
 		var encryptedTree sops.Tree
 		var fileBytes []byte
 		if c.Bool("encrypt") {
-			fileBytes, err := ioutil.ReadFile(fileName)
-			if err != nil {
-				panic(err)
-				return err
-			}
-			plainTree, err := loadPlainFile(c, inputStore, fileName, fileBytes, svcs)
+			keyGroups, err := getKeySources(c, fileName)
 			if err != nil {
 				return err
 			}
-			output, err = encrypt(c, plainTree, outputStore, svcs)
+			output, err = Encrypt(EncryptOpts{
+				OutputStore:       outputStore,
+				InputStore:        inputStore,
+				InputPath:         fileName,
+				Cipher:            aes.Cipher{},
+				UnencryptedSuffix: c.String("unencrypted-suffix"),
+				KeyServices:       svcs,
+				KeyGroups:         keyGroups,
+				GroupQuorum:       uint(c.Int("shamir-secret-sharing-quorum")),
+			})
+			if err != nil {
+				return err
+			}
 		}
 
 		if c.Bool("decrypt") {
-			fileBytes, err = ioutil.ReadFile(fileName)
+			extract, err := parseTreePath(c.String("extract"))
+			if err != nil {
+				return cli.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), exitInvalidTreePathFormat)
+			}
+			output, err = Decrypt(DecryptOpts{
+				OutputStore: outputStore,
+				InputStore:  inputStore,
+				InputPath:   fileName,
+				Cipher:      aes.Cipher{},
+				Extract:     extract,
+				KeyServices: svcs,
+				IgnoreMAC:   c.Bool("ignore-mac"),
+			})
 			if err != nil {
 				return err
 			}
-			encryptedTree, err = loadEncryptedFile(c, inputStore, fileBytes)
-			if err != nil {
-				return err
-			}
-			output, err = decrypt(c, encryptedTree, outputStore, svcs)
 		}
 		if c.Bool("rotate") {
 			fileBytes, err = ioutil.ReadFile(fileName)
@@ -425,31 +441,31 @@ func decryptTree(tree sops.Tree, ignoreMac bool, svcs []keyservice.KeyServiceCli
 	return tree, stash, nil
 }
 
-func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"), svcs)
-	if err != nil {
-		return nil, err
-	}
-	if c.String("extract") != "" {
-		v, err := tree.Branch.Truncate(c.String("extract"))
-		if err != nil {
-			return nil, cli.NewExitError(err.Error(), exitInvalidTreePathFormat)
+func parseTreePath(arg string) ([]interface{}, error) {
+	var path []interface{}
+	components := strings.Split(arg, "[")
+	for _, component := range components {
+		if component == "" {
+			continue
 		}
-		if newBranch, ok := v.(sops.TreeBranch); ok {
-			tree.Branch = newBranch
+		if component[len(component)-1] != ']' {
+			return nil, fmt.Errorf("component %s doesn't end with ]", component)
+		}
+		component = component[:len(component)-1]
+		if component[0] == byte('"') || component[0] == byte('\'') {
+			// The component is a string
+			component = component[1 : len(component)-1]
+			path = append(path, component)
 		} else {
-			bytes, err := outputStore.MarshalValue(v)
+			// The component must be a number
+			i, err := strconv.Atoi(component)
 			if err != nil {
-				return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), exitErrorDumpingTree)
+				return nil, err
 			}
-			return bytes, nil
+			path = append(path, i)
 		}
 	}
-	out, err := outputStore.Marshal(tree.Branch)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), exitErrorDumpingTree)
-	}
-	return out, nil
+	return path, nil
 }
 
 func getKeySources(c *cli.Context, file string) ([]sops.KeyGroup, error) {
@@ -520,18 +536,6 @@ func encryptTree(tree sops.Tree, stash map[string][]interface{}, svcs []keyservi
 	}
 	tree.Metadata.MessageAuthenticationCode = encryptedMac
 	return tree, nil
-}
-
-func encrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	tree, err := encryptTree(tree, nil, svcs)
-	if err != nil {
-		return nil, err
-	}
-	out, err := outputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-	}
-	return out, err
 }
 
 func rotate(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keyservice.KeyServiceClient) ([]byte, error) {
@@ -655,27 +659,22 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 	return valueToInsert, nil
 }
 
-func extractSetArguments(set string) (path string, key string, valueToInsert interface{}, err error) {
+func extractSetArguments(set string) (path []interface{}, valueToInsert interface{}, err error) {
 	// Set is a string with the format "python-dict-index json-value"
 	// Since python-dict-index has to end with ], we split at "] " to get the two parts
 	pathValuePair := strings.SplitAfterN(set, "] ", 2)
 	if len(pathValuePair) < 2 {
-		return "", "", nil, cli.NewExitError("Invalid --set format", exitErrorInvalidSetFormat)
+		return nil, nil, cli.NewExitError("Invalid --set format", exitErrorInvalidSetFormat)
 	}
 	fullPath := strings.TrimRight(pathValuePair[0], " ")
 	jsonValue := pathValuePair[1]
 	valueToInsert, err = jsonValueToTreeInsertableValue(jsonValue)
-	splitPath := strings.Split(fullPath, "[")
 
-	// The path is the full path except the last entry
-	path = strings.Join(splitPath[0:len(splitPath)-1], "")
-
-	// The key is the last entry in the full path
-	key, err = sops.TrimTreePathComponent(splitPath[len(splitPath)-1])
+	path, err = parseTreePath(fullPath)
 	if err != nil {
-		return "", "", nil, cli.NewExitError("Invalid --set path format", exitErrorInvalidSetFormat)
+		return nil, nil, cli.NewExitError("Invalid --set format", exitErrorInvalidSetFormat)
 	}
-	return path, key, valueToInsert, nil
+	return path, valueToInsert, nil
 }
 
 func edit(c *cli.Context, file string, fileBytes []byte, svcs []keyservice.KeyServiceClient) ([]byte, error) {
@@ -698,10 +697,12 @@ func edit(c *cli.Context, file string, fileBytes []byte, svcs []keyservice.KeySe
 		return nil, cli.NewExitError(fmt.Sprintf("Could not load file: %s", err), exitCouldNotReadInputFile)
 	}
 	if c.String("set") != "" {
-		path, key, value, err := extractSetArguments(c.String("set"))
+		path, value, err := extractSetArguments(c.String("set"))
 		if err != nil {
 			return nil, err
 		}
+		key := path[len(path)-1]
+		path = path[:len(path)-1]
 		parent, err := tree.Branch.Truncate(path)
 		if err != nil {
 			return nil, cli.NewExitError("Could not truncate tree to the provided path", exitErrorInvalidSetFormat)
