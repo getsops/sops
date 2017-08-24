@@ -1,19 +1,19 @@
 package main
 
 import (
-	"bufio"
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
 
 	"crypto/md5"
 	"io"
 	"os/exec"
 	"strings"
 
-	"time"
+	"path"
+
+	"bufio"
+	"bytes"
 
 	"github.com/google/shlex"
 	"go.mozilla.org/sops"
@@ -33,13 +33,7 @@ type EditOpts struct {
 }
 
 type EditExampleOpts struct {
-	Cipher            sops.DataKeyCipher
-	InputStore        sops.Store
-	OutputStore       sops.Store
-	InputPath         string
-	IgnoreMAC         bool
-	KeyServices       []keyservice.KeyServiceClient
-	ShowMasterKeys    bool
+	EditOpts
 	UnencryptedSuffix string
 	KeyGroups         []sops.KeyGroup
 	GroupQuorum       uint
@@ -69,6 +63,14 @@ var exampleTree = sops.TreeBranch{
 		Key:   "example_booleans",
 		Value: []interface{}{true, false},
 	},
+}
+
+type runEditorUntilOkOpts struct {
+	TmpFile        *os.File
+	OriginalHash   []byte
+	InputStore     sops.Store
+	ShowMasterKeys bool
+	Tree           *sops.Tree
 }
 
 func EditExample(opts EditExampleOpts) ([]byte, error) {
@@ -102,7 +104,30 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 	if len(errs) > 0 {
 		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
 	}
+	stash := make(map[string][]interface{})
 
+	return edit(opts.EditOpts, &tree, dataKey, stash)
+}
+
+func Edit(opts EditOpts) ([]byte, error) {
+	// Load the file
+	tree, err := loadEncryptedFile(opts.InputStore, opts.InputPath)
+	if err != nil {
+		return nil, err
+	}
+	// Decrypt the file
+	stash := make(map[string][]interface{})
+	dataKey, err := decryptTree(decryptTreeOpts{
+		Stash: stash, Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree, KeyServices: opts.KeyServices,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return edit(opts, tree, dataKey, stash)
+}
+
+func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]interface{}) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {
@@ -136,64 +161,17 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 	}
 
 	// Let the user edit the file
-	for {
-		err = runEditor(tmpfile.Name())
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
-		}
-		newHash, err := hashFile(tmpfile.Name())
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
-		}
-		if bytes.Equal(newHash, origHash) {
-			return nil, cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
-		}
-		edited, err := ioutil.ReadFile(tmpfile.Name())
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
-		}
-		newBranch, err := opts.InputStore.Unmarshal(edited)
-		if err != nil {
-			fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
-			bufio.NewReader(os.Stdin).ReadByte()
-			continue
-		}
-		if opts.ShowMasterKeys {
-			metadata, err := opts.InputStore.UnmarshalMetadata(edited)
-			if err != nil {
-				fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
-				bufio.NewReader(os.Stdin).ReadByte()
-				continue
-			}
-			tree.Metadata = *metadata
-		}
-		tree.Branch = newBranch
-		needVersionUpdated, err := AIsNewerThanB(version, tree.Metadata.Version)
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", tree.Metadata.Version, version, err), exitFailedToCompareVersions)
-		}
-		if needVersionUpdated {
-			tree.Metadata.Version = version
-		}
-		if tree.Metadata.MasterKeyCount() == 0 {
-			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
-			continue
-		}
-		break
-	}
+	runEditorUntilOk(runEditorUntilOkOpts{
+		InputStore: opts.InputStore, OriginalHash: origHash, TmpFile: tmpfile,
+		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
 
 	// Encrypt the file
-	mac, err := tree.Encrypt(dataKey, opts.Cipher, make(map[string][]interface{}))
+	err = encryptTree(encryptTreeOpts{
+		Stash: stash, DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
+	})
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
+		return nil, err
 	}
-	tree.Metadata.LastModified = time.Now().UTC()
-	mac, err = opts.Cipher.Encrypt(mac, dataKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
-	}
-	tree.Metadata.MessageAuthenticationCode = mac
 
 	// Output the file
 	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
@@ -203,91 +181,22 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 	return encryptedFile, nil
 }
 
-func Edit(opts EditOpts) ([]byte, error) {
-	// Load the file
-	fileBytes, err := ioutil.ReadFile(opts.InputPath)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error reading file: %s", err), exitCouldNotReadInputFile)
-	}
-	metadata, err := opts.InputStore.UnmarshalMetadata(fileBytes)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error loading file metadata: %s", err), exitCouldNotReadInputFile)
-	}
-	branch, err := opts.InputStore.Unmarshal(fileBytes)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
-	}
-	tree := sops.Tree{
-		Branch:   branch,
-		Metadata: *metadata,
-	}
-	// Decrypt the file
-	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
-	if err != nil {
-		return nil, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
-	}
-	computedMac, err := tree.Decrypt(dataKey, opts.Cipher, make(map[string][]interface{}))
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
-	}
-	fileMac, _, err := opts.Cipher.Decrypt(tree.Metadata.MessageAuthenticationCode, dataKey, tree.Metadata.LastModified.Format(time.RFC3339))
-	if !opts.IgnoreMAC {
-		if fileMac != computedMac {
-			// If the file has an empty MAC, display "no MAC" instead of not displaying anything
-			if fileMac == "" {
-				fileMac = "no MAC"
-			}
-			return nil, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", fileMac, computedMac), exitMacMismatch)
-		}
-	}
-	// Create temporary file for editing
-	tmpdir, err := ioutil.TempDir("", "")
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
-	}
-	defer os.RemoveAll(tmpdir)
-	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(opts.InputPath)))
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
-	}
-
-	// Write to temporary file
-	var out []byte
-	if opts.ShowMasterKeys {
-		out, err = opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
-	} else {
-		out, err = opts.OutputStore.Marshal(tree.Branch)
-	}
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-	}
-	_, err = tmpfile.Write(out)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
-	}
-
-	// Compute file hash to detect if the file has been edited
-	origHash, err := hashFile(tmpfile.Name())
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
-	}
-
-	// Let the user edit the file
+func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 	for {
-		err = runEditor(tmpfile.Name())
+		err := runEditor(opts.TmpFile.Name())
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+			return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
 		}
-		newHash, err := hashFile(tmpfile.Name())
+		newHash, err := hashFile(opts.TmpFile.Name())
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+			return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
 		}
-		if bytes.Equal(newHash, origHash) {
-			return nil, cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
+		if bytes.Equal(newHash, opts.OriginalHash) {
+			return cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
 		}
-		edited, err := ioutil.ReadFile(tmpfile.Name())
+		edited, err := ioutil.ReadFile(opts.TmpFile.Name())
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
+			return cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
 		}
 		newBranch, err := opts.InputStore.Unmarshal(edited)
 		if err != nil {
@@ -302,42 +211,24 @@ func Edit(opts EditOpts) ([]byte, error) {
 				bufio.NewReader(os.Stdin).ReadByte()
 				continue
 			}
-			tree.Metadata = *metadata
+			opts.Tree.Metadata = *metadata
 		}
-		tree.Branch = newBranch
-		needVersionUpdated, err := AIsNewerThanB(version, tree.Metadata.Version)
+		opts.Tree.Branch = newBranch
+		needVersionUpdated, err := AIsNewerThanB(version, opts.Tree.Metadata.Version)
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", tree.Metadata.Version, version, err), exitFailedToCompareVersions)
+			return cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version, err), exitFailedToCompareVersions)
 		}
 		if needVersionUpdated {
-			tree.Metadata.Version = version
+			opts.Tree.Metadata.Version = version
 		}
-		if tree.Metadata.MasterKeyCount() == 0 {
+		if opts.Tree.Metadata.MasterKeyCount() == 0 {
 			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
 			bufio.NewReader(os.Stdin).ReadByte()
 			continue
 		}
 		break
 	}
-
-	// Encrypt the file
-	mac, err := tree.Encrypt(dataKey, opts.Cipher, make(map[string][]interface{}))
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
-	}
-	tree.Metadata.LastModified = time.Now().UTC()
-	mac, err = opts.Cipher.Encrypt(mac, dataKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
-	}
-	tree.Metadata.MessageAuthenticationCode = mac
-
-	// Output the file
-	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-	}
-	return encryptedFile, nil
+	return nil
 }
 
 func hashFile(filePath string) ([]byte, error) {

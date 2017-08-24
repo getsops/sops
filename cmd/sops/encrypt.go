@@ -5,8 +5,6 @@ import (
 
 	"fmt"
 
-	"time"
-
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/keyservice"
 	"gopkg.in/urfave/cli.v1"
@@ -41,24 +39,19 @@ func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
 		Version:           version,
 		ShamirQuorum:      int(opts.GroupQuorum),
 	}
-	// Encrypt the file
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
 		err = fmt.Errorf("Could not generate data key: %s", errs)
 		return nil, err
 	}
-	mac, err := tree.Encrypt(dataKey, opts.Cipher, make(map[string][]interface{}))
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
-	}
-	tree.Metadata.LastModified = time.Now().UTC()
-	mac, err = opts.Cipher.Encrypt(mac, dataKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
-	}
-	tree.Metadata.MessageAuthenticationCode = mac
 
-	// Output the file
+	err = encryptTree(encryptTreeOpts{
+		Stash: make(map[string][]interface{}), DataKey: dataKey, Tree: &tree, Cipher: opts.Cipher,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	encryptedFile, err = opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)

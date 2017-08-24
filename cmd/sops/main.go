@@ -56,21 +56,6 @@ const (
 	exitFailedToCompareVersions                int = 202
 )
 
-func loadEncryptedFile(c *cli.Context, store sops.Store, fileBytes []byte) (tree sops.Tree, err error) {
-	metadata, err := store.UnmarshalMetadata(fileBytes)
-	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error loading file metadata: %s", err), exitCouldNotReadInputFile)
-	}
-	branch, err := store.Unmarshal(fileBytes)
-	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
-	}
-	return sops.Tree{
-		Branch:   branch,
-		Metadata: *metadata,
-	}, nil
-}
-
 func main() {
 	cli.VersionPrinter = printVersion
 	app := cli.NewApp()
@@ -299,16 +284,17 @@ func main() {
 		if isEditMode {
 			_, statErr := os.Stat(fileName)
 			fileExists := statErr == nil
+			opts := EditOpts{
+				OutputStore:    outputStore,
+				InputStore:     inputStore,
+				InputPath:      fileName,
+				Cipher:         aes.Cipher{},
+				KeyServices:    svcs,
+				IgnoreMAC:      c.Bool("ignore-mac"),
+				ShowMasterKeys: c.Bool("show-master-keys"),
+			}
 			if fileExists {
-				output, err = Edit(EditOpts{
-					OutputStore:    outputStore,
-					InputStore:     inputStore,
-					InputPath:      fileName,
-					Cipher:         aes.Cipher{},
-					KeyServices:    svcs,
-					IgnoreMAC:      c.Bool("ignore-mac"),
-					ShowMasterKeys: c.Bool("show-master-keys"),
-				})
+				output, err = Edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
 				keyGroups, err := getKeySources(c, fileName)
@@ -316,13 +302,7 @@ func main() {
 					return err
 				}
 				output, err = EditExample(EditExampleOpts{
-					OutputStore:       outputStore,
-					InputStore:        inputStore,
-					InputPath:         fileName,
-					Cipher:            aes.Cipher{},
-					KeyServices:       svcs,
-					IgnoreMAC:         c.Bool("ignore-mac"),
-					ShowMasterKeys:    c.Bool("show-master-keys"),
+					EditOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
 					KeyGroups:         keyGroups,
 					GroupQuorum:       uint(c.Int("shamir-secret-sharing-quorum")),
@@ -336,7 +316,7 @@ func main() {
 		// We open the file *after* the operations on the tree have been
 		// executed to avoid truncating it when there's errors
 		var outputFile *os.File
-		if c.Bool("in-place") || isEditMode {
+		if c.Bool("in-place") || isEditMode || c.String("set") != "" {
 			var err error
 			outputFile, err = os.Create(fileName)
 			if err != nil {
