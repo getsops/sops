@@ -5,6 +5,8 @@ This package should not be used directly. Instead, Sops users should install the
 command line client via `go get -u go.mozilla.org/sops/cmd/sops`, or use the
 decryption helper provided at `go.mozilla.org/sops/decrypt`.
 
+We do not guarantee API stability for any package other than `go.mozilla.org/sops/decrypt`.
+
 A Sops document is a Tree composed of a data branch with arbitrary key/value pairs
 and a metadata branch with encryption and integrity information.
 
