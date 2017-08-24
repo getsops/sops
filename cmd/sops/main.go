@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/url"
+	"path"
 
 	"google.golang.org/grpc"
 
@@ -17,7 +18,6 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path"
 	"strings"
 	"time"
 
@@ -309,7 +309,27 @@ func main() {
 			}
 		}
 
-		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate")
+		if c.String("set") != "" {
+			path, value, err := extractSetArguments(c.String("set"))
+			if err != nil {
+				return err
+			}
+			output, err = Set(SetOpts{
+				OutputStore: outputStore,
+				InputStore:  inputStore,
+				InputPath:   fileName,
+				Cipher:      aes.Cipher{},
+				KeyServices: svcs,
+				IgnoreMAC:   c.Bool("ignore-mac"),
+				Value:       value,
+				TreePath:    path,
+			})
+			if err != nil {
+				return err
+			}
+		}
+
+		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == ""
 		if isEditMode {
 			fileBytes, _ := ioutil.ReadFile(fileName)
 			output, err = edit(c, fileName, fileBytes, svcs)
@@ -671,98 +691,84 @@ func edit(c *cli.Context, file string, fileBytes []byte, svcs []keyservice.KeySe
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not load file: %s", err), exitCouldNotReadInputFile)
 	}
-	if c.String("set") != "" {
-		path, value, err := extractSetArguments(c.String("set"))
-		if err != nil {
-			return nil, err
-		}
-		key := path[len(path)-1]
-		path = path[:len(path)-1]
-		parent, err := tree.Branch.Truncate(path)
-		if err != nil {
-			return nil, cli.NewExitError("Could not truncate tree to the provided path", exitErrorInvalidSetFormat)
-		}
-		branch := parent.(sops.TreeBranch)
-		tree.Branch = branch.InsertOrReplaceValue(key, value)
+	tmpdir, err := ioutil.TempDir("", "")
+	if err != nil {
+		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
+	}
+	defer os.RemoveAll(tmpdir)
+	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(file)))
+	if err != nil {
+		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
+	}
+	var out []byte
+	if c.Bool("show-master-keys") {
+		out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
 	} else {
-		tmpdir, err := ioutil.TempDir("", "")
+		out, err = outputStore(c, file).Marshal(tree.Branch)
+	}
+	if err != nil {
+		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+	}
+	_, err = tmpfile.Write(out)
+	if err != nil {
+		return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
+	}
+	origHash, err := hashFile(tmpfile.Name())
+	if err != nil {
+		return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+	}
+	for {
+		err = runEditor(tmpfile.Name())
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
+			return nil, cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
 		}
-		defer os.RemoveAll(tmpdir)
-		tmpfile, err := os.Create(path.Join(tmpdir, path.Base(file)))
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
-		}
-		var out []byte
-		if c.Bool("show-master-keys") {
-			out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
-		} else {
-			out, err = outputStore(c, file).Marshal(tree.Branch)
-		}
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-		}
-		_, err = tmpfile.Write(out)
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
-		}
-		origHash, err := hashFile(tmpfile.Name())
+		newHash, err := hashFile(tmpfile.Name())
 		if err != nil {
 			return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
 		}
-		for {
-			err = runEditor(tmpfile.Name())
-			if err != nil {
-				return nil, cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
-			}
-			newHash, err := hashFile(tmpfile.Name())
-			if err != nil {
-				return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
-			}
-			if bytes.Equal(newHash, origHash) {
-				return nil, cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
-			}
-			edited, err := ioutil.ReadFile(tmpfile.Name())
-			if err != nil {
-				return nil, cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
-			}
-			newBranch, err := inputStore(c, file).Unmarshal(edited)
-			if err != nil {
-				fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
-				bufio.NewReader(os.Stdin).ReadByte()
-				continue
-			}
-			if c.Bool("show-master-keys") {
-				metadata, err := inputStore(c, file).UnmarshalMetadata(edited)
-				if err != nil {
-					fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
-					bufio.NewReader(os.Stdin).ReadByte()
-					continue
-				}
-				tree.Metadata = *metadata
-			}
-			tree.Branch = newBranch
-			needVersionUpdated, err := AIsNewerThanB(version, tree.Metadata.Version)
-			if err != nil {
-				return nil, cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", tree.Metadata.Version, version, err), exitFailedToCompareVersions)
-			}
-			if needVersionUpdated {
-				tree.Metadata.Version = version
-			}
-			if tree.Metadata.MasterKeyCount() == 0 {
-				fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
-				bufio.NewReader(os.Stdin).ReadByte()
-				continue
-			}
-			break
+		if bytes.Equal(newHash, origHash) {
+			return nil, cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
 		}
+		edited, err := ioutil.ReadFile(tmpfile.Name())
+		if err != nil {
+			return nil, cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
+		}
+		newBranch, err := inputStore(c, file).Unmarshal(edited)
+		if err != nil {
+			fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
+			bufio.NewReader(os.Stdin).ReadByte()
+			continue
+		}
+		if c.Bool("show-master-keys") {
+			metadata, err := inputStore(c, file).UnmarshalMetadata(edited)
+			if err != nil {
+				fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
+				bufio.NewReader(os.Stdin).ReadByte()
+				continue
+			}
+			tree.Metadata = *metadata
+		}
+		tree.Branch = newBranch
+		needVersionUpdated, err := AIsNewerThanB(version, tree.Metadata.Version)
+		if err != nil {
+			return nil, cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", tree.Metadata.Version, version, err), exitFailedToCompareVersions)
+		}
+		if needVersionUpdated {
+			tree.Metadata.Version = version
+		}
+		if tree.Metadata.MasterKeyCount() == 0 {
+			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
+			bufio.NewReader(os.Stdin).ReadByte()
+			continue
+		}
+		break
+
 	}
 	tree, err = encryptTree(tree, stash, svcs)
 	if err != nil {
 		return nil, err
 	}
-	out, err := outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
+	out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
 	}

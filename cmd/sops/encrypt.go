@@ -57,6 +57,8 @@ func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
 	}
 	tree.Metadata.MessageAuthenticationCode = mac
+
+	// Output the file
 	encryptedFile, err = opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
