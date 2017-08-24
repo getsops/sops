@@ -23,7 +23,8 @@ type EncryptOpts struct {
 	GroupQuorum       uint
 }
 
-func Encrypt(opts EncryptOpts) (decryptedFile []byte, err error) {
+func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
+	// Load the file
 	fileBytes, err := ioutil.ReadFile(opts.InputPath)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Error reading file: %s", err), exitCouldNotReadInputFile)
@@ -40,6 +41,7 @@ func Encrypt(opts EncryptOpts) (decryptedFile []byte, err error) {
 		Version:           version,
 		ShamirQuorum:      int(opts.GroupQuorum),
 	}
+	// Encrypt the file
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
 		err = fmt.Errorf("Could not generate data key: %s", errs)
@@ -55,7 +57,7 @@ func Encrypt(opts EncryptOpts) (decryptedFile []byte, err error) {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
 	}
 	tree.Metadata.MessageAuthenticationCode = mac
-	decryptedFile, err = opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	encryptedFile, err = opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
 	}

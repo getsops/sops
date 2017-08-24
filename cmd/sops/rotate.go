@@ -7,21 +7,29 @@ import (
 	"time"
 
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
-	"gopkg.in/urfave/cli.v1"
+	cli "gopkg.in/urfave/cli.v1"
 )
 
-type DecryptOpts struct {
-	Cipher      sops.DataKeyCipher
-	InputStore  sops.Store
-	OutputStore sops.Store
-	InputPath   string
-	IgnoreMAC   bool
-	Extract     []interface{}
+type RotateOpts struct {
+	Cipher        sops.DataKeyCipher
+	InputStore    sops.Store
+	OutputStore   sops.Store
+	InputPath     string
+	IgnoreMAC     bool
+	AddMasterKeys []struct {
+		Key     keys.MasterKey
+		ToGroup uint
+	}
+	RemoveMasterKeys []struct {
+		Key       keys.MasterKey
+		FromGroup uint
+	}
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func Decrypt(opts DecryptOpts) (decryptedFile []byte, err error) {
+func Rotate(opts RotateOpts) ([]byte, error) {
 	// Load the file
 	fileBytes, err := ioutil.ReadFile(opts.InputPath)
 	if err != nil {
@@ -58,34 +66,28 @@ func Decrypt(opts DecryptOpts) (decryptedFile []byte, err error) {
 			return nil, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", fileMac, computedMac), exitMacMismatch)
 		}
 	}
-
-	if len(opts.Extract) > 0 {
-		return Extract(tree, opts.Extract, opts.OutputStore)
+	// TODO: Add and remove master keys
+	// Create a new data key
+	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
+	if len(errs) > 0 {
+		err = fmt.Errorf("Could not generate data key: %s", errs)
+		return nil, err
 	}
-	decryptedFile, err = opts.OutputStore.Marshal(tree.Branch)
+	// Reencrypt the file with the new key
+	mac, err := tree.Encrypt(dataKey, opts.Cipher, make(map[string][]interface{}))
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), exitErrorDumpingTree)
+		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
 	}
-	return decryptedFile, err
-}
-
-func Extract(tree sops.Tree, path []interface{}, outputStore sops.Store) (output []byte, err error) {
-	v, err := tree.Branch.Truncate(path)
+	tree.Metadata.LastModified = time.Now().UTC()
+	mac, err = opts.Cipher.Encrypt(mac, dataKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
 	if err != nil {
-		return nil, fmt.Errorf("error truncating tree: %s", err)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
 	}
-	if newBranch, ok := v.(sops.TreeBranch); ok {
-		tree.Branch = newBranch
-		decrypted, err := outputStore.Marshal(tree.Branch)
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), exitErrorDumpingTree)
-		}
-		return decrypted, err
-	} else {
-		bytes, err := outputStore.MarshalValue(v)
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), exitErrorDumpingTree)
-		}
-		return bytes, nil
+	tree.Metadata.MessageAuthenticationCode = mac
+
+	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	if err != nil {
+		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
 	}
+	return encryptedFile, nil
 }

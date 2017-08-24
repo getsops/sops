@@ -254,8 +254,6 @@ func main() {
 
 		var output []byte
 		var err error
-		var encryptedTree sops.Tree
-		var fileBytes []byte
 		if c.Bool("encrypt") {
 			keyGroups, err := getKeySources(c, fileName)
 			if err != nil {
@@ -295,15 +293,20 @@ func main() {
 			}
 		}
 		if c.Bool("rotate") {
-			fileBytes, err = ioutil.ReadFile(fileName)
+			// TODO: Implement AddMasterKeys and RemoveMasterKeys
+			output, err = Rotate(RotateOpts{
+				OutputStore:      outputStore,
+				InputStore:       inputStore,
+				InputPath:        fileName,
+				Cipher:           aes.Cipher{},
+				KeyServices:      svcs,
+				IgnoreMAC:        c.Bool("ignore-mac"),
+				AddMasterKeys:    nil,
+				RemoveMasterKeys: nil,
+			})
 			if err != nil {
 				return err
 			}
-			encryptedTree, err = loadEncryptedFile(c, inputStore, fileBytes)
-			if err != nil {
-				return err
-			}
-			output, err = rotate(c, encryptedTree, outputStore, svcs)
 		}
 
 		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate")
@@ -536,34 +539,6 @@ func encryptTree(tree sops.Tree, stash map[string][]interface{}, svcs []keyservi
 	}
 	tree.Metadata.MessageAuthenticationCode = encryptedMac
 	return tree, nil
-}
-
-func rotate(c *cli.Context, tree sops.Tree, outputStore sops.Store, svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	tree, _, err := decryptTree(tree, c.Bool("ignore-mac"), svcs)
-	if err != nil {
-		return nil, err
-	}
-	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
-		return nil, cli.NewExitError("Invalid KMS encryption context format", exitErrorInvalidKMSEncryptionContextFormat)
-	}
-	tree.Metadata.AddKMSMasterKeys(c.String("add-kms"), kmsEncryptionContext)
-	tree.Metadata.AddPGPMasterKeys(c.String("add-pgp"))
-	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
-	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
-	_, errs := tree.GenerateDataKeyWithKeyServices(svcs)
-	if len(errs) > 0 {
-		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
-	}
-	tree, err = encryptTree(tree, nil, svcs)
-	if err != nil {
-		return nil, err
-	}
-	out, err := outputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-	}
-	return out, nil
 }
 
 func hashFile(filePath string) ([]byte, error) {
