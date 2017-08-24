@@ -4,27 +4,19 @@ import (
 	"log"
 	"net"
 	"net/url"
-	"path"
 
 	"google.golang.org/grpc"
 
 	"go.mozilla.org/sops"
 
-	"bufio"
-	"bytes"
-	"crypto/md5"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"strings"
 	"time"
 
 	encodingjson "encoding/json"
 	"reflect"
-
-	"github.com/google/shlex"
 
 	"strconv"
 
@@ -63,32 +55,6 @@ const (
 	exitNoEditorFound                          int = 201
 	exitFailedToCompareVersions                int = 202
 )
-
-func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes []byte, svcs []keyservice.KeyServiceClient) (tree sops.Tree, err error) {
-	branch, err := store.Unmarshal(fileBytes)
-	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), exitCouldNotReadInputFile)
-	}
-	tree.Branch = branch
-	ks, err := getKeySources(c, fileName)
-	if err != nil {
-		return tree, err
-	}
-	tree.Metadata = sops.Metadata{
-		UnencryptedSuffix: c.String("unencrypted-suffix"),
-		Version:           version,
-		KeyGroups:         ks,
-	}
-	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
-		tree.Metadata.ShamirQuorum = quorum
-	}
-	_, errs := tree.GenerateDataKeyWithKeyServices(svcs)
-	if len(errs) > 0 {
-		err = fmt.Errorf("Could not generate data key: %s", errs)
-		return
-	}
-	return
-}
 
 func loadEncryptedFile(c *cli.Context, store sops.Store, fileBytes []byte) (tree sops.Tree, err error) {
 	metadata, err := store.UnmarshalMetadata(fileBytes)
@@ -331,8 +297,37 @@ func main() {
 
 		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == ""
 		if isEditMode {
-			fileBytes, _ := ioutil.ReadFile(fileName)
-			output, err = edit(c, fileName, fileBytes, svcs)
+			_, statErr := os.Stat(fileName)
+			fileExists := statErr == nil
+			if fileExists {
+				output, err = Edit(EditOpts{
+					OutputStore:    outputStore,
+					InputStore:     inputStore,
+					InputPath:      fileName,
+					Cipher:         aes.Cipher{},
+					KeyServices:    svcs,
+					IgnoreMAC:      c.Bool("ignore-mac"),
+					ShowMasterKeys: c.Bool("show-master-keys"),
+				})
+			} else {
+				// File doesn't exist, edit the example file instead
+				keyGroups, err := getKeySources(c, fileName)
+				if err != nil {
+					return err
+				}
+				output, err = EditExample(EditExampleOpts{
+					OutputStore:       outputStore,
+					InputStore:        inputStore,
+					InputPath:         fileName,
+					Cipher:            aes.Cipher{},
+					KeyServices:       svcs,
+					IgnoreMAC:         c.Bool("ignore-mac"),
+					ShowMasterKeys:    c.Bool("show-master-keys"),
+					UnencryptedSuffix: c.String("unencrypted-suffix"),
+					KeyGroups:         keyGroups,
+					GroupQuorum:       uint(c.Int("shamir-secret-sharing-quorum")),
+				})
+			}
 		}
 
 		if err != nil {
@@ -387,31 +382,6 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	return
 }
 
-func runEditor(path string) error {
-	editor := os.Getenv("EDITOR")
-	var cmd *exec.Cmd
-	if editor == "" {
-		cmd = exec.Command("which", "vim", "nano")
-		out, err := cmd.Output()
-		if err != nil {
-			panic("Could not find any editors")
-		}
-		cmd = exec.Command(strings.Split(string(out), "\n")[0], path)
-	} else {
-		parts, err := shlex.Split(editor)
-		if err != nil {
-			return fmt.Errorf("Invalid $EDITOR: %s", editor)
-		}
-		parts = append(parts, path)
-		cmd = exec.Command(parts[0], parts[1:]...)
-	}
-
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
-}
-
 func inputStore(context *cli.Context, path string) sops.Store {
 	switch context.String("input-type") {
 	case "yaml":
@@ -440,28 +410,6 @@ func defaultStore(path string) sops.Store {
 		return &json.Store{}
 	}
 	return &json.BinaryStore{}
-}
-
-func decryptTree(tree sops.Tree, ignoreMac bool, svcs []keyservice.KeyServiceClient) (sops.Tree, map[string][]interface{}, error) {
-	cipher := aes.Cipher{}
-	stash := make(map[string][]interface{})
-	key, err := tree.Metadata.GetDataKeyWithKeyServices(svcs)
-	if err != nil {
-		return tree, nil, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
-	}
-	computedMac, err := tree.Decrypt(key, cipher, stash)
-	if err != nil {
-		return tree, nil, cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), exitErrorDecryptingTree)
-	}
-	fileMac, _, err := cipher.Decrypt(tree.Metadata.MessageAuthenticationCode, key, tree.Metadata.LastModified.Format(time.RFC3339))
-	if fileMac != computedMac && !ignoreMac {
-		outputMac := fileMac
-		if outputMac == "" {
-			outputMac = "no MAC"
-		}
-		return tree, nil, cli.NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", outputMac, computedMac), exitMacMismatch)
-	}
-	return tree, stash, nil
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
@@ -542,98 +490,6 @@ func getKeySources(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	return []sops.KeyGroup{append(kmsKeys, pgpKeys...)}, nil
 }
 
-func encryptTree(tree sops.Tree, stash map[string][]interface{}, svcs []keyservice.KeyServiceClient) (sops.Tree, error) {
-	cipher := aes.Cipher{}
-	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(svcs)
-	if err != nil {
-		return tree, cli.NewExitError(err.Error(), exitCouldNotRetrieveKey)
-	}
-	computedMac, err := tree.Encrypt(dataKey, cipher, stash)
-	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), exitErrorEncryptingTree)
-	}
-	tree.Metadata.LastModified = time.Now().UTC()
-	encryptedMac, err := cipher.Encrypt(computedMac, dataKey, tree.Metadata.LastModified.Format(time.RFC3339), nil)
-	if err != nil {
-		return tree, cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), exitErrorEncryptingMac)
-	}
-	tree.Metadata.MessageAuthenticationCode = encryptedMac
-	return tree, nil
-}
-
-func hashFile(filePath string) ([]byte, error) {
-	var result []byte
-	file, err := os.Open(filePath)
-	if err != nil {
-		return result, err
-	}
-	defer file.Close()
-	hash := md5.New()
-	if _, err := io.Copy(hash, file); err != nil {
-		return result, err
-	}
-	return hash.Sum(result), nil
-}
-
-var exampleTree = sops.TreeBranch{
-	sops.TreeItem{
-		Key:   "hello",
-		Value: `Welcome to SOPS! Edit this file as you please!`,
-	},
-	sops.TreeItem{
-		Key:   "example_key",
-		Value: "example_value",
-	},
-	sops.TreeItem{
-		Key: "example_array",
-		Value: []interface{}{
-			"example_value1",
-			"example_value2",
-		},
-	},
-	sops.TreeItem{
-		Key:   "example_number",
-		Value: 1234.56789,
-	},
-	sops.TreeItem{
-		Key:   "example_booleans",
-		Value: []interface{}{true, false},
-	},
-}
-
-func loadExample(c *cli.Context, file string, svcs []keyservice.KeyServiceClient) (sops.Tree, error) {
-	var in []byte
-	var tree sops.Tree
-	fileStore := inputStore(c, file)
-	if _, ok := fileStore.(*json.BinaryStore); ok {
-		// Get the value under the first key
-		in = []byte(exampleTree[0].Value.(string))
-	} else {
-		var err error
-		in, err = fileStore.Marshal(exampleTree)
-		if err != nil {
-			return tree, err
-		}
-	}
-	branch, _ := fileStore.Unmarshal(in)
-	tree.Branch = branch
-	ks, err := getKeySources(c, file)
-	if err != nil {
-		return tree, err
-	}
-	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
-	tree.Metadata.Version = version
-	tree.Metadata.KeyGroups = ks
-	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
-		tree.Metadata.ShamirQuorum = quorum
-	}
-	_, errs := tree.GenerateDataKeyWithKeyServices(svcs)
-	if len(errs) > 0 {
-		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
-	}
-	return tree, nil
-}
-
 func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 	var valueToInsert interface{}
 	err := encodingjson.Unmarshal([]byte(jsonValue), &valueToInsert)
@@ -670,107 +526,4 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 		return nil, nil, cli.NewExitError("Invalid --set format", exitErrorInvalidSetFormat)
 	}
 	return path, valueToInsert, nil
-}
-
-func edit(c *cli.Context, file string, fileBytes []byte, svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	var tree sops.Tree
-	var stash map[string][]interface{}
-	var err error
-	if fileBytes == nil {
-		tree, err = loadExample(c, file, svcs)
-	} else {
-		tree, err = loadEncryptedFile(c, inputStore(c, file), fileBytes)
-		if err != nil {
-			return nil, err
-		}
-		tree, stash, err = decryptTree(tree, c.Bool("ignore-mac"), svcs)
-		if err != nil {
-			return nil, err
-		}
-	}
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not load file: %s", err), exitCouldNotReadInputFile)
-	}
-	tmpdir, err := ioutil.TempDir("", "")
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
-	}
-	defer os.RemoveAll(tmpdir)
-	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(file)))
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
-	}
-	var out []byte
-	if c.Bool("show-master-keys") {
-		out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
-	} else {
-		out, err = outputStore(c, file).Marshal(tree.Branch)
-	}
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-	}
-	_, err = tmpfile.Write(out)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
-	}
-	origHash, err := hashFile(tmpfile.Name())
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
-	}
-	for {
-		err = runEditor(tmpfile.Name())
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
-		}
-		newHash, err := hashFile(tmpfile.Name())
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
-		}
-		if bytes.Equal(newHash, origHash) {
-			return nil, cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
-		}
-		edited, err := ioutil.ReadFile(tmpfile.Name())
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
-		}
-		newBranch, err := inputStore(c, file).Unmarshal(edited)
-		if err != nil {
-			fmt.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
-			bufio.NewReader(os.Stdin).ReadByte()
-			continue
-		}
-		if c.Bool("show-master-keys") {
-			metadata, err := inputStore(c, file).UnmarshalMetadata(edited)
-			if err != nil {
-				fmt.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
-				bufio.NewReader(os.Stdin).ReadByte()
-				continue
-			}
-			tree.Metadata = *metadata
-		}
-		tree.Branch = newBranch
-		needVersionUpdated, err := AIsNewerThanB(version, tree.Metadata.Version)
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", tree.Metadata.Version, version, err), exitFailedToCompareVersions)
-		}
-		if needVersionUpdated {
-			tree.Metadata.Version = version
-		}
-		if tree.Metadata.MasterKeyCount() == 0 {
-			fmt.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
-			continue
-		}
-		break
-
-	}
-	tree, err = encryptTree(tree, stash, svcs)
-	if err != nil {
-		return nil, err
-	}
-	out, err = outputStore(c, file).MarshalWithMetadata(tree.Branch, tree.Metadata)
-	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
-	}
-	return out, nil
 }
