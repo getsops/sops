@@ -357,18 +357,24 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 		part := parts[i]
 		for _, key := range group {
 			svcKey := keyservice.KeyFromMasterKey(key)
+			var keyErrs []error
+			encrypted := false
 			for _, svc := range svcs {
 				rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
 					Key:       &svcKey,
 					Plaintext: part,
 				})
 				if err != nil {
-					errs = append(errs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
+					keyErrs = append(keyErrs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
 					continue
 				}
 				key.SetEncryptedDataKey(rsp.Ciphertext)
+				encrypted = true
 				// Only need to encrypt the key successfully with one service
 				break
+			}
+			if !encrypted {
+				errs = append(errs, keyErrs...)
 			}
 		}
 	}
