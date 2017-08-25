@@ -392,6 +392,36 @@ Example: place the following in your `~/.bashrc`
 .. code:: bash
 
 	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
+
+Shamir Secret Sharing
+~~~~~~~~~~~~~~~~~~~~~
+
+By default, `sops` encrypts the data key with each master keys, such that if any
+of the master keys is available, the whole file can be decrypted. Sometimes, it
+is desirable to require access to several master keys in order to be able to
+decrypt files. This can be achieved with Shamir's Secret Sharing. With this
+method, the data key is split into several parts, one for each master key, and
+`quorum` parts are required in order to retrieve the data key and decrypt the file.
+
+You can enable this mode by passing `--shamir-secret-sharing` to the encrypt
+mode or by passing it to the edit mode for new files. You can set `quorum` with
+`--shamir-secret-sharing-quorum number`. The quorum must be lower or
+equal to the number of master keys.
+
+`quorum` defaults to 2.
+
+For example:
+
+```
+sops --shamir-secret-sharing --shamir-secret-sharing-quorum 5 example.json
+```
+
+This will require at least 5 master keys in order to decrypt the file. You can
+then decrypt the file the same way as with any other SOPS file:
+
+```
+sops -d example.json
+```
 	
 Important information on types
 ------------------------------

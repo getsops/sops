@@ -1,11 +1,15 @@
 extern crate tempdir;
+extern crate serde;
 extern crate serde_json;
 extern crate serde_yaml;
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate serde_derive;
 
 #[cfg(test)]
 mod tests {
+    extern crate serde;
     extern crate serde_json;
     extern crate serde_yaml;
 
@@ -15,6 +19,7 @@ mod tests {
     use std::process::Command;
     use serde_yaml::Value;
     const SOPS_BINARY_PATH: &'static str = "./sops";
+    const SOPS_TEST_GPG_KEY: &'static str = "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A";
 
     macro_rules! assert_encrypted {
         ($object:expr, $key:expr) => {
@@ -266,5 +271,73 @@ sops:
                     .status
                     .success(),
                 "SOPS failed to decrypt a file with no MAC with --ignore-mac passed in");
+    }
+
+    #[test]
+    fn roundtrip_shamir() {
+        let file_path = prepare_temp_file("test_roundtrip_shamir.yaml", "a: secret".as_bytes());
+        // Use the same PGP key in 10 master keys
+        let pgp_keys = [SOPS_TEST_GPG_KEY; 10];
+        let pgp_keys = pgp_keys.join(",");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("--pgp")
+            .arg(pgp_keys)
+            .arg("--shamir-secret-sharing")
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(),
+        "SOPS failed to encrypt a file with Shamir Secret Sharing");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output
+            .status
+            .success(),
+        "SOPS failed to decrypt a file with Shamir Secret Sharing");
+    }
+
+    #[test]
+    fn roundtrip_shamir_no_quorum() {
+        let file_path = prepare_temp_file("test_roundtrip_shamir_no_quorum.yaml", "a: secret".as_bytes());
+        // Use the same PGP key in 10 master keys
+        let pgp_keys = [SOPS_TEST_GPG_KEY; 10];
+        let pgp_keys = pgp_keys.join(",");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("--pgp")
+            .arg(pgp_keys)
+            .arg("--shamir-secret-sharing")
+            .arg("--shamir-secret-sharing-quorum")
+            .arg("10")
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(),
+        "SOPS failed to encrypt a file with Shamir Secret Sharing");
+        // Read the output, corrupt one GPG message, and try to decrypt
+        let mut file = File::open(file_path.clone()).unwrap();
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).unwrap();
+        // This is very hacky. That string appears in the GPG messages, so we remove it to
+        // corrupt them
+        let contents = contents.replacen("wYwDEE", "", 1);
+        let mut file = File::create(file_path.clone()).unwrap();
+        file.write_all(contents.as_bytes()).unwrap();
+        drop(file);
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(!output
+            .status
+            .success(),
+        "SOPS succeeded decrypting a file with Shamir Secret Sharing without quorum");
     }
 }

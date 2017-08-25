@@ -43,6 +43,7 @@ import (
 	"strings"
 	"time"
 
+	"go.mozilla.org/sops/shamir"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 )
@@ -52,7 +53,9 @@ const DefaultUnencryptedSuffix = "_unencrypted"
 
 type sopsError string
 
-func (e sopsError) Error() string { return string(e) }
+func (e sopsError) Error() string {
+	return string(e)
+}
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
 const MacMismatch = sopsError("MAC mismatch")
@@ -105,10 +108,10 @@ type Tree struct {
 
 // TrimTreePathComponent trimps a tree path component so that it's a valid tree key
 func TrimTreePathComponent(component string) (string, error) {
-	if component[len(component)-1] != ']' {
+	if component[len(component) - 1] != ']' {
 		return "", fmt.Errorf("Invalid component")
 	}
-	component = component[:len(component)-1]
+	component = component[:len(component) - 1]
 	component = strings.Replace(component, `"`, "", 2)
 	component = strings.Replace(component, `'`, "", 2)
 	return component, nil
@@ -288,6 +291,12 @@ type Metadata struct {
 	MessageAuthenticationCode string
 	Version                   string
 	KeySources                []KeySource
+	// Shamir is true when the data key is split across multiple master keys
+	// according to shamir's secret sharing algorithm
+	Shamir bool
+	// ShamirQuorum is the number of master keys required to recover the
+	// original data key
+	ShamirQuorum int
 }
 
 // KeySource is a collection of MasterKeys with a Name.
@@ -346,6 +355,11 @@ func (m *Metadata) RemoveMasterKeys(keys []MasterKey) {
 
 // UpdateMasterKeysIfNeeded encrypts the data key with all master keys if it's needed
 func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
+	// If we're using Shamir and we've added or removed keys, we must
+	// generate Shamir parts again and reencrypt with all keys
+	if m.Shamir {
+		return m.updateMasterKeysShamir(dataKey)
+	}
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
 			err := k.EncryptIfNeeded(dataKey)
@@ -357,8 +371,46 @@ func (m *Metadata) UpdateMasterKeysIfNeeded(dataKey []byte) (errs []error) {
 	return
 }
 
+// updateMasterKeysShamir splits the data key into parts using Shamir's Secret
+// Sharing algorithm and encrypts each part with a master key
+func (m *Metadata) updateMasterKeysShamir(dataKey []byte) (errs []error) {
+	keyCount := 0
+	for _, ks := range m.KeySources {
+		for range ks.Keys {
+			keyCount++
+		}
+	}
+	// If the quorum wasn't set, default to 2
+	if m.ShamirQuorum == 0 {
+		m.ShamirQuorum = 2
+	}
+	parts, err := shamir.Split(dataKey, keyCount, m.ShamirQuorum)
+	if err != nil {
+		errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
+		return
+	}
+	if len(parts) != keyCount {
+		errs = append(errs, fmt.Errorf("Not enough parts obtained from Shamir. Need %d, got %d", keyCount, len(parts)))
+		return
+	}
+	counter := 0
+	for _, ks := range m.KeySources {
+		for _, k := range ks.Keys {
+			err := k.Encrypt(parts[counter])
+			if err != nil {
+				errs = append(errs, fmt.Errorf("Failed to encrypt Shamir part with master key %q: %v\n", k.ToString(), err))
+			}
+			counter++
+		}
+	}
+	return
+}
+
 // UpdateMasterKeys encrypts the data key with all master keys
 func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
+	if m.Shamir {
+		return m.updateMasterKeysShamir(dataKey)
+	}
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
 			err := k.Encrypt(dataKey)
@@ -425,6 +477,8 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	out["unencrypted_suffix"] = m.UnencryptedSuffix
 	out["mac"] = m.MessageAuthenticationCode
 	out["version"] = m.Version
+	out["shamir"] = m.Shamir
+	out["shamir_quorum"] = m.ShamirQuorum
 	for _, ks := range m.KeySources {
 		var keys []map[string]interface{}
 		for _, k := range ks.Keys {
@@ -435,8 +489,31 @@ func (m *Metadata) ToMap() map[string]interface{} {
 	return out
 }
 
-// GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it.
-func (m Metadata) GetDataKey() ([]byte, error) {
+func (m Metadata) getDataKeyShamir() ([]byte, error) {
+	var parts [][]byte
+	for _, ks := range m.KeySources {
+		for _, k := range ks.Keys {
+			key, err := k.Decrypt()
+			if err != nil {
+				fmt.Printf("Key error: %s %s\n", k.ToString(), err)
+			} else {
+				parts = append(parts, key)
+			}
+		}
+	}
+	if len(parts) < m.ShamirQuorum {
+		return nil, fmt.Errorf("Not enough parts to recover data key with Shamir. Need %d, have %d.", m.ShamirQuorum, len(parts))
+	}
+	dataKey, err := shamir.Combine(parts)
+	if err != nil {
+		return nil, fmt.Errorf("Could not get data key from shamir parts: %s", err)
+	}
+	return dataKey, nil
+}
+
+// getFirstDataKey retrieves the data key from the first MasterKey in the
+// Metadata's KeySources that's able to return it.
+func (m Metadata) getFirstDataKey() ([]byte, error) {
 	errMsg := "Could not decrypt the data key with any of the master keys:\n"
 	for _, ks := range m.KeySources {
 		for _, k := range ks.Keys {
@@ -454,6 +531,15 @@ func (m Metadata) GetDataKey() ([]byte, error) {
 		}
 	}
 	return nil, fmt.Errorf(errMsg)
+}
+
+// GetDataKey retrieves the data key.
+func (m Metadata) GetDataKey() ([]byte, error) {
+	if m.Shamir {
+		return m.getDataKeyShamir()
+	} else {
+		return m.getFirstDataKey()
+	}
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
@@ -495,6 +581,15 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 	metadata.UnencryptedSuffix = unencryptedSuffix
 	if metadata.Version, ok = data["version"].(string); !ok {
 		metadata.Version = strconv.FormatFloat(data["version"].(float64), 'f', -1, 64)
+	}
+	shamir, ok := data["shamir"].(bool)
+	if ok {
+		metadata.Shamir = shamir
+	}
+	if shamirQuorum, ok := data["shamir_quorum"].(float64); ok {
+		metadata.ShamirQuorum = int(shamirQuorum)
+	} else if shamirQuorum, ok := data["shamir_quorum"].(int); ok {
+		metadata.ShamirQuorum = shamirQuorum
 	}
 	if k, ok := data["kms"].([]interface{}); ok {
 		ks, err := mapKMSEntriesToKeySource(k)

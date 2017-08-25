@@ -68,6 +68,12 @@ func loadPlainFile(c *cli.Context, store sops.Store, fileName string, fileBytes 
 		Version:           version,
 		KeySources:        ks,
 	}
+	if c.Bool("shamir-secret-sharing") {
+		tree.Metadata.Shamir = true
+	}
+	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
+		tree.Metadata.ShamirQuorum = quorum
+	}
 	tree.GenerateDataKey()
 	return
 }
@@ -201,6 +207,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "set",
 			Usage: `set a specific key or branch in the input JSON or YAML document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
+		},
+		cli.BoolFlag{
+			Name:  "shamir-secret-sharing",
+			Usage: "use Shamir's secret sharing to split the data key among all the master keys",
+		},
+		cli.IntFlag{
+			Name:  "shamir-secret-sharing-quorum",
+			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
 	}
 
@@ -553,6 +567,12 @@ func loadExample(c *cli.Context, file string) (sops.Tree, error) {
 	tree.Metadata.UnencryptedSuffix = c.String("unencrypted-suffix")
 	tree.Metadata.Version = version
 	tree.Metadata.KeySources = ks
+	if c.Bool("shamir-secret-sharing") {
+		tree.Metadata.Shamir = true
+	}
+	if quorum := c.Int("shamir-secret-sharing-quorum"); quorum != 0 {
+		tree.Metadata.ShamirQuorum = quorum
+	}
 	key, errs := tree.GenerateDataKey()
 	if len(errs) > 0 {
 		return tree, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
