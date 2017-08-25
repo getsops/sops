@@ -21,6 +21,7 @@ import (
 	"strconv"
 
 	"go.mozilla.org/sops/aes"
+	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -91,6 +92,30 @@ func main() {
 
    For more information, see the README at github.com/mozilla/sops`
 	app.EnableBashCompletion = true
+	app.Commands = []cli.Command{
+		{
+			Name:  "keyservice",
+			Usage: "start a SOPS key service server",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "network, net",
+					Usage: "network to listen on, e.g. 'tcp' or 'unix'",
+					Value: "tcp",
+				},
+				cli.StringFlag{
+					Name:  "address, addr",
+					Usage: "address to listen on, e.g. '127.0.0.1:5000' or '/tmp/sops.sock'",
+					Value: "127.0.0.1:5000",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				return keyservicecmd.Run(keyservicecmd.Opts{
+					Network: c.String("network"),
+					Address: c.String("address"),
+				})
+			},
+		},
+	}
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
 			Name:  "decrypt, d",

@@ -1,7 +1,6 @@
-package main
+package keyservice
 
 import (
-	"flag"
 	"log"
 	"net"
 	"os"
@@ -13,19 +12,20 @@ import (
 	"google.golang.org/grpc"
 )
 
-func main() {
-	var network, addr string
-	flag.StringVar(&network, "net", "tcp", "Network to listen on, eg tcp or unix")
-	flag.StringVar(&addr, "addr", "127.0.0.1:5000", "Address to listen on, eg 127.0.0.1:5000 or /tmp/sops.sock")
-	flag.Parse()
-	lis, err := net.Listen(network, addr)
+type Opts struct {
+	Network string
+	Address string
+}
+
+func Run(opts Opts) error {
+	lis, err := net.Listen(opts.Network, opts.Address)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer lis.Close()
 	grpcServer := grpc.NewServer()
 	keyservice.RegisterKeyServiceServer(grpcServer, keyservice.Server{})
-	log.Printf("Listening on %s://%s", network, addr)
+	log.Printf("Listening on %s://%s", opts.Network, opts.Address)
 
 	// Close socket if we get killed
 	sigc := make(chan os.Signal, 1)
@@ -36,5 +36,5 @@ func main() {
 		lis.Close()
 		os.Exit(0)
 	}(sigc)
-	grpcServer.Serve(lis)
+	return grpcServer.Serve(lis)
 }
