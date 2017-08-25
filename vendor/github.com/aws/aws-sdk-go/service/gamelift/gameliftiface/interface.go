@@ -21,12 +21,12 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon GameLift.
 //    func myFunc(svc gameliftiface.GameLiftAPI) bool {
-//        // Make svc.CreateAlias request
+//        // Make svc.AcceptMatch request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockGameLiftClient struct {
 //        gameliftiface.GameLiftAPI
 //    }
-//    func (m *mockGameLiftClient) CreateAlias(input *gamelift.CreateAliasInput) (*gamelift.CreateAliasOutput, error) {
+//    func (m *mockGameLiftClient) AcceptMatch(input *gamelift.AcceptMatchInput) (*gamelift.AcceptMatchOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type GameLiftAPI interface {
+	AcceptMatch(*gamelift.AcceptMatchInput) (*gamelift.AcceptMatchOutput, error)
+	AcceptMatchWithContext(aws.Context, *gamelift.AcceptMatchInput, ...request.Option) (*gamelift.AcceptMatchOutput, error)
+	AcceptMatchRequest(*gamelift.AcceptMatchInput) (*request.Request, *gamelift.AcceptMatchOutput)
+
 	CreateAlias(*gamelift.CreateAliasInput) (*gamelift.CreateAliasOutput, error)
 	CreateAliasWithContext(aws.Context, *gamelift.CreateAliasInput, ...request.Option) (*gamelift.CreateAliasOutput, error)
 	CreateAliasRequest(*gamelift.CreateAliasInput) (*request.Request, *gamelift.CreateAliasOutput)
@@ -79,6 +83,14 @@ type GameLiftAPI interface {
 	CreateGameSessionQueue(*gamelift.CreateGameSessionQueueInput) (*gamelift.CreateGameSessionQueueOutput, error)
 	CreateGameSessionQueueWithContext(aws.Context, *gamelift.CreateGameSessionQueueInput, ...request.Option) (*gamelift.CreateGameSessionQueueOutput, error)
 	CreateGameSessionQueueRequest(*gamelift.CreateGameSessionQueueInput) (*request.Request, *gamelift.CreateGameSessionQueueOutput)
+
+	CreateMatchmakingConfiguration(*gamelift.CreateMatchmakingConfigurationInput) (*gamelift.CreateMatchmakingConfigurationOutput, error)
+	CreateMatchmakingConfigurationWithContext(aws.Context, *gamelift.CreateMatchmakingConfigurationInput, ...request.Option) (*gamelift.CreateMatchmakingConfigurationOutput, error)
+	CreateMatchmakingConfigurationRequest(*gamelift.CreateMatchmakingConfigurationInput) (*request.Request, *gamelift.CreateMatchmakingConfigurationOutput)
+
+	CreateMatchmakingRuleSet(*gamelift.CreateMatchmakingRuleSetInput) (*gamelift.CreateMatchmakingRuleSetOutput, error)
+	CreateMatchmakingRuleSetWithContext(aws.Context, *gamelift.CreateMatchmakingRuleSetInput, ...request.Option) (*gamelift.CreateMatchmakingRuleSetOutput, error)
+	CreateMatchmakingRuleSetRequest(*gamelift.CreateMatchmakingRuleSetInput) (*request.Request, *gamelift.CreateMatchmakingRuleSetOutput)
 
 	CreatePlayerSession(*gamelift.CreatePlayerSessionInput) (*gamelift.CreatePlayerSessionOutput, error)
 	CreatePlayerSessionWithContext(aws.Context, *gamelift.CreatePlayerSessionInput, ...request.Option) (*gamelift.CreatePlayerSessionOutput, error)
@@ -103,6 +115,10 @@ type GameLiftAPI interface {
 	DeleteGameSessionQueue(*gamelift.DeleteGameSessionQueueInput) (*gamelift.DeleteGameSessionQueueOutput, error)
 	DeleteGameSessionQueueWithContext(aws.Context, *gamelift.DeleteGameSessionQueueInput, ...request.Option) (*gamelift.DeleteGameSessionQueueOutput, error)
 	DeleteGameSessionQueueRequest(*gamelift.DeleteGameSessionQueueInput) (*request.Request, *gamelift.DeleteGameSessionQueueOutput)
+
+	DeleteMatchmakingConfiguration(*gamelift.DeleteMatchmakingConfigurationInput) (*gamelift.DeleteMatchmakingConfigurationOutput, error)
+	DeleteMatchmakingConfigurationWithContext(aws.Context, *gamelift.DeleteMatchmakingConfigurationInput, ...request.Option) (*gamelift.DeleteMatchmakingConfigurationOutput, error)
+	DeleteMatchmakingConfigurationRequest(*gamelift.DeleteMatchmakingConfigurationInput) (*request.Request, *gamelift.DeleteMatchmakingConfigurationOutput)
 
 	DeleteScalingPolicy(*gamelift.DeleteScalingPolicyInput) (*gamelift.DeleteScalingPolicyOutput, error)
 	DeleteScalingPolicyWithContext(aws.Context, *gamelift.DeleteScalingPolicyInput, ...request.Option) (*gamelift.DeleteScalingPolicyOutput, error)
@@ -160,6 +176,18 @@ type GameLiftAPI interface {
 	DescribeInstancesWithContext(aws.Context, *gamelift.DescribeInstancesInput, ...request.Option) (*gamelift.DescribeInstancesOutput, error)
 	DescribeInstancesRequest(*gamelift.DescribeInstancesInput) (*request.Request, *gamelift.DescribeInstancesOutput)
 
+	DescribeMatchmaking(*gamelift.DescribeMatchmakingInput) (*gamelift.DescribeMatchmakingOutput, error)
+	DescribeMatchmakingWithContext(aws.Context, *gamelift.DescribeMatchmakingInput, ...request.Option) (*gamelift.DescribeMatchmakingOutput, error)
+	DescribeMatchmakingRequest(*gamelift.DescribeMatchmakingInput) (*request.Request, *gamelift.DescribeMatchmakingOutput)
+
+	DescribeMatchmakingConfigurations(*gamelift.DescribeMatchmakingConfigurationsInput) (*gamelift.DescribeMatchmakingConfigurationsOutput, error)
+	DescribeMatchmakingConfigurationsWithContext(aws.Context, *gamelift.DescribeMatchmakingConfigurationsInput, ...request.Option) (*gamelift.DescribeMatchmakingConfigurationsOutput, error)
+	DescribeMatchmakingConfigurationsRequest(*gamelift.DescribeMatchmakingConfigurationsInput) (*request.Request, *gamelift.DescribeMatchmakingConfigurationsOutput)
+
+	DescribeMatchmakingRuleSets(*gamelift.DescribeMatchmakingRuleSetsInput) (*gamelift.DescribeMatchmakingRuleSetsOutput, error)
+	DescribeMatchmakingRuleSetsWithContext(aws.Context, *gamelift.DescribeMatchmakingRuleSetsInput, ...request.Option) (*gamelift.DescribeMatchmakingRuleSetsOutput, error)
+	DescribeMatchmakingRuleSetsRequest(*gamelift.DescribeMatchmakingRuleSetsInput) (*request.Request, *gamelift.DescribeMatchmakingRuleSetsOutput)
+
 	DescribePlayerSessions(*gamelift.DescribePlayerSessionsInput) (*gamelift.DescribePlayerSessionsOutput, error)
 	DescribePlayerSessionsWithContext(aws.Context, *gamelift.DescribePlayerSessionsInput, ...request.Option) (*gamelift.DescribePlayerSessionsOutput, error)
 	DescribePlayerSessionsRequest(*gamelift.DescribePlayerSessionsInput) (*request.Request, *gamelift.DescribePlayerSessionsOutput)
@@ -212,9 +240,17 @@ type GameLiftAPI interface {
 	StartGameSessionPlacementWithContext(aws.Context, *gamelift.StartGameSessionPlacementInput, ...request.Option) (*gamelift.StartGameSessionPlacementOutput, error)
 	StartGameSessionPlacementRequest(*gamelift.StartGameSessionPlacementInput) (*request.Request, *gamelift.StartGameSessionPlacementOutput)
 
+	StartMatchmaking(*gamelift.StartMatchmakingInput) (*gamelift.StartMatchmakingOutput, error)
+	StartMatchmakingWithContext(aws.Context, *gamelift.StartMatchmakingInput, ...request.Option) (*gamelift.StartMatchmakingOutput, error)
+	StartMatchmakingRequest(*gamelift.StartMatchmakingInput) (*request.Request, *gamelift.StartMatchmakingOutput)
+
 	StopGameSessionPlacement(*gamelift.StopGameSessionPlacementInput) (*gamelift.StopGameSessionPlacementOutput, error)
 	StopGameSessionPlacementWithContext(aws.Context, *gamelift.StopGameSessionPlacementInput, ...request.Option) (*gamelift.StopGameSessionPlacementOutput, error)
 	StopGameSessionPlacementRequest(*gamelift.StopGameSessionPlacementInput) (*request.Request, *gamelift.StopGameSessionPlacementOutput)
+
+	StopMatchmaking(*gamelift.StopMatchmakingInput) (*gamelift.StopMatchmakingOutput, error)
+	StopMatchmakingWithContext(aws.Context, *gamelift.StopMatchmakingInput, ...request.Option) (*gamelift.StopMatchmakingOutput, error)
+	StopMatchmakingRequest(*gamelift.StopMatchmakingInput) (*request.Request, *gamelift.StopMatchmakingOutput)
 
 	UpdateAlias(*gamelift.UpdateAliasInput) (*gamelift.UpdateAliasOutput, error)
 	UpdateAliasWithContext(aws.Context, *gamelift.UpdateAliasInput, ...request.Option) (*gamelift.UpdateAliasOutput, error)
@@ -244,9 +280,17 @@ type GameLiftAPI interface {
 	UpdateGameSessionQueueWithContext(aws.Context, *gamelift.UpdateGameSessionQueueInput, ...request.Option) (*gamelift.UpdateGameSessionQueueOutput, error)
 	UpdateGameSessionQueueRequest(*gamelift.UpdateGameSessionQueueInput) (*request.Request, *gamelift.UpdateGameSessionQueueOutput)
 
+	UpdateMatchmakingConfiguration(*gamelift.UpdateMatchmakingConfigurationInput) (*gamelift.UpdateMatchmakingConfigurationOutput, error)
+	UpdateMatchmakingConfigurationWithContext(aws.Context, *gamelift.UpdateMatchmakingConfigurationInput, ...request.Option) (*gamelift.UpdateMatchmakingConfigurationOutput, error)
+	UpdateMatchmakingConfigurationRequest(*gamelift.UpdateMatchmakingConfigurationInput) (*request.Request, *gamelift.UpdateMatchmakingConfigurationOutput)
+
 	UpdateRuntimeConfiguration(*gamelift.UpdateRuntimeConfigurationInput) (*gamelift.UpdateRuntimeConfigurationOutput, error)
 	UpdateRuntimeConfigurationWithContext(aws.Context, *gamelift.UpdateRuntimeConfigurationInput, ...request.Option) (*gamelift.UpdateRuntimeConfigurationOutput, error)
 	UpdateRuntimeConfigurationRequest(*gamelift.UpdateRuntimeConfigurationInput) (*request.Request, *gamelift.UpdateRuntimeConfigurationOutput)
+
+	ValidateMatchmakingRuleSet(*gamelift.ValidateMatchmakingRuleSetInput) (*gamelift.ValidateMatchmakingRuleSetOutput, error)
+	ValidateMatchmakingRuleSetWithContext(aws.Context, *gamelift.ValidateMatchmakingRuleSetInput, ...request.Option) (*gamelift.ValidateMatchmakingRuleSetOutput, error)
+	ValidateMatchmakingRuleSetRequest(*gamelift.ValidateMatchmakingRuleSetInput) (*request.Request, *gamelift.ValidateMatchmakingRuleSetOutput)
 }
 
 var _ GameLiftAPI = (*gamelift.GameLift)(nil)

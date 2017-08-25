@@ -169,6 +169,12 @@ type FscryptKey struct {
 	Size uint32
 }
 
+type KeyctlDHParams struct {
+	Private int32
+	Prime   int32
+	Base    int32
+}
+
 const (
 	FADV_NORMAL     = 0x0
 	FADV_RANDOM     = 0x1
@@ -282,6 +288,13 @@ type IPv6Mreq struct {
 	Interface uint32
 }
 
+type PacketMreq struct {
+	Ifindex int32
+	Type    uint16
+	Alen    uint16
+	Address [8]uint8
+}
+
 type Msghdr struct {
 	Name       *byte
 	Namelen    uint32
@@ -370,9 +383,11 @@ const (
 	SizeofSockaddrALG       = 0x58
 	SizeofSockaddrVM        = 0x10
 	SizeofLinger            = 0x8
+	SizeofIovec             = 0x8
 	SizeofIPMreq            = 0x8
 	SizeofIPMreqn           = 0xc
 	SizeofIPv6Mreq          = 0x14
+	SizeofPacketMreq        = 0x10
 	SizeofMsghdr            = 0x1c
 	SizeofCmsghdr           = 0xc
 	SizeofInet4Pktinfo      = 0xc
@@ -568,17 +583,13 @@ type InotifyEvent struct {
 const SizeofInotifyEvent = 0x10
 
 type PtraceRegs struct {
-	Regs        [109]uint32
-	U_tsize     uint32
-	U_dsize     uint32
-	U_ssize     uint32
-	Start_code  uint32
-	Start_data  uint32
-	Start_stack uint32
-	Signal      int32
-	U_ar0       *byte
-	Magic       uint32
-	U_comm      [32]int8
+	Regs     [32]uint64
+	Lo       uint64
+	Hi       uint64
+	Epc      uint64
+	Badvaddr uint64
+	Status   uint64
+	Cause    uint64
 }
 
 type FdSet struct {
@@ -652,6 +663,10 @@ type Sigset_t struct {
 	X__val [32]uint32
 }
 
+const RNDGETENTCNT = 0x40045200
+
+const PERF_IOC_FLAG_GROUP = 0x1
+
 const _SC_PAGESIZE = 0x1e
 
 type Termios struct {
@@ -663,4 +678,11 @@ type Termios struct {
 	Cc     [23]uint8
 	Ispeed uint32
 	Ospeed uint32
+}
+
+type Winsize struct {
+	Row    uint16
+	Col    uint16
+	Xpixel uint16
+	Ypixel uint16
 }

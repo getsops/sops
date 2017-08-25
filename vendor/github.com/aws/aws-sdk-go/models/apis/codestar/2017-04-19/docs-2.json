@@ -1,9 +1,9 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS CodeStar</fullname> <p>This is the API reference for AWS CodeStar. This reference provides descriptions of the operations and data types for the AWS CodeStar API along with usage examples.</p> <p>You can use the AWS CodeStar API to work with:</p> <p>Projects and their resources, by calling the following:</p> <ul> <li> <p> <a>CreateProject</a>, which creates an empty project in AWS CodeStar with no resources.</p> </li> <li> <p> <a>DeleteProject</a>, which deletes a project in AWS CodeStar.</p> </li> <li> <p> <a>DescribeProject</a>, which lists the attributes of a project.</p> </li> <li> <p> <a>ListProjects</a>, which lists all AWS CodeStar projects associated with your AWS account.</p> </li> <li> <p> <a>ListResources</a>, which lists the resources associated with an AWS CodeStar project.</p> </li> <li> <p> <a>UpdateProject</a>, which updates the attributes of an AWS CodeStar project.</p> </li> </ul> <p>Teams and team members, by calling the following:</p> <ul> <li> <p> <a>AssociateTeamMember</a>, which adds an IAM user to the team for an AWS CodeStar project.</p> </li> <li> <p> <a>DisassociateTeamMember</a>, which removes an IAM user from the team for an AWS CodeStar project.</p> </li> <li> <p> <a>ListTeamMembers</a>, which lists all the IAM users in the team for an AWS CodeStar project, including their roles and attributes.</p> </li> </ul> <p>Users, by calling the following:</p> <ul> <li> <p> <a>CreateUserProfile</a>, which creates a user profile that contains data associated with the user across all AWS CodeStar projects.</p> </li> <li> <p> <a>DeleteUserProfile</a>, which deletes all user profile information across all AWS CodeStar projects.</p> </li> <li> <p> <a>DescribeUserProfile</a>, which describes the profile of a user.</p> </li> <li> <p> <a>ListUserProfiles</a>, which lists all AWS CodeStar user profiles.</p> </li> <li> <p> <a>UpdateUserProfile</a>, which updates the profile for an AWS CodeStar user. </p> </li> </ul>",
+  "service": "<fullname>AWS CodeStar</fullname> <p>This is the API reference for AWS CodeStar. This reference provides descriptions of the operations and data types for the AWS CodeStar API along with usage examples.</p> <p>You can use the AWS CodeStar API to work with:</p> <p>Projects and their resources, by calling the following:</p> <ul> <li> <p> <a>DeleteProject</a>, which deletes a project in AWS CodeStar.</p> </li> <li> <p> <a>DescribeProject</a>, which lists the attributes of a project.</p> </li> <li> <p> <a>ListProjects</a>, which lists all AWS CodeStar projects associated with your AWS account.</p> </li> <li> <p> <a>ListResources</a>, which lists the resources associated with an AWS CodeStar project.</p> </li> <li> <p> <a>UpdateProject</a>, which updates the attributes of an AWS CodeStar project.</p> </li> </ul> <p>Teams and team members, by calling the following:</p> <ul> <li> <p> <a>AssociateTeamMember</a>, which adds an IAM user to the team for an AWS CodeStar project.</p> </li> <li> <p> <a>DisassociateTeamMember</a>, which removes an IAM user from the team for an AWS CodeStar project.</p> </li> <li> <p> <a>ListTeamMembers</a>, which lists all the IAM users in the team for an AWS CodeStar project, including their roles and attributes.</p> </li> </ul> <p>Users, by calling the following:</p> <ul> <li> <p> <a>CreateUserProfile</a>, which creates a user profile that contains data associated with the user across all AWS CodeStar projects.</p> </li> <li> <p> <a>DeleteUserProfile</a>, which deletes all user profile information across all AWS CodeStar projects.</p> </li> <li> <p> <a>DescribeUserProfile</a>, which describes the profile of a user.</p> </li> <li> <p> <a>ListUserProfiles</a>, which lists all AWS CodeStar user profiles.</p> </li> <li> <p> <a>UpdateUserProfile</a>, which updates the profile for an AWS CodeStar user. </p> </li> </ul>",
   "operations": {
     "AssociateTeamMember": "<p>Adds an IAM user to the team for an AWS CodeStar project.</p>",
-    "CreateProject": "<p>Creates a project in AWS CodeStar with minimal structure and no resources.</p>",
+    "CreateProject": "<p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>",
     "CreateUserProfile": "<p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>",
     "DeleteProject": "<p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>",
     "DeleteUserProfile": "<p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>",
@@ -34,8 +34,8 @@
       "refs": {
         "AssociateTeamMemberRequest$clientRequestToken": "<p>A user- or system-generated token that identifies the entity that requested the team member association to the project. This token can be used to repeat the request. </p>",
         "AssociateTeamMemberResult$clientRequestToken": "<p>The user- or system-generated token from the initial request that can be used to repeat the request. </p>",
-        "CreateProjectRequest$clientRequestToken": "<p>A user- or system-generated token that identifies the entity that requested project creation. This token can be used to repeat the request. It can also be used to identify which user or system made the request in DescribeProject and ListProjects.</p>",
-        "CreateProjectResult$clientRequestToken": "<p>The user- or system-generated token from the initial request that can be used to repeat the request. It can also be used to identify which user or system made the request in DescribeProject and ListProjects.</p>",
+        "CreateProjectRequest$clientRequestToken": "<p>Reserved for future use.</p>",
+        "CreateProjectResult$clientRequestToken": "<p>Reserved for future use.</p>",
         "DeleteProjectRequest$clientRequestToken": "<p>A user- or system-generated token that identifies the entity that requested project deletion. This token can be used to repeat the request. </p>",
         "DescribeProjectResult$clientRequestToken": "<p>A user- or system-generated token that identifies the entity that requested project creation. </p>"
       }
@@ -234,7 +234,7 @@
     "ProjectArn": {
       "base": null,
       "refs": {
-        "CreateProjectResult$arn": "<p>The Amazon Resource Name (ARN) for the project.</p>",
+        "CreateProjectResult$arn": "<p>Reserved for future use.</p>",
         "DeleteProjectResult$projectArn": "<p>The Amazon Resource Name (ARN) of the deleted project.</p>",
         "DescribeProjectResult$arn": "<p>The Amazon Resource Name (ARN) for the project.</p>",
         "ProjectSummary$projectArn": "<p>The Amazon Resource Name (ARN) of the project.</p>"
@@ -253,7 +253,7 @@
     "ProjectDescription": {
       "base": null,
       "refs": {
-        "CreateProjectRequest$description": "<p>Optional. The description for the project.</p>",
+        "CreateProjectRequest$description": "<p>Reserved for future use.</p>",
         "DescribeProjectResult$description": "<p>The description of the project, if any.</p>",
         "UpdateProjectRequest$description": "<p>The description of the project, if any.</p>"
       }
@@ -262,8 +262,8 @@
       "base": null,
       "refs": {
         "AssociateTeamMemberRequest$projectId": "<p>The ID of the project to which you will add the IAM user.</p>",
-        "CreateProjectRequest$id": "<p>The ID for the AWS CodeStar project. Project IDs must be unique within an AWS account. Project IDs cannot exceed 15 characters and cannot contain capital letters and other restricted symbols. For more information, see <a href=\"http://docs.aws.amazon.com/codestar/latest/userguide/limits.html\">Limits</a> in the AWS CodeStar User Guide.</p>",
-        "CreateProjectResult$id": "<p>The ID for the project.</p>",
+        "CreateProjectRequest$id": "<p>Reserved for future use.</p>",
+        "CreateProjectResult$id": "<p>Reserved for future use.</p>",
         "DeleteProjectRequest$id": "<p>The ID of the project to be deleted in AWS CodeStar.</p>",
         "DescribeProjectRequest$id": "<p>The ID of the project.</p>",
         "DescribeProjectResult$id": "<p>The ID of the project.</p>",
@@ -278,7 +278,7 @@
     "ProjectName": {
       "base": null,
       "refs": {
-        "CreateProjectRequest$name": "<p>The friendly name for the project. This friendly name serves as the basis for the names for resources associated with the project, such as a repository name in AWS CodeCommit. The name is limited to 100 characters and cannot contain certain restricted symbols. For more information, see <a href=\"http://docs.aws.amazon.com/codestar/latest/userguide/limits.html\">Limits</a> in the AWS CodeStar User Guide.</p>",
+        "CreateProjectRequest$name": "<p>Reserved for future use.</p>",
         "DescribeProjectResult$name": "<p>The display name for the project.</p>",
         "UpdateProjectRequest$name": "<p>The name of the project you want to update.</p>"
       }
@@ -297,7 +297,7 @@
     "ProjectTemplateId": {
       "base": null,
       "refs": {
-        "CreateProjectResult$projectTemplateId": "<p>The ID for the AWS CodeStar project template used to create the project.</p>",
+        "CreateProjectResult$projectTemplateId": "<p>Reserved for future use.</p>",
         "DescribeProjectResult$projectTemplateId": "<p>The ID for the AWS CodeStar project template used to create the project.</p>"
       }
     },

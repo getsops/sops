@@ -222,6 +222,20 @@
         {"shape":"InvalidParameterValueException"}
       ]
     },
+    "GetDiscoveredResourceCounts":{
+      "name":"GetDiscoveredResourceCounts",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetDiscoveredResourceCountsRequest"},
+      "output":{"shape":"GetDiscoveredResourceCountsResponse"},
+      "errors":[
+        {"shape":"ValidationException"},
+        {"shape":"InvalidLimitException"},
+        {"shape":"InvalidNextTokenException"}
+      ]
+    },
     "GetResourceConfigHistory":{
       "name":"GetResourceConfigHistory",
       "http":{
@@ -914,6 +928,22 @@
         "ComplianceSummariesByResourceType":{"shape":"ComplianceSummariesByResourceType"}
       }
     },
+    "GetDiscoveredResourceCountsRequest":{
+      "type":"structure",
+      "members":{
+        "resourceTypes":{"shape":"ResourceTypes"},
+        "limit":{"shape":"Limit"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "GetDiscoveredResourceCountsResponse":{
+      "type":"structure",
+      "members":{
+        "totalDiscoveredResources":{"shape":"Long"},
+        "resourceCounts":{"shape":"ResourceCounts"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
     "GetResourceConfigHistoryRequest":{
       "type":"structure",
       "required":[
@@ -1054,6 +1084,7 @@
         "nextToken":{"shape":"NextToken"}
       }
     },
+    "Long":{"type":"long"},
     "MaxNumberOfConfigRulesExceededException":{
       "type":"structure",
       "members":{
@@ -1225,6 +1256,17 @@
       "member":{"shape":"Relationship"}
     },
     "RelationshipName":{"type":"string"},
+    "ResourceCount":{
+      "type":"structure",
+      "members":{
+        "resourceType":{"shape":"ResourceType"},
+        "count":{"shape":"Long"}
+      }
+    },
+    "ResourceCounts":{
+      "type":"list",
+      "member":{"shape":"ResourceCount"}
+    },
     "ResourceCreationTime":{"type":"timestamp"},
     "ResourceDeletionTime":{"type":"timestamp"},
     "ResourceId":{"type":"string"},
@@ -1294,7 +1336,9 @@
         "AWS::Redshift::ClusterParameterGroup",
         "AWS::Redshift::ClusterSecurityGroup",
         "AWS::Redshift::ClusterSubnetGroup",
-        "AWS::Redshift::EventSubscription"
+        "AWS::Redshift::EventSubscription",
+        "AWS::CloudWatch::Alarm",
+        "AWS::CloudFormation::Stack"
       ]
     },
     "ResourceTypeList":{

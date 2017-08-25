@@ -16,11 +16,11 @@ type service struct {
 }
 
 var mergeServices = map[string]service{
-	"dynamodbstreams": service{
+	"dynamodbstreams": {
 		dstName: "dynamodb",
 		srcName: "streams.dynamodb",
 	},
-	"wafregional": service{
+	"wafregional": {
 		dstName:        "waf",
 		srcName:        "waf-regional",
 		serviceVersion: "2015-08-24",
@@ -40,7 +40,7 @@ func (a *API) customizationPasses() {
 		"iotdataplane":      disableEndpointResolving,
 	}
 
-	for k, _ := range mergeServices {
+	for k := range mergeServices {
 		svcCustomizations[k] = mergeServicesCustomizations
 	}
 
@@ -57,6 +57,12 @@ func s3Customizations(a *API) {
 		// Remove ContentMD5 members
 		if _, ok := s.MemberRefs["ContentMD5"]; ok {
 			delete(s.MemberRefs, "ContentMD5")
+		}
+
+		for _, refName := range []string{"Bucket", "SSECustomerKey", "CopySourceSSECustomerKey"} {
+			if ref, ok := s.MemberRefs[refName]; ok {
+				ref.GenerateGetter = true
+			}
 		}
 
 		// Expires should be a string not time.Time since the format is not

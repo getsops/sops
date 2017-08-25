@@ -81,13 +81,7 @@ func readStackTag() (tag uint, ok bool) {
 	var current_tag uint
 	offset := 0
 	for {
-		// the expectation with getStack is that it will either:
-		//  * return everything when offset is 0 and ignore stackBatchSize,
-		//    otherwise returning nothing when offset is not 0 (the gopherjs case)
-		//  * or it will return at most stackBatchSize, respect offset, and
-		//    shouldn't be called when it returns less than stackBatchSize
-		//    (the runtime.Callers case).
-		batch := getStack(offset, stackBatchSize)
+		batch, next_offset := getStack(offset, stackBatchSize)
 		for _, pc := range batch {
 			val, ok := pc_lookup[pc]
 			if !ok {
@@ -99,10 +93,21 @@ func readStackTag() (tag uint, ok bool) {
 			current_tag <<= bitWidth
 			current_tag += uint(val)
 		}
-		if len(batch) < stackBatchSize {
+		if next_offset == 0 {
 			break
 		}
-		offset += len(batch)
+		offset = next_offset
 	}
 	return 0, false
+}
+
+func (m *ContextManager) preventInlining() {
+	// dunno if findPtr or getStack are likely to get inlined in a future release
+	// of go, but if they are inlined and their callers are inlined, that could
+	// hork some things. let's do our best to explain to the compiler that we
+	// really don't want those two functions inlined by saying they could change
+	// at any time. assumes preventInlining doesn't get compiled out.
+	// this whole thing is probably overkill.
+	findPtr = m.values[0][0].(func() uintptr)
+	getStack = m.values[0][1].(func(int, int) ([]uintptr, int))
 }

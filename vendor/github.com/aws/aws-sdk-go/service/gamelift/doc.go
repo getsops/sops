@@ -5,33 +5,43 @@
 //
 // Amazon GameLift is a managed service for developers who need a scalable,
 // dedicated server solution for their multiplayer games. Amazon GameLift provides
-// tools to acquire computing resources and deploy game servers, scale game
-// server capacity to meet player demand, and track in-depth metrics on player
-// usage and server performance.
+// tools for the following tasks: (1) acquire computing resources and deploy
+// game servers, (2) scale game server capacity to meet player demand, (3) host
+// game sessions and manage player access, and (4) track in-depth metrics on
+// player usage and server performance.
 //
-// The Amazon GameLift service API includes important features:
+// The Amazon GameLift service API includes two important function sets:
 //
-//    * Find game sessions and match players to games – Retrieve information
-//    on available game sessions; create new game sessions; send player requests
-//    to join a game session.
+//    * Manage game sessions and player access – Retrieve information on available
+//    game sessions; create new game sessions; send player requests to join
+//    a game session.
 //
 //    * Configure and manage game server resources – Manage builds, fleets,
 //    queues, and aliases; set autoscaling policies; retrieve logs and metrics.
 //
 // This reference guide describes the low-level service API for Amazon GameLift.
-// We recommend using either the Amazon Web Services software development kit
-// (AWS SDK (http://aws.amazon.com/tools/#sdk)), available in multiple languages,
-// or the AWS command-line interface (http://aws.amazon.com/cli/) (CLI) tool.
-// Both of these align with the low-level service API. In addition, you can
-// use the AWS Management Console (https://console.aws.amazon.com/gamelift/home)
-// for Amazon GameLift for many administrative actions.
+// You can use the API functionality with these tools:
 //
-// You can use some API actions with Amazon GameLift Local, a testing tool that
-// lets you test your game integration locally before deploying on Amazon GameLift.
-// You can call these APIs from the AWS CLI or programmatically; API calls to
-// Amazon GameLift Local servers perform exactly as they do when calling Amazon
-// GameLift web servers. For more information on using Amazon GameLift Local,
-// see Testing an Integration (http://docs.aws.amazon.com/gamelift/latest/developerguide/integration-testing-local.html).
+//    * The Amazon Web Services software development kit (AWS SDK (http://aws.amazon.com/tools/#sdk))
+//    is available in multiple languages (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-supported.html#gamelift-supported-clients)
+//    including C++ and C#. Use the SDK to access the API programmatically from
+//    an application, such as a game client.
+//
+//    * The AWS command-line interface (http://aws.amazon.com/cli/) (CLI) tool
+//    is primarily useful for handling administrative actions, such as setting
+//    up and managing Amazon GameLift settings and resources. You can use the
+//    AWS CLI to manage all of your AWS services.
+//
+//    * The AWS Management Console (https://console.aws.amazon.com/gamelift/home)
+//    for Amazon GameLift provides a web interface to manage your Amazon GameLift
+//    settings and resources. The console includes a dashboard for tracking
+//    key resources, including builds and fleets, and displays usage and performance
+//    metrics for your games as customizable graphs.
+//
+//    * Amazon GameLift Local is a tool for testing your game's integration
+//    with Amazon GameLift before deploying it on the service. This tools supports
+//    a subset of key API actions, which can be called from either the AWS CLI
+//    or programmatically. See Testing an Integration (http://docs.aws.amazon.com/gamelift/latest/developerguide/integration-testing-local.html).
 //
 // MORE RESOURCES
 //
@@ -55,22 +65,22 @@
 //
 // This list offers a functional overview of the Amazon GameLift service API.
 //
-// Finding Games and Joining Players
+// Managing Games and Players
 //
-// You can enable players to connect to game servers on Amazon GameLift from
-// a game client or through a game service (such as a matchmaking service).
-// You can use these operations to discover actively running game or start new
-// games. You can also match players to games, either singly or as a group.
+// Use these actions to start new game sessions, find existing game sessions,
+// track game session status and other information, and enable player access
+// to game sessions.
 //
 //    * Discover existing game sessions
 //
-// SearchGameSessions – Get all available game sessions or search for game sessions
-//    that match a set of criteria. Available in Amazon GameLift Local.
+// SearchGameSessions – Retrieve all available game sessions or search for game
+//    sessions that match a set of criteria.
 //
-//    * Start a new game session
+//    * Start new game sessions
 //
-// Game session placement – Use a queue to process new game session requests
-//    and create game sessions on fleets designated for the queue.
+// Start new games with Queues to find the best available hosting resources
+//    across multiple regions, minimize player latency, and balance game session
+//    activity for efficiency and cost effectiveness.
 //
 // StartGameSessionPlacement – Request a new game session placement and add
 //    one or more players to it.
@@ -83,7 +93,19 @@
 // CreateGameSession – Start a new game session on a specific fleet. Available
 //    in Amazon GameLift Local.
 //
-//    * Manage game session objects
+//    * Start new game sessions with FlexMatch matchmaking
+//
+// StartMatchmaking – Request matchmaking for one players or a group who want
+//    to play together.
+//
+// DescribeMatchmaking – Get details on a matchmaking request, including status.
+//
+// AcceptMatch – Register that a player accepts a proposed match, for matches
+//    that require player acceptance.
+//
+// StopMatchmaking – Cancel a matchmaking request.
+//
+//    * Manage game session data
 //
 // DescribeGameSessions – Retrieve metadata for one or more game sessions, including
 //    length of time active and current player count. Available in Amazon GameLift
@@ -97,7 +119,7 @@
 //
 // GetGameSessionLogUrl – Get the location of saved logs for a game session.
 //
-//    * Manage player sessions objects
+//    * Manage player sessions
 //
 // CreatePlayerSession – Send a request for a player to join a game session.
 //    Available in Amazon GameLift Local.
@@ -110,16 +132,17 @@
 //
 // Setting Up and Managing Game Servers
 //
-// When setting up Amazon GameLift, first create a game build and upload the
-// files to Amazon GameLift. Then use these operations to set up a fleet of
-// resources to run your game servers. Manage games to scale capacity, adjust
-// configuration settings, access raw utilization data, and more.
+// When setting up Amazon GameLift resources for your game, you first create
+// a game build (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-intro.html)
+// and upload it to Amazon GameLift. You can then use these actions to configure
+// and manage a fleet of resources to run your game servers, scale capacity
+// to meet player demand, access performance and utilization metrics, and more.
 //
 //    * Manage game builds
 //
-// CreateBuild – Create a new build by uploading files stored in an Amazon S3
-//    bucket. (To create a build stored at a local file location, use the AWS
-//    CLI command upload-build.)
+// CreateBuild – Create a new build using files stored in an Amazon S3 bucket.
+//    (Update uploading permissions with RequestUploadCredentials.) To create
+//    a build and upload files from a local path, use the AWS CLI command upload-build.
 //
 // ListBuilds – Get a list of all builds uploaded to a Amazon GameLift region.
 //
@@ -133,13 +156,13 @@
 //
 // CreateFleet – Configure and activate a new fleet to run a build's game servers.
 //
+// ListFleets – Get a list of all fleet IDs in a Amazon GameLift region (all
+//    statuses).
+//
 // DeleteFleet – Terminate a fleet that is no longer running game servers or
 //    hosting players.
 //
 // View / update fleet configurations.
-//
-// ListFleets – Get a list of all fleet IDs in a Amazon GameLift region (all
-//    statuses).
 //
 // DescribeFleetAttributes / UpdateFleetAttributes – View or change a fleet's
 //    metadata and settings for game session protection and resource creation
@@ -151,9 +174,6 @@
 //
 // DescribeRuntimeConfiguration / UpdateRuntimeConfiguration – View or change
 //    what server processes (and how many) to run on each instance in a fleet.
-//
-// DescribeInstances – Get information on each instance in a fleet, including
-//    instance ID, IP address, and status.
 //
 //    * Control fleet capacity
 //
@@ -186,6 +206,9 @@
 //
 //    * Remotely access an instance
 //
+// DescribeInstances – Get information on each instance in a fleet, including
+//    instance ID, IP address, and status.
+//
 // GetInstanceAccess – Request access credentials needed to remotely connect
 //    to a specified instance in a fleet.
 //
@@ -209,12 +232,35 @@
 // CreateGameSessionQueue – Create a queue for processing requests for new game
 //    sessions.
 //
-// DescribeGameSessionQueues – Get data on all game session queues defined in
-//    a Amazon GameLift region.
+// DescribeGameSessionQueues – Retrieve game session queues defined in a Amazon
+//    GameLift region.
 //
 // UpdateGameSessionQueue – Change the configuration of a game session queue.
 //
 // DeleteGameSessionQueue – Remove a game session queue from the region.
+//
+//    * Manage FlexMatch resources
+//
+// CreateMatchmakingConfiguration – Create a matchmaking configuration with
+//    instructions for building a player group and placing in a new game session.
+//
+//
+// DescribeMatchmakingConfigurations – Retrieve matchmaking configurations defined
+//    a Amazon GameLift region.
+//
+// UpdateMatchmakingConfiguration – Change settings for matchmaking configuration.
+//    queue.
+//
+// DeleteMatchmakingConfiguration – Remove a matchmaking configuration from
+//    the region.
+//
+// CreateMatchmakingRuleSet – Create a set of rules to use when searching for
+//    player matches.
+//
+// DescribeMatchmakingRuleSets – Retrieve matchmaking rule sets defined in a
+//    Amazon GameLift region.
+//
+// ValidateMatchmakingRuleSet – Verify syntax for a set of matchmaking rules.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01 for more information on this service.
 //
@@ -223,69 +269,17 @@
 //
 // Using the Client
 //
-// To use the client for Amazon GameLift you will first need
-// to create a new instance of it.
+// To Amazon GameLift with the SDK use the New function to create
+// a new service client. With that client you can make API requests to the service.
+// These clients are safe to use concurrently.
 //
-// When creating a client for an AWS service you'll first need to have a Session
-// already created. The Session provides configuration that can be shared
-// between multiple service clients. Additional configuration can be applied to
-// the Session and service's client when they are constructed. The aws package's
-// Config type contains several fields such as Region for the AWS Region the
-// client should make API requests too. The optional Config value can be provided
-// as the variadic argument for Sessions and client creation.
-//
-// Once the service's client is created you can use it to make API requests the
-// AWS service. These clients are safe to use concurrently.
-//
-//   // Create a session to share configuration, and load external configuration.
-//   sess := session.Must(session.NewSession())
-//
-//   // Create the service's client with the session.
-//   svc := gamelift.New(sess)
-//
-// See the SDK's documentation for more information on how to use service clients.
+// See the SDK's documentation for more information on how to use the SDK.
 // https://docs.aws.amazon.com/sdk-for-go/api/
 //
-// See aws package's Config type for more information on configuration options.
+// See aws.Config documentation for more information on configuring SDK clients.
 // https://docs.aws.amazon.com/sdk-for-go/api/aws/#Config
 //
 // See the Amazon GameLift client GameLift for more
-// information on creating the service's client.
+// information on creating client for this service.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/gamelift/#New
-//
-// Once the client is created you can make an API request to the service.
-// Each API method takes a input parameter, and returns the service response
-// and an error.
-//
-// The API method will document which error codes the service can be returned
-// by the operation if the service models the API operation's errors. These
-// errors will also be available as const strings prefixed with "ErrCode".
-//
-//   result, err := svc.CreateAlias(params)
-//   if err != nil {
-//       // Cast err to awserr.Error to handle specific error codes.
-//       aerr, ok := err.(awserr.Error)
-//       if ok && aerr.Code() == <error code to check for> {
-//           // Specific error code handling
-//       }
-//       return err
-//   }
-//
-//   fmt.Println("CreateAlias result:")
-//   fmt.Println(result)
-//
-// Using the Client with Context
-//
-// The service's client also provides methods to make API requests with a Context
-// value. This allows you to control the timeout, and cancellation of pending
-// requests. These methods also take request Option as variadic parameter to apply
-// additional configuration to the API request.
-//
-//   ctx := context.Background()
-//
-//   result, err := svc.CreateAliasWithContext(ctx, params)
-//
-// See the request package documentation for more information on using Context pattern
-// with the SDK.
-// https://docs.aws.amazon.com/sdk-for-go/api/aws/request/
 package gamelift

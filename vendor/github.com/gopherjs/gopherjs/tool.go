@@ -31,6 +31,7 @@ import (
 
 	gbuild "github.com/gopherjs/gopherjs/build"
 	"github.com/gopherjs/gopherjs/compiler"
+	"github.com/kisielk/gotool"
 	"github.com/neelance/sourcemap"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -94,11 +95,8 @@ func main() {
 			s := gbuild.NewSession(options)
 
 			err := func() error {
-				if len(args) == 0 {
-					return s.BuildDir(currentDirectory, currentDirectory, pkgObj)
-				}
-
-				if strings.HasSuffix(args[0], ".go") || strings.HasSuffix(args[0], ".inc.js") {
+				// Handle "gopherjs build [files]" ad-hoc package mode.
+				if len(args) > 0 && (strings.HasSuffix(args[0], ".go") || strings.HasSuffix(args[0], ".inc.js")) {
 					for _, arg := range args {
 						if !strings.HasSuffix(arg, ".go") && !strings.HasSuffix(arg, ".inc.js") {
 							return fmt.Errorf("named files must be .go or .inc.js files")
@@ -122,8 +120,11 @@ func main() {
 					return nil
 				}
 
-				for _, pkgPath := range args {
-					pkgPath = filepath.ToSlash(pkgPath)
+				// Expand import path patterns.
+				patternContext := gbuild.NewBuildContext("", options.BuildTags)
+				pkgs := (&gotool.Context{BuildContext: *patternContext}).ImportPaths(args)
+
+				for _, pkgPath := range pkgs {
 					if s.Watcher != nil {
 						pkg, err := gbuild.NewBuildContext(s.InstallSuffix(), options.BuildTags).Import(pkgPath, "", build.FindOnly)
 						if err != nil {
@@ -139,12 +140,14 @@ func main() {
 					if err != nil {
 						return err
 					}
-					if pkgObj == "" {
-						pkgObj = filepath.Base(args[0]) + ".js"
-					}
-					if pkg.IsCommand() && !pkg.UpToDate {
-						if err := s.WriteCommandPackage(archive, pkgObj); err != nil {
-							return err
+					if len(pkgs) == 1 { // Only consider writing output if single package specified.
+						if pkgObj == "" {
+							pkgObj = filepath.Base(pkg.ImportPath) + ".js"
+						}
+						if pkg.IsCommand() && !pkg.UpToDate {
+							if err := s.WriteCommandPackage(archive, pkgObj); err != nil {
+								return err
+							}
 						}
 					}
 				}
@@ -173,22 +176,10 @@ func main() {
 			s := gbuild.NewSession(options)
 
 			err := func() error {
-				pkgs := args
-				if len(pkgs) == 0 {
-					firstGopathWorkspace := filepath.SplitList(build.Default.GOPATH)[0] // TODO: The GOPATH workspace that contains the package source should be chosen.
-					srcDir, err := filepath.EvalSymlinks(filepath.Join(firstGopathWorkspace, "src"))
-					if err != nil {
-						return err
-					}
-					if !strings.HasPrefix(currentDirectory, srcDir) {
-						return fmt.Errorf("gopherjs install: no install location for directory %s outside GOPATH", currentDirectory)
-					}
-					pkgPath, err := filepath.Rel(srcDir, currentDirectory)
-					if err != nil {
-						return err
-					}
-					pkgs = []string{pkgPath}
-				}
+				// Expand import path patterns.
+				patternContext := gbuild.NewBuildContext("", options.BuildTags)
+				pkgs := (&gotool.Context{BuildContext: *patternContext}).ImportPaths(args)
+
 				if cmd.Name() == "get" {
 					goGet := exec.Command("go", append([]string{"get", "-d", "-tags=js"}, pkgs...)...)
 					goGet.Stdout = os.Stdout
@@ -198,8 +189,6 @@ func main() {
 					}
 				}
 				for _, pkgPath := range pkgs {
-					pkgPath = filepath.ToSlash(pkgPath)
-
 					pkg, err := gbuild.Import(pkgPath, 0, s.InstallSuffix(), options.BuildTags)
 					if s.Watcher != nil && pkg != nil { // add watch even on error
 						s.Watcher.Add(pkg.Dir)
@@ -305,6 +294,7 @@ func main() {
 	}
 	bench := cmdTest.Flags().String("bench", "", "Run benchmarks matching the regular expression. By default, no benchmarks run. To run all benchmarks, use '--bench=.'.")
 	benchtime := cmdTest.Flags().String("benchtime", "", "Run enough iterations of each benchmark to take t, specified as a time.Duration (for example, -benchtime 1h30s). The default is 1 second (1s).")
+	count := cmdTest.Flags().String("count", "", "Run each test and benchmark n times (default 1). Examples are always run once.")
 	run := cmdTest.Flags().String("run", "", "Run only those tests and examples matching the regular expression.")
 	short := cmdTest.Flags().Bool("short", false, "Tell long-running tests to shorten their run time.")
 	verbose := cmdTest.Flags().BoolP("verbose", "v", false, "Log all tests as they are run. Also print all text from Log and Logf calls even if the test succeeds.")
@@ -314,38 +304,17 @@ func main() {
 	cmdTest.Run = func(cmd *cobra.Command, args []string) {
 		options.BuildTags = strings.Fields(tags)
 		err := func() error {
+			// Expand import path patterns.
+			patternContext := gbuild.NewBuildContext("", options.BuildTags)
+			args = (&gotool.Context{BuildContext: *patternContext}).ImportPaths(args)
+
 			pkgs := make([]*gbuild.PackageData, len(args))
 			for i, pkgPath := range args {
-				pkgPath = filepath.ToSlash(pkgPath)
 				var err error
 				pkgs[i], err = gbuild.Import(pkgPath, 0, "", options.BuildTags)
 				if err != nil {
 					return err
 				}
-			}
-			if len(pkgs) == 0 {
-				firstGopathWorkspace := filepath.SplitList(build.Default.GOPATH)[0]
-				srcDir, err := filepath.EvalSymlinks(filepath.Join(firstGopathWorkspace, "src"))
-				if err != nil {
-					return err
-				}
-				var pkg *gbuild.PackageData
-				if strings.HasPrefix(currentDirectory, srcDir) {
-					pkgPath, err := filepath.Rel(srcDir, currentDirectory)
-					if err != nil {
-						return err
-					}
-					if pkg, err = gbuild.Import(pkgPath, 0, "", options.BuildTags); err != nil {
-						return err
-					}
-				}
-				if pkg == nil {
-					if pkg, err = gbuild.ImportDir(currentDirectory, 0, "", options.BuildTags); err != nil {
-						return err
-					}
-					pkg.ImportPath = "_" + currentDirectory
-				}
-				pkgs = []*gbuild.PackageData{pkg}
 			}
 
 			var exitErr error
@@ -466,6 +435,9 @@ func main() {
 				}
 				if *benchtime != "" {
 					args = append(args, "-test.benchtime", *benchtime)
+				}
+				if *count != "" {
+					args = append(args, "-test.count", *count)
 				}
 				if *run != "" {
 					args = append(args, "-test.run", *run)

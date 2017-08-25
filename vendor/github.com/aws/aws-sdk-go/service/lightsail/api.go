@@ -14,19 +14,18 @@ const opAllocateStaticIp = "AllocateStaticIp"
 
 // AllocateStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the AllocateStaticIp operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AllocateStaticIp for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AllocateStaticIp method directly
-// instead.
+// See AllocateStaticIp for more information on using the AllocateStaticIp
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AllocateStaticIpRequest method.
 //    req, resp := client.AllocateStaticIpRequest(params)
@@ -72,6 +71,10 @@ func (c *Lightsail) AllocateStaticIpRequest(input *AllocateStaticIpInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -115,19 +118,18 @@ const opAttachStaticIp = "AttachStaticIp"
 
 // AttachStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the AttachStaticIp operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AttachStaticIp for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AttachStaticIp method directly
-// instead.
+// See AttachStaticIp for more information on using the AttachStaticIp
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AttachStaticIpRequest method.
 //    req, resp := client.AttachStaticIpRequest(params)
@@ -173,6 +175,10 @@ func (c *Lightsail) AttachStaticIpRequest(input *AttachStaticIpInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -216,19 +222,18 @@ const opCloseInstancePublicPorts = "CloseInstancePublicPorts"
 
 // CloseInstancePublicPortsRequest generates a "aws/request.Request" representing the
 // client's request for the CloseInstancePublicPorts operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CloseInstancePublicPorts for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CloseInstancePublicPorts method directly
-// instead.
+// See CloseInstancePublicPorts for more information on using the CloseInstancePublicPorts
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CloseInstancePublicPortsRequest method.
 //    req, resp := client.CloseInstancePublicPortsRequest(params)
@@ -274,6 +279,10 @@ func (c *Lightsail) CloseInstancePublicPortsRequest(input *CloseInstancePublicPo
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -317,19 +326,18 @@ const opCreateDomain = "CreateDomain"
 
 // CreateDomainRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDomain operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateDomain for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDomain method directly
-// instead.
+// See CreateDomain for more information on using the CreateDomain
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDomainRequest method.
 //    req, resp := client.CreateDomainRequest(params)
@@ -375,6 +383,10 @@ func (c *Lightsail) CreateDomainRequest(input *CreateDomainInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -418,19 +430,18 @@ const opCreateDomainEntry = "CreateDomainEntry"
 
 // CreateDomainEntryRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDomainEntry operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateDomainEntry for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDomainEntry method directly
-// instead.
+// See CreateDomainEntry for more information on using the CreateDomainEntry
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDomainEntryRequest method.
 //    req, resp := client.CreateDomainEntryRequest(params)
@@ -477,6 +488,10 @@ func (c *Lightsail) CreateDomainEntryRequest(input *CreateDomainEntryInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -520,19 +535,18 @@ const opCreateInstanceSnapshot = "CreateInstanceSnapshot"
 
 // CreateInstanceSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInstanceSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateInstanceSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateInstanceSnapshot method directly
-// instead.
+// See CreateInstanceSnapshot for more information on using the CreateInstanceSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateInstanceSnapshotRequest method.
 //    req, resp := client.CreateInstanceSnapshotRequest(params)
@@ -579,6 +593,10 @@ func (c *Lightsail) CreateInstanceSnapshotRequest(input *CreateInstanceSnapshotI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -622,19 +640,18 @@ const opCreateInstances = "CreateInstances"
 
 // CreateInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInstances operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateInstances for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateInstances method directly
-// instead.
+// See CreateInstances for more information on using the CreateInstances
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateInstancesRequest method.
 //    req, resp := client.CreateInstancesRequest(params)
@@ -680,6 +697,10 @@ func (c *Lightsail) CreateInstancesRequest(input *CreateInstancesInput) (req *re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -723,19 +744,18 @@ const opCreateInstancesFromSnapshot = "CreateInstancesFromSnapshot"
 
 // CreateInstancesFromSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInstancesFromSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateInstancesFromSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateInstancesFromSnapshot method directly
-// instead.
+// See CreateInstancesFromSnapshot for more information on using the CreateInstancesFromSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateInstancesFromSnapshotRequest method.
 //    req, resp := client.CreateInstancesFromSnapshotRequest(params)
@@ -782,6 +802,10 @@ func (c *Lightsail) CreateInstancesFromSnapshotRequest(input *CreateInstancesFro
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -825,19 +849,18 @@ const opCreateKeyPair = "CreateKeyPair"
 
 // CreateKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the CreateKeyPair operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateKeyPair for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateKeyPair method directly
-// instead.
+// See CreateKeyPair for more information on using the CreateKeyPair
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateKeyPairRequest method.
 //    req, resp := client.CreateKeyPairRequest(params)
@@ -883,6 +906,10 @@ func (c *Lightsail) CreateKeyPairRequest(input *CreateKeyPairInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -926,19 +953,18 @@ const opDeleteDomain = "DeleteDomain"
 
 // DeleteDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDomain operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteDomain for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDomain method directly
-// instead.
+// See DeleteDomain for more information on using the DeleteDomain
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDomainRequest method.
 //    req, resp := client.DeleteDomainRequest(params)
@@ -984,6 +1010,10 @@ func (c *Lightsail) DeleteDomainRequest(input *DeleteDomainInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1027,19 +1057,18 @@ const opDeleteDomainEntry = "DeleteDomainEntry"
 
 // DeleteDomainEntryRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDomainEntry operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteDomainEntry for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDomainEntry method directly
-// instead.
+// See DeleteDomainEntry for more information on using the DeleteDomainEntry
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDomainEntryRequest method.
 //    req, resp := client.DeleteDomainEntryRequest(params)
@@ -1085,6 +1114,10 @@ func (c *Lightsail) DeleteDomainEntryRequest(input *DeleteDomainEntryInput) (req
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1128,19 +1161,18 @@ const opDeleteInstance = "DeleteInstance"
 
 // DeleteInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteInstance method directly
-// instead.
+// See DeleteInstance for more information on using the DeleteInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteInstanceRequest method.
 //    req, resp := client.DeleteInstanceRequest(params)
@@ -1186,6 +1218,10 @@ func (c *Lightsail) DeleteInstanceRequest(input *DeleteInstanceInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1229,19 +1265,18 @@ const opDeleteInstanceSnapshot = "DeleteInstanceSnapshot"
 
 // DeleteInstanceSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInstanceSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteInstanceSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteInstanceSnapshot method directly
-// instead.
+// See DeleteInstanceSnapshot for more information on using the DeleteInstanceSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteInstanceSnapshotRequest method.
 //    req, resp := client.DeleteInstanceSnapshotRequest(params)
@@ -1287,6 +1322,10 @@ func (c *Lightsail) DeleteInstanceSnapshotRequest(input *DeleteInstanceSnapshotI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1330,19 +1369,18 @@ const opDeleteKeyPair = "DeleteKeyPair"
 
 // DeleteKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteKeyPair operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteKeyPair for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteKeyPair method directly
-// instead.
+// See DeleteKeyPair for more information on using the DeleteKeyPair
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteKeyPairRequest method.
 //    req, resp := client.DeleteKeyPairRequest(params)
@@ -1388,6 +1426,10 @@ func (c *Lightsail) DeleteKeyPairRequest(input *DeleteKeyPairInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1431,19 +1473,18 @@ const opDetachStaticIp = "DetachStaticIp"
 
 // DetachStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the DetachStaticIp operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DetachStaticIp for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DetachStaticIp method directly
-// instead.
+// See DetachStaticIp for more information on using the DetachStaticIp
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DetachStaticIpRequest method.
 //    req, resp := client.DetachStaticIpRequest(params)
@@ -1489,6 +1530,10 @@ func (c *Lightsail) DetachStaticIpRequest(input *DetachStaticIpInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1532,19 +1577,18 @@ const opDownloadDefaultKeyPair = "DownloadDefaultKeyPair"
 
 // DownloadDefaultKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the DownloadDefaultKeyPair operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DownloadDefaultKeyPair for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DownloadDefaultKeyPair method directly
-// instead.
+// See DownloadDefaultKeyPair for more information on using the DownloadDefaultKeyPair
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DownloadDefaultKeyPairRequest method.
 //    req, resp := client.DownloadDefaultKeyPairRequest(params)
@@ -1590,6 +1634,10 @@ func (c *Lightsail) DownloadDefaultKeyPairRequest(input *DownloadDefaultKeyPairI
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1633,19 +1681,18 @@ const opGetActiveNames = "GetActiveNames"
 
 // GetActiveNamesRequest generates a "aws/request.Request" representing the
 // client's request for the GetActiveNames operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetActiveNames for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetActiveNames method directly
-// instead.
+// See GetActiveNames for more information on using the GetActiveNames
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetActiveNamesRequest method.
 //    req, resp := client.GetActiveNamesRequest(params)
@@ -1691,6 +1738,10 @@ func (c *Lightsail) GetActiveNamesRequest(input *GetActiveNamesInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1734,19 +1785,18 @@ const opGetBlueprints = "GetBlueprints"
 
 // GetBlueprintsRequest generates a "aws/request.Request" representing the
 // client's request for the GetBlueprints operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetBlueprints for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetBlueprints method directly
-// instead.
+// See GetBlueprints for more information on using the GetBlueprints
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetBlueprintsRequest method.
 //    req, resp := client.GetBlueprintsRequest(params)
@@ -1795,6 +1845,10 @@ func (c *Lightsail) GetBlueprintsRequest(input *GetBlueprintsInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1838,19 +1892,18 @@ const opGetBundles = "GetBundles"
 
 // GetBundlesRequest generates a "aws/request.Request" representing the
 // client's request for the GetBundles operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetBundles for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetBundles method directly
-// instead.
+// See GetBundles for more information on using the GetBundles
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetBundlesRequest method.
 //    req, resp := client.GetBundlesRequest(params)
@@ -1897,6 +1950,10 @@ func (c *Lightsail) GetBundlesRequest(input *GetBundlesInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -1940,19 +1997,18 @@ const opGetDomain = "GetDomain"
 
 // GetDomainRequest generates a "aws/request.Request" representing the
 // client's request for the GetDomain operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetDomain for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetDomain method directly
-// instead.
+// See GetDomain for more information on using the GetDomain
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetDomainRequest method.
 //    req, resp := client.GetDomainRequest(params)
@@ -1998,6 +2054,10 @@ func (c *Lightsail) GetDomainRequest(input *GetDomainInput) (req *request.Reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2041,19 +2101,18 @@ const opGetDomains = "GetDomains"
 
 // GetDomainsRequest generates a "aws/request.Request" representing the
 // client's request for the GetDomains operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetDomains for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetDomains method directly
-// instead.
+// See GetDomains for more information on using the GetDomains
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetDomainsRequest method.
 //    req, resp := client.GetDomainsRequest(params)
@@ -2099,6 +2158,10 @@ func (c *Lightsail) GetDomainsRequest(input *GetDomainsInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2142,19 +2205,18 @@ const opGetInstance = "GetInstance"
 
 // GetInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstance method directly
-// instead.
+// See GetInstance for more information on using the GetInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstanceRequest method.
 //    req, resp := client.GetInstanceRequest(params)
@@ -2201,6 +2263,10 @@ func (c *Lightsail) GetInstanceRequest(input *GetInstanceInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2244,19 +2310,18 @@ const opGetInstanceAccessDetails = "GetInstanceAccessDetails"
 
 // GetInstanceAccessDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceAccessDetails operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstanceAccessDetails for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstanceAccessDetails method directly
-// instead.
+// See GetInstanceAccessDetails for more information on using the GetInstanceAccessDetails
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstanceAccessDetailsRequest method.
 //    req, resp := client.GetInstanceAccessDetailsRequest(params)
@@ -2303,6 +2368,10 @@ func (c *Lightsail) GetInstanceAccessDetailsRequest(input *GetInstanceAccessDeta
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2346,19 +2415,18 @@ const opGetInstanceMetricData = "GetInstanceMetricData"
 
 // GetInstanceMetricDataRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceMetricData operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstanceMetricData for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstanceMetricData method directly
-// instead.
+// See GetInstanceMetricData for more information on using the GetInstanceMetricData
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstanceMetricDataRequest method.
 //    req, resp := client.GetInstanceMetricDataRequest(params)
@@ -2405,6 +2473,10 @@ func (c *Lightsail) GetInstanceMetricDataRequest(input *GetInstanceMetricDataInp
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2448,19 +2520,18 @@ const opGetInstancePortStates = "GetInstancePortStates"
 
 // GetInstancePortStatesRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstancePortStates operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstancePortStates for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstancePortStates method directly
-// instead.
+// See GetInstancePortStates for more information on using the GetInstancePortStates
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstancePortStatesRequest method.
 //    req, resp := client.GetInstancePortStatesRequest(params)
@@ -2506,6 +2577,10 @@ func (c *Lightsail) GetInstancePortStatesRequest(input *GetInstancePortStatesInp
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2549,19 +2624,18 @@ const opGetInstanceSnapshot = "GetInstanceSnapshot"
 
 // GetInstanceSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstanceSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstanceSnapshot method directly
-// instead.
+// See GetInstanceSnapshot for more information on using the GetInstanceSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstanceSnapshotRequest method.
 //    req, resp := client.GetInstanceSnapshotRequest(params)
@@ -2607,6 +2681,10 @@ func (c *Lightsail) GetInstanceSnapshotRequest(input *GetInstanceSnapshotInput) 
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2650,19 +2728,18 @@ const opGetInstanceSnapshots = "GetInstanceSnapshots"
 
 // GetInstanceSnapshotsRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceSnapshots operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstanceSnapshots for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstanceSnapshots method directly
-// instead.
+// See GetInstanceSnapshots for more information on using the GetInstanceSnapshots
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstanceSnapshotsRequest method.
 //    req, resp := client.GetInstanceSnapshotsRequest(params)
@@ -2708,6 +2785,10 @@ func (c *Lightsail) GetInstanceSnapshotsRequest(input *GetInstanceSnapshotsInput
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2751,19 +2832,18 @@ const opGetInstanceState = "GetInstanceState"
 
 // GetInstanceStateRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceState operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstanceState for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstanceState method directly
-// instead.
+// See GetInstanceState for more information on using the GetInstanceState
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstanceStateRequest method.
 //    req, resp := client.GetInstanceStateRequest(params)
@@ -2809,6 +2889,10 @@ func (c *Lightsail) GetInstanceStateRequest(input *GetInstanceStateInput) (req *
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2852,19 +2936,18 @@ const opGetInstances = "GetInstances"
 
 // GetInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstances operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetInstances for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetInstances method directly
-// instead.
+// See GetInstances for more information on using the GetInstances
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetInstancesRequest method.
 //    req, resp := client.GetInstancesRequest(params)
@@ -2911,6 +2994,10 @@ func (c *Lightsail) GetInstancesRequest(input *GetInstancesInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -2954,19 +3041,18 @@ const opGetKeyPair = "GetKeyPair"
 
 // GetKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the GetKeyPair operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetKeyPair for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetKeyPair method directly
-// instead.
+// See GetKeyPair for more information on using the GetKeyPair
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetKeyPairRequest method.
 //    req, resp := client.GetKeyPairRequest(params)
@@ -3012,6 +3098,10 @@ func (c *Lightsail) GetKeyPairRequest(input *GetKeyPairInput) (req *request.Requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3055,19 +3145,18 @@ const opGetKeyPairs = "GetKeyPairs"
 
 // GetKeyPairsRequest generates a "aws/request.Request" representing the
 // client's request for the GetKeyPairs operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetKeyPairs for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetKeyPairs method directly
-// instead.
+// See GetKeyPairs for more information on using the GetKeyPairs
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetKeyPairsRequest method.
 //    req, resp := client.GetKeyPairsRequest(params)
@@ -3113,6 +3202,10 @@ func (c *Lightsail) GetKeyPairsRequest(input *GetKeyPairsInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3156,19 +3249,18 @@ const opGetOperation = "GetOperation"
 
 // GetOperationRequest generates a "aws/request.Request" representing the
 // client's request for the GetOperation operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetOperation for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetOperation method directly
-// instead.
+// See GetOperation for more information on using the GetOperation
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetOperationRequest method.
 //    req, resp := client.GetOperationRequest(params)
@@ -3216,6 +3308,10 @@ func (c *Lightsail) GetOperationRequest(input *GetOperationInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3259,19 +3355,18 @@ const opGetOperations = "GetOperations"
 
 // GetOperationsRequest generates a "aws/request.Request" representing the
 // client's request for the GetOperations operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetOperations for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetOperations method directly
-// instead.
+// See GetOperations for more information on using the GetOperations
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetOperationsRequest method.
 //    req, resp := client.GetOperationsRequest(params)
@@ -3321,6 +3416,10 @@ func (c *Lightsail) GetOperationsRequest(input *GetOperationsInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3364,19 +3463,18 @@ const opGetOperationsForResource = "GetOperationsForResource"
 
 // GetOperationsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the GetOperationsForResource operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetOperationsForResource for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetOperationsForResource method directly
-// instead.
+// See GetOperationsForResource for more information on using the GetOperationsForResource
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetOperationsForResourceRequest method.
 //    req, resp := client.GetOperationsForResourceRequest(params)
@@ -3422,6 +3520,10 @@ func (c *Lightsail) GetOperationsForResourceRequest(input *GetOperationsForResou
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3465,19 +3567,18 @@ const opGetRegions = "GetRegions"
 
 // GetRegionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetRegions operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetRegions for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetRegions method directly
-// instead.
+// See GetRegions for more information on using the GetRegions
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetRegionsRequest method.
 //    req, resp := client.GetRegionsRequest(params)
@@ -3506,7 +3607,8 @@ func (c *Lightsail) GetRegionsRequest(input *GetRegionsInput) (req *request.Requ
 
 // GetRegions API operation for Amazon Lightsail.
 //
-// Returns a list of all valid regions for Amazon Lightsail.
+// Returns a list of all valid regions for Amazon Lightsail. Use the include
+// availability zones parameter to also return the availability zones in a region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3522,6 +3624,10 @@ func (c *Lightsail) GetRegionsRequest(input *GetRegionsInput) (req *request.Requ
 //   * ErrCodeInvalidInputException "InvalidInputException"
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
+//
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
@@ -3566,19 +3672,18 @@ const opGetStaticIp = "GetStaticIp"
 
 // GetStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the GetStaticIp operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetStaticIp for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetStaticIp method directly
-// instead.
+// See GetStaticIp for more information on using the GetStaticIp
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetStaticIpRequest method.
 //    req, resp := client.GetStaticIpRequest(params)
@@ -3624,6 +3729,10 @@ func (c *Lightsail) GetStaticIpRequest(input *GetStaticIpInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3667,19 +3776,18 @@ const opGetStaticIps = "GetStaticIps"
 
 // GetStaticIpsRequest generates a "aws/request.Request" representing the
 // client's request for the GetStaticIps operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See GetStaticIps for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the GetStaticIps method directly
-// instead.
+// See GetStaticIps for more information on using the GetStaticIps
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the GetStaticIpsRequest method.
 //    req, resp := client.GetStaticIpsRequest(params)
@@ -3725,6 +3833,10 @@ func (c *Lightsail) GetStaticIpsRequest(input *GetStaticIpsInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3768,19 +3880,18 @@ const opImportKeyPair = "ImportKeyPair"
 
 // ImportKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the ImportKeyPair operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ImportKeyPair for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ImportKeyPair method directly
-// instead.
+// See ImportKeyPair for more information on using the ImportKeyPair
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ImportKeyPairRequest method.
 //    req, resp := client.ImportKeyPairRequest(params)
@@ -3826,6 +3937,10 @@ func (c *Lightsail) ImportKeyPairRequest(input *ImportKeyPairInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3869,19 +3984,18 @@ const opIsVpcPeered = "IsVpcPeered"
 
 // IsVpcPeeredRequest generates a "aws/request.Request" representing the
 // client's request for the IsVpcPeered operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See IsVpcPeered for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the IsVpcPeered method directly
-// instead.
+// See IsVpcPeered for more information on using the IsVpcPeered
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the IsVpcPeeredRequest method.
 //    req, resp := client.IsVpcPeeredRequest(params)
@@ -3927,6 +4041,10 @@ func (c *Lightsail) IsVpcPeeredRequest(input *IsVpcPeeredInput) (req *request.Re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -3970,19 +4088,18 @@ const opOpenInstancePublicPorts = "OpenInstancePublicPorts"
 
 // OpenInstancePublicPortsRequest generates a "aws/request.Request" representing the
 // client's request for the OpenInstancePublicPorts operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See OpenInstancePublicPorts for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the OpenInstancePublicPorts method directly
-// instead.
+// See OpenInstancePublicPorts for more information on using the OpenInstancePublicPorts
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the OpenInstancePublicPortsRequest method.
 //    req, resp := client.OpenInstancePublicPortsRequest(params)
@@ -4028,6 +4145,10 @@ func (c *Lightsail) OpenInstancePublicPortsRequest(input *OpenInstancePublicPort
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -4071,19 +4192,18 @@ const opPeerVpc = "PeerVpc"
 
 // PeerVpcRequest generates a "aws/request.Request" representing the
 // client's request for the PeerVpc operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See PeerVpc for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the PeerVpc method directly
-// instead.
+// See PeerVpc for more information on using the PeerVpc
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the PeerVpcRequest method.
 //    req, resp := client.PeerVpcRequest(params)
@@ -4129,6 +4249,10 @@ func (c *Lightsail) PeerVpcRequest(input *PeerVpcInput) (req *request.Request, o
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -4168,23 +4292,127 @@ func (c *Lightsail) PeerVpcWithContext(ctx aws.Context, input *PeerVpcInput, opt
 	return out, req.Send()
 }
 
+const opPutInstancePublicPorts = "PutInstancePublicPorts"
+
+// PutInstancePublicPortsRequest generates a "aws/request.Request" representing the
+// client's request for the PutInstancePublicPorts operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutInstancePublicPorts for more information on using the PutInstancePublicPorts
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutInstancePublicPortsRequest method.
+//    req, resp := client.PutInstancePublicPortsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/PutInstancePublicPorts
+func (c *Lightsail) PutInstancePublicPortsRequest(input *PutInstancePublicPortsInput) (req *request.Request, output *PutInstancePublicPortsOutput) {
+	op := &request.Operation{
+		Name:       opPutInstancePublicPorts,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutInstancePublicPortsInput{}
+	}
+
+	output = &PutInstancePublicPortsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutInstancePublicPorts API operation for Amazon Lightsail.
+//
+// Sets the specified open ports for an Amazon Lightsail instance, and closes
+// all ports for every protocol not included in the current request.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Lightsail's
+// API operation PutInstancePublicPorts for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeServiceException "ServiceException"
+//   A general service exception.
+//
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   Lightsail throws this exception when user input does not conform to the validation
+//   rules of an input field.
+//
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   Lightsail throws this exception when it cannot find a resource.
+//
+//   * ErrCodeOperationFailureException "OperationFailureException"
+//   Lightsail throws this exception when an operation fails to execute.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   Lightsail throws this exception when the user cannot be authenticated or
+//   uses invalid credentials to access a resource.
+//
+//   * ErrCodeAccountSetupInProgressException "AccountSetupInProgressException"
+//   Lightsail throws this exception when an account is still in the setup in
+//   progress state.
+//
+//   * ErrCodeUnauthenticatedException "UnauthenticatedException"
+//   Lightsail throws this exception when the user has not been authenticated.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/PutInstancePublicPorts
+func (c *Lightsail) PutInstancePublicPorts(input *PutInstancePublicPortsInput) (*PutInstancePublicPortsOutput, error) {
+	req, out := c.PutInstancePublicPortsRequest(input)
+	return out, req.Send()
+}
+
+// PutInstancePublicPortsWithContext is the same as PutInstancePublicPorts with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutInstancePublicPorts for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Lightsail) PutInstancePublicPortsWithContext(ctx aws.Context, input *PutInstancePublicPortsInput, opts ...request.Option) (*PutInstancePublicPortsOutput, error) {
+	req, out := c.PutInstancePublicPortsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRebootInstance = "RebootInstance"
 
 // RebootInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the RebootInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See RebootInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RebootInstance method directly
-// instead.
+// See RebootInstance for more information on using the RebootInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RebootInstanceRequest method.
 //    req, resp := client.RebootInstanceRequest(params)
@@ -4233,6 +4461,10 @@ func (c *Lightsail) RebootInstanceRequest(input *RebootInstanceInput) (req *requ
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -4276,19 +4508,18 @@ const opReleaseStaticIp = "ReleaseStaticIp"
 
 // ReleaseStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the ReleaseStaticIp operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ReleaseStaticIp for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ReleaseStaticIp method directly
-// instead.
+// See ReleaseStaticIp for more information on using the ReleaseStaticIp
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ReleaseStaticIpRequest method.
 //    req, resp := client.ReleaseStaticIpRequest(params)
@@ -4334,6 +4565,10 @@ func (c *Lightsail) ReleaseStaticIpRequest(input *ReleaseStaticIpInput) (req *re
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -4377,19 +4612,18 @@ const opStartInstance = "StartInstance"
 
 // StartInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the StartInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See StartInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the StartInstance method directly
-// instead.
+// See StartInstance for more information on using the StartInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the StartInstanceRequest method.
 //    req, resp := client.StartInstanceRequest(params)
@@ -4436,6 +4670,10 @@ func (c *Lightsail) StartInstanceRequest(input *StartInstanceInput) (req *reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -4479,19 +4717,18 @@ const opStopInstance = "StopInstance"
 
 // StopInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the StopInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See StopInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the StopInstance method directly
-// instead.
+// See StopInstance for more information on using the StopInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the StopInstanceRequest method.
 //    req, resp := client.StopInstanceRequest(params)
@@ -4537,6 +4774,10 @@ func (c *Lightsail) StopInstanceRequest(input *StopInstanceInput) (req *request.
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -4580,19 +4821,18 @@ const opUnpeerVpc = "UnpeerVpc"
 
 // UnpeerVpcRequest generates a "aws/request.Request" representing the
 // client's request for the UnpeerVpc operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UnpeerVpc for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UnpeerVpc method directly
-// instead.
+// See UnpeerVpc for more information on using the UnpeerVpc
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UnpeerVpcRequest method.
 //    req, resp := client.UnpeerVpcRequest(params)
@@ -4638,6 +4878,10 @@ func (c *Lightsail) UnpeerVpcRequest(input *UnpeerVpcInput) (req *request.Reques
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
 //
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
+//
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
 //
@@ -4681,19 +4925,18 @@ const opUpdateDomainEntry = "UpdateDomainEntry"
 
 // UpdateDomainEntryRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDomainEntry operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateDomainEntry for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateDomainEntry method directly
-// instead.
+// See UpdateDomainEntry for more information on using the UpdateDomainEntry
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateDomainEntryRequest method.
 //    req, resp := client.UpdateDomainEntryRequest(params)
@@ -4738,6 +4981,10 @@ func (c *Lightsail) UpdateDomainEntryRequest(input *UpdateDomainEntryInput) (req
 //   * ErrCodeInvalidInputException "InvalidInputException"
 //   Lightsail throws this exception when user input does not conform to the validation
 //   rules of an input field.
+//
+//   Domain-related APIs are only available in the N. Virginia (us-east-1) Region.
+//   Please set your Region configuration to us-east-1 to create, view, or edit
+//   these resources.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
 //   Lightsail throws this exception when it cannot find a resource.
@@ -4927,7 +5174,7 @@ type AvailabilityZone struct {
 	// The state of the Availability Zone.
 	State *string `locationName:"state" type:"string"`
 
-	// The name of the Availability Zone.
+	// The name of the Availability Zone. The format is us-east-1a (case-sensitive).
 	ZoneName *string `locationName:"zoneName" type:"string"`
 }
 
@@ -5487,7 +5734,10 @@ type CreateInstancesFromSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
 	// The Availability Zone where you want to create your instances. Use the following
-	// formatting: us-east-1a (case sensitive).
+	// formatting: us-east-1a (case sensitive). You can get a list of availability
+	// zones by using the get regions (http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html)
+	// operation. Be sure to add the include availability zones parameter to your
+	// request.
 	//
 	// AvailabilityZone is a required field
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string" required:"true"`
@@ -5621,7 +5871,10 @@ type CreateInstancesInput struct {
 	_ struct{} `type:"structure"`
 
 	// The Availability Zone in which to create your instance. Use the following
-	// format: us-east-1a (case sensitive).
+	// format: us-east-1a (case sensitive). You can get a list of availability zones
+	// by using the get regions (http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html)
+	// operation. Be sure to add the include availability zones parameter to your
+	// request.
 	//
 	// AvailabilityZone is a required field
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string" required:"true"`
@@ -5639,8 +5892,11 @@ type CreateInstancesInput struct {
 	// BundleId is a required field
 	BundleId *string `locationName:"bundleId" type:"string" required:"true"`
 
-	// The name for your custom image.
-	CustomImageName *string `locationName:"customImageName" type:"string"`
+	// (Deprecated) The name for your custom image.
+	//
+	// In releases prior to June 12, 2017, this parameter was ignored by the API.
+	// It is now deprecated.
+	CustomImageName *string `locationName:"customImageName" deprecated:"true" type:"string"`
 
 	// The names to use for your new Lightsail instances. Separate multiple values
 	// using quotation marks and commas, for example: ["MyFirstInstance","MySecondInstance"]
@@ -7246,7 +7502,7 @@ type GetInstancePortStatesOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Information about the port states resulting from your request.
-	PortStates []*string `locationName:"portStates" type:"list"`
+	PortStates []*InstancePortState `locationName:"portStates" type:"list"`
 }
 
 // String returns the string representation
@@ -7260,7 +7516,7 @@ func (s GetInstancePortStatesOutput) GoString() string {
 }
 
 // SetPortStates sets the PortStates field's value.
-func (s *GetInstancePortStatesOutput) SetPortStates(v []*string) *GetInstancePortStatesOutput {
+func (s *GetInstancePortStatesOutput) SetPortStates(v []*InstancePortState) *GetInstancePortStatesOutput {
 	s.PortStates = v
 	return s
 }
@@ -7750,8 +8006,15 @@ func (s *GetOperationsForResourceInput) SetResourceName(v string) *GetOperations
 type GetOperationsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Returns the number of pages of results that remain.
-	NextPageCount *string `locationName:"nextPageCount" type:"string"`
+	// (Deprecated) Returns the number of pages of results that remain.
+	//
+	// In releases prior to June 12, 2017, this parameter returned null by the API.
+	// It is now deprecated, and the API returns the nextPageToken parameter instead.
+	NextPageCount *string `locationName:"nextPageCount" deprecated:"true" type:"string"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which can be used to return the next set of items in the list.
+	NextPageToken *string `locationName:"nextPageToken" type:"string"`
 
 	// An array of key-value pairs containing information about the results of your
 	// get operations for resource request.
@@ -7771,6 +8034,12 @@ func (s GetOperationsForResourceOutput) GoString() string {
 // SetNextPageCount sets the NextPageCount field's value.
 func (s *GetOperationsForResourceOutput) SetNextPageCount(v string) *GetOperationsForResourceOutput {
 	s.NextPageCount = &v
+	return s
+}
+
+// SetNextPageToken sets the NextPageToken field's value.
+func (s *GetOperationsForResourceOutput) SetNextPageToken(v string) *GetOperationsForResourceOutput {
+	s.NextPageToken = &v
 	return s
 }
 
@@ -8463,7 +8732,24 @@ type InstancePortInfo struct {
 	// The first port in the range.
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
 
-	// The protocol.
+	// The protocol being used. Can be one of the following.
+	//
+	//    * tcp - Transmission Control Protocol (TCP) provides reliable, ordered,
+	//    and error-checked delivery of streamed data between applications running
+	//    on hosts communicating by an IP network. If you have an application that
+	//    doesn't require reliable data stream service, use UDP instead.
+	//
+	//    * all - All transport layer protocol types. For more general information,
+	//    see Transport layer (https://en.wikipedia.org/wiki/Transport_layer) on
+	//    Wikipedia.
+	//
+	//    * udp - With User Datagram Protocol (UDP), computer applications can send
+	//    messages (or datagrams) to other hosts on an Internet Protocol (IP) network.
+	//    Prior communications are not required to set up transmission channels
+	//    or data paths. Applications that don't require reliable data stream service
+	//    can use UDP, which provides a connectionless datagram service that emphasizes
+	//    reduced latency over reliability. If you do require reliable data stream
+	//    service, use TCP instead.
 	Protocol *string `locationName:"protocol" type:"string" enum:"NetworkProtocol"`
 
 	// The last port in the range.
@@ -8518,6 +8804,75 @@ func (s *InstancePortInfo) SetProtocol(v string) *InstancePortInfo {
 
 // SetToPort sets the ToPort field's value.
 func (s *InstancePortInfo) SetToPort(v int64) *InstancePortInfo {
+	s.ToPort = &v
+	return s
+}
+
+// Describes the port state.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/InstancePortState
+type InstancePortState struct {
+	_ struct{} `type:"structure"`
+
+	// The first port in the range.
+	FromPort *int64 `locationName:"fromPort" type:"integer"`
+
+	// The protocol being used. Can be one of the following.
+	//
+	//    * tcp - Transmission Control Protocol (TCP) provides reliable, ordered,
+	//    and error-checked delivery of streamed data between applications running
+	//    on hosts communicating by an IP network. If you have an application that
+	//    doesn't require reliable data stream service, use UDP instead.
+	//
+	//    * all - All transport layer protocol types. For more general information,
+	//    see Transport layer (https://en.wikipedia.org/wiki/Transport_layer) on
+	//    Wikipedia.
+	//
+	//    * udp - With User Datagram Protocol (UDP), computer applications can send
+	//    messages (or datagrams) to other hosts on an Internet Protocol (IP) network.
+	//    Prior communications are not required to set up transmission channels
+	//    or data paths. Applications that don't require reliable data stream service
+	//    can use UDP, which provides a connectionless datagram service that emphasizes
+	//    reduced latency over reliability. If you do require reliable data stream
+	//    service, use TCP instead.
+	Protocol *string `locationName:"protocol" type:"string" enum:"NetworkProtocol"`
+
+	// Specifies whether the instance port is open or closed.
+	State *string `locationName:"state" type:"string" enum:"PortState"`
+
+	// The last port in the range.
+	ToPort *int64 `locationName:"toPort" type:"integer"`
+}
+
+// String returns the string representation
+func (s InstancePortState) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstancePortState) GoString() string {
+	return s.String()
+}
+
+// SetFromPort sets the FromPort field's value.
+func (s *InstancePortState) SetFromPort(v int64) *InstancePortState {
+	s.FromPort = &v
+	return s
+}
+
+// SetProtocol sets the Protocol field's value.
+func (s *InstancePortState) SetProtocol(v string) *InstancePortState {
+	s.Protocol = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *InstancePortState) SetState(v string) *InstancePortState {
+	s.State = &v
+	return s
+}
+
+// SetToPort sets the ToPort field's value.
+func (s *InstancePortState) SetToPort(v int64) *InstancePortState {
 	s.ToPort = &v
 	return s
 }
@@ -9203,6 +9558,83 @@ func (s *PortInfo) SetToPort(v int64) *PortInfo {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/PutInstancePublicPortsRequest
+type PutInstancePublicPortsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Lightsail instance name of the public port(s) you are setting.
+	//
+	// InstanceName is a required field
+	InstanceName *string `locationName:"instanceName" type:"string" required:"true"`
+
+	// Specifies information about the public port(s).
+	//
+	// PortInfos is a required field
+	PortInfos []*PortInfo `locationName:"portInfos" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s PutInstancePublicPortsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutInstancePublicPortsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutInstancePublicPortsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutInstancePublicPortsInput"}
+	if s.InstanceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceName"))
+	}
+	if s.PortInfos == nil {
+		invalidParams.Add(request.NewErrParamRequired("PortInfos"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInstanceName sets the InstanceName field's value.
+func (s *PutInstancePublicPortsInput) SetInstanceName(v string) *PutInstancePublicPortsInput {
+	s.InstanceName = &v
+	return s
+}
+
+// SetPortInfos sets the PortInfos field's value.
+func (s *PutInstancePublicPortsInput) SetPortInfos(v []*PortInfo) *PutInstancePublicPortsInput {
+	s.PortInfos = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/PutInstancePublicPortsResult
+type PutInstancePublicPortsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes metadata about the operation you just executed.
+	Operation *Operation `locationName:"operation" type:"structure"`
+}
+
+// String returns the string representation
+func (s PutInstancePublicPortsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutInstancePublicPortsOutput) GoString() string {
+	return s.String()
+}
+
+// SetOperation sets the Operation field's value.
+func (s *PutInstancePublicPortsOutput) SetOperation(v *Operation) *PutInstancePublicPortsOutput {
+	s.Operation = v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/lightsail-2016-11-28/RebootInstanceRequest
 type RebootInstanceInput struct {
 	_ struct{} `type:"structure"`
@@ -9271,7 +9703,7 @@ func (s *RebootInstanceOutput) SetOperations(v []*Operation) *RebootInstanceOutp
 type Region struct {
 	_ struct{} `type:"structure"`
 
-	// The Availability Zones.
+	// The Availability Zones. Follows the format us-east-1a (case-sensitive).
 	AvailabilityZones []*AvailabilityZone `locationName:"availabilityZones" type:"list"`
 
 	// The continent code (e.g., NA, meaning North America).
@@ -9396,7 +9828,7 @@ func (s *ReleaseStaticIpOutput) SetOperations(v []*Operation) *ReleaseStaticIpOu
 type ResourceLocation struct {
 	_ struct{} `type:"structure"`
 
-	// The Availability Zone.
+	// The Availability Zone. Follows the format us-east-1a (case-sensitive).
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
 	// The AWS Region name.
@@ -9965,6 +10397,9 @@ const (
 	// OperationTypeOpenInstancePublicPorts is a OperationType enum value
 	OperationTypeOpenInstancePublicPorts = "OpenInstancePublicPorts"
 
+	// OperationTypePutInstancePublicPorts is a OperationType enum value
+	OperationTypePutInstancePublicPorts = "PutInstancePublicPorts"
+
 	// OperationTypeCloseInstancePublicPorts is a OperationType enum value
 	OperationTypeCloseInstancePublicPorts = "CloseInstancePublicPorts"
 
@@ -10021,6 +10456,9 @@ const (
 const (
 	// RegionNameUsEast1 is a RegionName enum value
 	RegionNameUsEast1 = "us-east-1"
+
+	// RegionNameUsEast2 is a RegionName enum value
+	RegionNameUsEast2 = "us-east-2"
 
 	// RegionNameUsWest1 is a RegionName enum value
 	RegionNameUsWest1 = "us-west-1"

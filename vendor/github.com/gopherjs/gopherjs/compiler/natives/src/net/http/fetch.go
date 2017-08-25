@@ -4,6 +4,7 @@ package http
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"strconv"
@@ -116,7 +117,7 @@ func (t *fetchTransport) RoundTrip(req *Request) (*Response, error) {
 		},
 		func(reason *js.Object) {
 			select {
-			case errCh <- errors.New("net/http: fetch() failed"):
+			case errCh <- fmt.Errorf("net/http: fetch() failed: %s", reason.String()):
 			case <-req.Context().Done():
 			}
 		},

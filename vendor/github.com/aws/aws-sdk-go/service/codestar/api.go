@@ -14,19 +14,18 @@ const opAssociateTeamMember = "AssociateTeamMember"
 
 // AssociateTeamMemberRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateTeamMember operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AssociateTeamMember for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AssociateTeamMember method directly
-// instead.
+// See AssociateTeamMember for more information on using the AssociateTeamMember
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AssociateTeamMemberRequest method.
 //    req, resp := client.AssociateTeamMemberRequest(params)
@@ -113,19 +112,18 @@ const opCreateProject = "CreateProject"
 
 // CreateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the CreateProject operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateProject for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateProject method directly
-// instead.
+// See CreateProject for more information on using the CreateProject
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateProjectRequest method.
 //    req, resp := client.CreateProjectRequest(params)
@@ -154,7 +152,7 @@ func (c *CodeStar) CreateProjectRequest(input *CreateProjectInput) (req *request
 
 // CreateProject API operation for AWS CodeStar.
 //
-// Creates a project in AWS CodeStar with minimal structure and no resources.
+// Reserved for future use. To create a project, use the AWS CodeStar console.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -216,19 +214,18 @@ const opCreateUserProfile = "CreateUserProfile"
 
 // CreateUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUserProfile operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateUserProfile for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateUserProfile method directly
-// instead.
+// See CreateUserProfile for more information on using the CreateUserProfile
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateUserProfileRequest method.
 //    req, resp := client.CreateUserProfileRequest(params)
@@ -305,19 +302,18 @@ const opDeleteProject = "DeleteProject"
 
 // DeleteProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteProject operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteProject for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteProject method directly
-// instead.
+// See DeleteProject for more information on using the DeleteProject
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteProjectRequest method.
 //    req, resp := client.DeleteProjectRequest(params)
@@ -394,19 +390,18 @@ const opDeleteUserProfile = "DeleteUserProfile"
 
 // DeleteUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserProfile operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteUserProfile for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteUserProfile method directly
-// instead.
+// See DeleteUserProfile for more information on using the DeleteUserProfile
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteUserProfileRequest method.
 //    req, resp := client.DeleteUserProfileRequest(params)
@@ -477,19 +472,18 @@ const opDescribeProject = "DescribeProject"
 
 // DescribeProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeProject operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeProject for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeProject method directly
-// instead.
+// See DescribeProject for more information on using the DescribeProject
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeProjectRequest method.
 //    req, resp := client.DescribeProjectRequest(params)
@@ -570,19 +564,18 @@ const opDescribeUserProfile = "DescribeUserProfile"
 
 // DescribeUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserProfile operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeUserProfile for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeUserProfile method directly
-// instead.
+// See DescribeUserProfile for more information on using the DescribeUserProfile
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeUserProfileRequest method.
 //    req, resp := client.DescribeUserProfileRequest(params)
@@ -653,19 +646,18 @@ const opDisassociateTeamMember = "DisassociateTeamMember"
 
 // DisassociateTeamMemberRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateTeamMember operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DisassociateTeamMember for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DisassociateTeamMember method directly
-// instead.
+// See DisassociateTeamMember for more information on using the DisassociateTeamMember
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DisassociateTeamMemberRequest method.
 //    req, resp := client.DisassociateTeamMemberRequest(params)
@@ -746,19 +738,18 @@ const opListProjects = "ListProjects"
 
 // ListProjectsRequest generates a "aws/request.Request" representing the
 // client's request for the ListProjects operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListProjects for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListProjects method directly
-// instead.
+// See ListProjects for more information on using the ListProjects
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListProjectsRequest method.
 //    req, resp := client.ListProjectsRequest(params)
@@ -829,19 +820,18 @@ const opListResources = "ListResources"
 
 // ListResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the ListResources operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListResources for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListResources method directly
-// instead.
+// See ListResources for more information on using the ListResources
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListResourcesRequest method.
 //    req, resp := client.ListResourcesRequest(params)
@@ -915,19 +905,18 @@ const opListTeamMembers = "ListTeamMembers"
 
 // ListTeamMembersRequest generates a "aws/request.Request" representing the
 // client's request for the ListTeamMembers operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListTeamMembers for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListTeamMembers method directly
-// instead.
+// See ListTeamMembers for more information on using the ListTeamMembers
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListTeamMembersRequest method.
 //    req, resp := client.ListTeamMembersRequest(params)
@@ -1001,19 +990,18 @@ const opListUserProfiles = "ListUserProfiles"
 
 // ListUserProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListUserProfiles operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListUserProfiles for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListUserProfiles method directly
-// instead.
+// See ListUserProfiles for more information on using the ListUserProfiles
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListUserProfilesRequest method.
 //    req, resp := client.ListUserProfilesRequest(params)
@@ -1084,19 +1072,18 @@ const opUpdateProject = "UpdateProject"
 
 // UpdateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateProject operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateProject for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateProject method directly
-// instead.
+// See UpdateProject for more information on using the UpdateProject
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateProjectRequest method.
 //    req, resp := client.UpdateProjectRequest(params)
@@ -1167,19 +1154,18 @@ const opUpdateTeamMember = "UpdateTeamMember"
 
 // UpdateTeamMemberRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateTeamMember operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateTeamMember for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateTeamMember method directly
-// instead.
+// See UpdateTeamMember for more information on using the UpdateTeamMember
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateTeamMemberRequest method.
 //    req, resp := client.UpdateTeamMemberRequest(params)
@@ -1268,19 +1254,18 @@ const opUpdateUserProfile = "UpdateUserProfile"
 
 // UpdateUserProfileRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserProfile operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateUserProfile for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateUserProfile method directly
-// instead.
+// See UpdateUserProfile for more information on using the UpdateUserProfile
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateUserProfileRequest method.
 //    req, resp := client.UpdateUserProfileRequest(params)
@@ -1477,28 +1462,18 @@ func (s *AssociateTeamMemberOutput) SetClientRequestToken(v string) *AssociateTe
 type CreateProjectInput struct {
 	_ struct{} `type:"structure"`
 
-	// A user- or system-generated token that identifies the entity that requested
-	// project creation. This token can be used to repeat the request. It can also
-	// be used to identify which user or system made the request in DescribeProject
-	// and ListProjects.
+	// Reserved for future use.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
 
-	// Optional. The description for the project.
+	// Reserved for future use.
 	Description *string `locationName:"description" type:"string"`
 
-	// The ID for the AWS CodeStar project. Project IDs must be unique within an
-	// AWS account. Project IDs cannot exceed 15 characters and cannot contain capital
-	// letters and other restricted symbols. For more information, see Limits (http://docs.aws.amazon.com/codestar/latest/userguide/limits.html)
-	// in the AWS CodeStar User Guide.
+	// Reserved for future use.
 	//
 	// Id is a required field
 	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
 
-	// The friendly name for the project. This friendly name serves as the basis
-	// for the names for resources associated with the project, such as a repository
-	// name in AWS CodeCommit. The name is limited to 100 characters and cannot
-	// contain certain restricted symbols. For more information, see Limits (http://docs.aws.amazon.com/codestar/latest/userguide/limits.html)
-	// in the AWS CodeStar User Guide.
+	// Reserved for future use.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
@@ -1567,22 +1542,20 @@ func (s *CreateProjectInput) SetName(v string) *CreateProjectInput {
 type CreateProjectOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) for the project.
+	// Reserved for future use.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The user- or system-generated token from the initial request that can be
-	// used to repeat the request. It can also be used to identify which user or
-	// system made the request in DescribeProject and ListProjects.
+	// Reserved for future use.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
 
-	// The ID for the project.
+	// Reserved for future use.
 	//
 	// Id is a required field
 	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
 
-	// The ID for the AWS CodeStar project template used to create the project.
+	// Reserved for future use.
 	ProjectTemplateId *string `locationName:"projectTemplateId" min:"1" type:"string"`
 }
 
