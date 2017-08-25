@@ -1,10 +1,11 @@
 package yaml
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type mockFS struct {
@@ -51,6 +52,19 @@ creation_rules:
     pgp: bar
 `)
 
+var sampleConfigWithGroups = []byte(`
+creation_rules:
+  - filename_regex: foobar*
+    kms: "1"
+    pgp: "2"
+  - filename_regex: ""
+    key_groups:
+    - kms: foo
+      pgp: bar
+    - kms: baz
+      pgp: qux
+`)
+
 func TestLoadConfigFile(t *testing.T) {
 	expected := configFile{
 		CreationRules: []creationRule{
@@ -73,13 +87,52 @@ func TestLoadConfigFile(t *testing.T) {
 	assert.Equal(t, expected, conf)
 }
 
-func TestMasterKeyStringsForFile(t *testing.T) {
-	kms, pgp, err := MasterKeyStringsForFile("foobar2000", sampleConfig)
+func TestLoadConfigFileWithGroups(t *testing.T) {
+	expected := configFile{
+		CreationRules: []creationRule{
+			{
+				FilenameRegex: "foobar*",
+				KMS:           "1",
+				PGP:           "2",
+			},
+			{
+				FilenameRegex: "",
+				KeyGroups: []keyGroup{
+					{
+						KMS: "foo",
+						PGP: "bar",
+					},
+					{
+						KMS: "baz",
+						PGP: "qux",
+					},
+				},
+			},
+		},
+	}
+
+	conf := configFile{}
+	err := conf.load(sampleConfigWithGroups)
 	assert.Equal(t, nil, err)
-	assert.Equal(t, "1", kms)
-	assert.Equal(t, "2", pgp)
-	kms, pgp, err = MasterKeyStringsForFile("whatever", sampleConfig)
+	assert.Equal(t, expected, conf)
+}
+
+func TestKeyGroupsForFile(t *testing.T) {
+	groups, err := KeyGroupsForFile("foobar2000", sampleConfig, nil)
 	assert.Equal(t, nil, err)
-	assert.Equal(t, "foo", kms)
-	assert.Equal(t, "bar", pgp)
+	assert.Equal(t, "2", groups[0][0].ToString())
+	assert.Equal(t, "1", groups[0][1].ToString())
+	groups, err = KeyGroupsForFile("whatever", sampleConfig, nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "bar", groups[0][0].ToString())
+	assert.Equal(t, "foo", groups[0][1].ToString())
+}
+
+func TestKeyGroupsForFileWithGroups(t *testing.T) {
+	groups, err := KeyGroupsForFile("whatever", sampleConfigWithGroups, nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "bar", groups[0][0].ToString())
+	assert.Equal(t, "foo", groups[0][1].ToString())
+	assert.Equal(t, "qux", groups[1][0].ToString())
+	assert.Equal(t, "baz", groups[1][1].ToString())
 }

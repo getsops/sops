@@ -460,15 +460,12 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
 			}
 		}
-		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, confBytes)
-		if err == nil {
-			for _, k := range pgp.MasterKeysFromFingerprintString(pgpString) {
-				pgpKeys = append(pgpKeys, k)
-			}
-			for _, k := range kms.MasterKeysFromArnString(kmsString, kmsEncryptionContext) {
-				kmsKeys = append(kmsKeys, k)
-			}
+		groups, err := yaml.KeyGroupsForFile(file, confBytes, kmsEncryptionContext)
+		if err != nil {
+			return nil, err
 		}
+		log.Printf("Proceeding with key groups: %#v", groups)
+		return groups, err
 	}
 	return []sops.KeyGroup{append(kmsKeys, pgpKeys...)}, nil
 }
