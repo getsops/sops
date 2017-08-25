@@ -10,6 +10,7 @@ addons:
       - python3
 
 before_install:
+  - gem install fpm || sudo gem install fpm
   - curl https://sh.rustup.rs -sSf | sh -s -- -y
   - source ~/.cargo/env
 
