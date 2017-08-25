@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"log"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
@@ -41,20 +43,24 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 
 // Encrypt takes a sops data key, encrypts it with KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
+	log.Printf("Attempting encryption of KMS MasterKey with ARN %s", key.Arn)
 	// isMocked is set by unit test to indicate that the KMS service
 	// has already been initialized. it's ugly, but it works.
 	if kmsSvc == nil || !isMocked {
 		sess, err := key.createSession()
 		if err != nil {
+			log.Printf("Encryption of KMS MasterKey with ARN %s failed", key.Arn)
 			return fmt.Errorf("Failed to create session: %v", err)
 		}
 		kmsSvc = kms.New(sess)
 	}
 	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
 	if err != nil {
+		log.Printf("Encryption of KMS MasterKey with ARN %s failed", key.Arn)
 		return fmt.Errorf("Failed to call KMS encryption service: %v", err)
 	}
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
+	log.Printf("Encryption of KMS MasterKey with ARN %s succeeded", key.Arn)
 	return nil
 }
 
@@ -68,8 +74,10 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 
 // Decrypt decrypts the EncryptedKey field with AWS KMS and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	log.Printf("Attempting decryption of KMS MasterKey with ARN %s", key.Arn)
 	k, err := base64.StdEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
+		log.Printf("Decryption of KMS MasterKey with ARN %s failed", key.Arn)
 		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
 	}
 	// isMocked is set by unit test to indicate that the KMS service
@@ -77,14 +85,17 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	if kmsSvc == nil || !isMocked {
 		sess, err := key.createSession()
 		if err != nil {
+			log.Printf("Decryption of KMS MasterKey with ARN %s failed", key.Arn)
 			return nil, fmt.Errorf("Error creating AWS session: %v", err)
 		}
 		kmsSvc = kms.New(sess)
 	}
 	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
 	if err != nil {
+		log.Printf("Decryption of KMS MasterKey with ARN %s failed", key.Arn)
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
 	}
+	log.Printf("Decryption of KMS MasterKey with ARN %s succeeded", key.Arn)
 	return decrypted.Plaintext, nil
 }
 

@@ -113,13 +113,16 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	log.Printf("Attempting encryption of GPG MasterKey with fingerprint %s", key.Fingerprint)
 	openpgpErr := key.encryptWithCryptoOpenpgp(dataKey)
 	if openpgpErr == nil {
+		log.Printf("Encryption of GPG MasterKey with fingerprint %s succeeded", key.Fingerprint)
 		return nil
 	}
 	log.Print("Encryption with golang's openpgp package failed, falling back to the GPG binary")
 	binaryErr := key.encryptWithGPGBinary(dataKey)
 	if binaryErr == nil {
+		log.Printf("Encryption of GPG MasterKey with fingerprint %s succeeded", key.Fingerprint)
 		return nil
 	}
+	log.Printf("Encryption of GPG MasterKey with fingerprint %s failed", key.Fingerprint)
 	return fmt.Errorf(`could not encrypt data key with PGP key.
 	\tgolang.org/x/crypto/openpgp error: %s
 	\tGPG binary error: %s`, openpgpErr, binaryErr)
@@ -175,13 +178,16 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	log.Printf("Attempting decryption of GPG MasterKey with fingerprint %s", key.Fingerprint)
 	dataKey, openpgpErr := key.decryptWithCryptoOpenpgp()
 	if openpgpErr == nil {
+		log.Printf("Decryption of GPG MasterKey with fingerprint %s succeeded", key.Fingerprint)
 		return dataKey, nil
 	}
 	log.Print("Decryption with golang's openpgp package failed, falling back to the GPG binary")
 	dataKey, binaryErr := key.decryptWithGPGBinary()
 	if binaryErr == nil {
+		log.Printf("Decryption of GPG MasterKey with fingerprint %s succeeded", key.Fingerprint)
 		return dataKey, nil
 	}
+	log.Printf("Decryption of GPG MasterKey with fingerprint %s failed", key.Fingerprint)
 	return nil, fmt.Errorf(`could not encrypt data key with PGP key.
 	\tgolang.org/x/crypto/openpgp error: %s
 	\tGPG binary error: %s`, openpgpErr, binaryErr)
