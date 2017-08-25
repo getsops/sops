@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS CodePipeline.
@@ -115,6 +115,10 @@ type CodePipelineAPI interface {
 	ListActionTypes(*codepipeline.ListActionTypesInput) (*codepipeline.ListActionTypesOutput, error)
 	ListActionTypesWithContext(aws.Context, *codepipeline.ListActionTypesInput, ...request.Option) (*codepipeline.ListActionTypesOutput, error)
 	ListActionTypesRequest(*codepipeline.ListActionTypesInput) (*request.Request, *codepipeline.ListActionTypesOutput)
+
+	ListPipelineExecutions(*codepipeline.ListPipelineExecutionsInput) (*codepipeline.ListPipelineExecutionsOutput, error)
+	ListPipelineExecutionsWithContext(aws.Context, *codepipeline.ListPipelineExecutionsInput, ...request.Option) (*codepipeline.ListPipelineExecutionsOutput, error)
+	ListPipelineExecutionsRequest(*codepipeline.ListPipelineExecutionsInput) (*request.Request, *codepipeline.ListPipelineExecutionsOutput)
 
 	ListPipelines(*codepipeline.ListPipelinesInput) (*codepipeline.ListPipelinesOutput, error)
 	ListPipelinesWithContext(aws.Context, *codepipeline.ListPipelinesInput, ...request.Option) (*codepipeline.ListPipelinesOutput, error)

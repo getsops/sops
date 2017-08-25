@@ -11,8 +11,8 @@
       "result_key": "Directories"
     },
     "DescribeWorkspaces": {
-      "limit_key": "Limit",
       "input_token": "NextToken",
+      "limit_key": "Limit",
       "output_token": "NextToken",
       "result_key": "Workspaces"
     }

@@ -539,7 +539,7 @@ func (c *funcContext) translateExpr(expr ast.Expr) *expression {
 		plainFun := astutil.RemoveParens(e.Fun)
 
 		if astutil.IsTypeExpr(plainFun, c.p.Info.Info) {
-			return c.formatExpr("%s", c.translateConversion(e.Args[0], c.p.TypeOf(plainFun)))
+			return c.formatExpr("(%s)", c.translateConversion(e.Args[0], c.p.TypeOf(plainFun)))
 		}
 
 		sig := c.p.TypeOf(plainFun).Underlying().(*types.Signature)

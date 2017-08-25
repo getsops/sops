@@ -59,17 +59,17 @@ func jsMarkStack() (f []uintptr) {
 	return f
 }
 
-func findPtr() uintptr {
-	funcs := jsMarkStack()
-	if len(funcs) == 0 {
-		panic("failed to find function pointer")
+// variables to prevent inlining
+var (
+	findPtr = func() uintptr {
+		funcs := jsMarkStack()
+		if len(funcs) == 0 {
+			panic("failed to find function pointer")
+		}
+		return funcs[0]
 	}
-	return funcs[0]
-}
 
-func getStack(offset, amount int) []uintptr {
-	if offset != 0 {
-		return nil
+	getStack = func(offset, amount int) (stack []uintptr, next_offset int) {
+		return jsMarkStack(), 0
 	}
-	return jsMarkStack()
-}
+)

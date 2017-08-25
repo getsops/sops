@@ -32,7 +32,7 @@ Please use these community resources for getting help. We use the GitHub issues 
 * Ask a question on [StackOverflow](http://stackoverflow.com/) and tag it with the [`aws-sdk-go`](http://stackoverflow.com/questions/tagged/aws-sdk-go) tag.
 * Come join the AWS SDK for Go community chat on [gitter](https://gitter.im/aws/aws-sdk-go).
 * Open a support ticket with [AWS Support](http://docs.aws.amazon.com/awssupport/latest/user/getting-started.html).
-* If you think you may of found a bug, please open an [issue](https://github.com/aws/aws-sdk-go/issues/new).
+* If you think you may have found a bug, please open an [issue](https://github.com/aws/aws-sdk-go/issues/new).
 
 ## Opening Issues
 
@@ -167,7 +167,7 @@ and configures the S3 service client to use that role for API requests.
 
   // Create service client value configured for credentials
   // from assumed role.
-  svc := s3.New(sess, &aws.Config{Credentials: creds})/
+  svc := s3.New(sess, &aws.Config{Credentials: creds})
 ```
 
 See the [credentials][credentials_pkg] package documentation for more information on credential
@@ -226,7 +226,7 @@ regions different from the Session's region.
 
 ```go
   svc := s3.New(sess, &aws.Config{
-      Region: aws.String(ednpoints.UsWest2RegionID),
+      Region: aws.String(endpoints.UsWest2RegionID),
   })
 ```
 

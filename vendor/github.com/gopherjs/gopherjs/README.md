@@ -134,7 +134,7 @@ How it works:
 
 JavaScript has no concept of concurrency (except web workers, but those are too strictly separated to be used for goroutines). Because of that, instructions in JavaScript are never blocking. A blocking call would effectively freeze the responsiveness of your web page, so calls with callback arguments are used instead.
 
-GopherJS does some heavy lifting to work around this restriction: Whenever an instruction is blocking (e.g. communicating with a channel that isn't ready), the whole stack will unwind (= all functions return) and the goroutine will be put to sleep. Then another goroutine which is ready to resume gets picked and its stack with all local variables will be restored. This is done by preserving each stack frame inside a closure.
+GopherJS does some heavy lifting to work around this restriction: Whenever an instruction is blocking (e.g. communicating with a channel that isn't ready), the whole stack will unwind (= all functions return) and the goroutine will be put to sleep. Then another goroutine which is ready to resume gets picked and its stack with all local variables will be restored.
 
 ### GopherJS Development
 If you're looking to make changes to the GopherJS compiler, see [Developer Guidelines](https://github.com/gopherjs/gopherjs/wiki/Developer-Guidelines) for additional developer information.
