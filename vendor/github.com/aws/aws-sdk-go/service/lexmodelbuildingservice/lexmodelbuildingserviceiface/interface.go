@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon Lex Model Building Service.
@@ -84,13 +84,25 @@ type LexModelBuildingServiceAPI interface {
 	DeleteBotChannelAssociationWithContext(aws.Context, *lexmodelbuildingservice.DeleteBotChannelAssociationInput, ...request.Option) (*lexmodelbuildingservice.DeleteBotChannelAssociationOutput, error)
 	DeleteBotChannelAssociationRequest(*lexmodelbuildingservice.DeleteBotChannelAssociationInput) (*request.Request, *lexmodelbuildingservice.DeleteBotChannelAssociationOutput)
 
+	DeleteBotVersion(*lexmodelbuildingservice.DeleteBotVersionInput) (*lexmodelbuildingservice.DeleteBotVersionOutput, error)
+	DeleteBotVersionWithContext(aws.Context, *lexmodelbuildingservice.DeleteBotVersionInput, ...request.Option) (*lexmodelbuildingservice.DeleteBotVersionOutput, error)
+	DeleteBotVersionRequest(*lexmodelbuildingservice.DeleteBotVersionInput) (*request.Request, *lexmodelbuildingservice.DeleteBotVersionOutput)
+
 	DeleteIntent(*lexmodelbuildingservice.DeleteIntentInput) (*lexmodelbuildingservice.DeleteIntentOutput, error)
 	DeleteIntentWithContext(aws.Context, *lexmodelbuildingservice.DeleteIntentInput, ...request.Option) (*lexmodelbuildingservice.DeleteIntentOutput, error)
 	DeleteIntentRequest(*lexmodelbuildingservice.DeleteIntentInput) (*request.Request, *lexmodelbuildingservice.DeleteIntentOutput)
 
+	DeleteIntentVersion(*lexmodelbuildingservice.DeleteIntentVersionInput) (*lexmodelbuildingservice.DeleteIntentVersionOutput, error)
+	DeleteIntentVersionWithContext(aws.Context, *lexmodelbuildingservice.DeleteIntentVersionInput, ...request.Option) (*lexmodelbuildingservice.DeleteIntentVersionOutput, error)
+	DeleteIntentVersionRequest(*lexmodelbuildingservice.DeleteIntentVersionInput) (*request.Request, *lexmodelbuildingservice.DeleteIntentVersionOutput)
+
 	DeleteSlotType(*lexmodelbuildingservice.DeleteSlotTypeInput) (*lexmodelbuildingservice.DeleteSlotTypeOutput, error)
 	DeleteSlotTypeWithContext(aws.Context, *lexmodelbuildingservice.DeleteSlotTypeInput, ...request.Option) (*lexmodelbuildingservice.DeleteSlotTypeOutput, error)
 	DeleteSlotTypeRequest(*lexmodelbuildingservice.DeleteSlotTypeInput) (*request.Request, *lexmodelbuildingservice.DeleteSlotTypeOutput)
+
+	DeleteSlotTypeVersion(*lexmodelbuildingservice.DeleteSlotTypeVersionInput) (*lexmodelbuildingservice.DeleteSlotTypeVersionOutput, error)
+	DeleteSlotTypeVersionWithContext(aws.Context, *lexmodelbuildingservice.DeleteSlotTypeVersionInput, ...request.Option) (*lexmodelbuildingservice.DeleteSlotTypeVersionOutput, error)
+	DeleteSlotTypeVersionRequest(*lexmodelbuildingservice.DeleteSlotTypeVersionInput) (*request.Request, *lexmodelbuildingservice.DeleteSlotTypeVersionOutput)
 
 	DeleteUtterances(*lexmodelbuildingservice.DeleteUtterancesInput) (*lexmodelbuildingservice.DeleteUtterancesOutput, error)
 	DeleteUtterancesWithContext(aws.Context, *lexmodelbuildingservice.DeleteUtterancesInput, ...request.Option) (*lexmodelbuildingservice.DeleteUtterancesOutput, error)

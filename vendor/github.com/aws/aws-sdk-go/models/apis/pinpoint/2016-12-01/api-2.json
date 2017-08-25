@@ -9,6 +9,33 @@
     "jsonVersion" : "1.1"
   },
   "operations" : {
+    "CreateApp" : {
+      "name" : "CreateApp",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/v1/apps",
+        "responseCode" : 201
+      },
+      "input" : {
+        "shape" : "CreateAppRequest"
+      },
+      "output" : {
+        "shape" : "CreateAppResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "CreateCampaign" : {
       "name" : "CreateCampaign",
       "http" : {
@@ -117,6 +144,60 @@
         "shape" : "TooManyRequestsException"
       } ]
     },
+    "DeleteApnsSandboxChannel" : {
+      "name" : "DeleteApnsSandboxChannel",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v1/apps/{application-id}/channels/apns_sandbox",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DeleteApnsSandboxChannelRequest"
+      },
+      "output" : {
+        "shape" : "DeleteApnsSandboxChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "DeleteApp" : {
+      "name" : "DeleteApp",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v1/apps/{application-id}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DeleteAppRequest"
+      },
+      "output" : {
+        "shape" : "DeleteAppResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "DeleteCampaign" : {
       "name" : "DeleteCampaign",
       "http" : {
@@ -129,6 +210,33 @@
       },
       "output" : {
         "shape" : "DeleteCampaignResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "DeleteEmailChannel" : {
+      "name" : "DeleteEmailChannel",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v1/apps/{application-id}/channels/email",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DeleteEmailChannelRequest"
+      },
+      "output" : {
+        "shape" : "DeleteEmailChannelResponse"
       },
       "errors" : [ {
         "shape" : "BadRequestException"
@@ -225,6 +333,33 @@
         "shape" : "TooManyRequestsException"
       } ]
     },
+    "DeleteSmsChannel" : {
+      "name" : "DeleteSmsChannel",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v1/apps/{application-id}/channels/sms",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DeleteSmsChannelRequest"
+      },
+      "output" : {
+        "shape" : "DeleteSmsChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "GetApnsChannel" : {
       "name" : "GetApnsChannel",
       "http" : {
@@ -252,6 +387,60 @@
         "shape" : "TooManyRequestsException"
       } ]
     },
+    "GetApnsSandboxChannel" : {
+      "name" : "GetApnsSandboxChannel",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/apps/{application-id}/channels/apns_sandbox",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetApnsSandboxChannelRequest"
+      },
+      "output" : {
+        "shape" : "GetApnsSandboxChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "GetApp" : {
+      "name" : "GetApp",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/apps/{application-id}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetAppRequest"
+      },
+      "output" : {
+        "shape" : "GetAppResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "GetApplicationSettings" : {
       "name" : "GetApplicationSettings",
       "http" : {
@@ -264,6 +453,33 @@
       },
       "output" : {
         "shape" : "GetApplicationSettingsResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "GetApps" : {
+      "name" : "GetApps",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/apps",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetAppsRequest"
+      },
+      "output" : {
+        "shape" : "GetAppsResponse"
       },
       "errors" : [ {
         "shape" : "BadRequestException"
@@ -399,6 +615,33 @@
       },
       "output" : {
         "shape" : "GetCampaignsResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "GetEmailChannel" : {
+      "name" : "GetEmailChannel",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/apps/{application-id}/channels/email",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetEmailChannelRequest"
+      },
+      "output" : {
+        "shape" : "GetEmailChannelResponse"
       },
       "errors" : [ {
         "shape" : "BadRequestException"
@@ -684,6 +927,33 @@
         "shape" : "TooManyRequestsException"
       } ]
     },
+    "GetSmsChannel" : {
+      "name" : "GetSmsChannel",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/apps/{application-id}/channels/sms",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetSmsChannelRequest"
+      },
+      "output" : {
+        "shape" : "GetSmsChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "PutEventStream" : {
       "name" : "PutEventStream",
       "http" : {
@@ -711,6 +981,33 @@
         "shape" : "TooManyRequestsException"
       } ]
     },
+    "SendMessages" : {
+      "name" : "SendMessages",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/v1/apps/{application-id}/messages",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "SendMessagesRequest"
+      },
+      "output" : {
+        "shape" : "SendMessagesResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "UpdateApnsChannel" : {
       "name" : "UpdateApnsChannel",
       "http" : {
@@ -723,6 +1020,33 @@
       },
       "output" : {
         "shape" : "UpdateApnsChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "UpdateApnsSandboxChannel" : {
+      "name" : "UpdateApnsSandboxChannel",
+      "http" : {
+        "method" : "PUT",
+        "requestUri" : "/v1/apps/{application-id}/channels/apns_sandbox",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "UpdateApnsSandboxChannelRequest"
+      },
+      "output" : {
+        "shape" : "UpdateApnsSandboxChannelResponse"
       },
       "errors" : [ {
         "shape" : "BadRequestException"
@@ -777,6 +1101,33 @@
       },
       "output" : {
         "shape" : "UpdateCampaignResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "UpdateEmailChannel" : {
+      "name" : "UpdateEmailChannel",
+      "http" : {
+        "method" : "PUT",
+        "requestUri" : "/v1/apps/{application-id}/channels/email",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "UpdateEmailChannelRequest"
+      },
+      "output" : {
+        "shape" : "UpdateEmailChannelResponse"
       },
       "errors" : [ {
         "shape" : "BadRequestException"
@@ -899,6 +1250,33 @@
       }, {
         "shape" : "TooManyRequestsException"
       } ]
+    },
+    "UpdateSmsChannel" : {
+      "name" : "UpdateSmsChannel",
+      "http" : {
+        "method" : "PUT",
+        "requestUri" : "/v1/apps/{application-id}/channels/sms",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "UpdateSmsChannelRequest"
+      },
+      "output" : {
+        "shape" : "UpdateSmsChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
     }
   },
   "shapes" : {
@@ -907,6 +1285,9 @@
       "members" : {
         "Certificate" : {
           "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
         },
         "PrivateKey" : {
           "shape" : "__string"
@@ -921,6 +1302,99 @@
         },
         "CreationDate" : {
           "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "IsArchived" : {
+          "shape" : "__boolean"
+        },
+        "LastModifiedBy" : {
+          "shape" : "__string"
+        },
+        "LastModifiedDate" : {
+          "shape" : "__string"
+        },
+        "Platform" : {
+          "shape" : "__string"
+        },
+        "Version" : {
+          "shape" : "__integer"
+        }
+      }
+    },
+    "APNSMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Action" : {
+          "shape" : "Action"
+        },
+        "Badge" : {
+          "shape" : "__integer"
+        },
+        "Body" : {
+          "shape" : "__string"
+        },
+        "Category" : {
+          "shape" : "__string"
+        },
+        "Data" : {
+          "shape" : "MapOf__string"
+        },
+        "MediaUrl" : {
+          "shape" : "__string"
+        },
+        "RawContent" : {
+          "shape" : "__string"
+        },
+        "SilentPush" : {
+          "shape" : "__boolean"
+        },
+        "Sound" : {
+          "shape" : "__string"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        },
+        "ThreadId" : {
+          "shape" : "__string"
+        },
+        "Title" : {
+          "shape" : "__string"
+        },
+        "Url" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "APNSSandboxChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "Certificate" : {
+          "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
+        },
+        "PrivateKey" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "APNSSandboxChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "CreationDate" : {
+          "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
         },
         "Id" : {
           "shape" : "__string"
@@ -998,6 +1472,40 @@
         }
       }
     },
+    "AddressConfiguration" : {
+      "type" : "structure",
+      "members" : {
+        "BodyOverride" : {
+          "shape" : "__string"
+        },
+        "ChannelType" : {
+          "shape" : "ChannelType"
+        },
+        "Context" : {
+          "shape" : "MapOf__string"
+        },
+        "RawContent" : {
+          "shape" : "__string"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        },
+        "TitleOverride" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "ApplicationResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Id" : {
+          "shape" : "__string"
+        },
+        "Name" : {
+          "shape" : "__string"
+        }
+      }
+    },
     "ApplicationSettingsResource" : {
       "type" : "structure",
       "members" : {
@@ -1012,6 +1520,17 @@
         },
         "QuietTime" : {
           "shape" : "QuietTime"
+        }
+      }
+    },
+    "ApplicationsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Item" : {
+          "shape" : "ListOfApplicationResponse"
+        },
+        "NextToken" : {
+          "shape" : "__string"
         }
       }
     },
@@ -1043,6 +1562,23 @@
       "exception" : true,
       "error" : {
         "httpStatusCode" : 400
+      }
+    },
+    "CampaignEmailMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Body" : {
+          "shape" : "__string"
+        },
+        "FromAddress" : {
+          "shape" : "__string"
+        },
+        "HtmlBody" : {
+          "shape" : "__string"
+        },
+        "Title" : {
+          "shape" : "__string"
+        }
       }
     },
     "CampaignLimits" : {
@@ -1118,6 +1654,20 @@
         }
       }
     },
+    "CampaignSmsMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Body" : {
+          "shape" : "__string"
+        },
+        "MessageType" : {
+          "shape" : "MessageType"
+        },
+        "SenderId" : {
+          "shape" : "__string"
+        }
+      }
+    },
     "CampaignState" : {
       "type" : "structure",
       "members" : {
@@ -1143,7 +1693,35 @@
     },
     "ChannelType" : {
       "type" : "string",
-      "enum" : [ "APNS", "GCM" ]
+      "enum" : [ "GCM", "APNS", "APNS_SANDBOX", "ADM", "SMS", "EMAIL" ]
+    },
+    "CreateAppRequest" : {
+      "type" : "structure",
+      "members" : {
+        "CreateApplicationRequest" : {
+          "shape" : "CreateApplicationRequest"
+        }
+      },
+      "required" : [ "CreateApplicationRequest" ],
+      "payload" : "CreateApplicationRequest"
+    },
+    "CreateAppResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationResponse" : {
+          "shape" : "ApplicationResponse"
+        }
+      },
+      "required" : [ "ApplicationResponse" ],
+      "payload" : "ApplicationResponse"
+    },
+    "CreateApplicationRequest" : {
+      "type" : "structure",
+      "members" : {
+        "Name" : {
+          "shape" : "__string"
+        }
+      }
     },
     "CreateCampaignRequest" : {
       "type" : "structure",
@@ -1220,6 +1798,43 @@
       "required" : [ "SegmentResponse" ],
       "payload" : "SegmentResponse"
     },
+    "DefaultMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Body" : {
+          "shape" : "__string"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        }
+      }
+    },
+    "DefaultPushNotificationMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Action" : {
+          "shape" : "Action"
+        },
+        "Body" : {
+          "shape" : "__string"
+        },
+        "Data" : {
+          "shape" : "MapOf__string"
+        },
+        "SilentPush" : {
+          "shape" : "__boolean"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        },
+        "Title" : {
+          "shape" : "__string"
+        },
+        "Url" : {
+          "shape" : "__string"
+        }
+      }
+    },
     "DeleteApnsChannelRequest" : {
       "type" : "structure",
       "members" : {
@@ -1240,6 +1855,48 @@
       },
       "required" : [ "APNSChannelResponse" ],
       "payload" : "APNSChannelResponse"
+    },
+    "DeleteApnsSandboxChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "DeleteApnsSandboxChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "APNSSandboxChannelResponse" : {
+          "shape" : "APNSSandboxChannelResponse"
+        }
+      },
+      "required" : [ "APNSSandboxChannelResponse" ],
+      "payload" : "APNSSandboxChannelResponse"
+    },
+    "DeleteAppRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "DeleteAppResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationResponse" : {
+          "shape" : "ApplicationResponse"
+        }
+      },
+      "required" : [ "ApplicationResponse" ],
+      "payload" : "ApplicationResponse"
     },
     "DeleteCampaignRequest" : {
       "type" : "structure",
@@ -1266,6 +1923,27 @@
       },
       "required" : [ "CampaignResponse" ],
       "payload" : "CampaignResponse"
+    },
+    "DeleteEmailChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "DeleteEmailChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "EmailChannelResponse" : {
+          "shape" : "EmailChannelResponse"
+        }
+      },
+      "required" : [ "EmailChannelResponse" ],
+      "payload" : "EmailChannelResponse"
     },
     "DeleteEventStreamRequest" : {
       "type" : "structure",
@@ -1335,13 +2013,116 @@
       "required" : [ "SegmentResponse" ],
       "payload" : "SegmentResponse"
     },
+    "DeleteSmsChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "DeleteSmsChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "SMSChannelResponse" : {
+          "shape" : "SMSChannelResponse"
+        }
+      },
+      "required" : [ "SMSChannelResponse" ],
+      "payload" : "SMSChannelResponse"
+    },
+    "DeliveryStatus" : {
+      "type" : "string",
+      "enum" : [ "SUCCESSFUL", "THROTTLED", "TEMPORARY_FAILURE", "PERMANENT_FAILURE" ]
+    },
     "DimensionType" : {
       "type" : "string",
       "enum" : [ "INCLUSIVE", "EXCLUSIVE" ]
     },
+    "DirectMessageConfiguration" : {
+      "type" : "structure",
+      "members" : {
+        "APNSMessage" : {
+          "shape" : "APNSMessage"
+        },
+        "DefaultMessage" : {
+          "shape" : "DefaultMessage"
+        },
+        "DefaultPushNotificationMessage" : {
+          "shape" : "DefaultPushNotificationMessage"
+        },
+        "GCMMessage" : {
+          "shape" : "GCMMessage"
+        },
+        "SMSMessage" : {
+          "shape" : "SMSMessage"
+        }
+      }
+    },
     "Duration" : {
       "type" : "string",
       "enum" : [ "HR_24", "DAY_7", "DAY_14", "DAY_30" ]
+    },
+    "EmailChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "Enabled" : {
+          "shape" : "__boolean"
+        },
+        "FromAddress" : {
+          "shape" : "__string"
+        },
+        "Identity" : {
+          "shape" : "__string"
+        },
+        "RoleArn" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "EmailChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "CreationDate" : {
+          "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
+        },
+        "FromAddress" : {
+          "shape" : "__string"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "Identity" : {
+          "shape" : "__string"
+        },
+        "IsArchived" : {
+          "shape" : "__boolean"
+        },
+        "LastModifiedBy" : {
+          "shape" : "__string"
+        },
+        "LastModifiedDate" : {
+          "shape" : "__string"
+        },
+        "Platform" : {
+          "shape" : "__string"
+        },
+        "RoleArn" : {
+          "shape" : "__string"
+        },
+        "Version" : {
+          "shape" : "__integer"
+        }
+      }
     },
     "EndpointBatchItem" : {
       "type" : "structure",
@@ -1527,11 +2308,11 @@
         "RequestId" : {
           "shape" : "__string"
         },
-        "User" : {
-          "shape" : "EndpointUser"
-        },
         "ShardId" : {
           "shape" : "__string"
+        },
+        "User" : {
+          "shape" : "EndpointUser"
         }
       }
     },
@@ -1597,6 +2378,9 @@
       "members" : {
         "ApiKey" : {
           "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
         }
       }
     },
@@ -1611,6 +2395,9 @@
         },
         "Credential" : {
           "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
         },
         "Id" : {
           "shape" : "__string"
@@ -1629,6 +2416,56 @@
         },
         "Version" : {
           "shape" : "__integer"
+        }
+      }
+    },
+    "GCMMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Action" : {
+          "shape" : "Action"
+        },
+        "Body" : {
+          "shape" : "__string"
+        },
+        "CollapseKey" : {
+          "shape" : "__string"
+        },
+        "Data" : {
+          "shape" : "MapOf__string"
+        },
+        "IconReference" : {
+          "shape" : "__string"
+        },
+        "ImageIconUrl" : {
+          "shape" : "__string"
+        },
+        "ImageUrl" : {
+          "shape" : "__string"
+        },
+        "RawContent" : {
+          "shape" : "__string"
+        },
+        "RestrictedPackageName" : {
+          "shape" : "__string"
+        },
+        "SilentPush" : {
+          "shape" : "__boolean"
+        },
+        "SmallImageIconUrl" : {
+          "shape" : "__string"
+        },
+        "Sound" : {
+          "shape" : "__string"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        },
+        "Title" : {
+          "shape" : "__string"
+        },
+        "Url" : {
+          "shape" : "__string"
         }
       }
     },
@@ -1653,6 +2490,48 @@
       "required" : [ "APNSChannelResponse" ],
       "payload" : "APNSChannelResponse"
     },
+    "GetApnsSandboxChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "GetApnsSandboxChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "APNSSandboxChannelResponse" : {
+          "shape" : "APNSSandboxChannelResponse"
+        }
+      },
+      "required" : [ "APNSSandboxChannelResponse" ],
+      "payload" : "APNSSandboxChannelResponse"
+    },
+    "GetAppRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "GetAppResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationResponse" : {
+          "shape" : "ApplicationResponse"
+        }
+      },
+      "required" : [ "ApplicationResponse" ],
+      "payload" : "ApplicationResponse"
+    },
     "GetApplicationSettingsRequest" : {
       "type" : "structure",
       "members" : {
@@ -1673,6 +2552,31 @@
       },
       "required" : [ "ApplicationSettingsResource" ],
       "payload" : "ApplicationSettingsResource"
+    },
+    "GetAppsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "PageSize" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "page-size"
+        },
+        "Token" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "token"
+        }
+      }
+    },
+    "GetAppsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationsResponse" : {
+          "shape" : "ApplicationsResponse"
+        }
+      },
+      "required" : [ "ApplicationsResponse" ],
+      "payload" : "ApplicationsResponse"
     },
     "GetCampaignActivitiesRequest" : {
       "type" : "structure",
@@ -1833,6 +2737,27 @@
       },
       "required" : [ "CampaignsResponse" ],
       "payload" : "CampaignsResponse"
+    },
+    "GetEmailChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "GetEmailChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "EmailChannelResponse" : {
+          "shape" : "EmailChannelResponse"
+        }
+      },
+      "required" : [ "EmailChannelResponse" ],
+      "payload" : "EmailChannelResponse"
     },
     "GetEndpointRequest" : {
       "type" : "structure",
@@ -2119,6 +3044,27 @@
       "required" : [ "SegmentsResponse" ],
       "payload" : "SegmentsResponse"
     },
+    "GetSmsChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "GetSmsChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "SMSChannelResponse" : {
+          "shape" : "SMSChannelResponse"
+        }
+      },
+      "required" : [ "SMSChannelResponse" ],
+      "payload" : "SMSChannelResponse"
+    },
     "ImportJobRequest" : {
       "type" : "structure",
       "members" : {
@@ -2257,6 +3203,12 @@
         "shape" : "ActivityResponse"
       }
     },
+    "ListOfApplicationResponse" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "ApplicationResponse"
+      }
+    },
     "ListOfCampaignResponse" : {
       "type" : "list",
       "member" : {
@@ -2299,6 +3251,15 @@
         "shape" : "__string"
       }
     },
+    "MapOfAddressConfiguration" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "AddressConfiguration"
+      }
+    },
     "MapOfAttributeDimension" : {
       "type" : "map",
       "key" : {
@@ -2317,6 +3278,15 @@
         "shape" : "ListOf__string"
       }
     },
+    "MapOfMessageResult" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "MessageResult"
+      }
+    },
     "MapOf__double" : {
       "type" : "map",
       "key" : {
@@ -2324,6 +3294,24 @@
       },
       "value" : {
         "shape" : "__double"
+      }
+    },
+    "MapOf__integer" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "__integer"
+      }
+    },
+    "MapOf__string" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "__string"
       }
     },
     "Message" : {
@@ -2338,6 +3326,9 @@
         "ImageIconUrl" : {
           "shape" : "__string"
         },
+        "ImageSmallIconUrl" : {
+          "shape" : "__string"
+        },
         "ImageUrl" : {
           "shape" : "__string"
         },
@@ -2345,6 +3336,9 @@
           "shape" : "__string"
         },
         "MediaUrl" : {
+          "shape" : "__string"
+        },
+        "RawContent" : {
           "shape" : "__string"
         },
         "SilentPush" : {
@@ -2378,10 +3372,65 @@
         "DefaultMessage" : {
           "shape" : "Message"
         },
+        "EmailMessage" : {
+          "shape" : "CampaignEmailMessage"
+        },
         "GCMMessage" : {
           "shape" : "Message"
+        },
+        "SMSMessage" : {
+          "shape" : "CampaignSmsMessage"
         }
       }
+    },
+    "MessageRequest" : {
+      "type" : "structure",
+      "members" : {
+        "Addresses" : {
+          "shape" : "MapOfAddressConfiguration"
+        },
+        "Context" : {
+          "shape" : "MapOf__string"
+        },
+        "MessageConfiguration" : {
+          "shape" : "DirectMessageConfiguration"
+        }
+      }
+    },
+    "MessageResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "RequestId" : {
+          "shape" : "__string"
+        },
+        "Result" : {
+          "shape" : "MapOfMessageResult"
+        }
+      }
+    },
+    "MessageResult" : {
+      "type" : "structure",
+      "members" : {
+        "DeliveryStatus" : {
+          "shape" : "DeliveryStatus"
+        },
+        "StatusCode" : {
+          "shape" : "__integer"
+        },
+        "StatusMessage" : {
+          "shape" : "__string"
+        },
+        "UpdatedToken" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "MessageType" : {
+      "type" : "string",
+      "enum" : [ "TRANSACTIONAL", "PROMOTIONAL" ]
     },
     "MethodNotAllowedException" : {
       "type" : "structure",
@@ -2464,6 +3513,72 @@
       "type" : "string",
       "enum" : [ "ACTIVE", "INACTIVE" ]
     },
+    "SMSChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "Enabled" : {
+          "shape" : "__boolean"
+        },
+        "SenderId" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "SMSChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "CreationDate" : {
+          "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "IsArchived" : {
+          "shape" : "__boolean"
+        },
+        "LastModifiedBy" : {
+          "shape" : "__string"
+        },
+        "LastModifiedDate" : {
+          "shape" : "__string"
+        },
+        "Platform" : {
+          "shape" : "__string"
+        },
+        "SenderId" : {
+          "shape" : "__string"
+        },
+        "ShortCode" : {
+          "shape" : "__string"
+        },
+        "Version" : {
+          "shape" : "__integer"
+        }
+      }
+    },
+    "SMSMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Body" : {
+          "shape" : "__string"
+        },
+        "MessageType" : {
+          "shape" : "MessageType"
+        },
+        "SenderId" : {
+          "shape" : "__string"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        }
+      }
+    },
     "Schedule" : {
       "type" : "structure",
       "members" : {
@@ -2499,6 +3614,9 @@
       "type" : "structure",
       "members" : {
         "AppVersion" : {
+          "shape" : "SetDimension"
+        },
+        "Channel" : {
           "shape" : "SetDimension"
         },
         "DeviceType" : {
@@ -2538,6 +3656,9 @@
     "SegmentImportResource" : {
       "type" : "structure",
       "members" : {
+        "ChannelCounts" : {
+          "shape" : "MapOf__integer"
+        },
         "ExternalId" : {
           "shape" : "__string"
         },
@@ -2609,6 +3730,31 @@
           "shape" : "__string"
         }
       }
+    },
+    "SendMessagesRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        },
+        "MessageRequest" : {
+          "shape" : "MessageRequest"
+        }
+      },
+      "required" : [ "ApplicationId", "MessageRequest" ],
+      "payload" : "MessageRequest"
+    },
+    "SendMessagesResponse" : {
+      "type" : "structure",
+      "members" : {
+        "MessageResponse" : {
+          "shape" : "MessageResponse"
+        }
+      },
+      "required" : [ "MessageResponse" ],
+      "payload" : "MessageResponse"
     },
     "SetDimension" : {
       "type" : "structure",
@@ -2687,6 +3833,31 @@
       "required" : [ "APNSChannelResponse" ],
       "payload" : "APNSChannelResponse"
     },
+    "UpdateApnsSandboxChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "APNSSandboxChannelRequest" : {
+          "shape" : "APNSSandboxChannelRequest"
+        },
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId", "APNSSandboxChannelRequest" ],
+      "payload" : "APNSSandboxChannelRequest"
+    },
+    "UpdateApnsSandboxChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "APNSSandboxChannelResponse" : {
+          "shape" : "APNSSandboxChannelResponse"
+        }
+      },
+      "required" : [ "APNSSandboxChannelResponse" ],
+      "payload" : "APNSSandboxChannelResponse"
+    },
     "UpdateApplicationSettingsRequest" : {
       "type" : "structure",
       "members" : {
@@ -2741,6 +3912,31 @@
       },
       "required" : [ "CampaignResponse" ],
       "payload" : "CampaignResponse"
+    },
+    "UpdateEmailChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        },
+        "EmailChannelRequest" : {
+          "shape" : "EmailChannelRequest"
+        }
+      },
+      "required" : [ "ApplicationId", "EmailChannelRequest" ],
+      "payload" : "EmailChannelRequest"
+    },
+    "UpdateEmailChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "EmailChannelResponse" : {
+          "shape" : "EmailChannelResponse"
+        }
+      },
+      "required" : [ "EmailChannelResponse" ],
+      "payload" : "EmailChannelResponse"
     },
     "UpdateEndpointRequest" : {
       "type" : "structure",
@@ -2852,6 +4048,31 @@
       "required" : [ "SegmentResponse" ],
       "payload" : "SegmentResponse"
     },
+    "UpdateSmsChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        },
+        "SMSChannelRequest" : {
+          "shape" : "SMSChannelRequest"
+        }
+      },
+      "required" : [ "ApplicationId", "SMSChannelRequest" ],
+      "payload" : "SMSChannelRequest"
+    },
+    "UpdateSmsChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "SMSChannelResponse" : {
+          "shape" : "SMSChannelResponse"
+        }
+      },
+      "required" : [ "SMSChannelResponse" ],
+      "payload" : "SMSChannelResponse"
+    },
     "WriteApplicationSettingsRequest" : {
       "type" : "structure",
       "members" : {
@@ -2908,9 +4129,6 @@
       "type" : "structure",
       "members" : {
         "DestinationStreamArn" : {
-          "shape" : "__string"
-        },
-        "ExternalId" : {
           "shape" : "__string"
         },
         "RoleArn" : {

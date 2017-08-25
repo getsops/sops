@@ -15,15 +15,15 @@ formats and encrypts with AWS KMS and PGP.
 .. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
 	:target: https://travis-ci.org/mozilla/sops
 
-Install the **sops** command line with:
+Download binaries and packages of the latest release from `https://github.com/mozilla/sops/releases <https://github.com/mozilla/sops/releases>`_.
+
+Or, install the **sops** command line with:
 
 .. code:: bash
 
 	$ go get -u go.mozilla.org/sops/cmd/sops
 
-(requires Go >= 1.6)
-
-Or download RPM & DEB packages from `go.mozilla.org/sops/dist/ <https://go.mozilla.org/sops/dist/>`_.
+(requires Go >= 1.8)
 
 If you don't have Go installed, set it up with:
 

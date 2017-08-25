@@ -70,4 +70,6 @@ var (
 	HappenWithin         = assertions.ShouldHappenWithin
 	NotHappenWithin      = assertions.ShouldNotHappenWithin
 	BeChronological      = assertions.ShouldBeChronological
+
+	BeError = assertions.ShouldBeError
 )
