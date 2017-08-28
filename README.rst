@@ -440,6 +440,28 @@ SOPS file:
 ```
 sops -d example.json
 ```
+
+Key service
+~~~~~~~~~~~
+
+SOPS uses a client-server approach to encrypting and decrypting the data
+key. By default, SOPS runs a local key service in-process. SOPS uses a key
+service client to send an encrypt or decrypt request to a key service, which
+then performs the operation. The requests are sent using gRPC and Protocol
+Buffers. The requests contain an identifier for the key they should perform
+the operation with, and the plaintext or encrypted data key. The requests do
+not contain any cryptographic keys, public or private.
+
+Whenever we try to encrypt or decrypt a data key, SOPS will try to do so first
+with the local key service (unless it's disabled), and if that fails, it will
+try all other remote key services until one succeeds.
+
+You can start a key service server by running `sops keyservice`.
+
+You can specify the key services the `sops` binary uses with `--keyservice`.
+This flag can be specified more than once, so you can use multiple key
+services. The local key service can be disabled with
+`enable-local-keyservice=false`.
 	
 Important information on types
 ------------------------------
