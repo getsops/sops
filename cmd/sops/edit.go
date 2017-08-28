@@ -17,6 +17,8 @@ import (
 
 	"github.com/google/shlex"
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/cmd/sops/codes"
+	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/stores/json"
 	"gopkg.in/urfave/cli.v1"
@@ -89,7 +91,7 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 	var tree sops.Tree
 	branch, err := opts.InputStore.Unmarshal(fileBytes)
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), exitCouldNotReadInputFile)
+		return nil, cli.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
 	tree.Branch = branch
 	tree.Metadata = sops.Metadata{
@@ -102,7 +104,7 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 	// Generate a data key
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
-		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
+		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), codes.CouldNotRetrieveKey)
 	}
 	stash := make(map[string][]interface{})
 
@@ -111,13 +113,13 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 
 func Edit(opts EditOpts) ([]byte, error) {
 	// Load the file
-	tree, err := loadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
 	}
 	// Decrypt the file
 	stash := make(map[string][]interface{})
-	dataKey, err := decryptTree(decryptTreeOpts{
+	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
 		Stash: stash, Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree, KeyServices: opts.KeyServices,
 	})
 	if err != nil {
@@ -131,12 +133,12 @@ func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]int
 	// Create temporary file for editing
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), exitCouldNotWriteOutputFile)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), codes.CouldNotWriteOutputFile)
 	}
 	defer os.RemoveAll(tmpdir)
 	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(opts.InputPath)))
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), exitCouldNotWriteOutputFile)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), codes.CouldNotWriteOutputFile)
 	}
 
 	// Write to temporary file
@@ -147,17 +149,17 @@ func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]int
 		out, err = opts.OutputStore.Marshal(tree.Branch)
 	}
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	_, err = tmpfile.Write(out)
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), exitCouldNotWriteOutputFile)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
 	}
 
 	// Compute file hash to detect if the file has been edited
 	origHash, err := hashFile(tmpfile.Name())
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
 	}
 
 	// Let the user edit the file
@@ -166,7 +168,7 @@ func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]int
 		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
 
 	// Encrypt the file
-	err = encryptTree(encryptTreeOpts{
+	err = common.EncryptTree(common.EncryptTreeOpts{
 		Stash: stash, DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
@@ -176,7 +178,7 @@ func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]int
 	// Output the file
 	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	return encryptedFile, nil
 }
@@ -185,18 +187,18 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 	for {
 		err := runEditor(opts.TmpFile.Name())
 		if err != nil {
-			return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), exitNoEditorFound)
+			return cli.NewExitError(fmt.Sprintf("Could not run editor: %s", err), codes.NoEditorFound)
 		}
 		newHash, err := hashFile(opts.TmpFile.Name())
 		if err != nil {
-			return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), exitCouldNotReadInputFile)
+			return cli.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
 		}
 		if bytes.Equal(newHash, opts.OriginalHash) {
-			return cli.NewExitError("File has not changed, exiting.", exitFileHasNotBeenModified)
+			return cli.NewExitError("File has not changed, exiting.", codes.FileHasNotBeenModified)
 		}
 		edited, err := ioutil.ReadFile(opts.TmpFile.Name())
 		if err != nil {
-			return cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), exitCouldNotReadInputFile)
+			return cli.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), codes.CouldNotReadInputFile)
 		}
 		newBranch, err := opts.InputStore.Unmarshal(edited)
 		if err != nil {
@@ -216,7 +218,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 		opts.Tree.Branch = newBranch
 		needVersionUpdated, err := AIsNewerThanB(version, opts.Tree.Metadata.Version)
 		if err != nil {
-			return cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version, err), exitFailedToCompareVersions)
+			return cli.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version, err), codes.FailedToCompareVersions)
 		}
 		if needVersionUpdated {
 			opts.Tree.Metadata.Version = version

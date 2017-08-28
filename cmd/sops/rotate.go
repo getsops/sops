@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/cmd/sops/codes"
+	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	cli "gopkg.in/urfave/cli.v1"
@@ -21,12 +23,12 @@ type RotateOpts struct {
 }
 
 func Rotate(opts RotateOpts) ([]byte, error) {
-	tree, err := loadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
 	}
 
-	dataKey, err := decryptTree(decryptTreeOpts{
+	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
 		Stash: make(map[string][]interface{}), Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
 		KeyServices: opts.KeyServices,
 	})
@@ -55,7 +57,7 @@ func Rotate(opts RotateOpts) ([]byte, error) {
 	}
 
 	// Reencrypt the file with the new key
-	err = encryptTree(encryptTreeOpts{
+	err = common.EncryptTree(common.EncryptTreeOpts{
 		Stash: make(map[string][]interface{}), DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
@@ -64,7 +66,7 @@ func Rotate(opts RotateOpts) ([]byte, error) {
 
 	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), exitErrorDumpingTree)
+		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	return encryptedFile, nil
 }

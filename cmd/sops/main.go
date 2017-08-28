@@ -21,6 +21,8 @@ import (
 	"strconv"
 
 	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/cmd/sops/codes"
+	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
@@ -32,34 +34,20 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-const (
-	exitCouldNotReadInputFile                  int = 2
-	exitCouldNotWriteOutputFile                int = 3
-	exitErrorDumpingTree                       int = 4
-	exitErrorReadingConfig                     int = 5
-	exitErrorInvalidKMSEncryptionContextFormat int = 6
-	exitErrorInvalidSetFormat                  int = 7
-	exitErrorEncryptingMac                     int = 21
-	exitErrorEncryptingTree                    int = 23
-	exitErrorDecryptingMac                     int = 24
-	exitErrorDecryptingTree                    int = 25
-	exitCannotChangeKeysFromNonExistentFile    int = 49
-	exitMacMismatch                            int = 51
-	exitMacNotFound                            int = 52
-	exitConfigFileNotFound                     int = 61
-	exitKeyboardInterrupt                      int = 85
-	exitInvalidTreePathFormat                  int = 91
-	exitNoFileSpecified                        int = 100
-	exitCouldNotRetrieveKey                    int = 128
-	exitNoEncryptionKeyFound                   int = 111
-	exitFileHasNotBeenModified                 int = 200
-	exitNoEditorFound                          int = 201
-	exitFailedToCompareVersions                int = 202
-)
-
 func main() {
 	cli.VersionPrinter = printVersion
 	app := cli.NewApp()
+
+	keyserviceFlags := []cli.Flag{
+		cli.BoolTFlag{
+			Name:  "enable-local-keyservice",
+			Usage: "use local key service",
+		},
+		cli.StringSliceFlag{
+			Name:  "keyservice",
+			Usage: "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
+		},
+	}
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
 	app.ArgsUsage = "sops [options] file"
@@ -115,8 +103,94 @@ func main() {
 				})
 			},
 		},
+		{
+			Name:  "groups",
+			Usage: "modify the groups on a SOPS file",
+			Subcommands: []cli.Command{
+				{
+					Name:  "add",
+					Usage: "add a new group to a SOPS file",
+					Flags: append([]cli.Flag{
+						cli.StringFlag{
+							Name:  "file, f",
+							Usage: "the file to add the group to",
+						},
+						cli.StringSliceFlag{
+							Name:  "pgp",
+							Usage: "the PGP fingerprints the new group should contain. Can be specified more than once",
+						},
+						cli.StringSliceFlag{
+							Name:  "kms",
+							Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
+						},
+						cli.BoolFlag{
+							Name:  "in-place, i",
+							Usage: "write output back to the same file instead of stdout",
+						},
+						cli.IntFlag{
+							Name:  "shamir-secret-sharing-quorum",
+							Usage: "the number of master keys required to retrieve the data key with shamir",
+						},
+					}, keyserviceFlags...),
+					Action: func(c *cli.Context) error {
+						pgpFps := c.StringSlice("pgp")
+						kmsArns := c.StringSlice("kms")
+						var group sops.KeyGroup
+						for _, fp := range pgpFps {
+							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
+						}
+						for _, arn := range kmsArns {
+							group = append(group, kms.NewMasterKeyFromArn(arn, make(map[string]*string)))
+						}
+						return groups.Add(groups.AddOpts{
+							InputPath:   c.String("file"),
+							InPlace:     c.Bool("in-place"),
+							InputStore:  inputStore(c, c.String("file")),
+							OutputStore: outputStore(c, c.String("file")),
+							Group:       group,
+							GroupQuorum: c.Uint("shamir-secret-sharing-quorum"),
+							KeyServices: keyservices(c),
+						})
+					},
+				},
+				{
+					Name:  "delete",
+					Usage: "delete a key group from a SOPS file",
+					Flags: append([]cli.Flag{
+						cli.StringFlag{
+							Name:  "file, f",
+							Usage: "the file to add the group to",
+						},
+						cli.BoolFlag{
+							Name:  "in-place, i",
+							Usage: "write output back to the same file instead of stdout",
+						},
+						cli.UintFlag{
+							Name:  "shamir-secret-sharing-quorum",
+							Usage: "the number of master keys required to retrieve the data key with shamir",
+						},
+					}, keyserviceFlags...),
+					ArgsUsage: `[index]`,
+					Action: func(c *cli.Context) error {
+						group, err := strconv.ParseUint(c.Args().First(), 10, 32)
+						if err != nil {
+							return fmt.Errorf("failed to parse [index] argument: %s", err)
+						}
+						return groups.Delete(groups.DeleteOpts{
+							InputPath:   c.String("file"),
+							InPlace:     c.Bool("in-place"),
+							InputStore:  inputStore(c, c.String("file")),
+							OutputStore: outputStore(c, c.String("file")),
+							Group:       uint(group),
+							GroupQuorum: c.Uint("shamir-secret-sharing-quorum"),
+							KeyServices: keyservices(c),
+						})
+					},
+				},
+			},
+		},
 	}
-	app.Flags = []cli.Flag{
+	app.Flags = append([]cli.Flag{
 		cli.BoolFlag{
 			Name:  "decrypt, d",
 			Usage: "decrypt a file and output the result to stdout",
@@ -196,23 +270,15 @@ func main() {
 			Name:  "set",
 			Usage: `set a specific key or branch in the input JSON or YAML document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 		},
-		cli.BoolTFlag{
-			Name:  "enable-local-keyservice",
-			Usage: "use local key service",
-		},
-		cli.StringSliceFlag{
-			Name:  "keyservice",
-			Usage: "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
-		},
 		cli.IntFlag{
 			Name:  "shamir-secret-sharing-quorum",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
-	}
+	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
 		if c.NArg() < 1 {
-			return cli.NewExitError("Error: no file specified", exitNoFileSpecified)
+			return cli.NewExitError("Error: no file specified", codes.NoFileSpecified)
 		}
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
@@ -220,7 +286,7 @@ func main() {
 				return cli.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", 49)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
-				return cli.NewExitError("Error: cannot operate on non-existent file", exitNoFileSpecified)
+				return cli.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
 			}
 		}
 
@@ -253,7 +319,7 @@ func main() {
 		if c.Bool("decrypt") {
 			extract, err := parseTreePath(c.String("extract"))
 			if err != nil {
-				return cli.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), exitInvalidTreePathFormat)
+				return cli.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
 			output, err = Decrypt(DecryptOpts{
 				OutputStore: outputStore,
@@ -360,7 +426,7 @@ func main() {
 			var err error
 			outputFile, err = os.Create(fileName)
 			if err != nil {
-				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), exitCouldNotWriteOutputFile)
+				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 			}
 			defer outputFile.Close()
 		} else {
@@ -464,7 +530,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var pgpKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
-		return nil, cli.NewExitError("Invalid KMS encryption context format", exitErrorInvalidKMSEncryptionContextFormat)
+		return nil, cli.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
 	}
 	if c.String("kms") != "" {
 		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext) {
@@ -482,7 +548,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		if c.String("config") != "" {
 			confBytes, err = ioutil.ReadFile(c.String("config"))
 			if err != nil {
-				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
+				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), codes.ErrorReadingConfig)
 			}
 		}
 		groups, err := yaml.KeyGroupsForFile(file, confBytes, kmsEncryptionContext)
@@ -499,7 +565,7 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 	var valueToInsert interface{}
 	err := encodingjson.Unmarshal([]byte(jsonValue), &valueToInsert)
 	if err != nil {
-		return nil, cli.NewExitError("Value for --set is not valid JSON", exitErrorInvalidSetFormat)
+		return nil, cli.NewExitError("Value for --set is not valid JSON", codes.ErrorInvalidSetFormat)
 	}
 	// Check if decoding it as json we find a single value
 	// and not a map or slice, in which case we can't marshal
@@ -509,7 +575,7 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 		var err error
 		valueToInsert, err = (&json.Store{}).Unmarshal([]byte(jsonValue))
 		if err != nil {
-			return nil, cli.NewExitError("Invalid --set value format", exitErrorInvalidSetFormat)
+			return nil, cli.NewExitError("Invalid --set value format", codes.ErrorInvalidSetFormat)
 		}
 	}
 	return valueToInsert, nil
@@ -520,7 +586,7 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 	// Since python-dict-index has to end with ], we split at "] " to get the two parts
 	pathValuePair := strings.SplitAfterN(set, "] ", 2)
 	if len(pathValuePair) < 2 {
-		return nil, nil, cli.NewExitError("Invalid --set format", exitErrorInvalidSetFormat)
+		return nil, nil, cli.NewExitError("Invalid --set format", codes.ErrorInvalidSetFormat)
 	}
 	fullPath := strings.TrimRight(pathValuePair[0], " ")
 	jsonValue := pathValuePair[1]
@@ -528,7 +594,7 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 
 	path, err = parseTreePath(fullPath)
 	if err != nil {
-		return nil, nil, cli.NewExitError("Invalid --set format", exitErrorInvalidSetFormat)
+		return nil, nil, cli.NewExitError("Invalid --set format", codes.ErrorInvalidSetFormat)
 	}
 	return path, valueToInsert, nil
 }

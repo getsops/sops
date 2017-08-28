@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/cmd/sops/codes"
+	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keyservice"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -19,12 +21,12 @@ type DecryptOpts struct {
 }
 
 func Decrypt(opts DecryptOpts) (decryptedFile []byte, err error) {
-	tree, err := loadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = decryptTree(decryptTreeOpts{
+	_, err = common.DecryptTree(common.DecryptTreeOpts{
 		Stash: make(map[string][]interface{}), Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
 		KeyServices: opts.KeyServices,
 	})
@@ -37,7 +39,7 @@ func Decrypt(opts DecryptOpts) (decryptedFile []byte, err error) {
 	}
 	decryptedFile, err = opts.OutputStore.Marshal(tree.Branch)
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), exitErrorDumpingTree)
+		return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 	}
 	return decryptedFile, err
 }
@@ -51,13 +53,13 @@ func Extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 		tree.Branch = newBranch
 		decrypted, err := outputStore.Marshal(tree.Branch)
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), exitErrorDumpingTree)
+			return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 		}
 		return decrypted, err
 	} else {
 		bytes, err := outputStore.MarshalValue(v)
 		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), exitErrorDumpingTree)
+			return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), codes.ErrorDumpingTree)
 		}
 		return bytes, nil
 	}
