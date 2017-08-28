@@ -131,6 +131,10 @@ func main() {
 							Name:  "shamir-secret-sharing-quorum",
 							Usage: "the number of master keys required to retrieve the data key with shamir",
 						},
+						cli.StringFlag{
+							Name:  "encryption-context",
+							Usage: "comma separated list of KMS encryption context key:value pairs",
+						},
 					}, keyserviceFlags...),
 					Action: func(c *cli.Context) error {
 						pgpFps := c.StringSlice("pgp")
@@ -140,7 +144,7 @@ func main() {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
 						}
 						for _, arn := range kmsArns {
-							group = append(group, kms.NewMasterKeyFromArn(arn, make(map[string]*string)))
+							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context"))))
 						}
 						return groups.Add(groups.AddOpts{
 							InputPath:   c.String("file"),
@@ -176,6 +180,7 @@ func main() {
 						if err != nil {
 							return fmt.Errorf("failed to parse [index] argument: %s", err)
 						}
+
 						return groups.Delete(groups.DeleteOpts{
 							InputPath:   c.String("file"),
 							InPlace:     c.Bool("in-place"),
