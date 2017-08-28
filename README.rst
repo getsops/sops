@@ -393,31 +393,49 @@ Example: place the following in your `~/.bashrc`
 
 	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
 
-Shamir Secret Sharing
-~~~~~~~~~~~~~~~~~~~~~
+Key groups
+~~~~~~~~~~
 
-By default, `sops` encrypts the data key with each master keys, such that if any
-of the master keys is available, the whole file can be decrypted. Sometimes, it
-is desirable to require access to several master keys in order to be able to
-decrypt files. This can be achieved with Shamir's Secret Sharing. With this
-method, the data key is split into several parts, one for each master key, and
-`quorum` parts are required in order to retrieve the data key and decrypt the file.
+By default, `sops` encrypts the data key with each of the master keys, such
+that if any of the master keys is available, the file can be decrypted.
+However, it is sometimes desirable to require access to several master keys in
+order to be able to decrypt files. This can be achieved with key groups. With
+key groups, the data key is split into several parts, one for each key group.
+Each key group contains one or more master keys, and all the keys in each
+group encrypt the data key. For decryption, `quorum` parts are required in
+order to retrieve the data key, so at least one key in `quorum` groups has to
+be available.
 
-You can enable this mode by passing `--shamir-secret-sharing` to the encrypt
-mode or by passing it to the edit mode for new files. You can set `quorum` with
-`--shamir-secret-sharing-quorum number`. The quorum must be lower or
-equal to the number of master keys.
+`quorum` defaults to the number of key groups.
 
-`quorum` defaults to 2.
+Managing of key groups for SOPS files can be done with the `sops groups`
+command. Key groups can also be specified in the `.sops.yaml` config file,
+like so:
+
+```yaml
+creation_rules:
+    - filename_regex: .*keygroups.*
+      key_groups:
+      # First key group
+      - pgp: fingerprint1,fingerprint2
+        kms: arn1,arn2
+      # Second key group
+      - pgp: fingerprint3,fingerprint4
+        kms: arn3,arn4
+      # Third key group
+      - pgp: fingerprint5,fingerprint6
+        kms: arn5,arn6
+```
 
 For example:
 
 ```
-sops --shamir-secret-sharing --shamir-secret-sharing-quorum 5 example.json
+sops --shamir-secret-sharing-quorum 2 example.json
 ```
 
-This will require at least 5 master keys in order to decrypt the file. You can
-then decrypt the file the same way as with any other SOPS file:
+This will require at least 2 master keys from different key groups in order to
+decrypt the file. You can then decrypt the file the same way as with any other
+SOPS file:
 
 ```
 sops -d example.json
