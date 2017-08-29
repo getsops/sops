@@ -210,7 +210,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 		if opts.ShowMasterKeys {
 			metadata, err := opts.InputStore.UnmarshalMetadata(edited)
 			if err != nil {
-				log.Printf("sops branch is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
+				log.Printf("sops metadata is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
 				bufio.NewReader(os.Stdin).ReadByte()
 				continue
 			}

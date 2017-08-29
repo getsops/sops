@@ -329,7 +329,7 @@ func (m *Metadata) MasterKeyCount() int {
 func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
 	if len(svcs) == 0 {
 		return []error{
-			fmt.Errorf("No key services provided, can not update master keys."),
+			fmt.Errorf("No key services provided, cansnot update master keys."),
 		}
 	}
 	var parts [][]byte
