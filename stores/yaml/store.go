@@ -141,11 +141,11 @@ func (store Store) MarshalValue(v interface{}) ([]byte, error) {
 }
 
 // UnmarshalMetadata takes a yaml document as a string and extracts sops' metadata from it
-func (s *Store) UnmarshalMetadata(in []byte) (*sops.Metadata, error) {
+func (s *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	file := stores.SopsFile{}
 	err := yaml.Unmarshal(in, &file)
 	if err != nil {
-		return nil, fmt.Errorf("Error unmarshalling input yaml: %s", err)
+		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
 	return file.Metadata.ToInternal()
 }

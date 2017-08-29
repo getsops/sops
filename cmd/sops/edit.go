@@ -214,7 +214,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				bufio.NewReader(os.Stdin).ReadByte()
 				continue
 			}
-			opts.Tree.Metadata = *metadata
+			opts.Tree.Metadata = metadata
 		}
 		opts.Tree.Branch = newBranch
 		needVersionUpdated, err := AIsNewerThanB(version, opts.Tree.Metadata.Version)

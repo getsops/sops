@@ -53,7 +53,7 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	if err != nil {
 		return nil, err
 	}
-	tree := sops.Tree{Branch: branch, Metadata: *metadata}
+	tree := sops.Tree{Branch: branch, Metadata: metadata}
 
 	// Decrypt the tree
 	cipher := aes.Cipher{}

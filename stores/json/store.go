@@ -54,7 +54,7 @@ func (store BinaryStore) Unmarshal(in []byte) (sops.TreeBranch, error) {
 }
 
 // UnmarshalMetadata takes a binary format sops file and extracts sops' metadata from it
-func (store BinaryStore) UnmarshalMetadata(in []byte) (*sops.Metadata, error) {
+func (store BinaryStore) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	return store.store.UnmarshalMetadata(in)
 }
 
@@ -248,11 +248,11 @@ func (store Store) MarshalValue(v interface{}) ([]byte, error) {
 }
 
 // UnmarshalMetadata takes a json string and extracts sops' metadata from it
-func (store Store) UnmarshalMetadata(in []byte) (*sops.Metadata, error) {
+func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	file := stores.SopsFile{}
 	err := json.Unmarshal(in, &file)
 	if err != nil {
-		return nil, fmt.Errorf("Error unmarshalling input json: %s", err)
+		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
 	return file.Metadata.ToInternal()
 }

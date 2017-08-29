@@ -78,7 +78,7 @@ func LoadEncryptedFile(inputStore sops.Store, inputPath string) (*sops.Tree, err
 	}
 	tree := sops.Tree{
 		Branch:   branch,
-		Metadata: *metadata,
+		Metadata: metadata,
 	}
 	return &tree, nil
 }

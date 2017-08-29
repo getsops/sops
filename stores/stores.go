@@ -101,19 +101,19 @@ func kmsKeysFromGroup(group sops.KeyGroup) (keys []kmskey) {
 	return
 }
 
-func (m *Metadata) ToInternal() (*sops.Metadata, error) {
+func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	lastModified, err := time.Parse(time.RFC3339, m.LastModified)
 	if err != nil {
-		return nil, err
+		return sops.Metadata{}, err
 	}
 	groups, err := m.internalKeygroups()
 	if err != nil {
-		return nil, err
+		return sops.Metadata{}, err
 	}
 	if m.UnencryptedSuffix == "" {
 		m.UnencryptedSuffix = sops.DefaultUnencryptedSuffix
 	}
-	return &sops.Metadata{
+	return sops.Metadata{
 		KeyGroups:                 groups,
 		ShamirQuorum:              m.ShamirQuorum,
 		Version:                   m.Version,

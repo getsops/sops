@@ -311,7 +311,7 @@ type KeyGroup []keys.MasterKey
 // Store provides a way to load and save the sops tree along with metadata
 type Store interface {
 	Unmarshal(in []byte) (TreeBranch, error)
-	UnmarshalMetadata(in []byte) (*Metadata, error)
+	UnmarshalMetadata(in []byte) (Metadata, error)
 	Marshal(TreeBranch) ([]byte, error)
 	MarshalWithMetadata(TreeBranch, Metadata) ([]byte, error)
 	MarshalValue(interface{}) ([]byte, error)
