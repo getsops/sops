@@ -24,7 +24,7 @@ type Metadata struct {
 	UnencryptedSuffix         string     `yaml:"unencrypted_suffix" json:"unencrypted_suffix"`
 	MessageAuthenticationCode string     `yaml:"mac" json:"mac"`
 	Version                   string     `yaml:"version" json:"version"`
-	ShamirQuorum              uint       `yaml:"shamir_quorum,omitempty" json:"shamir_quorum,omitempty"`
+	ShamirQuorum              int        `yaml:"shamir_quorum,omitempty" json:"shamir_quorum,omitempty"`
 	KeyGroups                 []keygroup `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
 	PGPKeys                   []pgpkey   `yaml:"pgp,omitempty" json:"pgp,omitempty"`
 	KMSKeys                   []kmskey   `yaml:"kms,omitempty" json:"kms,omitempty"`

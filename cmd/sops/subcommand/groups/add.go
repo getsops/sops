@@ -13,7 +13,7 @@ type AddOpts struct {
 	InputStore  sops.Store
 	OutputStore sops.Store
 	Group       sops.KeyGroup
-	GroupQuorum uint
+	GroupQuorum int
 	InPlace     bool
 	KeyServices []keyservice.KeyServiceClient
 }

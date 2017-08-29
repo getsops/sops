@@ -20,7 +20,7 @@ type EncryptOpts struct {
 	KeyServices       []keyservice.KeyServiceClient
 	UnencryptedSuffix string
 	KeyGroups         []sops.KeyGroup
-	GroupQuorum       uint
+	GroupQuorum       int
 }
 
 func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {

@@ -152,7 +152,7 @@ func main() {
 							InputStore:  inputStore(c, c.String("file")),
 							OutputStore: outputStore(c, c.String("file")),
 							Group:       group,
-							GroupQuorum: c.Uint("shamir-secret-sharing-quorum"),
+							GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
 							KeyServices: keyservices(c),
 						})
 					},
@@ -169,7 +169,7 @@ func main() {
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
 						},
-						cli.UintFlag{
+						cli.IntFlag{
 							Name:  "shamir-secret-sharing-quorum",
 							Usage: "the number of master keys required to retrieve the data key with shamir",
 						},
@@ -187,7 +187,7 @@ func main() {
 							InputStore:  inputStore(c, c.String("file")),
 							OutputStore: outputStore(c, c.String("file")),
 							Group:       uint(group),
-							GroupQuorum: c.Uint("shamir-secret-sharing-quorum"),
+							GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
 							KeyServices: keyservices(c),
 						})
 					},
@@ -314,7 +314,7 @@ func main() {
 				UnencryptedSuffix: c.String("unencrypted-suffix"),
 				KeyServices:       svcs,
 				KeyGroups:         keyGroups,
-				GroupQuorum:       uint(c.Int("shamir-secret-sharing-quorum")),
+				GroupQuorum:       c.Int("shamir-secret-sharing-quorum"),
 			})
 			if err != nil {
 				return err
@@ -416,7 +416,7 @@ func main() {
 					EditOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
 					KeyGroups:         keyGroups,
-					GroupQuorum:       uint(c.Int("shamir-secret-sharing-quorum")),
+					GroupQuorum:       c.Int("shamir-secret-sharing-quorum"),
 				})
 			}
 		}

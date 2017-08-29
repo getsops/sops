@@ -39,7 +39,7 @@ type EditExampleOpts struct {
 	EditOpts
 	UnencryptedSuffix string
 	KeyGroups         []sops.KeyGroup
-	GroupQuorum       uint
+	GroupQuorum       int
 }
 
 var exampleTree = sops.TreeBranch{
