@@ -2,7 +2,7 @@ package aes
 
 import (
 	"crypto/rand"
-	"fmt"
+	"log"
 	"strings"
 	"testing"
 	"testing/quick"
@@ -35,7 +35,7 @@ func TestRoundtripString(t *testing.T) {
 		rand.Read(key)
 		s, err := Cipher{}.Encrypt(x, key, aad, nil)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return false
 		}
 		d, _, err := Cipher{}.Decrypt(s, key, aad)
@@ -54,7 +54,7 @@ func TestRoundtripFloat(t *testing.T) {
 	f := func(x float64) bool {
 		s, err := Cipher{}.Encrypt(x, key, "", nil)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return false
 		}
 		d, _, err := Cipher{}.Decrypt(s, key, "")
@@ -73,7 +73,7 @@ func TestRoundtripInt(t *testing.T) {
 	f := func(x int) bool {
 		s, err := Cipher{}.Encrypt(x, key, "", nil)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return false
 		}
 		d, _, err := Cipher{}.Decrypt(s, key, "")
@@ -92,7 +92,7 @@ func TestRoundtripBool(t *testing.T) {
 	f := func(x bool) bool {
 		s, err := Cipher{}.Encrypt(x, key, "", nil)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return false
 		}
 		d, _, err := Cipher{}.Decrypt(s, key, "")
