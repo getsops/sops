@@ -42,9 +42,11 @@ func Rotate(opts RotateOpts) ([]byte, error) {
 	}
 	// Remove master keys
 	for _, rmKey := range opts.RemoveMasterKeys {
-		for i, groupKey := range tree.Metadata.KeyGroups[0] {
-			if rmKey.ToString() == groupKey.ToString() {
-				tree.Metadata.KeyGroups[0] = append(tree.Metadata.KeyGroups[0][:i], tree.Metadata.KeyGroups[0][i+1:]...)
+		for i := range tree.Metadata.KeyGroups {
+			for j, groupKey := range tree.Metadata.KeyGroups[i] {
+				if rmKey.ToString() == groupKey.ToString() {
+					tree.Metadata.KeyGroups[i] = append(tree.Metadata.KeyGroups[i][:j], tree.Metadata.KeyGroups[i][j+1:]...)
+				}
 			}
 		}
 	}
