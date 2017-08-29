@@ -31,7 +31,10 @@ func Set(opts SetOpts) ([]byte, error) {
 
 	// Decrypt the file
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Stash: make(map[string][]interface{}), Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
+		Stash:       make(map[string][]interface{}),
+		Cipher:      opts.Cipher,
+		IgnoreMac:   opts.IgnoreMAC,
+		Tree:        tree,
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {

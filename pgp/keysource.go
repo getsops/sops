@@ -69,7 +69,7 @@ func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
 	return nil
 }
 
-func (key *MasterKey) encryptWithCryptoOpenpgp(dataKey []byte) error {
+func (key *MasterKey) encryptWithCryptoOpenPGP(dataKey []byte) error {
 	ring, err := key.pubRing()
 	if err != nil {
 		return err
@@ -111,7 +111,7 @@ func (key *MasterKey) encryptWithCryptoOpenpgp(dataKey []byte) error {
 // Encrypt encrypts the data key with the PGP key with the same fingerprint as the MasterKey. It looks for PGP public keys in $PGPHOME/pubring.gpg.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	log.Printf("Attempting encryption of GPG MasterKey with fingerprint %s", key.Fingerprint)
-	openpgpErr := key.encryptWithCryptoOpenpgp(dataKey)
+	openpgpErr := key.encryptWithCryptoOpenPGP(dataKey)
 	if openpgpErr == nil {
 		log.Printf("Encryption of GPG MasterKey with fingerprint %s succeeded", key.Fingerprint)
 		return nil

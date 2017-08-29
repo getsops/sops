@@ -458,11 +458,12 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 		if url.Scheme == "unix" {
 			addr = url.Path
 		}
-		var opts []grpc.DialOption
-		opts = append(opts, grpc.WithInsecure())
-		opts = append(opts, grpc.WithDialer(func(addr string, timeout time.Duration) (net.Conn, error) {
-			return net.DialTimeout(url.Scheme, addr, timeout)
-		}))
+		opts := []grpc.DialOption{
+			grpc.WithInsecure(),
+			grpc.WithDialer(func(addr string, timeout time.Duration) (net.Conn, error) {
+				return net.DialTimeout(url.Scheme, addr, timeout)
+			}),
+		}
 		log.Printf("Connecting to key service %s://%s", url.Scheme, addr)
 		conn, err := grpc.Dial(addr, opts...)
 		if err != nil {
