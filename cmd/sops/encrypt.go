@@ -39,7 +39,7 @@ func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
 		KeyGroups:         opts.KeyGroups,
 		UnencryptedSuffix: opts.UnencryptedSuffix,
 		Version:           version,
-		ShamirQuorum:      int(opts.GroupQuorum),
+		ShamirQuorum:      opts.GroupQuorum,
 	}
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {

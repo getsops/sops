@@ -99,7 +99,7 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 		KeyGroups:         opts.KeyGroups,
 		UnencryptedSuffix: opts.UnencryptedSuffix,
 		Version:           version,
-		ShamirQuorum:      int(opts.GroupQuorum),
+		ShamirQuorum:      opts.GroupQuorum,
 	}
 
 	// Generate a data key

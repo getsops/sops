@@ -18,7 +18,7 @@ type DeleteOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func min(a, b int) int {
+func min(a, b uint) uint {
 	if a > b {
 		return b
 	}
@@ -37,10 +37,10 @@ func Delete(opts DeleteOpts) error {
 	tree.Metadata.KeyGroups = append(tree.Metadata.KeyGroups[:opts.Group], tree.Metadata.KeyGroups[opts.Group+1:]...)
 
 	if opts.GroupQuorum != 0 {
-		tree.Metadata.ShamirQuorum = int(opts.GroupQuorum)
+		tree.Metadata.ShamirQuorum = opts.GroupQuorum
 	}
 	// The quorum should always be smaller or equal to the number of key groups
-	tree.Metadata.ShamirQuorum = min(tree.Metadata.ShamirQuorum, len(tree.Metadata.KeyGroups))
+	tree.Metadata.ShamirQuorum = min(tree.Metadata.ShamirQuorum, uint(len(tree.Metadata.KeyGroups)))
 
 	tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
 	output, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)

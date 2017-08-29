@@ -30,7 +30,7 @@ func Add(opts AddOpts) error {
 	tree.Metadata.KeyGroups = append(tree.Metadata.KeyGroups, opts.Group)
 
 	if opts.GroupQuorum != 0 {
-		tree.Metadata.ShamirQuorum = int(opts.GroupQuorum)
+		tree.Metadata.ShamirQuorum = opts.GroupQuorum
 	}
 	tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
 	output, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)

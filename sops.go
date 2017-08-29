@@ -301,7 +301,7 @@ type Metadata struct {
 	KeyGroups                 []KeyGroup
 	// ShamirQuorum is the number of key groups required to recover the
 	// original data key
-	ShamirQuorum int
+	ShamirQuorum uint
 	// DataKey caches the decrypted data key so it doesn't have to be decrypted with a master key every time it's needed
 	DataKey []byte
 }
@@ -340,10 +340,10 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 	} else {
 		var err error
 		if m.ShamirQuorum == 0 {
-			m.ShamirQuorum = len(m.KeyGroups)
+			m.ShamirQuorum = uint(len(m.KeyGroups))
 		}
 		log.Printf("Multiple KeyGroups found, proceeding with Shamir with quorum %d", m.ShamirQuorum)
-		parts, err = shamir.Split(dataKey, len(m.KeyGroups), m.ShamirQuorum)
+		parts, err = shamir.Split(dataKey, len(m.KeyGroups), int(m.ShamirQuorum))
 		if err != nil {
 			errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
 			return
@@ -418,7 +418,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 	}
 	var dataKey []byte
 	if len(m.KeyGroups) > 1 {
-		if len(parts) < m.ShamirQuorum {
+		if uint(len(parts)) < m.ShamirQuorum {
 			return nil, fmt.Errorf("Not enough parts to recover data key with Shamir. Need %d, have %d.", m.ShamirQuorum, len(parts))
 		}
 		var err error
