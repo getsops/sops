@@ -14,7 +14,7 @@ import (
 // and unmarshaled with DynamoDB AttributeValues it will be done so as number
 // instead of string in seconds since January 1, 1970 UTC.
 //
-// This type is useful as an alterntitive to the struct tag `unixtime` when you
+// This type is useful as an alternative to the struct tag `unixtime` when you
 // want to have your time value marshaled as Unix time in seconds intead of
 // the default time.RFC3339.
 //
@@ -57,10 +57,9 @@ func (e *UnixTime) UnmarshalDynamoDBAttributeValue(av *dynamodb.AttributeValue) 
 //		type ExampleMarshaler struct {
 //			Value int
 //		}
-//		type (m *ExampleMarshaler) 	MarshalDynamoDBAttributeValue(av *dynamodb.AttributeValue) error {
+//		func (m *ExampleMarshaler) 	MarshalDynamoDBAttributeValue(av *dynamodb.AttributeValue) error {
 //			n := fmt.Sprintf("%v", m.Value)
 //			av.N = &n
-//
 //			return nil
 //		}
 //
