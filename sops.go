@@ -398,6 +398,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 	errMsg := "Could not decrypt the data key with any of the master keys:\n"
 	var parts [][]byte
 	for _, group := range m.KeyGroups {
+	keysLoop:
 		for _, key := range group {
 			svcKey := keyservice.KeyFromMasterKey(key)
 			for _, svc := range svcs {
@@ -412,7 +413,10 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 					continue
 				}
 				parts = append(parts, rsp.Plaintext)
-				break
+				// All keys in a key group encrypt the same part, so as soon
+				// as we decrypt it successfully with one key, we need to
+				// proceed with the next group
+				break keysLoop
 			}
 		}
 	}
