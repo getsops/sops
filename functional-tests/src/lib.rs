@@ -284,16 +284,15 @@ sops:
             .output()
             .expect("Error running sops");
         assert!(output.status.success(),
-        "SOPS failed to encrypt a file with Shamir Secret Sharing");
+                "SOPS failed to encrypt a file with Shamir Secret Sharing");
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("-d")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        assert!(output
-            .status
-            .success(),
-        "SOPS failed to decrypt a file with Shamir Secret Sharing");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to decrypt a file with Shamir Secret Sharing");
         assert!(String::from_utf8_lossy(&output.stdout).contains("secret"));
     }
 
@@ -301,7 +300,8 @@ sops:
     fn roundtrip_shamir_missing_decryption_key() {
         // The .sops.yaml file ensures this file is encrypted with two key groups, each with one GPG key,
         // but we don't have one of the private keys
-        let file_path = prepare_temp_file("test_roundtrip_keygroups_missing_decryption_key.yaml", "a: secret".as_bytes());
+        let file_path = prepare_temp_file("test_roundtrip_keygroups_missing_decryption_key.yaml",
+                                          "a: secret".as_bytes());
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("-i")
             .arg("-e")
@@ -309,15 +309,62 @@ sops:
             .output()
             .expect("Error running sops");
         assert!(output.status.success(),
-        "SOPS failed to encrypt a file with Shamir Secret Sharing");
+                "SOPS failed to encrypt a file with Shamir Secret Sharing");
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("-d")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        assert!(!output
-            .status
-            .success(),
-        "SOPS succeeded decrypting a file with a missing decrytion key");
+        assert!(!output.status
+                    .success(),
+                "SOPS succeeded decrypting a file with a missing decrytion key");
+    }
+
+    #[test]
+    fn test_decrypt_file_multiple_keys() {
+        let file_path = prepare_temp_file("test_decrypt_file_multiple_keys.yaml",
+                                          br#"message: ENC[AES256_GCM,data:LEw770M=,iv:YwFnvFCDU1kRf0LRB2duTe+4qINzpSZrCiDTU/tUSug=,tag:N5TarWss2N1o9QGGPdC8kQ==,type:str]
+sops:
+    lastmodified: '2017-09-02T17:36:53Z'
+    unencrypted_suffix: _unencrypted
+    mac: ENC[AES256_GCM,data:roj5h4cVmamV5IgNePrtsVh3pVP3nwAHhHZkwrHLC1A2xpCb/zGZv0Z9iB1O03fsb7nEfOpB70sePnpE7ZcqHBEcZX9JRJ9lISPcc6MpVpMb5oZPjFvIwhX5YW5vc3G8geI5plwDZmtZaocYKQrGZeR+s4qXTeKDbQ1j/6hOikE=,iv:UpnsiySBxjGE4NIiZX8/enGaPf5fS7jvFVHRojhq3Jg=,tag:VEI8qQvcJz0YbiIDnyAlbA==,type:str]
+    version: 2.0.9
+    pgp:
+    -   created_at: '2017-09-02T17:36:40Z'
+        enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hQEMA+IvbYEY5w8ZAQf6A0l+/3mSA/Tz/Z9g0E5rpbR7HIrmmPhO40VOLBcAjemB
+            ksDaJiCr162n+XfyW/k0wNWzgibRsa9KBHFfTef4kzQPUuT8sGc74HMKvgz8cN3t
+            8Ed7Qp5ghk2SBPBRhf/NSQpUROSTit7DzMAt9QWvwgHJrLlIGojfz3dEbUKTE/9q
+            oRFrozKYRSCUCtcp1bpCwktA5tBxTiUsC5o2biMM6zlWOxwVtf+UwF4EDr3PomaD
+            9bSH3uMFr/ArQ0QmIXB1lJ/xJlHPWzJlrgpKU1CbkqkelM4gqAl1trDV8bpf91kt
+            ufc1taHznZbNV4I6Q1jRksJAhYpLrMuae2uokBOKetJeAQwcMyT5MWijIveuAuOe
+            Dyq2i+o8Fv4qf305ufSpeQm79BCNcYF/NMSHZ0NhxIctf7f0Bmti29aTwnSgThC3
+            tYvP/mRNduy0n3JOwIbbr0vz5sQSAsgek5CNVmquOQ==
+            =melP
+            -----END PGP MESSAGE-----
+        fp: 729D26A79482B5A20DEAD0A76945978B930DD7A2
+    -   created_at: '2017-09-02T17:36:40Z'
+        enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hIwDEEVDpnzXnMABA/91BbSKP0DMRl5S8glZalI4iJSEjkshvRXswONs7gVi756o
+            ZHAGVg1dQbtGRU4FvUI7dswTi9YfGLbGnBXytxajwWHzDip3LbpNEvQDnJSu8fCj
+            JAY7Ja9e28zqPOEWRTNapdGqjARjI+/66cWe+gOCy/El4hTBX9ideRE/fV6XldJe
+            Af3k0H8nAuWzx0zXUQsj5zcSdFjmEewPo7tpcVvjpHZKufYjJvRS9w3zNvIw9nsv
+            t6ss5LSaAtM/hpNMaTPtqzYVHwOa/E1m7+h9iEFS/gsZ6rcdDL2pSoPwPuWZcg==
+            =ZzYr
+            -----END PGP MESSAGE-----
+        fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+"#);
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to decrypt a file that uses multiple keys");
     }
 }
