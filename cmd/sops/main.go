@@ -22,8 +22,10 @@ import (
 
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/cmd/sops/codes"
+	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
+	"go.mozilla.org/sops/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -192,6 +194,28 @@ func main() {
 						})
 					},
 				},
+			},
+		},
+		{
+			Name:  "updatekeys",
+			Usage: "update the keys of a SOPS file using the config file",
+			Flags: append([]cli.Flag{
+				cli.StringFlag{
+					Name:  "file, f",
+					Usage: `the file or directory that should be updated with the new keys. If providing a directory, SOPS will walk it and update all files in all subdirectories. '.git' directories and '.sops.yaml' files are ignored.`,
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				keyGroups, err := keyGroups(c, c.String("file"))
+				if err != nil {
+					return err
+				}
+				return updatekeys.UpdateKeys(updatekeys.Opts{
+					InputPath:   c.String("file"),
+					Groups:      keyGroups,
+					GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
+					KeyServices: keyservices(c),
+				})
 			},
 		},
 	}
@@ -481,7 +505,7 @@ func inputStore(context *cli.Context, path string) sops.Store {
 	case "json":
 		return &json.Store{}
 	default:
-		return defaultStore(path)
+		return common.DefaultStoreForPath(path)
 	}
 }
 func outputStore(context *cli.Context, path string) sops.Store {
@@ -491,17 +515,8 @@ func outputStore(context *cli.Context, path string) sops.Store {
 	case "json":
 		return &json.Store{}
 	default:
-		return defaultStore(path)
+		return common.DefaultStoreForPath(path)
 	}
-}
-
-func defaultStore(path string) sops.Store {
-	if strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml") {
-		return &yamlstores.Store{}
-	} else if strings.HasSuffix(path, ".json") {
-		return &json.Store{}
-	}
-	return &json.BinaryStore{}
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
