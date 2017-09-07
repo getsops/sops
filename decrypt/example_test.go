@@ -1,11 +1,16 @@
-package sops_test
+package decrypt
 
 import (
 	"encoding/json"
-	"log"
 
-	"go.mozilla.org/sops/decrypt"
+	"github.com/sirupsen/logrus"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logrus.New()
+}
 
 type configuration struct {
 	FirstName string  `json:"firstName"`
@@ -30,7 +35,7 @@ func Example_DecryptFile() {
 		cfg      configuration
 		err      error
 	)
-	confData, err := decrypt.File(confPath, "json")
+	confData, err := File(confPath, "json")
 	if err != nil {
 		log.Fatalf("cleartext configuration marshalling failed with error: %v", err)
 	}

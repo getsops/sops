@@ -45,7 +45,7 @@ import (
 	"strings"
 	"time"
 
-	"log"
+	"github.com/sirupsen/logrus"
 
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
@@ -67,6 +67,12 @@ const MacMismatch = sopsError("MAC mismatch")
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
+
+var log *logrus.Logger
+
+func init() {
+	log = logrus.New()
+}
 
 // DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
 type DataKeyCipher interface {

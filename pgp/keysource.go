@@ -11,15 +11,20 @@ import (
 	"strings"
 	"time"
 
-	"log"
-
 	"os/exec"
 
 	"github.com/howeyc/gopass"
+	"github.com/sirupsen/logrus"
 	gpgagent "go.mozilla.org/gopgagent"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/armor"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logrus.New()
+}
 
 // MasterKey is a PGP key used to securely store sops' data key by encrypting it and decrypting it
 type MasterKey struct {

@@ -1,7 +1,6 @@
 package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
-	"log"
 	"net"
 	"net/url"
 
@@ -20,6 +19,7 @@ import (
 
 	"strconv"
 
+	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
@@ -33,6 +33,12 @@ import (
 	"go.mozilla.org/sops/yaml"
 	"gopkg.in/urfave/cli.v1"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logrus.New()
+}
 
 func main() {
 	cli.VersionPrinter = printVersion

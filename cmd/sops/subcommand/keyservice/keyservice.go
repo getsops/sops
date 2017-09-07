@@ -1,7 +1,6 @@
 package keyservice
 
 import (
-	"log"
 	"net"
 	"os"
 	"os/signal"
@@ -9,8 +8,15 @@ import (
 
 	"go.mozilla.org/sops/keyservice"
 
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logrus.New()
+}
 
 type Opts struct {
 	Network string

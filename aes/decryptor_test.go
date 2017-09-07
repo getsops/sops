@@ -2,7 +2,6 @@ package aes
 
 import (
 	"crypto/rand"
-	"log"
 	"strings"
 	"testing"
 	"testing/quick"
