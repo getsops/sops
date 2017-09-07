@@ -27,6 +27,7 @@ import (
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
@@ -37,7 +38,7 @@ import (
 var log *logrus.Logger
 
 func init() {
-	log = logrus.New()
+	log = logging.NewLogger("CMD")
 }
 
 func main() {
@@ -432,19 +433,22 @@ func main() {
 		}
 		// We open the file *after* the operations on the tree have been
 		// executed to avoid truncating it when there's errors
-		var outputFile *os.File
 		if c.Bool("in-place") || isEditMode || c.String("set") != "" {
-			var err error
-			outputFile, err = os.Create(fileName)
+			file, err := os.Create(fileName)
 			if err != nil {
 				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 			}
-			defer outputFile.Close()
+			defer file.Close()
+			_, err = file.Write(output)
+			if err != nil {
+				return err
+			}
+			log.Info("File written successfully")
+			return nil
 		} else {
-			outputFile = os.Stdout
+			_, err = os.Stdout.Write(output)
+			return err
 		}
-		outputFile.Write(output)
-		return nil
 	}
 	app.Run(os.Args)
 }

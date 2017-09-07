@@ -3,13 +3,15 @@ package decrypt
 import (
 	"encoding/json"
 
+	"go.mozilla.org/sops/logging"
+
 	"github.com/sirupsen/logrus"
 )
 
 var log *logrus.Logger
 
 func init() {
-	log = logrus.New()
+	log = logging.NewLogger("DECRYPT")
 }
 
 type configuration struct {

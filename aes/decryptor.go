@@ -11,12 +11,13 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops/logging"
 )
 
 var log *logrus.Logger
 
 func init() {
-	log = logrus.New()
+	log = logging.NewLogger("AES")
 }
 
 type encryptedValue struct {

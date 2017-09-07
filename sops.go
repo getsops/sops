@@ -49,6 +49,7 @@ import (
 
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/shamir"
 	"golang.org/x/net/context"
 )
@@ -71,7 +72,7 @@ const MetadataNotFound = sopsError("sops metadata not found")
 var log *logrus.Logger
 
 func init() {
-	log = logrus.New()
+	log = logging.NewLogger("SOPS")
 }
 
 // DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
@@ -119,7 +120,7 @@ type Tree struct {
 
 // Truncate truncates the tree to the path specified
 func (tree TreeBranch) Truncate(path []interface{}) (interface{}, error) {
-	log.Printf("Truncating tree to %s", path)
+	log.WithField("path", path).Info("Truncating tree")
 	var current interface{} = tree
 	for _, component := range path {
 		switch component := component.(type) {
@@ -242,7 +243,7 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
-	log.Print("Decrypting SOPS tree")
+	log.Debug("Decrypting tree")
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		var v interface{}
@@ -348,7 +349,10 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 		if m.ShamirQuorum == 0 {
 			m.ShamirQuorum = len(m.KeyGroups)
 		}
-		log.Printf("Multiple KeyGroups found, proceeding with Shamir with quorum %d", m.ShamirQuorum)
+		log.WithFields(logrus.Fields{
+			"quorum": m.ShamirQuorum,
+			"parts":  len(m.KeyGroups),
+		}).Info("Splitting data key with Shamir Secret Sharing")
 		parts, err = shamir.Split(dataKey, len(m.KeyGroups), int(m.ShamirQuorum))
 		if err != nil {
 			errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
@@ -442,6 +446,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 		}
 		dataKey = parts[0]
 	}
+	log.Info("Data key recovered successfully")
 	m.DataKey = dataKey
 	return dataKey, nil
 }

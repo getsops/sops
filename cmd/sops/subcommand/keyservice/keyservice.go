@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/logging"
 
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -15,7 +16,7 @@ import (
 var log *logrus.Logger
 
 func init() {
-	log = logrus.New()
+	log = logging.NewLogger("KEYSERVICE")
 }
 
 type Opts struct {
