@@ -6,6 +6,8 @@ import (
 
 	"io/ioutil"
 
+	"path/filepath"
+
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/keyservice"
@@ -76,9 +78,14 @@ func LoadEncryptedFile(inputStore sops.Store, inputPath string) (*sops.Tree, err
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Error loading file: %s", err), codes.CouldNotReadInputFile)
 	}
+	path, err := filepath.Abs(inputPath)
+	if err != nil {
+		return nil, err
+	}
 	tree := sops.Tree{
 		Branch:   branch,
 		Metadata: metadata,
+		FilePath: path,
 	}
 	return &tree, nil
 }

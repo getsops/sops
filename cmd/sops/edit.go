@@ -16,6 +16,8 @@ import (
 	"bufio"
 	"bytes"
 
+	"path/filepath"
+
 	"github.com/google/shlex"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
@@ -89,17 +91,23 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 			return nil, err
 		}
 	}
-	var tree sops.Tree
 	branch, err := opts.InputStore.Unmarshal(fileBytes)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
-	tree.Branch = branch
-	tree.Metadata = sops.Metadata{
-		KeyGroups:         opts.KeyGroups,
-		UnencryptedSuffix: opts.UnencryptedSuffix,
-		Version:           version,
-		ShamirQuorum:      opts.GroupQuorum,
+	path, err := filepath.Abs(opts.InputPath)
+	if err != nil {
+		return nil, err
+	}
+	tree := sops.Tree{
+		Branch: branch,
+		Metadata: sops.Metadata{
+			KeyGroups:         opts.KeyGroups,
+			UnencryptedSuffix: opts.UnencryptedSuffix,
+			Version:           version,
+			ShamirQuorum:      opts.GroupQuorum,
+		},
+		FilePath: path,
 	}
 
 	// Generate a data key

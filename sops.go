@@ -47,6 +47,7 @@ import (
 
 	"log"
 
+	"go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/shamir"
@@ -109,6 +110,8 @@ func (branch TreeBranch) InsertOrReplaceValue(key interface{}, newValue interfac
 type Tree struct {
 	Branch   TreeBranch
 	Metadata Metadata
+	// FilePath is the path of the file this struct represents
+	FilePath string
 }
 
 // Truncate truncates the tree to the path specified
@@ -268,6 +271,9 @@ func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
+	audit.SubmitEvent(audit.DecryptEvent{
+		File: tree.FilePath,
+	})
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 
 }
