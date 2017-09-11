@@ -70,8 +70,8 @@ const MetadataNotFound = sopsError("sops metadata not found")
 
 // DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
 type DataKeyCipher interface {
-	Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error)
-	Decrypt(value string, key []byte, path string) (plaintext interface{}, stashValue interface{}, err error)
+	Encrypt(value interface{}, key []byte, additionalData string, stash interface{}) (string, error)
+	Decrypt(value string, key []byte, additionalData string) (plaintext interface{}, stashValue interface{}, err error)
 }
 
 // Comment represents a comment in the sops tree for the file formats that actually support them.

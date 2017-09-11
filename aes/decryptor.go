@@ -53,7 +53,7 @@ func parse(value string) (*encryptedValue, error) {
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value and a stash value
-func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, stash interface{}, err error) {
+func (c Cipher) Decrypt(value string, key []byte, additionalData string) (plaintext interface{}, stash interface{}, err error) {
 	if value == "" {
 		return "", nil, nil
 	}
@@ -72,7 +72,7 @@ func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interf
 	}
 	stashValue := stashData{iv: encryptedValue.iv}
 	data := append(encryptedValue.data, encryptedValue.tag...)
-	decryptedBytes, err := gcm.Open(nil, encryptedValue.iv, data, []byte(path))
+	decryptedBytes, err := gcm.Open(nil, encryptedValue.iv, data, []byte(additionalData))
 	if err != nil {
 		return "", nil, fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
 	}
@@ -102,7 +102,7 @@ func (c Cipher) Decrypt(value string, key []byte, path string) (plaintext interf
 }
 
 // Encrypt takes one of (string, int, float, bool) and encrypts it with the provided key and additional auth data, returning a sops-format encrypted string.
-func (c Cipher) Encrypt(value interface{}, key []byte, path string, stash interface{}) (string, error) {
+func (c Cipher) Encrypt(value interface{}, key []byte, additionalData string, stash interface{}) (string, error) {
 	if value == "" {
 		return "", nil
 	}
@@ -144,7 +144,7 @@ func (c Cipher) Encrypt(value interface{}, key []byte, path string, stash interf
 	default:
 		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
 	}
-	out := gcm.Seal(nil, iv, plaintext, []byte(path))
+	out := gcm.Seal(nil, iv, plaintext, []byte(additionalData))
 	return fmt.Sprintf("ENC[AES256_GCM,data:%s,iv:%s,tag:%s,type:%s]",
 		base64.StdEncoding.EncodeToString(out[:len(out)-cryptoaes.BlockSize]),
 		base64.StdEncoding.EncodeToString(iv),
