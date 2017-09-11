@@ -10,7 +10,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-type DecryptOpts struct {
+type decryptOpts struct {
 	Cipher      sops.DataKeyCipher
 	InputStore  sops.Store
 	OutputStore sops.Store
@@ -20,7 +20,7 @@ type DecryptOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func Decrypt(opts DecryptOpts) (decryptedFile []byte, err error) {
+func Decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err

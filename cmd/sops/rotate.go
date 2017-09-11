@@ -11,7 +11,7 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
-type RotateOpts struct {
+type rotateOpts struct {
 	Cipher           sops.DataKeyCipher
 	InputStore       sops.Store
 	OutputStore      sops.Store
@@ -22,7 +22,7 @@ type RotateOpts struct {
 	KeyServices      []keyservice.KeyServiceClient
 }
 
-func Rotate(opts RotateOpts) ([]byte, error) {
+func Rotate(opts rotateOpts) ([]byte, error) {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err

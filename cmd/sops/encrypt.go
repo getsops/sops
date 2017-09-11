@@ -12,7 +12,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-type EncryptOpts struct {
+type encryptOpts struct {
 	Cipher            sops.DataKeyCipher
 	InputStore        sops.Store
 	OutputStore       sops.Store
@@ -23,7 +23,7 @@ type EncryptOpts struct {
 	GroupQuorum       int
 }
 
-func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
+func Encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
 	fileBytes, err := ioutil.ReadFile(opts.InputPath)
 	if err != nil {

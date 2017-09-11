@@ -10,7 +10,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-type SetOpts struct {
+type setOpts struct {
 	Cipher      sops.DataKeyCipher
 	InputStore  sops.Store
 	OutputStore sops.Store
@@ -21,7 +21,7 @@ type SetOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func Set(opts SetOpts) ([]byte, error) {
+func Set(opts setOpts) ([]byte, error) {
 	// Load the file
 	// TODO: Issue #173: if the file does not exist, create it with the contents passed in as opts.Value
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)

@@ -306,7 +306,7 @@ func main() {
 			if err != nil {
 				return err
 			}
-			output, err = Encrypt(EncryptOpts{
+			output, err = Encrypt(encryptOpts{
 				OutputStore:       outputStore,
 				InputStore:        inputStore,
 				InputPath:         fileName,
@@ -326,7 +326,7 @@ func main() {
 			if err != nil {
 				return cli.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
-			output, err = Decrypt(DecryptOpts{
+			output, err = Decrypt(decryptOpts{
 				OutputStore: outputStore,
 				InputStore:  inputStore,
 				InputPath:   fileName,
@@ -356,7 +356,7 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			output, err = Rotate(RotateOpts{
+			output, err = Rotate(rotateOpts{
 				OutputStore:      outputStore,
 				InputStore:       inputStore,
 				InputPath:        fileName,
@@ -376,7 +376,7 @@ func main() {
 			if err != nil {
 				return err
 			}
-			output, err = Set(SetOpts{
+			output, err = Set(setOpts{
 				OutputStore: outputStore,
 				InputStore:  inputStore,
 				InputPath:   fileName,
@@ -395,7 +395,7 @@ func main() {
 		if isEditMode {
 			_, statErr := os.Stat(fileName)
 			fileExists := statErr == nil
-			opts := EditOpts{
+			opts := editOpts{
 				OutputStore:    outputStore,
 				InputStore:     inputStore,
 				InputPath:      fileName,
@@ -412,8 +412,8 @@ func main() {
 				if err != nil {
 					return err
 				}
-				output, err = EditExample(EditExampleOpts{
-					EditOpts:          opts,
+				output, err = EditExample(editExampleOpts{
+					editOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
 					KeyGroups:         keyGroups,
 					GroupQuorum:       c.Int("shamir-secret-sharing-quorum"),

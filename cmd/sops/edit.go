@@ -25,7 +25,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-type EditOpts struct {
+type editOpts struct {
 	Cipher         sops.DataKeyCipher
 	InputStore     sops.Store
 	OutputStore    sops.Store
@@ -35,8 +35,8 @@ type EditOpts struct {
 	ShowMasterKeys bool
 }
 
-type EditExampleOpts struct {
-	EditOpts
+type editExampleOpts struct {
+	editOpts
 	UnencryptedSuffix string
 	KeyGroups         []sops.KeyGroup
 	GroupQuorum       int
@@ -76,7 +76,7 @@ type runEditorUntilOkOpts struct {
 	Tree           *sops.Tree
 }
 
-func EditExample(opts EditExampleOpts) ([]byte, error) {
+func EditExample(opts editExampleOpts) ([]byte, error) {
 	// Load the example file
 	var fileBytes []byte
 	if _, ok := opts.InputStore.(*json.BinaryStore); ok {
@@ -109,10 +109,10 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 	}
 	stash := make(map[string][]interface{})
 
-	return edit(opts.EditOpts, &tree, dataKey, stash)
+	return edit(opts.editOpts, &tree, dataKey, stash)
 }
 
-func Edit(opts EditOpts) ([]byte, error) {
+func Edit(opts editOpts) ([]byte, error) {
 	// Load the file
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
@@ -130,7 +130,7 @@ func Edit(opts EditOpts) ([]byte, error) {
 	return edit(opts, tree, dataKey, stash)
 }
 
-func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]interface{}) ([]byte, error) {
+func edit(opts editOpts, tree *sops.Tree, dataKey []byte, stash map[string][]interface{}) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {
