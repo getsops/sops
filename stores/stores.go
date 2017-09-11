@@ -20,14 +20,14 @@ type SopsFile struct {
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type Metadata struct {
-	LastModified              string     `yaml:"lastmodified" json:"lastmodified"`
-	UnencryptedSuffix         string     `yaml:"unencrypted_suffix" json:"unencrypted_suffix"`
-	MessageAuthenticationCode string     `yaml:"mac" json:"mac"`
-	Version                   string     `yaml:"version" json:"version"`
 	ShamirQuorum              int        `yaml:"shamir_quorum,omitempty" json:"shamir_quorum,omitempty"`
 	KeyGroups                 []keygroup `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	PGPKeys                   []pgpkey   `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys                   []kmskey   `yaml:"kms,omitempty" json:"kms,omitempty"`
+	KMSKeys                   []kmskey   `yaml:"kms" json:"kms"`
+	LastModified              string     `yaml:"lastmodified" json:"lastmodified"`
+	MessageAuthenticationCode string     `yaml:"mac" json:"mac"`
+	PGPKeys                   []pgpkey   `yaml:"pgp" json:"pgp"`
+	UnencryptedSuffix         string     `yaml:"unencrypted_suffix" json:"unencrypted_suffix"`
+	Version                   string     `yaml:"version" json:"version"`
 }
 
 type keygroup struct {
@@ -42,11 +42,11 @@ type pgpkey struct {
 }
 
 type kmskey struct {
+	Arn              string             `yaml:"arn" json:"arn"`
+	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
+	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
 	CreatedAt        string             `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	Arn              string             `yaml:"arn" json:"arn"`
-	Role             string             `yaml:"role" json:"role"`
-	Context          map[string]*string `yaml:"context" json:"context"`
 }
 
 func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
