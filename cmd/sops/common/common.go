@@ -55,7 +55,7 @@ func EncryptTree(opts EncryptTreeOpts) error {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), codes.ErrorEncryptingTree)
 	}
 	opts.Tree.Metadata.LastModified = time.Now().UTC()
-	mac, err = opts.Cipher.Encrypt(mac, opts.DataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339), nil)
+	mac, err = opts.Cipher.Encrypt(mac, opts.DataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339), opts.Stash)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), codes.ErrorEncryptingMac)
 	}
