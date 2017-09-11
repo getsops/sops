@@ -452,6 +452,11 @@ Buffers. The requests contain an identifier for the key they should perform
 the operation with, and the plaintext or encrypted data key. The requests do
 not contain any cryptographic keys, public or private.
 
+**WARNING: the key service connection currently does not use any sort of
+authentication or encryption. Therefore, it is recommended that you make sure
+the connection is authenticated and encrypted in some other way, for example
+through an SSH tunnel.**
+
 Whenever we try to encrypt or decrypt a data key, SOPS will try to do so first
 with the local key service (unless it's disabled), and if that fails, it will
 try all other remote key services until one succeeds.
