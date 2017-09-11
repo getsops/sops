@@ -343,7 +343,7 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			m.ShamirQuorum = len(m.KeyGroups)
 		}
 		log.Printf("Multiple KeyGroups found, proceeding with Shamir with quorum %d", m.ShamirQuorum)
-		parts, err = shamir.Split(dataKey, len(m.KeyGroups), int(m.ShamirQuorum))
+		parts, err = shamir.Split(dataKey, len(m.KeyGroups), m.ShamirQuorum)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
 			return
