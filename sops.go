@@ -43,6 +43,7 @@ import (
 	"strings"
 	"time"
 
+	"go.mozilla.org/sops/cloudkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 )
@@ -184,7 +185,7 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 		}
 		key, ok := item.Key.(string)
 		if !ok {
-			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are" +
+			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
 				"supported", item.Key, item.Key)
 		}
 		newV, err := tree.walkValue(item.Value, append(path, key), onLeaves)
@@ -385,6 +386,21 @@ func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
 	}
 }
 
+// AddCloudKMSMasterKeys parses the input comma separated string of cloud KMS resource IDs, generates a KMS MasterKey for each resource ID, and then adds the keys to the cloud KMS KeySource
+func (m *Metadata) AddCloudKMSMasterKeys(resourceIds string) {
+	for i, ks := range m.KeySources {
+		if ks.Name == "cloud-kms" {
+			var keys []MasterKey
+			for _, k := range cloudkms.MasterKeysFromResourceIdString(resourceIds) {
+				keys = append(keys, k)
+				fmt.Printf("Adding new cloud KMS master key: %s\n", k.ResourceId)
+			}
+			ks.Keys = append(ks.Keys, keys...)
+			m.KeySources[i] = ks
+		}
+	}
+}
+
 // AddKMSMasterKeys parses the input comma separated string of AWS KMS ARNs, generates a KMS MasterKey for each ARN, and then adds the keys to the KMS KeySource
 func (m *Metadata) AddKMSMasterKeys(kmsArns string, context map[string]*string) {
 	for i, ks := range m.KeySources {
@@ -413,6 +429,15 @@ func (m *Metadata) RemovePGPMasterKeys(pgpFps string) {
 func (m *Metadata) RemoveKMSMasterKeys(arns string) {
 	var keys []MasterKey
 	for _, k := range kms.MasterKeysFromArnString(arns, nil) {
+		keys = append(keys, k)
+	}
+	m.RemoveMasterKeys(keys)
+}
+
+// RemoveCloudKMSMasterKeys takes a comma separated string of cloud KMS resource IDs and removes the corresponding keys
+func (m *Metadata) RemoveCloudKMSMasterKeys(resourceIds string) {
+	var keys []MasterKey
+	for _, k := range cloudkms.MasterKeysFromResourceIdString(resourceIds) {
 		keys = append(keys, k)
 	}
 	m.RemoveMasterKeys(keys)
@@ -503,6 +528,13 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 		}
 	}
 
+	if cloudk, ok := data["cloud-kms"].([]interface{}); ok {
+		ks, err := mapCloudKMSEntriesToKeySource(cloudk)
+		if err == nil {
+			metadata.KeySources = append(metadata.KeySources, ks)
+		}
+	}
+
 	if pgp, ok := data["pgp"].([]interface{}); ok {
 		ks, err := mapPGPEntriesToKeySource(pgp)
 		if err == nil {
@@ -522,6 +554,33 @@ func convertToMapStringInterface(in map[interface{}]interface{}) (map[string]int
 		m[key] = v
 	}
 	return m, nil
+}
+
+func mapCloudKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
+	var keys []MasterKey
+	keysource := KeySource{Name: "cloud-kms", Keys: keys}
+	for _, v := range in {
+		entry, ok := v.(map[string]interface{})
+		if !ok {
+			m, ok := v.(map[interface{}]interface{})
+			var err error
+			entry, err = convertToMapStringInterface(m)
+			if !ok || err != nil {
+				fmt.Println("Cloud KMS entry has invalid format, skipping...")
+				continue
+			}
+		}
+		key := &cloudkms.MasterKey{}
+		key.ResourceId = entry["resource_id"].(string)
+		key.EncryptedKey = entry["enc"].(string)
+		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
+		if err != nil {
+			return keysource, fmt.Errorf("Could not parse creation date: %s", err)
+		}
+		key.CreationDate = creationDate
+		keysource.Keys = append(keysource.Keys, key)
+	}
+	return keysource, nil
 }
 
 func mapKMSEntriesToKeySource(in []interface{}) (KeySource, error) {

@@ -21,6 +21,7 @@ import (
 	"github.com/google/shlex"
 
 	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/cloudkms"
 	"go.mozilla.org/sops/json"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
@@ -91,7 +92,7 @@ func main() {
 	cli.VersionPrinter = printVersion
 	app := cli.NewApp()
 	app.Name = "sops"
-	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
+	app.Usage = "sops - encrypted file editor with AWS KMS, google cloud KMS and GPG support"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version
 	app.Authors = []cli.Author{
@@ -104,17 +105,23 @@ func main() {
    in the -k flag or in the SOPS_KMS_ARN environment variable.
    (you need valid credentials in ~/.aws/credentials or in your env)
 
+   To encrypt or decrypt a document with google cloud KMS, specify the
+   cloud KMS resource Id in the -c flag or in the SOPS_CLOUD_KMS_IDS
+   environment variable.
+   (you need to setup google application default credentials. See
+    https://developers.google.com/identity/protocols/application-default-credentials)
+
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
 
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p and -k flags are only used to encrypt new documents. Editing or
+   The -p, -k and -c flags are only used to encrypt new documents. Editing or
    decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
-   the "add-{kms,pgp}" and "rm-{kms,pgp}" flags.
+   the "add-{kms,pgp,cloud-kms}" and "rm-{kms,pgp,cloud-kms}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
@@ -141,6 +148,11 @@ func main() {
 			EnvVar: "SOPS_KMS_ARN",
 		},
 		cli.StringFlag{
+			Name:   "cloud-kms, c",
+			Usage:  "comma separated list of google cloud KMS resource IDs",
+			EnvVar: "SOPS_CLOUD_KMS_IDS",
+		},
+		cli.StringFlag{
 			Name:   "pgp, p",
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
@@ -164,6 +176,14 @@ func main() {
 		cli.BoolFlag{
 			Name:  "show-master-keys, s",
 			Usage: "display master encryption keys in the file during editing",
+		},
+		cli.StringFlag{
+			Name:  "add-cloud-kms",
+			Usage: "add the provided comma-separated list of google cloud KMS key resource IDs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-cloud-kms",
+			Usage: "remove the provided comma-separated list of google cloud KMS key resource IDs from the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "add-kms",
@@ -210,7 +230,7 @@ func main() {
 		}
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-cloud-kms") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-cloud-kms") != "" {
 				return cli.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", 49)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -393,6 +413,7 @@ func decrypt(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, er
 func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
 	var kmsKeys []sops.MasterKey
 	var pgpKeys []sops.MasterKey
+	var cloudKmsKeys []sops.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, cli.NewExitError("Invalid KMS encryption context format", exitErrorInvalidKMSEncryptionContextFormat)
@@ -402,13 +423,18 @@ func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}
+	if c.String("cloud-kms") != "" {
+		for _, k := range cloudkms.MasterKeysFromResourceIdString(c.String("cloud-kms")) {
+			cloudKmsKeys = append(cloudKmsKeys, k)
+		}
+	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
 	var err error
-	if c.String("kms") == "" && c.String("pgp") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("cloud-kms") == "" {
 		var confBytes []byte
 		if c.String("config") != "" {
 			confBytes, err = ioutil.ReadFile(c.String("config"))
@@ -428,7 +454,8 @@ func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
 	}
 	kmsKs := sops.KeySource{Name: "kms", Keys: kmsKeys}
 	pgpKs := sops.KeySource{Name: "pgp", Keys: pgpKeys}
-	return []sops.KeySource{kmsKs, pgpKs}, nil
+	cloudKmsKs := sops.KeySource{Name: "cloud-kms", Keys: cloudKmsKeys}
+	return []sops.KeySource{kmsKs, cloudKmsKs, pgpKs}, nil
 }
 
 func encryptTree(tree sops.Tree, stash map[string][]interface{}) (sops.Tree, error) {
@@ -473,8 +500,10 @@ func rotate(c *cli.Context, tree sops.Tree, outputStore sops.Store) ([]byte, err
 	}
 	tree.Metadata.AddKMSMasterKeys(c.String("add-kms"), kmsEncryptionContext)
 	tree.Metadata.AddPGPMasterKeys(c.String("add-pgp"))
+	tree.Metadata.AddCloudKMSMasterKeys(c.String("add-cloud-kms"))
 	tree.Metadata.RemoveKMSMasterKeys(c.String("rm-kms"))
 	tree.Metadata.RemovePGPMasterKeys(c.String("rm-pgp"))
+	tree.Metadata.RemoveCloudKMSMasterKeys(c.String("rm-cloud-kms"))
 	_, errs := tree.GenerateDataKey()
 	if len(errs) > 0 {
 		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), exitCouldNotRetrieveKey)
