@@ -400,16 +400,33 @@ By default, `sops` encrypts the data key with each of the master keys, such
 that if any of the master keys is available, the file can be decrypted.
 However, it is sometimes desirable to require access to several master keys in
 order to be able to decrypt files. This can be achieved with key groups. With
-key groups, the data key is split into several parts, one for each key group.
-Each key group contains one or more master keys, and all the keys in each
-group encrypt the data key. For decryption, `quorum` parts are required in
-order to retrieve the data key, so at least one key in `quorum` groups has to
-be available.
+key groups, the data key is split into several parts (using Shamir Secret
+Sharing scheme), and one part is given to each group. A key group contains any
+number of master keys that each have the ability to recover a fragment of the
+data key. When decrypting a file using key groups, `sops` goes through key
+groups in order, and in each group, tries to recover the fragment of the data
+key from a master key. Once the fragment is recovered, Sops moves on to the
+next group, until enough fragments have been recovered to obtain the data key.
+In Shamir Secret Sharing, this is called a quorum.
 
-`quorum` defaults to the number of key groups.
+By default, the quorum is set to the number of key groups. For example, if you
+have three key groups configured in your SOPS file and you don't override the
+default quorum, then one master key from each of the three groups will be
+required to decrypt the file.
 
-Managing of key groups for SOPS files can be done with the `sops groups`
-command. Key groups can also be specified in the `.sops.yaml` config file,
+Management of key groups is done via the `sops groups` command.
+
+For example, you can add a new key group with 3 PGP keys and 3 KMS keys to the
+file `my_file.yaml`:
+
+`sops groups add --file my_file.yaml --pgp fingerprint1 --pgp fingerprint2 --pgp fingerprint3 --kms arn1 --kms arn2 --kms arn3`
+
+Or you can delete the 1st group (group number 0, as groups are zero-indexed)
+from `my_file.yaml`:
+
+`sops groups delete --file my_file.yaml 0`
+
+Key groups can also be specified in the `.sops.yaml` config file,
 like so:
 
 ```yaml
@@ -427,13 +444,19 @@ creation_rules:
         kms: arn5,arn6
 ```
 
+Given this configuration, we can create a new encrypted file like we normally
+would, and optionally provide the `--shamir-secret-sharing-quorum` command line
+flag if we want to override the default quorum. `sops` will then split the data
+key into the proper number of parts and encrypt each fragment with the master
+keys found in each group.
+
 For example:
 
 ```
 sops --shamir-secret-sharing-quorum 2 example.json
 ```
 
-This will require at least 2 master keys from different key groups in order to
+This will require 2 master keys from different key groups in order to
 decrypt the file. You can then decrypt the file the same way as with any other
 SOPS file:
 
@@ -443,6 +466,12 @@ sops -d example.json
 
 Key service
 ~~~~~~~~~~~
+
+There are situations where you might want to run `sops` on a machine that
+doesn't have direct access to encryption keys such as GPG keys. The `sops` key
+service allows you to forward a socket so that `sops` can access encryption
+keys stored on a remote machine. This is similar to GPG Agent, but more
+portable.
 
 SOPS uses a client-server approach to encrypting and decrypting the data
 key. By default, SOPS runs a local key service in-process. SOPS uses a key
@@ -467,7 +496,17 @@ You can specify the key services the `sops` binary uses with `--keyservice`.
 This flag can be specified more than once, so you can use multiple key
 services. The local key service can be disabled with
 `enable-local-keyservice=false`.
-	
+
+For example, to decrypt a file using both the local key service and the key
+service exposed on the unix socket located in `/tmp/sops.sock`, you can run:
+
+`sops --keyservice unix:///tmp/sops.sock -d file.yaml`
+
+And if you only want to use the key service exposed on the unix socket located
+in `/tmp/sops.sock` and not the local key service, you can run:
+
+`sops --enable-local-keyservice=false --keyservice unix:///tmp/sops.sock -d file.yaml`
+
 Important information on types
 ------------------------------
 
