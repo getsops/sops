@@ -51,8 +51,13 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	KMS string
-	PGP string
+	KMS []kmsKey
+	PGP []string
+}
+
+type kmsKey struct {
+	Arn     string             `yaml:"arn"`
+	Context map[string]*string `yaml:"context"`
 }
 
 type creationRule struct {
@@ -97,11 +102,11 @@ func KeyGroupsForFile(filepath string, confBytes []byte, kmsEncryptionContext ma
 			if len(rule.KeyGroups) > 0 {
 				for _, group := range rule.KeyGroups {
 					var keyGroup sops.KeyGroup
-					for _, k := range pgp.MasterKeysFromFingerprintString(group.PGP) {
-						keyGroup = append(keyGroup, k)
+					for _, k := range group.PGP {
+						keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 					}
-					for _, k := range kms.MasterKeysFromArnString(group.KMS, kmsEncryptionContext) {
-						keyGroup = append(keyGroup, k)
+					for _, k := range group.KMS {
+						keyGroup = append(keyGroup, kms.NewMasterKeyFromArn(k.Arn, k.Context))
 					}
 					groups = append(groups, keyGroup)
 				}

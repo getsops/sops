@@ -59,10 +59,14 @@ creation_rules:
     pgp: "2"
   - filename_regex: ""
     key_groups:
-    - kms: foo
-      pgp: bar
-    - kms: baz
-      pgp: qux
+    - kms:
+      - arn: foo
+      pgp:
+      - bar
+    - kms:
+      - arn: baz
+      pgp:
+      - qux
 `)
 
 func TestLoadConfigFile(t *testing.T) {
@@ -99,12 +103,12 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 				FilenameRegex: "",
 				KeyGroups: []keyGroup{
 					{
-						KMS: "foo",
-						PGP: "bar",
+						KMS: []kmsKey{{Arn: "foo"}},
+						PGP: []string{"bar"},
 					},
 					{
-						KMS: "baz",
-						PGP: "qux",
+						KMS: []kmsKey{{Arn: "baz"}},
+						PGP: []string{"qux"},
 					},
 				},
 			},
