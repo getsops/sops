@@ -123,9 +123,9 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		return nil
 	}
 	log.Printf("Encryption of PGP MasterKey with fingerprint %s failed", key.Fingerprint)
-	return fmt.Errorf(`could not encrypt data key with PGP key.
-	\tgolang.org/x/crypto/openpgp error: %s
-	\tGPG binary error: %s`, openpgpErr, binaryErr)
+	return fmt.Errorf(
+		`could not encrypt data key with PGP key: golang.org/x/crypto/openpgp error: %v; GPG binary error: %v`,
+		openpgpErr, binaryErr)
 }
 
 // EncryptIfNeeded encrypts the data key with PGP only if it's needed, that is, if it hasn't been encrypted already
@@ -188,9 +188,9 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return dataKey, nil
 	}
 	log.Printf("Decryption of GPG MasterKey with fingerprint %s failed", key.Fingerprint)
-	return nil, fmt.Errorf(`could not encrypt data key with PGP key.
-	\tgolang.org/x/crypto/openpgp error: %s
-	\tGPG binary error: %s`, openpgpErr, binaryErr)
+	return nil, fmt.Errorf(
+		`could not decrypt data key with PGP key: golang.org/x/crypto/openpgp error: %v; GPG binary error: %v`,
+		openpgpErr, binaryErr)
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not
