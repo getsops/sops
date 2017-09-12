@@ -128,7 +128,7 @@ func main() {
 							Usage: "write output back to the same file instead of stdout",
 						},
 						cli.IntFlag{
-							Name:  "shamir-secret-sharing-quorum",
+							Name:  "shamir-secret-sharing-threshold",
 							Usage: "the number of master keys required to retrieve the data key with shamir",
 						},
 						cli.StringFlag{
@@ -147,13 +147,13 @@ func main() {
 							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context"))))
 						}
 						return groups.Add(groups.AddOpts{
-							InputPath:   c.String("file"),
-							InPlace:     c.Bool("in-place"),
-							InputStore:  inputStore(c, c.String("file")),
-							OutputStore: outputStore(c, c.String("file")),
-							Group:       group,
-							GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
-							KeyServices: keyservices(c),
+							InputPath:      c.String("file"),
+							InPlace:        c.Bool("in-place"),
+							InputStore:     inputStore(c, c.String("file")),
+							OutputStore:    outputStore(c, c.String("file")),
+							Group:          group,
+							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
+							KeyServices:    keyservices(c),
 						})
 					},
 				},
@@ -170,7 +170,7 @@ func main() {
 							Usage: "write output back to the same file instead of stdout",
 						},
 						cli.IntFlag{
-							Name:  "shamir-secret-sharing-quorum",
+							Name:  "shamir-secret-sharing-threshold",
 							Usage: "the number of master keys required to retrieve the data key with shamir",
 						},
 					}, keyserviceFlags...),
@@ -182,13 +182,13 @@ func main() {
 						}
 
 						return groups.Delete(groups.DeleteOpts{
-							InputPath:   c.String("file"),
-							InPlace:     c.Bool("in-place"),
-							InputStore:  inputStore(c, c.String("file")),
-							OutputStore: outputStore(c, c.String("file")),
-							Group:       uint(group),
-							GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
-							KeyServices: keyservices(c),
+							InputPath:      c.String("file"),
+							InPlace:        c.Bool("in-place"),
+							InputStore:     inputStore(c, c.String("file")),
+							OutputStore:    outputStore(c, c.String("file")),
+							Group:          uint(group),
+							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
+							KeyServices:    keyservices(c),
 						})
 					},
 				},
@@ -276,7 +276,7 @@ func main() {
 			Usage: `set a specific key or branch in the input JSON or YAML document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 		},
 		cli.IntFlag{
-			Name:  "shamir-secret-sharing-quorum",
+			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
 	}, keyserviceFlags...)
@@ -314,7 +314,7 @@ func main() {
 				UnencryptedSuffix: c.String("unencrypted-suffix"),
 				KeyServices:       svcs,
 				KeyGroups:         keyGroups,
-				GroupQuorum:       c.Int("shamir-secret-sharing-quorum"),
+				GroupThreshold:    c.Int("shamir-secret-sharing-threshold"),
 			})
 			if err != nil {
 				return err
@@ -416,7 +416,7 @@ func main() {
 					editOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
 					KeyGroups:         keyGroups,
-					GroupQuorum:       c.Int("shamir-secret-sharing-quorum"),
+					GroupThreshold:    c.Int("shamir-secret-sharing-threshold"),
 				})
 			}
 		}

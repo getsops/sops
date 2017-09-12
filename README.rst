@@ -407,12 +407,12 @@ data key. When decrypting a file using key groups, `sops` goes through key
 groups in order, and in each group, tries to recover the fragment of the data
 key from a master key. Once the fragment is recovered, Sops moves on to the
 next group, until enough fragments have been recovered to obtain the data key.
-In Shamir Secret Sharing, this is called a quorum.
+In Shamir Secret Sharing, this is called the threshold.
 
-By default, the quorum is set to the number of key groups. For example, if you
-have three key groups configured in your SOPS file and you don't override the
-default quorum, then one master key from each of the three groups will be
-required to decrypt the file.
+By default, the threshold is set to the number of key groups. For example, if
+you have three key groups configured in your SOPS file and you don't override
+the default threshold, then one master key from each of the three groups will
+be required to decrypt the file.
 
 Management of key groups is done via the `sops groups` command.
 
@@ -445,15 +445,15 @@ creation_rules:
 ```
 
 Given this configuration, we can create a new encrypted file like we normally
-would, and optionally provide the `--shamir-secret-sharing-quorum` command line
-flag if we want to override the default quorum. `sops` will then split the data
+would, and optionally provide the `--shamir-secret-sharing-threshold` command line
+flag if we want to override the default threshold. `sops` will then split the data
 key into the proper number of parts and encrypt each fragment with the master
 keys found in each group.
 
 For example:
 
 ```
-sops --shamir-secret-sharing-quorum 2 example.json
+sops --shamir-secret-sharing-threshold 2 example.json
 ```
 
 This will require 2 master keys from different key groups in order to

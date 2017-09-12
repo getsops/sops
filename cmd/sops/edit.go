@@ -39,7 +39,7 @@ type editExampleOpts struct {
 	editOpts
 	UnencryptedSuffix string
 	KeyGroups         []sops.KeyGroup
-	GroupQuorum       int
+	GroupThreshold    int
 }
 
 var exampleTree = sops.TreeBranch{
@@ -99,7 +99,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 		KeyGroups:         opts.KeyGroups,
 		UnencryptedSuffix: opts.UnencryptedSuffix,
 		Version:           version,
-		ShamirQuorum:      opts.GroupQuorum,
+		ShamirThreshold:   opts.GroupThreshold,
 	}
 
 	// Generate a data key

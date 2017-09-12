@@ -10,13 +10,13 @@ import (
 
 // DeleteOpts are the options for deleting a key group from a SOPS file
 type DeleteOpts struct {
-	InputPath   string
-	InputStore  sops.Store
-	OutputStore sops.Store
-	Group       uint
-	GroupQuorum int
-	InPlace     bool
-	KeyServices []keyservice.KeyServiceClient
+	InputPath      string
+	InputStore     sops.Store
+	OutputStore    sops.Store
+	Group          uint
+	GroupThreshold int
+	InPlace        bool
+	KeyServices    []keyservice.KeyServiceClient
 }
 
 func min(a, b int) int {
@@ -38,11 +38,11 @@ func Delete(opts DeleteOpts) error {
 	}
 	tree.Metadata.KeyGroups = append(tree.Metadata.KeyGroups[:opts.Group], tree.Metadata.KeyGroups[opts.Group+1:]...)
 
-	if opts.GroupQuorum != 0 {
-		tree.Metadata.ShamirQuorum = opts.GroupQuorum
+	if opts.GroupThreshold != 0 {
+		tree.Metadata.ShamirThreshold = opts.GroupThreshold
 	}
-	// The quorum should always be smaller or equal to the number of key groups
-	tree.Metadata.ShamirQuorum = min(tree.Metadata.ShamirQuorum, len(tree.Metadata.KeyGroups))
+	// The threshold should always be smaller or equal to the number of key groups
+	tree.Metadata.ShamirThreshold = min(tree.Metadata.ShamirThreshold, len(tree.Metadata.KeyGroups))
 
 	tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
 	output, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
