@@ -10,7 +10,6 @@ import (
 	"go.mozilla.org/sops"
 
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 	"time"
@@ -24,13 +23,13 @@ import (
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
+	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
-	"go.mozilla.org/sops/config"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -306,6 +305,10 @@ func main() {
 			if err != nil {
 				return err
 			}
+			shamirThreshold, err := shamirThreshold(c, fileName)
+			if err != nil {
+				return err
+			}
 			output, err = encrypt(encryptOpts{
 				OutputStore:       outputStore,
 				InputStore:        inputStore,
@@ -314,7 +317,7 @@ func main() {
 				UnencryptedSuffix: c.String("unencrypted-suffix"),
 				KeyServices:       svcs,
 				KeyGroups:         keyGroups,
-				GroupThreshold:    c.Int("shamir-secret-sharing-threshold"),
+				GroupThreshold:    shamirThreshold,
 			})
 			if err != nil {
 				return err
@@ -412,11 +415,15 @@ func main() {
 				if err != nil {
 					return err
 				}
+				shamirThreshold, err := shamirThreshold(c, fileName)
+				if err != nil {
+					return err
+				}
 				output, err = editExample(editExampleOpts{
 					editOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
 					KeyGroups:         keyGroups,
-					GroupThreshold:    c.Int("shamir-secret-sharing-threshold"),
+					GroupThreshold:    shamirThreshold,
 				})
 			}
 		}
@@ -548,23 +555,43 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	var err error
 	if c.String("kms") == "" && c.String("pgp") == "" {
-		var confBytes []byte
+		var err error
+		var configPath string
 		if c.String("config") != "" {
-			confBytes, err = ioutil.ReadFile(c.String("config"))
+		} else {
+			configPath, err = config.FindConfigFile(".")
 			if err != nil {
-				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), codes.ErrorReadingConfig)
+				return nil, fmt.Errorf("config file not found and no keys provided through command line options")
 			}
 		}
-		groups, err := config.KeyGroupsForFile(file, confBytes, kmsEncryptionContext)
+		conf, err := config.LoadForFile(configPath, file, kmsEncryptionContext)
 		if err != nil {
 			return nil, err
 		}
-		log.Printf("Proceeding with key groups: %#v", groups)
-		return groups, err
+		return conf.KeyGroups, err
 	}
 	return []sops.KeyGroup{append(kmsKeys, pgpKeys...)}, nil
+}
+
+func shamirThreshold(c *cli.Context, file string) (int, error) {
+	if c.Int("shamir-secret-sharing-threshold") != 0 {
+		return c.Int("shamir-secret-sharing-threshold"), nil
+	}
+	var err error
+	var configPath string
+	if c.String("config") != "" {
+	} else {
+		configPath, err = config.FindConfigFile(".")
+		if err != nil {
+			return 0, fmt.Errorf("config file not found and no keys provided through command line options")
+		}
+	}
+	conf, err := config.LoadForFile(configPath, file, nil)
+	if err != nil {
+		return 0, err
+	}
+	return conf.ShamirThreshold, err
 }
 
 func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {

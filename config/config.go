@@ -57,14 +57,16 @@ type keyGroup struct {
 
 type kmsKey struct {
 	Arn     string             `yaml:"arn"`
+	Role    string             `yaml:"role,omitempty"`
 	Context map[string]*string `yaml:"context"`
 }
 
 type creationRule struct {
-	FilenameRegex string `yaml:"filename_regex"`
-	KMS           string
-	PGP           string
-	KeyGroups     []keyGroup `yaml:"key_groups"`
+	FilenameRegex   string `yaml:"filename_regex"`
+	KMS             string
+	PGP             string
+	KeyGroups       []keyGroup `yaml:"key_groups"`
+	ShamirThreshold int        `yaml:"shamir_threshold"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -76,52 +78,61 @@ func (f *configFile) load(bytes []byte) error {
 	return nil
 }
 
-// KeyGroupsForFile returns the key groups that should be use for a given file, based on the file's path and the
-// configuration
-func KeyGroupsForFile(filepath string, confBytes []byte, kmsEncryptionContext map[string]*string) ([]sops.KeyGroup, error) {
-	var err error
-	if confBytes == nil {
-		var confPath string
-		confPath, err = FindConfigFile(".")
-		if err != nil {
-			return nil, err
-		}
-		confBytes, err = ioutil.ReadFile(confPath)
-	}
-	if err != nil {
-		return nil, fmt.Errorf("Could not read config file: %s", err)
-	}
+// Config is the configuration for a given SOPS file
+type Config struct {
+	KeyGroups       []sops.KeyGroup
+	ShamirThreshold int
+}
+
+func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	conf := configFile{}
-	err = conf.load(confBytes)
+	err := conf.load(confBytes)
 	if err != nil {
-		return nil, fmt.Errorf("Error loading config: %s", err)
+		return nil, fmt.Errorf("error loading config: %s", err)
+	}
+	var rule *creationRule
+
+	for _, r := range conf.CreationRules {
+		if match, _ := regexp.MatchString(r.FilenameRegex, filePath); match {
+			rule = &r
+			break
+		}
 	}
 	var groups []sops.KeyGroup
-	for _, rule := range conf.CreationRules {
-		if match, _ := regexp.MatchString(rule.FilenameRegex, filepath); match {
-			if len(rule.KeyGroups) > 0 {
-				for _, group := range rule.KeyGroups {
-					var keyGroup sops.KeyGroup
-					for _, k := range group.PGP {
-						keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
-					}
-					for _, k := range group.KMS {
-						keyGroup = append(keyGroup, kms.NewMasterKeyFromArn(k.Arn, k.Context))
-					}
-					groups = append(groups, keyGroup)
-				}
-			} else {
-				var keyGroup sops.KeyGroup
-				for _, k := range pgp.MasterKeysFromFingerprintString(rule.PGP) {
-					keyGroup = append(keyGroup, k)
-				}
-				for _, k := range kms.MasterKeysFromArnString(rule.KMS, kmsEncryptionContext) {
-					keyGroup = append(keyGroup, k)
-				}
-				groups = append(groups, keyGroup)
+	if len(rule.KeyGroups) > 0 {
+		for _, group := range rule.KeyGroups {
+			var keyGroup sops.KeyGroup
+			for _, k := range group.PGP {
+				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
-			return groups, nil
+			for _, k := range group.KMS {
+				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
+			}
+			groups = append(groups, keyGroup)
 		}
+	} else {
+		var keyGroup sops.KeyGroup
+		for _, k := range pgp.MasterKeysFromFingerprintString(rule.PGP) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range kms.MasterKeysFromArnString(rule.KMS, kmsEncryptionContext) {
+			keyGroup = append(keyGroup, k)
+		}
+		groups = append(groups, keyGroup)
 	}
-	return nil, nil
+	return &Config{
+		KeyGroups:       groups,
+		ShamirThreshold: rule.ShamirThreshold,
+	}, nil
+}
+
+// LoadForFile load the configuration for a given SOPS file from the config file at confPath. A kmsEncryptionContext
+// should be provided for configurations that do not contain key groups, as there's no way to specify context inside
+// a SOPS config file outside of key groups.
+func LoadForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+	confBytes, err := ioutil.ReadFile(confPath)
+	if err != nil {
+		return nil, fmt.Errorf("could not read config file: %s", err)
+	}
+	return loadForFileFromBytes(confBytes, filePath, kmsEncryptionContext)
 }

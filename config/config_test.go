@@ -122,21 +122,21 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 }
 
 func TestKeyGroupsForFile(t *testing.T) {
-	groups, err := KeyGroupsForFile("foobar2000", sampleConfig, nil)
+	conf, err := loadForFileFromBytes(sampleConfig, "foobar2000", nil)
 	assert.Equal(t, nil, err)
-	assert.Equal(t, "2", groups[0][0].ToString())
-	assert.Equal(t, "1", groups[0][1].ToString())
-	groups, err = KeyGroupsForFile("whatever", sampleConfig, nil)
+	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
+	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil)
 	assert.Equal(t, nil, err)
-	assert.Equal(t, "bar", groups[0][0].ToString())
-	assert.Equal(t, "foo", groups[0][1].ToString())
+	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
 }
 
 func TestKeyGroupsForFileWithGroups(t *testing.T) {
-	groups, err := KeyGroupsForFile("whatever", sampleConfigWithGroups, nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithGroups, "whatever", nil)
 	assert.Equal(t, nil, err)
-	assert.Equal(t, "bar", groups[0][0].ToString())
-	assert.Equal(t, "foo", groups[0][1].ToString())
-	assert.Equal(t, "qux", groups[1][0].ToString())
-	assert.Equal(t, "baz", groups[1][1].ToString())
+	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
+	assert.Equal(t, "qux", conf.KeyGroups[1][0].ToString())
+	assert.Equal(t, "baz", conf.KeyGroups[1][1].ToString())
 }

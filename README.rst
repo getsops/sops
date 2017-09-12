@@ -434,14 +434,25 @@ creation_rules:
     - filename_regex: .*keygroups.*
       key_groups:
       # First key group
-      - pgp: fingerprint1,fingerprint2
-        kms: arn1,arn2
+      - pgp:
+        - fingerprint1
+        - fingerprint2
+        kms:
+        - arn: arn1
+          role: role1
+          context:
+            foo: bar
+        - arn: arn2
       # Second key group
-      - pgp: fingerprint3,fingerprint4
-        kms: arn3,arn4
+      - pgp:
+        - fingerprint3
+        - fingerprint4
+        kms:
+        - arn: arn3
+        - arn: arn4
       # Third key group
-      - pgp: fingerprint5,fingerprint6
-        kms: arn5,arn6
+      - pgp:
+        - fingerprint5
 ```
 
 Given this configuration, we can create a new encrypted file like we normally
@@ -455,6 +466,38 @@ For example:
 ```
 sops --shamir-secret-sharing-threshold 2 example.json
 ```
+
+Alternatively, you can configure the Shamir threshold for each creation rule in the `.sops.yaml` config
+with `shamir_threshold`:
+
+```yaml
+creation_rules:
+    - filename_regex: .*keygroups.*
+      shamir_threshold: 2
+      key_groups:
+      # First key group
+      - pgp:
+        - fingerprint1
+        - fingerprint2
+        kms:
+        - arn: arn1
+          role: role1
+          context:
+            foo: bar
+        - arn: arn2
+      # Second key group
+      - pgp:
+        - fingerprint3
+        - fingerprint4
+        kms:
+        - arn: arn3
+        - arn: arn4
+      # Third key group
+      - pgp:
+        - fingerprint5
+```
+
+And then run `sops example.json`.
 
 This will require 2 master keys from different key groups in order to
 decrypt the file. You can then decrypt the file the same way as with any other

@@ -111,6 +111,16 @@ func (key *MasterKey) ToString() string {
 	return key.Arn
 }
 
+// NewMasterKey creates a new MasterKey from an ARN, role and context, setting the creation date to the current date
+func NewMasterKey(arn string, role string, context map[string]*string) *MasterKey {
+	return &MasterKey{
+		Arn:               arn,
+		Role:              role,
+		EncryptionContext: context,
+		CreationDate:      time.Now().UTC(),
+	}
+}
+
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN
 func NewMasterKeyFromArn(arn string, context map[string]*string) *MasterKey {
 	k := &MasterKey{}
