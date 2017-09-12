@@ -63,16 +63,15 @@ type EncryptTreeOpts struct {
 
 // EncryptTree encrypts the tree passed in through the EncryptTreeOpts
 func EncryptTree(opts EncryptTreeOpts) error {
-	mac, err := opts.Tree.Encrypt(opts.DataKey, opts.Cipher, opts.Stash)
+	unencryptedMac, err := opts.Tree.Encrypt(opts.DataKey, opts.Cipher, opts.Stash)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), codes.ErrorEncryptingTree)
 	}
 	opts.Tree.Metadata.LastModified = time.Now().UTC()
-	mac, err = opts.Cipher.Encrypt(mac, opts.DataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339), opts.Stash)
+	opts.Tree.Metadata.MessageAuthenticationCode, err = opts.Cipher.Encrypt(unencryptedMac, opts.DataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339), opts.Stash)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), codes.ErrorEncryptingMac)
 	}
-	opts.Tree.Metadata.MessageAuthenticationCode = mac
 	return nil
 }
 
