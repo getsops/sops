@@ -164,9 +164,12 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte, stash map[string][
 	}
 
 	// Let the user edit the file
-	runEditorUntilOk(runEditorUntilOkOpts{
+	err = runEditorUntilOk(runEditorUntilOkOpts{
 		InputStore: opts.InputStore, OriginalHash: origHash, TmpFile: tmpfile,
 		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
+	if err != nil {
+		return nil, err
+	}
 
 	// Encrypt the file
 	err = common.EncryptTree(common.EncryptTreeOpts{
