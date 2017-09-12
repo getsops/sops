@@ -3,11 +3,11 @@ syntax = "proto3";
 message Key {
 	oneof key_type {
 		KmsKey kms_key = 1;
-		GpgKey gpg_key = 2;
+		PgpKey pgp_key = 2;
 	}
 }
 
-message GpgKey {
+message PgpKey {
 	string fingerprint = 1;
 }
 

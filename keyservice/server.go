@@ -10,7 +10,7 @@ import (
 
 type Server struct{}
 
-func (ks *Server) encryptWithPgp(key *GpgKey, plaintext []byte) ([]byte, error) {
+func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	err := pgpKey.Encrypt(plaintext)
 	if err != nil {
@@ -36,7 +36,7 @@ func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) 
 	return []byte(kmsKey.EncryptedKey), nil
 }
 
-func (ks *Server) decryptWithPgp(key *GpgKey, ciphertext []byte) ([]byte, error) {
+func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
 	plaintext, err := pgpKey.Decrypt()
@@ -62,8 +62,8 @@ func (ks Server) Encrypt(ctx context.Context,
 	req *EncryptRequest) (*EncryptResponse, error) {
 	key := *req.Key
 	switch k := key.KeyType.(type) {
-	case *Key_GpgKey:
-		ciphertext, err := ks.encryptWithPgp(k.GpgKey, req.Plaintext)
+	case *Key_PgpKey:
+		ciphertext, err := ks.encryptWithPgp(k.PgpKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -89,8 +89,8 @@ func (ks Server) Decrypt(ctx context.Context,
 	req *DecryptRequest) (*DecryptResponse, error) {
 	key := *req.Key
 	switch k := key.KeyType.(type) {
-	case *Key_GpgKey:
-		plaintext, err := ks.decryptWithPgp(k.GpgKey, req.Ciphertext)
+	case *Key_PgpKey:
+		plaintext, err := ks.decryptWithPgp(k.PgpKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

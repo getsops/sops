@@ -12,8 +12,8 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 	switch mk := mk.(type) {
 	case *pgp.MasterKey:
 		return Key{
-			KeyType: &Key_GpgKey{
-				GpgKey: &GpgKey{
+			KeyType: &Key_PgpKey{
+				PgpKey: &PgpKey{
 					Fingerprint: mk.Fingerprint,
 				},
 			},
