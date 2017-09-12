@@ -442,13 +442,16 @@ func getKeySources(c *cli.Context, file string) ([]sops.KeySource, error) {
 				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), exitErrorReadingConfig)
 			}
 		}
-		kmsString, pgpString, err := yaml.MasterKeyStringsForFile(file, confBytes)
+		kmsString, pgpString, gcpkmsString, err := yaml.MasterKeyStringsForFile(file, confBytes)
 		if err == nil {
 			for _, k := range pgp.MasterKeysFromFingerprintString(pgpString) {
 				pgpKeys = append(pgpKeys, k)
 			}
 			for _, k := range kms.MasterKeysFromArnString(kmsString, kmsEncryptionContext) {
 				kmsKeys = append(kmsKeys, k)
+			}
+			for _, k := range gcpkms.MasterKeysFromResourceIdString(gcpkmsString) {
+				cloudKmsKeys = append(cloudKmsKeys, k)
 			}
 		}
 	}

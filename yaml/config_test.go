@@ -46,9 +46,11 @@ creation_rules:
   - filename_regex: foobar*
     kms: "1"
     pgp: "2"
+    gcp_kms: "3"
   - filename_regex: ""
     kms: foo
     pgp: bar
+    gcp_kms: baz
 `)
 
 func TestLoadConfigFile(t *testing.T) {
@@ -58,11 +60,13 @@ func TestLoadConfigFile(t *testing.T) {
 				FilenameRegex: "foobar*",
 				KMS:           "1",
 				PGP:           "2",
+				GCPKMS:        "3",
 			},
 			creationRule{
 				FilenameRegex: "",
 				KMS:           "foo",
 				PGP:           "bar",
+				GCPKMS:        "baz",
 			},
 		},
 	}
@@ -74,12 +78,14 @@ func TestLoadConfigFile(t *testing.T) {
 }
 
 func TestMasterKeyStringsForFile(t *testing.T) {
-	kms, pgp, err := MasterKeyStringsForFile("foobar2000", sampleConfig)
+	kms, pgp, gcpkms, err := MasterKeyStringsForFile("foobar2000", sampleConfig)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "1", kms)
 	assert.Equal(t, "2", pgp)
-	kms, pgp, err = MasterKeyStringsForFile("whatever", sampleConfig)
+	assert.Equal(t, "3", gcpkms)
+	kms, pgp, gcpkms, err = MasterKeyStringsForFile("whatever", sampleConfig)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "foo", kms)
 	assert.Equal(t, "bar", pgp)
+	assert.Equal(t, "baz", gcpkms)
 }

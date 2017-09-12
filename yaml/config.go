@@ -50,6 +50,7 @@ type configFile struct {
 type creationRule struct {
 	FilenameRegex string `yaml:"filename_regex"`
 	KMS           string
+	GCPKMS        string `yaml:"gcp_kms"`
 	PGP           string
 }
 
@@ -63,26 +64,26 @@ func (f *configFile) load(bytes []byte) error {
 }
 
 // MasterKeyStringsForFile returns a comma separated string of KMS ARNs and a comma separated list of PGP fingerprints. If the config bytes are left empty, the function will look for the config file by itself.
-func MasterKeyStringsForFile(filepath string, confBytes []byte) (kms, pgp string, err error) {
+func MasterKeyStringsForFile(filepath string, confBytes []byte) (kms, pgp, gcp_kms string, err error) {
 	if confBytes == nil {
 		confPath, err := FindConfigFile(".")
 		if err != nil {
-			return "", "", err
+			return "", "", "", err
 		}
 		confBytes, err = ioutil.ReadFile(confPath)
 	}
 	if err != nil {
-		return "", "", fmt.Errorf("Could not read config file: %s", err)
+		return "", "", "", fmt.Errorf("Could not read config file: %s", err)
 	}
 	conf := configFile{}
 	err = conf.load(confBytes)
 	if err != nil {
-		return "", "", fmt.Errorf("Error loading config: %s", err)
+		return "", "", "", fmt.Errorf("Error loading config: %s", err)
 	}
 	for _, rule := range conf.CreationRules {
 		if match, _ := regexp.MatchString(rule.FilenameRegex, filepath); match {
-			return rule.KMS, rule.PGP, nil
+			return rule.KMS, rule.PGP, rule.GCPKMS, nil
 		}
 	}
-	return "", "", nil
+	return "", "", "", nil
 }
