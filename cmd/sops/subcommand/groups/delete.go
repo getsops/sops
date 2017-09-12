@@ -3,6 +3,8 @@ package groups
 import (
 	"os"
 
+	"fmt"
+
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keyservice"
@@ -17,13 +19,6 @@ type DeleteOpts struct {
 	GroupThreshold int
 	InPlace        bool
 	KeyServices    []keyservice.KeyServiceClient
-}
-
-func min(a, b int) int {
-	if a > b {
-		return b
-	}
-	return a
 }
 
 // Delete deletes a key group from a SOPS file
@@ -41,8 +36,12 @@ func Delete(opts DeleteOpts) error {
 	if opts.GroupThreshold != 0 {
 		tree.Metadata.ShamirThreshold = opts.GroupThreshold
 	}
-	// The threshold should always be smaller or equal to the number of key groups
-	tree.Metadata.ShamirThreshold = min(tree.Metadata.ShamirThreshold, len(tree.Metadata.KeyGroups))
+
+	if len(tree.Metadata.KeyGroups) < tree.Metadata.ShamirThreshold {
+		return fmt.Errorf("removing this key group will make the Shamir threshold impossible to satisfy: "+
+			"Shamir threshold is %d, but we only have %d key groups", tree.Metadata.ShamirThreshold,
+			len(tree.Metadata.KeyGroups))
+	}
 
 	tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
 	output, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
