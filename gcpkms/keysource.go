@@ -1,4 +1,4 @@
-package cloudkms //import "go.mozilla.org/sops/cloudkms"
+package gcpkms //import "go.mozilla.org/sops/gcpkms"
 
 import (
 	"encoding/base64"
@@ -13,30 +13,25 @@ import (
 	cloudkms "google.golang.org/api/cloudkms/v1"
 )
 
-// this needs to be a global var for unit tests to work (mockKMS redefines
-// it in keysource_test.go)
-// var kmsSvc kmsiface.KMSAPI
-// var isMocked bool
-
-// MasterKey is a cloud KMS key used to encrypt and decrypt sops' data key.
+// MasterKey is a GCP KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
 	ResourceId   string
 	EncryptedKey string
 	CreationDate time.Time
 }
 
-// Encrypt takes a sops data key, encrypts it with cloud KMS and stores the result in the EncryptedKey field
+// Encrypt takes a sops data key, encrypts it with GCP KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
-		return fmt.Errorf("Cannot create cloud KMS service: %v", err)
+		return fmt.Errorf("Cannot create GCP KMS service: %v", err)
 	}
 	req := &cloudkms.EncryptRequest{
 		Plaintext: base64.StdEncoding.EncodeToString(dataKey),
 	}
 	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Encrypt(key.ResourceId, req).Do()
 	if err != nil {
-		return fmt.Errorf("Failed to call cloud KMS encryption service: %v", err)
+		return fmt.Errorf("Failed to call GCP KMS encryption service: %v", err)
 	}
 
 	key.EncryptedKey = resp.Ciphertext
@@ -51,11 +46,11 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	return nil
 }
 
-// Decrypt decrypts the EncryptedKey field with cloud KMS and returns the result.
+// Decrypt decrypts the EncryptedKey field with CGP KMS and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
-		return nil, fmt.Errorf("Cannot create cloud KMS service: %v", err)
+		return nil, fmt.Errorf("Cannot create GCP KMS service: %v", err)
 	}
 
 	req := &cloudkms.DecryptRequest{
@@ -78,7 +73,7 @@ func (key *MasterKey) ToString() string {
 	return key.ResourceId
 }
 
-// NewMasterKeyFromResourceId takes an cloud KMS resource id string and returns a new MasterKey for that
+// NewMasterKeyFromResourceId takes a GCP KMS resource ID string and returns a new MasterKey for that
 func NewMasterKeyFromResourceId(resourceId string) *MasterKey {
 	k := &MasterKey{}
 	resourceId = strings.Replace(resourceId, " ", "", -1)
@@ -87,8 +82,7 @@ func NewMasterKeyFromResourceId(resourceId string) *MasterKey {
 	return k
 }
 
-// MasterKeysFromResourceIdString takes a comma separated list of cloud KMS
-// resourece IDs and returns a slice of new MasterKeys for them
+// MasterKeysFromResourceIdString takes a comma separated list of GCP KMS resourece IDs and returns a slice of new MasterKeys for them
 func MasterKeysFromResourceIdString(resourceId string) []*MasterKey {
 	var keys []*MasterKey
 	if resourceId == "" {

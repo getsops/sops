@@ -1,4 +1,4 @@
-package cloudkms
+package gcpkms
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCloudKMSKeySourceFromString(t *testing.T) {
+func TestGCPKMSKeySourceFromString(t *testing.T) {
 	s := "projects/sops-testing1/locations/global/keyRings/creds/cryptoKeys/key1, projects/sops-testing2/locations/global/keyRings/creds/cryptoKeys/key2"
 	ks := MasterKeysFromResourceIdString(s)
 	k1 := ks[0]

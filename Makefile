@@ -33,7 +33,7 @@ test:
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
 	$(GO) test $(PROJECT)/pgp -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 	$(GO) test $(PROJECT)/kms -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
-	$(GO) test $(PROJECT)/cloudkms -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test $(PROJECT)/gcpkms -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 
 showcoverage: test
 	$(GO) tool cover -html=coverage.out

@@ -43,7 +43,7 @@ import (
 	"strings"
 	"time"
 
-	"go.mozilla.org/sops/cloudkms"
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 )
@@ -386,14 +386,14 @@ func (m *Metadata) AddPGPMasterKeys(pgpFps string) {
 	}
 }
 
-// AddCloudKMSMasterKeys parses the input comma separated string of cloud KMS resource IDs, generates a KMS MasterKey for each resource ID, and then adds the keys to the cloud KMS KeySource
-func (m *Metadata) AddCloudKMSMasterKeys(resourceIds string) {
+// AddGCPKMSMasterKeys parses the input comma separated string of GCP KMS resource IDs, generates a MasterKey for each resource ID, and then adds the keys to the GCP KMS KeySource
+func (m *Metadata) AddGCPKMSMasterKeys(resourceIds string) {
 	for i, ks := range m.KeySources {
-		if ks.Name == "cloud-kms" {
+		if ks.Name == "gcp_kms" {
 			var keys []MasterKey
-			for _, k := range cloudkms.MasterKeysFromResourceIdString(resourceIds) {
+			for _, k := range gcpkms.MasterKeysFromResourceIdString(resourceIds) {
 				keys = append(keys, k)
-				fmt.Printf("Adding new cloud KMS master key: %s\n", k.ResourceId)
+				fmt.Printf("Adding new GCP KMS master key: %s\n", k.ResourceId)
 			}
 			ks.Keys = append(ks.Keys, keys...)
 			m.KeySources[i] = ks
@@ -434,10 +434,10 @@ func (m *Metadata) RemoveKMSMasterKeys(arns string) {
 	m.RemoveMasterKeys(keys)
 }
 
-// RemoveCloudKMSMasterKeys takes a comma separated string of cloud KMS resource IDs and removes the corresponding keys
-func (m *Metadata) RemoveCloudKMSMasterKeys(resourceIds string) {
+// RemoveGCPKMSMasterKeys takes a comma separated string of GCP KMS resource IDs and removes the corresponding keys
+func (m *Metadata) RemoveGCPKMSMasterKeys(resourceIds string) {
 	var keys []MasterKey
-	for _, k := range cloudkms.MasterKeysFromResourceIdString(resourceIds) {
+	for _, k := range gcpkms.MasterKeysFromResourceIdString(resourceIds) {
 		keys = append(keys, k)
 	}
 	m.RemoveMasterKeys(keys)
@@ -472,6 +472,8 @@ func (m Metadata) GetDataKey() ([]byte, error) {
 			keyType := "Unknown"
 			if _, ok := k.(*pgp.MasterKey); ok {
 				keyType = "GPG"
+			} else if _, ok := k.(*gcpkms.MasterKey); ok {
+				keyType = "GCP KMS"
 			} else if _, ok := k.(*kms.MasterKey); ok {
 				keyType = "KMS"
 			}
@@ -528,8 +530,8 @@ func MapToMetadata(data map[string]interface{}) (Metadata, error) {
 		}
 	}
 
-	if cloudk, ok := data["cloud-kms"].([]interface{}); ok {
-		ks, err := mapCloudKMSEntriesToKeySource(cloudk)
+	if gcpk, ok := data["gcp_kms"].([]interface{}); ok {
+		ks, err := mapGCPKMSEntriesToKeySource(gcpk)
 		if err == nil {
 			metadata.KeySources = append(metadata.KeySources, ks)
 		}
@@ -556,9 +558,9 @@ func convertToMapStringInterface(in map[interface{}]interface{}) (map[string]int
 	return m, nil
 }
 
-func mapCloudKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
+func mapGCPKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
 	var keys []MasterKey
-	keysource := KeySource{Name: "cloud-kms", Keys: keys}
+	keysource := KeySource{Name: "gcp_kms", Keys: keys}
 	for _, v := range in {
 		entry, ok := v.(map[string]interface{})
 		if !ok {
@@ -566,11 +568,11 @@ func mapCloudKMSEntriesToKeySource(in []interface{}) (KeySource, error) {
 			var err error
 			entry, err = convertToMapStringInterface(m)
 			if !ok || err != nil {
-				fmt.Println("Cloud KMS entry has invalid format, skipping...")
+				fmt.Println("GCP KMS entry has invalid format, skipping...")
 				continue
 			}
 		}
-		key := &cloudkms.MasterKey{}
+		key := &gcpkms.MasterKey{}
 		key.ResourceId = entry["resource_id"].(string)
 		key.EncryptedKey = entry["enc"].(string)
 		creationDate, err := time.Parse(time.RFC3339, entry["created_at"].(string))
