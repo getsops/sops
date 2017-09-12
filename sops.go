@@ -1,5 +1,5 @@
 /*
-Package Sops manages JSON, YAML and BINARY documents to be encrypted or decrypted.
+Package sops manages JSON, YAML and BINARY documents to be encrypted or decrypted.
 
 This package should not be used directly. Instead, Sops users should install the
 command line client via `go get -u go.mozilla.org/sops/cmd/sops`, or use the
@@ -112,9 +112,9 @@ type Tree struct {
 }
 
 // Truncate truncates the tree to the path specified
-func (tree TreeBranch) Truncate(path []interface{}) (interface{}, error) {
+func (branch TreeBranch) Truncate(path []interface{}) (interface{}, error) {
 	log.Printf("Truncating tree to %s", path)
-	var current interface{} = tree
+	var current interface{} = branch
 	for _, component := range path {
 		switch component := component.(type) {
 		case string:
@@ -142,7 +142,7 @@ func (tree TreeBranch) Truncate(path []interface{}) (interface{}, error) {
 	return current, nil
 }
 
-func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
+func (branch TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
 	switch in := in.(type) {
 	case string:
 		return onLeaves(in, path)
@@ -155,20 +155,20 @@ func (tree TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in
 	case float64:
 		return onLeaves(in, path)
 	case TreeBranch:
-		return tree.walkBranch(in, path, onLeaves)
+		return branch.walkBranch(in, path, onLeaves)
 	case []interface{}:
-		return tree.walkSlice(in, path, onLeaves)
+		return branch.walkSlice(in, path, onLeaves)
 	default:
 		return nil, fmt.Errorf("Cannot walk value, unknown type: %T", in)
 	}
 }
 
-func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
+func (branch TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
 	for i, v := range in {
 		if _, ok := v.(Comment); ok {
 			continue
 		}
-		newV, err := tree.walkValue(v, path, onLeaves)
+		newV, err := branch.walkValue(v, path, onLeaves)
 		if err != nil {
 			return nil, err
 		}
@@ -177,7 +177,7 @@ func (tree TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(
 	return in, nil
 }
 
-func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
+func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
 	for i, item := range in {
 		if _, ok := item.Key.(Comment); ok {
 			continue
@@ -187,7 +187,7 @@ func (tree TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in
 			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
 				"supported", item.Key, item.Key)
 		}
-		newV, err := tree.walkValue(item.Value, append(path, key), onLeaves)
+		newV, err := branch.walkValue(item.Value, append(path, key), onLeaves)
 		if err != nil {
 			return nil, err
 		}
@@ -282,7 +282,7 @@ func (tree Tree) GenerateDataKey() ([]byte, []error) {
 	return newKey, tree.Metadata.UpdateMasterKeys(newKey)
 }
 
-// GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
+// GenerateDataKeyWithKeyServices generates a new random data key and encrypts it with all MasterKeys.
 func (tree *Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, []error) {
 	newKey := make([]byte, 32)
 	_, err := rand.Read(newKey)
@@ -306,6 +306,7 @@ type Metadata struct {
 	DataKey []byte
 }
 
+// KeyGroup is a slice of SOPS MasterKeys that all encrypt the same part of the data key
 type KeyGroup []keys.MasterKey
 
 // Store provides a way to load and save the sops tree along with metadata
@@ -326,10 +327,11 @@ func (m *Metadata) MasterKeyCount() int {
 	return count
 }
 
+// UpdateMasterKeysWithKeyServices encrypts the data key with all master keys using the provided key services
 func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
 	if len(svcs) == 0 {
 		return []error{
-			fmt.Errorf("No key services provided, cansnot update master keys."),
+			fmt.Errorf("no key services provided, cannot update master keys"),
 		}
 	}
 	var parts [][]byte
@@ -345,11 +347,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 		log.Printf("Multiple KeyGroups found, proceeding with Shamir with quorum %d", m.ShamirQuorum)
 		parts, err = shamir.Split(dataKey, len(m.KeyGroups), m.ShamirQuorum)
 		if err != nil {
-			errs = append(errs, fmt.Errorf("Could not split data key into parts for Shamir: %s", err))
+			errs = append(errs, fmt.Errorf("could not split data key into parts for Shamir: %s", err))
 			return
 		}
 		if len(parts) != len(m.KeyGroups) {
-			errs = append(errs, fmt.Errorf("Not enough parts obtained from Shamir. Need %d, got %d", len(m.KeyGroups), len(parts)))
+			errs = append(errs, fmt.Errorf("not enough parts obtained from Shamir: need %d, got %d", len(m.KeyGroups), len(parts)))
 			return
 		}
 	}
@@ -365,7 +367,7 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 					Plaintext: part,
 				})
 				if err != nil {
-					keyErrs = append(keyErrs, fmt.Errorf("Failed to encrypt new data key with master key %q: %v\n", key.ToString(), err))
+					keyErrs = append(keyErrs, fmt.Errorf("failed to encrypt new data key with master key %q: %v", key.ToString(), err))
 					continue
 				}
 				key.SetEncryptedDataKey(rsp.Ciphertext)
@@ -423,12 +425,12 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 	var dataKey []byte
 	if len(m.KeyGroups) > 1 {
 		if len(parts) < m.ShamirQuorum {
-			return nil, fmt.Errorf("Not enough parts to recover data key with Shamir. Need %d, have %d.", m.ShamirQuorum, len(parts))
+			return nil, fmt.Errorf("not enough parts to recover data key with Shamir: need %d, have %d", m.ShamirQuorum, len(parts))
 		}
 		var err error
 		dataKey, err = shamir.Combine(parts)
 		if err != nil {
-			return nil, fmt.Errorf("Could not get data key from shamir parts: %s", err)
+			return nil, fmt.Errorf("could not get data key from shamir parts: %s", err)
 		}
 	} else {
 		if len(parts) != 1 {

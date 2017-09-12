@@ -12,11 +12,13 @@ import (
 	"google.golang.org/grpc"
 )
 
+// Opts are the options the key service server can take
 type Opts struct {
 	Network string
 	Address string
 }
 
+// Run runs a SOPS key service server
 func Run(opts Opts) error {
 	lis, err := net.Listen(opts.Network, opts.Address)
 	if err != nil {

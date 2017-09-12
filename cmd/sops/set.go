@@ -21,7 +21,7 @@ type setOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func Set(opts setOpts) ([]byte, error) {
+func set(opts setOpts) ([]byte, error) {
 	// Load the file
 	// TODO: Issue #173: if the file does not exist, create it with the contents passed in as opts.Value
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)

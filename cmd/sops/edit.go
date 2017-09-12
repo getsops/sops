@@ -76,7 +76,7 @@ type runEditorUntilOkOpts struct {
 	Tree           *sops.Tree
 }
 
-func EditExample(opts editExampleOpts) ([]byte, error) {
+func editExample(opts editExampleOpts) ([]byte, error) {
 	// Load the example file
 	var fileBytes []byte
 	if _, ok := opts.InputStore.(*json.BinaryStore); ok {
@@ -109,10 +109,10 @@ func EditExample(opts editExampleOpts) ([]byte, error) {
 	}
 	stash := make(map[string][]interface{})
 
-	return edit(opts.editOpts, &tree, dataKey, stash)
+	return editTree(opts.editOpts, &tree, dataKey, stash)
 }
 
-func Edit(opts editOpts) ([]byte, error) {
+func edit(opts editOpts) ([]byte, error) {
 	// Load the file
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
@@ -127,10 +127,10 @@ func Edit(opts editOpts) ([]byte, error) {
 		return nil, err
 	}
 
-	return edit(opts, tree, dataKey, stash)
+	return editTree(opts, tree, dataKey, stash)
 }
 
-func edit(opts editOpts, tree *sops.Tree, dataKey []byte, stash map[string][]interface{}) ([]byte, error) {
+func editTree(opts editOpts, tree *sops.Tree, dataKey []byte, stash map[string][]interface{}) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {

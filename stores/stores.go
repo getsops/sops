@@ -10,12 +10,13 @@ import (
 	"go.mozilla.org/sops/pgp"
 )
 
+// SopsFile is a struct used by the stores as a helper unmarshal the SOPS metadata
 type SopsFile struct {
 	Data     interface{} `yaml:"data" json:"data"`
 	Metadata Metadata    `yaml:"sops" json:"sops"`
 }
 
-// metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.
+// Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.
 // This struct is just used for serialization, and SOPS uses another struct internally, sops.Metadata. It exists
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
@@ -49,6 +50,7 @@ type kmskey struct {
 	EncryptedDataKey string             `yaml:"enc" json:"enc"`
 }
 
+// MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
 func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	var m Metadata
 	m.LastModified = sopsMetadata.LastModified.Format(time.RFC3339)
@@ -101,6 +103,7 @@ func kmsKeysFromGroup(group sops.KeyGroup) (keys []kmskey) {
 	return
 }
 
+// ToInternal converts a storage-appropriate Metadata struct to a SOPS internal representation
 func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	lastModified, err := time.Parse(time.RFC3339, m.LastModified)
 	if err != nil {

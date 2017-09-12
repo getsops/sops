@@ -30,7 +30,7 @@ import (
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
-	"go.mozilla.org/sops/yaml"
+	"go.mozilla.org/sops/config"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -306,7 +306,7 @@ func main() {
 			if err != nil {
 				return err
 			}
-			output, err = Encrypt(encryptOpts{
+			output, err = encrypt(encryptOpts{
 				OutputStore:       outputStore,
 				InputStore:        inputStore,
 				InputPath:         fileName,
@@ -326,7 +326,7 @@ func main() {
 			if err != nil {
 				return cli.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
-			output, err = Decrypt(decryptOpts{
+			output, err = decrypt(decryptOpts{
 				OutputStore: outputStore,
 				InputStore:  inputStore,
 				InputPath:   fileName,
@@ -356,7 +356,7 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			output, err = Rotate(rotateOpts{
+			output, err = rotate(rotateOpts{
 				OutputStore:      outputStore,
 				InputStore:       inputStore,
 				InputPath:        fileName,
@@ -376,7 +376,7 @@ func main() {
 			if err != nil {
 				return err
 			}
-			output, err = Set(setOpts{
+			output, err = set(setOpts{
 				OutputStore: outputStore,
 				InputStore:  inputStore,
 				InputPath:   fileName,
@@ -405,14 +405,14 @@ func main() {
 				ShowMasterKeys: c.Bool("show-master-keys"),
 			}
 			if fileExists {
-				output, err = Edit(opts)
+				output, err = edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
 				keyGroups, err := keyGroups(c, fileName)
 				if err != nil {
 					return err
 				}
-				output, err = EditExample(editExampleOpts{
+				output, err = editExample(editExampleOpts{
 					editOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
 					KeyGroups:         keyGroups,
@@ -557,7 +557,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 				return nil, cli.NewExitError(fmt.Sprintf("Error loading config file: %s", err), codes.ErrorReadingConfig)
 			}
 		}
-		groups, err := yaml.KeyGroupsForFile(file, confBytes, kmsEncryptionContext)
+		groups, err := config.KeyGroupsForFile(file, confBytes, kmsEncryptionContext)
 		if err != nil {
 			return nil, err
 		}

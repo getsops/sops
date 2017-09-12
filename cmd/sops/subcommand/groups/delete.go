@@ -8,6 +8,7 @@ import (
 	"go.mozilla.org/sops/keyservice"
 )
 
+// DeleteOpts are the options for deleting a key group from a SOPS file
 type DeleteOpts struct {
 	InputPath   string
 	InputStore  sops.Store
@@ -25,6 +26,7 @@ func min(a, b int) int {
 	return a
 }
 
+// Delete deletes a key group from a SOPS file
 func Delete(opts DeleteOpts) error {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
@@ -47,7 +49,7 @@ func Delete(opts DeleteOpts) error {
 	if err != nil {
 		return err
 	}
-	var outputFile *os.File = os.Stdout
+	var outputFile = os.Stdout
 	if opts.InPlace {
 		var err error
 		outputFile, err = os.Create(opts.InputPath)

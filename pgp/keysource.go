@@ -28,10 +28,12 @@ type MasterKey struct {
 	CreationDate time.Time
 }
 
+// EncryptedDataKey returns the encrypted data key this master key holds
 func (key *MasterKey) EncryptedDataKey() []byte {
 	return []byte(key.EncryptedKey)
 }
 
+// SetEncryptedDataKey sets the encrypted data key for this master key
 func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
@@ -77,7 +79,7 @@ func (key *MasterKey) encryptWithCryptoOpenPGP(dataKey []byte) error {
 	fingerprints := key.fingerprintMap(ring)
 	entity, ok := fingerprints[key.Fingerprint]
 	if !ok {
-		return fmt.Errorf("Key with fingerprint %s is not available in keyring.", key.Fingerprint)
+		return fmt.Errorf("key with fingerprint %s is not available in keyring", key.Fingerprint)
 	}
 	encbuf := new(bytes.Buffer)
 	armorbuf, err := armor.Encode(encbuf, "PGP MESSAGE", nil)

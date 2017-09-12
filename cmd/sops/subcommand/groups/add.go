@@ -8,6 +8,7 @@ import (
 	"go.mozilla.org/sops/keyservice"
 )
 
+// AddOpts are the options for adding a key group to a SOPS file
 type AddOpts struct {
 	InputPath   string
 	InputStore  sops.Store
@@ -18,6 +19,7 @@ type AddOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
+// Add adds a key group to a SOPS file
 func Add(opts AddOpts) error {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
@@ -37,7 +39,7 @@ func Add(opts AddOpts) error {
 	if err != nil {
 		return err
 	}
-	var outputFile *os.File = os.Stdout
+	var outputFile = os.Stdout
 	if opts.InPlace {
 		var err error
 		outputFile, err = os.Create(opts.InputPath)

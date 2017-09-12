@@ -20,7 +20,7 @@ type decryptOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func Decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
+func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func Decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	}
 
 	if len(opts.Extract) > 0 {
-		return Extract(tree, opts.Extract, opts.OutputStore)
+		return extract(tree, opts.Extract, opts.OutputStore)
 	}
 	decryptedFile, err = opts.OutputStore.Marshal(tree.Branch)
 	if err != nil {
@@ -47,7 +47,7 @@ func Decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	return decryptedFile, err
 }
 
-func Extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (output []byte, err error) {
+func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (output []byte, err error) {
 	v, err := tree.Branch.Truncate(path)
 	if err != nil {
 		return nil, fmt.Errorf("error truncating tree: %s", err)
@@ -59,11 +59,10 @@ func Extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 			return nil, cli.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 		}
 		return decrypted, err
-	} else {
-		bytes, err := outputStore.MarshalValue(v)
-		if err != nil {
-			return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), codes.ErrorDumpingTree)
-		}
-		return bytes, nil
 	}
+	bytes, err := outputStore.MarshalValue(v)
+	if err != nil {
+		return nil, cli.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), codes.ErrorDumpingTree)
+	}
+	return bytes, nil
 }

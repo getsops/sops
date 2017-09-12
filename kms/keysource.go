@@ -33,10 +33,12 @@ type MasterKey struct {
 	EncryptionContext map[string]*string
 }
 
+// EncryptedDataKey returns the encrypted data key this master key holds
 func (key *MasterKey) EncryptedDataKey() []byte {
 	return []byte(key.EncryptedKey)
 }
 
+// SetEncryptedDataKey sets the encrypted data key for this master key
 func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }

@@ -1,4 +1,4 @@
-package yaml //import "go.mozilla.org/sops/yaml"
+package config //import "go.mozilla.org/sops/config"
 
 import (
 	"fmt"
@@ -71,6 +71,8 @@ func (f *configFile) load(bytes []byte) error {
 	return nil
 }
 
+// KeyGroupsForFile returns the key groups that should be use for a given file, based on the file's path and the
+// configuration
 func KeyGroupsForFile(filepath string, confBytes []byte, kmsEncryptionContext map[string]*string) ([]sops.KeyGroup, error) {
 	var err error
 	if confBytes == nil {

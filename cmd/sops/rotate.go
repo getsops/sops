@@ -22,7 +22,7 @@ type rotateOpts struct {
 	KeyServices      []keyservice.KeyServiceClient
 }
 
-func Rotate(opts rotateOpts) ([]byte, error) {
+func rotate(opts rotateOpts) ([]byte, error) {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err

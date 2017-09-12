@@ -8,6 +8,7 @@ import (
 	"go.mozilla.org/sops/pgp"
 )
 
+// KeyFromMasterKey converts a SOPS internal MasterKey to an RPC Key that can be serialized with Protocol Buffers
 func KeyFromMasterKey(mk keys.MasterKey) Key {
 	switch mk := mk.(type) {
 	case *pgp.MasterKey:

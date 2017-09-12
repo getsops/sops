@@ -23,7 +23,7 @@ type encryptOpts struct {
 	GroupQuorum       int
 }
 
-func Encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
+func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
 	fileBytes, err := ioutil.ReadFile(opts.InputPath)
 	if err != nil {
