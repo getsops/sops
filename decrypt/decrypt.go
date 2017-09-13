@@ -1,3 +1,7 @@
+/*
+Package decrypt is the external API other Go programs can use to decrypt SOPS files. It is the only package in SOPS with
+a stable API.
+*/
 package decrypt // import "go.mozilla.org/sops/decrypt"
 
 import (

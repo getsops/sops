@@ -1,3 +1,7 @@
+/*
+Package pgp contains an implementation of the go.mozilla.org/sops.MasterKey interface that encrypts and decrypts the
+data key by first trying with the golang.org/x/crypto/openpgp package and if that fails, by calling the "gpg" binary.
+ */
 package pgp //import "go.mozilla.org/sops/pgp"
 
 import (

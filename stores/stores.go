@@ -1,3 +1,12 @@
+/*
+Package stores acts as a layer between the internal representation of encrypted files and the encrypted files
+themselves.
+
+Subpackages implement serialization and deserialization to multiple formats.
+
+This package defines the structure SOPS files should have and conversions to and from the internal representation. Part
+of the purpose of this package is to make it easy to change the SOPS file format while remaining backwards-compatible.
+*/
 package stores
 
 import (
@@ -10,10 +19,9 @@ import (
 	"go.mozilla.org/sops/pgp"
 )
 
-// SopsFile is a struct used by the stores as a helper unmarshal the SOPS metadata
+// SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata
 type SopsFile struct {
-	Data     interface{} `yaml:"data" json:"data"`
-	Metadata Metadata    `yaml:"sops" json:"sops"`
+	Metadata Metadata `yaml:"sops" json:"sops"`
 }
 
 // Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.

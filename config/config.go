@@ -1,3 +1,6 @@
+/*
+Package config provides a way to find and load SOPS configuration files
+*/
 package config //import "go.mozilla.org/sops/config"
 
 import (

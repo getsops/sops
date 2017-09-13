@@ -1,3 +1,7 @@
+/*
+Package keyservice implements a gRPC API that can be used by SOPS to encrypt and decrypt the data key using remote
+master keys.
+*/
 package keyservice
 
 import (

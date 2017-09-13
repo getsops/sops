@@ -1,3 +1,6 @@
+/*
+Package aes defines a Cipher that uses 256-bit AES-GCM authenticated encryption to encrypt values the SOPS tree.
+*/
 package aes //import "go.mozilla.org/sops/aes"
 
 import (
