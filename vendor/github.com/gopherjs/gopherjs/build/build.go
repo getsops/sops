@@ -62,19 +62,34 @@ func NewBuildContext(installSuffix string, buildTags []string) *build.Context {
 // If an error occurs, Import returns a non-nil error and a nil
 // *PackageData.
 func Import(path string, mode build.ImportMode, installSuffix string, buildTags []string) (*PackageData, error) {
-	return importWithSrcDir(path, "", mode, installSuffix, buildTags)
+	wd, err := os.Getwd()
+	if err != nil {
+		// Getwd may fail if we're in GOARCH=js mode. That's okay, handle
+		// it by falling back to empty working directory. It just means
+		// Import will not be able to resolve relative import paths.
+		wd = ""
+	}
+	return importWithSrcDir(path, wd, mode, installSuffix, buildTags)
 }
 
 func importWithSrcDir(path string, srcDir string, mode build.ImportMode, installSuffix string, buildTags []string) (*PackageData, error) {
-	buildContext := NewBuildContext(installSuffix, buildTags)
-	if path == "syscall" { // syscall needs to use a typical GOARCH like amd64 to pick up definitions for _Socklen, BpfInsn, IFNAMSIZ, Timeval, BpfStat, SYS_FCNTL, Flock_t, etc.
-		buildContext.GOARCH = runtime.GOARCH
-		buildContext.InstallSuffix = "js"
+	bctx := NewBuildContext(installSuffix, buildTags)
+	switch path {
+	case "syscall":
+		// syscall needs to use a typical GOARCH like amd64 to pick up definitions for _Socklen, BpfInsn, IFNAMSIZ, Timeval, BpfStat, SYS_FCNTL, Flock_t, etc.
+		bctx.GOARCH = runtime.GOARCH
+		bctx.InstallSuffix = "js"
 		if installSuffix != "" {
-			buildContext.InstallSuffix += "_" + installSuffix
+			bctx.InstallSuffix += "_" + installSuffix
 		}
+	case "math/big":
+		// Use pure Go version of math/big; we don't want non-Go assembly versions.
+		bctx.BuildTags = append(bctx.BuildTags, "math_big_pure_go")
+	case "crypto/x509", "os/user":
+		// These stdlib packages have cgo and non-cgo versions (via build tags); we want the latter.
+		bctx.CgoEnabled = false
 	}
-	pkg, err := buildContext.Import(path, srcDir, mode)
+	pkg, err := bctx.Import(path, srcDir, mode)
 	if err != nil {
 		return nil, err
 	}
@@ -86,17 +101,17 @@ func importWithSrcDir(path string, srcDir string, mode build.ImportMode, install
 
 	switch path {
 	case "os":
-		pkg.GoFiles = stripExecutable(pkg.GoFiles) // Need to strip executable implementation files, because some of them contain package scope variables that perform (indirectly) syscalls on init.
+		pkg.GoFiles = excludeExecutable(pkg.GoFiles) // Need to exclude executable implementation files, because some of them contain package scope variables that perform (indirectly) syscalls on init.
 	case "runtime":
 		pkg.GoFiles = []string{"error.go"}
 	case "runtime/internal/sys":
-		pkg.GoFiles = []string{fmt.Sprintf("zgoos_%s.go", buildContext.GOOS), "zversion.go"}
+		pkg.GoFiles = []string{fmt.Sprintf("zgoos_%s.go", bctx.GOOS), "zversion.go"}
 	case "runtime/pprof":
 		pkg.GoFiles = nil
+	case "internal/poll":
+		pkg.GoFiles = exclude(pkg.GoFiles, "fd_poll_runtime.go")
 	case "crypto/rand":
 		pkg.GoFiles = []string{"rand.go", "util.go"}
-	case "crypto/x509":
-		pkg.CgoFiles = nil
 	}
 
 	if len(pkg.CgoFiles) > 0 {
@@ -124,13 +139,28 @@ func importWithSrcDir(path string, srcDir string, mode build.ImportMode, install
 	return &PackageData{Package: pkg, JSFiles: jsFiles}, nil
 }
 
-// stripExecutable strips all executable implementation .go files.
+// excludeExecutable excludes all executable implementation .go files.
 // They have "executable_" prefix.
-func stripExecutable(goFiles []string) []string {
+func excludeExecutable(goFiles []string) []string {
 	var s []string
 	for _, f := range goFiles {
 		if strings.HasPrefix(f, "executable_") {
 			continue
+		}
+		s = append(s, f)
+	}
+	return s
+}
+
+// exclude returns files, excluding specified files.
+func exclude(files []string, exclude ...string) []string {
+	var s []string
+Outer:
+	for _, f := range files {
+		for _, e := range exclude {
+			if f == e {
+				continue Outer
+			}
 		}
 		s = append(s, f)
 	}
@@ -516,6 +546,8 @@ func (s *Session) BuildPackage(pkg *PackageData) (*compiler.Archive, error) {
 		}
 
 		for _, importedPkgPath := range pkg.Imports {
+			// Ignore all imports that aren't mentioned in import specs of pkg.
+			// For example, this ignores imports such as runtime/internal/sys and runtime/internal/atomic.
 			ignored := true
 			for _, pos := range pkg.ImportPos[importedPkgPath] {
 				importFile := filepath.Base(pos.Filename)
@@ -529,6 +561,7 @@ func (s *Session) BuildPackage(pkg *PackageData) (*compiler.Archive, error) {
 					break
 				}
 			}
+
 			if importedPkgPath == "unsafe" || ignored {
 				continue
 			}
@@ -536,9 +569,9 @@ func (s *Session) BuildPackage(pkg *PackageData) (*compiler.Archive, error) {
 			if err != nil {
 				return nil, err
 			}
-			impModeTime := importedPkg.SrcModTime
-			if impModeTime.After(pkg.SrcModTime) {
-				pkg.SrcModTime = impModeTime
+			impModTime := importedPkg.SrcModTime
+			if impModTime.After(pkg.SrcModTime) {
+				pkg.SrcModTime = impModTime
 			}
 		}
 

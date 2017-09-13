@@ -11,6 +11,18 @@
     "uid":"codebuild-2016-10-06"
   },
   "operations":{
+    "BatchDeleteBuilds":{
+      "name":"BatchDeleteBuilds",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"BatchDeleteBuildsInput"},
+      "output":{"shape":"BatchDeleteBuildsOutput"},
+      "errors":[
+        {"shape":"InvalidInputException"}
+      ]
+    },
     "BatchGetBuilds":{
       "name":"BatchGetBuilds",
       "http":{
@@ -177,6 +189,20 @@
         "NO_ARTIFACTS"
       ]
     },
+    "BatchDeleteBuildsInput":{
+      "type":"structure",
+      "required":["ids"],
+      "members":{
+        "ids":{"shape":"BuildIds"}
+      }
+    },
+    "BatchDeleteBuildsOutput":{
+      "type":"structure",
+      "members":{
+        "buildsDeleted":{"shape":"BuildIds"},
+        "buildsNotDeleted":{"shape":"BuildsNotDeleted"}
+      }
+    },
     "BatchGetBuildsInput":{
       "type":"structure",
       "required":["ids"],
@@ -241,6 +267,13 @@
       "max":100,
       "min":1
     },
+    "BuildNotDeleted":{
+      "type":"structure",
+      "members":{
+        "id":{"shape":"NonEmptyString"},
+        "statusCode":{"shape":"String"}
+      }
+    },
     "BuildPhase":{
       "type":"structure",
       "members":{
@@ -274,6 +307,10 @@
     "Builds":{
       "type":"list",
       "member":{"shape":"Build"}
+    },
+    "BuildsNotDeleted":{
+      "type":"list",
+      "member":{"shape":"BuildNotDeleted"}
     },
     "ComputeType":{
       "type":"string",
@@ -395,6 +432,7 @@
         "GOLANG",
         "DOCKER",
         "ANDROID",
+        "DOTNET",
         "BASE"
       ]
     },
@@ -530,7 +568,8 @@
         "type":{"shape":"EnvironmentType"},
         "image":{"shape":"NonEmptyString"},
         "computeType":{"shape":"ComputeType"},
-        "environmentVariables":{"shape":"EnvironmentVariables"}
+        "environmentVariables":{"shape":"EnvironmentVariables"},
+        "privilegedMode":{"shape":"WrapperBoolean"}
       }
     },
     "ProjectName":{
@@ -604,7 +643,8 @@
         "CODECOMMIT",
         "CODEPIPELINE",
         "GITHUB",
-        "S3"
+        "S3",
+        "BITBUCKET"
       ]
     },
     "StartBuildInput":{
@@ -666,7 +706,7 @@
     "TimeOut":{
       "type":"integer",
       "max":480,
-      "min":1
+      "min":5
     },
     "Timestamp":{"type":"timestamp"},
     "UpdateProjectInput":{
@@ -696,6 +736,7 @@
       "min":1,
       "pattern":"^([\\\\p{L}\\\\p{Z}\\\\p{N}_.:/=@+\\\\-]*)$"
     },
+    "WrapperBoolean":{"type":"boolean"},
     "WrapperInt":{"type":"integer"},
     "WrapperLong":{"type":"long"}
   }

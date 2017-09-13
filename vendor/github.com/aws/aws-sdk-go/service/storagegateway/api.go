@@ -15,19 +15,18 @@ const opActivateGateway = "ActivateGateway"
 
 // ActivateGatewayRequest generates a "aws/request.Request" representing the
 // client's request for the ActivateGateway operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ActivateGateway for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ActivateGateway method directly
-// instead.
+// See ActivateGateway for more information on using the ActivateGateway
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ActivateGatewayRequest method.
 //    req, resp := client.ActivateGatewayRequest(params)
@@ -59,7 +58,7 @@ func (c *StorageGateway) ActivateGatewayRequest(input *ActivateGatewayInput) (re
 // Activates the gateway you previously deployed on your host. For more information,
 // see  Activate the AWS Storage Gateway (http://docs.aws.amazon.com/storagegateway/latest/userguide/GettingStartedActivateGateway-common.html).
 // In the activation process, you specify information such as the region you
-// want to use for storing snapshots, the time zone for scheduled snapshots
+// want to use for storing snapshots or tapes, the time zone for scheduled snapshots
 // the gateway snapshot schedule window, an activation key, and a name for your
 // gateway. The activation process also associates your gateway with your account;
 // for more information, see UpdateGatewayInformation.
@@ -108,19 +107,18 @@ const opAddCache = "AddCache"
 
 // AddCacheRequest generates a "aws/request.Request" representing the
 // client's request for the AddCache operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AddCache for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AddCache method directly
-// instead.
+// See AddCache for more information on using the AddCache
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AddCacheRequest method.
 //    req, resp := client.AddCacheRequest(params)
@@ -149,8 +147,8 @@ func (c *StorageGateway) AddCacheRequest(input *AddCacheInput) (req *request.Req
 
 // AddCache API operation for AWS Storage Gateway.
 //
-// Configures one or more gateway local disks as cache for a cached volumes
-// gateway. This operation is only supported in the cached volumes gateway architecture
+// Configures one or more gateway local disks as cache for a gateway. This operation
+// is only supported in the cached volume, tape and file gateway architectures
 // (see Storage Gateway Concepts (http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html)).
 //
 // In the request, you specify the gateway Amazon Resource Name (ARN) to which
@@ -199,19 +197,18 @@ const opAddTagsToResource = "AddTagsToResource"
 
 // AddTagsToResourceRequest generates a "aws/request.Request" representing the
 // client's request for the AddTagsToResource operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AddTagsToResource for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AddTagsToResource method directly
-// instead.
+// See AddTagsToResource for more information on using the AddTagsToResource
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AddTagsToResourceRequest method.
 //    req, resp := client.AddTagsToResourceRequest(params)
@@ -297,19 +294,18 @@ const opAddUploadBuffer = "AddUploadBuffer"
 
 // AddUploadBufferRequest generates a "aws/request.Request" representing the
 // client's request for the AddUploadBuffer operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AddUploadBuffer for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AddUploadBuffer method directly
-// instead.
+// See AddUploadBuffer for more information on using the AddUploadBuffer
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AddUploadBufferRequest method.
 //    req, resp := client.AddUploadBufferRequest(params)
@@ -339,8 +335,8 @@ func (c *StorageGateway) AddUploadBufferRequest(input *AddUploadBufferInput) (re
 // AddUploadBuffer API operation for AWS Storage Gateway.
 //
 // Configures one or more gateway local disks as upload buffer for a specified
-// gateway. This operation is supported for both the stored volumes and cached
-// volumes gateway architectures.
+// gateway. This operation is supported for the stored volume, cached volume
+// and tape gateway architectures.
 //
 // In the request, you specify the gateway Amazon Resource Name (ARN) to which
 // you want to add upload buffer, and one or more disk IDs that you want to
@@ -388,19 +384,18 @@ const opAddWorkingStorage = "AddWorkingStorage"
 
 // AddWorkingStorageRequest generates a "aws/request.Request" representing the
 // client's request for the AddWorkingStorage operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AddWorkingStorage for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AddWorkingStorage method directly
-// instead.
+// See AddWorkingStorage for more information on using the AddWorkingStorage
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AddWorkingStorageRequest method.
 //    req, resp := client.AddWorkingStorageRequest(params)
@@ -431,11 +426,11 @@ func (c *StorageGateway) AddWorkingStorageRequest(input *AddWorkingStorageInput)
 //
 // Configures one or more gateway local disks as working storage for a gateway.
 // This operation is only supported in the stored volume gateway architecture.
-// This operation is deprecated in cached-volumes API version 20120630. Use
-// AddUploadBuffer instead.
+// This operation is deprecated in cached volume API version 20120630. Use AddUploadBuffer
+// instead.
 //
 // Working storage is also referred to as upload buffer. You can also use the
-// AddUploadBuffer operation to add upload buffer to a stored-volume gateway.
+// AddUploadBuffer operation to add upload buffer to a stored volume gateway.
 //
 // In the request, you specify the gateway Amazon Resource Name (ARN) to which
 // you want to add working storage, and one or more disk IDs that you want to
@@ -483,19 +478,18 @@ const opCancelArchival = "CancelArchival"
 
 // CancelArchivalRequest generates a "aws/request.Request" representing the
 // client's request for the CancelArchival operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CancelArchival for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CancelArchival method directly
-// instead.
+// See CancelArchival for more information on using the CancelArchival
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CancelArchivalRequest method.
 //    req, resp := client.CancelArchivalRequest(params)
@@ -525,8 +519,8 @@ func (c *StorageGateway) CancelArchivalRequest(input *CancelArchivalInput) (req 
 // CancelArchival API operation for AWS Storage Gateway.
 //
 // Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after
-// the archiving process is initiated. This operation is only supported in tape
-// gateways.
+// the archiving process is initiated. This operation is only supported in the
+// tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -570,19 +564,18 @@ const opCancelRetrieval = "CancelRetrieval"
 
 // CancelRetrievalRequest generates a "aws/request.Request" representing the
 // client's request for the CancelRetrieval operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CancelRetrieval for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CancelRetrieval method directly
-// instead.
+// See CancelRetrieval for more information on using the CancelRetrieval
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CancelRetrievalRequest method.
 //    req, resp := client.CancelRetrievalRequest(params)
@@ -657,19 +650,18 @@ const opCreateCachediSCSIVolume = "CreateCachediSCSIVolume"
 
 // CreateCachediSCSIVolumeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCachediSCSIVolume operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateCachediSCSIVolume for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateCachediSCSIVolume method directly
-// instead.
+// See CreateCachediSCSIVolume for more information on using the CreateCachediSCSIVolume
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateCachediSCSIVolumeRequest method.
 //    req, resp := client.CreateCachediSCSIVolumeRequest(params)
@@ -698,18 +690,18 @@ func (c *StorageGateway) CreateCachediSCSIVolumeRequest(input *CreateCachediSCSI
 
 // CreateCachediSCSIVolume API operation for AWS Storage Gateway.
 //
-// Creates a cached volume on a specified cached volumes gateway. This operation
-// is only supported in the cached volumes gateway architecture.
+// Creates a cached volume on a specified cached volume gateway. This operation
+// is only supported in the cached volume gateway architecture.
 //
 // Cache storage must be allocated to the gateway before you can create a cached
 // volume. Use the AddCache operation to add cache storage to a gateway.
 //
 // In the request, you must specify the gateway, size of the volume in bytes,
 // the iSCSI target name, an IP address on which to expose the target, and a
-// unique client token. In response, AWS Storage Gateway creates the volume
-// and returns information about it. This information includes the volume Amazon
-// Resource Name (ARN), its size, and the iSCSI target ARN that initiators can
-// use to connect to the volume target.
+// unique client token. In response, the gateway creates the volume and returns
+// information about it. This information includes the volume Amazon Resource
+// Name (ARN), its size, and the iSCSI target ARN that initiators can use to
+// connect to the volume target.
 //
 // Optionally, you can provide the ARN for an existing volume as the SourceVolumeARN
 // for this cached volume, which creates an exact copy of the existing volume’s
@@ -758,19 +750,18 @@ const opCreateNFSFileShare = "CreateNFSFileShare"
 
 // CreateNFSFileShareRequest generates a "aws/request.Request" representing the
 // client's request for the CreateNFSFileShare operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateNFSFileShare for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateNFSFileShare method directly
-// instead.
+// See CreateNFSFileShare for more information on using the CreateNFSFileShare
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateNFSFileShareRequest method.
 //    req, resp := client.CreateNFSFileShareRequest(params)
@@ -802,7 +793,16 @@ func (c *StorageGateway) CreateNFSFileShareRequest(input *CreateNFSFileShareInpu
 // Creates a file share on an existing file gateway. In Storage Gateway, a file
 // share is a file system mount point backed by Amazon S3 cloud storage. Storage
 // Gateway exposes file shares using a Network File System (NFS) interface.
-// This operation is only supported in file gateways.
+// This operation is only supported in the file gateway architecture.
+//
+// File gateway requires AWS Security Token Service (AWS STS) to be activated
+// to enable you create a file share. Make sure AWS STS is activated in the
+// region you are creating your file gateway in. If AWS STS is not activated
+// in the region, activate it. For information about how to activate AWS STS,
+// see Activating and Deactivating AWS STS in an AWS Region in the AWS Identity
+// and Access Management User Guide.
+//
+// File gateway does not support creating hard or symbolic links on a file share.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -846,19 +846,18 @@ const opCreateSnapshot = "CreateSnapshot"
 
 // CreateSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateSnapshot method directly
-// instead.
+// See CreateSnapshot for more information on using the CreateSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateSnapshotRequest method.
 //    req, resp := client.CreateSnapshotRequest(params)
@@ -894,8 +893,7 @@ func (c *StorageGateway) CreateSnapshotRequest(input *CreateSnapshotInput) (req 
 // as well as import the data to an Amazon Elastic Block Store (EBS) volume
 // in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway
 // volume on a scheduled or ad-hoc basis. This API enables you to take ad-hoc
-// snapshot. For more information, see Working With Snapshots in the AWS Storage
-// Gateway Console (http://docs.aws.amazon.com/storagegateway/latest/userguide/WorkingWithSnapshots.html).
+// snapshot. For more information, see Editing a Snapshot Schedule (http://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot).
 //
 // In the CreateSnapshot request you identify the volume by providing its Amazon
 // Resource Name (ARN). You must also provide description for the snapshot.
@@ -904,7 +902,7 @@ func (c *StorageGateway) CreateSnapshotRequest(input *CreateSnapshotInput) (req 
 // AWS Storage Gateway returns you a snapshot ID. You can use this snapshot
 // ID to check the snapshot progress or later use it when you want to create
 // a volume from a snapshot. This operation is only supported in stored and
-// cached volumes gateways.
+// cached volume gateway architecture.
 //
 // To list or delete a snapshot, you must use the Amazon EC2 API. For more information,
 // see DescribeSnapshots or DeleteSnapshot in the EC2 API reference (http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_Operations.html).
@@ -959,19 +957,18 @@ const opCreateSnapshotFromVolumeRecoveryPoint = "CreateSnapshotFromVolumeRecover
 
 // CreateSnapshotFromVolumeRecoveryPointRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSnapshotFromVolumeRecoveryPoint operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateSnapshotFromVolumeRecoveryPoint for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateSnapshotFromVolumeRecoveryPoint method directly
-// instead.
+// See CreateSnapshotFromVolumeRecoveryPoint for more information on using the CreateSnapshotFromVolumeRecoveryPoint
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateSnapshotFromVolumeRecoveryPointRequest method.
 //    req, resp := client.CreateSnapshotFromVolumeRecoveryPointRequest(params)
@@ -1001,19 +998,19 @@ func (c *StorageGateway) CreateSnapshotFromVolumeRecoveryPointRequest(input *Cre
 // CreateSnapshotFromVolumeRecoveryPoint API operation for AWS Storage Gateway.
 //
 // Initiates a snapshot of a gateway from a volume recovery point. This operation
-// is only supported in the cached volumes gateway architecture.
+// is only supported in the cached volume gateway architecture.
 //
 // A volume recovery point is a point in time at which all data of the volume
 // is consistent and from which you can create a snapshot. To get a list of
-// volume recovery point for cached volumes gateway, use ListVolumeRecoveryPoints.
+// volume recovery point for cached volume gateway, use ListVolumeRecoveryPoints.
 //
 // In the CreateSnapshotFromVolumeRecoveryPoint request, you identify the volume
 // by providing its Amazon Resource Name (ARN). You must also provide a description
-// for the snapshot. When AWS Storage Gateway takes a snapshot of the specified
-// volume, the snapshot and its description appear in the AWS Storage Gateway
-// console. In response, AWS Storage Gateway returns you a snapshot ID. You
-// can use this snapshot ID to check the snapshot progress or later use it when
-// you want to create a volume from a snapshot.
+// for the snapshot. When the gateway takes a snapshot of the specified volume,
+// the snapshot and its description appear in the AWS Storage Gateway console.
+// In response, the gateway returns you a snapshot ID. You can use this snapshot
+// ID to check the snapshot progress or later use it when you want to create
+// a volume from a snapshot.
 //
 // To list or delete a snapshot, you must use the Amazon EC2 API. For more information,
 // in Amazon Elastic Compute Cloud API Reference.
@@ -1064,19 +1061,18 @@ const opCreateStorediSCSIVolume = "CreateStorediSCSIVolume"
 
 // CreateStorediSCSIVolumeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateStorediSCSIVolume operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateStorediSCSIVolume for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateStorediSCSIVolume method directly
-// instead.
+// See CreateStorediSCSIVolume for more information on using the CreateStorediSCSIVolume
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateStorediSCSIVolumeRequest method.
 //    req, resp := client.CreateStorediSCSIVolumeRequest(params)
@@ -1106,7 +1102,7 @@ func (c *StorageGateway) CreateStorediSCSIVolumeRequest(input *CreateStorediSCSI
 // CreateStorediSCSIVolume API operation for AWS Storage Gateway.
 //
 // Creates a volume on a specified gateway. This operation is only supported
-// in the stored volumes gateway architecture.
+// in the stored volume gateway architecture.
 //
 // The size of the volume to create is inferred from the disk size. You can
 // choose to preserve existing data on the disk, create volume from an existing
@@ -1114,10 +1110,10 @@ func (c *StorageGateway) CreateStorediSCSIVolumeRequest(input *CreateStorediSCSI
 // volume, then any existing data on the disk is erased.
 //
 // In the request you must specify the gateway and the disk information on which
-// you are creating the volume. In response, AWS Storage Gateway creates the
-// volume and returns volume information such as the volume Amazon Resource
-// Name (ARN), its size, and the iSCSI target ARN that initiators can use to
-// connect to the volume target.
+// you are creating the volume. In response, the gateway creates the volume
+// and returns volume information such as the volume Amazon Resource Name (ARN),
+// its size, and the iSCSI target ARN that initiators can use to connect to
+// the volume target.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1161,19 +1157,18 @@ const opCreateTapeWithBarcode = "CreateTapeWithBarcode"
 
 // CreateTapeWithBarcodeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateTapeWithBarcode operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateTapeWithBarcode for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateTapeWithBarcode method directly
-// instead.
+// See CreateTapeWithBarcode for more information on using the CreateTapeWithBarcode
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateTapeWithBarcodeRequest method.
 //    req, resp := client.CreateTapeWithBarcodeRequest(params)
@@ -1203,8 +1198,9 @@ func (c *StorageGateway) CreateTapeWithBarcodeRequest(input *CreateTapeWithBarco
 // CreateTapeWithBarcode API operation for AWS Storage Gateway.
 //
 // Creates a virtual tape by using your own barcode. You write data to the virtual
-// tape and then archive the tape. This operation is only supported in tape
-// gateways.
+// tape and then archive the tape. A barcode is unique and can not be reused
+// if it has already been used on a tape . This applies to barcodes used on
+// deleted tapes. This operation is only supported in the tape gateway. architecture.
 //
 // Cache storage must be allocated to the gateway before you can create a virtual
 // tape. Use the AddCache operation to add cache storage to a gateway.
@@ -1251,19 +1247,18 @@ const opCreateTapes = "CreateTapes"
 
 // CreateTapesRequest generates a "aws/request.Request" representing the
 // client's request for the CreateTapes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateTapes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateTapes method directly
-// instead.
+// See CreateTapes for more information on using the CreateTapes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateTapesRequest method.
 //    req, resp := client.CreateTapesRequest(params)
@@ -1293,7 +1288,8 @@ func (c *StorageGateway) CreateTapesRequest(input *CreateTapesInput) (req *reque
 // CreateTapes API operation for AWS Storage Gateway.
 //
 // Creates one or more virtual tapes. You write data to the virtual tapes and
-// then archive the tapes. This operation is only supported in tape gateways.
+// then archive the tapes. This operation is only supported in the tape gateway
+// architecture.
 //
 // Cache storage must be allocated to the gateway before you can create virtual
 // tapes. Use the AddCache operation to add cache storage to a gateway.
@@ -1340,19 +1336,18 @@ const opDeleteBandwidthRateLimit = "DeleteBandwidthRateLimit"
 
 // DeleteBandwidthRateLimitRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBandwidthRateLimit operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteBandwidthRateLimit for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteBandwidthRateLimit method directly
-// instead.
+// See DeleteBandwidthRateLimit for more information on using the DeleteBandwidthRateLimit
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteBandwidthRateLimitRequest method.
 //    req, resp := client.DeleteBandwidthRateLimitRequest(params)
@@ -1429,19 +1424,18 @@ const opDeleteChapCredentials = "DeleteChapCredentials"
 
 // DeleteChapCredentialsRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteChapCredentials operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteChapCredentials for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteChapCredentials method directly
-// instead.
+// See DeleteChapCredentials for more information on using the DeleteChapCredentials
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteChapCredentialsRequest method.
 //    req, resp := client.DeleteChapCredentialsRequest(params)
@@ -1515,19 +1509,18 @@ const opDeleteFileShare = "DeleteFileShare"
 
 // DeleteFileShareRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFileShare operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteFileShare for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteFileShare method directly
-// instead.
+// See DeleteFileShare for more information on using the DeleteFileShare
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteFileShareRequest method.
 //    req, resp := client.DeleteFileShareRequest(params)
@@ -1557,7 +1550,7 @@ func (c *StorageGateway) DeleteFileShareRequest(input *DeleteFileShareInput) (re
 // DeleteFileShare API operation for AWS Storage Gateway.
 //
 // Deletes a file share from a file gateway. This operation is only supported
-// in file gateways.
+// in the file gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1601,19 +1594,18 @@ const opDeleteGateway = "DeleteGateway"
 
 // DeleteGatewayRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGateway operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteGateway for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteGateway method directly
-// instead.
+// See DeleteGateway for more information on using the DeleteGateway
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteGatewayRequest method.
 //    req, resp := client.DeleteGatewayRequest(params)
@@ -1701,19 +1693,18 @@ const opDeleteSnapshotSchedule = "DeleteSnapshotSchedule"
 
 // DeleteSnapshotScheduleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSnapshotSchedule operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteSnapshotSchedule for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteSnapshotSchedule method directly
-// instead.
+// See DeleteSnapshotSchedule for more information on using the DeleteSnapshotSchedule
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteSnapshotScheduleRequest method.
 //    req, resp := client.DeleteSnapshotScheduleRequest(params)
@@ -1795,19 +1786,18 @@ const opDeleteTape = "DeleteTape"
 
 // DeleteTapeRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteTape operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteTape for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteTape method directly
-// instead.
+// See DeleteTape for more information on using the DeleteTape
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteTapeRequest method.
 //    req, resp := client.DeleteTapeRequest(params)
@@ -1836,8 +1826,8 @@ func (c *StorageGateway) DeleteTapeRequest(input *DeleteTapeInput) (req *request
 
 // DeleteTape API operation for AWS Storage Gateway.
 //
-// Deletes the specified virtual tape. This operation is only supported in tape
-// gateways.
+// Deletes the specified virtual tape. This operation is only supported in the
+// tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1881,19 +1871,18 @@ const opDeleteTapeArchive = "DeleteTapeArchive"
 
 // DeleteTapeArchiveRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteTapeArchive operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteTapeArchive for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteTapeArchive method directly
-// instead.
+// See DeleteTapeArchive for more information on using the DeleteTapeArchive
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteTapeArchiveRequest method.
 //    req, resp := client.DeleteTapeArchiveRequest(params)
@@ -1923,7 +1912,7 @@ func (c *StorageGateway) DeleteTapeArchiveRequest(input *DeleteTapeArchiveInput)
 // DeleteTapeArchive API operation for AWS Storage Gateway.
 //
 // Deletes the specified virtual tape from the virtual tape shelf (VTS). This
-// operation is only supported in tape gateways.
+// operation is only supported in the tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1967,19 +1956,18 @@ const opDeleteVolume = "DeleteVolume"
 
 // DeleteVolumeRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteVolume operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteVolume for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteVolume method directly
-// instead.
+// See DeleteVolume for more information on using the DeleteVolume
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteVolumeRequest method.
 //    req, resp := client.DeleteVolumeRequest(params)
@@ -2008,16 +1996,18 @@ func (c *StorageGateway) DeleteVolumeRequest(input *DeleteVolumeInput) (req *req
 
 // DeleteVolume API operation for AWS Storage Gateway.
 //
-// Deletes the specified gateway volume that you previously created using the
-// CreateCachediSCSIVolume or CreateStorediSCSIVolume API. For stored volumes
-// gateways, the local disk that was configured as the storage volume is not
-// deleted. You can reuse the local disk to create another storage volume.
+// Deletes the specified storage volume that you previously created using the
+// CreateCachediSCSIVolume or CreateStorediSCSIVolume API. This operation is
+// only supported in the cached volume and stored volume architectures. For
+// stored volume gateways, the local disk that was configured as the storage
+// volume is not deleted. You can reuse the local disk to create another storage
+// volume.
 //
-// Before you delete a gateway volume, make sure there are no iSCSI connections
-// to the volume you are deleting. You should also make sure there is no snapshot
-// in progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API
-// to query snapshots on the volume you are deleting and check the snapshot
-// status. For more information, go to DescribeSnapshots (http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html)
+// Before you delete a volume, make sure there are no iSCSI connections to the
+// volume you are deleting. You should also make sure there is no snapshot in
+// progress. You can use the Amazon Elastic Compute Cloud (Amazon EC2) API to
+// query snapshots on the volume you are deleting and check the snapshot status.
+// For more information, go to DescribeSnapshots (http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html)
 // in the Amazon Elastic Compute Cloud API Reference.
 //
 // In the request, you must provide the Amazon Resource Name (ARN) of the storage
@@ -2065,19 +2055,18 @@ const opDescribeBandwidthRateLimit = "DescribeBandwidthRateLimit"
 
 // DescribeBandwidthRateLimitRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBandwidthRateLimit operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeBandwidthRateLimit for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeBandwidthRateLimit method directly
-// instead.
+// See DescribeBandwidthRateLimit for more information on using the DescribeBandwidthRateLimit
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeBandwidthRateLimitRequest method.
 //    req, resp := client.DescribeBandwidthRateLimitRequest(params)
@@ -2156,19 +2145,18 @@ const opDescribeCache = "DescribeCache"
 
 // DescribeCacheRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCache operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeCache for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeCache method directly
-// instead.
+// See DescribeCache for more information on using the DescribeCache
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeCacheRequest method.
 //    req, resp := client.DescribeCacheRequest(params)
@@ -2198,7 +2186,7 @@ func (c *StorageGateway) DescribeCacheRequest(input *DescribeCacheInput) (req *r
 // DescribeCache API operation for AWS Storage Gateway.
 //
 // Returns information about the cache of a gateway. This operation is only
-// supported in the cached volumes gateway architecture.
+// supported in the cached volume,tape and file gateway architectures.
 //
 // The response includes disk IDs that are configured as cache, and it includes
 // the amount of cache allocated and used.
@@ -2245,19 +2233,18 @@ const opDescribeCachediSCSIVolumes = "DescribeCachediSCSIVolumes"
 
 // DescribeCachediSCSIVolumesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCachediSCSIVolumes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeCachediSCSIVolumes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeCachediSCSIVolumes method directly
-// instead.
+// See DescribeCachediSCSIVolumes for more information on using the DescribeCachediSCSIVolumes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeCachediSCSIVolumesRequest method.
 //    req, resp := client.DescribeCachediSCSIVolumesRequest(params)
@@ -2287,7 +2274,7 @@ func (c *StorageGateway) DescribeCachediSCSIVolumesRequest(input *DescribeCached
 // DescribeCachediSCSIVolumes API operation for AWS Storage Gateway.
 //
 // Returns a description of the gateway volumes specified in the request. This
-// operation is only supported in the cached volumes gateway architecture.
+// operation is only supported in the cached volume gateway architecture.
 //
 // The list of gateway volumes in the request must be from one gateway. In the
 // response Amazon Storage Gateway returns volume information sorted by volume
@@ -2335,19 +2322,18 @@ const opDescribeChapCredentials = "DescribeChapCredentials"
 
 // DescribeChapCredentialsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeChapCredentials operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeChapCredentials for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeChapCredentials method directly
-// instead.
+// See DescribeChapCredentials for more information on using the DescribeChapCredentials
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeChapCredentialsRequest method.
 //    req, resp := client.DescribeChapCredentialsRequest(params)
@@ -2421,19 +2407,18 @@ const opDescribeGatewayInformation = "DescribeGatewayInformation"
 
 // DescribeGatewayInformationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeGatewayInformation operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeGatewayInformation for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeGatewayInformation method directly
-// instead.
+// See DescribeGatewayInformation for more information on using the DescribeGatewayInformation
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeGatewayInformationRequest method.
 //    req, resp := client.DescribeGatewayInformationRequest(params)
@@ -2509,19 +2494,18 @@ const opDescribeMaintenanceStartTime = "DescribeMaintenanceStartTime"
 
 // DescribeMaintenanceStartTimeRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMaintenanceStartTime operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeMaintenanceStartTime for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeMaintenanceStartTime method directly
-// instead.
+// See DescribeMaintenanceStartTime for more information on using the DescribeMaintenanceStartTime
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeMaintenanceStartTimeRequest method.
 //    req, resp := client.DescribeMaintenanceStartTimeRequest(params)
@@ -2595,19 +2579,18 @@ const opDescribeNFSFileShares = "DescribeNFSFileShares"
 
 // DescribeNFSFileSharesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeNFSFileShares operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeNFSFileShares for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeNFSFileShares method directly
-// instead.
+// See DescribeNFSFileShares for more information on using the DescribeNFSFileShares
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeNFSFileSharesRequest method.
 //    req, resp := client.DescribeNFSFileSharesRequest(params)
@@ -2681,19 +2664,18 @@ const opDescribeSnapshotSchedule = "DescribeSnapshotSchedule"
 
 // DescribeSnapshotScheduleRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSnapshotSchedule operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeSnapshotSchedule for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeSnapshotSchedule method directly
-// instead.
+// See DescribeSnapshotSchedule for more information on using the DescribeSnapshotSchedule
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeSnapshotScheduleRequest method.
 //    req, resp := client.DescribeSnapshotScheduleRequest(params)
@@ -2724,7 +2706,8 @@ func (c *StorageGateway) DescribeSnapshotScheduleRequest(input *DescribeSnapshot
 //
 // Describes the snapshot schedule for the specified gateway volume. The snapshot
 // schedule information includes intervals at which snapshots are automatically
-// initiated on the volume.
+// initiated on the volume. This operation is only supported in the cached volume
+// and stored volume architectures.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2768,19 +2751,18 @@ const opDescribeStorediSCSIVolumes = "DescribeStorediSCSIVolumes"
 
 // DescribeStorediSCSIVolumesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeStorediSCSIVolumes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeStorediSCSIVolumes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeStorediSCSIVolumes method directly
-// instead.
+// See DescribeStorediSCSIVolumes for more information on using the DescribeStorediSCSIVolumes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeStorediSCSIVolumesRequest method.
 //    req, resp := client.DescribeStorediSCSIVolumesRequest(params)
@@ -2812,7 +2794,7 @@ func (c *StorageGateway) DescribeStorediSCSIVolumesRequest(input *DescribeStored
 // Returns the description of the gateway volumes specified in the request.
 // The list of gateway volumes in the request must be from one gateway. In the
 // response Amazon Storage Gateway returns volume information sorted by volume
-// ARNs. This operation is only supported in stored volumes gateways.
+// ARNs. This operation is only supported in stored volume gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2856,19 +2838,18 @@ const opDescribeTapeArchives = "DescribeTapeArchives"
 
 // DescribeTapeArchivesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTapeArchives operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeTapeArchives for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeTapeArchives method directly
-// instead.
+// See DescribeTapeArchives for more information on using the DescribeTapeArchives
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeTapeArchivesRequest method.
 //    req, resp := client.DescribeTapeArchivesRequest(params)
@@ -2904,11 +2885,10 @@ func (c *StorageGateway) DescribeTapeArchivesRequest(input *DescribeTapeArchives
 // DescribeTapeArchives API operation for AWS Storage Gateway.
 //
 // Returns a description of specified virtual tapes in the virtual tape shelf
-// (VTS).
+// (VTS). This operation is only supported in the tape gateway architecture.
 //
 // If a specific TapeARN is not specified, AWS Storage Gateway returns a description
-// of all virtual tapes found in the VTS associated with your account. This
-// operation is only supported in tape gateways.
+// of all virtual tapes found in the VTS associated with your account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3002,19 +2982,18 @@ const opDescribeTapeRecoveryPoints = "DescribeTapeRecoveryPoints"
 
 // DescribeTapeRecoveryPointsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTapeRecoveryPoints operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeTapeRecoveryPoints for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeTapeRecoveryPoints method directly
-// instead.
+// See DescribeTapeRecoveryPoints for more information on using the DescribeTapeRecoveryPoints
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeTapeRecoveryPointsRequest method.
 //    req, resp := client.DescribeTapeRecoveryPointsRequest(params)
@@ -3055,7 +3034,7 @@ func (c *StorageGateway) DescribeTapeRecoveryPointsRequest(input *DescribeTapeRe
 // A recovery point is a point-in-time view of a virtual tape at which all the
 // data on the virtual tape is consistent. If your gateway crashes, virtual
 // tapes that have recovery points can be recovered to a new gateway. This operation
-// is only supported in tape gateways.
+// is only supported in the tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3149,19 +3128,18 @@ const opDescribeTapes = "DescribeTapes"
 
 // DescribeTapesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTapes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeTapes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeTapes method directly
-// instead.
+// See DescribeTapes for more information on using the DescribeTapes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeTapesRequest method.
 //    req, resp := client.DescribeTapesRequest(params)
@@ -3199,7 +3177,7 @@ func (c *StorageGateway) DescribeTapesRequest(input *DescribeTapesInput) (req *r
 // Returns a description of the specified Amazon Resource Name (ARN) of virtual
 // tapes. If a TapeARN is not specified, returns a description of all virtual
 // tapes associated with the specified gateway. This operation is only supported
-// in tape gateways.
+// in the tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3293,19 +3271,18 @@ const opDescribeUploadBuffer = "DescribeUploadBuffer"
 
 // DescribeUploadBufferRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUploadBuffer operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeUploadBuffer for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeUploadBuffer method directly
-// instead.
+// See DescribeUploadBuffer for more information on using the DescribeUploadBuffer
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeUploadBufferRequest method.
 //    req, resp := client.DescribeUploadBufferRequest(params)
@@ -3335,7 +3312,7 @@ func (c *StorageGateway) DescribeUploadBufferRequest(input *DescribeUploadBuffer
 // DescribeUploadBuffer API operation for AWS Storage Gateway.
 //
 // Returns information about the upload buffer of a gateway. This operation
-// is supported for both the stored volume and cached volumes gateway architectures.
+// is supported for the stored volume, cached volume and tape gateway architectures.
 //
 // The response includes disk IDs that are configured as upload buffer space,
 // and it includes the amount of upload buffer space allocated and used.
@@ -3382,19 +3359,18 @@ const opDescribeVTLDevices = "DescribeVTLDevices"
 
 // DescribeVTLDevicesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVTLDevices operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeVTLDevices for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeVTLDevices method directly
-// instead.
+// See DescribeVTLDevices for more information on using the DescribeVTLDevices
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeVTLDevicesRequest method.
 //    req, resp := client.DescribeVTLDevicesRequest(params)
@@ -3432,7 +3408,7 @@ func (c *StorageGateway) DescribeVTLDevicesRequest(input *DescribeVTLDevicesInpu
 // Returns a description of virtual tape library (VTL) devices for the specified
 // tape gateway. In the response, AWS Storage Gateway returns VTL device information.
 //
-// This operation is only supported in tape gateways.
+// This operation is only supported in the tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3526,19 +3502,18 @@ const opDescribeWorkingStorage = "DescribeWorkingStorage"
 
 // DescribeWorkingStorageRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeWorkingStorage operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeWorkingStorage for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeWorkingStorage method directly
-// instead.
+// See DescribeWorkingStorage for more information on using the DescribeWorkingStorage
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeWorkingStorageRequest method.
 //    req, resp := client.DescribeWorkingStorageRequest(params)
@@ -3569,11 +3544,11 @@ func (c *StorageGateway) DescribeWorkingStorageRequest(input *DescribeWorkingSto
 //
 // Returns information about the working storage of a gateway. This operation
 // is only supported in the stored volumes gateway architecture. This operation
-// is deprecated in cached-volumes API version (20120630). Use DescribeUploadBuffer
+// is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer
 // instead.
 //
 // Working storage is also referred to as upload buffer. You can also use the
-// DescribeUploadBuffer operation to add upload buffer to a stored-volume gateway.
+// DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.
 //
 // The response includes disk IDs that are configured as working storage, and
 // it includes the amount of working storage allocated and used.
@@ -3620,19 +3595,18 @@ const opDisableGateway = "DisableGateway"
 
 // DisableGatewayRequest generates a "aws/request.Request" representing the
 // client's request for the DisableGateway operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DisableGateway for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DisableGateway method directly
-// instead.
+// See DisableGateway for more information on using the DisableGateway
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DisableGatewayRequest method.
 //    req, resp := client.DisableGatewayRequest(params)
@@ -3661,11 +3635,12 @@ func (c *StorageGateway) DisableGatewayRequest(input *DisableGatewayInput) (req 
 
 // DisableGateway API operation for AWS Storage Gateway.
 //
-// Disables a gateway when the gateway is no longer functioning. For example,
+// Disables a tape gateway when the gateway is no longer functioning. For example,
 // if your gateway VM is damaged, you can disable the gateway so you can recover
 // virtual tapes.
 //
 // Use this operation for a tape gateway that is not reachable or not functioning.
+// This operation is only supported in the tape gateway architectures.
 //
 // Once a gateway is disabled it cannot be enabled.
 //
@@ -3711,19 +3686,18 @@ const opListFileShares = "ListFileShares"
 
 // ListFileSharesRequest generates a "aws/request.Request" representing the
 // client's request for the ListFileShares operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListFileShares for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListFileShares method directly
-// instead.
+// See ListFileShares for more information on using the ListFileShares
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListFileSharesRequest method.
 //    req, resp := client.ListFileSharesRequest(params)
@@ -3754,7 +3728,7 @@ func (c *StorageGateway) ListFileSharesRequest(input *ListFileSharesInput) (req 
 //
 // Gets a list of the file shares for a specific file gateway, or the list of
 // file shares that belong to the calling user account. This operation is only
-// supported in file gateways.
+// supported in the file gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3798,19 +3772,18 @@ const opListGateways = "ListGateways"
 
 // ListGatewaysRequest generates a "aws/request.Request" representing the
 // client's request for the ListGateways operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListGateways for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListGateways method directly
-// instead.
+// See ListGateways for more information on using the ListGateways
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListGatewaysRequest method.
 //    req, resp := client.ListGatewaysRequest(params)
@@ -3949,19 +3922,18 @@ const opListLocalDisks = "ListLocalDisks"
 
 // ListLocalDisksRequest generates a "aws/request.Request" representing the
 // client's request for the ListLocalDisks operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListLocalDisks for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListLocalDisks method directly
-// instead.
+// See ListLocalDisks for more information on using the ListLocalDisks
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListLocalDisksRequest method.
 //    req, resp := client.ListLocalDisksRequest(params)
@@ -4043,19 +4015,18 @@ const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForResource operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListTagsForResource for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListTagsForResource method directly
-// instead.
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListTagsForResourceRequest method.
 //    req, resp := client.ListTagsForResourceRequest(params)
@@ -4084,7 +4055,8 @@ func (c *StorageGateway) ListTagsForResourceRequest(input *ListTagsForResourceIn
 
 // ListTagsForResource API operation for AWS Storage Gateway.
 //
-// Lists the tags that have been added to the specified resource.
+// Lists the tags that have been added to the specified resource. This operation
+// is only supported in the cached volume, stored volume and tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4128,19 +4100,18 @@ const opListTapes = "ListTapes"
 
 // ListTapesRequest generates a "aws/request.Request" representing the
 // client's request for the ListTapes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListTapes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListTapes method directly
-// instead.
+// See ListTapes for more information on using the ListTapes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListTapesRequest method.
 //    req, resp := client.ListTapesRequest(params)
@@ -4179,7 +4150,7 @@ func (c *StorageGateway) ListTapesRequest(input *ListTapesInput) (req *request.R
 // body to limit the number of tapes in the response. If the number of tapes
 // returned in the response is truncated, the response includes a Marker element
 // that you can use in your subsequent request to retrieve the next set of tapes.
-// This operation is only supported in tape gateways.
+// This operation is only supported in the tape gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4223,19 +4194,18 @@ const opListVolumeInitiators = "ListVolumeInitiators"
 
 // ListVolumeInitiatorsRequest generates a "aws/request.Request" representing the
 // client's request for the ListVolumeInitiators operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListVolumeInitiators for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListVolumeInitiators method directly
-// instead.
+// See ListVolumeInitiators for more information on using the ListVolumeInitiators
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListVolumeInitiatorsRequest method.
 //    req, resp := client.ListVolumeInitiatorsRequest(params)
@@ -4265,7 +4235,8 @@ func (c *StorageGateway) ListVolumeInitiatorsRequest(input *ListVolumeInitiators
 // ListVolumeInitiators API operation for AWS Storage Gateway.
 //
 // Lists iSCSI initiators that are connected to a volume. You can use this operation
-// to determine whether a volume is being used or not.
+// to determine whether a volume is being used or not. This operation is only
+// supported in the cached volume and stored volume gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4309,19 +4280,18 @@ const opListVolumeRecoveryPoints = "ListVolumeRecoveryPoints"
 
 // ListVolumeRecoveryPointsRequest generates a "aws/request.Request" representing the
 // client's request for the ListVolumeRecoveryPoints operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListVolumeRecoveryPoints for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListVolumeRecoveryPoints method directly
-// instead.
+// See ListVolumeRecoveryPoints for more information on using the ListVolumeRecoveryPoints
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListVolumeRecoveryPointsRequest method.
 //    req, resp := client.ListVolumeRecoveryPointsRequest(params)
@@ -4351,7 +4321,7 @@ func (c *StorageGateway) ListVolumeRecoveryPointsRequest(input *ListVolumeRecove
 // ListVolumeRecoveryPoints API operation for AWS Storage Gateway.
 //
 // Lists the recovery points for a specified gateway. This operation is only
-// supported in the cached volumes gateway architecture.
+// supported in the cached volume gateway architecture.
 //
 // Each cache volume has one recovery point. A volume recovery point is a point
 // in time at which all data of the volume is consistent and from which you
@@ -4401,19 +4371,18 @@ const opListVolumes = "ListVolumes"
 
 // ListVolumesRequest generates a "aws/request.Request" representing the
 // client's request for the ListVolumes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListVolumes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListVolumes method directly
-// instead.
+// See ListVolumes for more information on using the ListVolumes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListVolumesRequest method.
 //    req, resp := client.ListVolumesRequest(params)
@@ -4458,7 +4427,8 @@ func (c *StorageGateway) ListVolumesRequest(input *ListVolumesInput) (req *reque
 // to limit the number of volumes in the response. If the number of volumes
 // returned in the response is truncated, the response includes a Marker field.
 // You can use this Marker value in your subsequent request to retrieve the
-// next set of volumes.
+// next set of volumes. This operation is only supported in the cached volume
+// and stored volume gateway architectures.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4552,19 +4522,18 @@ const opRefreshCache = "RefreshCache"
 
 // RefreshCacheRequest generates a "aws/request.Request" representing the
 // client's request for the RefreshCache operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See RefreshCache for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RefreshCache method directly
-// instead.
+// See RefreshCache for more information on using the RefreshCache
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RefreshCacheRequest method.
 //    req, resp := client.RefreshCacheRequest(params)
@@ -4594,8 +4563,8 @@ func (c *StorageGateway) RefreshCacheRequest(input *RefreshCacheInput) (req *req
 // RefreshCache API operation for AWS Storage Gateway.
 //
 // Refreshes the cache for the specified file share. This operation finds objects
-// in the Amazon S3 bucket that were added or removed since the gateway last
-// listed the bucket's contents and cached the results.
+// in the Amazon S3 bucket that were added, removed or replaced since the gateway
+// last listed the bucket's contents and cached the results.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4639,19 +4608,18 @@ const opRemoveTagsFromResource = "RemoveTagsFromResource"
 
 // RemoveTagsFromResourceRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTagsFromResource operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See RemoveTagsFromResource for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RemoveTagsFromResource method directly
-// instead.
+// See RemoveTagsFromResource for more information on using the RemoveTagsFromResource
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RemoveTagsFromResourceRequest method.
 //    req, resp := client.RemoveTagsFromResourceRequest(params)
@@ -4680,7 +4648,8 @@ func (c *StorageGateway) RemoveTagsFromResourceRequest(input *RemoveTagsFromReso
 
 // RemoveTagsFromResource API operation for AWS Storage Gateway.
 //
-// Removes one or more tags from the specified resource.
+// Removes one or more tags from the specified resource. This operation is only
+// supported in the cached volume, stored volume and tape gateway architectures.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4724,19 +4693,18 @@ const opResetCache = "ResetCache"
 
 // ResetCacheRequest generates a "aws/request.Request" representing the
 // client's request for the ResetCache operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ResetCache for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ResetCache method directly
-// instead.
+// See ResetCache for more information on using the ResetCache
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ResetCacheRequest method.
 //    req, resp := client.ResetCacheRequest(params)
@@ -4771,6 +4739,8 @@ func (c *StorageGateway) ResetCacheRequest(input *ResetCacheInput) (req *request
 // in the gateway. For example, an error can occur when a disk is corrupted
 // or removed from the gateway. When a cache is reset, the gateway loses its
 // cache storage. At this point you can reconfigure the disks as cache disks.
+// This operation is only supported in the cached volume,tape and file gateway
+// architectures.
 //
 // If the cache disk you are resetting contains data that has not been uploaded
 // to Amazon S3 yet, that data can be lost. After you reset cache disks, there
@@ -4819,19 +4789,18 @@ const opRetrieveTapeArchive = "RetrieveTapeArchive"
 
 // RetrieveTapeArchiveRequest generates a "aws/request.Request" representing the
 // client's request for the RetrieveTapeArchive operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See RetrieveTapeArchive for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RetrieveTapeArchive method directly
-// instead.
+// See RetrieveTapeArchive for more information on using the RetrieveTapeArchive
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RetrieveTapeArchiveRequest method.
 //    req, resp := client.RetrieveTapeArchiveRequest(params)
@@ -4863,11 +4832,13 @@ func (c *StorageGateway) RetrieveTapeArchiveRequest(input *RetrieveTapeArchiveIn
 // Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a
 // tape gateway. Virtual tapes archived in the VTS are not associated with any
 // gateway. However after a tape is retrieved, it is associated with a gateway,
-// even though it is also listed in the VTS.
+// even though it is also listed in the VTS, that is, archive. This operation
+// is only supported in the tape gateway architecture.
 //
 // Once a tape is successfully retrieved to a gateway, it cannot be retrieved
 // again to another gateway. You must archive the tape again before you can
-// retrieve it to another gateway.
+// retrieve it to another gateway. This operation is only supported in the tape
+// gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4911,19 +4882,18 @@ const opRetrieveTapeRecoveryPoint = "RetrieveTapeRecoveryPoint"
 
 // RetrieveTapeRecoveryPointRequest generates a "aws/request.Request" representing the
 // client's request for the RetrieveTapeRecoveryPoint operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See RetrieveTapeRecoveryPoint for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RetrieveTapeRecoveryPoint method directly
-// instead.
+// See RetrieveTapeRecoveryPoint for more information on using the RetrieveTapeRecoveryPoint
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RetrieveTapeRecoveryPointRequest method.
 //    req, resp := client.RetrieveTapeRecoveryPointRequest(params)
@@ -4952,7 +4922,8 @@ func (c *StorageGateway) RetrieveTapeRecoveryPointRequest(input *RetrieveTapeRec
 
 // RetrieveTapeRecoveryPoint API operation for AWS Storage Gateway.
 //
-// Retrieves the recovery point for the specified virtual tape.
+// Retrieves the recovery point for the specified virtual tape. This operation
+// is only supported in the tape gateway architecture.
 //
 // A recovery point is a point in time view of a virtual tape at which all the
 // data on the tape is consistent. If your gateway crashes, virtual tapes that
@@ -5004,19 +4975,18 @@ const opSetLocalConsolePassword = "SetLocalConsolePassword"
 
 // SetLocalConsolePasswordRequest generates a "aws/request.Request" representing the
 // client's request for the SetLocalConsolePassword operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See SetLocalConsolePassword for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the SetLocalConsolePassword method directly
-// instead.
+// See SetLocalConsolePassword for more information on using the SetLocalConsolePassword
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the SetLocalConsolePasswordRequest method.
 //    req, resp := client.SetLocalConsolePasswordRequest(params)
@@ -5092,19 +5062,18 @@ const opShutdownGateway = "ShutdownGateway"
 
 // ShutdownGatewayRequest generates a "aws/request.Request" representing the
 // client's request for the ShutdownGateway operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ShutdownGateway for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ShutdownGateway method directly
-// instead.
+// See ShutdownGateway for more information on using the ShutdownGateway
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ShutdownGatewayRequest method.
 //    req, resp := client.ShutdownGatewayRequest(params)
@@ -5136,8 +5105,8 @@ func (c *StorageGateway) ShutdownGatewayRequest(input *ShutdownGatewayInput) (re
 // Shuts down a gateway. To specify which gateway to shut down, use the Amazon
 // Resource Name (ARN) of the gateway in the body of your request.
 //
-// The operation shuts down the gateway service component running in the storage
-// gateway's virtual machine (VM) and not the VM.
+// The operation shuts down the gateway service component running in the gateway's
+// virtual machine (VM) and not the host VM.
 //
 // If you want to shut down the VM, it is recommended that you first shut down
 // the gateway component in the VM to avoid unpredictable conditions.
@@ -5197,19 +5166,18 @@ const opStartGateway = "StartGateway"
 
 // StartGatewayRequest generates a "aws/request.Request" representing the
 // client's request for the StartGateway operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See StartGateway for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the StartGateway method directly
-// instead.
+// See StartGateway for more information on using the StartGateway
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the StartGatewayRequest method.
 //    req, resp := client.StartGatewayRequest(params)
@@ -5293,19 +5261,18 @@ const opUpdateBandwidthRateLimit = "UpdateBandwidthRateLimit"
 
 // UpdateBandwidthRateLimitRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateBandwidthRateLimit operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateBandwidthRateLimit for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateBandwidthRateLimit method directly
-// instead.
+// See UpdateBandwidthRateLimit for more information on using the UpdateBandwidthRateLimit
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateBandwidthRateLimitRequest method.
 //    req, resp := client.UpdateBandwidthRateLimitRequest(params)
@@ -5387,19 +5354,18 @@ const opUpdateChapCredentials = "UpdateChapCredentials"
 
 // UpdateChapCredentialsRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateChapCredentials operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateChapCredentials for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateChapCredentials method directly
-// instead.
+// See UpdateChapCredentials for more information on using the UpdateChapCredentials
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateChapCredentialsRequest method.
 //    req, resp := client.UpdateChapCredentialsRequest(params)
@@ -5477,19 +5443,18 @@ const opUpdateGatewayInformation = "UpdateGatewayInformation"
 
 // UpdateGatewayInformationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGatewayInformation operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateGatewayInformation for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateGatewayInformation method directly
-// instead.
+// See UpdateGatewayInformation for more information on using the UpdateGatewayInformation
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateGatewayInformationRequest method.
 //    req, resp := client.UpdateGatewayInformationRequest(params)
@@ -5568,19 +5533,18 @@ const opUpdateGatewaySoftwareNow = "UpdateGatewaySoftwareNow"
 
 // UpdateGatewaySoftwareNowRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGatewaySoftwareNow operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateGatewaySoftwareNow for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateGatewaySoftwareNow method directly
-// instead.
+// See UpdateGatewaySoftwareNow for more information on using the UpdateGatewaySoftwareNow
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateGatewaySoftwareNowRequest method.
 //    req, resp := client.UpdateGatewaySoftwareNowRequest(params)
@@ -5667,19 +5631,18 @@ const opUpdateMaintenanceStartTime = "UpdateMaintenanceStartTime"
 
 // UpdateMaintenanceStartTimeRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateMaintenanceStartTime operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateMaintenanceStartTime for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateMaintenanceStartTime method directly
-// instead.
+// See UpdateMaintenanceStartTime for more information on using the UpdateMaintenanceStartTime
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateMaintenanceStartTimeRequest method.
 //    req, resp := client.UpdateMaintenanceStartTimeRequest(params)
@@ -5754,19 +5717,18 @@ const opUpdateNFSFileShare = "UpdateNFSFileShare"
 
 // UpdateNFSFileShareRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateNFSFileShare operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateNFSFileShare for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateNFSFileShare method directly
-// instead.
+// See UpdateNFSFileShare for more information on using the UpdateNFSFileShare
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateNFSFileShareRequest method.
 //    req, resp := client.UpdateNFSFileShareRequest(params)
@@ -5795,10 +5757,26 @@ func (c *StorageGateway) UpdateNFSFileShareRequest(input *UpdateNFSFileShareInpu
 
 // UpdateNFSFileShare API operation for AWS Storage Gateway.
 //
-// Updates a file share. This operation is only supported in file gateways.
+// Updates a file share. This operation is only supported in the file gateway
+// architecture.
 //
 // To leave a file share field unchanged, set the corresponding input field
 // to null.
+//
+// Updates the following file share setting:
+//
+//    * Default storage class for your S3 bucket
+//
+//    * Metadata defaults for your S3 bucket
+//
+//    * Allowed NFS clients for your file share
+//
+//    * Squash settings
+//
+//    * Write status of your file share
+//
+// To leave a file share field unchanged, set the corresponding input field
+// to null. This operation is only supported in file gateways.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5842,19 +5820,18 @@ const opUpdateSnapshotSchedule = "UpdateSnapshotSchedule"
 
 // UpdateSnapshotScheduleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSnapshotSchedule operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateSnapshotSchedule for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateSnapshotSchedule method directly
-// instead.
+// See UpdateSnapshotSchedule for more information on using the UpdateSnapshotSchedule
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateSnapshotScheduleRequest method.
 //    req, resp := client.UpdateSnapshotScheduleRequest(params)
@@ -5883,7 +5860,8 @@ func (c *StorageGateway) UpdateSnapshotScheduleRequest(input *UpdateSnapshotSche
 
 // UpdateSnapshotSchedule API operation for AWS Storage Gateway.
 //
-// Updates a snapshot schedule configured for a gateway volume.
+// Updates a snapshot schedule configured for a gateway volume. This operation
+// is only supported in the cached volume and stored volume gateway architectures.
 //
 // The default snapshot schedule for volume is once every 24 hours, starting
 // at the creation time of the volume. You can use this API to change the snapshot
@@ -5935,19 +5913,18 @@ const opUpdateVTLDeviceType = "UpdateVTLDeviceType"
 
 // UpdateVTLDeviceTypeRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateVTLDeviceType operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateVTLDeviceType for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateVTLDeviceType method directly
-// instead.
+// See UpdateVTLDeviceType for more information on using the UpdateVTLDeviceType
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateVTLDeviceTypeRequest method.
 //    req, resp := client.UpdateVTLDeviceTypeRequest(params)
@@ -5979,7 +5956,8 @@ func (c *StorageGateway) UpdateVTLDeviceTypeRequest(input *UpdateVTLDeviceTypeIn
 // Updates the type of medium changer in a tape gateway. When you activate a
 // tape gateway, you select a medium changer type for the tape gateway. This
 // operation enables you to select a different type of medium changer after
-// a tape gateway is activated. This operation is only supported in tape gateways.
+// a tape gateway is activated. This operation is only supported in the tape
+// gateway architecture.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6054,22 +6032,24 @@ type ActivateGatewayInput struct {
 	// GatewayName is a required field
 	GatewayName *string `min:"2" type:"string" required:"true"`
 
-	// A value that indicates the region where you want to store the snapshot backups.
-	// The gateway region specified must be the same region as the region in your
-	// Host header in the request. For more information about available regions
-	// and endpoints for AWS Storage Gateway, see Regions and Endpoints (http://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region)
+	// A value that indicates the region where you want to store your data. The
+	// gateway region specified must be the same region as the region in your Host
+	// header in the request. For more information about available regions and endpoints
+	// for AWS Storage Gateway, see Regions and Endpoints (http://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region)
 	// in the Amazon Web Services Glossary.
 	//
 	// Valid Values: "us-east-1", "us-east-2", "us-west-1", "us-west-2", "ca-central-1",
 	// "eu-west-1", "eu-central-1", "eu-west-2", "ap-northeast-1", "ap-northeast-2",
-	// "ap-southeast-1", "ap-southeast-2", "sa-east-1"
+	// "ap-southeast-1", "ap-southeast-2", "ap-south-1", "sa-east-1"
 	//
 	// GatewayRegion is a required field
 	GatewayRegion *string `min:"1" type:"string" required:"true"`
 
 	// A value that indicates the time zone you want to set for the gateway. The
-	// time zone is used, for example, for scheduling snapshots and your gateway's
-	// maintenance schedule.
+	// time zone is of the format "GMT-hr:mm" or "GMT+hr:mm". For example, GMT-4:00
+	// indicates the time is 4 hours behind GMT. GMT+2:00 indicates the time is
+	// 2 hours ahead of GMT. The time zone is used, for example, for scheduling
+	// snapshots and your gateway's maintenance schedule.
 	//
 	// GatewayTimezone is a required field
 	GatewayTimezone *string `min:"3" type:"string" required:"true"`
@@ -6572,6 +6552,8 @@ func (s *AddWorkingStorageOutput) SetGatewayARN(v string) *AddWorkingStorageOutp
 type CachediSCSIVolume struct {
 	_ struct{} `type:"structure"`
 
+	// The date the volume was created. Volumes created prior to March 28, 2017
+	// don’t have this time stamp.
 	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// If the cached volume was created from a snapshot, this field contains the
@@ -6589,7 +6571,7 @@ type CachediSCSIVolume struct {
 	// in the response if the cached volume is not restoring or bootstrapping.
 	VolumeProgress *float64 `type:"double"`
 
-	// The size of the volume in bytes.
+	// The size, in bytes, of the volume capacity.
 	VolumeSizeInBytes *int64 `type:"long"`
 
 	// One of the VolumeStatus values that indicates the state of the storage volume.
@@ -7086,7 +7068,7 @@ type CreateNFSFileShareInput struct {
 	// be set when KmsEncrypted is true. Optional.
 	KMSKey *string `min:"20" type:"string"`
 
-	// The ARN of the backend storage used for storing file data.
+	// The ARN of the backed storage used for storing file data.
 	//
 	// LocationARN is a required field
 	LocationARN *string `min:"16" type:"string" required:"true"`
@@ -7094,8 +7076,8 @@ type CreateNFSFileShareInput struct {
 	// File share default values. Optional.
 	NFSFileShareDefaults *NFSFileShareDefaults `type:"structure"`
 
-	// Sets the write status of a file share. "true", if the write status is read-only;
-	// otherwise "false.
+	// Sets the write status of a file share: "true" if the write status is read-only,
+	// and otherwise "false".
 	ReadOnly *bool `type:"boolean"`
 
 	// The ARN of the AWS Identity and Access Management (IAM) role that a file
@@ -7104,9 +7086,13 @@ type CreateNFSFileShareInput struct {
 	// Role is a required field
 	Role *string `min:"20" type:"string" required:"true"`
 
-	// Maps a user to anonymous user. Valid options: "RootSquash" - Only root is
-	// mapped to anonymous user, "NoSquash" - No one is mapped to anonymous user
-	// or "AllSquash" - Everyone is mapped to anonymous user.
+	// Maps a user to anonymous user. Valid options are the following:
+	//
+	//    * "RootSquash" - Only root is mapped to anonymous user.
+	//
+	//    * "NoSquash" - No one is mapped to anonymous user.
+	//
+	//    * "AllSquash" - Everyone is mapped to anonymous user.
 	Squash *string `min:"5" type:"string"`
 }
 
@@ -7513,7 +7499,7 @@ type CreateStorediSCSIVolumeInput struct {
 
 	// The name of the iSCSI target used by initiators to connect to the target
 	// and as a suffix for the target ARN. For example, specifying TargetName as
-	// myvolume results in the target ARN of arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume.
+	// myvolume results in the target ARN of arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume.
 	// The target name must be unique across all volumes of a gateway.
 	//
 	// TargetName is a required field
@@ -7657,6 +7643,9 @@ type CreateTapeWithBarcodeInput struct {
 	GatewayARN *string `min:"50" type:"string" required:"true"`
 
 	// The barcode that you want to assign to the tape.
+	//
+	// Barcodes cannot be reused. This includes barcodes used for tapes that have
+	// been deleted.
 	//
 	// TapeBarcode is a required field
 	TapeBarcode *string `min:"7" type:"string" required:"true"`
@@ -8094,6 +8083,12 @@ type DeleteFileShareInput struct {
 	//
 	// FileShareARN is a required field
 	FileShareARN *string `min:"50" type:"string" required:"true"`
+
+	// If set to true, deletes a file share immediately and aborts all data uploads
+	// to AWS. Otherwise the file share is not deleted until all data is uploaded
+	// to AWS. This process aborts the data upload process and the file share enters
+	// the FORCE_DELETING status.
+	ForceDelete *bool `type:"boolean"`
 }
 
 // String returns the string representation
@@ -8125,6 +8120,12 @@ func (s *DeleteFileShareInput) Validate() error {
 // SetFileShareARN sets the FileShareARN field's value.
 func (s *DeleteFileShareInput) SetFileShareARN(v string) *DeleteFileShareInput {
 	s.FileShareARN = &v
+	return s
+}
+
+// SetForceDelete sets the ForceDelete field's value.
+func (s *DeleteFileShareInput) SetForceDelete(v bool) *DeleteFileShareInput {
+	s.ForceDelete = &v
 	return s
 }
 
@@ -9615,8 +9616,8 @@ type DescribeTapesInput struct {
 
 	// Specifies one or more unique Amazon Resource Names (ARNs) that represent
 	// the virtual tapes you want to describe. If this parameter is not specified,
-	// AWS Storage Gateway returns a description of all virtual tapes associated
-	// with the specified gateway.
+	// Tape gateway returns a description of all virtual tapes associated with the
+	// specified gateway.
 	TapeARNs []*string `type:"list"`
 }
 
@@ -11152,7 +11153,7 @@ func (s *ListVolumesOutput) SetVolumeInfos(v []*VolumeInfo) *ListVolumesOutput {
 // objects in S3 buckets don't, by default, have Unix file permissions assigned
 // to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects
 // that represent files and folders are assigned these default Unix permissions.
-// This operation is only supported in file gateways.
+// This operation is only supported in the file gateway architecture.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/storagegateway-2013-06-30/NFSFileShareDefaults
 type NFSFileShareDefaults struct {
 	_ struct{} `type:"structure"`
@@ -11226,7 +11227,7 @@ func (s *NFSFileShareDefaults) SetOwnerId(v int64) *NFSFileShareDefaults {
 }
 
 // The Unix file permissions and ownership information assigned, by default,
-// to native S3 objects when Storage Gateway discovers them in S3 buckets. This
+// to native S3 objects when file gateway discovers them in S3 buckets. This
 // operation is only supported in file gateways.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/storagegateway-2013-06-30/NFSFileShareInfo
 type NFSFileShareInfo struct {
@@ -11269,23 +11270,27 @@ type NFSFileShareInfo struct {
 	// objects in S3 buckets don't, by default, have Unix file permissions assigned
 	// to them. Upon discovery in an S3 bucket by Storage Gateway, the S3 objects
 	// that represent files and folders are assigned these default Unix permissions.
-	// This operation is only supported in file gateways.
+	// This operation is only supported in the file gateway architecture.
 	NFSFileShareDefaults *NFSFileShareDefaults `type:"structure"`
 
 	// The file share path used by the NFS client to identify the mount point.
 	Path *string `type:"string"`
 
-	// Indicates whether the write status of a file share is read-only. "true",
-	// if write status is read-only; otherwise "false".
+	// A value that indicates whether the write status of a file share is read-only:
+	// "true" if write status is read-only, and otherwise "false".
 	ReadOnly *bool `type:"boolean"`
 
 	// The ARN of the IAM role that file gateway assumes when it accesses the underlying
 	// storage.
 	Role *string `min:"20" type:"string"`
 
-	// Indicates the user mapped to anonymous user. Valid options: "RootSquash"
-	// - Only root is mapped to anonymous user, "NoSquash" - No one is mapped to
-	// anonymous user or "AllSquash" - Everyone is mapped to anonymous user.
+	// The user mapped to anonymous user. Valid options are the following:
+	//
+	//    * "RootSquash" - Only root is mapped to anonymous user.
+	//
+	//    * "NoSquash" - No one is mapped to anonymous user
+	//
+	//    * "AllSquash" - Everyone is mapped to anonymous user.
 	Squash *string `min:"5" type:"string"`
 }
 
@@ -12058,6 +12063,8 @@ func (s *StartGatewayOutput) SetGatewayARN(v string) *StartGatewayOutput {
 type StorediSCSIVolume struct {
 	_ struct{} `type:"structure"`
 
+	// The date the volume was created. Volumes created prior to March 28, 2017
+	// don’t have this time stamp.
 	CreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Indicates if when the stored volume was created, existing data on the underlying
@@ -12244,13 +12251,19 @@ type Tape struct {
 	// The barcode that identifies a specific virtual tape.
 	TapeBarcode *string `min:"7" type:"string"`
 
+	// The date the virtual tape was created.
 	TapeCreatedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// The size, in bytes, of the virtual tape.
+	// The size, in bytes, of the virtual tape capacity.
 	TapeSizeInBytes *int64 `type:"long"`
 
 	// The current state of the virtual tape.
 	TapeStatus *string `type:"string"`
+
+	// The size, in bytes, of data written to the virtual tape.
+	//
+	// This value is not available for tapes created prior to May 13, 2015.
+	TapeUsedInBytes *int64 `type:"long"`
 
 	// The virtual tape library (VTL) device that the virtual tape is associated
 	// with.
@@ -12303,6 +12316,12 @@ func (s *Tape) SetTapeStatus(v string) *Tape {
 	return s
 }
 
+// SetTapeUsedInBytes sets the TapeUsedInBytes field's value.
+func (s *Tape) SetTapeUsedInBytes(v int64) *Tape {
+	s.TapeUsedInBytes = &v
+	return s
+}
+
 // SetVTLDevice sets the VTLDevice field's value.
 func (s *Tape) SetVTLDevice(v string) *Tape {
 	s.VTLDevice = &v
@@ -12339,6 +12358,11 @@ type TapeArchive struct {
 
 	// The current state of the archived virtual tape.
 	TapeStatus *string `type:"string"`
+
+	// The size, in bytes, of data written to the virtual tape.
+	//
+	// This value is not available for tapes created prior to May 13, 2015.
+	TapeUsedInBytes *int64 `type:"long"`
 }
 
 // String returns the string representation
@@ -12390,6 +12414,12 @@ func (s *TapeArchive) SetTapeSizeInBytes(v int64) *TapeArchive {
 // SetTapeStatus sets the TapeStatus field's value.
 func (s *TapeArchive) SetTapeStatus(v string) *TapeArchive {
 	s.TapeStatus = &v
+	return s
+}
+
+// SetTapeUsedInBytes sets the TapeUsedInBytes field's value.
+func (s *TapeArchive) SetTapeUsedInBytes(v int64) *TapeArchive {
+	s.TapeUsedInBytes = &v
 	return s
 }
 
@@ -13075,13 +13105,17 @@ type UpdateNFSFileShareInput struct {
 	// The default values for the file share. Optional.
 	NFSFileShareDefaults *NFSFileShareDefaults `type:"structure"`
 
-	// Sets the write status of a file share. "true", if the write status is read-only;
-	// otherwise "false.
+	// Sets the write status of a file share: "true" if the write status is read-only,
+	// otherwise "false".
 	ReadOnly *bool `type:"boolean"`
 
-	// Indicates the user mapped to anonymous user. Valid options: "RootSquash"
-	// - Only root is mapped to anonymous user, "NoSquash" - No one is mapped to
-	// anonymous user or "AllSquash" - Everyone is mapped to anonymous user.
+	// The user mapped to anonymous user. Valid options are the following:
+	//
+	//    * "RootSquash" - Only root is mapped to anonymous user.
+	//
+	//    * "NoSquash" - No one is mapped to anonymous user
+	//
+	//    * "AllSquash" - Everyone is mapped to anonymous user.
 	Squash *string `min:"5" type:"string"`
 }
 
@@ -13487,7 +13521,7 @@ type VolumeInfo struct {
 	// The Amazon Resource Name (ARN) for the storage volume. For example, the following
 	// is a valid ARN:
 	//
-	// arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABB
+	// arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABB
 	//
 	// Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens
 	// (-).

@@ -90,12 +90,21 @@ var knownFails = map[string]failReason{
 	"fixedbugs/issue15528.go": {category: usesUnsupportedPackage, desc: `imports "unsafe" package and gets: Error: reflect: call of reflect.Value.IsNil on unsafe.Pointer Value`}, // See https://github.com/golang/go/commit/dfc56a4cd313c9c5de37f4fadb14912286edc42f for relevant commit.
 	"fixedbugs/issue17381.go": {category: unsureIfGopherJSSupportsThisFeature, desc: "tests runtime.{Callers,FuncForPC} behavior in a deferred func with garbage on stack... does GopherJS even support runtime.{Callers,FuncForPC}?"},
 	"fixedbugs/issue18149.go": {desc: "//line directives with filenames are not correctly parsed, see https://github.com/gopherjs/gopherjs/issues/553."},
+
+	// These are new tests in Go 1.9.
+	"fixedbugs/issue19182.go": {category: neverTerminates, desc: "needs GOMAXPROCS=2"},
+	"fixedbugs/issue19040.go": {desc: `panicwrap error text:
+			"runtime error: invalid memory address or nil pointer dereference"
+		want:
+			"value method main.T.F called using nil *T pointer"`},
+	"fixedbugs/issue19246.go": {desc: "expected nil pointer dereference panic"}, // Issue https://golang.org/issues/19246: Failed to evaluate some zero-sized values when converting them to interfaces.
 }
 
 type failCategory uint8
 
 const (
 	other                    failCategory = iota
+	neverTerminates                       // Test never terminates (so avoid starting it).
 	usesUnsupportedPackage                // Test fails because it imports an unsupported package, e.g., "unsafe".
 	requiresSourceMapSupport              // Test fails without source map support (as configured in CI), because it tries to check filename/line number via runtime.Caller.
 	compilerPanic
@@ -214,11 +223,6 @@ func main() {
 		}
 		status := "ok  "
 		errStr := ""
-		if _, isSkip := test.err.(skipError); isSkip {
-			test.err = nil
-			errStr = "unexpected skip for " + path.Join(test.dir, test.gofile) + ": " + errStr
-			status = "FAIL"
-		}
 		// GOPHERJS.
 		if _, ok := knownFails[filepath.ToSlash(test.goFileName())]; ok && test.err != nil {
 			errStr = test.err.Error()
@@ -228,6 +232,11 @@ func main() {
 			// unok means unexpected okay. Test was expected to fail, but it unexpectedly succeeded.
 			// If this is not an accident, it should be removed from knownFails map.
 			status = "unok"
+		}
+		if _, isSkip := test.err.(skipError); isSkip {
+			test.err = nil
+			errStr = "unexpected skip for " + path.Join(test.dir, test.gofile) + ": " + errStr
+			status = "FAIL"
 		}
 		if test.err != nil {
 			status = "FAIL"
@@ -522,6 +531,12 @@ func (t *test) run() {
 		t.dt = time.Since(start)
 		close(t.donec)
 	}()
+
+	// GOPHERJS: Some tests may never terminate once started. Avoid starting them.
+	if kf, ok := knownFails[filepath.ToSlash(t.goFileName())]; ok && kf.category == neverTerminates {
+		t.err = skipError("skipping because it doesn't terminate")
+		return
+	}
 
 	srcBytes, err := ioutil.ReadFile(t.goFileName())
 	if err != nil {
