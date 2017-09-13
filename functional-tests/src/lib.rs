@@ -19,7 +19,6 @@ mod tests {
     use std::process::Command;
     use serde_yaml::Value;
     const SOPS_BINARY_PATH: &'static str = "./sops";
-    const SOPS_TEST_GPG_KEY: &'static str = "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A";
 
     macro_rules! assert_encrypted {
         ($object:expr, $key:expr) => {
@@ -229,30 +228,7 @@ b: ba"#
 
     #[test]
     fn decrypt_file_no_mac() {
-        let file_path = prepare_temp_file("test_decrypt_no_mac.yaml",
-                                          r#"
-myapp1: ENC[AES256_GCM,data:QsGJGjvQOpoVCIlrYTcOQEfQzriw,iv:ShmgdRNV6UrOJ22Rgr7habB74Nd/YFxU4lDh6jy6n+8=,tag:8GT6U8lzrI27DcFc1+icgQ==,type:str]
-sops:
-    pgp:
-    -   fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
-        created_at: '2015-11-25T00:32:57Z'
-        enc: |
-            -----BEGIN PGP MESSAGE-----
-            Version: GnuPG v1
-
-            hIwDEEVDpnzXnMABBACBf7lGw8B0sLbfup1Ye51FNpY6iF/4SPTdjeV4OB3uDwIJ
-            FRa6z7VR+FrtWyyNYRNB2Wm5eegnEEWwui6hFw7tvlhkN8C5hWQ0B47oYMTstZDR
-            TR3Eu7y70u3YLoQKZgDnPb6hQplGIoYVd/EMpDgKmKnmz5oCiIkEI68T3aXo5tJc
-            AZhplIlk9eSMHIW9CmGkNp5HtZlQWzVSdGdcQcIUBG4F+Vf40max9u0Jkk1Se1do
-            BJ+D4Kl5dZXBj3njvo4YdZ+FGoYPfMlX1GCw0W4caUu6tD8RjuzJA+fYo2Q=
-            =Cnu4
-            -----END PGP MESSAGE-----
-    lastmodified: '2016-03-16T23:34:46Z'
-    version: 1.7
-    attention: This section contains key material that should only be modified with
-        extra care. See `sops -h`.
-"#
-                                              .as_bytes());
+        let file_path = prepare_temp_file("test_decrypt_no_mac.yaml", include_bytes!("../res/no_mac.yaml"));
         assert!(!Command::new(SOPS_BINARY_PATH)
                     .arg("-d")
                     .arg(file_path.clone())
@@ -323,41 +299,7 @@ sops:
     #[test]
     fn test_decrypt_file_multiple_keys() {
         let file_path = prepare_temp_file("test_decrypt_file_multiple_keys.yaml",
-                                          br#"message: ENC[AES256_GCM,data:LEw770M=,iv:YwFnvFCDU1kRf0LRB2duTe+4qINzpSZrCiDTU/tUSug=,tag:N5TarWss2N1o9QGGPdC8kQ==,type:str]
-sops:
-    lastmodified: '2017-09-02T17:36:53Z'
-    unencrypted_suffix: _unencrypted
-    mac: ENC[AES256_GCM,data:roj5h4cVmamV5IgNePrtsVh3pVP3nwAHhHZkwrHLC1A2xpCb/zGZv0Z9iB1O03fsb7nEfOpB70sePnpE7ZcqHBEcZX9JRJ9lISPcc6MpVpMb5oZPjFvIwhX5YW5vc3G8geI5plwDZmtZaocYKQrGZeR+s4qXTeKDbQ1j/6hOikE=,iv:UpnsiySBxjGE4NIiZX8/enGaPf5fS7jvFVHRojhq3Jg=,tag:VEI8qQvcJz0YbiIDnyAlbA==,type:str]
-    version: 2.0.9
-    pgp:
-    -   created_at: '2017-09-02T17:36:40Z'
-        enc: |
-            -----BEGIN PGP MESSAGE-----
-
-            hQEMA+IvbYEY5w8ZAQf6A0l+/3mSA/Tz/Z9g0E5rpbR7HIrmmPhO40VOLBcAjemB
-            ksDaJiCr162n+XfyW/k0wNWzgibRsa9KBHFfTef4kzQPUuT8sGc74HMKvgz8cN3t
-            8Ed7Qp5ghk2SBPBRhf/NSQpUROSTit7DzMAt9QWvwgHJrLlIGojfz3dEbUKTE/9q
-            oRFrozKYRSCUCtcp1bpCwktA5tBxTiUsC5o2biMM6zlWOxwVtf+UwF4EDr3PomaD
-            9bSH3uMFr/ArQ0QmIXB1lJ/xJlHPWzJlrgpKU1CbkqkelM4gqAl1trDV8bpf91kt
-            ufc1taHznZbNV4I6Q1jRksJAhYpLrMuae2uokBOKetJeAQwcMyT5MWijIveuAuOe
-            Dyq2i+o8Fv4qf305ufSpeQm79BCNcYF/NMSHZ0NhxIctf7f0Bmti29aTwnSgThC3
-            tYvP/mRNduy0n3JOwIbbr0vz5sQSAsgek5CNVmquOQ==
-            =melP
-            -----END PGP MESSAGE-----
-        fp: 729D26A79482B5A20DEAD0A76945978B930DD7A2
-    -   created_at: '2017-09-02T17:36:40Z'
-        enc: |
-            -----BEGIN PGP MESSAGE-----
-
-            hIwDEEVDpnzXnMABA/91BbSKP0DMRl5S8glZalI4iJSEjkshvRXswONs7gVi756o
-            ZHAGVg1dQbtGRU4FvUI7dswTi9YfGLbGnBXytxajwWHzDip3LbpNEvQDnJSu8fCj
-            JAY7Ja9e28zqPOEWRTNapdGqjARjI+/66cWe+gOCy/El4hTBX9ideRE/fV6XldJe
-            Af3k0H8nAuWzx0zXUQsj5zcSdFjmEewPo7tpcVvjpHZKufYjJvRS9w3zNvIw9nsv
-            t6ss5LSaAtM/hpNMaTPtqzYVHwOa/E1m7+h9iEFS/gsZ6rcdDL2pSoPwPuWZcg==
-            =ZzYr
-            -----END PGP MESSAGE-----
-        fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
-"#);
+                                          include_bytes!("../res/multiple_keys.yaml"));
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("-d")
             .arg(file_path.clone())
