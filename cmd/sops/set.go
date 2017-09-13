@@ -11,7 +11,7 @@ import (
 )
 
 type setOpts struct {
-	Cipher      sops.DataKeyCipher
+	Cipher      sops.Cipher
 	InputStore  sops.Store
 	OutputStore sops.Store
 	InputPath   string
@@ -31,7 +31,6 @@ func set(opts setOpts) ([]byte, error) {
 
 	// Decrypt the file
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Stash:       make(map[string][]interface{}),
 		Cipher:      opts.Cipher,
 		IgnoreMac:   opts.IgnoreMAC,
 		Tree:        tree,
@@ -52,7 +51,7 @@ func set(opts setOpts) ([]byte, error) {
 	tree.Branch = branch.InsertOrReplaceValue(key, opts.Value)
 
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash: make(map[string][]interface{}), DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
+		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
 		return nil, err

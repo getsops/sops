@@ -26,7 +26,7 @@ import (
 )
 
 type editOpts struct {
-	Cipher         sops.DataKeyCipher
+	Cipher         sops.Cipher
 	InputStore     sops.Store
 	OutputStore    sops.Store
 	InputPath      string
@@ -107,9 +107,8 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	if len(errs) > 0 {
 		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), codes.CouldNotRetrieveKey)
 	}
-	stash := make(map[string][]interface{})
 
-	return editTree(opts.editOpts, &tree, dataKey, stash)
+	return editTree(opts.editOpts, &tree, dataKey)
 }
 
 func edit(opts editOpts) ([]byte, error) {
@@ -119,18 +118,17 @@ func edit(opts editOpts) ([]byte, error) {
 		return nil, err
 	}
 	// Decrypt the file
-	stash := make(map[string][]interface{})
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Stash: stash, Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree, KeyServices: opts.KeyServices,
+		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree, KeyServices: opts.KeyServices,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return editTree(opts, tree, dataKey, stash)
+	return editTree(opts, tree, dataKey)
 }
 
-func editTree(opts editOpts, tree *sops.Tree, dataKey []byte, stash map[string][]interface{}) ([]byte, error) {
+func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {
@@ -173,7 +171,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte, stash map[string][
 
 	// Encrypt the file
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash: stash, DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
+		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
 		return nil, err

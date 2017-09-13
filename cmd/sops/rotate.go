@@ -12,7 +12,7 @@ import (
 )
 
 type rotateOpts struct {
-	Cipher           sops.DataKeyCipher
+	Cipher           sops.Cipher
 	InputStore       sops.Store
 	OutputStore      sops.Store
 	InputPath        string
@@ -29,7 +29,7 @@ func rotate(opts rotateOpts) ([]byte, error) {
 	}
 
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Stash: make(map[string][]interface{}), Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
+		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {
@@ -60,7 +60,7 @@ func rotate(opts rotateOpts) ([]byte, error) {
 
 	// Reencrypt the file with the new key
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash: make(map[string][]interface{}), DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
+		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
 		return nil, err

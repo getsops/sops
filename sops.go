@@ -68,10 +68,15 @@ const MacMismatch = sopsError("MAC mismatch")
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
 
-// DataKeyCipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the data key can be stored alongside the encrypted content. A DataKeyCipher must be able to decrypt the values it encrypts.
-type DataKeyCipher interface {
-	Encrypt(value interface{}, key []byte, additionalData string, stash interface{}) (string, error)
-	Decrypt(value string, key []byte, additionalData string) (plaintext interface{}, stashValue interface{}, err error)
+// Cipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the
+// data key can be stored alongside the encrypted content. A Cipher must be able to decrypt the values it encrypts.
+type Cipher interface {
+	// Encrypt takes a plaintext, a key and additional data and returns the plaintext encrypted with the key, using the
+	// additional data for authentication
+	Encrypt(plaintext interface{}, key []byte, additionalData string) (ciphertext string, err error)
+	// Encrypt takes a ciphertext, a key and additional data and returns the ciphertext encrypted with the key, using
+	// the additional data for authentication
+	Decrypt(ciphertext string, key []byte, additionalData string) (plaintext interface{}, err error)
 }
 
 // Comment represents a comment in the sops tree for the file formats that actually support them.
@@ -197,7 +202,7 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 }
 
 // Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
-func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
+func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		bytes, err := ToBytes(in)
@@ -210,14 +215,7 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 		if !unencrypted {
 			var err error
 			pathString := strings.Join(path, ":") + ":"
-			// Pop from the left of the stash
-			var stashValue interface{}
-			if len(stash[pathString]) > 0 {
-				var newStash []interface{}
-				stashValue, newStash = stash[pathString][0], stash[pathString][1:len(stash[pathString])]
-				stash[pathString] = newStash
-			}
-			in, err = cipher.Encrypt(in, key, pathString, stashValue)
+			in, err = cipher.Encrypt(in, key, pathString)
 			if err != nil {
 				return nil, fmt.Errorf("Could not encrypt value: %s", err)
 			}
@@ -235,7 +233,7 @@ func (tree Tree) Encrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 }
 
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
-func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]interface{}) (string, error) {
+func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Print("Decrypting SOPS tree")
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
@@ -248,13 +246,11 @@ func (tree Tree) Decrypt(key []byte, cipher DataKeyCipher, stash map[string][]in
 		}
 		if !unencrypted {
 			var err error
-			var stashValue interface{}
 			pathString := strings.Join(path, ":") + ":"
-			v, stashValue, err = cipher.Decrypt(in.(string), key, pathString)
+			v, err = cipher.Decrypt(in.(string), key, pathString)
 			if err != nil {
 				return nil, fmt.Errorf("Could not decrypt value: %s", err)
 			}
-			stash[pathString] = append(stash[pathString], stashValue)
 		} else {
 			v = in
 		}

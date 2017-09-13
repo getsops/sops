@@ -23,13 +23,23 @@ type encryptedValue struct {
 
 const nonceSize int = 32
 
-type stashData struct {
-	iv        []byte
-	plaintext interface{}
+type stashKey struct {
+	additionalData string
+	plaintext      interface{}
 }
 
 // Cipher encrypts and decrypts data keys with AES GCM 256
-type Cipher struct{}
+type Cipher struct {
+	// stash is a map that stores IVs for reuse, so that the ciphertext doesn't change when decrypting and reencrypting
+	// the same values.
+	stash map[stashKey][]byte
+}
+
+func NewCipher() Cipher {
+	return Cipher{
+		stash: make(map[stashKey][]byte),
+	}
+}
 
 var encre = regexp.MustCompile(`^ENC\[AES256_GCM,data:(.+),iv:(.+),tag:(.+),type:(.+)\]`)
 
@@ -56,57 +66,50 @@ func parse(value string) (*encryptedValue, error) {
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value and a stash value
-func (c Cipher) Decrypt(value string, key []byte, additionalData string) (plaintext interface{}, stash interface{}, err error) {
-	if value == "" {
-		return "", nil, nil
+func (c Cipher) Decrypt(ciphertext string, key []byte, additionalData string) (plaintext interface{}, err error) {
+	if ciphertext == "" {
+		return "", nil
 	}
-	encryptedValue, err := parse(value)
+	encryptedValue, err := parse(ciphertext)
 	if err != nil {
-		return "", nil, err
+		return nil, err
 	}
 	aescipher, err := cryptoaes.NewCipher(key)
 	if err != nil {
-		return "", nil, err
+		return nil, err
 	}
 
 	gcm, err := cipher.NewGCMWithNonceSize(aescipher, len(encryptedValue.iv))
 	if err != nil {
-		return "", nil, err
+		return nil, err
 	}
-	stashValue := stashData{iv: encryptedValue.iv}
 	data := append(encryptedValue.data, encryptedValue.tag...)
 	decryptedBytes, err := gcm.Open(nil, encryptedValue.iv, data, []byte(additionalData))
 	if err != nil {
-		return "", nil, fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
+		return nil, fmt.Errorf("Could not decrypt with AES_GCM: %s", err)
 	}
 	decryptedValue := string(decryptedBytes)
 	switch encryptedValue.datatype {
 	case "str":
-		stashValue.plaintext = decryptedValue
-		return decryptedValue, stashValue, nil
+		plaintext = decryptedValue
 	case "int":
 		plaintext, err = strconv.Atoi(decryptedValue)
-		stashValue.plaintext = plaintext
-		return plaintext, stashValue, err
 	case "float":
 		plaintext, err = strconv.ParseFloat(decryptedValue, 64)
-		stashValue.plaintext = plaintext
-		return plaintext, stashValue, err
 	case "bytes":
-		stashValue.plaintext = decryptedBytes
-		return decryptedBytes, stashValue, nil
+		plaintext = decryptedBytes
 	case "bool":
 		plaintext, err = strconv.ParseBool(decryptedValue)
-		stashValue.plaintext = plaintext
-		return plaintext, stashValue, err
 	default:
-		return nil, nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
+		return nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
 	}
+	c.stash[stashKey{plaintext: plaintext, additionalData: additionalData}] = encryptedValue.iv
+	return plaintext, err
 }
 
 // Encrypt takes one of (string, int, float, bool) and encrypts it with the provided key and additional auth data, returning a sops-format encrypted string.
-func (c Cipher) Encrypt(value interface{}, key []byte, additionalData string, stash interface{}) (string, error) {
-	if value == "" {
+func (c Cipher) Encrypt(plaintext interface{}, key []byte, additionalData string) (ciphertext string, err error) {
+	if plaintext == "" {
 		return "", nil
 	}
 	aescipher, err := cryptoaes.NewCipher(key)
@@ -114,40 +117,40 @@ func (c Cipher) Encrypt(value interface{}, key []byte, additionalData string, st
 		return "", fmt.Errorf("Could not initialize AES GCM encryption cipher: %s", err)
 	}
 	var iv []byte
-	if stash, ok := stash.(stashData); !ok || stash.plaintext != value {
+	if stash, ok := c.stash[stashKey{plaintext: plaintext, additionalData: additionalData}]; !ok {
 		iv = make([]byte, nonceSize)
 		_, err = rand.Read(iv)
 		if err != nil {
 			return "", fmt.Errorf("Could not generate random bytes for IV: %s", err)
 		}
 	} else {
-		iv = stash.iv
+		iv = stash
 	}
 	gcm, err := cipher.NewGCMWithNonceSize(aescipher, nonceSize)
 	if err != nil {
 		return "", fmt.Errorf("Could not create GCM: %s", err)
 	}
-	var plaintext []byte
+	var plainBytes []byte
 	var encryptedType string
-	switch value := value.(type) {
+	switch value := plaintext.(type) {
 	case string:
 		encryptedType = "str"
-		plaintext = []byte(value)
+		plainBytes = []byte(value)
 	case int:
 		encryptedType = "int"
-		plaintext = []byte(strconv.Itoa(value))
+		plainBytes = []byte(strconv.Itoa(value))
 	case float64:
 		encryptedType = "float"
 		// The Python version encodes floats without padding 0s after the decimal point.
-		plaintext = []byte(strconv.FormatFloat(value, 'f', -1, 64))
+		plainBytes = []byte(strconv.FormatFloat(value, 'f', -1, 64))
 	case bool:
 		encryptedType = "bool"
 		// The Python version encodes booleans with Titlecase
-		plaintext = []byte(strings.Title(strconv.FormatBool(value)))
+		plainBytes = []byte(strings.Title(strconv.FormatBool(value)))
 	default:
 		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
 	}
-	out := gcm.Seal(nil, iv, plaintext, []byte(additionalData))
+	out := gcm.Seal(nil, iv, plainBytes, []byte(additionalData))
 	return fmt.Sprintf("ENC[AES256_GCM,data:%s,iv:%s,tag:%s,type:%s]",
 		base64.StdEncoding.EncodeToString(out[:len(out)-cryptoaes.BlockSize]),
 		base64.StdEncoding.EncodeToString(iv),

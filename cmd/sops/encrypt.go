@@ -13,7 +13,7 @@ import (
 )
 
 type encryptOpts struct {
-	Cipher            sops.DataKeyCipher
+	Cipher            sops.Cipher
 	InputStore        sops.Store
 	OutputStore       sops.Store
 	InputPath         string
@@ -48,7 +48,6 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	}
 
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash:   make(map[string][]interface{}),
 		DataKey: dataKey,
 		Tree:    &tree,
 		Cipher:  opts.Cipher,

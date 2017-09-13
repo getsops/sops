@@ -11,7 +11,7 @@ import (
 )
 
 type decryptOpts struct {
-	Cipher      sops.DataKeyCipher
+	Cipher      sops.Cipher
 	InputStore  sops.Store
 	OutputStore sops.Store
 	InputPath   string
@@ -27,7 +27,6 @@ func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	}
 
 	_, err = common.DecryptTree(common.DecryptTreeOpts{
-		Stash:       make(map[string][]interface{}),
 		Cipher:      opts.Cipher,
 		IgnoreMac:   opts.IgnoreMAC,
 		Tree:        tree,
