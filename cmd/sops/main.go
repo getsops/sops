@@ -20,11 +20,11 @@ import (
 	"strconv"
 
 	"go.mozilla.org/sops/aes"
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
 	"go.mozilla.org/sops/config"
-	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -371,7 +371,7 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			for _, k := range gcpkms.MasterKeysFromResourceIdString(c.String("add-gcp-kms")) {
+			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 
@@ -382,7 +382,7 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			for _, k := range gcpkms.MasterKeysFromResourceIdString(c.String("rm-gcp-kms")) {
+			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			output, err = rotate(rotateOpts{
@@ -578,7 +578,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("gcp-kms") != "" {
-		for _, k := range gcpkms.MasterKeysFromResourceIdString(c.String("gcp-kms")) {
+		for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("gcp-kms")) {
 			cloudKmsKeys = append(cloudKmsKeys, k)
 		}
 	}

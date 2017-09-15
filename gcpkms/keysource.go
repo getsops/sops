@@ -15,7 +15,7 @@ import (
 
 // MasterKey is a GCP KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
-	ResourceId   string
+	ResourceID   string
 	EncryptedKey string
 	CreationDate time.Time
 }
@@ -39,7 +39,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	req := &cloudkms.EncryptRequest{
 		Plaintext: base64.StdEncoding.EncodeToString(dataKey),
 	}
-	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Encrypt(key.ResourceId, req).Do()
+	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Encrypt(key.ResourceID, req).Do()
 	if err != nil {
 		return fmt.Errorf("Failed to call GCP KMS encryption service: %v", err)
 	}
@@ -66,7 +66,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	req := &cloudkms.DecryptRequest{
 		Ciphertext: key.EncryptedKey,
 	}
-	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Decrypt(key.ResourceId, req).Do()
+	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Decrypt(key.ResourceID, req).Do()
 	if err != nil {
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
 	}
@@ -80,35 +80,35 @@ func (key *MasterKey) NeedsRotation() bool {
 
 // ToString converts the key to a string representation
 func (key *MasterKey) ToString() string {
-	return key.ResourceId
+	return key.ResourceID
 }
 
-// NewMasterKeyFromResourceId takes a GCP KMS resource ID string and returns a new MasterKey for that
-func NewMasterKeyFromResourceId(resourceId string) *MasterKey {
+// NewMasterKeyFromResourceID takes a GCP KMS resource ID string and returns a new MasterKey for that
+func NewMasterKeyFromResourceID(resourceID string) *MasterKey {
 	k := &MasterKey{}
-	resourceId = strings.Replace(resourceId, " ", "", -1)
-	k.ResourceId = resourceId
+	resourceID = strings.Replace(resourceID, " ", "", -1)
+	k.ResourceID = resourceID
 	k.CreationDate = time.Now().UTC()
 	return k
 }
 
-// MasterKeysFromResourceIdString takes a comma separated list of GCP KMS resourece IDs and returns a slice of new MasterKeys for them
-func MasterKeysFromResourceIdString(resourceId string) []*MasterKey {
+// MasterKeysFromResourceIDString takes a comma separated list of GCP KMS resourece IDs and returns a slice of new MasterKeys for them
+func MasterKeysFromResourceIDString(resourceID string) []*MasterKey {
 	var keys []*MasterKey
-	if resourceId == "" {
+	if resourceID == "" {
 		return keys
 	}
-	for _, s := range strings.Split(resourceId, ",") {
-		keys = append(keys, NewMasterKeyFromResourceId(s))
+	for _, s := range strings.Split(resourceID, ",") {
+		keys = append(keys, NewMasterKeyFromResourceID(s))
 	}
 	return keys
 }
 
 func (key MasterKey) createCloudKMSService() (*cloudkms.Service, error) {
 	re := regexp.MustCompile(`^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$`)
-	matches := re.FindStringSubmatch(key.ResourceId)
+	matches := re.FindStringSubmatch(key.ResourceID)
 	if matches == nil {
-		return nil, fmt.Errorf("No valid resoureceId found in %q", key.ResourceId)
+		return nil, fmt.Errorf("No valid resoureceId found in %q", key.ResourceID)
 	}
 
 	ctx := context.Background()
@@ -127,7 +127,7 @@ func (key MasterKey) createCloudKMSService() (*cloudkms.Service, error) {
 // ToMap converts the MasterKey to a map for serialization purposes
 func (key MasterKey) ToMap() map[string]interface{} {
 	out := make(map[string]interface{})
-	out["resource_id"] = key.ResourceId
+	out["resource_id"] = key.ResourceID
 	out["enc"] = key.EncryptedKey
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	return out

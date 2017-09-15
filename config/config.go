@@ -12,9 +12,9 @@ import (
 
 	"github.com/mozilla-services/yaml"
 	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/gcpkms"
 )
 
 type fileSystem interface {
@@ -119,7 +119,7 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
 			}
 			for _, k := range group.GCPKMS {
-				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceId(k.ResourceID))
+				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
 			}
 			groups = append(groups, keyGroup)
 		}
@@ -131,7 +131,7 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		for _, k := range kms.MasterKeysFromArnString(rule.KMS, kmsEncryptionContext) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range gcpkms.MasterKeysFromResourceIdString(rule.GCPKMS) {
+		for _, k := range gcpkms.MasterKeysFromResourceIDString(rule.GCPKMS) {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
