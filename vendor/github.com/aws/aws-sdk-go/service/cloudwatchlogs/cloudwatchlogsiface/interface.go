@@ -92,6 +92,10 @@ type CloudWatchLogsAPI interface {
 	DeleteMetricFilterWithContext(aws.Context, *cloudwatchlogs.DeleteMetricFilterInput, ...request.Option) (*cloudwatchlogs.DeleteMetricFilterOutput, error)
 	DeleteMetricFilterRequest(*cloudwatchlogs.DeleteMetricFilterInput) (*request.Request, *cloudwatchlogs.DeleteMetricFilterOutput)
 
+	DeleteResourcePolicy(*cloudwatchlogs.DeleteResourcePolicyInput) (*cloudwatchlogs.DeleteResourcePolicyOutput, error)
+	DeleteResourcePolicyWithContext(aws.Context, *cloudwatchlogs.DeleteResourcePolicyInput, ...request.Option) (*cloudwatchlogs.DeleteResourcePolicyOutput, error)
+	DeleteResourcePolicyRequest(*cloudwatchlogs.DeleteResourcePolicyInput) (*request.Request, *cloudwatchlogs.DeleteResourcePolicyOutput)
+
 	DeleteRetentionPolicy(*cloudwatchlogs.DeleteRetentionPolicyInput) (*cloudwatchlogs.DeleteRetentionPolicyOutput, error)
 	DeleteRetentionPolicyWithContext(aws.Context, *cloudwatchlogs.DeleteRetentionPolicyInput, ...request.Option) (*cloudwatchlogs.DeleteRetentionPolicyOutput, error)
 	DeleteRetentionPolicyRequest(*cloudwatchlogs.DeleteRetentionPolicyInput) (*request.Request, *cloudwatchlogs.DeleteRetentionPolicyOutput)
@@ -131,6 +135,10 @@ type CloudWatchLogsAPI interface {
 
 	DescribeMetricFiltersPages(*cloudwatchlogs.DescribeMetricFiltersInput, func(*cloudwatchlogs.DescribeMetricFiltersOutput, bool) bool) error
 	DescribeMetricFiltersPagesWithContext(aws.Context, *cloudwatchlogs.DescribeMetricFiltersInput, func(*cloudwatchlogs.DescribeMetricFiltersOutput, bool) bool, ...request.Option) error
+
+	DescribeResourcePolicies(*cloudwatchlogs.DescribeResourcePoliciesInput) (*cloudwatchlogs.DescribeResourcePoliciesOutput, error)
+	DescribeResourcePoliciesWithContext(aws.Context, *cloudwatchlogs.DescribeResourcePoliciesInput, ...request.Option) (*cloudwatchlogs.DescribeResourcePoliciesOutput, error)
+	DescribeResourcePoliciesRequest(*cloudwatchlogs.DescribeResourcePoliciesInput) (*request.Request, *cloudwatchlogs.DescribeResourcePoliciesOutput)
 
 	DescribeSubscriptionFilters(*cloudwatchlogs.DescribeSubscriptionFiltersInput) (*cloudwatchlogs.DescribeSubscriptionFiltersOutput, error)
 	DescribeSubscriptionFiltersWithContext(aws.Context, *cloudwatchlogs.DescribeSubscriptionFiltersInput, ...request.Option) (*cloudwatchlogs.DescribeSubscriptionFiltersOutput, error)
@@ -172,6 +180,10 @@ type CloudWatchLogsAPI interface {
 	PutMetricFilter(*cloudwatchlogs.PutMetricFilterInput) (*cloudwatchlogs.PutMetricFilterOutput, error)
 	PutMetricFilterWithContext(aws.Context, *cloudwatchlogs.PutMetricFilterInput, ...request.Option) (*cloudwatchlogs.PutMetricFilterOutput, error)
 	PutMetricFilterRequest(*cloudwatchlogs.PutMetricFilterInput) (*request.Request, *cloudwatchlogs.PutMetricFilterOutput)
+
+	PutResourcePolicy(*cloudwatchlogs.PutResourcePolicyInput) (*cloudwatchlogs.PutResourcePolicyOutput, error)
+	PutResourcePolicyWithContext(aws.Context, *cloudwatchlogs.PutResourcePolicyInput, ...request.Option) (*cloudwatchlogs.PutResourcePolicyOutput, error)
+	PutResourcePolicyRequest(*cloudwatchlogs.PutResourcePolicyInput) (*request.Request, *cloudwatchlogs.PutResourcePolicyOutput)
 
 	PutRetentionPolicy(*cloudwatchlogs.PutRetentionPolicyInput) (*cloudwatchlogs.PutRetentionPolicyOutput, error)
 	PutRetentionPolicyWithContext(aws.Context, *cloudwatchlogs.PutRetentionPolicyInput, ...request.Option) (*cloudwatchlogs.PutRetentionPolicyOutput, error)

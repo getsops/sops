@@ -1029,6 +1029,14 @@ type EC2API interface {
 	UnmonitorInstancesWithContext(aws.Context, *ec2.UnmonitorInstancesInput, ...request.Option) (*ec2.UnmonitorInstancesOutput, error)
 	UnmonitorInstancesRequest(*ec2.UnmonitorInstancesInput) (*request.Request, *ec2.UnmonitorInstancesOutput)
 
+	UpdateSecurityGroupRuleDescriptionsEgress(*ec2.UpdateSecurityGroupRuleDescriptionsEgressInput) (*ec2.UpdateSecurityGroupRuleDescriptionsEgressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsEgressWithContext(aws.Context, *ec2.UpdateSecurityGroupRuleDescriptionsEgressInput, ...request.Option) (*ec2.UpdateSecurityGroupRuleDescriptionsEgressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsEgressRequest(*ec2.UpdateSecurityGroupRuleDescriptionsEgressInput) (*request.Request, *ec2.UpdateSecurityGroupRuleDescriptionsEgressOutput)
+
+	UpdateSecurityGroupRuleDescriptionsIngress(*ec2.UpdateSecurityGroupRuleDescriptionsIngressInput) (*ec2.UpdateSecurityGroupRuleDescriptionsIngressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsIngressWithContext(aws.Context, *ec2.UpdateSecurityGroupRuleDescriptionsIngressInput, ...request.Option) (*ec2.UpdateSecurityGroupRuleDescriptionsIngressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsIngressRequest(*ec2.UpdateSecurityGroupRuleDescriptionsIngressInput) (*request.Request, *ec2.UpdateSecurityGroupRuleDescriptionsIngressOutput)
+
 	WaitUntilBundleTaskComplete(*ec2.DescribeBundleTasksInput) error
 	WaitUntilBundleTaskCompleteWithContext(aws.Context, *ec2.DescribeBundleTasksInput, ...request.WaiterOption) error
 

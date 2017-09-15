@@ -20,7 +20,7 @@
     ],
     "anEmptyValue": "",
     "sops": {
-        "version": 1.6,
+        "version": "1.6",
         "mac": "ENC[AES256_GCM,data:YlhAZo7NAUHlRQzAPoPha12yl3nEaaq3lKyJ1hoMMtw9M7kts1cfrk301arKHrRAssqcqq1RizYVTyennOIj+TpOYoi8dOzXAtm+NrjQrb7SNosGLPXO2mbvOIoeqzZuzureHRCitNeLwzD8+U/vlGhRTuB6Be7TGt55CD+OMMM=,iv:x9DFpKn9xlq5uoRfbV2rnAsmjY4YyZH6wQnBY80x2dw=,tag:JnGt3eJNLRC3FamfNkAkew==,type:str]",
         "pgp": [
             {

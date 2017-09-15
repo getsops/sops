@@ -31,6 +31,7 @@ import (
 
 	gbuild "github.com/gopherjs/gopherjs/build"
 	"github.com/gopherjs/gopherjs/compiler"
+	"github.com/gopherjs/gopherjs/internal/sysutil"
 	"github.com/kisielk/gotool"
 	"github.com/neelance/sourcemap"
 	"github.com/spf13/cobra"
@@ -750,9 +751,29 @@ func runNode(script string, args []string, dir string, quiet bool) error {
 	}
 
 	if runtime.GOOS != "windows" {
-		allArgs = append(allArgs, "--stack_size=10000", script)
+		// We've seen issues with stack space limits causing
+		// recursion-heavy standard library tests to fail (e.g., see
+		// https://github.com/gopherjs/gopherjs/pull/669#issuecomment-319319483).
+		//
+		// There are two separate limits in non-Windows environments:
+		//
+		// -	OS process limit
+		// -	Node.js (V8) limit
+		//
+		// GopherJS fetches the current OS process limit, and sets the
+		// Node.js limit to the same value. So both limits are kept in sync
+		// and can be controlled by setting OS process limit. E.g.:
+		//
+		// 	ulimit -s 10000 && gopherjs test
+		//
+		cur, err := sysutil.RlimitStack()
+		if err != nil {
+			return fmt.Errorf("failed to get stack size limit: %v", err)
+		}
+		allArgs = append(allArgs, fmt.Sprintf("--stack_size=%v", cur/1000)) // Convert from bytes to KB.
 	}
 
+	allArgs = append(allArgs, script)
 	allArgs = append(allArgs, args...)
 
 	node := exec.Command("node", allArgs...)

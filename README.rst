@@ -383,8 +383,8 @@ passed on the sops command line or in environment variables.
 Specify a different GPG executable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`sops` checks for the `SOPS_GPG_EXEC` environment variable. If specified, 
-it will attempt to use the executable set there instead of the default 
+`sops` checks for the `SOPS_GPG_EXEC` environment variable. If specified,
+it will attempt to use the executable set there instead of the default
 of `gpg`.
 
 Example: place the following in your `~/.bashrc`
@@ -392,7 +392,166 @@ Example: place the following in your `~/.bashrc`
 .. code:: bash
 
 	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
-	
+
+Key groups
+~~~~~~~~~~
+
+By default, `sops` encrypts the data key for a file with each of the master keys,
+such that if any of the master keys is available, the file can be decrypted.
+However, it is sometimes desirable to require access to multiple master keys
+in order to decrypt files. This can be achieved with key groups.
+
+When using key groups in sops, data keys are split into parts such that keys from
+multiple groups are required to decrypt a file. `sops` uses Shamir's Secret Sharing
+to split the data key such that each key group has a fragment, each key in the
+key group can decrypt that fragment, and a configurable number of fragments (threshold)
+are needed to decrypt and piece together the complete data key. When decrypting a
+file using multiple key groups, `sops` goes through key groups in order, and in
+each group, tries to recover the fragment of the data key using a master key from
+that group. Once the fragment is recovered, `sops` moves on to the next group,
+until enough fragments have been recovered to obtain the complete data key.
+
+By default, the threshold is set to the number of key groups. For example, if
+you have three key groups configured in your SOPS file and you don't override
+the default threshold, then one master key from each of the three groups will
+be required to decrypt the file.
+
+Management of key groups is done with the `sops groups` command.
+
+For example, you can add a new key group with 3 PGP keys and 3 KMS keys to the
+file `my_file.yaml`:
+
+`sops groups add --file my_file.yaml --pgp fingerprint1 --pgp fingerprint2 --pgp fingerprint3 --kms arn1 --kms arn2 --kms arn3`
+
+Or you can delete the 1st group (group number 0, as groups are zero-indexed)
+from `my_file.yaml`:
+
+`sops groups delete --file my_file.yaml 0`
+
+Key groups can also be specified in the `.sops.yaml` config file,
+like so:
+
+.. code:: yaml
+
+    creation_rules:
+        - filename_regex: .*keygroups.*
+          key_groups:
+          # First key group
+          - pgp:
+            - fingerprint1
+            - fingerprint2
+            kms:
+            - arn: arn1
+              role: role1
+              context:
+                foo: bar
+            - arn: arn2
+          # Second key group
+          - pgp:
+            - fingerprint3
+            - fingerprint4
+            kms:
+            - arn: arn3
+            - arn: arn4
+          # Third key group
+          - pgp:
+            - fingerprint5
+
+Given this configuration, we can create a new encrypted file like we normally
+would, and optionally provide the `--shamir-secret-sharing-threshold` command line
+flag if we want to override the default threshold. `sops` will then split the data
+key into three parts (from the number of key groups) and encrypt each fragment with
+the master keys found in each group.
+
+For example:
+
+.. code:: yaml
+
+    sops --shamir-secret-sharing-threshold 2 example.json
+
+Alternatively, you can configure the Shamir threshold for each creation rule in the `.sops.yaml` config
+with `shamir_threshold`:
+
+.. code:: yaml
+
+    creation_rules:
+        - filename_regex: .*keygroups.*
+          shamir_threshold: 2
+          key_groups:
+          # First key group
+          - pgp:
+            - fingerprint1
+            - fingerprint2
+            kms:
+            - arn: arn1
+              role: role1
+              context:
+                foo: bar
+            - arn: arn2
+          # Second key group
+          - pgp:
+            - fingerprint3
+            - fingerprint4
+            kms:
+            - arn: arn3
+            - arn: arn4
+          # Third key group
+          - pgp:
+            - fingerprint5
+
+And then run `sops example.json`.
+
+The threshold (`shamir_threshold`) is set to 2, so this configuration will require
+master keys from two of the three different key groups in order to decrypt the file.
+You can then decrypt the file the same way as with any other SOPS file:
+
+.. code:: yaml
+
+    sops -d example.json
+
+Key service
+~~~~~~~~~~~
+
+There are situations where you might want to run `sops` on a machine that
+doesn't have direct access to encryption keys such as PGP keys. The `sops` key
+service allows you to forward a socket so that `sops` can access encryption
+keys stored on a remote machine. This is similar to GPG Agent, but more
+portable.
+
+SOPS uses a client-server approach to encrypting and decrypting the data
+key. By default, SOPS runs a local key service in-process. SOPS uses a key
+service client to send an encrypt or decrypt request to a key service, which
+then performs the operation. The requests are sent using gRPC and Protocol
+Buffers. The requests contain an identifier for the key they should perform
+the operation with, and the plaintext or encrypted data key. The requests do
+not contain any cryptographic keys, public or private.
+
+**WARNING: the key service connection currently does not use any sort of
+authentication or encryption. Therefore, it is recommended that you make sure
+the connection is authenticated and encrypted in some other way, for example
+through an SSH tunnel.**
+
+Whenever we try to encrypt or decrypt a data key, SOPS will try to do so first
+with the local key service (unless it's disabled), and if that fails, it will
+try all other remote key services until one succeeds.
+
+You can start a key service server by running `sops keyservice`.
+
+You can specify the key services the `sops` binary uses with `--keyservice`.
+This flag can be specified more than once, so you can use multiple key
+services. The local key service can be disabled with
+`enable-local-keyservice=false`.
+
+For example, to decrypt a file using both the local key service and the key
+service exposed on the unix socket located in `/tmp/sops.sock`, you can run:
+
+`sops --keyservice unix:///tmp/sops.sock -d file.yaml`
+
+And if you only want to use the key service exposed on the unix socket located
+in `/tmp/sops.sock` and not the local key service, you can run:
+
+`sops --enable-local-keyservice=false --keyservice unix:///tmp/sops.sock -d file.yaml`
+
 Important information on types
 ------------------------------
 

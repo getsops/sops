@@ -460,6 +460,9 @@ func (c *GameLift) CreateFleetRequest(input *CreateFleetInput) (req *request.Req
 // Once you specify a metric group, the new fleet's metrics are included in
 // the metric group's data.
 //
+// You have the option of creating a VPC peering connection with the new fleet.
+// For more information, see VPC Peering with Amazon GameLift Fleets (http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
+//
 // If the CreateFleet call is successful, Amazon GameLift performs the following
 // tasks:
 //
@@ -1411,6 +1414,267 @@ func (c *GameLift) CreatePlayerSessionsWithContext(ctx aws.Context, input *Creat
 	return out, req.Send()
 }
 
+const opCreateVpcPeeringAuthorization = "CreateVpcPeeringAuthorization"
+
+// CreateVpcPeeringAuthorizationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateVpcPeeringAuthorization operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateVpcPeeringAuthorization for more information on using the CreateVpcPeeringAuthorization
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateVpcPeeringAuthorizationRequest method.
+//    req, resp := client.CreateVpcPeeringAuthorizationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringAuthorization
+func (c *GameLift) CreateVpcPeeringAuthorizationRequest(input *CreateVpcPeeringAuthorizationInput) (req *request.Request, output *CreateVpcPeeringAuthorizationOutput) {
+	op := &request.Operation{
+		Name:       opCreateVpcPeeringAuthorization,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateVpcPeeringAuthorizationInput{}
+	}
+
+	output = &CreateVpcPeeringAuthorizationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateVpcPeeringAuthorization API operation for Amazon GameLift.
+//
+// Requests authorization to create or delete a peer connection between the
+// VPC for your Amazon GameLift fleet and a virtual private cloud (VPC) in your
+// AWS account. VPC peering enables the game servers on your fleet to communicate
+// directly with other AWS resources. Once you've received authorization, call
+// CreateVpcPeeringConnection to establish the peering connection. For more
+// information, see VPC Peering with Amazon GameLift Fleets (http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
+//
+// You can peer with VPCs that are owned by any AWS account you have access
+// to, including the account that you use to manage your Amazon GameLift fleets.
+// You cannot peer with VPCs that are in different regions.
+//
+// To request authorization to create a connection, call this operation from
+// the AWS account with the VPC that you want to peer to your Amazon GameLift
+// fleet. For example, to enable your game servers to retrieve data from a DynamoDB
+// table, use the account that manages that DynamoDB resource. Identify the
+// following values: (1) The ID of the VPC that you want to peer with, and (2)
+// the ID of the AWS account that you use to manage Amazon GameLift. If successful,
+// VPC peering is authorized for the specified VPC.
+//
+// To request authorization to delete a connection, call this operation from
+// the AWS account with the VPC that is peered with your Amazon GameLift fleet.
+// Identify the following values: (1) VPC ID that you want to delete the peering
+// connection for, and (2) ID of the AWS account that you use to manage Amazon
+// GameLift.
+//
+// The authorization remains valid for 24 hours unless it is canceled by a call
+// to DeleteVpcPeeringAuthorization. You must create or delete the peering connection
+// while the authorization is valid.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation CreateVpcPeeringAuthorization for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   The client failed authentication. Clients should not retry such requests.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   A service resource associated with the request could not be found. Clients
+//   should not retry such requests.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringAuthorization
+func (c *GameLift) CreateVpcPeeringAuthorization(input *CreateVpcPeeringAuthorizationInput) (*CreateVpcPeeringAuthorizationOutput, error) {
+	req, out := c.CreateVpcPeeringAuthorizationRequest(input)
+	return out, req.Send()
+}
+
+// CreateVpcPeeringAuthorizationWithContext is the same as CreateVpcPeeringAuthorization with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateVpcPeeringAuthorization for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GameLift) CreateVpcPeeringAuthorizationWithContext(ctx aws.Context, input *CreateVpcPeeringAuthorizationInput, opts ...request.Option) (*CreateVpcPeeringAuthorizationOutput, error) {
+	req, out := c.CreateVpcPeeringAuthorizationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateVpcPeeringConnection = "CreateVpcPeeringConnection"
+
+// CreateVpcPeeringConnectionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateVpcPeeringConnection operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateVpcPeeringConnection for more information on using the CreateVpcPeeringConnection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateVpcPeeringConnectionRequest method.
+//    req, resp := client.CreateVpcPeeringConnectionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringConnection
+func (c *GameLift) CreateVpcPeeringConnectionRequest(input *CreateVpcPeeringConnectionInput) (req *request.Request, output *CreateVpcPeeringConnectionOutput) {
+	op := &request.Operation{
+		Name:       opCreateVpcPeeringConnection,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateVpcPeeringConnectionInput{}
+	}
+
+	output = &CreateVpcPeeringConnectionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateVpcPeeringConnection API operation for Amazon GameLift.
+//
+// Establishes a VPC peering connection between a virtual private cloud (VPC)
+// in an AWS account with the VPC for your Amazon GameLift fleet. VPC peering
+// enables the game servers on your fleet to communicate directly with other
+// AWS resources. You can peer with VPCs in any AWS account that you have access
+// to, including the account that you use to manage your Amazon GameLift fleets.
+// You cannot peer with VPCs that are in different regions. For more information,
+// see VPC Peering with Amazon GameLift Fleets (http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
+//
+// Before calling this operation to establish the peering connection, you first
+// need to call CreateVpcPeeringAuthorization and identify the VPC you want
+// to peer with. Once the authorization for the specified VPC is issued, you
+// have 24 hours to establish the connection. These two operations handle all
+// tasks necessary to peer the two VPCs, including acceptance, updating routing
+// tables, etc.
+//
+// To establish the connection, call this operation from the AWS account that
+// is used to manage the Amazon GameLift fleets. Identify the following values:
+// (1) The ID of the fleet you want to be enable a VPC peering connection for;
+// (2) The AWS account with the VPC that you want to peer with; and (3) The
+// ID of the VPC you want to peer with. This operation is asynchronous. If successful,
+// a VpcPeeringConnection request is created. You can use continuous polling
+// to track the request's status using DescribeVpcPeeringConnections, or by
+// monitoring fleet events for success or failure using DescribeFleetEvents.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation CreateVpcPeeringConnection for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   The client failed authentication. Clients should not retry such requests.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   A service resource associated with the request could not be found. Clients
+//   should not retry such requests.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringConnection
+func (c *GameLift) CreateVpcPeeringConnection(input *CreateVpcPeeringConnectionInput) (*CreateVpcPeeringConnectionOutput, error) {
+	req, out := c.CreateVpcPeeringConnectionRequest(input)
+	return out, req.Send()
+}
+
+// CreateVpcPeeringConnectionWithContext is the same as CreateVpcPeeringConnection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateVpcPeeringConnection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GameLift) CreateVpcPeeringConnectionWithContext(ctx aws.Context, input *CreateVpcPeeringConnectionInput, opts ...request.Option) (*CreateVpcPeeringConnectionOutput, error) {
+	req, out := c.CreateVpcPeeringConnectionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteAlias = "DeleteAlias"
 
 // DeleteAliasRequest generates a "aws/request.Request" representing the
@@ -2128,6 +2392,228 @@ func (c *GameLift) DeleteScalingPolicy(input *DeleteScalingPolicyInput) (*Delete
 // for more information on using Contexts.
 func (c *GameLift) DeleteScalingPolicyWithContext(ctx aws.Context, input *DeleteScalingPolicyInput, opts ...request.Option) (*DeleteScalingPolicyOutput, error) {
 	req, out := c.DeleteScalingPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteVpcPeeringAuthorization = "DeleteVpcPeeringAuthorization"
+
+// DeleteVpcPeeringAuthorizationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteVpcPeeringAuthorization operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteVpcPeeringAuthorization for more information on using the DeleteVpcPeeringAuthorization
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteVpcPeeringAuthorizationRequest method.
+//    req, resp := client.DeleteVpcPeeringAuthorizationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringAuthorization
+func (c *GameLift) DeleteVpcPeeringAuthorizationRequest(input *DeleteVpcPeeringAuthorizationInput) (req *request.Request, output *DeleteVpcPeeringAuthorizationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteVpcPeeringAuthorization,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteVpcPeeringAuthorizationInput{}
+	}
+
+	output = &DeleteVpcPeeringAuthorizationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteVpcPeeringAuthorization API operation for Amazon GameLift.
+//
+// Cancels a pending VPC peering authorization for the specified VPC. If the
+// authorization has already been used to create a peering connection, call
+// DeleteVpcPeeringConnection to remove the connection.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation DeleteVpcPeeringAuthorization for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   The client failed authentication. Clients should not retry such requests.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   A service resource associated with the request could not be found. Clients
+//   should not retry such requests.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringAuthorization
+func (c *GameLift) DeleteVpcPeeringAuthorization(input *DeleteVpcPeeringAuthorizationInput) (*DeleteVpcPeeringAuthorizationOutput, error) {
+	req, out := c.DeleteVpcPeeringAuthorizationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteVpcPeeringAuthorizationWithContext is the same as DeleteVpcPeeringAuthorization with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteVpcPeeringAuthorization for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GameLift) DeleteVpcPeeringAuthorizationWithContext(ctx aws.Context, input *DeleteVpcPeeringAuthorizationInput, opts ...request.Option) (*DeleteVpcPeeringAuthorizationOutput, error) {
+	req, out := c.DeleteVpcPeeringAuthorizationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteVpcPeeringConnection = "DeleteVpcPeeringConnection"
+
+// DeleteVpcPeeringConnectionRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteVpcPeeringConnection operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteVpcPeeringConnection for more information on using the DeleteVpcPeeringConnection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteVpcPeeringConnectionRequest method.
+//    req, resp := client.DeleteVpcPeeringConnectionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringConnection
+func (c *GameLift) DeleteVpcPeeringConnectionRequest(input *DeleteVpcPeeringConnectionInput) (req *request.Request, output *DeleteVpcPeeringConnectionOutput) {
+	op := &request.Operation{
+		Name:       opDeleteVpcPeeringConnection,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteVpcPeeringConnectionInput{}
+	}
+
+	output = &DeleteVpcPeeringConnectionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteVpcPeeringConnection API operation for Amazon GameLift.
+//
+// Removes a VPC peering connection. To delete the connection, you must have
+// a valid authorization for the VPC peering connection that you want to delete.
+// You can check for an authorization by calling DescribeVpcPeeringAuthorizations
+// or request a new one using CreateVpcPeeringAuthorization.
+//
+// Once a valid authorization exists, call this operation from the AWS account
+// that is used to manage the Amazon GameLift fleets. Identify the connection
+// to delete by the connection ID and fleet ID. If successful, the connection
+// is removed.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation DeleteVpcPeeringConnection for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   The client failed authentication. Clients should not retry such requests.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   A service resource associated with the request could not be found. Clients
+//   should not retry such requests.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringConnection
+func (c *GameLift) DeleteVpcPeeringConnection(input *DeleteVpcPeeringConnectionInput) (*DeleteVpcPeeringConnectionOutput, error) {
+	req, out := c.DeleteVpcPeeringConnectionRequest(input)
+	return out, req.Send()
+}
+
+// DeleteVpcPeeringConnectionWithContext is the same as DeleteVpcPeeringConnection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteVpcPeeringConnection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GameLift) DeleteVpcPeeringConnectionWithContext(ctx aws.Context, input *DeleteVpcPeeringConnectionInput, opts ...request.Option) (*DeleteVpcPeeringConnectionOutput, error) {
+	req, out := c.DeleteVpcPeeringConnectionRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4522,6 +5008,223 @@ func (c *GameLift) DescribeScalingPoliciesWithContext(ctx aws.Context, input *De
 	return out, req.Send()
 }
 
+const opDescribeVpcPeeringAuthorizations = "DescribeVpcPeeringAuthorizations"
+
+// DescribeVpcPeeringAuthorizationsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeVpcPeeringAuthorizations operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeVpcPeeringAuthorizations for more information on using the DescribeVpcPeeringAuthorizations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeVpcPeeringAuthorizationsRequest method.
+//    req, resp := client.DescribeVpcPeeringAuthorizationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringAuthorizations
+func (c *GameLift) DescribeVpcPeeringAuthorizationsRequest(input *DescribeVpcPeeringAuthorizationsInput) (req *request.Request, output *DescribeVpcPeeringAuthorizationsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeVpcPeeringAuthorizations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeVpcPeeringAuthorizationsInput{}
+	}
+
+	output = &DescribeVpcPeeringAuthorizationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeVpcPeeringAuthorizations API operation for Amazon GameLift.
+//
+// Retrieves valid VPC peering authorizations that are pending for the AWS account.
+// This operation returns all VPC peering authorizations and requests for peering.
+// This includes those initiated and received by this account.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation DescribeVpcPeeringAuthorizations for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   The client failed authentication. Clients should not retry such requests.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringAuthorizations
+func (c *GameLift) DescribeVpcPeeringAuthorizations(input *DescribeVpcPeeringAuthorizationsInput) (*DescribeVpcPeeringAuthorizationsOutput, error) {
+	req, out := c.DescribeVpcPeeringAuthorizationsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeVpcPeeringAuthorizationsWithContext is the same as DescribeVpcPeeringAuthorizations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeVpcPeeringAuthorizations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GameLift) DescribeVpcPeeringAuthorizationsWithContext(ctx aws.Context, input *DescribeVpcPeeringAuthorizationsInput, opts ...request.Option) (*DescribeVpcPeeringAuthorizationsOutput, error) {
+	req, out := c.DescribeVpcPeeringAuthorizationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeVpcPeeringConnections = "DescribeVpcPeeringConnections"
+
+// DescribeVpcPeeringConnectionsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeVpcPeeringConnections operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeVpcPeeringConnections for more information on using the DescribeVpcPeeringConnections
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeVpcPeeringConnectionsRequest method.
+//    req, resp := client.DescribeVpcPeeringConnectionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringConnections
+func (c *GameLift) DescribeVpcPeeringConnectionsRequest(input *DescribeVpcPeeringConnectionsInput) (req *request.Request, output *DescribeVpcPeeringConnectionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeVpcPeeringConnections,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeVpcPeeringConnectionsInput{}
+	}
+
+	output = &DescribeVpcPeeringConnectionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeVpcPeeringConnections API operation for Amazon GameLift.
+//
+// Retrieves information on VPC peering connections. Use this operation to get
+// peering information for all fleets or for one specific fleet ID.
+//
+// To retrieve connection information, call this operation from the AWS account
+// that is used to manage the Amazon GameLift fleets. Specify a fleet ID or
+// leave the parameter empty to retrieve all connection records. If successful,
+// the retrieved information includes both active and pending connections. Active
+// connections identify the IpV4 CIDR block that the VPC uses to connect.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation DescribeVpcPeeringConnections for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   The client failed authentication. Clients should not retry such requests.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   A service resource associated with the request could not be found. Clients
+//   should not retry such requests.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringConnections
+func (c *GameLift) DescribeVpcPeeringConnections(input *DescribeVpcPeeringConnectionsInput) (*DescribeVpcPeeringConnectionsOutput, error) {
+	req, out := c.DescribeVpcPeeringConnectionsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeVpcPeeringConnectionsWithContext is the same as DescribeVpcPeeringConnections with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeVpcPeeringConnections for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GameLift) DescribeVpcPeeringConnectionsWithContext(ctx aws.Context, input *DescribeVpcPeeringConnectionsInput, opts ...request.Option) (*DescribeVpcPeeringConnectionsOutput, error) {
+	req, out := c.DescribeVpcPeeringConnectionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetGameSessionLogUrl = "GetGameSessionLogUrl"
 
 // GetGameSessionLogUrlRequest generates a "aws/request.Request" representing the
@@ -5843,7 +6546,7 @@ func (c *GameLift) StartMatchmakingRequest(input *StartMatchmakingInput) (req *r
 // attributes relevant for the matchmaking configuration. If successful, a matchmaking
 // ticket is returned with status set to QUEUED. Track the status of the ticket
 // to respond as needed and acquire game session connection information for
-// sucessfully completed matches.
+// successfully completed matches.
 //
 // Tracking ticket status -- A couple of options are available for tracking
 // the status of matchmaking requests:
@@ -7660,7 +8363,7 @@ type AttributeValue struct {
 	SDM map[string]*float64 `type:"map"`
 
 	// For a list of up to 10 strings. Maximum length for each string is 100 characters.
-	// Duplicate values are not recognized; all occurances of the the repeated value
+	// Duplicate values are not recognized; all occurrences of the repeated value
 	// after the first of a repeated value are ignored.
 	SL []*string `type:"list"`
 }
@@ -7798,14 +8501,15 @@ type Build struct {
 	//
 	// Possible build statuses include the following:
 	//
-	//    * INITIALIZED – A new build has been defined, but no files have been uploaded.
-	//    You cannot create fleets for builds that are in this status. When a build
-	//    is successfully created, the build status is set to this value.
+	//    * INITIALIZED -- A new build has been defined, but no files have been
+	//    uploaded. You cannot create fleets for builds that are in this status.
+	//    When a build is successfully created, the build status is set to this
+	//    value.
 	//
-	//    * READY – The game build has been successfully uploaded. You can now create
-	//    new fleets for this build.
+	//    * READY -- The game build has been successfully uploaded. You can now
+	//    create new fleets for this build.
 	//
-	//    * FAILED – The game build upload failed. You cannot create new fleets
+	//    * FAILED -- The game build upload failed. You cannot create new fleets
 	//    for this build.
 	Status *string `type:"string" enum:"BuildStatus"`
 
@@ -8141,12 +8845,23 @@ type CreateFleetInput struct {
 	// this change will only affect sessions created after the policy change. You
 	// can also set protection for individual instances using UpdateGameSession.
 	//
-	//    * NoProtection – The game session can be terminated during a scale-down
+	//    * NoProtection -- The game session can be terminated during a scale-down
 	//    event.
 	//
-	//    * FullProtection – If the game session is in an ACTIVE status, it cannot
+	//    * FullProtection -- If the game session is in an ACTIVE status, it cannot
 	//    be terminated during a scale-down event.
 	NewGameSessionProtectionPolicy *string `type:"string" enum:"ProtectionPolicy"`
+
+	// Unique identifier for the AWS account with the VPC that you want to peer
+	// your Amazon GameLift fleet with. You can find your Account ID in the AWS
+	// Management Console under account settings.
+	PeerVpcAwsAccountId *string `min:"1" type:"string"`
+
+	// Unique identifier for a VPC with resources to be accessed by your Amazon
+	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
+	// To get VPC information, including IDs, use the Virtual Private Cloud service
+	// tools, including the VPC Dashboard in the AWS Management Console.
+	PeerVpcId *string `min:"1" type:"string"`
 
 	// Policy that limits the number of game sessions an individual player can create
 	// over a span of time for this fleet.
@@ -8205,6 +8920,12 @@ func (s *CreateFleetInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.PeerVpcAwsAccountId != nil && len(*s.PeerVpcAwsAccountId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PeerVpcAwsAccountId", 1))
+	}
+	if s.PeerVpcId != nil && len(*s.PeerVpcId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PeerVpcId", 1))
 	}
 	if s.ServerLaunchParameters != nil && len(*s.ServerLaunchParameters) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ServerLaunchParameters", 1))
@@ -8279,6 +9000,18 @@ func (s *CreateFleetInput) SetName(v string) *CreateFleetInput {
 // SetNewGameSessionProtectionPolicy sets the NewGameSessionProtectionPolicy field's value.
 func (s *CreateFleetInput) SetNewGameSessionProtectionPolicy(v string) *CreateFleetInput {
 	s.NewGameSessionProtectionPolicy = &v
+	return s
+}
+
+// SetPeerVpcAwsAccountId sets the PeerVpcAwsAccountId field's value.
+func (s *CreateFleetInput) SetPeerVpcAwsAccountId(v string) *CreateFleetInput {
+	s.PeerVpcAwsAccountId = &v
+	return s
+}
+
+// SetPeerVpcId sets the PeerVpcId field's value.
+func (s *CreateFleetInput) SetPeerVpcId(v string) *CreateFleetInput {
+	s.PeerVpcId = &v
 	return s
 }
 
@@ -8365,14 +9098,14 @@ type CreateGameSessionInput struct {
 	// This parameter is no longer preferred. Please use IdempotencyToken instead.
 	// Custom string that uniquely identifies a request for a new game session.
 	// Maximum token length is 48 characters. If provided, this string is included
-	// in the new game session's ID. (A game session ID has the following format:
+	// in the new game session's ID. (A game session ARN has the following format:
 	// arn:aws:gamelift:<region>::gamesession/<fleet ID>/<custom ID string or idempotency
 	// token>.)
 	GameSessionId *string `min:"1" type:"string"`
 
 	// Custom string that uniquely identifies a request for a new game session.
 	// Maximum token length is 48 characters. If provided, this string is included
-	// in the new game session's ID. (A game session ID has the following format:
+	// in the new game session's ID. (A game session ARN has the following format:
 	// arn:aws:gamelift:<region>::gamesession/<fleet ID>/<custom ID string or idempotency
 	// token>.) Idempotency tokens remain in use for 30 days after a game session
 	// has ended; game session objects are retained for this time period and then
@@ -8659,7 +9392,7 @@ type CreateMatchmakingConfigurationInput struct {
 	AdditionalPlayerCount *int64 `type:"integer"`
 
 	// Information to attached to all events related to the matchmaking configuration.
-	CustomEventData *string `min:"1" type:"string"`
+	CustomEventData *string `type:"string"`
 
 	// Meaningful description of the matchmaking configuration.
 	Description *string `min:"1" type:"string"`
@@ -8696,7 +9429,7 @@ type CreateMatchmakingConfigurationInput struct {
 	Name *string `min:"1" type:"string" required:"true"`
 
 	// SNS topic ARN that is set up to receive matchmaking notifications.
-	NotificationTarget *string `min:"1" type:"string"`
+	NotificationTarget *string `type:"string"`
 
 	// Maximum duration, in seconds, that a matchmaking ticket can remain in process
 	// before timing out. Requests that time out can be resubmitted as needed.
@@ -8731,9 +9464,6 @@ func (s *CreateMatchmakingConfigurationInput) Validate() error {
 	if s.AcceptanceTimeoutSeconds != nil && *s.AcceptanceTimeoutSeconds < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("AcceptanceTimeoutSeconds", 1))
 	}
-	if s.CustomEventData != nil && len(*s.CustomEventData) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("CustomEventData", 1))
-	}
 	if s.Description != nil && len(*s.Description) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
 	}
@@ -8748,9 +9478,6 @@ func (s *CreateMatchmakingConfigurationInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.NotificationTarget != nil && len(*s.NotificationTarget) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NotificationTarget", 1))
 	}
 	if s.RequestTimeoutSeconds == nil {
 		invalidParams.Add(request.NewErrParamRequired("RequestTimeoutSeconds"))
@@ -9163,6 +9890,191 @@ func (s *CreatePlayerSessionsOutput) SetPlayerSessions(v []*PlayerSession) *Crea
 }
 
 // Represents the input for a request action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringAuthorizationInput
+type CreateVpcPeeringAuthorizationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for the AWS account that you use to manage your Amazon
+	// GameLift fleet. You can find your Account ID in the AWS Management Console
+	// under account settings.
+	//
+	// GameLiftAwsAccountId is a required field
+	GameLiftAwsAccountId *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for a VPC with resources to be accessed by your Amazon
+	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
+	// To get VPC information, including IDs, use the Virtual Private Cloud service
+	// tools, including the VPC Dashboard in the AWS Management Console.
+	//
+	// PeerVpcId is a required field
+	PeerVpcId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateVpcPeeringAuthorizationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateVpcPeeringAuthorizationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateVpcPeeringAuthorizationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateVpcPeeringAuthorizationInput"}
+	if s.GameLiftAwsAccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GameLiftAwsAccountId"))
+	}
+	if s.GameLiftAwsAccountId != nil && len(*s.GameLiftAwsAccountId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GameLiftAwsAccountId", 1))
+	}
+	if s.PeerVpcId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PeerVpcId"))
+	}
+	if s.PeerVpcId != nil && len(*s.PeerVpcId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PeerVpcId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGameLiftAwsAccountId sets the GameLiftAwsAccountId field's value.
+func (s *CreateVpcPeeringAuthorizationInput) SetGameLiftAwsAccountId(v string) *CreateVpcPeeringAuthorizationInput {
+	s.GameLiftAwsAccountId = &v
+	return s
+}
+
+// SetPeerVpcId sets the PeerVpcId field's value.
+func (s *CreateVpcPeeringAuthorizationInput) SetPeerVpcId(v string) *CreateVpcPeeringAuthorizationInput {
+	s.PeerVpcId = &v
+	return s
+}
+
+// Represents the returned data in response to a request action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringAuthorizationOutput
+type CreateVpcPeeringAuthorizationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details on the requested VPC peering authorization, including expiration.
+	VpcPeeringAuthorization *VpcPeeringAuthorization `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateVpcPeeringAuthorizationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateVpcPeeringAuthorizationOutput) GoString() string {
+	return s.String()
+}
+
+// SetVpcPeeringAuthorization sets the VpcPeeringAuthorization field's value.
+func (s *CreateVpcPeeringAuthorizationOutput) SetVpcPeeringAuthorization(v *VpcPeeringAuthorization) *CreateVpcPeeringAuthorizationOutput {
+	s.VpcPeeringAuthorization = v
+	return s
+}
+
+// Represents the input for a request action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringConnectionInput
+type CreateVpcPeeringConnectionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for a fleet. This tells Amazon GameLift which GameLift
+	// VPC to peer with.
+	//
+	// FleetId is a required field
+	FleetId *string `type:"string" required:"true"`
+
+	// Unique identifier for the AWS account with the VPC that you want to peer
+	// your Amazon GameLift fleet with. You can find your Account ID in the AWS
+	// Management Console under account settings.
+	//
+	// PeerVpcAwsAccountId is a required field
+	PeerVpcAwsAccountId *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for a VPC with resources to be accessed by your Amazon
+	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
+	// To get VPC information, including IDs, use the Virtual Private Cloud service
+	// tools, including the VPC Dashboard in the AWS Management Console.
+	//
+	// PeerVpcId is a required field
+	PeerVpcId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateVpcPeeringConnectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateVpcPeeringConnectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateVpcPeeringConnectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateVpcPeeringConnectionInput"}
+	if s.FleetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FleetId"))
+	}
+	if s.PeerVpcAwsAccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PeerVpcAwsAccountId"))
+	}
+	if s.PeerVpcAwsAccountId != nil && len(*s.PeerVpcAwsAccountId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PeerVpcAwsAccountId", 1))
+	}
+	if s.PeerVpcId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PeerVpcId"))
+	}
+	if s.PeerVpcId != nil && len(*s.PeerVpcId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PeerVpcId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFleetId sets the FleetId field's value.
+func (s *CreateVpcPeeringConnectionInput) SetFleetId(v string) *CreateVpcPeeringConnectionInput {
+	s.FleetId = &v
+	return s
+}
+
+// SetPeerVpcAwsAccountId sets the PeerVpcAwsAccountId field's value.
+func (s *CreateVpcPeeringConnectionInput) SetPeerVpcAwsAccountId(v string) *CreateVpcPeeringConnectionInput {
+	s.PeerVpcAwsAccountId = &v
+	return s
+}
+
+// SetPeerVpcId sets the PeerVpcId field's value.
+func (s *CreateVpcPeeringConnectionInput) SetPeerVpcId(v string) *CreateVpcPeeringConnectionInput {
+	s.PeerVpcId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/CreateVpcPeeringConnectionOutput
+type CreateVpcPeeringConnectionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateVpcPeeringConnectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateVpcPeeringConnectionOutput) GoString() string {
+	return s.String()
+}
+
+// Represents the input for a request action.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteAliasInput
 type DeleteAliasInput struct {
 	_ struct{} `type:"structure"`
@@ -9514,6 +10426,160 @@ func (s DeleteScalingPolicyOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteScalingPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// Represents the input for a request action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringAuthorizationInput
+type DeleteVpcPeeringAuthorizationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for the AWS account that you use to manage your Amazon
+	// GameLift fleet. You can find your Account ID in the AWS Management Console
+	// under account settings.
+	//
+	// GameLiftAwsAccountId is a required field
+	GameLiftAwsAccountId *string `min:"1" type:"string" required:"true"`
+
+	// Unique identifier for a VPC with resources to be accessed by your Amazon
+	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
+	// To get VPC information, including IDs, use the Virtual Private Cloud service
+	// tools, including the VPC Dashboard in the AWS Management Console.
+	//
+	// PeerVpcId is a required field
+	PeerVpcId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteVpcPeeringAuthorizationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteVpcPeeringAuthorizationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteVpcPeeringAuthorizationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteVpcPeeringAuthorizationInput"}
+	if s.GameLiftAwsAccountId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GameLiftAwsAccountId"))
+	}
+	if s.GameLiftAwsAccountId != nil && len(*s.GameLiftAwsAccountId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GameLiftAwsAccountId", 1))
+	}
+	if s.PeerVpcId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PeerVpcId"))
+	}
+	if s.PeerVpcId != nil && len(*s.PeerVpcId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PeerVpcId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGameLiftAwsAccountId sets the GameLiftAwsAccountId field's value.
+func (s *DeleteVpcPeeringAuthorizationInput) SetGameLiftAwsAccountId(v string) *DeleteVpcPeeringAuthorizationInput {
+	s.GameLiftAwsAccountId = &v
+	return s
+}
+
+// SetPeerVpcId sets the PeerVpcId field's value.
+func (s *DeleteVpcPeeringAuthorizationInput) SetPeerVpcId(v string) *DeleteVpcPeeringAuthorizationInput {
+	s.PeerVpcId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringAuthorizationOutput
+type DeleteVpcPeeringAuthorizationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteVpcPeeringAuthorizationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteVpcPeeringAuthorizationOutput) GoString() string {
+	return s.String()
+}
+
+// Represents the input for a request action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringConnectionInput
+type DeleteVpcPeeringConnectionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for a fleet. This value must match the fleet ID referenced
+	// in the VPC peering connection record.
+	//
+	// FleetId is a required field
+	FleetId *string `type:"string" required:"true"`
+
+	// Unique identifier for a VPC peering connection. This value is included in
+	// the VpcPeeringConnection object, which can be retrieved by calling DescribeVpcPeeringConnections.
+	//
+	// VpcPeeringConnectionId is a required field
+	VpcPeeringConnectionId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteVpcPeeringConnectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteVpcPeeringConnectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteVpcPeeringConnectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteVpcPeeringConnectionInput"}
+	if s.FleetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FleetId"))
+	}
+	if s.VpcPeeringConnectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcPeeringConnectionId"))
+	}
+	if s.VpcPeeringConnectionId != nil && len(*s.VpcPeeringConnectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VpcPeeringConnectionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFleetId sets the FleetId field's value.
+func (s *DeleteVpcPeeringConnectionInput) SetFleetId(v string) *DeleteVpcPeeringConnectionInput {
+	s.FleetId = &v
+	return s
+}
+
+// SetVpcPeeringConnectionId sets the VpcPeeringConnectionId field's value.
+func (s *DeleteVpcPeeringConnectionInput) SetVpcPeeringConnectionId(v string) *DeleteVpcPeeringConnectionInput {
+	s.VpcPeeringConnectionId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteVpcPeeringConnectionOutput
+type DeleteVpcPeeringConnectionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteVpcPeeringConnectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteVpcPeeringConnectionOutput) GoString() string {
 	return s.String()
 }
 
@@ -11073,16 +12139,16 @@ type DescribePlayerSessionsInput struct {
 	//
 	// Possible player session statuses include the following:
 	//
-	//    * RESERVED – The player session request has been received, but the player
+	//    * RESERVED -- The player session request has been received, but the player
 	//    has not yet connected to the server process and/or been validated.
 	//
-	//    * ACTIVE – The player has been validated by the server process and is
+	//    * ACTIVE -- The player has been validated by the server process and is
 	//    currently connected.
 	//
-	//    * COMPLETED – The player connection has been dropped.
+	//    * COMPLETED -- The player connection has been dropped.
 	//
-	//    * TIMEDOUT – A player session request was received, but the player did
-	//    not connect and/or was not validated within the time-out limit (60 seconds).
+	//    * TIMEDOUT -- A player session request was received, but the player did
+	//    not connect and/or was not validated within the timeout limit (60 seconds).
 	PlayerSessionStatusFilter *string `min:"1" type:"string"`
 }
 
@@ -11282,19 +12348,19 @@ type DescribeScalingPoliciesInput struct {
 	// Scaling policy status to filter results on. A scaling policy is only in force
 	// when in an ACTIVE status.
 	//
-	//    * ACTIVE – The scaling policy is currently in force.
+	//    * ACTIVE -- The scaling policy is currently in force.
 	//
-	//    * UPDATEREQUESTED – A request to update the scaling policy has been received.
+	//    * UPDATEREQUESTED -- A request to update the scaling policy has been received.
 	//
-	//    * UPDATING – A change is being made to the scaling policy.
+	//    * UPDATING -- A change is being made to the scaling policy.
 	//
-	//    * DELETEREQUESTED – A request to delete the scaling policy has been received.
+	//    * DELETEREQUESTED -- A request to delete the scaling policy has been received.
 	//
-	//    * DELETING – The scaling policy is being deleted.
+	//    * DELETING -- The scaling policy is being deleted.
 	//
-	//    * DELETED – The scaling policy has been deleted.
+	//    * DELETED -- The scaling policy has been deleted.
 	//
-	//    * ERROR – An error occurred in creating the policy. It should be removed
+	//    * ERROR -- An error occurred in creating the policy. It should be removed
 	//    and recreated.
 	StatusFilter *string `type:"string" enum:"ScalingStatusType"`
 }
@@ -11385,6 +12451,96 @@ func (s *DescribeScalingPoliciesOutput) SetNextToken(v string) *DescribeScalingP
 // SetScalingPolicies sets the ScalingPolicies field's value.
 func (s *DescribeScalingPoliciesOutput) SetScalingPolicies(v []*ScalingPolicy) *DescribeScalingPoliciesOutput {
 	s.ScalingPolicies = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringAuthorizationsInput
+type DescribeVpcPeeringAuthorizationsInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeVpcPeeringAuthorizationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeVpcPeeringAuthorizationsInput) GoString() string {
+	return s.String()
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringAuthorizationsOutput
+type DescribeVpcPeeringAuthorizationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Collection of objects that describe all valid VPC peering operations for
+	// the current AWS account.
+	VpcPeeringAuthorizations []*VpcPeeringAuthorization `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeVpcPeeringAuthorizationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeVpcPeeringAuthorizationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetVpcPeeringAuthorizations sets the VpcPeeringAuthorizations field's value.
+func (s *DescribeVpcPeeringAuthorizationsOutput) SetVpcPeeringAuthorizations(v []*VpcPeeringAuthorization) *DescribeVpcPeeringAuthorizationsOutput {
+	s.VpcPeeringAuthorizations = v
+	return s
+}
+
+// Represents the input for a request action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringConnectionsInput
+type DescribeVpcPeeringConnectionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for a fleet.
+	FleetId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeVpcPeeringConnectionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeVpcPeeringConnectionsInput) GoString() string {
+	return s.String()
+}
+
+// SetFleetId sets the FleetId field's value.
+func (s *DescribeVpcPeeringConnectionsInput) SetFleetId(v string) *DescribeVpcPeeringConnectionsInput {
+	s.FleetId = &v
+	return s
+}
+
+// Represents the returned data in response to a request action.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DescribeVpcPeeringConnectionsOutput
+type DescribeVpcPeeringConnectionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Collection of VPC peering connection records that match the request.
+	VpcPeeringConnections []*VpcPeeringConnection `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeVpcPeeringConnectionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeVpcPeeringConnectionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetVpcPeeringConnections sets the VpcPeeringConnections field's value.
+func (s *DescribeVpcPeeringConnectionsOutput) SetVpcPeeringConnections(v []*VpcPeeringConnection) *DescribeVpcPeeringConnectionsOutput {
+	s.VpcPeeringConnections = v
 	return s
 }
 
@@ -11627,36 +12783,36 @@ type Event struct {
 
 	// Type of event being logged. The following events are currently in use:
 	//
-	//    * General events:
+	// General events:
 	//
-	// GENERIC_EVENT – An unspecified event has occurred.
+	//    *  GENERIC_EVENT -- An unspecified event has occurred.
 	//
-	//    * Fleet creation events:
+	// Fleet creation events:
 	//
-	// FLEET_CREATED – A fleet record was successfully created with a status of
-	//    NEW. Event messaging includes the fleet ID.
+	//    * FLEET_CREATED -- A fleet record was successfully created with a status
+	//    of NEW. Event messaging includes the fleet ID.
 	//
-	// FLEET_STATE_DOWNLOADING – Fleet status changed from NEW to DOWNLOADING. The
-	//    compressed build has started downloading to a fleet instance for installation.
+	//    * FLEET_STATE_DOWNLOADING -- Fleet status changed from NEW to DOWNLOADING.
+	//    The compressed build has started downloading to a fleet instance for installation.
 	//
-	// FLEET_BINARY_DOWNLOAD_FAILED – The build failed to download to the fleet
-	//    instance.
+	//    *  FLEET_BINARY_DOWNLOAD_FAILED -- The build failed to download to the
+	//    fleet instance.
 	//
-	// FLEET_CREATION_EXTRACTING_BUILD – The game server build was successfully
+	//    * FLEET_CREATION_EXTRACTING_BUILD – The game server build was successfully
 	//    downloaded to an instance, and the build files are now being extracted
 	//    from the uploaded build and saved to an instance. Failure at this stage
 	//    prevents a fleet from moving to ACTIVE status. Logs for this stage display
 	//    a list of the files that are extracted and saved on the instance. Access
 	//    the logs by using the URL in PreSignedLogUrl.
 	//
-	// FLEET_CREATION_RUNNING_INSTALLER – The game server build files were successfully
-	//    extracted, and the Amazon GameLift is now running the build's install
-	//    script (if one is included). Failure in this stage prevents a fleet from
-	//    moving to ACTIVE status. Logs for this stage list the installation steps
-	//    and whether or not the install completed successfully. Access the logs
-	//    by using the URL in PreSignedLogUrl.
+	//    * FLEET_CREATION_RUNNING_INSTALLER – The game server build files were
+	//    successfully extracted, and the Amazon GameLift is now running the build's
+	//    install script (if one is included). Failure in this stage prevents a
+	//    fleet from moving to ACTIVE status. Logs for this stage list the installation
+	//    steps and whether or not the install completed successfully. Access the
+	//    logs by using the URL in PreSignedLogUrl.
 	//
-	// FLEET_CREATION_VALIDATING_RUNTIME_CONFIG – The build process was successful,
+	//    * FLEET_CREATION_VALIDATING_RUNTIME_CONFIG -- The build process was successful,
 	//    and the Amazon GameLift is now verifying that the game server launch paths,
 	//    which are specified in the fleet's run-time configuration, exist. If any
 	//    listed launch path exists, Amazon GameLift tries to launch a game server
@@ -11665,42 +12821,58 @@ type Event struct {
 	//    the launch paths in the run-time configuration and indicate whether each
 	//    is found. Access the logs by using the URL in PreSignedLogUrl.
 	//
-	// FLEET_STATE_VALIDATING – Fleet status changed from DOWNLOADING to VALIDATING.
+	//    * FLEET_STATE_VALIDATING -- Fleet status changed from DOWNLOADING to VALIDATING.
 	//
-	// FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND – Validation of the run-time configuration
-	//    failed because the executable specified in a launch path does not exist
-	//    on the instance.
+	//    *  FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND -- Validation of the run-time
+	//    configuration failed because the executable specified in a launch path
+	//    does not exist on the instance.
 	//
-	// FLEET_STATE_BUILDING – Fleet status changed from VALIDATING to BUILDING.
+	//    * FLEET_STATE_BUILDING -- Fleet status changed from VALIDATING to BUILDING.
 	//
-	// FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE – Validation of the run-time
+	//    * FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE -- Validation of the run-time
 	//    configuration failed because the executable specified in a launch path
 	//    failed to run on the fleet instance.
 	//
-	// FLEET_STATE_ACTIVATING – Fleet status changed from BUILDING to ACTIVATING.
+	//    * FLEET_STATE_ACTIVATING -- Fleet status changed from BUILDING to ACTIVATING.
 	//
 	//
-	// FLEET_ACTIVATION_FAILED - The fleet failed to successfully complete one of
-	//    the steps in the fleet activation process. This event code indicates that
-	//    the game build was successfully downloaded to a fleet instance, built,
+	//    *  FLEET_ACTIVATION_FAILED - The fleet failed to successfully complete
+	//    one of the steps in the fleet activation process. This event code indicates
+	//    that the game build was successfully downloaded to a fleet instance, built,
 	//    and validated, but was not able to start a server process. A possible
 	//    reason for failure is that the game server is not reporting "process ready"
 	//    to the Amazon GameLift service.
 	//
-	// FLEET_STATE_ACTIVE – The fleet's status changed from ACTIVATING to ACTIVE.
-	//    The fleet is now ready to host game sessions.
+	//    * FLEET_STATE_ACTIVE -- The fleet's status changed from ACTIVATING to
+	//    ACTIVE. The fleet is now ready to host game sessions.
 	//
-	//    * Other fleet events:
+	// VPC peering events:
 	//
-	// FLEET_SCALING_EVENT – A change was made to the fleet's capacity settings
+	//    * FLEET_VPC_PEERING_SUCCEEDED -- A VPC peering connection has been established
+	//    between the VPC for an Amazon GameLift fleet and a VPC in your AWS account.
+	//
+	//    * FLEET_VPC_PEERING_FAILED -- A requested VPC peering connection has failed.
+	//    Event details and status information (see DescribeVpcPeeringConnections)
+	//    provide additional detail. A common reason for peering failure is that
+	//    the two VPCs have overlapping CIDR blocks of IPv4 addresses. To resolve
+	//    this, change the CIDR block for the VPC in your AWS account. For more
+	//    information on VPC peering failures, see http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html
+	//    (http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html)
+	//
+	//    * FLEET_VPC_PEERING_DELETED -- A VPC peering connection has been successfully
+	//    deleted.
+	//
+	// Other fleet events:
+	//
+	//    * FLEET_SCALING_EVENT -- A change was made to the fleet's capacity settings
 	//    (desired instances, minimum/maximum scaling limits). Event messaging includes
 	//    the new capacity settings.
 	//
-	// FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED – A change was made to the
-	//    fleet's game session protection policy setting. Event messaging includes
-	//    both the old and new policy setting.
+	//    * FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED -- A change was made
+	//    to the fleet's game session protection policy setting. Event messaging
+	//    includes both the old and new policy setting.
 	//
-	// FLEET_DELETED – A request to delete a fleet was initiated.
+	//    * FLEET_DELETED -- A request to delete a fleet was initiated.
 	EventCode *string `type:"string" enum:"EventCode"`
 
 	// Unique identifier for a fleet event.
@@ -11856,10 +13028,10 @@ type FleetAttributes struct {
 	// Type of game session protection to set for all new instances started in the
 	// fleet.
 	//
-	//    * NoProtection – The game session can be terminated during a scale-down
+	//    * NoProtection -- The game session can be terminated during a scale-down
 	//    event.
 	//
-	//    * FullProtection – If the game session is in an ACTIVE status, it cannot
+	//    * FullProtection -- If the game session is in an ACTIVE status, it cannot
 	//    be terminated during a scale-down event.
 	NewGameSessionProtectionPolicy *string `type:"string" enum:"ProtectionPolicy"`
 
@@ -11886,21 +13058,21 @@ type FleetAttributes struct {
 	//
 	// Possible fleet statuses include the following:
 	//
-	//    * NEW – A new fleet has been defined and desired instances is set to 1.
+	//    * NEW -- A new fleet has been defined and desired instances is set to
+	//    1.
 	//
-	//
-	//    * DOWNLOADING/VALIDATING/BUILDING/ACTIVATING – Amazon GameLift is setting
+	//    * DOWNLOADING/VALIDATING/BUILDING/ACTIVATING -- Amazon GameLift is setting
 	//    up the new fleet, creating new instances with the game build and starting
 	//    server processes.
 	//
-	//    * ACTIVE – Hosts can now accept game sessions.
+	//    * ACTIVE -- Hosts can now accept game sessions.
 	//
-	//    * ERROR – An error occurred when downloading, validating, building, or
+	//    * ERROR -- An error occurred when downloading, validating, building, or
 	//    activating the fleet.
 	//
-	//    * DELETING – Hosts are responding to a delete fleet request.
+	//    * DELETING -- Hosts are responding to a delete fleet request.
 	//
-	//    * TERMINATED – The fleet no longer exists.
+	//    * TERMINATED -- The fleet no longer exists.
 	Status *string `type:"string" enum:"FleetStatus"`
 
 	// Time stamp indicating when this data object was terminated. Format is a number
@@ -12318,7 +13490,7 @@ type GameSession struct {
 	// Number of players currently in the game session.
 	CurrentPlayerSessionCount *int64 `type:"integer"`
 
-	// Unique identifier for a fleet the game session is running on.
+	// Unique identifier for a fleet that the game session is running on.
 	FleetId *string `type:"string"`
 
 	// Set of developer-defined properties for a game session, formatted as a set
@@ -12333,7 +13505,7 @@ type GameSession struct {
 	// Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameSessionData *string `min:"1" type:"string"`
 
-	// Unique identifier for the game session. A game session ID has the following
+	// Unique identifier for the game session. A game session ARN has the following
 	// format: arn:aws:gamelift:<region>::gamesession/<fleet ID>/<custom ID string
 	// or idempotency token>.
 	GameSessionId *string `min:"1" type:"string"`
@@ -12531,10 +13703,10 @@ type GameSessionDetail struct {
 
 	// Current status of protection for the game session.
 	//
-	//    * NoProtection – The game session can be terminated during a scale-down
+	//    * NoProtection -- The game session can be terminated during a scale-down
 	//    event.
 	//
-	//    * FullProtection – If the game session is in an ACTIVE status, it cannot
+	//    * FullProtection -- If the game session is in an ACTIVE status, it cannot
 	//    be terminated during a scale-down event.
 	ProtectionPolicy *string `type:"string" enum:"ProtectionPolicy"`
 }
@@ -12650,17 +13822,17 @@ type GameSessionPlacement struct {
 
 	// Current status of the game session placement request.
 	//
-	//    * PENDING – The placement request is currently in the queue waiting to
+	//    * PENDING -- The placement request is currently in the queue waiting to
 	//    be processed.
 	//
-	//    * FULFILLED – A new game session and player sessions (if requested) have
+	//    * FULFILLED -- A new game session and player sessions (if requested) have
 	//    been successfully created. Values for GameSessionArn and GameSessionRegion
 	//    are available.
 	//
-	//    * CANCELLED – The placement request was canceled with a call to StopGameSessionPlacement.
+	//    * CANCELLED -- The placement request was canceled with a call to StopGameSessionPlacement.
 	//
-	//    * TIMED_OUT – A new game session was not successfully created before the
-	//    time limit expired. You can resubmit the placement request as needed.
+	//    * TIMED_OUT -- A new game session was not successfully created before
+	//    the time limit expired. You can resubmit the placement request as needed.
 	Status *string `type:"string" enum:"GameSessionPlacementState"`
 }
 
@@ -13098,15 +14270,15 @@ type Instance struct {
 
 	// Current status of the instance. Possible statuses include the following:
 	//
-	//    * PENDING – The instance is in the process of being created and launching
+	//    * PENDING -- The instance is in the process of being created and launching
 	//    server processes as defined in the fleet's run-time configuration.
 	//
-	//    * ACTIVE – The instance has been successfully created and at least one
+	//    * ACTIVE -- The instance has been successfully created and at least one
 	//    server process has successfully launched and reported back to Amazon GameLift
 	//    that it is ready to host a game session. The instance is now considered
 	//    ready to host game sessions.
 	//
-	//    * TERMINATING – The instance is in the process of shutting down. This
+	//    * TERMINATING -- The instance is in the process of shutting down. This
 	//    may happen to reduce capacity during a scaling down event or to recycle
 	//    resources in the event of a problem.
 	Status *string `type:"string" enum:"InstanceStatus"`
@@ -13386,10 +14558,10 @@ type ListAliasesInput struct {
 	//
 	// Possible routing types include the following:
 	//
-	//    * SIMPLE – The alias resolves to one specific fleet. Use this type when
+	//    * SIMPLE -- The alias resolves to one specific fleet. Use this type when
 	//    routing to active fleets.
 	//
-	//    * TERMINAL – The alias does not resolve to a fleet but instead can be
+	//    * TERMINAL -- The alias does not resolve to a fleet but instead can be
 	//    used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException
 	//    with the RoutingStrategy message embedded.
 	RoutingStrategyType *string `type:"string" enum:"RoutingStrategyType"`
@@ -13503,14 +14675,15 @@ type ListBuildsInput struct {
 	//
 	// Possible build statuses include the following:
 	//
-	//    * INITIALIZED – A new build has been defined, but no files have been uploaded.
-	//    You cannot create fleets for builds that are in this status. When a build
-	//    is successfully created, the build status is set to this value.
+	//    * INITIALIZED -- A new build has been defined, but no files have been
+	//    uploaded. You cannot create fleets for builds that are in this status.
+	//    When a build is successfully created, the build status is set to this
+	//    value.
 	//
-	//    * READY – The game build has been successfully uploaded. You can now create
-	//    new fleets for this build.
+	//    * READY -- The game build has been successfully uploaded. You can now
+	//    create new fleets for this build.
 	//
-	//    * FAILED – The game build upload failed. You cannot create new fleets
+	//    * FAILED -- The game build upload failed. You cannot create new fleets
 	//    for this build.
 	Status *string `type:"string" enum:"BuildStatus"`
 }
@@ -13697,9 +14870,9 @@ func (s *ListFleetsOutput) SetNextToken(v string) *ListFleetsOutput {
 	return s
 }
 
-// New player session created as a result of a successful FlexMatch match. A
-// successful match automatically creates new player sessions for every player
-// ID in the original matchmaking request.
+// Represents a new player session that is created as a result of a successful
+// FlexMatch match. A successful match automatically creates new player sessions
+// for every player ID in the original matchmaking request.
 //
 // When players connect to the match's game session, they must include both
 // player ID and player session ID in order to claim their assigned player slot.
@@ -13762,7 +14935,7 @@ type MatchmakingConfiguration struct {
 	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// Information to attached to all events related to the matchmaking configuration.
-	CustomEventData *string `min:"1" type:"string"`
+	CustomEventData *string `type:"string"`
 
 	// Descriptive label that is associated with matchmaking configuration.
 	Description *string `min:"1" type:"string"`
@@ -13795,7 +14968,7 @@ type MatchmakingConfiguration struct {
 	Name *string `min:"1" type:"string"`
 
 	// SNS topic ARN that is set up to receive matchmaking notifications.
-	NotificationTarget *string `min:"1" type:"string"`
+	NotificationTarget *string `type:"string"`
 
 	// Maximum duration, in seconds, that a matchmaking ticket can remain in process
 	// before timing out. Requests that time out can be resubmitted as needed.
@@ -13986,6 +15159,15 @@ type MatchmakingTicket struct {
 	// game session is created for the match.
 	ConfigurationName *string `min:"1" type:"string"`
 
+	// Time stamp indicating when the matchmaking request stopped being processed
+	// due to successful completion, timeout, or cancellation. Format is a number
+	// expressed in Unix time as milliseconds (for example "1469498468.057").
+	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Average amount of time (in seconds) that players are currently waiting for
+	// a match. If there is not enough recent data, this property may be empty.
+	EstimatedWaitTime *int64 `type:"integer"`
+
 	// Identifier and connection information of the game session created for the
 	// match. This information is added to the ticket only after the matchmaking
 	// request has been successfully completed.
@@ -14003,29 +15185,29 @@ type MatchmakingTicket struct {
 
 	// Current status of the matchmaking request.
 	//
-	//    * QUEUED – The matchmaking request has been received and is currently
+	//    * QUEUED -- The matchmaking request has been received and is currently
 	//    waiting to be processed.
 	//
-	//    * SEARCHING – The matchmaking request is currently being processed.
+	//    * SEARCHING -- The matchmaking request is currently being processed.
 	//
-	//    * REQUIRES_ACCEPTANCE – A match has been proposed and the players must
+	//    * REQUIRES_ACCEPTANCE -- A match has been proposed and the players must
 	//    accept the match (see AcceptMatch). This status is used only with requests
 	//    that use a matchmaking configuration with a player acceptance requirement.
 	//
-	//    * PLACING – The FlexMatch engine has matched players and is in the process
+	//    * PLACING -- The FlexMatch engine has matched players and is in the process
 	//    of placing a new game session for the match.
 	//
-	//    * COMPLETED – Players have been matched and a game session is ready to
+	//    * COMPLETED -- Players have been matched and a game session is ready to
 	//    host the players. A ticket in this state contains the necessary connection
 	//    information for players.
 	//
-	//    * FAILED – The matchmaking request was not completed. Tickets with players
+	//    * FAILED -- The matchmaking request was not completed. Tickets with players
 	//    who fail to accept a proposed match are placed in FAILED status; new matchmaking
 	//    requests can be submitted for these players.
 	//
-	//    * CANCELLED – The matchmaking request was canceled with a call to StopMatchmaking.
+	//    * CANCELLED -- The matchmaking request was canceled with a call to StopMatchmaking.
 	//
-	//    * TIMED_OUT – The matchmaking request was not completed within the duration
+	//    * TIMED_OUT -- The matchmaking request was not completed within the duration
 	//    specified in the matchmaking configuration. Matchmaking requests that
 	//    time out can be resubmitted.
 	Status *string `type:"string" enum:"MatchmakingConfigurationStatus"`
@@ -14055,6 +15237,18 @@ func (s MatchmakingTicket) GoString() string {
 // SetConfigurationName sets the ConfigurationName field's value.
 func (s *MatchmakingTicket) SetConfigurationName(v string) *MatchmakingTicket {
 	s.ConfigurationName = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *MatchmakingTicket) SetEndTime(v time.Time) *MatchmakingTicket {
+	s.EndTime = &v
+	return s
+}
+
+// SetEstimatedWaitTime sets the EstimatedWaitTime field's value.
+func (s *MatchmakingTicket) SetEstimatedWaitTime(v int64) *MatchmakingTicket {
+	s.EstimatedWaitTime = &v
 	return s
 }
 
@@ -14153,8 +15347,8 @@ func (s *PlacedPlayerSession) SetPlayerSessionId(v string) *PlacedPlayerSession 
 	return s
 }
 
-// Object used in matchmaking to represent a player. When starting a matchmaking
-// request, a player has a player ID and may have latency data. Team information
+// Represents a player in matchmaking. When starting a matchmaking request,
+// a player has a player ID, attributes, and may have latency data. Team information
 // is added after a match has been successfully completed.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/Player
 type Player struct {
@@ -14162,13 +15356,13 @@ type Player struct {
 
 	// Set of values, expressed in milliseconds, indicating the amount of latency
 	// that a player experiences when connected to AWS regions. If this property
-	// is present, FlexMatch considers placing the match only in regions that are
-	// included in the object map. If not present (that is, null), FlexMatch ignores
-	// latency issues and may place the match in any region in the queue.
+	// is present, FlexMatch considers placing the match only in regions for which
+	// latency is reported.
 	//
-	// If this property contains an empty map, FlexMatch assumes that no regions
-	// are available to the player. In this scenario, the ticket is not matchable
-	// and always times out unless canceled.
+	// If a matchmaker has a rule that evaluates player latency, players must report
+	// latency in order to be matched. If no latency is reported in this scenario,
+	// FlexMatch assumes that no regions are available to the player and the ticket
+	// is not matchable.
 	LatencyInMs map[string]*int64 `type:"map"`
 
 	// Collection of name:value pairs containing player information for use in matchmaking.
@@ -14425,16 +15619,16 @@ type PlayerSession struct {
 	//
 	// Possible player session statuses include the following:
 	//
-	//    * RESERVED – The player session request has been received, but the player
+	//    * RESERVED -- The player session request has been received, but the player
 	//    has not yet connected to the server process and/or been validated.
 	//
-	//    * ACTIVE – The player has been validated by the server process and is
+	//    * ACTIVE -- The player has been validated by the server process and is
 	//    currently connected.
 	//
-	//    * COMPLETED – The player connection has been dropped.
+	//    * COMPLETED -- The player connection has been dropped.
 	//
-	//    * TIMEDOUT – A player session request was received, but the player did
-	//    not connect and/or was not validated within the time-out limit (60 seconds).
+	//    * TIMEDOUT -- A player session request was received, but the player did
+	//    not connect and/or was not validated within the timeout limit (60 seconds).
 	Status *string `type:"string" enum:"PlayerSessionStatus"`
 
 	// Time stamp indicating when this data object was terminated. Format is a number
@@ -14536,24 +15730,24 @@ type PutScalingPolicyInput struct {
 
 	// Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.
 	//
-	//    * ActivatingGameSessions – number of game sessions in the process of being
-	//    created (game session status = ACTIVATING).
+	//    * ActivatingGameSessions -- number of game sessions in the process of
+	//    being created (game session status = ACTIVATING).
 	//
-	//    * ActiveGameSessions – number of game sessions currently running (game
+	//    * ActiveGameSessions -- number of game sessions currently running (game
 	//    session status = ACTIVE).
 	//
-	//    * CurrentPlayerSessions – number of active or reserved player sessions
+	//    * CurrentPlayerSessions -- number of active or reserved player sessions
 	//    (player session status = ACTIVE or RESERVED).
 	//
-	//    * AvailablePlayerSessions – number of player session slots currently available
-	//    in active game sessions across the fleet, calculated by subtracting a
-	//    game session's current player session count from its maximum player session
-	//    count. This number includes game sessions that are not currently accepting
-	//    players (game session PlayerSessionCreationPolicy = DENY_ALL).
+	//    * AvailablePlayerSessions -- number of player session slots currently
+	//    available in active game sessions across the fleet, calculated by subtracting
+	//    a game session's current player session count from its maximum player
+	//    session count. This number includes game sessions that are not currently
+	//    accepting players (game session PlayerSessionCreationPolicy = DENY_ALL).
 	//
-	//    * ActiveInstances – number of instances currently running a game session.
+	//    * ActiveInstances -- number of instances currently running a game session.
 	//
-	//    * IdleInstances – number of instances not currently running a game session.
+	//    * IdleInstances -- number of instances not currently running a game session.
 	//
 	// MetricName is a required field
 	MetricName *string `type:"string" required:"true" enum:"MetricName"`
@@ -14572,13 +15766,13 @@ type PutScalingPolicyInput struct {
 
 	// Type of adjustment to make to a fleet's instance count (see FleetCapacity):
 	//
-	//    * ChangeInCapacity – add (or subtract) the scaling adjustment value from
+	//    * ChangeInCapacity -- add (or subtract) the scaling adjustment value from
 	//    the current instance count. Positive values scale up while negative values
 	//    scale down.
 	//
-	//    * ExactCapacity – set the instance count to the scaling adjustment value.
+	//    * ExactCapacity -- set the instance count to the scaling adjustment value.
 	//
-	//    * PercentChangeInCapacity – increase or reduce the current instance count
+	//    * PercentChangeInCapacity -- increase or reduce the current instance count
 	//    by the scaling adjustment, read as a percentage. Positive values scale
 	//    up while negative values scale down; for example, a value of "-10" scales
 	//    the fleet down by 10%.
@@ -14961,10 +16155,10 @@ type RoutingStrategy struct {
 	//
 	// Possible routing types include the following:
 	//
-	//    * SIMPLE – The alias resolves to one specific fleet. Use this type when
+	//    * SIMPLE -- The alias resolves to one specific fleet. Use this type when
 	//    routing to active fleets.
 	//
-	//    * TERMINAL – The alias does not resolve to a fleet but instead can be
+	//    * TERMINAL -- The alias does not resolve to a fleet but instead can be
 	//    used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException
 	//    with the RoutingStrategy message embedded.
 	Type *string `type:"string" enum:"RoutingStrategyType"`
@@ -15268,24 +16462,24 @@ type ScalingPolicy struct {
 
 	// Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.
 	//
-	//    * ActivatingGameSessions – number of game sessions in the process of being
-	//    created (game session status = ACTIVATING).
+	//    * ActivatingGameSessions -- number of game sessions in the process of
+	//    being created (game session status = ACTIVATING).
 	//
-	//    * ActiveGameSessions – number of game sessions currently running (game
+	//    * ActiveGameSessions -- number of game sessions currently running (game
 	//    session status = ACTIVE).
 	//
-	//    * CurrentPlayerSessions – number of active or reserved player sessions
+	//    * CurrentPlayerSessions -- number of active or reserved player sessions
 	//    (player session status = ACTIVE or RESERVED).
 	//
-	//    * AvailablePlayerSessions – number of player session slots currently available
-	//    in active game sessions across the fleet, calculated by subtracting a
-	//    game session's current player session count from its maximum player session
-	//    count. This number does include game sessions that are not currently accepting
-	//    players (game session PlayerSessionCreationPolicy = DENY_ALL).
+	//    * AvailablePlayerSessions -- number of player session slots currently
+	//    available in active game sessions across the fleet, calculated by subtracting
+	//    a game session's current player session count from its maximum player
+	//    session count. This number does include game sessions that are not currently
+	//    accepting players (game session PlayerSessionCreationPolicy = DENY_ALL).
 	//
-	//    * ActiveInstances – number of instances currently running a game session.
+	//    * ActiveInstances -- number of instances currently running a game session.
 	//
-	//    * IdleInstances – number of instances not currently running a game session.
+	//    * IdleInstances -- number of instances not currently running a game session.
 	MetricName *string `type:"string" enum:"MetricName"`
 
 	// Descriptive label that is associated with a scaling policy. Policy names
@@ -15297,13 +16491,13 @@ type ScalingPolicy struct {
 
 	// Type of adjustment to make to a fleet's instance count (see FleetCapacity):
 	//
-	//    * ChangeInCapacity – add (or subtract) the scaling adjustment value from
+	//    * ChangeInCapacity -- add (or subtract) the scaling adjustment value from
 	//    the current instance count. Positive values scale up while negative values
 	//    scale down.
 	//
-	//    * ExactCapacity – set the instance count to the scaling adjustment value.
+	//    * ExactCapacity -- set the instance count to the scaling adjustment value.
 	//
-	//    * PercentChangeInCapacity – increase or reduce the current instance count
+	//    * PercentChangeInCapacity -- increase or reduce the current instance count
 	//    by the scaling adjustment, read as a percentage. Positive values scale
 	//    up while negative values scale down.
 	ScalingAdjustmentType *string `type:"string" enum:"ScalingAdjustmentType"`
@@ -15311,19 +16505,21 @@ type ScalingPolicy struct {
 	// Current status of the scaling policy. The scaling policy is only in force
 	// when in an ACTIVE status.
 	//
-	//    * ACTIVE – The scaling policy is currently in force.
+	//    * ACTIVE -- The scaling policy is currently in force.
 	//
-	//    * UPDATE_REQUESTED – A request to update the scaling policy has been received.
+	//    * UPDATE_REQUESTED -- A request to update the scaling policy has been
+	//    received.
 	//
-	//    * UPDATING – A change is being made to the scaling policy.
+	//    * UPDATING -- A change is being made to the scaling policy.
 	//
-	//    * DELETE_REQUESTED – A request to delete the scaling policy has been received.
+	//    * DELETE_REQUESTED -- A request to delete the scaling policy has been
+	//    received.
 	//
-	//    * DELETING – The scaling policy is being deleted.
+	//    * DELETING -- The scaling policy is being deleted.
 	//
-	//    * DELETED – The scaling policy has been deleted.
+	//    * DELETED -- The scaling policy has been deleted.
 	//
-	//    * ERROR – An error occurred in creating the policy. It should be removed
+	//    * ERROR -- An error occurred in creating the policy. It should be removed
 	//    and recreated.
 	Status *string `type:"string" enum:"ScalingStatusType"`
 
@@ -16314,10 +17510,10 @@ type UpdateFleetAttributesInput struct {
 	// fleet. Instances that already exist are not affected. You can set protection
 	// for individual instances using UpdateGameSession.
 	//
-	//    * NoProtection – The game session can be terminated during a scale-down
+	//    * NoProtection -- The game session can be terminated during a scale-down
 	//    event.
 	//
-	//    * FullProtection – If the game session is in an ACTIVE status, it cannot
+	//    * FullProtection -- If the game session is in an ACTIVE status, it cannot
 	//    be terminated during a scale-down event.
 	NewGameSessionProtectionPolicy *string `type:"string" enum:"ProtectionPolicy"`
 
@@ -16636,10 +17832,10 @@ type UpdateGameSessionInput struct {
 
 	// Game session protection policy to apply to this game session only.
 	//
-	//    * NoProtection – The game session can be terminated during a scale-down
+	//    * NoProtection -- The game session can be terminated during a scale-down
 	//    event.
 	//
-	//    * FullProtection – If the game session is in an ACTIVE status, it cannot
+	//    * FullProtection -- If the game session is in an ACTIVE status, it cannot
 	//    be terminated during a scale-down event.
 	ProtectionPolicy *string `type:"string" enum:"ProtectionPolicy"`
 }
@@ -16868,7 +18064,7 @@ type UpdateMatchmakingConfigurationInput struct {
 	AdditionalPlayerCount *int64 `type:"integer"`
 
 	// Information to attached to all events related to the matchmaking configuration.
-	CustomEventData *string `min:"1" type:"string"`
+	CustomEventData *string `type:"string"`
 
 	// Descriptive label that is associated with matchmaking configuration.
 	Description *string `min:"1" type:"string"`
@@ -16904,7 +18100,7 @@ type UpdateMatchmakingConfigurationInput struct {
 	// SNS topic ARN that is set up to receive matchmaking notifications. See  Setting
 	// up Notifications for Matchmaking (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html)
 	// for more information.
-	NotificationTarget *string `min:"1" type:"string"`
+	NotificationTarget *string `type:"string"`
 
 	// Maximum duration, in seconds, that a matchmaking ticket can remain in process
 	// before timing out. Requests that time out can be resubmitted as needed.
@@ -16932,9 +18128,6 @@ func (s *UpdateMatchmakingConfigurationInput) Validate() error {
 	if s.AcceptanceTimeoutSeconds != nil && *s.AcceptanceTimeoutSeconds < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("AcceptanceTimeoutSeconds", 1))
 	}
-	if s.CustomEventData != nil && len(*s.CustomEventData) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("CustomEventData", 1))
-	}
 	if s.Description != nil && len(*s.Description) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
 	}
@@ -16946,9 +18139,6 @@ func (s *UpdateMatchmakingConfigurationInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.NotificationTarget != nil && len(*s.NotificationTarget) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("NotificationTarget", 1))
 	}
 	if s.RequestTimeoutSeconds != nil && *s.RequestTimeoutSeconds < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("RequestTimeoutSeconds", 1))
@@ -17228,6 +18418,224 @@ func (s *ValidateMatchmakingRuleSetOutput) SetValid(v bool) *ValidateMatchmaking
 	return s
 }
 
+// Represents an authorization for a VPC peering connection between the VPC
+// for an Amazon GameLift fleet and another VPC on an account you have access
+// to. This authorization must exist and be valid for the peering connection
+// to be established. Authorizations are valid for 24 hours after they are issued.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/VpcPeeringAuthorization
+type VpcPeeringAuthorization struct {
+	_ struct{} `type:"structure"`
+
+	// Time stamp indicating when this authorization was issued. Format is a number
+	// expressed in Unix time as milliseconds (for example "1469498468.057").
+	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Time stamp indicating when this authorization expires (24 hours after issuance).
+	// Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").
+	ExpirationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	// Unique identifier for the AWS account that you use to manage your Amazon
+	// GameLift fleet. You can find your Account ID in the AWS Management Console
+	// under account settings.
+	GameLiftAwsAccountId *string `min:"1" type:"string"`
+
+	PeerVpcAwsAccountId *string `min:"1" type:"string"`
+
+	// Unique identifier for a VPC with resources to be accessed by your Amazon
+	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
+	// To get VPC information, including IDs, use the Virtual Private Cloud service
+	// tools, including the VPC Dashboard in the AWS Management Console.
+	PeerVpcId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s VpcPeeringAuthorization) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcPeeringAuthorization) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *VpcPeeringAuthorization) SetCreationTime(v time.Time) *VpcPeeringAuthorization {
+	s.CreationTime = &v
+	return s
+}
+
+// SetExpirationTime sets the ExpirationTime field's value.
+func (s *VpcPeeringAuthorization) SetExpirationTime(v time.Time) *VpcPeeringAuthorization {
+	s.ExpirationTime = &v
+	return s
+}
+
+// SetGameLiftAwsAccountId sets the GameLiftAwsAccountId field's value.
+func (s *VpcPeeringAuthorization) SetGameLiftAwsAccountId(v string) *VpcPeeringAuthorization {
+	s.GameLiftAwsAccountId = &v
+	return s
+}
+
+// SetPeerVpcAwsAccountId sets the PeerVpcAwsAccountId field's value.
+func (s *VpcPeeringAuthorization) SetPeerVpcAwsAccountId(v string) *VpcPeeringAuthorization {
+	s.PeerVpcAwsAccountId = &v
+	return s
+}
+
+// SetPeerVpcId sets the PeerVpcId field's value.
+func (s *VpcPeeringAuthorization) SetPeerVpcId(v string) *VpcPeeringAuthorization {
+	s.PeerVpcId = &v
+	return s
+}
+
+// Represents a peering connection between a VPC on one of your AWS accounts
+// and the VPC for your Amazon GameLift fleets. This record may be for an active
+// peering connection or a pending connection that has not yet been established.
+//
+// VPC peering connection operations include:
+//
+//    * CreateVpcPeeringAuthorization
+//
+//    * DescribeVpcPeeringAuthorizations
+//
+//    * DeleteVpcPeeringAuthorization
+//
+//    * CreateVpcPeeringConnection
+//
+//    * DescribeVpcPeeringConnections
+//
+//    * DeleteVpcPeeringConnection
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/VpcPeeringConnection
+type VpcPeeringConnection struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for a fleet. This ID determines the ID of the Amazon GameLift
+	// VPC for your fleet.
+	FleetId *string `type:"string"`
+
+	// Unique identifier for the VPC that contains the Amazon GameLift fleet for
+	// this connection. This VPC is managed by Amazon GameLift and does not appear
+	// in your AWS account.
+	GameLiftVpcId *string `min:"1" type:"string"`
+
+	// CIDR block of IPv4 addresses assigned to the VPC peering connection for the
+	// GameLift VPC. The peered VPC also has an IPv4 CIDR block associated with
+	// it; these blocks cannot overlap or the peering connection cannot be created.
+	IpV4CidrBlock *string `min:"1" type:"string"`
+
+	// Unique identifier for a VPC with resources to be accessed by your Amazon
+	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
+	// To get VPC information, including IDs, use the Virtual Private Cloud service
+	// tools, including the VPC Dashboard in the AWS Management Console.
+	PeerVpcId *string `min:"1" type:"string"`
+
+	// Object that contains status information about the connection. Status indicates
+	// if a connection is pending, successful, or failed.
+	Status *VpcPeeringConnectionStatus `type:"structure"`
+
+	// Unique identifier that is automatically assigned to the connection record.
+	// This ID is referenced in VPC peering connection events, and is used when
+	// deleting a connection with DeleteVpcPeeringConnection.
+	VpcPeeringConnectionId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s VpcPeeringConnection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcPeeringConnection) GoString() string {
+	return s.String()
+}
+
+// SetFleetId sets the FleetId field's value.
+func (s *VpcPeeringConnection) SetFleetId(v string) *VpcPeeringConnection {
+	s.FleetId = &v
+	return s
+}
+
+// SetGameLiftVpcId sets the GameLiftVpcId field's value.
+func (s *VpcPeeringConnection) SetGameLiftVpcId(v string) *VpcPeeringConnection {
+	s.GameLiftVpcId = &v
+	return s
+}
+
+// SetIpV4CidrBlock sets the IpV4CidrBlock field's value.
+func (s *VpcPeeringConnection) SetIpV4CidrBlock(v string) *VpcPeeringConnection {
+	s.IpV4CidrBlock = &v
+	return s
+}
+
+// SetPeerVpcId sets the PeerVpcId field's value.
+func (s *VpcPeeringConnection) SetPeerVpcId(v string) *VpcPeeringConnection {
+	s.PeerVpcId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *VpcPeeringConnection) SetStatus(v *VpcPeeringConnectionStatus) *VpcPeeringConnection {
+	s.Status = v
+	return s
+}
+
+// SetVpcPeeringConnectionId sets the VpcPeeringConnectionId field's value.
+func (s *VpcPeeringConnection) SetVpcPeeringConnectionId(v string) *VpcPeeringConnection {
+	s.VpcPeeringConnectionId = &v
+	return s
+}
+
+// Represents status information for a VPC peering connection. Status is associated
+// with a VpcPeeringConnection object. Status codes and messages are provided
+// from EC2 (). (http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_VpcPeeringConnectionStateReason.html)
+// Connection status information is also communicated as a fleet Event.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/VpcPeeringConnectionStatus
+type VpcPeeringConnectionStatus struct {
+	_ struct{} `type:"structure"`
+
+	// Code indicating the status of a VPC peering connection.
+	Code *string `min:"1" type:"string"`
+
+	// Additional messaging associated with the connection status.
+	Message *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s VpcPeeringConnectionStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcPeeringConnectionStatus) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *VpcPeeringConnectionStatus) SetCode(v string) *VpcPeeringConnectionStatus {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *VpcPeeringConnectionStatus) SetMessage(v string) *VpcPeeringConnectionStatus {
+	s.Message = &v
+	return s
+}
+
 const (
 	// AcceptanceTypeAccept is a AcceptanceType enum value
 	AcceptanceTypeAccept = "ACCEPT"
@@ -17318,6 +18726,24 @@ const (
 
 	// EC2InstanceTypeR38xlarge is a EC2InstanceType enum value
 	EC2InstanceTypeR38xlarge = "r3.8xlarge"
+
+	// EC2InstanceTypeR4Large is a EC2InstanceType enum value
+	EC2InstanceTypeR4Large = "r4.large"
+
+	// EC2InstanceTypeR4Xlarge is a EC2InstanceType enum value
+	EC2InstanceTypeR4Xlarge = "r4.xlarge"
+
+	// EC2InstanceTypeR42xlarge is a EC2InstanceType enum value
+	EC2InstanceTypeR42xlarge = "r4.2xlarge"
+
+	// EC2InstanceTypeR44xlarge is a EC2InstanceType enum value
+	EC2InstanceTypeR44xlarge = "r4.4xlarge"
+
+	// EC2InstanceTypeR48xlarge is a EC2InstanceType enum value
+	EC2InstanceTypeR48xlarge = "r4.8xlarge"
+
+	// EC2InstanceTypeR416xlarge is a EC2InstanceType enum value
+	EC2InstanceTypeR416xlarge = "r4.16xlarge"
 
 	// EC2InstanceTypeM3Medium is a EC2InstanceType enum value
 	EC2InstanceTypeM3Medium = "m3.medium"
@@ -17434,6 +18860,15 @@ const (
 
 	// EventCodeFleetCreationValidatingRuntimeConfig is a EventCode enum value
 	EventCodeFleetCreationValidatingRuntimeConfig = "FLEET_CREATION_VALIDATING_RUNTIME_CONFIG"
+
+	// EventCodeFleetVpcPeeringSucceeded is a EventCode enum value
+	EventCodeFleetVpcPeeringSucceeded = "FLEET_VPC_PEERING_SUCCEEDED"
+
+	// EventCodeFleetVpcPeeringFailed is a EventCode enum value
+	EventCodeFleetVpcPeeringFailed = "FLEET_VPC_PEERING_FAILED"
+
+	// EventCodeFleetVpcPeeringDeleted is a EventCode enum value
+	EventCodeFleetVpcPeeringDeleted = "FLEET_VPC_PEERING_DELETED"
 )
 
 const (
@@ -17516,11 +18951,11 @@ const (
 )
 
 const (
-	// MatchmakingConfigurationStatusCanceled is a MatchmakingConfigurationStatus enum value
-	MatchmakingConfigurationStatusCanceled = "CANCELED"
+	// MatchmakingConfigurationStatusCancelled is a MatchmakingConfigurationStatus enum value
+	MatchmakingConfigurationStatusCancelled = "CANCELLED"
 
-	// MatchmakingConfigurationStatusComplete is a MatchmakingConfigurationStatus enum value
-	MatchmakingConfigurationStatusComplete = "COMPLETE"
+	// MatchmakingConfigurationStatusCompleted is a MatchmakingConfigurationStatus enum value
+	MatchmakingConfigurationStatusCompleted = "COMPLETED"
 
 	// MatchmakingConfigurationStatusFailed is a MatchmakingConfigurationStatus enum value
 	MatchmakingConfigurationStatusFailed = "FAILED"

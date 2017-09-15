@@ -16,6 +16,13 @@ import (
 // - allow user-defined superscript notation (such as <sup>4</sup>)
 // - same for non-breaking spaces, like &nbsp;
 
+// A VisibleDigits computes digits, comma placement and trailing zeros as they
+// will be shown to the user.
+type VisibleDigits interface {
+	Digits(buf []byte, t language.Tag, scale int) Digits
+	// TODO: Do we also need to add the verb or pass a format.State?
+}
+
 // Formatting proceeds along the following lines:
 // 0) Compose rounding information from format and context.
 // 1) Convert a number into a Decimal.
@@ -56,12 +63,16 @@ func (f *Formatter) InitDecimal(t language.Tag) {
 // given language.
 func (f *Formatter) InitScientific(t language.Tag) {
 	f.init(t, tagToScientific)
+	f.Pattern.MinFractionDigits = 0
+	f.Pattern.MaxFractionDigits = -1
 }
 
 // InitEngineering initializes a Formatter using the default Pattern for the
 // given language.
 func (f *Formatter) InitEngineering(t language.Tag) {
 	f.init(t, tagToScientific)
+	f.Pattern.MinFractionDigits = 0
+	f.Pattern.MaxFractionDigits = -1
 	f.Pattern.MaxIntegerDigits = 3
 	f.Pattern.MinIntegerDigits = 1
 }
@@ -142,54 +153,55 @@ func (f *Formatter) Render(dst []byte, d Digits) []byte {
 	return result
 }
 
+// decimalVisibleDigits converts d according to the RoundingContext. Note that
+// the exponent may change as a result of this operation.
 func decimalVisibleDigits(r RoundingContext, d *Decimal) Digits {
 	if d.NaN || d.Inf {
 		return Digits{digits: digits{Neg: d.Neg, NaN: d.NaN, Inf: d.Inf}}
 	}
 	n := Digits{digits: d.normalize().digits}
 
-	if maxSig := int(r.MaxSignificantDigits); maxSig > 0 {
-		// TODO: really round to zero?
-		n.round(ToZero, maxSig)
-	}
-	digits := n.Digits
 	exp := n.Exp
 	exp += int32(r.DigitShift)
 
 	// Cap integer digits. Remove *most-significant* digits.
 	if r.MaxIntegerDigits > 0 {
 		if p := int(exp) - int(r.MaxIntegerDigits); p > 0 {
-			if p > len(digits) {
-				p = len(digits)
+			if p > len(n.Digits) {
+				p = len(n.Digits)
 			}
-			if digits = digits[p:]; len(digits) == 0 {
+			if n.Digits = n.Digits[p:]; len(n.Digits) == 0 {
 				exp = 0
 			} else {
 				exp -= int32(p)
 			}
 			// Strip leading zeros.
-			for len(digits) > 0 && digits[0] == 0 {
-				digits = digits[1:]
+			for len(n.Digits) > 0 && n.Digits[0] == 0 {
+				n.Digits = n.Digits[1:]
 				exp--
 			}
 		}
 	}
 
-	// Rounding usually is done by convert, but we don't rely on it.
-	numFrac := len(digits) - int(exp)
-	if r.MaxSignificantDigits == 0 && int(r.MaxFractionDigits) < numFrac {
-		p := int(exp) + int(r.MaxFractionDigits)
-		if p <= 0 {
-			p = 0
-		} else if p >= len(digits) {
-			p = len(digits)
-		}
-		digits = digits[:p] // TODO: round
+	// Rounding if not already done by Convert.
+	p := len(n.Digits)
+	if maxSig := int(r.MaxSignificantDigits); maxSig > 0 {
+		p = maxSig
 	}
+	if maxFrac := int(r.MaxFractionDigits); maxFrac >= 0 {
+		if cap := int(exp) + maxFrac; cap < p {
+			p = int(exp) + maxFrac
+		}
+		if p < 0 {
+			p = 0
+		}
+	}
+	n.round(r.Mode, p)
 
 	// set End (trailing zeros)
-	n.End = int32(len(digits))
-	if len(digits) == 0 {
+	n.End = int32(len(n.Digits))
+	if n.End == 0 {
+		exp = 0
 		if r.MinFractionDigits > 0 {
 			n.End = int32(r.MinFractionDigits)
 		}
@@ -204,7 +216,6 @@ func decimalVisibleDigits(r RoundingContext, d *Decimal) Digits {
 			n.End = int32(r.MinSignificantDigits)
 		}
 	}
-	n.Digits = digits
 	n.Exp = exp
 	return n
 }
@@ -288,50 +299,49 @@ func scientificVisibleDigits(r RoundingContext, d *Decimal) Digits {
 	}
 	n := Digits{digits: d.normalize().digits, IsScientific: true}
 
+	// Normalize to have at least one digit. This simplifies engineering
+	// notation.
+	if len(n.Digits) == 0 {
+		n.Digits = append(n.Digits, 0)
+		n.Exp = 1
+	}
+
 	// Significant digits are transformed by the parser for scientific notation
 	// and do not need to be handled here.
 	maxInt, numInt := int(r.MaxIntegerDigits), int(r.MinIntegerDigits)
 	if numInt == 0 {
 		numInt = 1
 	}
-	maxSig := int(r.MaxFractionDigits) + numInt
-	minSig := int(r.MinFractionDigits) + numInt
-
-	if maxSig > 0 {
-		// TODO: really round to zero?
-		n.round(ToZero, maxSig)
-	}
-	digits := n.Digits
-	exp := n.Exp
 
 	// If a maximum number of integers is specified, the minimum must be 1
 	// and the exponent is grouped by this number (e.g. for engineering)
-	if len(digits) == 0 {
-		exp = 0
-	} else if maxInt > numInt {
+	if maxInt > numInt {
 		// Correct the exponent to reflect a single integer digit.
-		exp--
 		numInt = 1
 		// engineering
 		// 0.01234 ([12345]e-1) -> 1.2345e-2  12.345e-3
 		// 12345   ([12345]e+5) -> 1.2345e4  12.345e3
-		d := int(exp) % maxInt
+		d := int(n.Exp-1) % maxInt
 		if d < 0 {
 			d += maxInt
 		}
-		exp -= int32(d)
 		numInt += d
-	} else {
-		exp -= int32(numInt)
 	}
 
-	n.Comma = uint8(numInt)
-	n.End = int32(len(digits))
-	if n.End < int32(minSig) {
-		n.End = int32(minSig)
+	p := len(n.Digits)
+	if maxSig := int(r.MaxSignificantDigits); maxSig > 0 {
+		p = maxSig
 	}
-	n.Digits = digits
-	n.Exp = exp
+	if maxFrac := int(r.MaxFractionDigits); maxFrac >= 0 && numInt+maxFrac < p {
+		p = numInt + maxFrac
+	}
+	n.round(r.Mode, p)
+
+	n.Comma = uint8(numInt)
+	n.End = int32(len(n.Digits))
+	if minSig := int32(r.MinFractionDigits) + int32(numInt); n.End < minSig {
+		n.End = minSig
+	}
 	return n
 }
 
@@ -342,7 +352,6 @@ func appendScientific(dst []byte, f *Formatter, n *Digits) (b []byte, postPre, p
 		return dst, 0, 0
 	}
 	digits := n.Digits
-	exp := n.Exp
 	numInt := int(n.Comma)
 	numFrac := int(n.End) - int(n.Comma)
 
@@ -387,6 +396,7 @@ func appendScientific(dst []byte, f *Formatter, n *Digits) (b []byte, postPre, p
 	buf := [12]byte{}
 	// TODO: use exponential if superscripting is not available (no Latin
 	// numbers or no tags) and use exponential in all other cases.
+	exp := n.Exp - int32(n.Comma)
 	exponential := f.Symbol(SymExponential)
 	if exponential == "E" {
 		dst = append(dst, "\u202f"...) // NARROW NO-BREAK SPACE

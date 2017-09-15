@@ -207,3 +207,31 @@ func TestEncodeUnixTime(t *testing.T) {
 	}
 	assert.Equal(t, expect, actual)
 }
+
+type AliasedTime time.Time
+
+func TestEncodeAliasedUnixTime(t *testing.T) {
+	type A struct {
+		Normal AliasedTime
+		Tagged AliasedTime `dynamodbav:",unixtime"`
+	}
+
+	a := A{
+		Normal: AliasedTime(time.Unix(123, 0).UTC()),
+		Tagged: AliasedTime(time.Unix(456, 0)),
+	}
+
+	actual, err := Marshal(a)
+	assert.NoError(t, err)
+	expect := &dynamodb.AttributeValue{
+		M: map[string]*dynamodb.AttributeValue{
+			"Normal": {
+				S: aws.String("1970-01-01T00:02:03Z"),
+			},
+			"Tagged": {
+				N: aws.String("456"),
+			},
+		},
+	}
+	assert.Equal(t, expect, actual)
+}

@@ -295,28 +295,49 @@ var noCrossLinkServices = map[string]struct{}{
 	"budgets":           {},
 	"cloudsearch":       {},
 	"cloudsearchdomain": {},
-	"discovery":         {},
 	"elastictranscoder": {},
 	"es":                {},
 	"glacier":           {},
 	"importexport":      {},
 	"iot":               {},
 	"iot-data":          {},
-	"lambda":            {},
 	"machinelearning":   {},
 	"rekognition":       {},
 	"sdb":               {},
 	"swf":               {},
 }
 
-func GetCrosslinkURL(baseURL, name, uid string, params ...string) string {
-	_, ok := noCrossLinkServices[strings.ToLower(name)]
-	if uid != "" && baseURL != "" && !ok {
-		return strings.Join(append([]string{baseURL, "goto", "WebAPI", uid}, params...), "/")
+// GetCrosslinkURL returns the crosslinking URL for the shape based on the name and
+// uid provided. Empty string is returned if no crosslink link could be determined.
+func GetCrosslinkURL(baseURL, uid string, params ...string) string {
+	if uid == "" || baseURL == "" {
+		return ""
 	}
-	return ""
+
+	if _, ok := noCrossLinkServices[strings.ToLower(serviceIDFromUID(uid))]; ok {
+		return ""
+	}
+
+	return strings.Join(append([]string{baseURL, "goto", "WebAPI", uid}, params...), "/")
 }
 
+func serviceIDFromUID(uid string) string {
+	found := 0
+	i := len(uid) - 1
+	for ; i >= 0; i-- {
+		if uid[i] == '-' {
+			found++
+		}
+		// Terminate after the date component is found, e.g. es-2017-11-11
+		if found == 3 {
+			break
+		}
+	}
+
+	return uid[0:i]
+}
+
+// APIName returns the API's service name.
 func (a *API) APIName() string {
 	return a.name
 }
@@ -331,7 +352,7 @@ var tplServiceDoc = template.Must(template.New("service docs").Funcs(template.Fu
 //
 {{ .Documentation }}
 {{ end -}}
-{{ $crosslinkURL := GetCrosslinkURL $.BaseCrosslinkURL $.APIName $.Metadata.UID -}}
+{{ $crosslinkURL := GetCrosslinkURL $.BaseCrosslinkURL $.Metadata.UID -}}
 {{ if $crosslinkURL -}}
 //
 // See {{ $crosslinkURL }} for more information on this service.

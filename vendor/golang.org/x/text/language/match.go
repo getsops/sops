@@ -16,6 +16,29 @@ func PreferSameScript(preferSame bool) MatchOption {
 	return func(m *matcher) { m.preferSameScript = preferSame }
 }
 
+// TODO(v1.0.0): consider making Matcher a concrete type, instead of interface.
+// There doesn't seem to be too much need for multiple types.
+// Making it a concrete type allows MatchStrings to be a method, which will
+// improve its discoverability.
+
+// MatchStrings parses and matches the given strings until one of them matches
+// the language in the Matcher. A string may be an Accept-Language header as
+// handled by ParseAcceptLanguage. The default language is returned if no
+// other language matched.
+func MatchStrings(m Matcher, lang ...string) (tag Tag, index int) {
+	for _, accept := range lang {
+		desired, _, err := ParseAcceptLanguage(accept)
+		if err != nil {
+			continue
+		}
+		if tag, index, conf := m.Match(desired...); conf != No {
+			return tag, index
+		}
+	}
+	tag, index, _ = m.Match()
+	return
+}
+
 // Matcher is the interface that wraps the Match method.
 //
 // Match returns the best match for any of the given tags, along with

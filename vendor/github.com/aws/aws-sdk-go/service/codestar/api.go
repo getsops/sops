@@ -901,6 +901,91 @@ func (c *CodeStar) ListResourcesWithContext(ctx aws.Context, input *ListResource
 	return out, req.Send()
 }
 
+const opListTagsForProject = "ListTagsForProject"
+
+// ListTagsForProjectRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForProject operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForProject for more information on using the ListTagsForProject
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForProjectRequest method.
+//    req, resp := client.ListTagsForProjectRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/ListTagsForProject
+func (c *CodeStar) ListTagsForProjectRequest(input *ListTagsForProjectInput) (req *request.Request, output *ListTagsForProjectOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForProject,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListTagsForProjectInput{}
+	}
+
+	output = &ListTagsForProjectOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForProject API operation for AWS CodeStar.
+//
+// Gets the tags for a project.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeStar's
+// API operation ListTagsForProject for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeProjectNotFoundException "ProjectNotFoundException"
+//   The specified AWS CodeStar project was not found.
+//
+//   * ErrCodeValidationException "ValidationException"
+//   The specified input is either not valid, or it could not be validated.
+//
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
+//   The next token is not valid.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/ListTagsForProject
+func (c *CodeStar) ListTagsForProject(input *ListTagsForProjectInput) (*ListTagsForProjectOutput, error) {
+	req, out := c.ListTagsForProjectRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForProjectWithContext is the same as ListTagsForProject with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForProject for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeStar) ListTagsForProjectWithContext(ctx aws.Context, input *ListTagsForProjectInput, opts ...request.Option) (*ListTagsForProjectOutput, error) {
+	req, out := c.ListTagsForProjectRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListTeamMembers = "ListTeamMembers"
 
 // ListTeamMembersRequest generates a "aws/request.Request" representing the
@@ -1063,6 +1148,184 @@ func (c *CodeStar) ListUserProfiles(input *ListUserProfilesInput) (*ListUserProf
 // for more information on using Contexts.
 func (c *CodeStar) ListUserProfilesWithContext(ctx aws.Context, input *ListUserProfilesInput, opts ...request.Option) (*ListUserProfilesOutput, error) {
 	req, out := c.ListUserProfilesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagProject = "TagProject"
+
+// TagProjectRequest generates a "aws/request.Request" representing the
+// client's request for the TagProject operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagProject for more information on using the TagProject
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagProjectRequest method.
+//    req, resp := client.TagProjectRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/TagProject
+func (c *CodeStar) TagProjectRequest(input *TagProjectInput) (req *request.Request, output *TagProjectOutput) {
+	op := &request.Operation{
+		Name:       opTagProject,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagProjectInput{}
+	}
+
+	output = &TagProjectOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// TagProject API operation for AWS CodeStar.
+//
+// Adds tags to a project.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeStar's
+// API operation TagProject for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeProjectNotFoundException "ProjectNotFoundException"
+//   The specified AWS CodeStar project was not found.
+//
+//   * ErrCodeValidationException "ValidationException"
+//   The specified input is either not valid, or it could not be validated.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   A resource limit has been exceeded.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Another modification is being made. That modification must complete before
+//   you can make your change.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/TagProject
+func (c *CodeStar) TagProject(input *TagProjectInput) (*TagProjectOutput, error) {
+	req, out := c.TagProjectRequest(input)
+	return out, req.Send()
+}
+
+// TagProjectWithContext is the same as TagProject with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagProject for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeStar) TagProjectWithContext(ctx aws.Context, input *TagProjectInput, opts ...request.Option) (*TagProjectOutput, error) {
+	req, out := c.TagProjectRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagProject = "UntagProject"
+
+// UntagProjectRequest generates a "aws/request.Request" representing the
+// client's request for the UntagProject operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagProject for more information on using the UntagProject
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagProjectRequest method.
+//    req, resp := client.UntagProjectRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/UntagProject
+func (c *CodeStar) UntagProjectRequest(input *UntagProjectInput) (req *request.Request, output *UntagProjectOutput) {
+	op := &request.Operation{
+		Name:       opUntagProject,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagProjectInput{}
+	}
+
+	output = &UntagProjectOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UntagProject API operation for AWS CodeStar.
+//
+// Removes tags from a project.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeStar's
+// API operation UntagProject for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeProjectNotFoundException "ProjectNotFoundException"
+//   The specified AWS CodeStar project was not found.
+//
+//   * ErrCodeValidationException "ValidationException"
+//   The specified input is either not valid, or it could not be validated.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   A resource limit has been exceeded.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Another modification is being made. That modification must complete before
+//   you can make your change.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/UntagProject
+func (c *CodeStar) UntagProject(input *UntagProjectInput) (*UntagProjectOutput, error) {
+	req, out := c.UntagProjectRequest(input)
+	return out, req.Send()
+}
+
+// UntagProjectWithContext is the same as UntagProject with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagProject for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeStar) UntagProjectWithContext(ctx aws.Context, input *UntagProjectInput, opts ...request.Option) (*UntagProjectOutput, error) {
+	req, out := c.UntagProjectRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1358,8 +1621,8 @@ type AssociateTeamMemberInput struct {
 	// to remotely access project resources, for example Amazon EC2 instances.
 	RemoteAccessAllowed *bool `locationName:"remoteAccessAllowed" type:"boolean"`
 
-	// The Amazon Resource Name (ARN) for the IAM user you want to add to the DevHub
-	// project.
+	// The Amazon Resource Name (ARN) for the IAM user you want to add to the AWS
+	// CodeStar project.
 	//
 	// UserArn is a required field
 	UserArn *string `locationName:"userArn" min:"32" type:"string" required:"true"`
@@ -2350,7 +2613,7 @@ func (s *ListProjectsOutput) SetProjects(v []*ProjectSummary) *ListProjectsOutpu
 type ListResourcesInput struct {
 	_ struct{} `type:"structure"`
 
-	// he maximum amount of data that can be contained in a single set of results.
+	// The maximum amount of data that can be contained in a single set of results.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The continuation token for the next set of results, if the results cannot
@@ -2444,6 +2707,105 @@ func (s *ListResourcesOutput) SetNextToken(v string) *ListResourcesOutput {
 // SetResources sets the Resources field's value.
 func (s *ListResourcesOutput) SetResources(v []*Resource) *ListResourcesOutput {
 	s.Resources = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/ListTagsForProjectRequest
+type ListTagsForProjectInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the project to get tags for.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
+
+	// Reserved for future use.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// Reserved for future use.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListTagsForProjectInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForProjectInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForProjectInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForProjectInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 2))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *ListTagsForProjectInput) SetId(v string) *ListTagsForProjectInput {
+	s.Id = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListTagsForProjectInput) SetMaxResults(v int64) *ListTagsForProjectInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTagsForProjectInput) SetNextToken(v string) *ListTagsForProjectInput {
+	s.NextToken = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/ListTagsForProjectResult
+type ListTagsForProjectOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Reserved for future use.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The tags for the project.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s ListTagsForProjectOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForProjectOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTagsForProjectOutput) SetNextToken(v string) *ListTagsForProjectOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForProjectOutput) SetTags(v map[string]*string) *ListTagsForProjectOutput {
+	s.Tags = v
 	return s
 }
 
@@ -2697,6 +3059,86 @@ func (s *Resource) SetId(v string) *Resource {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/TagProjectRequest
+type TagProjectInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the project you want to add a tag to.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
+
+	// The tags you want to add to the project.
+	//
+	// Tags is a required field
+	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
+}
+
+// String returns the string representation
+func (s TagProjectInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagProjectInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagProjectInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagProjectInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 2))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *TagProjectInput) SetId(v string) *TagProjectInput {
+	s.Id = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagProjectInput) SetTags(v map[string]*string) *TagProjectInput {
+	s.Tags = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/TagProjectResult
+type TagProjectOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tags for the project.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s TagProjectOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagProjectOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagProjectOutput) SetTags(v map[string]*string) *TagProjectOutput {
+	s.Tags = v
+	return s
+}
+
 // Information about a team member in a project.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/TeamMember
 type TeamMember struct {
@@ -2745,6 +3187,77 @@ func (s *TeamMember) SetRemoteAccessAllowed(v bool) *TeamMember {
 func (s *TeamMember) SetUserArn(v string) *TeamMember {
 	s.UserArn = &v
 	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/UntagProjectRequest
+type UntagProjectInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the project to remove tags from.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"2" type:"string" required:"true"`
+
+	// The tags to remove from the project.
+	//
+	// Tags is a required field
+	Tags []*string `locationName:"tags" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagProjectInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagProjectInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagProjectInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagProjectInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 2))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *UntagProjectInput) SetId(v string) *UntagProjectInput {
+	s.Id = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UntagProjectInput) SetTags(v []*string) *UntagProjectInput {
+	s.Tags = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/UntagProjectResult
+type UntagProjectOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagProjectOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagProjectOutput) GoString() string {
+	return s.String()
 }
 
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/codestar-2017-04-19/UpdateProjectRequest

@@ -2990,6 +2990,13 @@ type TargetTrackingScalingPolicyConfiguration struct {
 	// Reserved for future use.
 	CustomizedMetricSpecification *CustomizedMetricSpecification `type:"structure"`
 
+	// Indicates whether scale in by the target tracking policy is disabled. If
+	// the value is true, scale in is disabled and the target tracking policy won't
+	// remove capacity from the scalable resource. Otherwise, scale in is enabled
+	// and the target tracking policy can remove capacity from the scalable resource.
+	// The default value is false.
+	DisableScaleIn *bool `type:"boolean"`
+
 	// A predefined metric.
 	PredefinedMetricSpecification *PredefinedMetricSpecification `type:"structure"`
 
@@ -3055,6 +3062,12 @@ func (s *TargetTrackingScalingPolicyConfiguration) Validate() error {
 // SetCustomizedMetricSpecification sets the CustomizedMetricSpecification field's value.
 func (s *TargetTrackingScalingPolicyConfiguration) SetCustomizedMetricSpecification(v *CustomizedMetricSpecification) *TargetTrackingScalingPolicyConfiguration {
 	s.CustomizedMetricSpecification = v
+	return s
+}
+
+// SetDisableScaleIn sets the DisableScaleIn field's value.
+func (s *TargetTrackingScalingPolicyConfiguration) SetDisableScaleIn(v bool) *TargetTrackingScalingPolicyConfiguration {
+	s.DisableScaleIn = &v
 	return s
 }
 

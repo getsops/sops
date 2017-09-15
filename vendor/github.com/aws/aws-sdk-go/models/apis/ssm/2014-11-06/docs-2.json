@@ -1987,6 +1987,12 @@
         "UpdateManagedInstanceRoleRequest$IamRole": "<p>The IAM role you want to assign or change.</p>"
       }
     },
+    "IdempotencyToken": {
+      "base": null,
+      "refs": {
+        "StartAutomationExecutionRequest$ClientToken": "<p>User-provided idempotency token. The token must be unique, is case insensitive, enforces the UUID format, and can't be reused.</p>"
+      }
+    },
     "IdempotentParameterMismatch": {
       "base": "<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>",
       "refs": {
@@ -4174,6 +4180,12 @@
       "base": null,
       "refs": {
         "ListResourceComplianceSummariesResult$ResourceComplianceSummaryItems": "<p>A summary count for specified or targeted managed instances. Summary count includes information about compliant and non-compliant State Manager associations, patch status, or custom items according to the filter criteria that you specify. </p>"
+      }
+    },
+    "ResourceDataSyncAWSKMSKeyARN": {
+      "base": null,
+      "refs": {
+        "ResourceDataSyncS3Destination$AWSKMSKeyARN": "<p>The ARN of an encryption key for a destination in Amazon S3. Must belong to the same region as the destination Amazon S3 bucket.</p>"
       }
     },
     "ResourceDataSyncAlreadyExistsException": {

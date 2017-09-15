@@ -13,6 +13,7 @@
 package plural
 
 import (
+	"golang.org/x/text/internal/number"
 	"golang.org/x/text/language"
 )
 
@@ -109,8 +110,8 @@ func getIntApprox(digits []byte, start, end, nMod, big int) (n int) {
 //      123        []byte{1, 2, 3}     3      0
 //      123.4      []byte{1, 2, 3, 4}  3      1
 //      123.40     []byte{1, 2, 3, 4}  3      2
-//      100000     []byte{1}           6......0
-//      100000.00  []byte{1}           6......3
+//      100000     []byte{1}           6      0
+//      100000.00  []byte{1}           6      3
 func (p *Rules) MatchDigits(t language.Tag, digits []byte, exp, scale int) Form {
 	index, _ := language.CompactIndex(t)
 
@@ -121,6 +122,11 @@ func (p *Rules) MatchDigits(t language.Tag, digits []byte, exp, scale int) Form 
 	f := getIntApprox(digits, exp, exp+scale, 2, 100)
 
 	return matchPlural(p, index, n, f, scale)
+}
+
+func (p *Rules) matchDisplayDigits(t language.Tag, d *number.Digits) (Form, int) {
+	n := getIntApprox(d.Digits, 0, int(d.Exp), 6, 1000000)
+	return p.MatchDigits(t, d.Digits, int(d.Exp), d.NumFracDigits()), n
 }
 
 func validForms(p *Rules, t language.Tag) (forms []Form) {

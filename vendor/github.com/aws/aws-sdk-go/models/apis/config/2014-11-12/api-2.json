@@ -373,6 +373,11 @@
     "AllSupported":{"type":"boolean"},
     "AvailabilityZone":{"type":"string"},
     "AwsRegion":{"type":"string"},
+    "BaseResourceId":{
+      "type":"string",
+      "max":768,
+      "min":1
+    },
     "Boolean":{"type":"boolean"},
     "ChannelName":{
       "type":"string",
@@ -408,7 +413,7 @@
       "type":"structure",
       "members":{
         "ResourceType":{"shape":"StringWithCharLimit256"},
-        "ResourceId":{"shape":"StringWithCharLimit256"},
+        "ResourceId":{"shape":"BaseResourceId"},
         "Compliance":{"shape":"Compliance"}
       }
     },
@@ -721,7 +726,7 @@
       "type":"structure",
       "members":{
         "ResourceType":{"shape":"StringWithCharLimit256"},
-        "ResourceId":{"shape":"StringWithCharLimit256"},
+        "ResourceId":{"shape":"BaseResourceId"},
         "ComplianceTypes":{"shape":"ComplianceTypes"},
         "Limit":{"shape":"Limit"},
         "NextToken":{"shape":"NextToken"}
@@ -827,7 +832,7 @@
       ],
       "members":{
         "ComplianceResourceType":{"shape":"StringWithCharLimit256"},
-        "ComplianceResourceId":{"shape":"StringWithCharLimit256"},
+        "ComplianceResourceId":{"shape":"BaseResourceId"},
         "ComplianceType":{"shape":"ComplianceType"},
         "Annotation":{"shape":"StringWithCharLimit256"},
         "OrderingTimestamp":{"shape":"OrderingTimestamp"}
@@ -856,7 +861,7 @@
       "members":{
         "ConfigRuleName":{"shape":"StringWithCharLimit64"},
         "ResourceType":{"shape":"StringWithCharLimit256"},
-        "ResourceId":{"shape":"StringWithCharLimit256"}
+        "ResourceId":{"shape":"BaseResourceId"}
       }
     },
     "EvaluationResults":{
@@ -898,7 +903,7 @@
       ],
       "members":{
         "ResourceType":{"shape":"StringWithCharLimit256"},
-        "ResourceId":{"shape":"StringWithCharLimit256"},
+        "ResourceId":{"shape":"BaseResourceId"},
         "ComplianceTypes":{"shape":"ComplianceTypes"},
         "NextToken":{"shape":"String"}
       }
@@ -1362,7 +1367,7 @@
         "ComplianceResourceTypes":{"shape":"ComplianceResourceTypes"},
         "TagKey":{"shape":"StringWithCharLimit128"},
         "TagValue":{"shape":"StringWithCharLimit256"},
-        "ComplianceResourceId":{"shape":"StringWithCharLimit256"}
+        "ComplianceResourceId":{"shape":"BaseResourceId"}
       }
     },
     "Source":{

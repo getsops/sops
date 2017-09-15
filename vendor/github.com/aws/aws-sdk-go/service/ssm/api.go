@@ -8364,6 +8364,10 @@ func (c *SSM) StartAutomationExecutionRequest(input *StartAutomationExecutionInp
 //   * ErrCodeAutomationDefinitionVersionNotFoundException "AutomationDefinitionVersionNotFoundException"
 //   An Automation document with the specified name and version could not be found.
 //
+//   * ErrCodeIdempotentParameterMismatch "IdempotentParameterMismatch"
+//   Error returned when an idempotent operation is retried and the parameters
+//   don't match the original call to the API with the same idempotency token.
+//
 //   * ErrCodeInternalServerError "InternalServerError"
 //   An error occurred on the server side.
 //
@@ -24707,6 +24711,10 @@ func (s *ResourceDataSyncItem) SetSyncName(v string) *ResourceDataSyncItem {
 type ResourceDataSyncS3Destination struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of an encryption key for a destination in Amazon S3. Must belong
+	// to the same region as the destination Amazon S3 bucket.
+	AWSKMSKeyARN *string `min:"1" type:"string"`
+
 	// The name of the Amazon S3 bucket where the aggregated data is stored.
 	//
 	// BucketName is a required field
@@ -24739,6 +24747,9 @@ func (s ResourceDataSyncS3Destination) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ResourceDataSyncS3Destination) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ResourceDataSyncS3Destination"}
+	if s.AWSKMSKeyARN != nil && len(*s.AWSKMSKeyARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AWSKMSKeyARN", 1))
+	}
 	if s.BucketName == nil {
 		invalidParams.Add(request.NewErrParamRequired("BucketName"))
 	}
@@ -24762,6 +24773,12 @@ func (s *ResourceDataSyncS3Destination) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAWSKMSKeyARN sets the AWSKMSKeyARN field's value.
+func (s *ResourceDataSyncS3Destination) SetAWSKMSKeyARN(v string) *ResourceDataSyncS3Destination {
+	s.AWSKMSKeyARN = &v
+	return s
 }
 
 // SetBucketName sets the BucketName field's value.
@@ -25332,6 +25349,10 @@ func (s *SeveritySummary) SetUnspecifiedCount(v int64) *SeveritySummary {
 type StartAutomationExecutionInput struct {
 	_ struct{} `type:"structure"`
 
+	// User-provided idempotency token. The token must be unique, is case insensitive,
+	// enforces the UUID format, and can't be reused.
+	ClientToken *string `min:"36" type:"string"`
+
 	// The name of the Automation document to use for this execution.
 	//
 	// DocumentName is a required field
@@ -25358,6 +25379,9 @@ func (s StartAutomationExecutionInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartAutomationExecutionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartAutomationExecutionInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
 	if s.DocumentName == nil {
 		invalidParams.Add(request.NewErrParamRequired("DocumentName"))
 	}
@@ -25369,6 +25393,12 @@ func (s *StartAutomationExecutionInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *StartAutomationExecutionInput) SetClientToken(v string) *StartAutomationExecutionInput {
+	s.ClientToken = &v
+	return s
 }
 
 // SetDocumentName sets the DocumentName field's value.

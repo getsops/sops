@@ -11541,24 +11541,65 @@ type CreateDBInstanceInput struct {
 	//
 	// MySQL
 	//
-	// Constraints: Must be an integer from 5 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 5 to 6144.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 6144.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 5 to 3072.
 	//
 	// MariaDB
 	//
-	// Constraints: Must be an integer from 5 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 5 to 6144.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 6144.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 5 to 3072.
 	//
 	// PostgreSQL
 	//
-	// Constraints: Must be an integer from 5 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 5 to 6144.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 6144.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 5 to 3072.
 	//
 	// Oracle
 	//
-	// Constraints: Must be an integer from 10 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 10 to 6144.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 6144.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 10 to 3072.
 	//
 	// SQL Server
 	//
-	// Constraints: Must be an integer from 200 to 4096 (Standard Edition and Enterprise
-	// Edition) or from 20 to 4096 (Express Edition and Web Edition)
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2):
+	//
+	// Enterprise and Standard editions: Must be an integer from 200 to 16384.
+	//
+	// Web and Express editions: Must be an integer from 20 to 16384.
+	//
+	//    * Provisioned IOPS storage (io1):
+	//
+	// Enterprise and Standard editions: Must be an integer from 200 to 16384.
+	//
+	// Web and Express editions: Must be an integer from 100 to 16384.
+	//
+	//    * Magnetic storage (standard):
+	//
+	// Enterprise and Standard editions: Must be an integer from 200 to 1024.
+	//
+	// Web and Express editions: Must be an integer from 20 to 1024.
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Indicates that minor engine upgrades will be applied automatically to the
@@ -11813,11 +11854,15 @@ type CreateDBInstanceInput struct {
 	//
 	// MariaDB
 	//
+	//    * 10.1.23 (supported in all AWS regions)
+	//
 	//    * 10.1.19 (supported in all AWS regions)
 	//
 	//    * 10.1.14 (supported in all regions except us-east-2)
 	//
-	// 10.0.28 (supported in all AWS regions)
+	// 10.0.31 (supported in all AWS regions)
+	//
+	//    * 10.0.28 (supported in all AWS regions)
 	//
 	//    * 10.0.24 (supported in all AWS regions)
 	//
@@ -12751,7 +12796,8 @@ type CreateDBInstanceReadReplicaInput struct {
 	//    is running MySQL 5.6.
 	//
 	//    * Can specify a DB instance that is a PostgreSQL DB instance only if the
-	//    source is running PostgreSQL 9.3.5 or later.
+	//    source is running PostgreSQL 9.3.5 or later (9.4.7 and higher for cross
+	//    region replication).
 	//
 	//    * The specified DB instance must have automatic backups enabled, its backup
 	//    retention period must be greater than 0.
@@ -23512,6 +23558,19 @@ type OptionGroupOption struct {
 
 	// Specifies whether the option requires a port.
 	PortRequired *bool `type:"boolean"`
+
+	// If true, you must enable the Auto Minor Version Upgrade setting for your
+	// DB instance before you can use this option. You can enable Auto Minor Version
+	// Upgrade when you first create your DB instance, or by modifying your DB instance
+	// later.
+	RequiresAutoMinorEngineVersionUpgrade *bool `type:"boolean"`
+
+	// If true, you can change the option to an earlier version of the option. This
+	// only applies to options that have different versions available.
+	SupportsOptionVersionDowngrade *bool `type:"boolean"`
+
+	// If true, you can only use this option with a DB instance that is in a VPC.
+	VpcOnly *bool `type:"boolean"`
 }
 
 // String returns the string representation
@@ -23599,6 +23658,24 @@ func (s *OptionGroupOption) SetPersistent(v bool) *OptionGroupOption {
 // SetPortRequired sets the PortRequired field's value.
 func (s *OptionGroupOption) SetPortRequired(v bool) *OptionGroupOption {
 	s.PortRequired = &v
+	return s
+}
+
+// SetRequiresAutoMinorEngineVersionUpgrade sets the RequiresAutoMinorEngineVersionUpgrade field's value.
+func (s *OptionGroupOption) SetRequiresAutoMinorEngineVersionUpgrade(v bool) *OptionGroupOption {
+	s.RequiresAutoMinorEngineVersionUpgrade = &v
+	return s
+}
+
+// SetSupportsOptionVersionDowngrade sets the SupportsOptionVersionDowngrade field's value.
+func (s *OptionGroupOption) SetSupportsOptionVersionDowngrade(v bool) *OptionGroupOption {
+	s.SupportsOptionVersionDowngrade = &v
+	return s
+}
+
+// SetVpcOnly sets the VpcOnly field's value.
+func (s *OptionGroupOption) SetVpcOnly(v bool) *OptionGroupOption {
+	s.VpcOnly = &v
 	return s
 }
 

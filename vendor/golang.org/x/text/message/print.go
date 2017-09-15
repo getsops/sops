@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"unicode/utf8"
 
+	"golang.org/x/text/internal/format"
 	"golang.org/x/text/internal/number"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message/catalog"
@@ -284,7 +285,7 @@ func (p *printer) initDecimal(minFrac, maxFrac int) {
 	f.MinIntegerDigits = 1
 	f.MaxIntegerDigits = 0
 	f.MinFractionDigits = uint8(minFrac)
-	f.MaxFractionDigits = uint16(maxFrac)
+	f.MaxFractionDigits = int16(maxFrac)
 	p.setFlags(f)
 	f.PadRune = 0
 	if p.fmt.widPresent {
@@ -313,7 +314,7 @@ func (p *printer) initScientific(minFrac, maxFrac int) {
 	} else {
 		f.SetPrecision(maxFrac + 1)
 		f.MinFractionDigits = uint8(minFrac)
-		f.MaxFractionDigits = uint16(maxFrac)
+		f.MaxFractionDigits = int16(maxFrac)
 	}
 	f.MinExponentDigits = 2
 	p.setFlags(f)
@@ -605,6 +606,12 @@ func (p *printer) handleMethods(verb rune) (handled bool) {
 		return
 	}
 	// Is it a Formatter?
+	if formatter, ok := p.arg.(format.Formatter); ok {
+		handled = true
+		defer p.catchPanic(p.arg, verb)
+		formatter.Format(p, verb)
+		return
+	}
 	if formatter, ok := p.arg.(fmt.Formatter); ok {
 		handled = true
 		defer p.catchPanic(p.arg, verb)
@@ -1040,7 +1047,7 @@ formatLoop:
 						p.fmt.plusV = p.fmt.plus
 						p.fmt.plus = false
 					}
-					p.printArg(p.Arg(p.argNum), rune(c))
+					p.printArg(p.Arg(p.argNum+1), rune(c))
 					p.argNum++
 					i++
 					continue formatLoop
