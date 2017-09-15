@@ -1255,6 +1255,7 @@
         {"shape":"InvalidAutomationExecutionParametersException"},
         {"shape":"AutomationExecutionLimitExceededException"},
         {"shape":"AutomationDefinitionVersionNotFoundException"},
+        {"shape":"IdempotentParameterMismatch"},
         {"shape":"InternalServerError"}
       ]
     },
@@ -3727,6 +3728,12 @@
       "type":"string",
       "max":64
     },
+    "IdempotencyToken":{
+      "type":"string",
+      "max":36,
+      "min":36,
+      "pattern":"[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+    },
     "IdempotentParameterMismatch":{
       "type":"structure",
       "members":{
@@ -5888,6 +5895,12 @@
         "locationName":"Item"
       }
     },
+    "ResourceDataSyncAWSKMSKeyARN":{
+      "type":"string",
+      "max":512,
+      "min":1,
+      "pattern":"arn:.*"
+    },
     "ResourceDataSyncAlreadyExistsException":{
       "type":"structure",
       "members":{
@@ -5953,7 +5966,8 @@
         "BucketName":{"shape":"ResourceDataSyncS3BucketName"},
         "Prefix":{"shape":"ResourceDataSyncS3Prefix"},
         "SyncFormat":{"shape":"ResourceDataSyncS3Format"},
-        "Region":{"shape":"ResourceDataSyncS3Region"}
+        "Region":{"shape":"ResourceDataSyncS3Region"},
+        "AWSKMSKeyARN":{"shape":"ResourceDataSyncAWSKMSKeyARN"}
       }
     },
     "ResourceDataSyncS3Format":{
@@ -6141,7 +6155,8 @@
           "shape":"DocumentVersion",
           "box":true
         },
-        "Parameters":{"shape":"AutomationParameterMap"}
+        "Parameters":{"shape":"AutomationParameterMap"},
+        "ClientToken":{"shape":"IdempotencyToken"}
       }
     },
     "StartAutomationExecutionResult":{

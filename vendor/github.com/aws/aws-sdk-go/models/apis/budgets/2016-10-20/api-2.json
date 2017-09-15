@@ -542,12 +542,13 @@
       "members":{
         "NotificationType":{"shape":"NotificationType"},
         "ComparisonOperator":{"shape":"ComparisonOperator"},
-        "Threshold":{"shape":"NotificationThreshold"}
+        "Threshold":{"shape":"NotificationThreshold"},
+        "ThresholdType":{"shape":"ThresholdType"}
       }
     },
     "NotificationThreshold":{
       "type":"double",
-      "max":300,
+      "max":1000000000,
       "min":0.1
     },
     "NotificationType":{
@@ -614,6 +615,13 @@
       "enum":[
         "SNS",
         "EMAIL"
+      ]
+    },
+    "ThresholdType":{
+      "type":"string",
+      "enum":[
+        "PERCENTAGE",
+        "ABSOLUTE_VALUE"
       ]
     },
     "TimePeriod":{

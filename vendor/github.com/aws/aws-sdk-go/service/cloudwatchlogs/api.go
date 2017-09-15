@@ -159,7 +159,7 @@ func (c *CloudWatchLogs) CreateExportTaskRequest(input *CreateExportTaskInput) (
 //
 // You can export logs from multiple log groups or multiple time ranges to the
 // same S3 bucket. To separate out log data for each export task, you can specify
-// a prefix that will be used as the Amazon S3 key prefix for all exported objects.
+// a prefix to be used as the Amazon S3 key prefix for all exported objects.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -773,6 +773,94 @@ func (c *CloudWatchLogs) DeleteMetricFilter(input *DeleteMetricFilterInput) (*De
 // for more information on using Contexts.
 func (c *CloudWatchLogs) DeleteMetricFilterWithContext(ctx aws.Context, input *DeleteMetricFilterInput, opts ...request.Option) (*DeleteMetricFilterOutput, error) {
 	req, out := c.DeleteMetricFilterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteResourcePolicy = "DeleteResourcePolicy"
+
+// DeleteResourcePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteResourcePolicy operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteResourcePolicy for more information on using the DeleteResourcePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteResourcePolicyRequest method.
+//    req, resp := client.DeleteResourcePolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DeleteResourcePolicy
+func (c *CloudWatchLogs) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput) (req *request.Request, output *DeleteResourcePolicyOutput) {
+	op := &request.Operation{
+		Name:       opDeleteResourcePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteResourcePolicyInput{}
+	}
+
+	output = &DeleteResourcePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteResourcePolicy API operation for Amazon CloudWatch Logs.
+//
+// Deletes a resource policy from this account. This revokes the access of the
+// identities in that policy to put log events to this account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Logs's
+// API operation DeleteResourcePolicy for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A parameter is specified incorrectly.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service cannot complete the request.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DeleteResourcePolicy
+func (c *CloudWatchLogs) DeleteResourcePolicy(input *DeleteResourcePolicyInput) (*DeleteResourcePolicyOutput, error) {
+	req, out := c.DeleteResourcePolicyRequest(input)
+	return out, req.Send()
+}
+
+// DeleteResourcePolicyWithContext is the same as DeleteResourcePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteResourcePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchLogs) DeleteResourcePolicyWithContext(ctx aws.Context, input *DeleteResourcePolicyInput, opts ...request.Option) (*DeleteResourcePolicyOutput, error) {
+	req, out := c.DeleteResourcePolicyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1611,6 +1699,88 @@ func (c *CloudWatchLogs) DescribeMetricFiltersPagesWithContext(ctx aws.Context, 
 	return p.Err()
 }
 
+const opDescribeResourcePolicies = "DescribeResourcePolicies"
+
+// DescribeResourcePoliciesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeResourcePolicies operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeResourcePolicies for more information on using the DescribeResourcePolicies
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeResourcePoliciesRequest method.
+//    req, resp := client.DescribeResourcePoliciesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DescribeResourcePolicies
+func (c *CloudWatchLogs) DescribeResourcePoliciesRequest(input *DescribeResourcePoliciesInput) (req *request.Request, output *DescribeResourcePoliciesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeResourcePolicies,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeResourcePoliciesInput{}
+	}
+
+	output = &DescribeResourcePoliciesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeResourcePolicies API operation for Amazon CloudWatch Logs.
+//
+// Lists the resource policies in this account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Logs's
+// API operation DescribeResourcePolicies for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A parameter is specified incorrectly.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service cannot complete the request.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DescribeResourcePolicies
+func (c *CloudWatchLogs) DescribeResourcePolicies(input *DescribeResourcePoliciesInput) (*DescribeResourcePoliciesOutput, error) {
+	req, out := c.DescribeResourcePoliciesRequest(input)
+	return out, req.Send()
+}
+
+// DescribeResourcePoliciesWithContext is the same as DescribeResourcePolicies with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeResourcePolicies for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchLogs) DescribeResourcePoliciesWithContext(ctx aws.Context, input *DescribeResourcePoliciesInput, opts ...request.Option) (*DescribeResourcePoliciesOutput, error) {
+	req, out := c.DescribeResourcePoliciesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeSubscriptionFilters = "DescribeSubscriptionFilters"
 
 // DescribeSubscriptionFiltersRequest generates a "aws/request.Request" representing the
@@ -1808,11 +1978,11 @@ func (c *CloudWatchLogs) FilterLogEventsRequest(input *FilterLogEventsInput) (re
 // or filter the results using a filter pattern, a time range, and the name
 // of the log stream.
 //
-// By default, this operation returns as many log events as can fit in 1MB (up
-// to 10,000 log events), or all the events found within the time range that
-// you specify. If the results include a token, then there are more log events
-// available, and you can get additional results by specifying the token in
-// a subsequent call.
+// By default, this operation returns as many log events as can fit in 1 MB
+// (up to 10,000 log events), or all the events found within the time range
+// that you specify. If the results include a token, then there are more log
+// events available, and you can get additional results by specifying the token
+// in a subsequent call.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1957,9 +2127,8 @@ func (c *CloudWatchLogs) GetLogEventsRequest(input *GetLogEventsInput) (req *req
 // events or filter using a time range.
 //
 // By default, this operation returns as many log events as can fit in a response
-// size of 1MB (up to 10,000 log events). If the results include tokens, there
-// are more log events available. You can get additional log events by specifying
-// one of the tokens in a subsequent call.
+// size of 1 MB (up to 10,000 log events). You can get additional log events
+// by specifying one of the tokens in a subsequent call.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2179,14 +2348,14 @@ func (c *CloudWatchLogs) PutDestinationRequest(input *PutDestinationInput) (req 
 // PutDestination API operation for Amazon CloudWatch Logs.
 //
 // Creates or updates a destination. A destination encapsulates a physical resource
-// (such as a Kinesis stream) and enables you to subscribe to a real-time stream
-// of log events of a different account, ingested using PutLogEvents. Currently,
-// the only supported physical resource is a Amazon Kinesis stream belonging
+// (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time
+// stream of log events for a different account, ingested using PutLogEvents.
+// Currently, the only supported physical resource is a Kinesis stream belonging
 // to the same account as the destination.
 //
-// A destination controls what is written to its Amazon Kinesis stream through
-// an access policy. By default, PutDestination does not set any access policy
-// with the destination, which means a cross-account user cannot call PutSubscriptionFilter
+// Through an access policy, a destination controls what is written to its Kinesis
+// stream. By default, PutDestination does not set any access policy with the
+// destination, which means a cross-account user cannot call PutSubscriptionFilter
 // against this destination. To enable this, the destination owner must call
 // PutDestinationPolicy after PutDestination.
 //
@@ -2367,7 +2536,9 @@ func (c *CloudWatchLogs) PutLogEventsRequest(input *PutLogEventsInput) (req *req
 //
 // You must include the sequence token obtained from the response of the previous
 // call. An upload in a newly created log stream does not require a sequence
-// token. You can also get the sequence token using DescribeLogStreams.
+// token. You can also get the sequence token using DescribeLogStreams. If you
+// call PutLogEvents twice within a narrow time period using the same value
+// for sequenceToken, both calls may be successful, or one may be rejected.
 //
 // The batch of events must satisfy the following constraints:
 //
@@ -2382,8 +2553,8 @@ func (c *CloudWatchLogs) PutLogEventsRequest(input *PutLogEventsInput) (req *req
 //    retention period of the log group.
 //
 //    * The log events in the batch must be in chronological ordered by their
-//    timestamp (the time the event occurred, expressed as the number of milliseconds
-//    since Jan 1, 1970 00:00:00 UTC).
+//    time stamp (the time the event occurred, expressed as the number of milliseconds
+//    after Jan 1, 1970 00:00:00 UTC).
 //
 //    * The maximum number of log events in a batch is 10,000.
 //
@@ -2533,6 +2704,93 @@ func (c *CloudWatchLogs) PutMetricFilterWithContext(ctx aws.Context, input *PutM
 	return out, req.Send()
 }
 
+const opPutResourcePolicy = "PutResourcePolicy"
+
+// PutResourcePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the PutResourcePolicy operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutResourcePolicy for more information on using the PutResourcePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutResourcePolicyRequest method.
+//    req, resp := client.PutResourcePolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/PutResourcePolicy
+func (c *CloudWatchLogs) PutResourcePolicyRequest(input *PutResourcePolicyInput) (req *request.Request, output *PutResourcePolicyOutput) {
+	op := &request.Operation{
+		Name:       opPutResourcePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutResourcePolicyInput{}
+	}
+
+	output = &PutResourcePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutResourcePolicy API operation for Amazon CloudWatch Logs.
+//
+// Creates or updates a resource policy allowing other AWS services to put log
+// events to this account, such as Amazon Route 53. An account can have up to
+// 50 resource policies per region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Logs's
+// API operation PutResourcePolicy for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A parameter is specified incorrectly.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   You have reached the maximum number of resources that can be created.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service cannot complete the request.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/PutResourcePolicy
+func (c *CloudWatchLogs) PutResourcePolicy(input *PutResourcePolicyInput) (*PutResourcePolicyOutput, error) {
+	req, out := c.PutResourcePolicyRequest(input)
+	return out, req.Send()
+}
+
+// PutResourcePolicyWithContext is the same as PutResourcePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutResourcePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchLogs) PutResourcePolicyWithContext(ctx aws.Context, input *PutResourcePolicyInput, opts ...request.Option) (*PutResourcePolicyOutput, error) {
+	req, out := c.PutResourcePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutRetentionPolicy = "PutRetentionPolicy"
 
 // PutRetentionPolicyRequest generates a "aws/request.Request" representing the
@@ -2580,7 +2838,7 @@ func (c *CloudWatchLogs) PutRetentionPolicyRequest(input *PutRetentionPolicyInpu
 // PutRetentionPolicy API operation for Amazon CloudWatch Logs.
 //
 // Sets the retention of the specified log group. A retention policy allows
-// you to configure the number of days you want to retain log events in the
+// you to configure the number of days for which to retain log events in the
 // specified log group.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2682,16 +2940,16 @@ func (c *CloudWatchLogs) PutSubscriptionFilterRequest(input *PutSubscriptionFilt
 //    * A logical destination that belongs to a different account, for cross-account
 //    delivery.
 //
-//    * An Amazon Kinesis Firehose stream that belongs to the same account as
-//    the subscription filter, for same-account delivery.
+//    * An Amazon Kinesis Firehose delivery stream that belongs to the same
+//    account as the subscription filter, for same-account delivery.
 //
 //    * An AWS Lambda function that belongs to the same account as the subscription
 //    filter, for same-account delivery.
 //
 // There can only be one subscription filter associated with a log group. If
 // you are updating an existing filter, you must specify the correct name in
-// filterName. Otherwise, the call will fail because you cannot associate a
-// second filter with a log group.
+// filterName. Otherwise, the call fails because you cannot associate a second
+// filter with a log group.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3069,7 +3327,7 @@ type CreateExportTaskInput struct {
 	DestinationPrefix *string `locationName:"destinationPrefix" type:"string"`
 
 	// The start time of the range for the request, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this
+	// after Jan 1, 1970 00:00:00 UTC. Events with a time stamp earlier than this
 	// time are not exported.
 	//
 	// From is a required field
@@ -3088,8 +3346,8 @@ type CreateExportTaskInput struct {
 	TaskName *string `locationName:"taskName" min:"1" type:"string"`
 
 	// The end time of the range for the request, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time
-	// are not exported.
+	// after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this
+	// time are not exported.
 	//
 	// To is a required field
 	To *int64 `locationName:"to" type:"long" required:"true"`
@@ -3610,6 +3868,45 @@ func (s DeleteMetricFilterOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DeleteResourcePolicyRequest
+type DeleteResourcePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the policy to be revoked. This parameter is required.
+	PolicyName *string `locationName:"policyName" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteResourcePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteResourcePolicyInput) GoString() string {
+	return s.String()
+}
+
+// SetPolicyName sets the PolicyName field's value.
+func (s *DeleteResourcePolicyInput) SetPolicyName(v string) *DeleteResourcePolicyInput {
+	s.PolicyName = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DeleteResourcePolicyOutput
+type DeleteResourcePolicyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteResourcePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteResourcePolicyOutput) GoString() string {
+	return s.String()
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DeleteRetentionPolicyRequest
 type DeleteRetentionPolicyInput struct {
 	_ struct{} `type:"structure"`
@@ -4063,7 +4360,7 @@ type DescribeLogStreamsInput struct {
 
 	// The prefix to match.
 	//
-	// You cannot specify this parameter if orderBy is LastEventTime.
+	// iIf orderBy is LastEventTime,you cannot specify this parameter.
 	LogStreamNamePrefix *string `locationName:"logStreamNamePrefix" min:"1" type:"string"`
 
 	// The token for the next set of items to return. (You received this token from
@@ -4079,7 +4376,7 @@ type DescribeLogStreamsInput struct {
 	//
 	// lastEventTimestamp represents the time of the most recent log event in the
 	// log stream in CloudWatch Logs. This number is expressed as the number of
-	// milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on
+	// milliseconds after Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on
 	// an eventual consistency basis. It typically updates in less than an hour
 	// from ingestion, but may take longer in some rare situations.
 	OrderBy *string `locationName:"orderBy" type:"string" enum:"OrderBy"`
@@ -4317,6 +4614,91 @@ func (s *DescribeMetricFiltersOutput) SetNextToken(v string) *DescribeMetricFilt
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DescribeResourcePoliciesRequest
+type DescribeResourcePoliciesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of resource policies to be displayed with one call of
+	// this API.
+	Limit *int64 `locationName:"limit" min:"1" type:"integer"`
+
+	// The token for the next set of items to return. The token expires after 24
+	// hours.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeResourcePoliciesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeResourcePoliciesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeResourcePoliciesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeResourcePoliciesInput"}
+	if s.Limit != nil && *s.Limit < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Limit", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLimit sets the Limit field's value.
+func (s *DescribeResourcePoliciesInput) SetLimit(v int64) *DescribeResourcePoliciesInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeResourcePoliciesInput) SetNextToken(v string) *DescribeResourcePoliciesInput {
+	s.NextToken = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DescribeResourcePoliciesResponse
+type DescribeResourcePoliciesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token for the next set of items to return. The token expires after 24
+	// hours.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The resource policies that exist in this account.
+	ResourcePolicies []*ResourcePolicy `locationName:"resourcePolicies" type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeResourcePoliciesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeResourcePoliciesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeResourcePoliciesOutput) SetNextToken(v string) *DescribeResourcePoliciesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourcePolicies sets the ResourcePolicies field's value.
+func (s *DescribeResourcePoliciesOutput) SetResourcePolicies(v []*ResourcePolicy) *DescribeResourcePoliciesOutput {
+	s.ResourcePolicies = v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DescribeSubscriptionFiltersRequest
 type DescribeSubscriptionFiltersInput struct {
 	_ struct{} `type:"structure"`
@@ -4444,7 +4826,7 @@ type Destination struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The creation time of the destination, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	CreationTime *int64 `locationName:"creationTime" type:"long"`
 
 	// The name of the destination.
@@ -4453,8 +4835,8 @@ type Destination struct {
 	// A role for impersonation, used when delivering log events to the target.
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string"`
 
-	// The Amazon Resource Name (ARN) of the physical target where the log events
-	// will be delivered (for example, a Kinesis stream).
+	// The Amazon Resource Name (ARN) of the physical target to where the log events
+	// are delivered (for example, a Kinesis stream).
 	TargetArn *string `locationName:"targetArn" min:"1" type:"string"`
 }
 
@@ -4518,8 +4900,8 @@ type ExportTask struct {
 	// Execution info about the export task.
 	ExecutionInfo *ExportTaskExecutionInfo `locationName:"executionInfo" type:"structure"`
 
-	// The start time, expressed as the number of milliseconds since Jan 1, 1970
-	// 00:00:00 UTC. Events with a timestamp prior to this time are not exported.
+	// The start time, expressed as the number of milliseconds after Jan 1, 1970
+	// 00:00:00 UTC. Events with a time stamp before this time are not exported.
 	From *int64 `locationName:"from" type:"long"`
 
 	// The name of the log group from which logs data was exported.
@@ -4534,8 +4916,8 @@ type ExportTask struct {
 	// The name of the export task.
 	TaskName *string `locationName:"taskName" min:"1" type:"string"`
 
-	// The end time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00
-	// UTC. Events with a timestamp later than this time are not exported.
+	// The end time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00
+	// UTC. Events with a time stamp later than this time are not exported.
 	To *int64 `locationName:"to" type:"long"`
 }
 
@@ -4609,11 +4991,11 @@ type ExportTaskExecutionInfo struct {
 	_ struct{} `type:"structure"`
 
 	// The completion time of the export task, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	CompletionTime *int64 `locationName:"completionTime" type:"long"`
 
 	// The creation time of the export task, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	CreationTime *int64 `locationName:"creationTime" type:"long"`
 }
 
@@ -4677,8 +5059,8 @@ func (s *ExportTaskStatus) SetMessage(v string) *ExportTaskStatus {
 type FilterLogEventsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The end of the time range, expressed as the number of milliseconds since
-	// Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are
+	// The end of the time range, expressed as the number of milliseconds after
+	// Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are
 	// not returned.
 	EndTime *int64 `locationName:"endTime" type:"long"`
 
@@ -4686,8 +5068,8 @@ type FilterLogEventsInput struct {
 	FilterPattern *string `locationName:"filterPattern" type:"string"`
 
 	// If the value is true, the operation makes a best effort to provide responses
-	// that contain events from multiple log streams within the log group interleaved
-	// in a single response. If the value is false all the matched log events in
+	// that contain events from multiple log streams within the log group, interleaved
+	// in a single response. If the value is false, all the matched log events in
 	// the first log stream are searched first, then those in the next log stream,
 	// and so on. The default is false.
 	Interleaved *bool `locationName:"interleaved" type:"boolean"`
@@ -4707,9 +5089,9 @@ type FilterLogEventsInput struct {
 	// from a previous call.)
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 
-	// The start of the time range, expressed as the number of milliseconds since
-	// Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are
-	// not returned.
+	// The start of the time range, expressed as the number of milliseconds after
+	// Jan 1, 1970 00:00:00 UTC. Events with a time stamp before this time are not
+	// returned.
 	StartTime *int64 `locationName:"startTime" type:"long"`
 }
 
@@ -4849,7 +5231,7 @@ type FilteredLogEvent struct {
 	EventId *string `locationName:"eventId" type:"string"`
 
 	// The time the event was ingested, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	IngestionTime *int64 `locationName:"ingestionTime" type:"long"`
 
 	// The name of the log stream this event belongs to.
@@ -4858,7 +5240,7 @@ type FilteredLogEvent struct {
 	// The data contained in the log event.
 	Message *string `locationName:"message" min:"1" type:"string"`
 
-	// The time the event occurred, expressed as the number of milliseconds since
+	// The time the event occurred, expressed as the number of milliseconds after
 	// Jan 1, 1970 00:00:00 UTC.
 	Timestamp *int64 `locationName:"timestamp" type:"long"`
 }
@@ -4907,14 +5289,14 @@ func (s *FilteredLogEvent) SetTimestamp(v int64) *FilteredLogEvent {
 type GetLogEventsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The end of the time range, expressed as the number of milliseconds since
-	// Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are
+	// The end of the time range, expressed as the number of milliseconds after
+	// Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are
 	// not included.
 	EndTime *int64 `locationName:"endTime" type:"long"`
 
 	// The maximum number of log events returned. If you don't specify a value,
-	// the maximum is as many log events as can fit in a response size of 1MB, up
-	// to 10,000 log events.
+	// the maximum is as many log events as can fit in a response size of 1 MB,
+	// up to 10,000 log events.
 	Limit *int64 `locationName:"limit" min:"1" type:"integer"`
 
 	// The name of the log group.
@@ -4936,8 +5318,8 @@ type GetLogEventsInput struct {
 	// is false.
 	StartFromHead *bool `locationName:"startFromHead" type:"boolean"`
 
-	// The start of the time range, expressed as the number of milliseconds since
-	// Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time
+	// The start of the time range, expressed as the number of milliseconds after
+	// Jan 1, 1970 00:00:00 UTC. Events with a time stamp earlier than this time
 	// are not included.
 	StartTime *int64 `locationName:"startTime" type:"long"`
 }
@@ -5077,7 +5459,7 @@ type InputLogEvent struct {
 	// Message is a required field
 	Message *string `locationName:"message" min:"1" type:"string" required:"true"`
 
-	// The time the event occurred, expressed as the number of milliseconds since
+	// The time the event occurred, expressed as the number of milliseconds fter
 	// Jan 1, 1970 00:00:00 UTC.
 	//
 	// Timestamp is a required field
@@ -5200,7 +5582,7 @@ type LogGroup struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The creation time of the log group, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	CreationTime *int64 `locationName:"creationTime" type:"long"`
 
 	// The name of the log group.
@@ -5274,21 +5656,21 @@ type LogStream struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The creation time of the stream, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	CreationTime *int64 `locationName:"creationTime" type:"long"`
 
-	// The time of the first event, expressed as the number of milliseconds since
+	// The time of the first event, expressed as the number of milliseconds after
 	// Jan 1, 1970 00:00:00 UTC.
 	FirstEventTimestamp *int64 `locationName:"firstEventTimestamp" type:"long"`
 
 	// the time of the most recent log event in the log stream in CloudWatch Logs.
-	// This number is expressed as the number of milliseconds since Jan 1, 1970
+	// This number is expressed as the number of milliseconds after Jan 1, 1970
 	// 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It
 	// typically updates in less than an hour from ingestion, but may take longer
 	// in some rare situations.
 	LastEventTimestamp *int64 `locationName:"lastEventTimestamp" type:"long"`
 
-	// The ingestion time, expressed as the number of milliseconds since Jan 1,
+	// The ingestion time, expressed as the number of milliseconds after Jan 1,
 	// 1970 00:00:00 UTC.
 	LastIngestionTime *int64 `locationName:"lastIngestionTime" type:"long"`
 
@@ -5368,14 +5750,14 @@ type MetricFilter struct {
 	_ struct{} `type:"structure"`
 
 	// The creation time of the metric filter, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	CreationTime *int64 `locationName:"creationTime" type:"long"`
 
 	// The name of the metric filter.
 	FilterName *string `locationName:"filterName" min:"1" type:"string"`
 
 	// A symbolic description of how CloudWatch Logs should interpret the data in
-	// each log event. For example, a log event may contain timestamps, IP addresses,
+	// each log event. For example, a log event may contain time stamps, IP addresses,
 	// strings, and so on. You use the filter pattern to specify what to look for
 	// in the log event message.
 	FilterPattern *string `locationName:"filterPattern" type:"string"`
@@ -5470,7 +5852,7 @@ func (s *MetricFilterMatchRecord) SetExtractedValues(v map[string]*string) *Metr
 	return s
 }
 
-// Indicates how to transform ingested log events into metric data in a CloudWatch
+// Indicates how to transform ingested log events in to metric data in a CloudWatch
 // metric.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/MetricTransformation
 type MetricTransformation struct {
@@ -5556,13 +5938,13 @@ type OutputLogEvent struct {
 	_ struct{} `type:"structure"`
 
 	// The time the event was ingested, expressed as the number of milliseconds
-	// since Jan 1, 1970 00:00:00 UTC.
+	// after Jan 1, 1970 00:00:00 UTC.
 	IngestionTime *int64 `locationName:"ingestionTime" type:"long"`
 
 	// The data contained in the log event.
 	Message *string `locationName:"message" min:"1" type:"string"`
 
-	// The time the event occurred, expressed as the number of milliseconds since
+	// The time the event occurred, expressed as the number of milliseconds after
 	// Jan 1, 1970 00:00:00 UTC.
 	Timestamp *int64 `locationName:"timestamp" type:"long"`
 }
@@ -5604,13 +5986,13 @@ type PutDestinationInput struct {
 	// DestinationName is a required field
 	DestinationName *string `locationName:"destinationName" min:"1" type:"string" required:"true"`
 
-	// The ARN of an IAM role that grants CloudWatch Logs permissions to call Amazon
-	// Kinesis PutRecord on the destination stream.
+	// The ARN of an IAM role that grants CloudWatch Logs permissions to call the
+	// Amazon Kinesis PutRecord operation on the destination stream.
 	//
 	// RoleArn is a required field
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string" required:"true"`
 
-	// The ARN of an Amazon Kinesis stream to deliver matching log events to.
+	// The ARN of an Amazon Kinesis stream to which to deliver matching log events.
 	//
 	// TargetArn is a required field
 	TargetArn *string `locationName:"targetArn" min:"1" type:"string" required:"true"`
@@ -5790,7 +6172,11 @@ type PutLogEventsInput struct {
 	// LogStreamName is a required field
 	LogStreamName *string `locationName:"logStreamName" min:"1" type:"string" required:"true"`
 
-	// The sequence token.
+	// The sequence token obtained from the response of the previous PutLogEvents
+	// call. An upload in a newly created log stream does not require a sequence
+	// token. You can also get the sequence token using DescribeLogStreams. If you
+	// call PutLogEvents twice within a narrow time period using the same value
+	// for sequenceToken, both calls may be successful, or one may be rejected.
 	SequenceToken *string `locationName:"sequenceToken" min:"1" type:"string"`
 }
 
@@ -5921,7 +6307,7 @@ type PutMetricFilterInput struct {
 	// LogGroupName is a required field
 	LogGroupName *string `locationName:"logGroupName" min:"1" type:"string" required:"true"`
 
-	// A collection of information needed to define how metric data gets emitted.
+	// A collection of information that defines how metric data gets emitted.
 	//
 	// MetricTransformations is a required field
 	MetricTransformations []*MetricTransformation `locationName:"metricTransformations" min:"1" type:"list" required:"true"`
@@ -6017,6 +6403,85 @@ func (s PutMetricFilterOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/PutResourcePolicyRequest
+type PutResourcePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// Details of the new policy, including the identity of the principal that is
+	// enabled to put logs to this account. This is formatted as a JSON string.
+	//
+	// The following example creates a resource policy enabling the Route 53 service
+	// to put DNS query logs in to the specified log group. Replace "logArn" with
+	// the ARN of your CloudWatch Logs resource, such as a log group or log stream.
+	//
+	// { "Version": "2012-10-17" "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs",
+	// "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ]
+	// }, "Action":"logs:PutLogEvents", "Resource": logArn } ] }
+	PolicyDocument *string `locationName:"policyDocument" min:"1" type:"string"`
+
+	// Name of the new policy. This parameter is required.
+	PolicyName *string `locationName:"policyName" type:"string"`
+}
+
+// String returns the string representation
+func (s PutResourcePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutResourcePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutResourcePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutResourcePolicyInput"}
+	if s.PolicyDocument != nil && len(*s.PolicyDocument) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyDocument", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPolicyDocument sets the PolicyDocument field's value.
+func (s *PutResourcePolicyInput) SetPolicyDocument(v string) *PutResourcePolicyInput {
+	s.PolicyDocument = &v
+	return s
+}
+
+// SetPolicyName sets the PolicyName field's value.
+func (s *PutResourcePolicyInput) SetPolicyName(v string) *PutResourcePolicyInput {
+	s.PolicyName = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/PutResourcePolicyResponse
+type PutResourcePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The new policy.
+	ResourcePolicy *ResourcePolicy `locationName:"resourcePolicy" type:"structure"`
+}
+
+// String returns the string representation
+func (s PutResourcePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutResourcePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetResourcePolicy sets the ResourcePolicy field's value.
+func (s *PutResourcePolicyOutput) SetResourcePolicy(v *ResourcePolicy) *PutResourcePolicyOutput {
+	s.ResourcePolicy = v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/PutRetentionPolicyRequest
 type PutRetentionPolicyInput struct {
 	_ struct{} `type:"structure"`
@@ -6103,8 +6568,8 @@ type PutSubscriptionFilterInput struct {
 	//    * A logical destination (specified using an ARN) belonging to a different
 	//    account, for cross-account delivery.
 	//
-	//    * An Amazon Kinesis Firehose stream belonging to the same account as the
-	//    subscription filter, for same-account delivery.
+	//    * An Amazon Kinesis Firehose delivery stream belonging to the same account
+	//    as the subscription filter, for same-account delivery.
 	//
 	//    * An AWS Lambda function belonging to the same account as the subscription
 	//    filter, for same-account delivery.
@@ -6118,9 +6583,9 @@ type PutSubscriptionFilterInput struct {
 	Distribution *string `locationName:"distribution" type:"string" enum:"Distribution"`
 
 	// A name for the subscription filter. If you are updating an existing filter,
-	// you must specify the correct name in filterName. Otherwise, the call will
-	// fail because you cannot associate a second filter with a log group. To find
-	// the name of the filter currently associated with a log group, use DescribeSubscriptionFilters.
+	// you must specify the correct name in filterName. Otherwise, the call fails
+	// because you cannot associate a second filter with a log group. To find the
+	// name of the filter currently associated with a log group, use DescribeSubscriptionFilters.
 	//
 	// FilterName is a required field
 	FilterName *string `locationName:"filterName" min:"1" type:"string" required:"true"`
@@ -6280,6 +6745,51 @@ func (s *RejectedLogEventsInfo) SetTooOldLogEventEndIndex(v int64) *RejectedLogE
 	return s
 }
 
+// A policy enabling one or more entities to put logs to a log group in this
+// account.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/ResourcePolicy
+type ResourcePolicy struct {
+	_ struct{} `type:"structure"`
+
+	// Time stamp showing when this policy was last updated, expressed as the number
+	// of milliseconds after Jan 1, 1970 00:00:00 UTC.
+	LastUpdatedTime *int64 `locationName:"lastUpdatedTime" type:"long"`
+
+	// The details of the policy.
+	PolicyDocument *string `locationName:"policyDocument" min:"1" type:"string"`
+
+	// The name of the resource policy.
+	PolicyName *string `locationName:"policyName" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourcePolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourcePolicy) GoString() string {
+	return s.String()
+}
+
+// SetLastUpdatedTime sets the LastUpdatedTime field's value.
+func (s *ResourcePolicy) SetLastUpdatedTime(v int64) *ResourcePolicy {
+	s.LastUpdatedTime = &v
+	return s
+}
+
+// SetPolicyDocument sets the PolicyDocument field's value.
+func (s *ResourcePolicy) SetPolicyDocument(v string) *ResourcePolicy {
+	s.PolicyDocument = &v
+	return s
+}
+
+// SetPolicyName sets the PolicyName field's value.
+func (s *ResourcePolicy) SetPolicyName(v string) *ResourcePolicy {
+	s.PolicyName = &v
+	return s
+}
+
 // Represents the search status of a log stream.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/SearchedLogStream
 type SearchedLogStream struct {
@@ -6320,7 +6830,7 @@ type SubscriptionFilter struct {
 	_ struct{} `type:"structure"`
 
 	// The creation time of the subscription filter, expressed as the number of
-	// milliseconds since Jan 1, 1970 00:00:00 UTC.
+	// milliseconds after Jan 1, 1970 00:00:00 UTC.
 	CreationTime *int64 `locationName:"creationTime" type:"long"`
 
 	// The Amazon Resource Name (ARN) of the destination.
@@ -6334,7 +6844,7 @@ type SubscriptionFilter struct {
 	FilterName *string `locationName:"filterName" min:"1" type:"string"`
 
 	// A symbolic description of how CloudWatch Logs should interpret the data in
-	// each log event. For example, a log event may contain timestamps, IP addresses,
+	// each log event. For example, a log event may contain time stamps, IP addresses,
 	// strings, and so on. You use the filter pattern to specify what to look for
 	// in the log event message.
 	FilterPattern *string `locationName:"filterPattern" type:"string"`
@@ -6476,7 +6986,7 @@ type TestMetricFilterInput struct {
 	_ struct{} `type:"structure"`
 
 	// A symbolic description of how CloudWatch Logs should interpret the data in
-	// each log event. For example, a log event may contain timestamps, IP addresses,
+	// each log event. For example, a log event may contain time stamps, IP addresses,
 	// strings, and so on. You use the filter pattern to specify what to look for
 	// in the log event message.
 	//

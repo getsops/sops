@@ -55,11 +55,13 @@ type Pattern struct {
 // It contains all information needed to determine the "visible digits" as
 // required by the pluralization rules.
 type RoundingContext struct {
-	Increment uint32 // if > 0, round to Increment * 10^-scale()
 	// TODO: unify these two fields so that there is a more unambiguous meaning
 	// of how precision is handled.
-	MaxSignificantDigits int16 // -1 is infinite precision
-	MaxFractionDigits    uint16
+	MaxSignificantDigits int16 // -1 is unlimited
+	MaxFractionDigits    int16 // -1 is unlimited
+
+	Increment      uint32
+	IncrementScale uint8 // May differ from printed scale.
 
 	Mode RoundingMode
 
@@ -75,20 +77,38 @@ type RoundingContext struct {
 	MinExponentDigits uint8
 }
 
-func (r *RoundingContext) scale() int {
-	// scale is 0 when precision is set.
-	if r.MaxSignificantDigits != 0 {
-		return 0
+// RoundSignificantDigits returns the number of significant digits an
+// implementation of Convert may round to or n < 0 if there is no maximum or
+// a maximum is not recommended.
+func (r *RoundingContext) RoundSignificantDigits() (n int) {
+	if r.MaxFractionDigits == 0 && r.MaxSignificantDigits > 0 {
+		return int(r.MaxSignificantDigits)
+	} else if r.isScientific() && r.MaxIntegerDigits == 1 {
+		if r.MaxSignificantDigits == 0 ||
+			int(r.MaxFractionDigits+1) == int(r.MaxSignificantDigits) {
+			// Note: don't add DigitShift: it is only used for decimals.
+			return int(r.MaxFractionDigits) + 1
+		}
 	}
-	return int(r.MaxFractionDigits)
+	return -1
 }
 
-func (r *RoundingContext) precision() int { return int(r.MaxSignificantDigits) }
+// RoundFractionDigits returns the number of fraction digits an implementation
+// of Convert may round to or n < 0 if there is no maximum or a maximum is not
+// recommended.
+func (r *RoundingContext) RoundFractionDigits() (n int) {
+	if r.MinExponentDigits == 0 &&
+		r.MaxSignificantDigits == 0 &&
+		r.MaxFractionDigits >= 0 {
+		return int(r.MaxFractionDigits) + int(r.DigitShift)
+	}
+	return -1
+}
 
 // SetScale fixes the RoundingContext to a fixed number of fraction digits.
 func (r *RoundingContext) SetScale(scale int) {
 	r.MinFractionDigits = uint8(scale)
-	r.MaxFractionDigits = uint16(scale)
+	r.MaxFractionDigits = int16(scale)
 }
 
 func (r *RoundingContext) SetPrecision(prec int) {
@@ -209,6 +229,9 @@ func ParsePattern(s string) (f *Pattern, err error) {
 		p.NegOffset = 0
 	} else {
 		p.Affix = affix
+	}
+	if p.Increment == 0 {
+		p.IncrementScale = 0
 	}
 	return p.Pattern, nil
 }
@@ -335,6 +358,7 @@ func (p *parser) number(r rune) state {
 	case '@':
 		p.groupingCount++
 		p.leadingSharps = 0
+		p.MaxFractionDigits = -1
 		return p.sigDigits(r)
 	case ',':
 		if p.leadingSharps == 0 { // no leading commas
@@ -414,7 +438,7 @@ func (p *parser) sigDigitsFinal(r rune) state {
 func (p *parser) normalizeSigDigitsWithExponent() state {
 	p.MinIntegerDigits, p.MaxIntegerDigits = 1, 1
 	p.MinFractionDigits = p.MinSignificantDigits - 1
-	p.MaxFractionDigits = uint16(p.MaxSignificantDigits) - 1
+	p.MaxFractionDigits = p.MaxSignificantDigits - 1
 	p.MinSignificantDigits, p.MaxSignificantDigits = 0, 0
 	return p.exponent
 }
@@ -423,6 +447,7 @@ func (p *parser) fraction(r rune) state {
 	switch r {
 	case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 		p.Increment = p.Increment*10 + uint32(r-'0')
+		p.IncrementScale++
 		p.MinFractionDigits++
 		p.MaxFractionDigits++
 	case '#':

@@ -10644,7 +10644,7 @@ type PutScalingPolicyInput struct {
 	// in the Auto Scaling User Guide.
 	AdjustmentType *string `min:"1" type:"string"`
 
-	// The name or ARN of the group.
+	// The name of the group.
 	//
 	// AutoScalingGroupName is a required field
 	AutoScalingGroupName *string `min:"1" type:"string" required:"true"`

@@ -10,8 +10,6 @@
 // shadows. A thing shadow is a persistent representation of your things and
 // their state in the AWS cloud.
 //
-// See https://docs.aws.amazon.com/goto/WebAPI/iot-data-2015-05-28 for more information on this service.
-//
 // See iotdataplane package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/iotdataplane/
 //

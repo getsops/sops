@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS CodeBuild.
 //    func myFunc(svc codebuildiface.CodeBuildAPI) bool {
-//        // Make svc.BatchGetBuilds request
+//        // Make svc.BatchDeleteBuilds request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockCodeBuildClient struct {
 //        codebuildiface.CodeBuildAPI
 //    }
-//    func (m *mockCodeBuildClient) BatchGetBuilds(input *codebuild.BatchGetBuildsInput) (*codebuild.BatchGetBuildsOutput, error) {
+//    func (m *mockCodeBuildClient) BatchDeleteBuilds(input *codebuild.BatchDeleteBuildsInput) (*codebuild.BatchDeleteBuildsOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type CodeBuildAPI interface {
+	BatchDeleteBuilds(*codebuild.BatchDeleteBuildsInput) (*codebuild.BatchDeleteBuildsOutput, error)
+	BatchDeleteBuildsWithContext(aws.Context, *codebuild.BatchDeleteBuildsInput, ...request.Option) (*codebuild.BatchDeleteBuildsOutput, error)
+	BatchDeleteBuildsRequest(*codebuild.BatchDeleteBuildsInput) (*request.Request, *codebuild.BatchDeleteBuildsOutput)
+
 	BatchGetBuilds(*codebuild.BatchGetBuildsInput) (*codebuild.BatchGetBuildsOutput, error)
 	BatchGetBuildsWithContext(aws.Context, *codebuild.BatchGetBuildsInput, ...request.Option) (*codebuild.BatchGetBuildsOutput, error)
 	BatchGetBuildsRequest(*codebuild.BatchGetBuildsInput) (*request.Request, *codebuild.BatchGetBuildsOutput)

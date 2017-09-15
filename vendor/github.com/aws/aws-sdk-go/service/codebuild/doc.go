@@ -15,6 +15,8 @@
 //
 // AWS CodeBuild supports these operations:
 //
+//    * BatchDeleteBuilds: Deletes one or more builds.
+//
 //    * BatchGetProjects: Gets information about one or more build projects.
 //    A build project defines how AWS CodeBuild will run a build. This includes
 //    information such as where to get the source code to build, the build environment

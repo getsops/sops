@@ -2055,6 +2055,24 @@
       },
       "input":{"shape":"UnmonitorInstancesRequest"},
       "output":{"shape":"UnmonitorInstancesResult"}
+    },
+    "UpdateSecurityGroupRuleDescriptionsEgress":{
+      "name":"UpdateSecurityGroupRuleDescriptionsEgress",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateSecurityGroupRuleDescriptionsEgressRequest"},
+      "output":{"shape":"UpdateSecurityGroupRuleDescriptionsEgressResult"}
+    },
+    "UpdateSecurityGroupRuleDescriptionsIngress":{
+      "name":"UpdateSecurityGroupRuleDescriptionsIngress",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateSecurityGroupRuleDescriptionsIngressRequest"},
+      "output":{"shape":"UpdateSecurityGroupRuleDescriptionsIngressResult"}
     }
   },
   "shapes":{
@@ -2529,6 +2547,7 @@
           "shape":"Boolean",
           "locationName":"amazonProvidedIpv6CidrBlock"
         },
+        "CidrBlock":{"shape":"String"},
         "VpcId":{
           "shape":"String",
           "locationName":"vpcId"
@@ -2541,6 +2560,10 @@
         "Ipv6CidrBlockAssociation":{
           "shape":"VpcIpv6CidrBlockAssociation",
           "locationName":"ipv6CidrBlockAssociation"
+        },
+        "CidrBlockAssociation":{
+          "shape":"VpcCidrBlockAssociation",
+          "locationName":"cidrBlockAssociation"
         },
         "VpcId":{
           "shape":"String",
@@ -3274,6 +3297,22 @@
       "type":"list",
       "member":{
         "shape":"CancelledSpotInstanceRequest",
+        "locationName":"item"
+      }
+    },
+    "CidrBlock":{
+      "type":"structure",
+      "members":{
+        "CidrBlock":{
+          "shape":"String",
+          "locationName":"cidrBlock"
+        }
+      }
+    },
+    "CidrBlockSet":{
+      "type":"list",
+      "member":{
+        "shape":"CidrBlock",
         "locationName":"item"
       }
     },
@@ -7170,6 +7209,10 @@
           "shape":"VpcIpv6CidrBlockAssociation",
           "locationName":"ipv6CidrBlockAssociation"
         },
+        "CidrBlockAssociation":{
+          "shape":"VpcCidrBlockAssociation",
+          "locationName":"cidrBlockAssociation"
+        },
         "VpcId":{
           "shape":"String",
           "locationName":"vpcId"
@@ -8190,7 +8233,10 @@
     },
     "HostOfferingSet":{
       "type":"list",
-      "member":{"shape":"HostOffering"}
+      "member":{
+        "shape":"HostOffering",
+        "locationName":"item"
+      }
     },
     "HostProperties":{
       "type":"structure",
@@ -9997,6 +10043,10 @@
         "CidrIp":{
           "shape":"String",
           "locationName":"cidrIp"
+        },
+        "Description":{
+          "shape":"String",
+          "locationName":"description"
         }
       }
     },
@@ -10044,6 +10094,10 @@
         "CidrIpv6":{
           "shape":"String",
           "locationName":"cidrIpv6"
+        },
+        "Description":{
+          "shape":"String",
+          "locationName":"description"
         }
       }
     },
@@ -10763,6 +10817,10 @@
         "VpcId":{
           "shape":"String",
           "locationName":"vpcId"
+        },
+        "Tags":{
+          "shape":"TagList",
+          "locationName":"tagSet"
         }
       }
     },
@@ -11440,6 +11498,10 @@
     "PrefixListId":{
       "type":"structure",
       "members":{
+        "Description":{
+          "shape":"String",
+          "locationName":"description"
+        },
         "PrefixListId":{
           "shape":"String",
           "locationName":"prefixListId"
@@ -14984,6 +15046,44 @@
         "locationName":"item"
       }
     },
+    "UpdateSecurityGroupRuleDescriptionsEgressRequest":{
+      "type":"structure",
+      "required":["IpPermissions"],
+      "members":{
+        "DryRun":{"shape":"Boolean"},
+        "GroupId":{"shape":"String"},
+        "GroupName":{"shape":"String"},
+        "IpPermissions":{"shape":"IpPermissionList"}
+      }
+    },
+    "UpdateSecurityGroupRuleDescriptionsEgressResult":{
+      "type":"structure",
+      "members":{
+        "Return":{
+          "shape":"Boolean",
+          "locationName":"return"
+        }
+      }
+    },
+    "UpdateSecurityGroupRuleDescriptionsIngressRequest":{
+      "type":"structure",
+      "required":["IpPermissions"],
+      "members":{
+        "DryRun":{"shape":"Boolean"},
+        "GroupId":{"shape":"String"},
+        "GroupName":{"shape":"String"},
+        "IpPermissions":{"shape":"IpPermissionList"}
+      }
+    },
+    "UpdateSecurityGroupRuleDescriptionsIngressResult":{
+      "type":"structure",
+      "members":{
+        "Return":{
+          "shape":"Boolean",
+          "locationName":"return"
+        }
+      }
+    },
     "UserBucket":{
       "type":"structure",
       "members":{
@@ -15023,6 +15123,10 @@
     "UserIdGroupPair":{
       "type":"structure",
       "members":{
+        "Description":{
+          "shape":"String",
+          "locationName":"description"
+        },
         "GroupId":{
           "shape":"String",
           "locationName":"groupId"
@@ -15502,6 +15606,10 @@
           "shape":"VpcIpv6CidrBlockAssociationSet",
           "locationName":"ipv6CidrBlockAssociationSet"
         },
+        "CidrBlockAssociationSet":{
+          "shape":"VpcCidrBlockAssociationSet",
+          "locationName":"cidrBlockAssociationSet"
+        },
         "IsDefault":{
           "shape":"Boolean",
           "locationName":"isDefault"
@@ -15538,6 +15646,30 @@
         "enableDnsSupport",
         "enableDnsHostnames"
       ]
+    },
+    "VpcCidrBlockAssociation":{
+      "type":"structure",
+      "members":{
+        "AssociationId":{
+          "shape":"String",
+          "locationName":"associationId"
+        },
+        "CidrBlock":{
+          "shape":"String",
+          "locationName":"cidrBlock"
+        },
+        "CidrBlockState":{
+          "shape":"VpcCidrBlockState",
+          "locationName":"cidrBlockState"
+        }
+      }
+    },
+    "VpcCidrBlockAssociationSet":{
+      "type":"list",
+      "member":{
+        "shape":"VpcCidrBlockAssociation",
+        "locationName":"item"
+      }
     },
     "VpcCidrBlockState":{
       "type":"structure",
@@ -15762,6 +15894,10 @@
         "Ipv6CidrBlockSet":{
           "shape":"Ipv6CidrBlockSet",
           "locationName":"ipv6CidrBlockSet"
+        },
+        "CidrBlockSet":{
+          "shape":"CidrBlockSet",
+          "locationName":"cidrBlockSet"
         },
         "OwnerId":{
           "shape":"String",

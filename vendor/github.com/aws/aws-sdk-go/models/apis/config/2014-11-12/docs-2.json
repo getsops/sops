@@ -61,6 +61,17 @@
         "ConfigurationItem$awsRegion": "<p>The region where the resource resides.</p>"
       }
     },
+    "BaseResourceId": {
+      "base": null,
+      "refs": {
+        "ComplianceByResource$ResourceId": "<p>The ID of the AWS resource that was evaluated.</p>",
+        "DescribeComplianceByResourceRequest$ResourceId": "<p>The ID of the AWS resource for which you want compliance information. You can specify only one resource ID. If you specify a resource ID, you must also specify a type for <code>ResourceType</code>.</p>",
+        "Evaluation$ComplianceResourceId": "<p>The ID of the AWS resource that was evaluated.</p>",
+        "EvaluationResultQualifier$ResourceId": "<p>The ID of the evaluated AWS resource.</p>",
+        "GetComplianceDetailsByResourceRequest$ResourceId": "<p>The ID of the AWS resource for which you want compliance information.</p>",
+        "Scope$ComplianceResourceId": "<p>The IDs of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>"
+      }
+    },
     "Boolean": {
       "base": null,
       "refs": {
@@ -1082,22 +1093,16 @@
       "base": null,
       "refs": {
         "ComplianceByResource$ResourceType": "<p>The type of the AWS resource that was evaluated.</p>",
-        "ComplianceByResource$ResourceId": "<p>The ID of the AWS resource that was evaluated.</p>",
         "ComplianceResourceTypes$member": null,
         "ComplianceSummaryByResourceType$ResourceType": "<p>The type of AWS resource.</p>",
         "DescribeComplianceByResourceRequest$ResourceType": "<p>The types of AWS resources for which you want compliance information; for example, <code>AWS::EC2::Instance</code>. For this action, you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>",
-        "DescribeComplianceByResourceRequest$ResourceId": "<p>The ID of the AWS resource for which you want compliance information. You can specify only one resource ID. If you specify a resource ID, you must also specify a type for <code>ResourceType</code>.</p>",
         "Evaluation$ComplianceResourceType": "<p>The type of AWS resource that was evaluated.</p>",
-        "Evaluation$ComplianceResourceId": "<p>The ID of the AWS resource that was evaluated.</p>",
         "Evaluation$Annotation": "<p>Supplementary information about how the evaluation determined the compliance.</p>",
         "EvaluationResult$Annotation": "<p>Supplementary information about how the evaluation determined the compliance.</p>",
         "EvaluationResultQualifier$ResourceType": "<p>The type of AWS resource that was evaluated.</p>",
-        "EvaluationResultQualifier$ResourceId": "<p>The ID of the evaluated AWS resource.</p>",
         "GetComplianceDetailsByResourceRequest$ResourceType": "<p>The type of the AWS resource for which you want compliance information.</p>",
-        "GetComplianceDetailsByResourceRequest$ResourceId": "<p>The ID of the AWS resource for which you want compliance information.</p>",
         "ResourceTypes$member": null,
         "Scope$TagValue": "<p>The tag value applied to only those AWS resources that you want to trigger an evaluation for the rule. If you specify a value for <code>TagValue</code>, you must also specify a value for <code>TagKey</code>.</p>",
-        "Scope$ComplianceResourceId": "<p>The IDs of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>",
         "Source$SourceIdentifier": "<p>For AWS Config managed rules, a predefined identifier from a list. For example, <code>IAM_PASSWORD_POLICY</code> is a managed rule. To reference a managed rule, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For custom rules, the identifier is the Amazon Resource Name (ARN) of the rule's AWS Lambda function, such as <code>arn:aws:lambda:us-east-2:123456789012:function:custom_rule_name</code>.</p>"
       }
     },

@@ -16,16 +16,32 @@ func Acos(x float64) float64 {
 	return math.Call("acos", x).Float()
 }
 
+func Acosh(x float64) float64 {
+	return math.Call("acosh", x).Float()
+}
+
 func Asin(x float64) float64 {
 	return math.Call("asin", x).Float()
+}
+
+func Asinh(x float64) float64 {
+	return math.Call("asinh", x).Float()
 }
 
 func Atan(x float64) float64 {
 	return math.Call("atan", x).Float()
 }
 
+func Atanh(x float64) float64 {
+	return math.Call("atanh", x).Float()
+}
+
 func Atan2(y, x float64) float64 {
 	return math.Call("atan2", y, x).Float()
+}
+
+func Cbrt(x float64) float64 {
+	return math.Call("cbrt", x).Float()
 }
 
 func Ceil(x float64) float64 {
@@ -49,6 +65,14 @@ func Cosh(x float64) float64 {
 
 func Dim(x, y float64) float64 {
 	return dim(x, y)
+}
+
+func Erf(x float64) float64 {
+	return erf(x)
+}
+
+func Erfc(x float64) float64 {
+	return erfc(x)
 }
 
 func Exp(x float64) float64 {

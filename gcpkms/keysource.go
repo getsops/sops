@@ -20,6 +20,16 @@ type MasterKey struct {
 	CreationDate time.Time
 }
 
+// EncryptedDataKey returns the encrypted data key this master key holds
+func (key *MasterKey) EncryptedDataKey() []byte {
+	return []byte(key.EncryptedKey)
+}
+
+// SetEncryptedDataKey sets the encrypted data key for this master key
+func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
+	key.EncryptedKey = string(enc)
+}
+
 // Encrypt takes a sops data key, encrypts it with GCP KMS and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	cloudkmsService, err := key.createCloudKMSService()

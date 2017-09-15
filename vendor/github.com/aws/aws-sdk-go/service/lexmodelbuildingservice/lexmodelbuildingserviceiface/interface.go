@@ -166,6 +166,10 @@ type LexModelBuildingServiceAPI interface {
 	GetBuiltinSlotTypesPages(*lexmodelbuildingservice.GetBuiltinSlotTypesInput, func(*lexmodelbuildingservice.GetBuiltinSlotTypesOutput, bool) bool) error
 	GetBuiltinSlotTypesPagesWithContext(aws.Context, *lexmodelbuildingservice.GetBuiltinSlotTypesInput, func(*lexmodelbuildingservice.GetBuiltinSlotTypesOutput, bool) bool, ...request.Option) error
 
+	GetExport(*lexmodelbuildingservice.GetExportInput) (*lexmodelbuildingservice.GetExportOutput, error)
+	GetExportWithContext(aws.Context, *lexmodelbuildingservice.GetExportInput, ...request.Option) (*lexmodelbuildingservice.GetExportOutput, error)
+	GetExportRequest(*lexmodelbuildingservice.GetExportInput) (*request.Request, *lexmodelbuildingservice.GetExportOutput)
+
 	GetIntent(*lexmodelbuildingservice.GetIntentInput) (*lexmodelbuildingservice.GetIntentOutput, error)
 	GetIntentWithContext(aws.Context, *lexmodelbuildingservice.GetIntentInput, ...request.Option) (*lexmodelbuildingservice.GetIntentOutput, error)
 	GetIntentRequest(*lexmodelbuildingservice.GetIntentInput) (*request.Request, *lexmodelbuildingservice.GetIntentOutput)
