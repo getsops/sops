@@ -475,10 +475,8 @@ var fmtTests = []struct {
 	{"%.4b", float32(1.0), "8388608p-23"},
 	{"%.4b", -1.0, "-4503599627370496p-52"},
 	// Test correct f.intbuf boundary checks.
-	// TODO: the following cases won't work because of rounding errors. We can
-	// fix this if we expose the internals of strconv.
-	// {"%.68f", 1.0, zeroFill("1.", 68, "")},   // TODO(bug): rounding error
-	// {"%.68f", -1.0, zeroFill("-1.", 68, "")}, // TODO(bug): rounding error
+	{"%.68f", 1.0, zeroFill("1.", 68, "")},
+	{"%.68f", -1.0, zeroFill("-1.", 68, "")},
 	// float infinites and NaNs
 	{"%f", posInf, "∞"},
 	{"%.1f", negInf, "-∞"},

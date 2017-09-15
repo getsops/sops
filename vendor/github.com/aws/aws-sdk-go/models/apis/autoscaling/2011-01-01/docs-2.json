@@ -1135,7 +1135,7 @@
         "PutLifecycleHookType$RoleARN": "<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p> <p>This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>",
         "PutNotificationConfigurationType$AutoScalingGroupName": "<p>The name of the Auto Scaling group.</p>",
         "PutNotificationConfigurationType$TopicARN": "<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>",
-        "PutScalingPolicyType$AutoScalingGroupName": "<p>The name or ARN of the group.</p>",
+        "PutScalingPolicyType$AutoScalingGroupName": "<p>The name of the group.</p>",
         "PutScheduledUpdateGroupActionType$AutoScalingGroupName": "<p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>",
         "RecordLifecycleActionHeartbeatType$AutoScalingGroupName": "<p>The name of the Auto Scaling group for the hook.</p>",
         "ScalingPolicy$PolicyARN": "<p>The Amazon Resource Name (ARN) of the policy.</p>",

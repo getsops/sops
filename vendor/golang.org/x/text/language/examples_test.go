@@ -6,6 +6,7 @@ package language_test
 
 import (
 	"fmt"
+	"net/http"
 
 	"golang.org/x/text/language"
 )
@@ -338,6 +339,20 @@ func ExampleMatcher() {
 	// en-u-co-phonebk 0 No
 
 	// TODO: "he" should be "he-u-rg-IL High"
+}
+
+func ExampleMatchStrings() {
+	// languages supported by this service:
+	matcher := language.NewMatcher([]language.Tag{
+		language.English, language.Dutch, language.German,
+	})
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		lang, _ := r.Cookie("lang")
+		tag, _ := language.MatchStrings(matcher, lang.String(), r.Header.Get("Accept-Language"))
+
+		fmt.Println("User language:", tag)
+	})
 }
 
 func ExampleComprehends() {

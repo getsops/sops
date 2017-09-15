@@ -32,8 +32,8 @@
 //    in the Amazon AppStream 2.0 Developer Guide.
 //
 //    * Provisioned read and write capacity for Amazon DynamoDB tables and global
-//    secondary indexes. For more information, see Auto Scaling for DynamoDB
-//    (http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TargetTracking.html)
+//    secondary indexes. For more information, see Managing Throughput Capacity
+//    Automatically with DynamoDB Auto Scaling (http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/AutoScaling.html)
 //    in the Amazon DynamoDB Developer Guide.
 //
 // For a list of supported regions, see AWS Regions and Endpoints: Application

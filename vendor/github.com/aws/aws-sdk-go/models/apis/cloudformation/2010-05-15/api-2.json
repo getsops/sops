@@ -614,6 +614,7 @@
       },
       "exception":true
     },
+    "Arn":{"type":"string"},
     "CancelUpdateStackInput":{
       "type":"structure",
       "required":["StackName"],
@@ -773,6 +774,7 @@
         "Capabilities":{"shape":"Capabilities"},
         "ResourceTypes":{"shape":"ResourceTypes"},
         "RoleARN":{"shape":"RoleARN"},
+        "RollbackConfiguration":{"shape":"RollbackConfiguration"},
         "NotificationARNs":{"shape":"NotificationARNs"},
         "Tags":{"shape":"Tags"},
         "ChangeSetName":{"shape":"ChangeSetName"},
@@ -797,6 +799,7 @@
         "TemplateURL":{"shape":"TemplateURL"},
         "Parameters":{"shape":"Parameters"},
         "DisableRollback":{"shape":"DisableRollback"},
+        "RollbackConfiguration":{"shape":"RollbackConfiguration"},
         "TimeoutInMinutes":{"shape":"TimeoutMinutes"},
         "NotificationARNs":{"shape":"NotificationARNs"},
         "Capabilities":{"shape":"Capabilities"},
@@ -972,6 +975,7 @@
         "Status":{"shape":"ChangeSetStatus"},
         "StatusReason":{"shape":"ChangeSetStatusReason"},
         "NotificationARNs":{"shape":"NotificationARNs"},
+        "RollbackConfiguration":{"shape":"RollbackConfiguration"},
         "Capabilities":{"shape":"Capabilities"},
         "Tags":{"shape":"Tags"},
         "Changes":{"shape":"Changes"},
@@ -1420,6 +1424,11 @@
       "min":1
     },
     "Metadata":{"type":"string"},
+    "MonitoringTimeInMinutes":{
+      "type":"integer",
+      "max":180,
+      "min":0
+    },
     "NameAlreadyExistsException":{
       "type":"structure",
       "members":{
@@ -1660,6 +1669,29 @@
       "max":2048,
       "min":20
     },
+    "RollbackConfiguration":{
+      "type":"structure",
+      "members":{
+        "RollbackTriggers":{"shape":"RollbackTriggers"},
+        "MonitoringTimeInMinutes":{"shape":"MonitoringTimeInMinutes"}
+      }
+    },
+    "RollbackTrigger":{
+      "type":"structure",
+      "required":[
+        "Arn",
+        "Type"
+      ],
+      "members":{
+        "Arn":{"shape":"Arn"},
+        "Type":{"shape":"Type"}
+      }
+    },
+    "RollbackTriggers":{
+      "type":"list",
+      "member":{"shape":"RollbackTrigger"},
+      "max":5
+    },
     "Scope":{
       "type":"list",
       "member":{"shape":"ResourceAttribute"}
@@ -1703,6 +1735,7 @@
         "Parameters":{"shape":"Parameters"},
         "CreationTime":{"shape":"CreationTime"},
         "LastUpdatedTime":{"shape":"LastUpdatedTime"},
+        "RollbackConfiguration":{"shape":"RollbackConfiguration"},
         "StackStatus":{"shape":"StackStatus"},
         "StackStatusReason":{"shape":"StackStatusReason"},
         "DisableRollback":{"shape":"DisableRollback"},
@@ -2180,6 +2213,7 @@
       "type":"list",
       "member":{"shape":"TransformName"}
     },
+    "Type":{"type":"string"},
     "UpdateStackInput":{
       "type":"structure",
       "required":["StackName"],
@@ -2194,6 +2228,7 @@
         "Capabilities":{"shape":"Capabilities"},
         "ResourceTypes":{"shape":"ResourceTypes"},
         "RoleARN":{"shape":"RoleARN"},
+        "RollbackConfiguration":{"shape":"RollbackConfiguration"},
         "StackPolicyBody":{"shape":"StackPolicyBody"},
         "StackPolicyURL":{"shape":"StackPolicyURL"},
         "NotificationARNs":{"shape":"NotificationARNs"},

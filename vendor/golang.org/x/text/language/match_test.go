@@ -94,6 +94,60 @@ func makeTagList(s string) (tags []Tag) {
 	return tags
 }
 
+func TestMatchStrings(t *testing.T) {
+	testCases := []struct {
+		supported string
+		desired   string // strings separted by |
+		tag       string
+		index     int
+	}{{
+		supported: "en",
+		desired:   "",
+		tag:       "en",
+		index:     0,
+	}, {
+		supported: "en",
+		desired:   "nl",
+		tag:       "en",
+		index:     0,
+	}, {
+		supported: "en,nl",
+		desired:   "nl",
+		tag:       "nl",
+		index:     1,
+	}, {
+		supported: "en,nl",
+		desired:   "nl|en",
+		tag:       "nl",
+		index:     1,
+	}, {
+		supported: "en-GB,nl",
+		desired:   "en ; q=0.1,nl",
+		tag:       "nl",
+		index:     1,
+	}, {
+		supported: "en-GB,nl",
+		desired:   "en;q=0.005 | dk; q=0.1,nl ",
+		tag:       "en-GB",
+		index:     0,
+	}, {
+		// do not match faulty tags with und
+		supported: "en,und",
+		desired:   "|en",
+		tag:       "en",
+		index:     0,
+	}}
+	for _, tc := range testCases {
+		t.Run(path.Join(tc.supported, tc.desired), func(t *testing.T) {
+			m := NewMatcher(makeTagList(tc.supported))
+			tag, index := MatchStrings(m, strings.Split(tc.desired, "|")...)
+			if tag.String() != tc.tag || index != tc.index {
+				t.Errorf("got %v, %d; want %v, %d", tag, index, tc.tag, tc.index)
+			}
+		})
+	}
+}
+
 func TestAddLikelySubtags(t *testing.T) {
 	tests := []struct{ in, out string }{
 		{"aa", "aa-Latn-ET"},

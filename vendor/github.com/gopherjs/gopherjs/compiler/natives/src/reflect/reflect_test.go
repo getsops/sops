@@ -59,6 +59,10 @@ func TestSelectOnInvalid(t *testing.T) {
 	})
 }
 
+func TestStructOfFieldName(t *testing.T) {
+	t.Skip("StructOf")
+}
+
 func TestStructOf(t *testing.T) {
 	t.Skip("StructOf")
 }

@@ -7,6 +7,7 @@ go:
   - 1.6
   - 1.7
   - 1.8
+  - 1.9
   - tip
     
 # Use Go 1.5's vendoring experiment for 1.5 tests.

@@ -11,6 +11,8 @@
 // about how the service works, see AWS Lambda: How it Works (http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html)
 // in the AWS Lambda Developer Guide.
 //
+// See https://docs.aws.amazon.com/goto/WebAPI/lambda-2015-03-31 for more information on this service.
+//
 // See lambda package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/lambda/
 //
