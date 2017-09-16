@@ -252,6 +252,16 @@ func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	file := stores.SopsFile{}
 	err := json.Unmarshal(in, &file)
 	if err != nil {
+		if err, ok := err.(*json.UnmarshalTypeError); ok {
+			if err.Value == "number" && err.Struct == "Metadata" && err.Field == "version" {
+				return sops.Metadata{},
+					fmt.Errorf("SOPS versions higher than 2.0.10 can not automatically decrypt JSON files " +
+						"created with SOPS 1.x. In order to be able to decrypt this file, you can either edit it " +
+						"manually and make sure the JSON value under `sops -> version` is a string and not a " +
+						"number, or you can rotate the file's key with any version of SOPS between 2.0 and 2.0.10 " +
+						"using `sops -r your_file.json`")
+			}
+		}
 		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
 	return file.Metadata.ToInternal()
