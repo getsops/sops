@@ -308,11 +308,22 @@ func TestEncryptComments(t *testing.T) {
 				Key:   Comment{"foo"},
 				Value: nil,
 			},
+			TreeItem{
+				Key: "list",
+				Value: []interface{}{
+					"1",
+					Comment{"bar"},
+					"2",
+				},
+			},
 		},
-		Metadata: Metadata{},
+		Metadata: Metadata{
+			UnencryptedSuffix: DefaultUnencryptedSuffix,
+		},
 	}
 	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
-	assert.NotEqual(t, "foo", tree.Branch[0].Key.(Comment).Value)
+	assert.Equal(t, "oof", tree.Branch[0].Key.(Comment).Value)
+	assert.Equal(t, "rab", tree.Branch[1].Value.([]interface{})[1])
 }
 
 func TestDecryptComments(t *testing.T) {
@@ -322,11 +333,22 @@ func TestDecryptComments(t *testing.T) {
 				Key:   Comment{"oof"},
 				Value: nil,
 			},
+			TreeItem{
+				Key: "list",
+				Value: []interface{}{
+					"1",
+					Comment{"rab"},
+					"2",
+				},
+			},
 		},
-		Metadata: Metadata{},
+		Metadata: Metadata{
+			UnencryptedSuffix: DefaultUnencryptedSuffix,
+		},
 	}
 	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
 	assert.Equal(t, "foo", tree.Branch[0].Key.(Comment).Value)
+	assert.Equal(t, "bar", tree.Branch[1].Value.([]interface{})[1])
 }
 
 func TestDecryptUnencryptedComments(t *testing.T) {

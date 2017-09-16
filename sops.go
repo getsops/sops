@@ -266,7 +266,7 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 				if err != nil {
 					// Assume the comment was not encrypted in the first place
 					log.Printf("[WARNING] Found possibly unencrypted comment in file (#%s). This is to be expected if the file being decrypted was created with an older version of SOPS.", c.Value)
-					in = c
+					v = c
 				}
 			} else {
 				v, err = cipher.Decrypt(in.(string), key, pathString)
@@ -278,7 +278,7 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 			v = in
 		}
 		// Only add to MAC if not a comment
-		if _, ok := in.(Comment); !ok {
+		if _, ok := v.(Comment); !ok {
 			bytes, err := ToBytes(v)
 			if err != nil {
 				return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
