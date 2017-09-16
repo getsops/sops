@@ -250,6 +250,96 @@ b: ba"#
     }
 
     #[test]
+    fn encrypt_comments() {
+        let file_contents = br#"
+        lorem: ipsum
+        # this-is-a-comment
+        dolor: sit
+        "#;
+        let file_path = prepare_temp_file("test_encrypt_comments.yaml", file_contents);
+        let output = Command::new(SOPS_BINARY_PATH)
+                    .arg("-e")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
+    }
+
+    #[test]
+    fn decrypt_comments() {
+        let file_contents = br#"
+        lorem: ENC[AES256_GCM,data:PhmSdTs=,iv:J5ugEWq6RfyNx+5zDXvcTdoQ18YYZkqesDED7LNzou4=,tag:0Qrom6J6aUnZMZzGz5XCxw==,type:str]
+        #ENC[AES256_GCM,data:HiHCasVRzWUiFxKb3X/AcEeM,iv:bmNg+T91dqGk/CEtVH+FDC53osDCEPmWmJKpLyAU5OM=,tag:bTLDYxQSAfYDCBYccoUokQ==,type:comment]
+        dolor: ENC[AES256_GCM,data:IgvT,iv:wtPNYbDTARFE810PH6ldOLzCDcAjkB/dzPsZjpgHcko=,tag:zwE8P+AwO1hrHkgF6pTbZw==,type:str]
+        sops:
+            kms: []
+            lastmodified: '2017-08-16T03:41:16Z'
+            mac: ENC[AES256_GCM,data:3ngUnY2hkK6pkDbCeAnOHsi/M6bLnGk1vkd+EeGyN/efqJZmwH0+9hUdACNnwHzofIR6NbtCGZal+cSCuTGD4eDuqNV+LbwV1/EaaVZj9RktTNXq3STSXxfzYGoHV3NOMtBhq6sYhF0U72nunreCymm3QzOTylAa2HlmRs54axM=,iv:EMXphsMa+ELK8XXX3MDfFJe3jFgXzwCSwjxNR5ah14k=,tag:gakwLdPvwyihj+FkTG/2kQ==,type:str]
+            pgp:
+            -   created_at: '2017-08-16T03:41:16Z'
+                enc: |-
+                    -----BEGIN PGP MESSAGE-----
+
+                    wYwDEEVDpnzXnMABBAAlUcnNciv6rGJua/wmjVYBAHD95VT/M6cc8dg0bPR8XH5a
+                    /GeM2RasBzX7ICuBijjesY9exsnrTkBK3/1XpAjygdiW5DciXmqRz/5nE4DLxH+w
+                    nZvmnCmg8AdfPKxhr+eM+pKibiN4uEhsJggA9c2ACUQ/YMo4o04fLKZGXqGtT9Lg
+                    AeRiZfM3ykiyHDbUQ3P9YAdL4fH44A3gpeHoGeBv4iBFFE7ge+XCby9rgN9Qa7NF
+                    /Wahxm7U3RcwT6JSbNDHNCJtolEPeuCR5D2/Kc/2b30e6fLDnpbfSJXiRh4TbOG3
+                    rAA=
+                    =7P04
+                    -----END PGP MESSAGE-----
+                fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+            unencrypted_suffix: _unencrypted
+            version: 2.0.9
+        "#;
+        let file_path = prepare_temp_file("test_decrypt_comments.yaml", file_contents);
+        let output = Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
+    }
+
+    #[test]
+    fn decrypt_comments_unencrypted_comments() {
+        let file_contents = br#"
+        lorem: ENC[AES256_GCM,data:PhmSdTs=,iv:J5ugEWq6RfyNx+5zDXvcTdoQ18YYZkqesDED7LNzou4=,tag:0Qrom6J6aUnZMZzGz5XCxw==,type:str]
+        # this-is-a-comment
+        dolor: ENC[AES256_GCM,data:IgvT,iv:wtPNYbDTARFE810PH6ldOLzCDcAjkB/dzPsZjpgHcko=,tag:zwE8P+AwO1hrHkgF6pTbZw==,type:str]
+        sops:
+            kms: []
+            lastmodified: '2017-08-16T03:41:16Z'
+            mac: ENC[AES256_GCM,data:3ngUnY2hkK6pkDbCeAnOHsi/M6bLnGk1vkd+EeGyN/efqJZmwH0+9hUdACNnwHzofIR6NbtCGZal+cSCuTGD4eDuqNV+LbwV1/EaaVZj9RktTNXq3STSXxfzYGoHV3NOMtBhq6sYhF0U72nunreCymm3QzOTylAa2HlmRs54axM=,iv:EMXphsMa+ELK8XXX3MDfFJe3jFgXzwCSwjxNR5ah14k=,tag:gakwLdPvwyihj+FkTG/2kQ==,type:str]
+            pgp:
+            -   created_at: '2017-08-16T03:41:16Z'
+                enc: |-
+                    -----BEGIN PGP MESSAGE-----
+
+                    wYwDEEVDpnzXnMABBAAlUcnNciv6rGJua/wmjVYBAHD95VT/M6cc8dg0bPR8XH5a
+                    /GeM2RasBzX7ICuBijjesY9exsnrTkBK3/1XpAjygdiW5DciXmqRz/5nE4DLxH+w
+                    nZvmnCmg8AdfPKxhr+eM+pKibiN4uEhsJggA9c2ACUQ/YMo4o04fLKZGXqGtT9Lg
+                    AeRiZfM3ykiyHDbUQ3P9YAdL4fH44A3gpeHoGeBv4iBFFE7ge+XCby9rgN9Qa7NF
+                    /Wahxm7U3RcwT6JSbNDHNCJtolEPeuCR5D2/Kc/2b30e6fLDnpbfSJXiRh4TbOG3
+                    rAA=
+                    =7P04
+                    -----END PGP MESSAGE-----
+                fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+            unencrypted_suffix: _unencrypted
+            version: 2.0.9
+        "#;
+        let file_path = prepare_temp_file("test_decrypt_comments.yaml", file_contents);
+        let output = Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
+    }
+
     fn roundtrip_shamir() {
         // The .sops.yaml file ensures this file is encrypted with two key groups, each with one GPG key
         let file_path = prepare_temp_file("test_roundtrip_keygroups.yaml", "a: secret".as_bytes());
