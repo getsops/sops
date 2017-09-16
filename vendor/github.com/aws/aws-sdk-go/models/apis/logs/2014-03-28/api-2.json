@@ -127,6 +127,19 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "DeleteResourcePolicy":{
+      "name":"DeleteResourcePolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteResourcePolicyRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "DeleteRetentionPolicy":{
       "name":"DeleteRetentionPolicy",
       "http":{
@@ -219,6 +232,19 @@
       "errors":[
         {"shape":"InvalidParameterException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "DescribeResourcePolicies":{
+      "name":"DescribeResourcePolicies",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeResourcePoliciesRequest"},
+      "output":{"shape":"DescribeResourcePoliciesResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
         {"shape":"ServiceUnavailableException"}
       ]
     },
@@ -331,6 +357,20 @@
         {"shape":"InvalidParameterException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"OperationAbortedException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "PutResourcePolicy":{
+      "name":"PutResourcePolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutResourcePolicyRequest"},
+      "output":{"shape":"PutResourcePolicyResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
         {"shape":"LimitExceededException"},
         {"shape":"ServiceUnavailableException"}
       ]
@@ -502,6 +542,12 @@
         "filterName":{"shape":"FilterName"}
       }
     },
+    "DeleteResourcePolicyRequest":{
+      "type":"structure",
+      "members":{
+        "policyName":{"shape":"PolicyName"}
+      }
+    },
     "DeleteRetentionPolicyRequest":{
       "type":"structure",
       "required":["logGroupName"],
@@ -606,6 +652,20 @@
       "type":"structure",
       "members":{
         "metricFilters":{"shape":"MetricFilters"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeResourcePoliciesRequest":{
+      "type":"structure",
+      "members":{
+        "nextToken":{"shape":"NextToken"},
+        "limit":{"shape":"DescribeLimit"}
+      }
+    },
+    "DescribeResourcePoliciesResponse":{
+      "type":"structure",
+      "members":{
+        "resourcePolicies":{"shape":"ResourcePolicies"},
         "nextToken":{"shape":"NextToken"}
       }
     },
@@ -1003,6 +1063,12 @@
       "type":"list",
       "member":{"shape":"OutputLogEvent"}
     },
+    "PolicyDocument":{
+      "type":"string",
+      "max":5120,
+      "min":1
+    },
+    "PolicyName":{"type":"string"},
     "PutDestinationPolicyRequest":{
       "type":"structure",
       "required":[
@@ -1069,6 +1135,19 @@
         "metricTransformations":{"shape":"MetricTransformations"}
       }
     },
+    "PutResourcePolicyRequest":{
+      "type":"structure",
+      "members":{
+        "policyName":{"shape":"PolicyName"},
+        "policyDocument":{"shape":"PolicyDocument"}
+      }
+    },
+    "PutResourcePolicyResponse":{
+      "type":"structure",
+      "members":{
+        "resourcePolicy":{"shape":"ResourcePolicy"}
+      }
+    },
     "PutRetentionPolicyRequest":{
       "type":"structure",
       "required":[
@@ -1116,6 +1195,18 @@
       "members":{
       },
       "exception":true
+    },
+    "ResourcePolicies":{
+      "type":"list",
+      "member":{"shape":"ResourcePolicy"}
+    },
+    "ResourcePolicy":{
+      "type":"structure",
+      "members":{
+        "policyName":{"shape":"PolicyName"},
+        "policyDocument":{"shape":"PolicyDocument"},
+        "lastUpdatedTime":{"shape":"Timestamp"}
+      }
     },
     "RoleArn":{
       "type":"string",

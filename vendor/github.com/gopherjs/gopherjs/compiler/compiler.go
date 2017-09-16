@@ -12,12 +12,12 @@ import (
 	"strings"
 
 	"github.com/gopherjs/gopherjs/compiler/prelude"
-	"github.com/gopherjs/gopherjs/third_party/importer"
+	"golang.org/x/tools/go/gcimporter15"
 )
 
 var sizes32 = &types.StdSizes{WordSize: 4, MaxAlign: 8}
 var reservedKeywords = make(map[string]bool)
-var _ = ___GOPHERJS_REQUIRES_GO_VERSION_1_8___ // Compile error on other Go versions, because they're not supported.
+var _ = ___GOPHERJS_REQUIRES_GO_VERSION_1_9___ // Compile error on other Go versions, because they're not supported.
 
 func init() {
 	for _, keyword := range []string{"abstract", "arguments", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger", "default", "delete", "do", "double", "else", "enum", "eval", "export", "extends", "false", "final", "finally", "float", "for", "function", "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "let", "long", "native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", "super", "switch", "synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "undefined", "var", "void", "volatile", "while", "with", "yield"} {
@@ -239,7 +239,7 @@ func ReadArchive(filename, path string, r io.Reader, packages map[string]*types.
 	}
 
 	var err error
-	_, packages[path], err = importer.ImportData(packages, a.ExportData)
+	_, packages[path], err = gcimporter.BImportData(token.NewFileSet(), packages, a.ExportData, path)
 	if err != nil {
 		return nil, err
 	}

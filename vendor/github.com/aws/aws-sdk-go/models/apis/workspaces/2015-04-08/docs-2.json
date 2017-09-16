@@ -10,11 +10,11 @@
     "DescribeWorkspaceDirectories": "<p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>",
     "DescribeWorkspaces": "<p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>",
     "DescribeWorkspacesConnectionStatus": "<p>Describes the connection status of a specified WorkSpace.</p>",
-    "ModifyWorkspaceProperties": "<p>Modifies the WorkSpace properties, including the RunningMode and AutoStop time.</p>",
+    "ModifyWorkspaceProperties": "<p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>",
     "RebootWorkspaces": "<p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note>",
     "RebuildWorkspaces": "<p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note>",
-    "StartWorkspaces": "<p>Starts the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to “STOPPED.”</p>",
-    "StopWorkspaces": "<p> Stops the specified WorkSpaces. The API only works with WorkSpaces that have RunningMode configured as AutoStop and the State set to AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>",
+    "StartWorkspaces": "<p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>",
+    "StopWorkspaces": "<p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>",
     "TerminateWorkspaces": "<p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note>"
   },
   "shapes": {
@@ -25,7 +25,7 @@
       }
     },
     "AccessDeniedException": {
-      "base": null,
+      "base": "<p>The user is not authorized to access a resource.</p>",
       "refs": {
       }
     },
@@ -313,7 +313,7 @@
       }
     },
     "InvalidResourceStateException": {
-      "base": "<p>The specified WorkSpace has an invalid state for this operation.</p>",
+      "base": "<p>The state of the WorkSpace is not valid for this operation.</p>",
       "refs": {
       }
     },
@@ -574,7 +574,7 @@
       }
     },
     "UnsupportedWorkspaceConfigurationException": {
-      "base": "<p>The WorkSpace does not have the supported configuration for this operation. For more information, see the <a href=\"http://docs.aws.amazon.com/workspaces/latest/adminguide\">Amazon WorkSpaces Administration Guide</a>. </p>",
+      "base": "<p>The configuration of this WorkSpace is not supported for this operation. For more information, see the <a href=\"http://docs.aws.amazon.com/workspaces/latest/adminguide/\">Amazon WorkSpaces Administration Guide</a>. </p>",
       "refs": {
       }
     },

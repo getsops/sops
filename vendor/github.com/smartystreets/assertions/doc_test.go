@@ -3,8 +3,25 @@ package assertions
 import (
 	"bytes"
 	"fmt"
+	"reflect"
 	"testing"
 )
+
+func TestGoConveyModeAffectsSerializer(t *testing.T) {
+	if reflect.TypeOf(serializer) != reflect.TypeOf(new(noopSerializer)) {
+		t.Error("Expected noop serializer as default")
+	}
+
+	GoConveyMode(true)
+	if reflect.TypeOf(serializer) != reflect.TypeOf(new(failureSerializer)) {
+		t.Error("Expected failure serializer")
+	}
+
+	GoConveyMode(false)
+	if reflect.TypeOf(serializer) != reflect.TypeOf(new(noopSerializer)) {
+		t.Error("Expected noop serializer")
+	}
+}
 
 func TestPassingAssertion(t *testing.T) {
 	fake := &FakeT{buffer: new(bytes.Buffer)}

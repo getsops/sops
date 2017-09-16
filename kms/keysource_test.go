@@ -2,10 +2,11 @@ package kms
 
 import (
 	"bytes"
-	"fmt"
 	"testing"
 	"testing/quick"
 	"time"
+
+	"log"
 
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/stretchr/testify/assert"
@@ -30,11 +31,11 @@ func TestKMS(t *testing.T) {
 	f := func(x []byte) bool {
 		err := k.Encrypt(x)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		v, err := k.Decrypt()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 		return bytes.Equal(v, x)
 	}
@@ -132,7 +133,7 @@ func TestKeyToMap(t *testing.T) {
 		"role":       "bar",
 		"enc":        "this is encrypted",
 		"created_at": "2016-10-31T10:00:00Z",
-		"context":    map[string]string{
+		"context": map[string]string{
 			"key1": value1,
 			"key2": value2,
 		},

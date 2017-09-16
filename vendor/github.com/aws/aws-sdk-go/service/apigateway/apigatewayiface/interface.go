@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon API Gateway.
@@ -147,6 +147,10 @@ type APIGatewayAPI interface {
 	DeleteDomainName(*apigateway.DeleteDomainNameInput) (*apigateway.DeleteDomainNameOutput, error)
 	DeleteDomainNameWithContext(aws.Context, *apigateway.DeleteDomainNameInput, ...request.Option) (*apigateway.DeleteDomainNameOutput, error)
 	DeleteDomainNameRequest(*apigateway.DeleteDomainNameInput) (*request.Request, *apigateway.DeleteDomainNameOutput)
+
+	DeleteGatewayResponse(*apigateway.DeleteGatewayResponseInput) (*apigateway.DeleteGatewayResponseOutput, error)
+	DeleteGatewayResponseWithContext(aws.Context, *apigateway.DeleteGatewayResponseInput, ...request.Option) (*apigateway.DeleteGatewayResponseOutput, error)
+	DeleteGatewayResponseRequest(*apigateway.DeleteGatewayResponseInput) (*request.Request, *apigateway.DeleteGatewayResponseOutput)
 
 	DeleteIntegration(*apigateway.DeleteIntegrationInput) (*apigateway.DeleteIntegrationOutput, error)
 	DeleteIntegrationWithContext(aws.Context, *apigateway.DeleteIntegrationInput, ...request.Option) (*apigateway.DeleteIntegrationOutput, error)
@@ -291,6 +295,14 @@ type APIGatewayAPI interface {
 	GetExportWithContext(aws.Context, *apigateway.GetExportInput, ...request.Option) (*apigateway.GetExportOutput, error)
 	GetExportRequest(*apigateway.GetExportInput) (*request.Request, *apigateway.GetExportOutput)
 
+	GetGatewayResponse(*apigateway.GetGatewayResponseInput) (*apigateway.UpdateGatewayResponseOutput, error)
+	GetGatewayResponseWithContext(aws.Context, *apigateway.GetGatewayResponseInput, ...request.Option) (*apigateway.UpdateGatewayResponseOutput, error)
+	GetGatewayResponseRequest(*apigateway.GetGatewayResponseInput) (*request.Request, *apigateway.UpdateGatewayResponseOutput)
+
+	GetGatewayResponses(*apigateway.GetGatewayResponsesInput) (*apigateway.GetGatewayResponsesOutput, error)
+	GetGatewayResponsesWithContext(aws.Context, *apigateway.GetGatewayResponsesInput, ...request.Option) (*apigateway.GetGatewayResponsesOutput, error)
+	GetGatewayResponsesRequest(*apigateway.GetGatewayResponsesInput) (*request.Request, *apigateway.GetGatewayResponsesOutput)
+
 	GetIntegration(*apigateway.GetIntegrationInput) (*apigateway.Integration, error)
 	GetIntegrationWithContext(aws.Context, *apigateway.GetIntegrationInput, ...request.Option) (*apigateway.Integration, error)
 	GetIntegrationRequest(*apigateway.GetIntegrationInput) (*request.Request, *apigateway.Integration)
@@ -413,6 +425,10 @@ type APIGatewayAPI interface {
 	ImportRestApiWithContext(aws.Context, *apigateway.ImportRestApiInput, ...request.Option) (*apigateway.RestApi, error)
 	ImportRestApiRequest(*apigateway.ImportRestApiInput) (*request.Request, *apigateway.RestApi)
 
+	PutGatewayResponse(*apigateway.PutGatewayResponseInput) (*apigateway.UpdateGatewayResponseOutput, error)
+	PutGatewayResponseWithContext(aws.Context, *apigateway.PutGatewayResponseInput, ...request.Option) (*apigateway.UpdateGatewayResponseOutput, error)
+	PutGatewayResponseRequest(*apigateway.PutGatewayResponseInput) (*request.Request, *apigateway.UpdateGatewayResponseOutput)
+
 	PutIntegration(*apigateway.PutIntegrationInput) (*apigateway.Integration, error)
 	PutIntegrationWithContext(aws.Context, *apigateway.PutIntegrationInput, ...request.Option) (*apigateway.Integration, error)
 	PutIntegrationRequest(*apigateway.PutIntegrationInput) (*request.Request, *apigateway.Integration)
@@ -476,6 +492,10 @@ type APIGatewayAPI interface {
 	UpdateDomainName(*apigateway.UpdateDomainNameInput) (*apigateway.DomainName, error)
 	UpdateDomainNameWithContext(aws.Context, *apigateway.UpdateDomainNameInput, ...request.Option) (*apigateway.DomainName, error)
 	UpdateDomainNameRequest(*apigateway.UpdateDomainNameInput) (*request.Request, *apigateway.DomainName)
+
+	UpdateGatewayResponse(*apigateway.UpdateGatewayResponseInput) (*apigateway.UpdateGatewayResponseOutput, error)
+	UpdateGatewayResponseWithContext(aws.Context, *apigateway.UpdateGatewayResponseInput, ...request.Option) (*apigateway.UpdateGatewayResponseOutput, error)
+	UpdateGatewayResponseRequest(*apigateway.UpdateGatewayResponseInput) (*request.Request, *apigateway.UpdateGatewayResponseOutput)
 
 	UpdateIntegration(*apigateway.UpdateIntegrationInput) (*apigateway.Integration, error)
 	UpdateIntegrationWithContext(aws.Context, *apigateway.UpdateIntegrationInput, ...request.Option) (*apigateway.Integration, error)

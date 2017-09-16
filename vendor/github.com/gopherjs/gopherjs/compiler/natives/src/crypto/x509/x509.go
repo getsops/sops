@@ -2,13 +2,8 @@
 
 package x509
 
-import "os"
+import "errors"
 
 func loadSystemRoots() (*CertPool, error) {
-	// no system roots
-	return NewCertPool(), nil
-}
-
-func execSecurityRoots() (*CertPool, error) {
-	return nil, os.ErrNotExist
+	return nil, errors.New("crypto/x509: system root pool is not available in GopherJS")
 }
