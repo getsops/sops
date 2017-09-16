@@ -1,11 +1,15 @@
 extern crate tempdir;
+extern crate serde;
 extern crate serde_json;
 extern crate serde_yaml;
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate serde_derive;
 
 #[cfg(test)]
 mod tests {
+    extern crate serde;
     extern crate serde_json;
     extern crate serde_yaml;
 
@@ -224,30 +228,7 @@ b: ba"#
 
     #[test]
     fn decrypt_file_no_mac() {
-        let file_path = prepare_temp_file("test_decrypt_no_mac.yaml",
-                                          r#"
-myapp1: ENC[AES256_GCM,data:QsGJGjvQOpoVCIlrYTcOQEfQzriw,iv:ShmgdRNV6UrOJ22Rgr7habB74Nd/YFxU4lDh6jy6n+8=,tag:8GT6U8lzrI27DcFc1+icgQ==,type:str]
-sops:
-    pgp:
-    -   fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
-        created_at: '2015-11-25T00:32:57Z'
-        enc: |
-            -----BEGIN PGP MESSAGE-----
-            Version: GnuPG v1
-
-            hIwDEEVDpnzXnMABBACBf7lGw8B0sLbfup1Ye51FNpY6iF/4SPTdjeV4OB3uDwIJ
-            FRa6z7VR+FrtWyyNYRNB2Wm5eegnEEWwui6hFw7tvlhkN8C5hWQ0B47oYMTstZDR
-            TR3Eu7y70u3YLoQKZgDnPb6hQplGIoYVd/EMpDgKmKnmz5oCiIkEI68T3aXo5tJc
-            AZhplIlk9eSMHIW9CmGkNp5HtZlQWzVSdGdcQcIUBG4F+Vf40max9u0Jkk1Se1do
-            BJ+D4Kl5dZXBj3njvo4YdZ+FGoYPfMlX1GCw0W4caUu6tD8RjuzJA+fYo2Q=
-            =Cnu4
-            -----END PGP MESSAGE-----
-    lastmodified: '2016-03-16T23:34:46Z'
-    version: 1.7
-    attention: This section contains key material that should only be modified with
-        extra care. See `sops -h`.
-"#
-                                              .as_bytes());
+        let file_path = prepare_temp_file("test_decrypt_no_mac.yaml", include_bytes!("../res/no_mac.yaml"));
         assert!(!Command::new(SOPS_BINARY_PATH)
                     .arg("-d")
                     .arg(file_path.clone())
@@ -266,5 +247,115 @@ sops:
                     .status
                     .success(),
                 "SOPS failed to decrypt a file with no MAC with --ignore-mac passed in");
+    }
+
+    #[test]
+    fn encrypt_comments() {
+        let file_path = "res/comments.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
+    }
+
+    #[test]
+    fn encrypt_comments_list() {
+        let file_path = "res/comments_list.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
+    }
+
+    #[test]
+    fn decrypt_comments() {
+        let file_path = "res/comments.enc.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
+    }
+
+    #[test]
+    fn decrypt_comments_unencrypted_comments() {
+        let file_path = "res/comments_unencrypted_comments.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
+    }
+
+    #[test]
+    fn roundtrip_shamir() {
+        // The .sops.yaml file ensures this file is encrypted with two key groups, each with one GPG key
+        let file_path = prepare_temp_file("test_roundtrip_keygroups.yaml", "a: secret".as_bytes());
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(),
+                "SOPS failed to encrypt a file with Shamir Secret Sharing");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to decrypt a file with Shamir Secret Sharing");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("secret"));
+    }
+
+    #[test]
+    fn roundtrip_shamir_missing_decryption_key() {
+        // The .sops.yaml file ensures this file is encrypted with two key groups, each with one GPG key,
+        // but we don't have one of the private keys
+        let file_path = prepare_temp_file("test_roundtrip_keygroups_missing_decryption_key.yaml",
+                                          "a: secret".as_bytes());
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(),
+                "SOPS failed to encrypt a file with Shamir Secret Sharing");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(!output.status
+                    .success(),
+                "SOPS succeeded decrypting a file with a missing decrytion key");
+    }
+
+    #[test]
+    fn test_decrypt_file_multiple_keys() {
+        let file_path = prepare_temp_file("test_decrypt_file_multiple_keys.yaml",
+                                          include_bytes!("../res/multiple_keys.yaml"));
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to decrypt a file that uses multiple keys");
     }
 }

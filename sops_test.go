@@ -2,12 +2,37 @@ package sops
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/kms"
+	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
+
+type reverseCipher struct{}
+
+// reverse returns its argument string reversed rune-wise left to right.
+func reverse(s string) string {
+	r := []rune(s)
+	for i, j := 0, len(r)-1; i < len(r)/2; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return string(r)
+}
+
+func (c reverseCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
+	b, err := ToBytes(value)
+	if err != nil {
+		return "", err
+	}
+	return reverse(string(b)), nil
+}
+func (c reverseCipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, err error) {
+	if value == "error" {
+		return nil, fmt.Errorf("Error")
+	}
+	return reverse(value), nil
+}
 
 func TestUnencryptedSuffix(t *testing.T) {
 	branch := TreeBranch{
@@ -41,15 +66,15 @@ func TestUnencryptedSuffix(t *testing.T) {
 			},
 		},
 	}
-	cipher := aes.Cipher{}
-	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher, nil)
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
 	if err != nil {
 		t.Errorf("Encrypting the tree failed: %s", err)
 	}
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branch, expected)
 	}
-	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher, nil)
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
 	if err != nil {
 		t.Errorf("Decrypting the tree failed: %s", err)
 	}
@@ -60,12 +85,12 @@ func TestUnencryptedSuffix(t *testing.T) {
 
 type MockCipher struct{}
 
-func (m MockCipher) Encrypt(value interface{}, key []byte, path string, stashValue interface{}) (string, error) {
+func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
 	return "a", nil
 }
 
-func (m MockCipher) Decrypt(value string, key []byte, path string) (interface{}, interface{}, error) {
-	return "a", nil, nil
+func (m MockCipher) Decrypt(value string, key []byte, path string) (interface{}, error) {
+	return "a", nil
 }
 
 func TestEncrypt(t *testing.T) {
@@ -116,7 +141,7 @@ func TestEncrypt(t *testing.T) {
 		},
 	}
 	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
-	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{}, make(map[string][]interface{}))
+	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{})
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("%s does not equal expected tree: %s", tree.Branch, expected)
 	}
@@ -170,7 +195,7 @@ func TestDecrypt(t *testing.T) {
 		},
 	}
 	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
-	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{}, make(map[string][]interface{}))
+	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{})
 	if !reflect.DeepEqual(tree.Branch, expected) {
 		t.Errorf("%s does not equal expected tree: %s", tree.Branch, expected)
 	}
@@ -198,44 +223,14 @@ func TestTruncateTree(t *testing.T) {
 		},
 	}
 	expected := 3
-	result, err := tree.Truncate(`["bar"]["foobar"][2]`)
+	result, err := tree.Truncate([]interface{}{
+		"bar",
+		"foobar",
+		2,
+	})
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expected, result)
 }
-
-func TestRemoveMasterKeys(t *testing.T) {
-	m := Metadata{
-		KeySources: []KeySource{
-			KeySource{
-				Name: "kms",
-				Keys: []MasterKey{
-					&kms.MasterKey{
-						Arn: "foo",
-					}, &kms.MasterKey{
-						Arn: "bar",
-					},
-					&kms.MasterKey{
-						Arn: "foobar",
-					},
-				},
-			},
-		},
-	}
-	m.RemoveMasterKeys([]MasterKey{
-		&kms.MasterKey{
-			Arn: "bar",
-		},
-		&kms.MasterKey{
-			Arn: "foobar",
-		},
-	})
-	assert.Equal(t, []MasterKey{
-		&kms.MasterKey{
-			Arn: "foo",
-		},
-	}, m.KeySources[0].Keys)
-}
-
 
 func TestInsertOrReplaceValue(t *testing.T) {
 	tree := TreeBranch{
@@ -300,8 +295,73 @@ func TestInsertOrReplaceValue(t *testing.T) {
 			},
 		},
 		TreeItem{
-			Key: "foobar",
+			Key:   "foobar",
 			Value: 100,
 		},
 	})
+}
+
+func TestEncryptComments(t *testing.T) {
+	tree := Tree{
+		Branch: TreeBranch{
+			TreeItem{
+				Key:   Comment{"foo"},
+				Value: nil,
+			},
+			TreeItem{
+				Key: "list",
+				Value: []interface{}{
+					"1",
+					Comment{"bar"},
+					"2",
+				},
+			},
+		},
+		Metadata: Metadata{
+			UnencryptedSuffix: DefaultUnencryptedSuffix,
+		},
+	}
+	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
+	assert.Equal(t, "oof", tree.Branch[0].Key.(Comment).Value)
+	assert.Equal(t, "rab", tree.Branch[1].Value.([]interface{})[1])
+}
+
+func TestDecryptComments(t *testing.T) {
+	tree := Tree{
+		Branch: TreeBranch{
+			TreeItem{
+				Key:   Comment{"oof"},
+				Value: nil,
+			},
+			TreeItem{
+				Key: "list",
+				Value: []interface{}{
+					"1",
+					Comment{"rab"},
+					"2",
+				},
+			},
+		},
+		Metadata: Metadata{
+			UnencryptedSuffix: DefaultUnencryptedSuffix,
+		},
+	}
+	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
+	assert.Equal(t, "foo", tree.Branch[0].Key.(Comment).Value)
+	assert.Equal(t, "bar", tree.Branch[1].Value.([]interface{})[1])
+}
+
+func TestDecryptUnencryptedComments(t *testing.T) {
+	tree := Tree{
+		Branch: TreeBranch{
+			TreeItem{
+				// We use `error` to simulate an error decrypting, the fake cipher will error in this case
+				Key:   Comment{"error"},
+				Value: nil,
+			},
+		},
+		Metadata: Metadata{},
+	}
+	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
+	assert.Equal(t, "error", tree.Branch[0].Key.(Comment).Value)
 }

@@ -1,2 +1,14 @@
 creation_rules:
+    - filename_regex: test_roundtrip_keygroups.yaml
+      key_groups:
+      - pgp:
+        - 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+      - pgp:
+        - 729D26A79482B5A20DEAD0A76945978B930DD7A2
+    - filename_regex: test_roundtrip_keygroups_missing_decryption_key.yaml
+      key_groups:
+      - pgp:
+        - 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+      - pgp:
+        - 620B9A4C96230B91E7473D20113D2B26EA0890C7
     - pgp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A

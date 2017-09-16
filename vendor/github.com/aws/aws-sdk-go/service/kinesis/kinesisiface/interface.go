@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon Kinesis.
@@ -137,6 +137,14 @@ type KinesisAPI interface {
 	SplitShard(*kinesis.SplitShardInput) (*kinesis.SplitShardOutput, error)
 	SplitShardWithContext(aws.Context, *kinesis.SplitShardInput, ...request.Option) (*kinesis.SplitShardOutput, error)
 	SplitShardRequest(*kinesis.SplitShardInput) (*request.Request, *kinesis.SplitShardOutput)
+
+	StartStreamEncryption(*kinesis.StartStreamEncryptionInput) (*kinesis.StartStreamEncryptionOutput, error)
+	StartStreamEncryptionWithContext(aws.Context, *kinesis.StartStreamEncryptionInput, ...request.Option) (*kinesis.StartStreamEncryptionOutput, error)
+	StartStreamEncryptionRequest(*kinesis.StartStreamEncryptionInput) (*request.Request, *kinesis.StartStreamEncryptionOutput)
+
+	StopStreamEncryption(*kinesis.StopStreamEncryptionInput) (*kinesis.StopStreamEncryptionOutput, error)
+	StopStreamEncryptionWithContext(aws.Context, *kinesis.StopStreamEncryptionInput, ...request.Option) (*kinesis.StopStreamEncryptionOutput, error)
+	StopStreamEncryptionRequest(*kinesis.StopStreamEncryptionInput) (*request.Request, *kinesis.StopStreamEncryptionOutput)
 
 	UpdateShardCount(*kinesis.UpdateShardCountInput) (*kinesis.UpdateShardCountOutput, error)
 	UpdateShardCountWithContext(aws.Context, *kinesis.UpdateShardCountInput, ...request.Option) (*kinesis.UpdateShardCountOutput, error)

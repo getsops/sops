@@ -1,12 +1,9 @@
 go-spew
 =======
 
-[![Build Status](https://img.shields.io/travis/davecgh/go-spew.svg)]
-(https://travis-ci.org/davecgh/go-spew) [![ISC License]
-(http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org) [![Coverage Status]
-(https://img.shields.io/coveralls/davecgh/go-spew.svg)]
-(https://coveralls.io/r/davecgh/go-spew?branch=master)
-
+[![Build Status](https://img.shields.io/travis/davecgh/go-spew.svg)](https://travis-ci.org/davecgh/go-spew)
+[![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
+[![Coverage Status](https://img.shields.io/coveralls/davecgh/go-spew.svg)](https://coveralls.io/r/davecgh/go-spew?branch=master)
 
 Go-spew implements a deep pretty printer for Go data structures to aid in
 debugging.  A comprehensive suite of tests with 100% test coverage is provided
@@ -21,8 +18,7 @@ post about it
 
 ## Documentation
 
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)]
-(http://godoc.org/github.com/davecgh/go-spew/spew)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/davecgh/go-spew/spew)
 
 Full `go doc` style documentation for the project can be viewed online without
 installing this package by using the excellent GoDoc site here:

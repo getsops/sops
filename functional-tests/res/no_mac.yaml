@@ -1,0 +1,20 @@
+myapp1: ENC[AES256_GCM,data:QsGJGjvQOpoVCIlrYTcOQEfQzriw,iv:ShmgdRNV6UrOJ22Rgr7habB74Nd/YFxU4lDh6jy6n+8=,tag:8GT6U8lzrI27DcFc1+icgQ==,type:str]
+sops:
+    pgp:
+    -   fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+        created_at: '2015-11-25T00:32:57Z'
+        enc: |
+            -----BEGIN PGP MESSAGE-----
+            Version: GnuPG v1
+
+            hIwDEEVDpnzXnMABBACBf7lGw8B0sLbfup1Ye51FNpY6iF/4SPTdjeV4OB3uDwIJ
+            FRa6z7VR+FrtWyyNYRNB2Wm5eegnEEWwui6hFw7tvlhkN8C5hWQ0B47oYMTstZDR
+            TR3Eu7y70u3YLoQKZgDnPb6hQplGIoYVd/EMpDgKmKnmz5oCiIkEI68T3aXo5tJc
+            AZhplIlk9eSMHIW9CmGkNp5HtZlQWzVSdGdcQcIUBG4F+Vf40max9u0Jkk1Se1do
+            BJ+D4Kl5dZXBj3njvo4YdZ+FGoYPfMlX1GCw0W4caUu6tD8RjuzJA+fYo2Q=
+            =Cnu4
+            -----END PGP MESSAGE-----
+    lastmodified: '2016-03-16T23:34:46Z'
+    version: 1.7
+    attention: This section contains key material that should only be modified with
+        extra care. See `sops -h`.

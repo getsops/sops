@@ -12,19 +12,18 @@ const opCompareFaces = "CompareFaces"
 
 // CompareFacesRequest generates a "aws/request.Request" representing the
 // client's request for the CompareFaces operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CompareFaces for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CompareFaces method directly
-// instead.
+// See CompareFaces for more information on using the CompareFaces
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CompareFacesRequest method.
 //    req, resp := client.CompareFacesRequest(params)
@@ -55,25 +54,33 @@ func (c *Rekognition) CompareFacesRequest(input *CompareFacesInput) (req *reques
 // target input image.
 //
 // If the source image contains multiple faces, the service detects the largest
-// face and uses it to compare with each face detected in the target image.
+// face and compares it with each face detected in the target image.
 //
 // In response, the operation returns an array of face matches ordered by similarity
-// score with the highest similarity scores first. For each face match, the
-// response provides a bounding box of the face and confidence value (indicating
-// the level of confidence that the bounding box contains a face). The response
-// also provides a similarity score, which indicates how closely the faces match.
+// score in descending order. For each face match, the response provides a bounding
+// box of the face, facial landmarks, pose details (pitch, role, and yaw), quality
+// (brightness and sharpness), and confidence value (indicating the level of
+// confidence that the bounding box contains a face). The response also provides
+// a similarity score, which indicates how closely the faces match.
 //
-// By default, only faces with the similarity score of greater than or equal
-// to 80% are returned in the response. You can change this value.
+// By default, only faces with a similarity score of greater than or equal to
+// 80% are returned in the response. You can change this value by specifying
+// the SimilarityThreshold parameter.
 //
-// In addition to the face matches, the response returns information about the
-// face in the source image, including the bounding box of the face and confidence
+// CompareFaces also returns an array of faces that don't match the source image.
+// For each face, it returns a bounding box, confidence value, landmarks, pose
+// details, and quality. The response also returns information about the face
+// in the source image, including the bounding box of the face and confidence
 // value.
 //
-// This is a stateless API operation. That is, the operation does not persist
-// any data.
+// If the image doesn't contain Exif metadata, CompareFaces returns orientation
+// information for the source and target images. Use these values to display
+// the images with the correct image orientation.
 //
-// For an example, see get-started-exercise-compare-faces
+// This is a stateless API operation. That is, data returned by this operation
+// doesn't persist.
+//
+// For an example, see get-started-exercise-compare-faces.
 //
 // This operation requires permissions to perform the rekognition:CompareFaces
 // action.
@@ -139,19 +146,18 @@ const opCreateCollection = "CreateCollection"
 
 // CreateCollectionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCollection operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateCollection for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateCollection method directly
-// instead.
+// See CreateCollection for more information on using the CreateCollection
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateCollectionRequest method.
 //    req, resp := client.CreateCollectionRequest(params)
@@ -185,6 +191,8 @@ func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req
 // users. A user can then index faces using the IndexFaces operation and persist
 // results in a specific collection. Then, a user can search the collection
 // for faces in the user-specific container.
+//
+// Collection names are case-sensitive.
 //
 // For an example, see example1.
 //
@@ -245,19 +253,18 @@ const opDeleteCollection = "DeleteCollection"
 
 // DeleteCollectionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCollection operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteCollection for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteCollection method directly
-// instead.
+// See DeleteCollection for more information on using the DeleteCollection
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteCollectionRequest method.
 //    req, resp := client.DeleteCollectionRequest(params)
@@ -344,19 +351,18 @@ const opDeleteFaces = "DeleteFaces"
 
 // DeleteFacesRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFaces operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteFaces for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteFaces method directly
-// instead.
+// See DeleteFaces for more information on using the DeleteFaces
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteFacesRequest method.
 //    req, resp := client.DeleteFacesRequest(params)
@@ -443,19 +449,18 @@ const opDetectFaces = "DetectFaces"
 
 // DetectFacesRequest generates a "aws/request.Request" representing the
 // client's request for the DetectFaces operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DetectFaces for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DetectFaces method directly
-// instead.
+// See DetectFaces for more information on using the DetectFaces
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DetectFacesRequest method.
 //    req, resp := client.DetectFacesRequest(params)
@@ -562,19 +567,18 @@ const opDetectLabels = "DetectLabels"
 
 // DetectLabelsRequest generates a "aws/request.Request" representing the
 // client's request for the DetectLabels operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DetectLabels for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DetectLabels method directly
-// instead.
+// See DetectLabels for more information on using the DetectLabels
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DetectLabelsRequest method.
 //    req, resp := client.DetectLabelsRequest(params)
@@ -709,19 +713,18 @@ const opDetectModerationLabels = "DetectModerationLabels"
 
 // DetectModerationLabelsRequest generates a "aws/request.Request" representing the
 // client's request for the DetectModerationLabels operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DetectModerationLabels for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DetectModerationLabels method directly
-// instead.
+// See DetectModerationLabels for more information on using the DetectModerationLabels
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DetectModerationLabelsRequest method.
 //    req, resp := client.DetectModerationLabelsRequest(params)
@@ -748,14 +751,14 @@ func (c *Rekognition) DetectModerationLabelsRequest(input *DetectModerationLabel
 
 // DetectModerationLabels API operation for Amazon Rekognition.
 //
-// Detects explicit or suggestive adult content in a specified .jpeg or .png
+// Detects explicit or suggestive adult content in a specified JPEG or PNG format
 // image. Use DetectModerationLabels to moderate images depending on your requirements.
 // For example, you might want to filter images that contain nudity, but not
 // images containing suggestive content.
 //
 // To filter images, use the labels returned by DetectModerationLabels to determine
 // which types of content are appropriate. For information about moderation
-// labels, see howitworks-moderateimage.
+// labels, see image-moderation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -814,23 +817,122 @@ func (c *Rekognition) DetectModerationLabelsWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opGetCelebrityInfo = "GetCelebrityInfo"
+
+// GetCelebrityInfoRequest generates a "aws/request.Request" representing the
+// client's request for the GetCelebrityInfo operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCelebrityInfo for more information on using the GetCelebrityInfo
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetCelebrityInfoRequest method.
+//    req, resp := client.GetCelebrityInfoRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *Rekognition) GetCelebrityInfoRequest(input *GetCelebrityInfoInput) (req *request.Request, output *GetCelebrityInfoOutput) {
+	op := &request.Operation{
+		Name:       opGetCelebrityInfo,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetCelebrityInfoInput{}
+	}
+
+	output = &GetCelebrityInfoOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCelebrityInfo API operation for Amazon Rekognition.
+//
+// Gets the name and additional information about a celebrity based on his or
+// her Rekognition ID. The additional information is returned as an array of
+// URLs. If there is no additional information about the celebrity, this list
+// is empty. For more information, see celebrity-recognition.
+//
+// This operation requires permissions to perform the rekognition:GetCelebrityInfo
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation GetCelebrityInfo for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   Input parameter violated a constraint. Validate your parameter before calling
+//   the API operation again.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You are not authorized to perform the action.
+//
+//   * ErrCodeInternalServerError "InternalServerError"
+//   Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   Amazon Rekognition is temporarily unable to process the request. Try your
+//   call again.
+//
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
+//   The number of requests exceeded your throughput limit. If you want to increase
+//   this limit, contact Amazon Rekognition.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   Collection specified in the request is not found.
+//
+func (c *Rekognition) GetCelebrityInfo(input *GetCelebrityInfoInput) (*GetCelebrityInfoOutput, error) {
+	req, out := c.GetCelebrityInfoRequest(input)
+	return out, req.Send()
+}
+
+// GetCelebrityInfoWithContext is the same as GetCelebrityInfo with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCelebrityInfo for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) GetCelebrityInfoWithContext(ctx aws.Context, input *GetCelebrityInfoInput, opts ...request.Option) (*GetCelebrityInfoOutput, error) {
+	req, out := c.GetCelebrityInfoRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opIndexFaces = "IndexFaces"
 
 // IndexFacesRequest generates a "aws/request.Request" representing the
 // client's request for the IndexFaces operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See IndexFaces for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the IndexFaces method directly
-// instead.
+// See IndexFaces for more information on using the IndexFaces
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the IndexFacesRequest method.
 //    req, resp := client.IndexFacesRequest(params)
@@ -875,12 +977,12 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 // faces. This includes, the bounding box of the detected face, confidence value
 // (indicating the bounding box contains a face), a face ID assigned by the
 // service for each face that is detected and stored, and an image ID assigned
-// by the service for the input image If you request all facial attributes (using
-// the detectionAttributes parameter, Amazon Rekognition returns detailed facial
-// attributes such as facial landmarks (for example, location of eye and mount)
-// and other facial attributes such gender. If you provide the same image, specify
-// the same collection, and use the same external ID in the IndexFaces operation,
-// Amazon Rekognition doesn't save duplicate face metadata.
+// by the service for the input image. If you request all facial attributes
+// (using the detectionAttributes parameter, Amazon Rekognition returns detailed
+// facial attributes such as facial landmarks (for example, location of eye
+// and mount) and other facial attributes such gender. If you provide the same
+// image, specify the same collection, and use the same external ID in the IndexFaces
+// operation, Amazon Rekognition doesn't save duplicate face metadata.
 //
 // For an example, see example2.
 //
@@ -951,19 +1053,18 @@ const opListCollections = "ListCollections"
 
 // ListCollectionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListCollections operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListCollections for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListCollections method directly
-// instead.
+// See ListCollections for more information on using the ListCollections
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListCollectionsRequest method.
 //    req, resp := client.ListCollectionsRequest(params)
@@ -1112,19 +1213,18 @@ const opListFaces = "ListFaces"
 
 // ListFacesRequest generates a "aws/request.Request" representing the
 // client's request for the ListFaces operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListFaces for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListFaces method directly
-// instead.
+// See ListFaces for more information on using the ListFaces
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListFacesRequest method.
 //    req, resp := client.ListFacesRequest(params)
@@ -1267,23 +1367,151 @@ func (c *Rekognition) ListFacesPagesWithContext(ctx aws.Context, input *ListFace
 	return p.Err()
 }
 
+const opRecognizeCelebrities = "RecognizeCelebrities"
+
+// RecognizeCelebritiesRequest generates a "aws/request.Request" representing the
+// client's request for the RecognizeCelebrities operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RecognizeCelebrities for more information on using the RecognizeCelebrities
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RecognizeCelebritiesRequest method.
+//    req, resp := client.RecognizeCelebritiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *Rekognition) RecognizeCelebritiesRequest(input *RecognizeCelebritiesInput) (req *request.Request, output *RecognizeCelebritiesOutput) {
+	op := &request.Operation{
+		Name:       opRecognizeCelebrities,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RecognizeCelebritiesInput{}
+	}
+
+	output = &RecognizeCelebritiesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RecognizeCelebrities API operation for Amazon Rekognition.
+//
+// Returns an array of celebrities recognized in the input image. The image
+// is passed either as base64-encoded image bytes or as a reference to an image
+// in an Amazon S3 bucket. The image must be either a PNG or JPEG formatted
+// file. For more information, see celebrity-recognition.
+//
+// RecognizeCelebrities returns the 15 largest faces in the image. It lists
+// recognized celebrities in the CelebrityFaces list and unrecognized faces
+// in the UnrecognizedFaces list. The operation doesn't return celebrities whose
+// face sizes are smaller than the largest 15 faces in the image.
+//
+// For each celebrity recognized, the API returns a Celebrity object. The Celebrity
+// object contains the celebrity name, ID, URL links to additional information,
+// match confidence, and a ComparedFace object that you can use to locate the
+// celebrity's face on the image.
+//
+// Rekognition does not retain information about which images a celebrity has
+// been recognized in. Your application must store this information and use
+// the Celebrity ID property as a unique identifier for the celebrity. If you
+// don't store the celebrity name or additional information URLs returned by
+// RecognizeCelebrities, you will need the ID to identify the celebrity in a
+// call to the operation.
+//
+// For an example, see recognize-celebrities-tutorial.
+//
+// This operation requires permissions to perform the rekognition:RecognizeCelebrities
+// operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation RecognizeCelebrities for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidS3ObjectException "InvalidS3ObjectException"
+//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   Input parameter violated a constraint. Validate your parameter before calling
+//   the API operation again.
+//
+//   * ErrCodeInvalidImageFormatException "InvalidImageFormatException"
+//   The provided image format is not supported.
+//
+//   * ErrCodeImageTooLargeException "ImageTooLargeException"
+//   The input image size exceeds the allowed limit. For more information, see
+//   limits.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You are not authorized to perform the action.
+//
+//   * ErrCodeInternalServerError "InternalServerError"
+//   Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   Amazon Rekognition is temporarily unable to process the request. Try your
+//   call again.
+//
+//   * ErrCodeProvisionedThroughputExceededException "ProvisionedThroughputExceededException"
+//   The number of requests exceeded your throughput limit. If you want to increase
+//   this limit, contact Amazon Rekognition.
+//
+//   * ErrCodeInvalidImageFormatException "InvalidImageFormatException"
+//   The provided image format is not supported.
+//
+func (c *Rekognition) RecognizeCelebrities(input *RecognizeCelebritiesInput) (*RecognizeCelebritiesOutput, error) {
+	req, out := c.RecognizeCelebritiesRequest(input)
+	return out, req.Send()
+}
+
+// RecognizeCelebritiesWithContext is the same as RecognizeCelebrities with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RecognizeCelebrities for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) RecognizeCelebritiesWithContext(ctx aws.Context, input *RecognizeCelebritiesInput, opts ...request.Option) (*RecognizeCelebritiesOutput, error) {
+	req, out := c.RecognizeCelebritiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opSearchFaces = "SearchFaces"
 
 // SearchFacesRequest generates a "aws/request.Request" representing the
 // client's request for the SearchFaces operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See SearchFaces for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the SearchFaces method directly
-// instead.
+// See SearchFaces for more information on using the SearchFaces
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the SearchFacesRequest method.
 //    req, resp := client.SearchFacesRequest(params)
@@ -1383,19 +1611,18 @@ const opSearchFacesByImage = "SearchFacesByImage"
 
 // SearchFacesByImageRequest generates a "aws/request.Request" representing the
 // client's request for the SearchFacesByImage operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See SearchFacesByImage for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the SearchFacesByImage method directly
-// instead.
+// See SearchFacesByImage for more information on using the SearchFacesByImage
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the SearchFacesByImageRequest method.
 //    req, resp := client.SearchFacesByImageRequest(params)
@@ -1648,18 +1875,82 @@ func (s *BoundingBox) SetWidth(v float64) *BoundingBox {
 	return s
 }
 
+// Provides information about a celebrity recognized by the operation.
+type Celebrity struct {
+	_ struct{} `type:"structure"`
+
+	// Provides information about the celebrity's face, such as its location on
+	// the image.
+	Face *ComparedFace `type:"structure"`
+
+	// A unique identifier for the celebrity.
+	Id *string `type:"string"`
+
+	// The confidence, in percentage, that Rekognition has that the recognized face
+	// is the celebrity.
+	MatchConfidence *float64 `type:"float"`
+
+	// The name of the celebrity.
+	Name *string `type:"string"`
+
+	// An array of URLs pointing to additional information about the celebrity.
+	// If there is no additional information about the celebrity, this list is empty.
+	Urls []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s Celebrity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Celebrity) GoString() string {
+	return s.String()
+}
+
+// SetFace sets the Face field's value.
+func (s *Celebrity) SetFace(v *ComparedFace) *Celebrity {
+	s.Face = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Celebrity) SetId(v string) *Celebrity {
+	s.Id = &v
+	return s
+}
+
+// SetMatchConfidence sets the MatchConfidence field's value.
+func (s *Celebrity) SetMatchConfidence(v float64) *Celebrity {
+	s.MatchConfidence = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Celebrity) SetName(v string) *Celebrity {
+	s.Name = &v
+	return s
+}
+
+// SetUrls sets the Urls field's value.
+func (s *Celebrity) SetUrls(v []*string) *Celebrity {
+	s.Urls = v
+	return s
+}
+
 type CompareFacesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The minimum level of confidence in the match you want included in the result.
+	// The minimum level of confidence in the face matches that a match must meet
+	// to be included in the FaceMatches array.
 	SimilarityThreshold *float64 `type:"float"`
 
-	// Source image either as bytes or an S3 object
+	// The source image, either as bytes or as an S3 object.
 	//
 	// SourceImage is a required field
 	SourceImage *Image `type:"structure" required:"true"`
 
-	// Target image either as bytes or an S3 object
+	// The target image, either as bytes or as an S3 object.
 	//
 	// TargetImage is a required field
 	TargetImage *Image `type:"structure" required:"true"`
@@ -1719,9 +2010,10 @@ func (s *CompareFacesInput) SetTargetImage(v *Image) *CompareFacesInput {
 	return s
 }
 
-// For the provided the bounding box, confidence level that the bounding box
-// actually contains a face, and the similarity between the face in the bounding
-// box and the face in the source image.
+// Provides information about a face in a target image that matches the source
+// image face analysed by CompareFaces. The Face property contains the bounding
+// box of the face in the target image. The Similarity property is the confidence
+// that the source image face matches the face in the bounding box.
 type CompareFacesMatch struct {
 	_ struct{} `type:"structure"`
 
@@ -1758,13 +2050,45 @@ func (s *CompareFacesMatch) SetSimilarity(v float64) *CompareFacesMatch {
 type CompareFacesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Provides an array of CompareFacesMatch objects. Each object provides the
-	// bounding box, confidence that the bounding box contains a face, and the similarity
-	// between the face in the bounding box and the face in the source image.
+	// An array of faces in the target image that match the source image face. Each
+	// CompareFacesMatch object provides the bounding box, the confidence level
+	// that the bounding box contains a face, and the similarity score for the face
+	// in the bounding box and the face in the source image.
 	FaceMatches []*CompareFacesMatch `type:"list"`
 
-	// The face from the source image that was used for comparison.
+	// The face in the source image that was used for comparison.
 	SourceImageFace *ComparedSourceImageFace `type:"structure"`
+
+	// The orientation of the source image (counterclockwise direction). If your
+	// application displays the source image, you can use this value to correct
+	// image orientation. The bounding box coordinates returned in SourceImageFace
+	// represent the location of the face before the image orientation is corrected.
+	//
+	// If the source image is in .jpeg format, it might contain exchangeable image
+	// (Exif) metadata that includes the image's orientation. If the Exif metadata
+	// for the source image populates the orientation field, the value of OrientationCorrection
+	// is null and the SourceImageFace bounding box coordinates represent the location
+	// of the face after Exif metadata is used to correct the orientation. Images
+	// in .png format don't contain Exif metadata.
+	SourceImageOrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
+
+	// The orientation of the target image (in counterclockwise direction). If your
+	// application displays the target image, you can use this value to correct
+	// the orientation of the image. The bounding box coordinates returned in FaceMatches
+	// and UnmatchedFaces represent face locations before the image orientation
+	// is corrected.
+	//
+	// If the target image is in .jpg format, it might contain Exif metadata that
+	// includes the orientation of the image. If the Exif metadata for the target
+	// image populates the orientation field, the value of OrientationCorrection
+	// is null and the bounding box coordinates in FaceMatches and UnmatchedFaces
+	// represent the location of the face after Exif metadata is used to correct
+	// the orientation. Images in .png format don't contain Exif metadata.
+	TargetImageOrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
+
+	// An array of faces in the target image that did not match the source image
+	// face.
+	UnmatchedFaces []*ComparedFace `type:"list"`
 }
 
 // String returns the string representation
@@ -1789,35 +2113,43 @@ func (s *CompareFacesOutput) SetSourceImageFace(v *ComparedSourceImageFace) *Com
 	return s
 }
 
-// Provides face metadata (bounding box and confidence that the bounding box
-// actually contains a face).
+// SetSourceImageOrientationCorrection sets the SourceImageOrientationCorrection field's value.
+func (s *CompareFacesOutput) SetSourceImageOrientationCorrection(v string) *CompareFacesOutput {
+	s.SourceImageOrientationCorrection = &v
+	return s
+}
+
+// SetTargetImageOrientationCorrection sets the TargetImageOrientationCorrection field's value.
+func (s *CompareFacesOutput) SetTargetImageOrientationCorrection(v string) *CompareFacesOutput {
+	s.TargetImageOrientationCorrection = &v
+	return s
+}
+
+// SetUnmatchedFaces sets the UnmatchedFaces field's value.
+func (s *CompareFacesOutput) SetUnmatchedFaces(v []*ComparedFace) *CompareFacesOutput {
+	s.UnmatchedFaces = v
+	return s
+}
+
+// Provides face metadata for target image faces that are analysed by CompareFaces
+// and RecognizeCelebrities.
 type ComparedFace struct {
 	_ struct{} `type:"structure"`
 
-	// Identifies the bounding box around the object or face. The left (x-coordinate)
-	// and top (y-coordinate) are coordinates representing the top and left sides
-	// of the bounding box. Note that the upper-left corner of the image is the
-	// origin (0,0).
-	//
-	// The top and left values returned are ratios of the overall image size. For
-	// example, if the input image is 700x200 pixels, and the top-left coordinate
-	// of the bounding box is 350x50 pixels, the API returns a left value of 0.5
-	// (350/700) and a top value of 0.25 (50/200).
-	//
-	// The width and height values represent the dimensions of the bounding box
-	// as a ratio of the overall image dimension. For example, if the input image
-	// is 700x200 pixels, and the bounding box width is 70 pixels, the width returned
-	// is 0.1.
-	//
-	// The bounding box coordinates can have negative values. For example, if Amazon
-	// Rekognition is able to detect a face that is at the image edge and is only
-	// partially visible, the service can return coordinates that are outside the
-	// image bounds and, depending on the image edge, you might get negative values
-	// or values greater than 1 for the left or top values.
+	// Bounding box of the face.
 	BoundingBox *BoundingBox `type:"structure"`
 
 	// Level of confidence that what the bounding box contains is a face.
 	Confidence *float64 `type:"float"`
+
+	// An array of facial landmarks.
+	Landmarks []*Landmark `type:"list"`
+
+	// Indicates the pose of the face as determined by its pitch, roll, and yaw.
+	Pose *Pose `type:"structure"`
+
+	// Identifies face image brightness and sharpness.
+	Quality *ImageQuality `type:"structure"`
 }
 
 // String returns the string representation
@@ -1842,6 +2174,24 @@ func (s *ComparedFace) SetConfidence(v float64) *ComparedFace {
 	return s
 }
 
+// SetLandmarks sets the Landmarks field's value.
+func (s *ComparedFace) SetLandmarks(v []*Landmark) *ComparedFace {
+	s.Landmarks = v
+	return s
+}
+
+// SetPose sets the Pose field's value.
+func (s *ComparedFace) SetPose(v *Pose) *ComparedFace {
+	s.Pose = v
+	return s
+}
+
+// SetQuality sets the Quality field's value.
+func (s *ComparedFace) SetQuality(v *ImageQuality) *ComparedFace {
+	s.Quality = v
+	return s
+}
+
 // Type that describes the face Amazon Rekognition chose to compare with the
 // faces in the target. This contains a bounding box for the selected face and
 // confidence level that the bounding box contains a face. Note that Amazon
@@ -1849,26 +2199,7 @@ func (s *ComparedFace) SetConfidence(v float64) *ComparedFace {
 type ComparedSourceImageFace struct {
 	_ struct{} `type:"structure"`
 
-	// Identifies the bounding box around the object or face. The left (x-coordinate)
-	// and top (y-coordinate) are coordinates representing the top and left sides
-	// of the bounding box. Note that the upper-left corner of the image is the
-	// origin (0,0).
-	//
-	// The top and left values returned are ratios of the overall image size. For
-	// example, if the input image is 700x200 pixels, and the top-left coordinate
-	// of the bounding box is 350x50 pixels, the API returns a left value of 0.5
-	// (350/700) and a top value of 0.25 (50/200).
-	//
-	// The width and height values represent the dimensions of the bounding box
-	// as a ratio of the overall image dimension. For example, if the input image
-	// is 700x200 pixels, and the bounding box width is 70 pixels, the width returned
-	// is 0.1.
-	//
-	// The bounding box coordinates can have negative values. For example, if Amazon
-	// Rekognition is able to detect a face that is at the image edge and is only
-	// partially visible, the service can return coordinates that are outside the
-	// image bounds and, depending on the image edge, you might get negative values
-	// or values greater than 1 for the left or top values.
+	// Bounding box of the face.
 	BoundingBox *BoundingBox `type:"structure"`
 
 	// Confidence level that the selected bounding box contains a face.
@@ -2119,7 +2450,7 @@ func (s *DeleteFacesOutput) SetDeletedFaces(v []*string) *DeleteFacesOutput {
 type DetectFacesInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of facial attributes you want to be returned. This can be the default
+	// An array of facial attributes you want to be returned. This can be the default
 	// list of attributes or all attributes. If you don't specify a value for Attributes
 	// or if you specify ["DEFAULT"], the API returns the following subset of facial
 	// attributes: BoundingBox, Confidence, Pose, Quality and Landmarks. If you
@@ -2183,18 +2514,17 @@ type DetectFacesOutput struct {
 	// Details of each face found in the image.
 	FaceDetails []*FaceDetail `type:"list"`
 
-	// The algorithm detects the image orientation. If it detects that the image
-	// was rotated, it returns the degrees of rotation. If your application is displaying
-	// the image, you can use this value to adjust the orientation.
+	// The orientation of the input image (counter-clockwise direction). If your
+	// application displays the image, you can use this value to correct image orientation.
+	// The bounding box coordinates returned in FaceDetails represent face locations
+	// before the image orientation is corrected.
 	//
-	// For example, if the service detects that the input image was rotated by 90
-	// degrees, it corrects orientation, performs face detection, and then returns
-	// the faces. That is, the bounding box coordinates in the response are based
-	// on the corrected orientation.
-	//
-	// If the source image Exif metadata populates the orientation field, Amazon
-	// Rekognition does not perform orientation correction and the value of OrientationCorrection
-	// will be nil.
+	// If the input image is in .jpeg format, it might contain exchangeable image
+	// (Exif) metadata that includes the image's orientation. If so, and the Exif
+	// metadata for the input image populates the orientation field, the value of
+	// OrientationCorrection is null and the FaceDetails bounding box coordinates
+	// represent face locations after Exif metadata is used to correct the image
+	// orientation. Images in .png format don't contain Exif metadata.
 	OrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
 }
 
@@ -2292,15 +2622,14 @@ type DetectLabelsOutput struct {
 	// An array of labels for the real-world objects detected.
 	Labels []*Label `type:"list"`
 
-	// Amazon Rekognition returns the orientation of the input image that was detected
-	// (clockwise direction). If your application displays the image, you can use
-	// this value to correct the orientation. If Amazon Rekognition detects that
-	// the input image was rotated (for example, by 90 degrees), it first corrects
-	// the orientation before detecting the labels.
+	// The orientation of the input image (counter-clockwise direction). If your
+	// application displays the image, you can use this value to correct the orientation.
+	// If Amazon Rekognition detects that the input image was rotated (for example,
+	// by 90 degrees), it first corrects the orientation before detecting the labels.
 	//
-	// If the source image Exif metadata populates the orientation field, Amazon
+	// If the input image Exif metadata populates the orientation field, Amazon
 	// Rekognition does not perform orientation correction and the value of OrientationCorrection
-	// will be nil.
+	// will be null.
 	OrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
 }
 
@@ -2329,22 +2658,7 @@ func (s *DetectLabelsOutput) SetOrientationCorrection(v string) *DetectLabelsOut
 type DetectModerationLabelsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Provides the source image either as bytes or an S3 object.
-	//
-	// The region for the S3 bucket containing the S3 object must match the region
-	// you use for Amazon Rekognition operations.
-	//
-	// You may need to Base64-encode the image bytes depending on the language you
-	// are using and whether or not you are using the AWS SDK. For more information,
-	// see example4.
-	//
-	// If you use the Amazon CLI to call Amazon Rekognition operations, passing
-	// image bytes using the Bytes property is not supported. You must first upload
-	// the image to an Amazon S3 bucket and then call the operation using the S3Object
-	// property.
-	//
-	// For Amazon Rekognition to process an S3 object, the user must have permission
-	// to access the S3 object. For more information, see manage-access-resource-policies.
+	// The input image as bytes or an S3 object.
 	//
 	// Image is a required field
 	Image *Image `type:"structure" required:"true"`
@@ -2401,9 +2715,9 @@ func (s *DetectModerationLabelsInput) SetMinConfidence(v float64) *DetectModerat
 type DetectModerationLabelsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of labels for explicit or suggestive adult content found in the image.
-	// The list includes the top-level label and each child label detected in the
-	// image. This is useful for filtering specific categories of content.
+	// An array of labels for explicit or suggestive adult content found in the
+	// image. The list includes the top-level label and each child label detected
+	// in the image. This is useful for filtering specific categories of content.
 	ModerationLabels []*ModerationLabel `type:"list"`
 }
 
@@ -2526,30 +2840,11 @@ func (s *Eyeglasses) SetValue(v bool) *Eyeglasses {
 }
 
 // Describes the face properties such as the bounding box, face ID, image ID
-// of the source image, and external image ID that you assigned.
+// of the input image, and external image ID that you assigned.
 type Face struct {
 	_ struct{} `type:"structure"`
 
-	// Identifies the bounding box around the object or face. The left (x-coordinate)
-	// and top (y-coordinate) are coordinates representing the top and left sides
-	// of the bounding box. Note that the upper-left corner of the image is the
-	// origin (0,0).
-	//
-	// The top and left values returned are ratios of the overall image size. For
-	// example, if the input image is 700x200 pixels, and the top-left coordinate
-	// of the bounding box is 350x50 pixels, the API returns a left value of 0.5
-	// (350/700) and a top value of 0.25 (50/200).
-	//
-	// The width and height values represent the dimensions of the bounding box
-	// as a ratio of the overall image dimension. For example, if the input image
-	// is 700x200 pixels, and the bounding box width is 70 pixels, the width returned
-	// is 0.1.
-	//
-	// The bounding box coordinates can have negative values. For example, if Amazon
-	// Rekognition is able to detect a face that is at the image edge and is only
-	// partially visible, the service can return coordinates that are outside the
-	// image bounds and, depending on the image edge, you might get negative values
-	// or values greater than 1 for the left or top values.
+	// Bounding box of the face.
 	BoundingBox *BoundingBox `type:"structure"`
 
 	// Confidence level that the bounding box contains a face (and not a different
@@ -2562,7 +2857,7 @@ type Face struct {
 	// Unique identifier that Amazon Rekognition assigns to the face.
 	FaceId *string `type:"string"`
 
-	// Unique identifier that Amazon Rekognition assigns to the source image.
+	// Unique identifier that Amazon Rekognition assigns to the input image.
 	ImageId *string `type:"string"`
 }
 
@@ -2640,7 +2935,7 @@ type FaceDetail struct {
 	// Gender of the face and the confidence level in the determination.
 	Gender *Gender `type:"structure"`
 
-	// Indicates the location of the landmark on the face.
+	// Indicates the location of landmarks on the face.
 	Landmarks []*Landmark `type:"list"`
 
 	// Indicates whether or not the mouth on the face is open, and the confidence
@@ -2651,7 +2946,7 @@ type FaceDetail struct {
 	// in the determination.
 	Mustache *Mustache `type:"structure"`
 
-	// Indicates the pose of the face as determined by pitch, roll, and the yaw.
+	// Indicates the pose of the face as determined by its pitch, roll, and yaw.
 	Pose *Pose `type:"structure"`
 
 	// Identifies image brightness and sharpness.
@@ -2807,7 +3102,7 @@ type FaceRecord struct {
 	_ struct{} `type:"structure"`
 
 	// Describes the face properties such as the bounding box, face ID, image ID
-	// of the source image, and external image ID that you assigned.
+	// of the input image, and external image ID that you assigned.
 	Face *Face `type:"structure"`
 
 	// Structure containing attributes of the face that the algorithm detected.
@@ -2869,14 +3164,92 @@ func (s *Gender) SetValue(v string) *Gender {
 	return s
 }
 
-// Provides the source image either as bytes or an S3 object.
+type GetCelebrityInfoInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID for the celebrity. You get the celebrity ID from a call to the operation,
+	// which recognizes celebrities in an image.
+	//
+	// Id is a required field
+	Id *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetCelebrityInfoInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCelebrityInfoInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCelebrityInfoInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCelebrityInfoInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *GetCelebrityInfoInput) SetId(v string) *GetCelebrityInfoInput {
+	s.Id = &v
+	return s
+}
+
+type GetCelebrityInfoOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the celebrity.
+	Name *string `type:"string"`
+
+	// An array of URLs pointing to additional celebrity information.
+	Urls []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s GetCelebrityInfoOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCelebrityInfoOutput) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *GetCelebrityInfoOutput) SetName(v string) *GetCelebrityInfoOutput {
+	s.Name = &v
+	return s
+}
+
+// SetUrls sets the Urls field's value.
+func (s *GetCelebrityInfoOutput) SetUrls(v []*string) *GetCelebrityInfoOutput {
+	s.Urls = v
+	return s
+}
+
+// Provides the input image either as bytes or an S3 object.
+//
+// You pass image bytes to a Rekognition API operation by using the Bytes property.
+// For example, you would use the Bytes property to pass an image loaded from
+// a local file system. Image bytes passed by using the Bytes property must
+// be base64-encoded. Your code may not need to encode image bytes if you are
+// using an AWS SDK to call Rekognition API operations. For more information,
+// see example4.
+//
+// You pass images stored in an S3 bucket to a Rekognition API operation by
+// using the S3Object property. Images stored in an S3 bucket do not need to
+// be base64-encoded.
 //
 // The region for the S3 bucket containing the S3 object must match the region
 // you use for Amazon Rekognition operations.
-//
-// You may need to Base64-encode the image bytes depending on the language you
-// are using and whether or not you are using the AWS SDK. For more information,
-// see example4.
 //
 // If you use the Amazon CLI to call Amazon Rekognition operations, passing
 // image bytes using the Bytes property is not supported. You must first upload
@@ -2981,7 +3354,7 @@ type IndexFacesInput struct {
 	// CollectionId is a required field
 	CollectionId *string `min:"1" type:"string" required:"true"`
 
-	// A list of facial attributes that you want to be returned. This can be the
+	// An array of facial attributes that you want to be returned. This can be the
 	// default list of attributes or all attributes. If you don't specify a value
 	// for Attributes or if you specify ["DEFAULT"], the API returns the following
 	// subset of facial attributes: BoundingBox, Confidence, Pose, Quality and Landmarks.
@@ -2995,22 +3368,7 @@ type IndexFacesInput struct {
 	// ID you want to assign to all the faces detected in the image.
 	ExternalImageId *string `min:"1" type:"string"`
 
-	// Provides the source image either as bytes or an S3 object.
-	//
-	// The region for the S3 bucket containing the S3 object must match the region
-	// you use for Amazon Rekognition operations.
-	//
-	// You may need to Base64-encode the image bytes depending on the language you
-	// are using and whether or not you are using the AWS SDK. For more information,
-	// see example4.
-	//
-	// If you use the Amazon CLI to call Amazon Rekognition operations, passing
-	// image bytes using the Bytes property is not supported. You must first upload
-	// the image to an Amazon S3 bucket and then call the operation using the S3Object
-	// property.
-	//
-	// For Amazon Rekognition to process an S3 object, the user must have permission
-	// to access the S3 object. For more information, see manage-access-resource-policies.
+	// The input image as bytes or an S3 object.
 	//
 	// Image is a required field
 	Image *Image `type:"structure" required:"true"`
@@ -3084,14 +3442,16 @@ type IndexFacesOutput struct {
 	// see howitworks-index-faces.
 	FaceRecords []*FaceRecord `type:"list"`
 
-	// The algorithm detects the image orientation. If it detects that the image
-	// was rotated, it returns the degree of rotation. You can use this value to
-	// correct the orientation and also appropriately analyze the bounding box coordinates
-	// that are returned.
+	// The orientation of the input image (counterclockwise direction). If your
+	// application displays the image, you can use this value to correct image orientation.
+	// The bounding box coordinates returned in FaceRecords represent face locations
+	// before the image orientation is corrected.
 	//
-	// If the source image Exif metadata populates the orientation field, Amazon
-	// Rekognition does not perform orientation correction and the value of OrientationCorrection
-	// will be nil.
+	// If the input image is in jpeg format, it might contain exchangeable image
+	// (Exif) metadata. If so, and the Exif metadata populates the orientation field,
+	// the value of OrientationCorrection is null and the bounding box coordinates
+	// in FaceRecords represent face locations after Exif metadata is used to correct
+	// the image orientation. Images in .png format don't contain Exif metadata.
 	OrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
 }
 
@@ -3158,12 +3518,12 @@ type Landmark struct {
 	// Type of the landmark.
 	Type *string `type:"string" enum:"LandmarkType"`
 
-	// x-coordinate from the top left of the landmark expressed as the ration of
+	// x-coordinate from the top left of the landmark expressed as the ratio of
 	// the width of the image. For example, if the images is 700x200 and the x-coordinate
 	// of the landmark is at 350 pixels, this value is 0.5.
 	X *float64 `type:"float"`
 
-	// y-coordinate from the top left of the landmark expressed as the ration of
+	// y-coordinate from the top left of the landmark expressed as the ratio of
 	// the height of the image. For example, if the images is 700x200 and the y-coordinate
 	// of the landmark is at 100 pixels, this value is 0.5.
 	Y *float64 `type:"float"`
@@ -3358,7 +3718,7 @@ func (s *ListFacesOutput) SetNextToken(v string) *ListFacesOutput {
 
 // Provides information about a single type of moderated content found in an
 // image. Each type of moderated content has a label within a hierarchical taxonomy.
-// For more information, see howitworks-moderateimage.
+// For more information, see image-moderation.
 type ModerationLabel struct {
 	_ struct{} `type:"structure"`
 
@@ -3474,7 +3834,7 @@ func (s *Mustache) SetValue(v bool) *Mustache {
 	return s
 }
 
-// Indicates the pose of the face as determined by pitch, roll, and the yaw.
+// Indicates the pose of the face as determined by its pitch, roll, and yaw.
 type Pose struct {
 	_ struct{} `type:"structure"`
 
@@ -3513,6 +3873,102 @@ func (s *Pose) SetRoll(v float64) *Pose {
 // SetYaw sets the Yaw field's value.
 func (s *Pose) SetYaw(v float64) *Pose {
 	s.Yaw = &v
+	return s
+}
+
+type RecognizeCelebritiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The input image to use for celebrity recognition.
+	//
+	// Image is a required field
+	Image *Image `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s RecognizeCelebritiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RecognizeCelebritiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RecognizeCelebritiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RecognizeCelebritiesInput"}
+	if s.Image == nil {
+		invalidParams.Add(request.NewErrParamRequired("Image"))
+	}
+	if s.Image != nil {
+		if err := s.Image.Validate(); err != nil {
+			invalidParams.AddNested("Image", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetImage sets the Image field's value.
+func (s *RecognizeCelebritiesInput) SetImage(v *Image) *RecognizeCelebritiesInput {
+	s.Image = v
+	return s
+}
+
+type RecognizeCelebritiesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details about each celebrity found in the image. Amazon Rekognition can detect
+	// a maximum of 15 celebrities in an image.
+	CelebrityFaces []*Celebrity `type:"list"`
+
+	// The orientation of the input image (counterclockwise direction). If your
+	// application displays the image, you can use this value to correct the orientation.
+	// The bounding box coordinates returned in CelebrityFaces and UnrecognizedFaces
+	// represent face locations before the image orientation is corrected.
+	//
+	// If the input image is in .jpeg format, it might contain exchangeable image
+	// (Exif) metadata that includes the image's orientation. If so, and the Exif
+	// metadata for the input image populates the orientation field, the value of
+	// OrientationCorrection is null and the CelebrityFaces and UnrecognizedFaces
+	// bounding box coordinates represent face locations after Exif metadata is
+	// used to correct the image orientation. Images in .png format don't contain
+	// Exif metadata.
+	OrientationCorrection *string `type:"string" enum:"OrientationCorrection"`
+
+	// Details about each unrecognized face in the image.
+	UnrecognizedFaces []*ComparedFace `type:"list"`
+}
+
+// String returns the string representation
+func (s RecognizeCelebritiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RecognizeCelebritiesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCelebrityFaces sets the CelebrityFaces field's value.
+func (s *RecognizeCelebritiesOutput) SetCelebrityFaces(v []*Celebrity) *RecognizeCelebritiesOutput {
+	s.CelebrityFaces = v
+	return s
+}
+
+// SetOrientationCorrection sets the OrientationCorrection field's value.
+func (s *RecognizeCelebritiesOutput) SetOrientationCorrection(v string) *RecognizeCelebritiesOutput {
+	s.OrientationCorrection = &v
+	return s
+}
+
+// SetUnrecognizedFaces sets the UnrecognizedFaces field's value.
+func (s *RecognizeCelebritiesOutput) SetUnrecognizedFaces(v []*ComparedFace) *RecognizeCelebritiesOutput {
+	s.UnrecognizedFaces = v
 	return s
 }
 
@@ -3596,22 +4052,7 @@ type SearchFacesByImageInput struct {
 	// than 70%.
 	FaceMatchThreshold *float64 `type:"float"`
 
-	// Provides the source image either as bytes or an S3 object.
-	//
-	// The region for the S3 bucket containing the S3 object must match the region
-	// you use for Amazon Rekognition operations.
-	//
-	// You may need to Base64-encode the image bytes depending on the language you
-	// are using and whether or not you are using the AWS SDK. For more information,
-	// see example4.
-	//
-	// If you use the Amazon CLI to call Amazon Rekognition operations, passing
-	// image bytes using the Bytes property is not supported. You must first upload
-	// the image to an Amazon S3 bucket and then call the operation using the S3Object
-	// property.
-	//
-	// For Amazon Rekognition to process an S3 object, the user must have permission
-	// to access the S3 object. For more information, see manage-access-resource-policies.
+	// The input image as bytes or an S3 object.
 	//
 	// Image is a required field
 	Image *Image `type:"structure" required:"true"`
@@ -3941,87 +4382,87 @@ const (
 
 const (
 	// GenderTypeMale is a GenderType enum value
-	GenderTypeMale = "MALE"
+	GenderTypeMale = "Male"
 
 	// GenderTypeFemale is a GenderType enum value
-	GenderTypeFemale = "FEMALE"
+	GenderTypeFemale = "Female"
 )
 
 const (
 	// LandmarkTypeEyeLeft is a LandmarkType enum value
-	LandmarkTypeEyeLeft = "EYE_LEFT"
+	LandmarkTypeEyeLeft = "eyeLeft"
 
 	// LandmarkTypeEyeRight is a LandmarkType enum value
-	LandmarkTypeEyeRight = "EYE_RIGHT"
+	LandmarkTypeEyeRight = "eyeRight"
 
 	// LandmarkTypeNose is a LandmarkType enum value
-	LandmarkTypeNose = "NOSE"
+	LandmarkTypeNose = "nose"
 
 	// LandmarkTypeMouthLeft is a LandmarkType enum value
-	LandmarkTypeMouthLeft = "MOUTH_LEFT"
+	LandmarkTypeMouthLeft = "mouthLeft"
 
 	// LandmarkTypeMouthRight is a LandmarkType enum value
-	LandmarkTypeMouthRight = "MOUTH_RIGHT"
+	LandmarkTypeMouthRight = "mouthRight"
 
-	// LandmarkTypeLeftEyebrowLeft is a LandmarkType enum value
-	LandmarkTypeLeftEyebrowLeft = "LEFT_EYEBROW_LEFT"
+	// LandmarkTypeLeftEyeBrowLeft is a LandmarkType enum value
+	LandmarkTypeLeftEyeBrowLeft = "leftEyeBrowLeft"
 
-	// LandmarkTypeLeftEyebrowRight is a LandmarkType enum value
-	LandmarkTypeLeftEyebrowRight = "LEFT_EYEBROW_RIGHT"
+	// LandmarkTypeLeftEyeBrowRight is a LandmarkType enum value
+	LandmarkTypeLeftEyeBrowRight = "leftEyeBrowRight"
 
-	// LandmarkTypeLeftEyebrowUp is a LandmarkType enum value
-	LandmarkTypeLeftEyebrowUp = "LEFT_EYEBROW_UP"
+	// LandmarkTypeLeftEyeBrowUp is a LandmarkType enum value
+	LandmarkTypeLeftEyeBrowUp = "leftEyeBrowUp"
 
-	// LandmarkTypeRightEyebrowLeft is a LandmarkType enum value
-	LandmarkTypeRightEyebrowLeft = "RIGHT_EYEBROW_LEFT"
+	// LandmarkTypeRightEyeBrowLeft is a LandmarkType enum value
+	LandmarkTypeRightEyeBrowLeft = "rightEyeBrowLeft"
 
-	// LandmarkTypeRightEyebrowRight is a LandmarkType enum value
-	LandmarkTypeRightEyebrowRight = "RIGHT_EYEBROW_RIGHT"
+	// LandmarkTypeRightEyeBrowRight is a LandmarkType enum value
+	LandmarkTypeRightEyeBrowRight = "rightEyeBrowRight"
 
-	// LandmarkTypeRightEyebrowUp is a LandmarkType enum value
-	LandmarkTypeRightEyebrowUp = "RIGHT_EYEBROW_UP"
+	// LandmarkTypeRightEyeBrowUp is a LandmarkType enum value
+	LandmarkTypeRightEyeBrowUp = "rightEyeBrowUp"
 
 	// LandmarkTypeLeftEyeLeft is a LandmarkType enum value
-	LandmarkTypeLeftEyeLeft = "LEFT_EYE_LEFT"
+	LandmarkTypeLeftEyeLeft = "leftEyeLeft"
 
 	// LandmarkTypeLeftEyeRight is a LandmarkType enum value
-	LandmarkTypeLeftEyeRight = "LEFT_EYE_RIGHT"
+	LandmarkTypeLeftEyeRight = "leftEyeRight"
 
 	// LandmarkTypeLeftEyeUp is a LandmarkType enum value
-	LandmarkTypeLeftEyeUp = "LEFT_EYE_UP"
+	LandmarkTypeLeftEyeUp = "leftEyeUp"
 
 	// LandmarkTypeLeftEyeDown is a LandmarkType enum value
-	LandmarkTypeLeftEyeDown = "LEFT_EYE_DOWN"
+	LandmarkTypeLeftEyeDown = "leftEyeDown"
 
 	// LandmarkTypeRightEyeLeft is a LandmarkType enum value
-	LandmarkTypeRightEyeLeft = "RIGHT_EYE_LEFT"
+	LandmarkTypeRightEyeLeft = "rightEyeLeft"
 
 	// LandmarkTypeRightEyeRight is a LandmarkType enum value
-	LandmarkTypeRightEyeRight = "RIGHT_EYE_RIGHT"
+	LandmarkTypeRightEyeRight = "rightEyeRight"
 
 	// LandmarkTypeRightEyeUp is a LandmarkType enum value
-	LandmarkTypeRightEyeUp = "RIGHT_EYE_UP"
+	LandmarkTypeRightEyeUp = "rightEyeUp"
 
 	// LandmarkTypeRightEyeDown is a LandmarkType enum value
-	LandmarkTypeRightEyeDown = "RIGHT_EYE_DOWN"
+	LandmarkTypeRightEyeDown = "rightEyeDown"
 
 	// LandmarkTypeNoseLeft is a LandmarkType enum value
-	LandmarkTypeNoseLeft = "NOSE_LEFT"
+	LandmarkTypeNoseLeft = "noseLeft"
 
 	// LandmarkTypeNoseRight is a LandmarkType enum value
-	LandmarkTypeNoseRight = "NOSE_RIGHT"
+	LandmarkTypeNoseRight = "noseRight"
 
 	// LandmarkTypeMouthUp is a LandmarkType enum value
-	LandmarkTypeMouthUp = "MOUTH_UP"
+	LandmarkTypeMouthUp = "mouthUp"
 
 	// LandmarkTypeMouthDown is a LandmarkType enum value
-	LandmarkTypeMouthDown = "MOUTH_DOWN"
+	LandmarkTypeMouthDown = "mouthDown"
 
 	// LandmarkTypeLeftPupil is a LandmarkType enum value
-	LandmarkTypeLeftPupil = "LEFT_PUPIL"
+	LandmarkTypeLeftPupil = "leftPupil"
 
 	// LandmarkTypeRightPupil is a LandmarkType enum value
-	LandmarkTypeRightPupil = "RIGHT_PUPIL"
+	LandmarkTypeRightPupil = "rightPupil"
 )
 
 const (
