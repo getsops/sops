@@ -1,6 +1,25 @@
 Changelog
 =========
 
+3.0.0
+-----
+
+* Shamir secret sharing scheme support allows SOPS to require multiple master
+  keys to access a data key and decrypt a file. See `sops groups -help`.
+
+* Keyservice to forward access to a local master key on a socket, similar to
+  gpg-agent. See `sops keyservice --help`.
+
+* Encrypt comments by default
+
+* Support for Google Compute Platform KMS
+
+* Refactor of the store logic to separate the internal representation SOPS
+  has of files from the external representation used in JSON and YAML files
+
+* Reencoding of versions as string on sops 1.X files, may break backward
+  compatibility but will be handled automatically.
+
 2.0.0
 -----
 
