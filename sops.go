@@ -165,6 +165,10 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, onLeaves func(
 		return branch.walkBranch(in, path, onLeaves)
 	case []interface{}:
 		return branch.walkSlice(in, path, onLeaves)
+	case nil:
+		// the value returned remains the same since it doesn't make
+		// sense to encrypt or decrypt a nil value
+		return nil, nil
 	default:
 		return nil, fmt.Errorf("Cannot walk value, unknown type: %T", in)
 	}
