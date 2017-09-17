@@ -1,3 +1,7 @@
+/*
+Package pgp contains an implementation of the go.mozilla.org/sops.MasterKey interface that encrypts and decrypts the
+data key by first trying with the golang.org/x/crypto/openpgp package and if that fails, by calling the "gpg" binary.
+*/
 package pgp //import "go.mozilla.org/sops/pgp"
 
 import (
@@ -34,10 +38,12 @@ type MasterKey struct {
 	CreationDate time.Time
 }
 
+// EncryptedDataKey returns the encrypted data key this master key holds
 func (key *MasterKey) EncryptedDataKey() []byte {
 	return []byte(key.EncryptedKey)
 }
 
+// SetEncryptedDataKey sets the encrypted data key for this master key
 func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
@@ -83,7 +89,7 @@ func (key *MasterKey) encryptWithCryptoOpenPGP(dataKey []byte) error {
 	fingerprints := key.fingerprintMap(ring)
 	entity, ok := fingerprints[key.Fingerprint]
 	if !ok {
-		return fmt.Errorf("Key with fingerprint %s is not available in keyring.", key.Fingerprint)
+		return fmt.Errorf("key with fingerprint %s is not available in keyring", key.Fingerprint)
 	}
 	encbuf := new(bytes.Buffer)
 	armorbuf, err := armor.Encode(encbuf, "PGP MESSAGE", nil)
@@ -127,9 +133,9 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		return nil
 	}
 	log.WithField("fingerprint", key.Fingerprint).Warn("Encryption failed")
-	return fmt.Errorf(`could not encrypt data key with PGP key.
-	\tgolang.org/x/crypto/openpgp error: %s
-	\tGPG binary error: %s`, openpgpErr, binaryErr)
+	return fmt.Errorf(
+		`could not encrypt data key with PGP key: golang.org/x/crypto/openpgp error: %v; GPG binary error: %v`,
+		openpgpErr, binaryErr)
 }
 
 // EncryptIfNeeded encrypts the data key with PGP only if it's needed, that is, if it hasn't been encrypted already
@@ -173,7 +179,7 @@ func (key *MasterKey) decryptWithCryptoOpenpgp() ([]byte, error) {
 	if b, err := ioutil.ReadAll(md.UnverifiedBody); err == nil {
 		return b, nil
 	}
-	return nil, fmt.Errorf("The key could not be decrypted with any of the GPG entries")
+	return nil, fmt.Errorf("The key could not be decrypted with any of the PGP entries")
 }
 
 // Decrypt uses PGP to obtain the data key from the EncryptedKey store in the MasterKey and returns it
@@ -188,10 +194,10 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
 		return dataKey, nil
 	}
-	log.WithField("fingerprint", key.Fingerprint).Info("Decryption failed")
-	return nil, fmt.Errorf(`could not encrypt data key with PGP key.
-	\tgolang.org/x/crypto/openpgp error: %s
-	\tGPG binary error: %s`, openpgpErr, binaryErr)
+	log.WithField("fingerprint", key.Fingerprint).Warn("Decryption failed")
+	return nil, fmt.Errorf(
+		`could not decrypt data key with PGP key: golang.org/x/crypto/openpgp error: %v; GPG binary error: %v`,
+		openpgpErr, binaryErr)
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not
@@ -271,7 +277,8 @@ func (key *MasterKey) fingerprintMap(ring openpgp.EntityList) map[string]openpgp
 func (key *MasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 	conn, err := gpgagent.NewConn()
 	if err == gpgagent.ErrNoAgent {
-		log.Printf("gpg-agent not found, continuing with manual passphrase input...")
+		log.Infof("gpg-agent not found, continuing with manual passphrase " +
+			"input...")
 		fmt.Print("Enter PGP key passphrase: ")
 		pass, err := gopass.GetPasswd()
 		if err != nil {

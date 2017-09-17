@@ -12,18 +12,18 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-type EncryptOpts struct {
-	Cipher            sops.DataKeyCipher
+type encryptOpts struct {
+	Cipher            sops.Cipher
 	InputStore        sops.Store
 	OutputStore       sops.Store
 	InputPath         string
 	KeyServices       []keyservice.KeyServiceClient
 	UnencryptedSuffix string
 	KeyGroups         []sops.KeyGroup
-	GroupQuorum       int
+	GroupThreshold    int
 }
 
-func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
+func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
 	fileBytes, err := ioutil.ReadFile(opts.InputPath)
 	if err != nil {
@@ -39,7 +39,7 @@ func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
 		KeyGroups:         opts.KeyGroups,
 		UnencryptedSuffix: opts.UnencryptedSuffix,
 		Version:           version,
-		ShamirQuorum:      opts.GroupQuorum,
+		ShamirThreshold:   opts.GroupThreshold,
 	}
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
@@ -48,7 +48,6 @@ func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
 	}
 
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash:   make(map[string][]interface{}),
 		DataKey: dataKey,
 		Tree:    &tree,
 		Cipher:  opts.Cipher,

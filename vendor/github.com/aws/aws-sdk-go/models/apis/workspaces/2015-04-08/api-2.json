@@ -1,14 +1,14 @@
 {
   "version":"2.0",
   "metadata":{
-    "uid":"workspaces-2015-04-08",
     "apiVersion":"2015-04-08",
     "endpointPrefix":"workspaces",
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"Amazon WorkSpaces",
     "signatureVersion":"v4",
-    "targetPrefix":"WorkspacesService"
+    "targetPrefix":"WorkspacesService",
+    "uid":"workspaces-2015-04-08"
   },
   "operations":{
     "CreateTags":{

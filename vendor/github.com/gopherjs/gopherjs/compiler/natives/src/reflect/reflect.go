@@ -122,6 +122,7 @@ func reflectType(typ *js.Object) *rtype {
 			}
 			setKindType(rt, &interfaceType{
 				rtype:   *rt,
+				pkgPath: newName(internalStr(typ.Get("pkg")), "", "", false),
 				methods: imethods,
 			})
 		case Map:
@@ -142,10 +143,14 @@ func reflectType(typ *js.Object) *rtype {
 			reflectFields := make([]structField, fields.Length())
 			for i := range reflectFields {
 				f := fields.Index(i)
+				offsetAnon := uintptr(i) << 1
+				if f.Get("anonymous").Bool() {
+					offsetAnon |= 1
+				}
 				reflectFields[i] = structField{
-					name:   newName(internalStr(f.Get("name")), internalStr(f.Get("tag")), "", f.Get("exported").Bool()),
-					typ:    reflectType(f.Get("typ")),
-					offset: uintptr(i),
+					name:       newName(internalStr(f.Get("name")), internalStr(f.Get("tag")), "", f.Get("exported").Bool()),
+					typ:        reflectType(f.Get("typ")),
+					offsetAnon: offsetAnon,
 				}
 			}
 			setKindType(rt, &structType{
@@ -491,7 +496,7 @@ func makechan(typ *rtype, size uint64) (ch unsafe.Pointer) {
 	return unsafe.Pointer(js.Global.Get("$Chan").New(jsType(ctyp.elem), size).Unsafe())
 }
 
-func makemap(t *rtype) (m unsafe.Pointer) {
+func makemap(t *rtype, cap int) (m unsafe.Pointer) {
 	return unsafe.Pointer(js.Global.Get("Object").New().Unsafe())
 }
 
@@ -959,7 +964,7 @@ func (v Value) Field(i int) Value {
 
 	fl := v.flag&(flagStickyRO|flagIndir|flagAddr) | flag(typ.Kind())
 	if !field.name.isExported() {
-		if field.name.name() == "" {
+		if field.anon() {
 			fl |= flagEmbedRO
 		} else {
 			fl |= flagStickyRO
@@ -1296,7 +1301,7 @@ func (v Value) Close() {
 
 var selectHelper = js.Global.Get("$select").Interface().(func(...interface{}) *js.Object)
 
-func chanrecv(t *rtype, ch unsafe.Pointer, nb bool, val unsafe.Pointer) (selected, received bool) {
+func chanrecv(ch unsafe.Pointer, nb bool, val unsafe.Pointer) (selected, received bool) {
 	comms := [][]*js.Object{{js.InternalObject(ch)}}
 	if nb {
 		comms = append(comms, []*js.Object{})
@@ -1310,7 +1315,7 @@ func chanrecv(t *rtype, ch unsafe.Pointer, nb bool, val unsafe.Pointer) (selecte
 	return true, recvRes.Index(1).Bool()
 }
 
-func chansend(t *rtype, ch unsafe.Pointer, val unsafe.Pointer, nb bool) bool {
+func chansend(ch unsafe.Pointer, val unsafe.Pointer, nb bool) bool {
 	comms := [][]*js.Object{{js.InternalObject(ch), js.InternalObject(val).Call("$get")}}
 	if nb {
 		comms = append(comms, []*js.Object{})

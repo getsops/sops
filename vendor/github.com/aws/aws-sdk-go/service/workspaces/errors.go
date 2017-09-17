@@ -6,6 +6,8 @@ const (
 
 	// ErrCodeAccessDeniedException for service response error code
 	// "AccessDeniedException".
+	//
+	// The user is not authorized to access a resource.
 	ErrCodeAccessDeniedException = "AccessDeniedException"
 
 	// ErrCodeInvalidParameterValuesException for service response error code
@@ -17,7 +19,7 @@ const (
 	// ErrCodeInvalidResourceStateException for service response error code
 	// "InvalidResourceStateException".
 	//
-	// The specified WorkSpace has an invalid state for this operation.
+	// The state of the WorkSpace is not valid for this operation.
 	ErrCodeInvalidResourceStateException = "InvalidResourceStateException"
 
 	// ErrCodeOperationInProgressException for service response error code
@@ -48,7 +50,7 @@ const (
 	// ErrCodeUnsupportedWorkspaceConfigurationException for service response error code
 	// "UnsupportedWorkspaceConfigurationException".
 	//
-	// The WorkSpace does not have the supported configuration for this operation.
-	// For more information, see the Amazon WorkSpaces Administration Guide (http://docs.aws.amazon.com/workspaces/latest/adminguide).
+	// The configuration of this WorkSpace is not supported for this operation.
+	// For more information, see the Amazon WorkSpaces Administration Guide (http://docs.aws.amazon.com/workspaces/latest/adminguide/).
 	ErrCodeUnsupportedWorkspaceConfigurationException = "UnsupportedWorkspaceConfigurationException"
 )

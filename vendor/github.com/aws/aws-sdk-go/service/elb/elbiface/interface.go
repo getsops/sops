@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // Elastic Load Balancing.
@@ -111,6 +111,10 @@ type ELBAPI interface {
 	DeregisterInstancesFromLoadBalancer(*elb.DeregisterInstancesFromLoadBalancerInput) (*elb.DeregisterInstancesFromLoadBalancerOutput, error)
 	DeregisterInstancesFromLoadBalancerWithContext(aws.Context, *elb.DeregisterInstancesFromLoadBalancerInput, ...request.Option) (*elb.DeregisterInstancesFromLoadBalancerOutput, error)
 	DeregisterInstancesFromLoadBalancerRequest(*elb.DeregisterInstancesFromLoadBalancerInput) (*request.Request, *elb.DeregisterInstancesFromLoadBalancerOutput)
+
+	DescribeAccountLimits(*elb.DescribeAccountLimitsInput) (*elb.DescribeAccountLimitsOutput, error)
+	DescribeAccountLimitsWithContext(aws.Context, *elb.DescribeAccountLimitsInput, ...request.Option) (*elb.DescribeAccountLimitsOutput, error)
+	DescribeAccountLimitsRequest(*elb.DescribeAccountLimitsInput) (*request.Request, *elb.DescribeAccountLimitsOutput)
 
 	DescribeInstanceHealth(*elb.DescribeInstanceHealthInput) (*elb.DescribeInstanceHealthOutput, error)
 	DescribeInstanceHealthWithContext(aws.Context, *elb.DescribeInstanceHealthInput, ...request.Option) (*elb.DescribeInstanceHealthOutput, error)

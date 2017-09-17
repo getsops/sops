@@ -20,10 +20,7 @@ func (self *failureSerializer) serializeDetailed(expected, actual interface{}, m
 		Expected: render.Render(expected),
 		Actual:   render.Render(actual),
 	}
-	serialized, err := json.Marshal(view)
-	if err != nil {
-		return message
-	}
+	serialized, _ := json.Marshal(view)
 	return string(serialized)
 }
 
@@ -33,10 +30,7 @@ func (self *failureSerializer) serialize(expected, actual interface{}, message s
 		Expected: fmt.Sprintf("%+v", expected),
 		Actual:   fmt.Sprintf("%+v", actual),
 	}
-	serialized, err := json.Marshal(view)
-	if err != nil {
-		return message
-	}
+	serialized, _ := json.Marshal(view)
 	return string(serialized)
 }
 

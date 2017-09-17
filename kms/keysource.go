@@ -1,3 +1,7 @@
+/*
+Package kms contains an implementation of the go.mozilla.org/sops.MasterKey interface that encrypts and decrypts the
+data key using AWS KMS with the AWS Go SDK.
+*/
 package kms //import "go.mozilla.org/sops/kms"
 
 import (
@@ -40,10 +44,12 @@ type MasterKey struct {
 	EncryptionContext map[string]*string
 }
 
+// EncryptedDataKey returns the encrypted data key this master key holds
 func (key *MasterKey) EncryptedDataKey() []byte {
 	return []byte(key.EncryptedKey)
 }
 
+// SetEncryptedDataKey sets the encrypted data key for this master key
 func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
@@ -112,6 +118,16 @@ func (key *MasterKey) NeedsRotation() bool {
 // ToString converts the key to a string representation
 func (key *MasterKey) ToString() string {
 	return key.Arn
+}
+
+// NewMasterKey creates a new MasterKey from an ARN, role and context, setting the creation date to the current date
+func NewMasterKey(arn string, role string, context map[string]*string) *MasterKey {
+	return &MasterKey{
+		Arn:               arn,
+		Role:              role,
+		EncryptionContext: context,
+		CreationDate:      time.Now().UTC(),
+	}
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN

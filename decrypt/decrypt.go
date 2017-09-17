@@ -1,3 +1,7 @@
+/*
+Package decrypt is the external API other Go programs can use to decrypt SOPS files. It is the only package in SOPS with
+a stable API.
+*/
 package decrypt // import "go.mozilla.org/sops/decrypt"
 
 import (
@@ -56,9 +60,8 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	tree := sops.Tree{Branch: branch, Metadata: metadata}
 
 	// Decrypt the tree
-	cipher := aes.Cipher{}
-	stash := make(map[string][]interface{})
-	mac, err := tree.Decrypt(key, cipher, stash)
+	cipher := aes.NewCipher()
+	mac, err := tree.Decrypt(key, cipher)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +69,7 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	// Compute the hash of the cleartext tree and compare it with
 	// the one that was stored in the document. If they match,
 	// integrity was preserved
-	originalMac, _, err := cipher.Decrypt(
+	originalMac, err := cipher.Decrypt(
 		metadata.MessageAuthenticationCode,
 		key,
 		metadata.LastModified.Format(time.RFC3339),

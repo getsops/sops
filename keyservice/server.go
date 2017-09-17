@@ -6,11 +6,13 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
+// Server is a key service server that uses SOPS MasterKeys to fulfill requests
 type Server struct{}
 
-func (ks *Server) encryptWithPgp(key *GpgKey, plaintext []byte) ([]byte, error) {
+func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	err := pgpKey.Encrypt(plaintext)
 	if err != nil {
@@ -36,7 +38,7 @@ func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) 
 	return []byte(kmsKey.EncryptedKey), nil
 }
 
-func (ks *Server) decryptWithPgp(key *GpgKey, ciphertext []byte) ([]byte, error) {
+func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
 	plaintext, err := pgpKey.Decrypt()
@@ -58,12 +60,14 @@ func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error)
 	return []byte(plaintext), err
 }
 
+// Encrypt takes an encrypt request and encrypts the provided plaintext with the provided key, returning the encrypted
+// result
 func (ks Server) Encrypt(ctx context.Context,
 	req *EncryptRequest) (*EncryptResponse, error) {
 	key := *req.Key
 	switch k := key.KeyType.(type) {
-	case *Key_GpgKey:
-		ciphertext, err := ks.encryptWithPgp(k.GpgKey, req.Plaintext)
+	case *Key_PgpKey:
+		ciphertext, err := ks.encryptWithPgp(k.PgpKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -79,18 +83,20 @@ func (ks Server) Encrypt(ctx context.Context,
 			Ciphertext: ciphertext,
 		}, nil
 	case nil:
-		return nil, grpc.Errorf(codes.NotFound, "Must provide a key")
+		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
-		return nil, grpc.Errorf(codes.NotFound, "Unknown key type")
+		return nil, status.Errorf(codes.NotFound, "Unknown key type")
 	}
 }
 
+// Decrypt takes a decrypt request and decrypts the provided ciphertext with the provided key, returning the decrypted
+// result
 func (ks Server) Decrypt(ctx context.Context,
 	req *DecryptRequest) (*DecryptResponse, error) {
 	key := *req.Key
 	switch k := key.KeyType.(type) {
-	case *Key_GpgKey:
-		plaintext, err := ks.decryptWithPgp(k.GpgKey, req.Ciphertext)
+	case *Key_PgpKey:
+		plaintext, err := ks.decryptWithPgp(k.PgpKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

@@ -12,8 +12,8 @@ import (
 	"strings"
 
 	"github.com/gopherjs/gopherjs/compiler/analysis"
-	"github.com/gopherjs/gopherjs/third_party/importer"
 	"github.com/neelance/astrewrite"
+	"golang.org/x/tools/go/gcimporter15"
 	"golang.org/x/tools/go/types/typeutil"
 )
 
@@ -164,7 +164,7 @@ func Compile(importPath string, files []*ast.File, fileSet *token.FileSet, impor
 	}
 	importContext.Packages[importPath] = typesPkg
 
-	exportData := importer.ExportData(typesPkg)
+	exportData := gcimporter.BExportData(nil, typesPkg)
 	encodedFileSet := bytes.NewBuffer(nil)
 	if err := fileSet.Write(json.NewEncoder(encodedFileSet).Encode); err != nil {
 		return nil, err
@@ -217,6 +217,11 @@ func Compile(importPath string, files []*ast.File, fileSet *token.FileSet, impor
 	var importDecls []*Decl
 	var importedPaths []string
 	for _, importedPkg := range typesPkg.Imports() {
+		if importedPkg == types.Unsafe {
+			// Prior to Go 1.9, unsafe import was excluded by Imports() method,
+			// but now we do it here to maintain previous behavior.
+			continue
+		}
 		c.p.pkgVars[importedPkg.Path()] = c.newVariableWithLevel(importedPkg.Name(), true)
 		importedPaths = append(importedPaths, importedPkg.Path())
 	}
@@ -428,6 +433,9 @@ func Compile(importPath string, files []*ast.File, fileSet *token.FileSet, impor
 	// named types
 	var typeDecls []*Decl
 	for _, o := range c.p.typeNames {
+		if o.IsAlias() {
+			continue
+		}
 		typeName := c.objectName(o)
 		d := Decl{
 			Vars:            []string{typeName},
@@ -463,34 +471,35 @@ func Compile(importPath string, files []*ast.File, fileSet *token.FileSet, impor
 				c.Printf(`%s = $newType(%d, %s, "%s.%s", %t, "%s", %t, %s);`, lhs, size, typeKind(o.Type()), o.Pkg().Name(), o.Name(), o.Name() != "", o.Pkg().Path(), o.Exported(), constructor)
 			})
 			d.MethodListCode = c.CatchOutput(0, func() {
-				if _, isInterface := o.Type().Underlying().(*types.Interface); !isInterface {
-					named := o.Type().(*types.Named)
-					var methods []string
-					var ptrMethods []string
-					for i := 0; i < named.NumMethods(); i++ {
-						method := named.Method(i)
-						name := method.Name()
-						if reservedKeywords[name] {
-							name += "$"
-						}
-						pkgPath := ""
-						if !method.Exported() {
-							pkgPath = method.Pkg().Path()
-						}
-						t := method.Type().(*types.Signature)
-						entry := fmt.Sprintf(`{prop: "%s", name: "%s", pkg: "%s", typ: $funcType(%s)}`, name, method.Name(), pkgPath, c.initArgs(t))
-						if _, isPtr := t.Recv().Type().(*types.Pointer); isPtr {
-							ptrMethods = append(ptrMethods, entry)
-							continue
-						}
-						methods = append(methods, entry)
+				named := o.Type().(*types.Named)
+				if _, ok := named.Underlying().(*types.Interface); ok {
+					return
+				}
+				var methods []string
+				var ptrMethods []string
+				for i := 0; i < named.NumMethods(); i++ {
+					method := named.Method(i)
+					name := method.Name()
+					if reservedKeywords[name] {
+						name += "$"
 					}
-					if len(methods) > 0 {
-						c.Printf("%s.methods = [%s];", c.typeName(o.Type()), strings.Join(methods, ", "))
+					pkgPath := ""
+					if !method.Exported() {
+						pkgPath = method.Pkg().Path()
 					}
-					if len(ptrMethods) > 0 {
-						c.Printf("%s.methods = [%s];", c.typeName(types.NewPointer(o.Type())), strings.Join(ptrMethods, ", "))
+					t := method.Type().(*types.Signature)
+					entry := fmt.Sprintf(`{prop: "%s", name: "%s", pkg: "%s", typ: $funcType(%s)}`, name, method.Name(), pkgPath, c.initArgs(t))
+					if _, isPtr := t.Recv().Type().(*types.Pointer); isPtr {
+						ptrMethods = append(ptrMethods, entry)
+						continue
 					}
+					methods = append(methods, entry)
+				}
+				if len(methods) > 0 {
+					c.Printf("%s.methods = [%s];", c.typeName(named), strings.Join(methods, ", "))
+				}
+				if len(ptrMethods) > 0 {
+					c.Printf("%s.methods = [%s];", c.typeName(types.NewPointer(named)), strings.Join(ptrMethods, ", "))
 				}
 			})
 			switch t := o.Type().Underlying().(type) {
@@ -577,14 +586,10 @@ func (c *funcContext) initArgs(ty types.Type) string {
 		fields := make([]string, t.NumFields())
 		for i := range fields {
 			field := t.Field(i)
-			name := ""
-			if !field.Anonymous() {
-				name = field.Name()
-			}
 			if !field.Exported() {
 				pkgPath = field.Pkg().Path()
 			}
-			fields[i] = fmt.Sprintf(`{prop: "%s", name: "%s", exported: %t, typ: %s, tag: %s}`, fieldName(t, i), name, field.Exported(), c.typeName(field.Type()), encodeString(t.Tag(i)))
+			fields[i] = fmt.Sprintf(`{prop: "%s", name: "%s", anonymous: %t, exported: %t, typ: %s, tag: %s}`, fieldName(t, i), field.Name(), field.Anonymous(), field.Exported(), c.typeName(field.Type()), encodeString(t.Tag(i)))
 		}
 		return fmt.Sprintf(`"%s", [%s]`, pkgPath, strings.Join(fields, ", "))
 	default:
@@ -669,7 +674,7 @@ func translateFunction(typ *ast.FuncType, recv *ast.Ident, body *ast.BlockStmt, 
 		parent:      outerContext,
 		sig:         sig,
 		allVars:     make(map[string]int, len(outerContext.allVars)),
-		localVars:   []string{"$ptr"},
+		localVars:   []string{},
 		flowDatas:   map[*types.Label]*flowData{nil: {}},
 		caseCounter: 1,
 		labelCases:  make(map[*types.Label]int),

@@ -24,7 +24,7 @@ const (
 	// ErrCodeRead is an error that is returned during HTTP reads.
 	ErrCodeRead = "ReadError"
 
-	// ErrCodeResponseTimeout is the connection timeout error that is recieved
+	// ErrCodeResponseTimeout is the connection timeout error that is received
 	// during body reads.
 	ErrCodeResponseTimeout = "ResponseTimeout"
 
@@ -269,11 +269,17 @@ func (r *Request) Presign(expireTime time.Duration) (string, error) {
 	return r.HTTPRequest.URL.String(), nil
 }
 
-// PresignRequest behaves just like presign, but hoists all headers and signs them.
-// Also returns the signed hash back to the user
+// PresignRequest behaves just like presign, with the addition of returning a
+// set of headers that were signed.
+//
+// Returns the URL string for the API operation with signature in the query string,
+// and the HTTP headers that were included in the signature. These headers must
+// be included in any HTTP request made with the presigned URL.
+//
+// To prevent hoisting any headers to the query string set NotHoist to true on
+// this Request value prior to calling PresignRequest.
 func (r *Request) PresignRequest(expireTime time.Duration) (string, http.Header, error) {
 	r.ExpireTime = expireTime
-	r.NotHoist = true
 	r.Sign()
 	if r.Error != nil {
 		return "", nil, r.Error
@@ -338,10 +344,7 @@ func (r *Request) Sign() error {
 	return r.Error
 }
 
-// ResetBody rewinds the request body backto its starting position, and
-// set's the HTTP Request body reference. When the body is read prior
-// to being sent in the HTTP request it will need to be rewound.
-func (r *Request) ResetBody() {
+func (r *Request) getNextRequestBody() (io.ReadCloser, error) {
 	if r.safeBody != nil {
 		r.safeBody.Close()
 	}
@@ -363,14 +366,14 @@ func (r *Request) ResetBody() {
 	// Related golang/go#18257
 	l, err := computeBodyLength(r.Body)
 	if err != nil {
-		r.Error = awserr.New(ErrCodeSerialization, "failed to compute request body size", err)
-		return
+		return nil, awserr.New(ErrCodeSerialization, "failed to compute request body size", err)
 	}
 
+	var body io.ReadCloser
 	if l == 0 {
-		r.HTTPRequest.Body = noBodyReader
+		body = NoBody
 	} else if l > 0 {
-		r.HTTPRequest.Body = r.safeBody
+		body = r.safeBody
 	} else {
 		// Hack to prevent sending bodies for methods where the body
 		// should be ignored by the server. Sending bodies on these
@@ -382,11 +385,13 @@ func (r *Request) ResetBody() {
 		// a io.Reader that was not also an io.Seeker.
 		switch r.Operation.HTTPMethod {
 		case "GET", "HEAD", "DELETE":
-			r.HTTPRequest.Body = noBodyReader
+			body = NoBody
 		default:
-			r.HTTPRequest.Body = r.safeBody
+			body = r.safeBody
 		}
 	}
+
+	return body, nil
 }
 
 // Attempts to compute the length of the body of the reader using the
@@ -488,7 +493,7 @@ func (r *Request) Send() error {
 			r.Handlers.Retry.Run(r)
 			r.Handlers.AfterRetry.Run(r)
 			if r.Error != nil {
-				debugLogReqError(r, "Send Request", false, r.Error)
+				debugLogReqError(r, "Send Request", false, err)
 				return r.Error
 			}
 			debugLogReqError(r, "Send Request", true, err)
@@ -497,12 +502,13 @@ func (r *Request) Send() error {
 		r.Handlers.UnmarshalMeta.Run(r)
 		r.Handlers.ValidateResponse.Run(r)
 		if r.Error != nil {
-			err := r.Error
 			r.Handlers.UnmarshalError.Run(r)
+			err := r.Error
+
 			r.Handlers.Retry.Run(r)
 			r.Handlers.AfterRetry.Run(r)
 			if r.Error != nil {
-				debugLogReqError(r, "Validate Response", false, r.Error)
+				debugLogReqError(r, "Validate Response", false, err)
 				return r.Error
 			}
 			debugLogReqError(r, "Validate Response", true, err)
@@ -515,7 +521,7 @@ func (r *Request) Send() error {
 			r.Handlers.Retry.Run(r)
 			r.Handlers.AfterRetry.Run(r)
 			if r.Error != nil {
-				debugLogReqError(r, "Unmarshal Response", false, r.Error)
+				debugLogReqError(r, "Unmarshal Response", false, err)
 				return r.Error
 			}
 			debugLogReqError(r, "Unmarshal Response", true, err)

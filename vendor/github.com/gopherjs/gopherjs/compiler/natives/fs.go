@@ -1,4 +1,4 @@
-// +build dev
+// +build gopherjsdev
 
 package natives
 

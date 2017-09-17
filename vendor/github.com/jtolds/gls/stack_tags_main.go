@@ -9,15 +9,22 @@ import (
 	"runtime"
 )
 
-func getStack(offset, amount int) []uintptr {
-	stack := make([]uintptr, amount)
-	return stack[:runtime.Callers(offset, stack)]
-}
-
-func findPtr() uintptr {
-	pc, _, _, ok := runtime.Caller(3)
-	if !ok {
-		panic("failed to find function pointer")
+var (
+	findPtr = func() uintptr {
+		var pc [1]uintptr
+		n := runtime.Callers(4, pc[:])
+		if n != 1 {
+			panic("failed to find function pointer")
+		}
+		return pc[0]
 	}
-	return pc
-}
+
+	getStack = func(offset, amount int) (stack []uintptr, next_offset int) {
+		stack = make([]uintptr, amount)
+		stack = stack[:runtime.Callers(offset, stack)]
+		if len(stack) < amount {
+			return stack, 0
+		}
+		return stack, offset + len(stack)
+	}
+)
