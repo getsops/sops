@@ -74,8 +74,8 @@ func main() {
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k and -c flags are only used to encrypt new documents. Editing or
-   decrypting existing documents can be done with "sops file" or
+   The -p, -k and --gcp-kms flags are only used to encrypt new documents. Editing
+   or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
    the "add-{kms,pgp,gcp-kms}" and "rm-{kms,pgp,gcp-kms}" flags.
@@ -226,7 +226,7 @@ func main() {
 		cli.StringFlag{
 			Name:   "gcp-kms",
 			Usage:  "comma separated list of GCP KMS resource IDs",
-			EnvVar: "SOPS_CGP_KMS_IDS",
+			EnvVar: "SOPS_GCP_KMS_IDS",
 		},
 		cli.StringFlag{
 			Name:   "pgp, p",

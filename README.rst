@@ -163,21 +163,52 @@ the example files and pgp key provided with the repository::
 
 This last step will decrypt `example.yaml` using the test private key.
 
+
+Encrypting using GCP KMS
+~~~~~~~~~~~~~~~~~~~~~~~~
+GCP KMS uses `Application Default Credentials
+<https://developers.google.com/identity/protocols/application-default-credentials>`_.
+If you aleady logged-ing using :bash:`gcloud auth login` you can enable appication
+default credentials using the sdk::
+
+	$ gcloud auth application-default login
+
+Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
+cloud console the get the ResourceID or you can create one using the gcloud
+sdk:
+
+.. code:: bash
+
+	$ gcloud kms keyrings create sops --location global
+	$ gcloud kms keys create sops-key --location global --keyring sops --purpose encryption
+	$ gcloud kms keys list --location global --keyring sops
+
+	# you should see
+	NAME                                                                   PURPOSE          PRIMARY_STATE
+	projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key ENCRYPT_DECRYPT  ENABLED
+
+Now you can encrypt a file using::
+
+	$ sops --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml
+
+
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-When creating new files, `sops` uses the PGP and KMS defined in the command
-line arguments `--kms` and `--pgp`, or from the environment variables
-`SOPS_KMS_ARN` and `SOPS_PGP_FP`. That information is stored in the file under
-the `sops` section, such that decrypting files does not require providing those
-parameters again.
+When creating new files, `sops` uses the PGP, KMS and GCP KMS defined in the
+command line arguments `--kms`, `--pgp` or `--gcp-kms`, or from the environment
+variables `SOPS_KMS_ARN`, `SOPS_PGP_FP`, `SOPS_GCP_KMS_IDS`. That information is
+stored in the file under the `sops` section, such that decrypting files does not
+require providing those parameters again.
 
 Master PGP and KMS keys can be added and removed from a `sops` file in one of
 two ways: by using command line flag, or by editing the file directly.
 
-Command line flag `--add-kms`, `--add-pgp`, `--rm-kms` and `--rm-pgp` can be
-used to add and remove keys from a file. These flags use the comma separated
-syntax as the `--kms` and `--pgp` arguments when creating new files.
+Command line flag `--add-kms`, `--add-pgp`, `--add-gcp-kms`, `--rm-kms`,
+`--rm-pgp` and `--rm-gcp-kms` can be used to add and remove keys from a file.
+These flags use the comma separated syntax as the `--kms`, `--pgp` and `--gcp-kms`
+arguments when creating new files.
 
 .. code:: bash
 
