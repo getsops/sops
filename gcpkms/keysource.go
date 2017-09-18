@@ -92,7 +92,7 @@ func NewMasterKeyFromResourceID(resourceID string) *MasterKey {
 	return k
 }
 
-// MasterKeysFromResourceIDString takes a comma separated list of GCP KMS resourece IDs and returns a slice of new MasterKeys for them
+// MasterKeysFromResourceIDString takes a comma separated list of GCP KMS resource IDs and returns a slice of new MasterKeys for them
 func MasterKeysFromResourceIDString(resourceID string) []*MasterKey {
 	var keys []*MasterKey
 	if resourceID == "" {
@@ -108,7 +108,7 @@ func (key MasterKey) createCloudKMSService() (*cloudkms.Service, error) {
 	re := regexp.MustCompile(`^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$`)
 	matches := re.FindStringSubmatch(key.ResourceID)
 	if matches == nil {
-		return nil, fmt.Errorf("No valid resoureceId found in %q", key.ResourceID)
+		return nil, fmt.Errorf("No valid resourceId found in %q", key.ResourceID)
 	}
 
 	ctx := context.Background()

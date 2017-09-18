@@ -131,7 +131,7 @@ func main() {
 						},
 						cli.StringSliceFlag{
 							Name:  "gcp-kms",
-							Usage: "the GCP KMS Resourece ID the new group should contain. Can be specified more than once",
+							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
 						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
