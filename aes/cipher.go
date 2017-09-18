@@ -12,6 +12,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"go.mozilla.org/sops"
 )
 
 type encryptedValue struct {
@@ -100,6 +102,8 @@ func (c Cipher) Decrypt(ciphertext string, key []byte, additionalData string) (p
 		plaintext = decryptedBytes
 	case "bool":
 		plaintext, err = strconv.ParseBool(decryptedValue)
+	case "comment":
+		plaintext = sops.Comment{Value: decryptedValue}
 	default:
 		return nil, fmt.Errorf("Unknown datatype: %s", encryptedValue.datatype)
 	}
@@ -147,6 +151,9 @@ func (c Cipher) Encrypt(plaintext interface{}, key []byte, additionalData string
 		encryptedType = "bool"
 		// The Python version encodes booleans with Titlecase
 		plainBytes = []byte(strings.Title(strconv.FormatBool(value)))
+	case sops.Comment:
+		encryptedType = "comment"
+		plainBytes = []byte(value.Value)
 	default:
 		return "", fmt.Errorf("Value to encrypt has unsupported type %T", value)
 	}
