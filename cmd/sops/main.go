@@ -20,11 +20,11 @@ import (
 	"strconv"
 
 	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
 	"go.mozilla.org/sops/config"
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -128,6 +128,10 @@ func main() {
 						cli.StringSliceFlag{
 							Name:  "kms",
 							Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
+						},
+						cli.StringSliceFlag{
+							Name:  "gcp-kms",
+							Usage: "the GCP KMS Resourece ID the new group should contain. Can be specified more than once",
 						},
 						cli.BoolFlag{
 							Name:  "in-place, i",

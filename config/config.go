@@ -12,9 +12,9 @@ import (
 
 	"github.com/mozilla-services/yaml"
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
-	"go.mozilla.org/sops/gcpkms"
 )
 
 type fileSystem interface {
