@@ -7,6 +7,7 @@ package keyservice
 import (
 	"fmt"
 
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
@@ -20,6 +21,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_PgpKey{
 				PgpKey: &PgpKey{
 					Fingerprint: mk.Fingerprint,
+				},
+			},
+		}
+	case *gcpkms.MasterKey:
+		return Key{
+			KeyType: &Key_GcpKmsKey{
+				GcpKmsKey: &GcpKmsKey{
+					ResourceId: mk.ResourceID,
 				},
 			},
 		}

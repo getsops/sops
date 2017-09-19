@@ -40,12 +40,11 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
+	"log"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
-
-	"log"
 
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"

@@ -4,6 +4,7 @@ message Key {
 	oneof key_type {
 		KmsKey kms_key = 1;
 		PgpKey pgp_key = 2;
+		GcpKmsKey gcp_kms_key = 3;
 	}
 }
 
@@ -15,6 +16,10 @@ message KmsKey {
 	string arn = 1;
 	string role = 2;
 	map<string, string> context = 3;
+}
+
+message GcpKmsKey {
+	string resource_id = 1;
 }
 
 message EncryptRequest {
