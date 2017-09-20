@@ -178,6 +178,10 @@ func TestDecrypt(t *testing.T) {
 			Key:   "foobar",
 			Value: "2.12",
 		},
+		TreeItem{
+			Key:   "barfoo",
+			Value: nil,
+		},
 	}
 	expected := TreeBranch{
 		TreeItem{
@@ -200,6 +204,10 @@ func TestDecrypt(t *testing.T) {
 		TreeItem{
 			Key:   "foobar",
 			Value: "a",
+		},
+		TreeItem{
+			Key:   "barfoo",
+			Value: nil,
 		},
 	}
 	tree := Tree{Branch: branch, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
@@ -348,6 +356,10 @@ func TestDecryptComments(t *testing.T) {
 					Comment{"rab"},
 					"2",
 				},
+			},
+			TreeItem{
+				Key:   "list",
+				Value: nil,
 			},
 		},
 		Metadata: Metadata{
