@@ -25,8 +25,8 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-type EditOpts struct {
-	Cipher         sops.DataKeyCipher
+type editOpts struct {
+	Cipher         sops.Cipher
 	InputStore     sops.Store
 	OutputStore    sops.Store
 	InputPath      string
@@ -35,11 +35,11 @@ type EditOpts struct {
 	ShowMasterKeys bool
 }
 
-type EditExampleOpts struct {
-	EditOpts
+type editExampleOpts struct {
+	editOpts
 	UnencryptedSuffix string
 	KeyGroups         []sops.KeyGroup
-	GroupQuorum       int
+	GroupThreshold    int
 }
 
 var exampleTree = sops.TreeBranch{
@@ -76,7 +76,7 @@ type runEditorUntilOkOpts struct {
 	Tree           *sops.Tree
 }
 
-func EditExample(opts EditExampleOpts) ([]byte, error) {
+func editExample(opts editExampleOpts) ([]byte, error) {
 	// Load the example file
 	var fileBytes []byte
 	if _, ok := opts.InputStore.(*json.BinaryStore); ok {
@@ -99,7 +99,7 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 		KeyGroups:         opts.KeyGroups,
 		UnencryptedSuffix: opts.UnencryptedSuffix,
 		Version:           version,
-		ShamirQuorum:      opts.GroupQuorum,
+		ShamirThreshold:   opts.GroupThreshold,
 	}
 
 	// Generate a data key
@@ -107,30 +107,28 @@ func EditExample(opts EditExampleOpts) ([]byte, error) {
 	if len(errs) > 0 {
 		return nil, cli.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), codes.CouldNotRetrieveKey)
 	}
-	stash := make(map[string][]interface{})
 
-	return edit(opts.EditOpts, &tree, dataKey, stash)
+	return editTree(opts.editOpts, &tree, dataKey)
 }
 
-func Edit(opts EditOpts) ([]byte, error) {
+func edit(opts editOpts) ([]byte, error) {
 	// Load the file
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
 	}
 	// Decrypt the file
-	stash := make(map[string][]interface{})
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Stash: stash, Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree, KeyServices: opts.KeyServices,
+		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree, KeyServices: opts.KeyServices,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return edit(opts, tree, dataKey, stash)
+	return editTree(opts, tree, dataKey)
 }
 
-func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]interface{}) ([]byte, error) {
+func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := ioutil.TempDir("", "")
 	if err != nil {
@@ -164,13 +162,16 @@ func edit(opts EditOpts, tree *sops.Tree, dataKey []byte, stash map[string][]int
 	}
 
 	// Let the user edit the file
-	runEditorUntilOk(runEditorUntilOkOpts{
+	err = runEditorUntilOk(runEditorUntilOkOpts{
 		InputStore: opts.InputStore, OriginalHash: origHash, TmpFile: tmpfile,
 		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
+	if err != nil {
+		return nil, err
+	}
 
 	// Encrypt the file
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash: stash, DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
+		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
 		return nil, err

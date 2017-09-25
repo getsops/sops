@@ -210,6 +210,56 @@ func TestGetCertificate_expiredCache(t *testing.T) {
 	testGetCertificate(t, man, "example.org", hello)
 }
 
+func TestGetCertificate_failedAttempt(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+	}))
+	defer ts.Close()
+
+	const example = "example.org"
+	d := createCertRetryAfter
+	f := testDidRemoveState
+	defer func() {
+		createCertRetryAfter = d
+		testDidRemoveState = f
+	}()
+	createCertRetryAfter = 0
+	done := make(chan struct{})
+	testDidRemoveState = func(domain string) {
+		if domain != example {
+			t.Errorf("testDidRemoveState: domain = %q; want %q", domain, example)
+		}
+		close(done)
+	}
+
+	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	man := &Manager{
+		Prompt: AcceptTOS,
+		Client: &acme.Client{
+			Key:          key,
+			DirectoryURL: ts.URL,
+		},
+	}
+	defer man.stopRenew()
+	hello := &tls.ClientHelloInfo{ServerName: example}
+	if _, err := man.GetCertificate(hello); err == nil {
+		t.Error("GetCertificate: err is nil")
+	}
+	select {
+	case <-time.After(5 * time.Second):
+		t.Errorf("took too long to remove the %q state", example)
+	case <-done:
+		man.stateMu.Lock()
+		defer man.stateMu.Unlock()
+		if v, exist := man.state[example]; exist {
+			t.Errorf("state exists for %q: %+v", example, v)
+		}
+	}
+}
+
 // startACMEServerStub runs an ACME server
 // The domain argument is the expected domain name of a certificate request.
 func startACMEServerStub(t *testing.T, man *Manager, domain string) (url string, finish func()) {
@@ -228,7 +278,7 @@ func startACMEServerStub(t *testing.T, man *Manager, domain string) (url string,
 	// ACME CA server stub
 	var ca *httptest.Server
 	ca = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("replay-nonce", "nonce")
+		w.Header().Set("Replay-Nonce", "nonce")
 		if r.Method == "HEAD" {
 			// a nonce request
 			return
@@ -245,7 +295,7 @@ func startACMEServerStub(t *testing.T, man *Manager, domain string) (url string,
 			w.Write([]byte("{}"))
 		// domain authorization
 		case "/new-authz":
-			w.Header().Set("location", ca.URL+"/authz/1")
+			w.Header().Set("Location", ca.URL+"/authz/1")
 			w.WriteHeader(http.StatusCreated)
 			if err := authzTmpl.Execute(w, ca.URL); err != nil {
 				t.Errorf("authzTmpl: %v", err)
@@ -276,7 +326,7 @@ func startACMEServerStub(t *testing.T, man *Manager, domain string) (url string,
 				t.Errorf("new-cert: dummyCert: %v", err)
 			}
 			chainUp := fmt.Sprintf("<%s/ca-cert>; rel=up", ca.URL)
-			w.Header().Set("link", chainUp)
+			w.Header().Set("Link", chainUp)
 			w.WriteHeader(http.StatusCreated)
 			w.Write(der)
 		// CA chain cert
@@ -507,6 +557,50 @@ func TestValidCert(t *testing.T) {
 		}
 		if err == nil && test.ok && leaf == nil {
 			t.Errorf("%d: leaf is nil", i)
+		}
+	}
+}
+
+type cacheGetFunc func(ctx context.Context, key string) ([]byte, error)
+
+func (f cacheGetFunc) Get(ctx context.Context, key string) ([]byte, error) {
+	return f(ctx, key)
+}
+
+func (f cacheGetFunc) Put(ctx context.Context, key string, data []byte) error {
+	return fmt.Errorf("unsupported Put of %q = %q", key, data)
+}
+
+func (f cacheGetFunc) Delete(ctx context.Context, key string) error {
+	return fmt.Errorf("unsupported Delete of %q", key)
+}
+
+func TestManagerGetCertificateBogusSNI(t *testing.T) {
+	m := Manager{
+		Prompt: AcceptTOS,
+		Cache: cacheGetFunc(func(ctx context.Context, key string) ([]byte, error) {
+			return nil, fmt.Errorf("cache.Get of %s", key)
+		}),
+	}
+	tests := []struct {
+		name    string
+		wantErr string
+	}{
+		{"foo.com", "cache.Get of foo.com"},
+		{"foo.com.", "cache.Get of foo.com"},
+		{`a\b.com`, "acme/autocert: server name contains invalid character"},
+		{`a/b.com`, "acme/autocert: server name contains invalid character"},
+		{"", "acme/autocert: missing server name"},
+		{"foo", "acme/autocert: server name component count invalid"},
+		{".foo", "acme/autocert: server name component count invalid"},
+		{"foo.", "acme/autocert: server name component count invalid"},
+		{"fo.o", "cache.Get of fo.o"},
+	}
+	for _, tt := range tests {
+		_, err := m.GetCertificate(&tls.ClientHelloInfo{ServerName: tt.name})
+		got := fmt.Sprint(err)
+		if got != tt.wantErr {
+			t.Errorf("GetCertificate(SNI = %q) = %q; want %q", tt.name, got, tt.wantErr)
 		}
 	}
 }

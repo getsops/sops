@@ -15,15 +15,15 @@ formats and encrypts with AWS KMS and PGP.
 .. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
 	:target: https://travis-ci.org/mozilla/sops
 
-Install the **sops** command line with:
+Download binaries and packages of the latest release from `https://github.com/mozilla/sops/releases <https://github.com/mozilla/sops/releases>`_.
+
+Or, install the **sops** command line with:
 
 .. code:: bash
 
 	$ go get -u go.mozilla.org/sops/cmd/sops
 
-(requires Go >= 1.6)
-
-Or download RPM & DEB packages from `go.mozilla.org/sops/dist/ <https://go.mozilla.org/sops/dist/>`_.
+(requires Go >= 1.8)
 
 If you don't have Go installed, set it up with:
 
@@ -163,21 +163,52 @@ the example files and pgp key provided with the repository::
 
 This last step will decrypt `example.yaml` using the test private key.
 
+
+Encrypting using GCP KMS
+~~~~~~~~~~~~~~~~~~~~~~~~
+GCP KMS uses `Application Default Credentials
+<https://developers.google.com/identity/protocols/application-default-credentials>`_.
+If you aleady logged-ing using :bash:`gcloud auth login` you can enable appication
+default credentials using the sdk::
+
+	$ gcloud auth application-default login
+
+Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
+cloud console the get the ResourceID or you can create one using the gcloud
+sdk:
+
+.. code:: bash
+
+	$ gcloud kms keyrings create sops --location global
+	$ gcloud kms keys create sops-key --location global --keyring sops --purpose encryption
+	$ gcloud kms keys list --location global --keyring sops
+
+	# you should see
+	NAME                                                                   PURPOSE          PRIMARY_STATE
+	projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key ENCRYPT_DECRYPT  ENABLED
+
+Now you can encrypt a file using::
+
+	$ sops --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml
+
+
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-When creating new files, `sops` uses the PGP and KMS defined in the command
-line arguments `--kms` and `--pgp`, or from the environment variables
-`SOPS_KMS_ARN` and `SOPS_PGP_FP`. That information is stored in the file under
-the `sops` section, such that decrypting files does not require providing those
-parameters again.
+When creating new files, `sops` uses the PGP, KMS and GCP KMS defined in the
+command line arguments `--kms`, `--pgp` or `--gcp-kms`, or from the environment
+variables `SOPS_KMS_ARN`, `SOPS_PGP_FP`, `SOPS_GCP_KMS_IDS`. That information is
+stored in the file under the `sops` section, such that decrypting files does not
+require providing those parameters again.
 
 Master PGP and KMS keys can be added and removed from a `sops` file in one of
 two ways: by using command line flag, or by editing the file directly.
 
-Command line flag `--add-kms`, `--add-pgp`, `--rm-kms` and `--rm-pgp` can be
-used to add and remove keys from a file. These flags use the comma separated
-syntax as the `--kms` and `--pgp` arguments when creating new files.
+Command line flag `--add-kms`, `--add-pgp`, `--add-gcp-kms`, `--rm-kms`,
+`--rm-pgp` and `--rm-gcp-kms` can be used to add and remove keys from a file.
+These flags use the comma separated syntax as the `--kms`, `--pgp` and `--gcp-kms`
+arguments when creating new files.
 
 .. code:: bash
 
@@ -383,8 +414,8 @@ passed on the sops command line or in environment variables.
 Specify a different GPG executable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`sops` checks for the `SOPS_GPG_EXEC` environment variable. If specified, 
-it will attempt to use the executable set there instead of the default 
+`sops` checks for the `SOPS_GPG_EXEC` environment variable. If specified,
+it will attempt to use the executable set there instead of the default
 of `gpg`.
 
 Example: place the following in your `~/.bashrc`
@@ -396,53 +427,127 @@ Example: place the following in your `~/.bashrc`
 Key groups
 ~~~~~~~~~~
 
-By default, `sops` encrypts the data key with each of the master keys, such
-that if any of the master keys is available, the file can be decrypted.
-However, it is sometimes desirable to require access to several master keys in
-order to be able to decrypt files. This can be achieved with key groups. With
-key groups, the data key is split into several parts, one for each key group.
-Each key group contains one or more master keys, and all the keys in each
-group encrypt the data key. For decryption, `quorum` parts are required in
-order to retrieve the data key, so at least one key in `quorum` groups has to
-be available.
+By default, `sops` encrypts the data key for a file with each of the master keys,
+such that if any of the master keys is available, the file can be decrypted.
+However, it is sometimes desirable to require access to multiple master keys
+in order to decrypt files. This can be achieved with key groups.
 
-`quorum` defaults to the number of key groups.
+When using key groups in sops, data keys are split into parts such that keys from
+multiple groups are required to decrypt a file. `sops` uses Shamir's Secret Sharing
+to split the data key such that each key group has a fragment, each key in the
+key group can decrypt that fragment, and a configurable number of fragments (threshold)
+are needed to decrypt and piece together the complete data key. When decrypting a
+file using multiple key groups, `sops` goes through key groups in order, and in
+each group, tries to recover the fragment of the data key using a master key from
+that group. Once the fragment is recovered, `sops` moves on to the next group,
+until enough fragments have been recovered to obtain the complete data key.
 
-Managing of key groups for SOPS files can be done with the `sops groups`
-command. Key groups can also be specified in the `.sops.yaml` config file,
+By default, the threshold is set to the number of key groups. For example, if
+you have three key groups configured in your SOPS file and you don't override
+the default threshold, then one master key from each of the three groups will
+be required to decrypt the file.
+
+Management of key groups is done with the `sops groups` command.
+
+For example, you can add a new key group with 3 PGP keys and 3 KMS keys to the
+file `my_file.yaml`:
+
+`sops groups add --file my_file.yaml --pgp fingerprint1 --pgp fingerprint2 --pgp fingerprint3 --kms arn1 --kms arn2 --kms arn3`
+
+Or you can delete the 1st group (group number 0, as groups are zero-indexed)
+from `my_file.yaml`:
+
+`sops groups delete --file my_file.yaml 0`
+
+Key groups can also be specified in the `.sops.yaml` config file,
 like so:
 
-```yaml
-creation_rules:
-    - filename_regex: .*keygroups.*
-      key_groups:
-      # First key group
-      - pgp: fingerprint1,fingerprint2
-        kms: arn1,arn2
-      # Second key group
-      - pgp: fingerprint3,fingerprint4
-        kms: arn3,arn4
-      # Third key group
-      - pgp: fingerprint5,fingerprint6
-        kms: arn5,arn6
-```
+.. code:: yaml
+
+    creation_rules:
+        - filename_regex: .*keygroups.*
+          key_groups:
+          # First key group
+          - pgp:
+            - fingerprint1
+            - fingerprint2
+            kms:
+            - arn: arn1
+              role: role1
+              context:
+                foo: bar
+            - arn: arn2
+          # Second key group
+          - pgp:
+            - fingerprint3
+            - fingerprint4
+            kms:
+            - arn: arn3
+            - arn: arn4
+          # Third key group
+          - pgp:
+            - fingerprint5
+
+Given this configuration, we can create a new encrypted file like we normally
+would, and optionally provide the `--shamir-secret-sharing-threshold` command line
+flag if we want to override the default threshold. `sops` will then split the data
+key into three parts (from the number of key groups) and encrypt each fragment with
+the master keys found in each group.
 
 For example:
 
-```
-sops --shamir-secret-sharing-quorum 2 example.json
-```
+.. code:: yaml
 
-This will require at least 2 master keys from different key groups in order to
-decrypt the file. You can then decrypt the file the same way as with any other
-SOPS file:
+    sops --shamir-secret-sharing-threshold 2 example.json
 
-```
-sops -d example.json
-```
+Alternatively, you can configure the Shamir threshold for each creation rule in the `.sops.yaml` config
+with `shamir_threshold`:
+
+.. code:: yaml
+
+    creation_rules:
+        - filename_regex: .*keygroups.*
+          shamir_threshold: 2
+          key_groups:
+          # First key group
+          - pgp:
+            - fingerprint1
+            - fingerprint2
+            kms:
+            - arn: arn1
+              role: role1
+              context:
+                foo: bar
+            - arn: arn2
+          # Second key group
+          - pgp:
+            - fingerprint3
+            - fingerprint4
+            kms:
+            - arn: arn3
+            - arn: arn4
+          # Third key group
+          - pgp:
+            - fingerprint5
+
+And then run `sops example.json`.
+
+The threshold (`shamir_threshold`) is set to 2, so this configuration will require
+master keys from two of the three different key groups in order to decrypt the file.
+You can then decrypt the file the same way as with any other SOPS file:
+
+.. code:: yaml
+
+    sops -d example.json
 
 Key service
 ~~~~~~~~~~~
+
+There are situations where you might want to run `sops` on a machine that
+doesn't have direct access to encryption keys such as PGP keys. The `sops` key
+service allows you to forward a socket so that `sops` can access encryption
+keys stored on a remote machine. This is similar to GPG Agent, but more
+portable.
 
 SOPS uses a client-server approach to encrypting and decrypting the data
 key. By default, SOPS runs a local key service in-process. SOPS uses a key
@@ -451,6 +556,11 @@ then performs the operation. The requests are sent using gRPC and Protocol
 Buffers. The requests contain an identifier for the key they should perform
 the operation with, and the plaintext or encrypted data key. The requests do
 not contain any cryptographic keys, public or private.
+
+**WARNING: the key service connection currently does not use any sort of
+authentication or encryption. Therefore, it is recommended that you make sure
+the connection is authenticated and encrypted in some other way, for example
+through an SSH tunnel.**
 
 Whenever we try to encrypt or decrypt a data key, SOPS will try to do so first
 with the local key service (unless it's disabled), and if that fails, it will
@@ -462,7 +572,17 @@ You can specify the key services the `sops` binary uses with `--keyservice`.
 This flag can be specified more than once, so you can use multiple key
 services. The local key service can be disabled with
 `enable-local-keyservice=false`.
-	
+
+For example, to decrypt a file using both the local key service and the key
+service exposed on the unix socket located in `/tmp/sops.sock`, you can run:
+
+`sops --keyservice unix:///tmp/sops.sock -d file.yaml`
+
+And if you only want to use the key service exposed on the unix socket located
+in `/tmp/sops.sock` and not the local key service, you can run:
+
+`sops --enable-local-keyservice=false --keyservice unix:///tmp/sops.sock -d file.yaml`
+
 Important information on types
 ------------------------------
 

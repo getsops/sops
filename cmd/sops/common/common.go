@@ -16,24 +16,29 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
+// DecryptTreeOpts are the options needed to decrypt a tree
 type DecryptTreeOpts struct {
-	Tree        *sops.Tree
-	Stash       map[string][]interface{}
+	// Tree is the tree to be decrypted
+	Tree *sops.Tree
+	// KeyServices are the key services to be used for decryption of the data key
 	KeyServices []keyservice.KeyServiceClient
-	IgnoreMac   bool
-	Cipher      sops.DataKeyCipher
+	// IgnoreMac is whether or not to ignore the Message Authentication Code included in the SOPS tree
+	IgnoreMac bool
+	// Cipher is the cryptographic cipher to use to decrypt the values inside the tree
+	Cipher sops.Cipher
 }
 
-func DecryptTree(opts DecryptTreeOpts) ([]byte, error) {
-	dataKey, err := opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+// DecryptTree decrypts the tree passed in through the DecryptTreeOpts and additionally returns the decrypted data key
+func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
+	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
 	if err != nil {
 		return nil, cli.NewExitError(err.Error(), codes.CouldNotRetrieveKey)
 	}
-	computedMac, err := opts.Tree.Decrypt(dataKey, opts.Cipher, opts.Stash)
+	computedMac, err := opts.Tree.Decrypt(dataKey, opts.Cipher)
 	if err != nil {
 		return nil, cli.NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), codes.ErrorDecryptingTree)
 	}
-	fileMac, _, err := opts.Cipher.Decrypt(opts.Tree.Metadata.MessageAuthenticationCode, dataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339))
+	fileMac, err := opts.Cipher.Decrypt(opts.Tree.Metadata.MessageAuthenticationCode, dataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339))
 	if !opts.IgnoreMac {
 		if fileMac != computedMac {
 			// If the file has an empty MAC, display "no MAC" instead of not displaying anything
@@ -46,27 +51,31 @@ func DecryptTree(opts DecryptTreeOpts) ([]byte, error) {
 	return dataKey, nil
 }
 
+// EncryptTreeOpts are the options needed to encrypt a tree
 type EncryptTreeOpts struct {
-	Tree    *sops.Tree
-	Stash   map[string][]interface{}
-	Cipher  sops.DataKeyCipher
+	// Tree is the tree to be encrypted
+	Tree *sops.Tree
+	// Cipher is the cryptographic cipher to use to encrypt the values inside the tree
+	Cipher sops.Cipher
+	// DataKey is the key the cipher should use to encrypt the values inside the tree
 	DataKey []byte
 }
 
+// EncryptTree encrypts the tree passed in through the EncryptTreeOpts
 func EncryptTree(opts EncryptTreeOpts) error {
-	mac, err := opts.Tree.Encrypt(opts.DataKey, opts.Cipher, opts.Stash)
+	unencryptedMac, err := opts.Tree.Encrypt(opts.DataKey, opts.Cipher)
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), codes.ErrorEncryptingTree)
 	}
 	opts.Tree.Metadata.LastModified = time.Now().UTC()
-	mac, err = opts.Cipher.Encrypt(mac, opts.DataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339), nil)
+	opts.Tree.Metadata.MessageAuthenticationCode, err = opts.Cipher.Encrypt(unencryptedMac, opts.DataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339))
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), codes.ErrorEncryptingMac)
 	}
-	opts.Tree.Metadata.MessageAuthenticationCode = mac
 	return nil
 }
 
+// LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
 func LoadEncryptedFile(inputStore sops.Store, inputPath string) (*sops.Tree, error) {
 	fileBytes, err := ioutil.ReadFile(inputPath)
 	if err != nil {

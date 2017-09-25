@@ -1,5 +1,7 @@
+// Package codes the exit statuses returned by the sops binary
 package codes
 
+// Exit statuses returned by the binary
 const (
 	CouldNotReadInputFile                  int = 2
 	CouldNotWriteOutputFile                int = 3

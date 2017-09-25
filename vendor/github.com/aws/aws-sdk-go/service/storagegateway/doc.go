@@ -28,16 +28,16 @@
 //    their request parameters, response elements, possible errors, and examples
 //    of requests and responses.
 //
-//    * AWS Storage Gateway Regions and Endpoints (http://docs.aws.amazon.com/general/latest/gr/index.html?rande.html):
-//    Provides a list of each of the s and endpoints available for use with
-//    AWS Storage Gateway.
+//    * AWS Storage Gateway Regions and Endpoints: (http://docs.aws.amazon.com/general/latest/gr/rande.html#sg_region)
+//    Provides a list of each region and endpoints available for use with AWS
+//    Storage Gateway.
 //
 // AWS Storage Gateway resource IDs are in uppercase. When you use these resource
 // IDs with the Amazon EC2 API, EC2 expects resource IDs in lowercase. You must
 // change your resource ID to lowercase to use it with the EC2 API. For example,
-// in Storage Gateway the ID for a volume might be vol-1122AABB. When you use
-// this ID with the EC2 API, you must change it to vol-1122aabb. Otherwise,
-// the EC2 API might not behave as expected.
+// in Storage Gateway the ID for a volume might be vol-AA22BB012345DAF670. When
+// you use this ID with the EC2 API, you must change it to vol-aa22bb012345daf670.
+// Otherwise, the EC2 API might not behave as expected.
 //
 // IDs for Storage Gateway volumes and Amazon EBS snapshots created from gateway
 // volumes are changing to a longer format. Starting in December 2016, all new
@@ -46,12 +46,12 @@
 // systems with the new format. For more information, see Longer EC2 and EBS
 // Resource IDs (https://aws.amazon.com/ec2/faqs/#longer-ids).
 //
-//  For example, a volume ARN with the longer volume ID format will look like
-// this:
+//  For example, a volume Amazon Resource Name (ARN) with the longer volume
+// ID format looks like the following:
 //
 // arn:aws:storagegateway:us-west-2:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABBCCDDEEFFG.
 //
-// A snapshot ID with the longer ID format will look like this: snap-78e226633445566ee.
+// A snapshot ID with the longer ID format looks like the following: snap-78e226633445566ee.
 //
 // For more information, see Announcement: Heads-up – Longer AWS Storage Gateway
 // volume and snapshot IDs coming in 2016 (https://forums.aws.amazon.com/ann.jspa?annID=3557).
@@ -63,69 +63,17 @@
 //
 // Using the Client
 //
-// To use the client for AWS Storage Gateway you will first need
-// to create a new instance of it.
+// To AWS Storage Gateway with the SDK use the New function to create
+// a new service client. With that client you can make API requests to the service.
+// These clients are safe to use concurrently.
 //
-// When creating a client for an AWS service you'll first need to have a Session
-// already created. The Session provides configuration that can be shared
-// between multiple service clients. Additional configuration can be applied to
-// the Session and service's client when they are constructed. The aws package's
-// Config type contains several fields such as Region for the AWS Region the
-// client should make API requests too. The optional Config value can be provided
-// as the variadic argument for Sessions and client creation.
-//
-// Once the service's client is created you can use it to make API requests the
-// AWS service. These clients are safe to use concurrently.
-//
-//   // Create a session to share configuration, and load external configuration.
-//   sess := session.Must(session.NewSession())
-//
-//   // Create the service's client with the session.
-//   svc := storagegateway.New(sess)
-//
-// See the SDK's documentation for more information on how to use service clients.
+// See the SDK's documentation for more information on how to use the SDK.
 // https://docs.aws.amazon.com/sdk-for-go/api/
 //
-// See aws package's Config type for more information on configuration options.
+// See aws.Config documentation for more information on configuring SDK clients.
 // https://docs.aws.amazon.com/sdk-for-go/api/aws/#Config
 //
 // See the AWS Storage Gateway client StorageGateway for more
-// information on creating the service's client.
+// information on creating client for this service.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/storagegateway/#New
-//
-// Once the client is created you can make an API request to the service.
-// Each API method takes a input parameter, and returns the service response
-// and an error.
-//
-// The API method will document which error codes the service can be returned
-// by the operation if the service models the API operation's errors. These
-// errors will also be available as const strings prefixed with "ErrCode".
-//
-//   result, err := svc.ActivateGateway(params)
-//   if err != nil {
-//       // Cast err to awserr.Error to handle specific error codes.
-//       aerr, ok := err.(awserr.Error)
-//       if ok && aerr.Code() == <error code to check for> {
-//           // Specific error code handling
-//       }
-//       return err
-//   }
-//
-//   fmt.Println("ActivateGateway result:")
-//   fmt.Println(result)
-//
-// Using the Client with Context
-//
-// The service's client also provides methods to make API requests with a Context
-// value. This allows you to control the timeout, and cancellation of pending
-// requests. These methods also take request Option as variadic parameter to apply
-// additional configuration to the API request.
-//
-//   ctx := context.Background()
-//
-//   result, err := svc.ActivateGatewayWithContext(ctx, params)
-//
-// See the request package documentation for more information on using Context pattern
-// with the SDK.
-// https://docs.aws.amazon.com/sdk-for-go/api/aws/request/
 package storagegateway

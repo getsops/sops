@@ -1,7 +1,8 @@
 language: go
 
 go:
-  - tip
+  - 1.x
+  - master
 
 install:
   - go get -t ./...

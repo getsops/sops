@@ -111,9 +111,9 @@ func syncFile(opts Opts) error {
 	}
 	tree.Metadata.KeyGroups = opts.Groups
 	if opts.GroupQuorum != 0 {
-		tree.Metadata.ShamirQuorum = opts.GroupQuorum
+		tree.Metadata.ShamirThreshold = opts.GroupQuorum
 	}
-	tree.Metadata.ShamirQuorum = min(tree.Metadata.ShamirQuorum, len(tree.Metadata.KeyGroups))
+	tree.Metadata.ShamirThreshold = min(tree.Metadata.ShamirThreshold, len(tree.Metadata.KeyGroups))
 	errs := tree.Metadata.UpdateMasterKeysWithKeyServices(key, opts.KeyServices)
 	if len(errs) > 0 {
 		return fmt.Errorf("error updating one or more master keys: %s", errs)

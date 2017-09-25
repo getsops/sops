@@ -11,8 +11,8 @@ import (
 	cli "gopkg.in/urfave/cli.v1"
 )
 
-type RotateOpts struct {
-	Cipher           sops.DataKeyCipher
+type rotateOpts struct {
+	Cipher           sops.Cipher
 	InputStore       sops.Store
 	OutputStore      sops.Store
 	InputPath        string
@@ -22,14 +22,14 @@ type RotateOpts struct {
 	KeyServices      []keyservice.KeyServiceClient
 }
 
-func Rotate(opts RotateOpts) ([]byte, error) {
+func rotate(opts rotateOpts) ([]byte, error) {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
 	}
 
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Stash: make(map[string][]interface{}), Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
+		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {
@@ -43,7 +43,7 @@ func Rotate(opts RotateOpts) ([]byte, error) {
 	// Remove master keys
 	for _, rmKey := range opts.RemoveMasterKeys {
 		for i := range tree.Metadata.KeyGroups {
-			for j, groupKey := range tree.Metadata.KeyGroups[0] {
+			for j, groupKey := range tree.Metadata.KeyGroups[i] {
 				if rmKey.ToString() == groupKey.ToString() {
 					tree.Metadata.KeyGroups[i] = append(tree.Metadata.KeyGroups[i][:j], tree.Metadata.KeyGroups[i][j+1:]...)
 				}
@@ -60,7 +60,7 @@ func Rotate(opts RotateOpts) ([]byte, error) {
 
 	// Reencrypt the file with the new key
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash: make(map[string][]interface{}), DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
+		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
 		return nil, err
