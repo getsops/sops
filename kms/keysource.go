@@ -27,7 +27,7 @@ import (
 var log *logrus.Logger
 
 func init() {
-	log = logging.NewLogger("KMS")
+	log = logging.NewLogger("AWSKMS")
 }
 
 // this needs to be a global var for unit tests to work (mockKMS redefines
