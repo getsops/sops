@@ -1,6 +1,7 @@
 package keyservice
 
 import (
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 	"golang.org/x/net/context"
@@ -38,6 +39,17 @@ func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) 
 	return []byte(kmsKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithGcpKms(key *GcpKmsKey, plaintext []byte) ([]byte, error) {
+	gcpKmsKey := gcpkms.MasterKey{
+		ResourceID: key.ResourceId,
+	}
+	err := gcpKmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(gcpKmsKey.EncryptedKey), nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -60,6 +72,15 @@ func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error)
 	return []byte(plaintext), err
 }
 
+func (ks *Server) decryptWithGcpKms(key *GcpKmsKey, ciphertext []byte) ([]byte, error) {
+	gcpKmsKey := gcpkms.MasterKey{
+		ResourceID: key.ResourceId,
+	}
+	gcpKmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := gcpKmsKey.Decrypt()
+	return []byte(plaintext), err
+}
+
 // Encrypt takes an encrypt request and encrypts the provided plaintext with the provided key, returning the encrypted
 // result
 func (ks Server) Encrypt(ctx context.Context,
@@ -76,6 +97,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		}, nil
 	case *Key_KmsKey:
 		ciphertext, err := ks.encryptWithKms(k.KmsKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		return &EncryptResponse{
+			Ciphertext: ciphertext,
+		}, nil
+	case *Key_GcpKmsKey:
+		ciphertext, err := ks.encryptWithGcpKms(k.GcpKmsKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -105,6 +134,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}, nil
 	case *Key_KmsKey:
 		plaintext, err := ks.decryptWithKms(k.KmsKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		return &DecryptResponse{
+			Plaintext: plaintext,
+		}, nil
+	case *Key_GcpKmsKey:
+		plaintext, err := ks.decryptWithGcpKms(k.GcpKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

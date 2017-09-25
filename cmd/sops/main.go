@@ -24,6 +24,7 @@ import (
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
 	"go.mozilla.org/sops/config"
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -55,7 +56,7 @@ func main() {
 		},
 	}
 	app.Name = "sops"
-	app.Usage = "sops - encrypted file editor with AWS KMS and GPG support"
+	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS and GPG support"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version
 	app.Authors = []cli.Author{
@@ -68,17 +69,23 @@ func main() {
    in the -k flag or in the SOPS_KMS_ARN environment variable.
    (you need valid credentials in ~/.aws/credentials or in your env)
 
+   To encrypt or decrypt a document with GCP KMS, specify the
+   GCP KMS resource ID in the --gcp-kms flag or in the SOPS_GCP_KMS_IDS
+   environment variable.
+   (you need to setup google application default credentials. See
+    https://developers.google.com/identity/protocols/application-default-credentials)
+
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
 
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p and -k flags are only used to encrypt new documents. Editing or
-   decrypting existing documents can be done with "sops file" or
+   The -p, -k and --gcp-kms flags are only used to encrypt new documents. Editing
+   or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
-   the "add-{kms,pgp}" and "rm-{kms,pgp}" flags.
+   the "add-{kms,pgp,gcp-kms}" and "rm-{kms,pgp,gcp-kms}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
@@ -128,6 +135,10 @@ func main() {
 						cli.StringSliceFlag{
 							Name:  "kms",
 							Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
+						},
+						cli.StringSliceFlag{
+							Name:  "gcp-kms",
+							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
 						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
@@ -220,6 +231,11 @@ func main() {
 			EnvVar: "SOPS_KMS_ARN",
 		},
 		cli.StringFlag{
+			Name:   "gcp-kms",
+			Usage:  "comma separated list of GCP KMS resource IDs",
+			EnvVar: "SOPS_GCP_KMS_IDS",
+		},
+		cli.StringFlag{
 			Name:   "pgp, p",
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
@@ -243,6 +259,14 @@ func main() {
 		cli.BoolFlag{
 			Name:  "show-master-keys, s",
 			Usage: "display master encryption keys in the file during editing",
+		},
+		cli.StringFlag{
+			Name:  "add-gcp-kms",
+			Usage: "add the provided comma-separated list of GCP KMS key resource IDs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-gcp-kms",
+			Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "add-kms",
@@ -293,7 +317,7 @@ func main() {
 		}
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" {
 				return cli.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", 49)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -358,12 +382,18 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
+			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
+				addMasterKeys = append(addMasterKeys, k)
+			}
 
 			var rmMasterKeys []keys.MasterKey
-			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext) {
+			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
+			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			output, err = rotate(rotateOpts{
@@ -554,6 +584,7 @@ func parseTreePath(arg string) ([]interface{}, error) {
 func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
+	var cloudKmsKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, cli.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -563,12 +594,17 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}
+	if c.String("gcp-kms") != "" {
+		for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("gcp-kms")) {
+			cloudKmsKeys = append(cloudKmsKeys, k)
+		}
+	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" {
 		var err error
 		var configPath string
 		if c.String("config") != "" {
@@ -584,7 +620,11 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 		return conf.KeyGroups, err
 	}
-	return []sops.KeyGroup{append(kmsKeys, pgpKeys...)}, nil
+	var group sops.KeyGroup
+	group = append(group, kmsKeys...)
+	group = append(group, cloudKmsKeys...)
+	group = append(group, pgpKeys...)
+	return []sops.KeyGroup{group}, nil
 }
 
 func shamirThreshold(c *cli.Context, file string) (int, error) {
