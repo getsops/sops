@@ -1,12 +1,12 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/E9Mz_hP5i26SQ5VsjbAuKq1M7jI\"",
+ "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/oRWw5OqIvzBrnyAI_p6qB5VpgEM\"",
  "discoveryVersion": "v1",
  "id": "toolresults:v1beta3firstparty",
  "name": "toolresults",
  "canonicalName": "Tool Results",
  "version": "v1beta3firstparty",
- "revision": "20170906",
+ "revision": "20170911",
  "title": "Cloud Tool Results firstparty API",
  "description": "Reads and publishes results from Firebase Test Lab.",
  "ownerDomain": "google.com",
@@ -21,7 +21,7 @@
  "basePath": "/toolresults/v1beta3firstparty/projects/",
  "rootUrl": "https://www.googleapis.com/",
  "servicePath": "toolresults/v1beta3firstparty/projects/",
- "batchPath": "batch/toolresults/v1beta3firstparty",
+ "batchPath": "batch",
  "parameters": {
   "alt": {
    "type": "string",

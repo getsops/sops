@@ -385,6 +385,7 @@ type Command struct {
 	// again until the user has entered it.
 	//   "DO_NOT_ASK_CREDENTIALS_ON_BOOT" - Don't ask for user credentials
 	// on device boot.
+	//   "LOCK_NOW" - Lock the device after password reset.
 	ResetPasswordFlags []string `json:"resetPasswordFlags,omitempty"`
 
 	// Type: The type of the command.
@@ -1370,8 +1371,8 @@ type NonComplianceDetail struct {
 	FieldPath string `json:"fieldPath,omitempty"`
 
 	// InstallationFailureReason: If package_name is set and the
-	// non-compliance reason is APP_NOT_INSTALLED, the detailed reason the
-	// app cannot be installed.
+	// non-compliance reason is APP_NOT_INSTALLED or APP_NOT_UPDATED, the
+	// detailed reason the app cannot be installed or updated.
 	//
 	// Possible values:
 	//   "INSTALLATION_FAILURE_REASON_UNSPECIFIED" - This value is
@@ -1418,7 +1419,10 @@ type NonComplianceDetail struct {
 	//   "PENDING" - The setting was not applied yet at the time of the
 	// report, but is expected to be applied shortly.
 	//   "APP_INCOMPATIBLE" - The setting cannot be applied to the
-	// application because its target SDK version is not high enough.
+	// application because the application doesn't support it, for example
+	// because its target SDK version is not high enough.
+	//   "APP_NOT_UPDATED" - The application is installed but not updated to
+	// the minimum version code specified by policy
 	NonComplianceReason string `json:"nonComplianceReason,omitempty"`
 
 	// PackageName: The package name indicating which application is out of
@@ -1479,13 +1483,14 @@ type NonComplianceDetailCondition struct {
 	//   "PENDING" - The setting was not applied yet at the time of the
 	// report, but is expected to be applied shortly.
 	//   "APP_INCOMPATIBLE" - The setting cannot be applied to the
-	// application because its target SDK version is not high enough.
+	// application because the application doesn't support it, for example
+	// because its target SDK version is not high enough.
+	//   "APP_NOT_UPDATED" - The application is installed but not updated to
+	// the minimum version code specified by policy
 	NonComplianceReason string `json:"nonComplianceReason,omitempty"`
 
 	// PackageName: The package name indicating which application is out of
 	// compliance. If not set, then this condition matches any package name.
-	// If this field is set, then setting_name must be unset or set to
-	// applications; otherwise, the condition would never be satisfied.
 	PackageName string `json:"packageName,omitempty"`
 
 	// SettingName: The name of the policy setting. This is the JSON field
@@ -1771,6 +1776,10 @@ type Policy struct {
 	// Applications: Policy applied to apps.
 	Applications []*ApplicationPolicy `json:"applications,omitempty"`
 
+	// AutoTimeRequired: Whether auto time is required, which prevents the
+	// user from manually setting the date and time.
+	AutoTimeRequired bool `json:"autoTimeRequired,omitempty"`
+
 	// BlockApplicationsEnabled: Whether applications other than the ones
 	// configured in applications are blocked from being installed. When
 	// set, applications that were installed under a previous policy but no
@@ -1838,13 +1847,15 @@ type Policy struct {
 	// enterprises/{enterpriseId}/policies/{policyId}
 	Name string `json:"name,omitempty"`
 
-	// NetworkEscapeHatchEnabled: Flag to specify if network escape hatch is
-	// enabled. If this flag has been enabled then upon device boot if
-	// device has no network connection, then an activity will be shown that
-	// allows the user to temporarily connect to a network to fetch the
-	// latest policy. The launched activity will time out if no network has
-	// been connected for a given while and will return to the previous
-	// activity that was shown.
+	// NetworkEscapeHatchEnabled: Whether the network escape hatch is
+	// enabled. If a network connection can't be made at boot time, the
+	// escape hatch prompts the user to temporarily connect to a network in
+	// order to refresh the device policy. After applying policy, the
+	// temporary network will be forgotten and the device will continue
+	// booting. This prevents being unable to connect to a network if there
+	// is no suitable network in the last policy and the device boots into
+	// an app in lock task mode, or the user is otherwise unable to reach
+	// device settings.
 	NetworkEscapeHatchEnabled bool `json:"networkEscapeHatchEnabled,omitempty"`
 
 	// OpenNetworkConfiguration: Network configuration for the device. See

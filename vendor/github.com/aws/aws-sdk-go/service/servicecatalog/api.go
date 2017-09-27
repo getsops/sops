@@ -368,6 +368,95 @@ func (c *ServiceCatalog) AssociateTagOptionWithResourceWithContext(ctx aws.Conte
 	return out, req.Send()
 }
 
+const opCopyProduct = "CopyProduct"
+
+// CopyProductRequest generates a "aws/request.Request" representing the
+// client's request for the CopyProduct operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CopyProduct for more information on using the CopyProduct
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CopyProductRequest method.
+//    req, resp := client.CopyProductRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CopyProduct
+func (c *ServiceCatalog) CopyProductRequest(input *CopyProductInput) (req *request.Request, output *CopyProductOutput) {
+	op := &request.Operation{
+		Name:       opCopyProduct,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CopyProductInput{}
+	}
+
+	output = &CopyProductOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CopyProduct API operation for AWS Service Catalog.
+//
+// Copies the specified source product to the specified target product or a
+// new product.
+//
+// You can copy the product to the same account or another account. You can
+// copy the product to the same region or another region.
+//
+// This operation is performed asynchronously. To track the progress of the
+// operation, use DescribeCopyProductStatus.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation CopyProduct for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+//   * ErrCodeInvalidParametersException "InvalidParametersException"
+//   One or more parameters provided to the operation are invalid.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CopyProduct
+func (c *ServiceCatalog) CopyProduct(input *CopyProductInput) (*CopyProductOutput, error) {
+	req, out := c.CopyProductRequest(input)
+	return out, req.Send()
+}
+
+// CopyProductWithContext is the same as CopyProduct with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CopyProduct for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) CopyProductWithContext(ctx aws.Context, input *CopyProductInput, opts ...request.Option) (*CopyProductOutput, error) {
+	req, out := c.CopyProductRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateConstraint = "CreateConstraint"
 
 // CreateConstraintRequest generates a "aws/request.Request" representing the
@@ -765,8 +854,6 @@ func (c *ServiceCatalog) CreateProvisioningArtifactRequest(input *CreateProvisio
 //
 // Create a new provisioning artifact for the specified product. This operation
 // does not work with a product that has been shared with you.
-//
-// See the bottom of this topic for an example JSON request.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1405,6 +1492,85 @@ func (c *ServiceCatalog) DescribeConstraint(input *DescribeConstraintInput) (*De
 // for more information on using Contexts.
 func (c *ServiceCatalog) DescribeConstraintWithContext(ctx aws.Context, input *DescribeConstraintInput, opts ...request.Option) (*DescribeConstraintOutput, error) {
 	req, out := c.DescribeConstraintRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeCopyProductStatus = "DescribeCopyProductStatus"
+
+// DescribeCopyProductStatusRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeCopyProductStatus operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeCopyProductStatus for more information on using the DescribeCopyProductStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeCopyProductStatusRequest method.
+//    req, resp := client.DescribeCopyProductStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeCopyProductStatus
+func (c *ServiceCatalog) DescribeCopyProductStatusRequest(input *DescribeCopyProductStatusInput) (req *request.Request, output *DescribeCopyProductStatusOutput) {
+	op := &request.Operation{
+		Name:       opDescribeCopyProductStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeCopyProductStatusInput{}
+	}
+
+	output = &DescribeCopyProductStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeCopyProductStatus API operation for AWS Service Catalog.
+//
+// Describes the status of the specified copy product operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Service Catalog's
+// API operation DescribeCopyProductStatus for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeCopyProductStatus
+func (c *ServiceCatalog) DescribeCopyProductStatus(input *DescribeCopyProductStatusInput) (*DescribeCopyProductStatusOutput, error) {
+	req, out := c.DescribeCopyProductStatusRequest(input)
+	return out, req.Send()
+}
+
+// DescribeCopyProductStatusWithContext is the same as DescribeCopyProductStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeCopyProductStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) DescribeCopyProductStatusWithContext(ctx aws.Context, input *DescribeCopyProductStatusInput, opts ...request.Option) (*DescribeCopyProductStatusOutput, error) {
+	req, out := c.DescribeCopyProductStatusRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2439,6 +2605,12 @@ func (c *ServiceCatalog) ListAcceptedPortfolioSharesRequest(input *ListAcceptedP
 		Name:       opListAcceptedPortfolioShares,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2487,6 +2659,56 @@ func (c *ServiceCatalog) ListAcceptedPortfolioSharesWithContext(ctx aws.Context,
 	return out, req.Send()
 }
 
+// ListAcceptedPortfolioSharesPages iterates over the pages of a ListAcceptedPortfolioShares operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAcceptedPortfolioShares method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAcceptedPortfolioShares operation.
+//    pageNum := 0
+//    err := client.ListAcceptedPortfolioSharesPages(params,
+//        func(page *ListAcceptedPortfolioSharesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) ListAcceptedPortfolioSharesPages(input *ListAcceptedPortfolioSharesInput, fn func(*ListAcceptedPortfolioSharesOutput, bool) bool) error {
+	return c.ListAcceptedPortfolioSharesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAcceptedPortfolioSharesPagesWithContext same as ListAcceptedPortfolioSharesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) ListAcceptedPortfolioSharesPagesWithContext(ctx aws.Context, input *ListAcceptedPortfolioSharesInput, fn func(*ListAcceptedPortfolioSharesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAcceptedPortfolioSharesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAcceptedPortfolioSharesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAcceptedPortfolioSharesOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListConstraintsForPortfolio = "ListConstraintsForPortfolio"
 
 // ListConstraintsForPortfolioRequest generates a "aws/request.Request" representing the
@@ -2518,6 +2740,12 @@ func (c *ServiceCatalog) ListConstraintsForPortfolioRequest(input *ListConstrain
 		Name:       opListConstraintsForPortfolio,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2570,6 +2798,56 @@ func (c *ServiceCatalog) ListConstraintsForPortfolioWithContext(ctx aws.Context,
 	return out, req.Send()
 }
 
+// ListConstraintsForPortfolioPages iterates over the pages of a ListConstraintsForPortfolio operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListConstraintsForPortfolio method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListConstraintsForPortfolio operation.
+//    pageNum := 0
+//    err := client.ListConstraintsForPortfolioPages(params,
+//        func(page *ListConstraintsForPortfolioOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) ListConstraintsForPortfolioPages(input *ListConstraintsForPortfolioInput, fn func(*ListConstraintsForPortfolioOutput, bool) bool) error {
+	return c.ListConstraintsForPortfolioPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListConstraintsForPortfolioPagesWithContext same as ListConstraintsForPortfolioPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) ListConstraintsForPortfolioPagesWithContext(ctx aws.Context, input *ListConstraintsForPortfolioInput, fn func(*ListConstraintsForPortfolioOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListConstraintsForPortfolioInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListConstraintsForPortfolioRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListConstraintsForPortfolioOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListLaunchPaths = "ListLaunchPaths"
 
 // ListLaunchPathsRequest generates a "aws/request.Request" representing the
@@ -2601,6 +2879,12 @@ func (c *ServiceCatalog) ListLaunchPathsRequest(input *ListLaunchPathsInput) (re
 		Name:       opListLaunchPaths,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2652,6 +2936,56 @@ func (c *ServiceCatalog) ListLaunchPathsWithContext(ctx aws.Context, input *List
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListLaunchPathsPages iterates over the pages of a ListLaunchPaths operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListLaunchPaths method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListLaunchPaths operation.
+//    pageNum := 0
+//    err := client.ListLaunchPathsPages(params,
+//        func(page *ListLaunchPathsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) ListLaunchPathsPages(input *ListLaunchPathsInput, fn func(*ListLaunchPathsOutput, bool) bool) error {
+	return c.ListLaunchPathsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListLaunchPathsPagesWithContext same as ListLaunchPathsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) ListLaunchPathsPagesWithContext(ctx aws.Context, input *ListLaunchPathsInput, fn func(*ListLaunchPathsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListLaunchPathsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListLaunchPathsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListLaunchPathsOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opListPortfolioAccess = "ListPortfolioAccess"
@@ -2765,6 +3099,12 @@ func (c *ServiceCatalog) ListPortfoliosRequest(input *ListPortfoliosInput) (req 
 		Name:       opListPortfolios,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2813,6 +3153,56 @@ func (c *ServiceCatalog) ListPortfoliosWithContext(ctx aws.Context, input *ListP
 	return out, req.Send()
 }
 
+// ListPortfoliosPages iterates over the pages of a ListPortfolios operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPortfolios method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPortfolios operation.
+//    pageNum := 0
+//    err := client.ListPortfoliosPages(params,
+//        func(page *ListPortfoliosOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) ListPortfoliosPages(input *ListPortfoliosInput, fn func(*ListPortfoliosOutput, bool) bool) error {
+	return c.ListPortfoliosPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPortfoliosPagesWithContext same as ListPortfoliosPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) ListPortfoliosPagesWithContext(ctx aws.Context, input *ListPortfoliosInput, fn func(*ListPortfoliosOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPortfoliosInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPortfoliosRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPortfoliosOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListPortfoliosForProduct = "ListPortfoliosForProduct"
 
 // ListPortfoliosForProductRequest generates a "aws/request.Request" representing the
@@ -2844,6 +3234,12 @@ func (c *ServiceCatalog) ListPortfoliosForProductRequest(input *ListPortfoliosFo
 		Name:       opListPortfoliosForProduct,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2895,6 +3291,56 @@ func (c *ServiceCatalog) ListPortfoliosForProductWithContext(ctx aws.Context, in
 	return out, req.Send()
 }
 
+// ListPortfoliosForProductPages iterates over the pages of a ListPortfoliosForProduct operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPortfoliosForProduct method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPortfoliosForProduct operation.
+//    pageNum := 0
+//    err := client.ListPortfoliosForProductPages(params,
+//        func(page *ListPortfoliosForProductOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) ListPortfoliosForProductPages(input *ListPortfoliosForProductInput, fn func(*ListPortfoliosForProductOutput, bool) bool) error {
+	return c.ListPortfoliosForProductPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPortfoliosForProductPagesWithContext same as ListPortfoliosForProductPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) ListPortfoliosForProductPagesWithContext(ctx aws.Context, input *ListPortfoliosForProductInput, fn func(*ListPortfoliosForProductOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPortfoliosForProductInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPortfoliosForProductRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPortfoliosForProductOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListPrincipalsForPortfolio = "ListPrincipalsForPortfolio"
 
 // ListPrincipalsForPortfolioRequest generates a "aws/request.Request" representing the
@@ -2926,6 +3372,12 @@ func (c *ServiceCatalog) ListPrincipalsForPortfolioRequest(input *ListPrincipals
 		Name:       opListPrincipalsForPortfolio,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2975,6 +3427,56 @@ func (c *ServiceCatalog) ListPrincipalsForPortfolioWithContext(ctx aws.Context, 
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListPrincipalsForPortfolioPages iterates over the pages of a ListPrincipalsForPortfolio operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPrincipalsForPortfolio method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPrincipalsForPortfolio operation.
+//    pageNum := 0
+//    err := client.ListPrincipalsForPortfolioPages(params,
+//        func(page *ListPrincipalsForPortfolioOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) ListPrincipalsForPortfolioPages(input *ListPrincipalsForPortfolioInput, fn func(*ListPrincipalsForPortfolioOutput, bool) bool) error {
+	return c.ListPrincipalsForPortfolioPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPrincipalsForPortfolioPagesWithContext same as ListPrincipalsForPortfolioPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) ListPrincipalsForPortfolioPagesWithContext(ctx aws.Context, input *ListPrincipalsForPortfolioInput, fn func(*ListPrincipalsForPortfolioOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPrincipalsForPortfolioInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPrincipalsForPortfolioRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPrincipalsForPortfolioOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opListProvisioningArtifacts = "ListProvisioningArtifacts"
@@ -3708,6 +4210,12 @@ func (c *ServiceCatalog) SearchProductsRequest(input *SearchProductsInput) (req 
 		Name:       opSearchProducts,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3760,6 +4268,56 @@ func (c *ServiceCatalog) SearchProductsWithContext(ctx aws.Context, input *Searc
 	return out, req.Send()
 }
 
+// SearchProductsPages iterates over the pages of a SearchProducts operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See SearchProducts method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a SearchProducts operation.
+//    pageNum := 0
+//    err := client.SearchProductsPages(params,
+//        func(page *SearchProductsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) SearchProductsPages(input *SearchProductsInput, fn func(*SearchProductsOutput, bool) bool) error {
+	return c.SearchProductsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// SearchProductsPagesWithContext same as SearchProductsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) SearchProductsPagesWithContext(ctx aws.Context, input *SearchProductsInput, fn func(*SearchProductsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *SearchProductsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.SearchProductsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*SearchProductsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opSearchProductsAsAdmin = "SearchProductsAsAdmin"
 
 // SearchProductsAsAdminRequest generates a "aws/request.Request" representing the
@@ -3791,6 +4349,12 @@ func (c *ServiceCatalog) SearchProductsAsAdminRequest(input *SearchProductsAsAdm
 		Name:       opSearchProductsAsAdmin,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"PageToken"},
+			OutputTokens:    []string{"NextPageToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3843,6 +4407,56 @@ func (c *ServiceCatalog) SearchProductsAsAdminWithContext(ctx aws.Context, input
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// SearchProductsAsAdminPages iterates over the pages of a SearchProductsAsAdmin operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See SearchProductsAsAdmin method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a SearchProductsAsAdmin operation.
+//    pageNum := 0
+//    err := client.SearchProductsAsAdminPages(params,
+//        func(page *SearchProductsAsAdminOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ServiceCatalog) SearchProductsAsAdminPages(input *SearchProductsAsAdminInput, fn func(*SearchProductsAsAdminOutput, bool) bool) error {
+	return c.SearchProductsAsAdminPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// SearchProductsAsAdminPagesWithContext same as SearchProductsAsAdminPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ServiceCatalog) SearchProductsAsAdminPagesWithContext(ctx aws.Context, input *SearchProductsAsAdminInput, fn func(*SearchProductsAsAdminOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *SearchProductsAsAdminInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.SearchProductsAsAdminRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*SearchProductsAsAdminOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opTerminateProvisionedProduct = "TerminateProvisionedProduct"
@@ -4458,16 +5072,13 @@ func (c *ServiceCatalog) UpdateTagOptionWithContext(ctx aws.Context, input *Upda
 type AcceptPortfolioShareInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The portfolio identifier.
@@ -4574,16 +5185,13 @@ func (s *AccessLevelFilter) SetValue(v string) *AccessLevelFilter {
 type AssociatePrincipalWithPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The portfolio identifier.
@@ -4680,16 +5288,13 @@ func (s AssociatePrincipalWithPortfolioOutput) GoString() string {
 type AssociateProductWithPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The portfolio identifier.
@@ -4937,34 +5542,173 @@ func (s *ConstraintSummary) SetType(v string) *ConstraintSummary {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CopyProductInput
+type CopyProductInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code.
+	//
+	//    * en - English (default)
+	//
+	//    * jp - Japanese
+	//
+	//    * zh - Chinese
+	AcceptLanguage *string `type:"string"`
+
+	// The copy options. If the value is CopyTags, the tags from the source product
+	// are copied to the target product.
+	CopyOptions []*string `type:"list"`
+
+	// A token to disambiguate duplicate requests. You can use the same input in
+	// multiple requests, provided that you also specify a different idempotency
+	// token for each request.
+	//
+	// IdempotencyToken is a required field
+	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
+
+	// The Amazon Resource Name (ARN) of the source product.
+	//
+	// SourceProductArn is a required field
+	SourceProductArn *string `min:"1" type:"string" required:"true"`
+
+	// The IDs of the product versions to copy. By default, all provisioning artifacts
+	// are copied.
+	SourceProvisioningArtifactIdentifiers []map[string]*string `type:"list"`
+
+	// The ID of the target product. By default, a new product is created.
+	TargetProductId *string `min:"1" type:"string"`
+
+	// A name for the target product. The default is the name of the source product.
+	TargetProductName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CopyProductInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CopyProductInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CopyProductInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CopyProductInput"}
+	if s.IdempotencyToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdempotencyToken"))
+	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
+	if s.SourceProductArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceProductArn"))
+	}
+	if s.SourceProductArn != nil && len(*s.SourceProductArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceProductArn", 1))
+	}
+	if s.TargetProductId != nil && len(*s.TargetProductId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TargetProductId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *CopyProductInput) SetAcceptLanguage(v string) *CopyProductInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetCopyOptions sets the CopyOptions field's value.
+func (s *CopyProductInput) SetCopyOptions(v []*string) *CopyProductInput {
+	s.CopyOptions = v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *CopyProductInput) SetIdempotencyToken(v string) *CopyProductInput {
+	s.IdempotencyToken = &v
+	return s
+}
+
+// SetSourceProductArn sets the SourceProductArn field's value.
+func (s *CopyProductInput) SetSourceProductArn(v string) *CopyProductInput {
+	s.SourceProductArn = &v
+	return s
+}
+
+// SetSourceProvisioningArtifactIdentifiers sets the SourceProvisioningArtifactIdentifiers field's value.
+func (s *CopyProductInput) SetSourceProvisioningArtifactIdentifiers(v []map[string]*string) *CopyProductInput {
+	s.SourceProvisioningArtifactIdentifiers = v
+	return s
+}
+
+// SetTargetProductId sets the TargetProductId field's value.
+func (s *CopyProductInput) SetTargetProductId(v string) *CopyProductInput {
+	s.TargetProductId = &v
+	return s
+}
+
+// SetTargetProductName sets the TargetProductName field's value.
+func (s *CopyProductInput) SetTargetProductName(v string) *CopyProductInput {
+	s.TargetProductName = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CopyProductOutput
+type CopyProductOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique token to pass to DescribeCopyProductStatus to track the progress
+	// of the operation.
+	CopyProductToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CopyProductOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CopyProductOutput) GoString() string {
+	return s.String()
+}
+
+// SetCopyProductToken sets the CopyProductToken field's value.
+func (s *CopyProductOutput) SetCopyProductToken(v string) *CopyProductOutput {
+	s.CopyProductToken = &v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateConstraintInput
 type CreateConstraintInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The text description of the constraint.
 	Description *string `type:"string"`
 
-	// A token to disambiguate duplicate requests. You can create multiple resources
-	// using the same input in multiple requests, provided that you also specify
-	// a different idempotency token for each request.
+	// A token to disambiguate duplicate requests. You can use the same input in
+	// multiple requests, provided that you also specify a different idempotency
+	// token for each request.
 	//
 	// IdempotencyToken is a required field
 	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
 
 	// The constraint parameters. Expected values vary depending on which Type is
-	// specified. For examples, see the bottom of this topic.
+	// specified. For more information, see the Examples section.
 	//
 	// For Type LAUNCH, the RoleArn property is required.
 	//
@@ -5127,16 +5871,13 @@ func (s *CreateConstraintOutput) SetStatus(v string) *CreateConstraintOutput {
 type CreatePortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The text description of the portfolio.
@@ -5147,9 +5888,9 @@ type CreatePortfolioInput struct {
 	// DisplayName is a required field
 	DisplayName *string `min:"1" type:"string" required:"true"`
 
-	// A token to disambiguate duplicate requests. You can create multiple resources
-	// using the same input in multiple requests, provided that you also specify
-	// a different idempotency token for each request.
+	// A token to disambiguate duplicate requests. You can use the same input in
+	// multiple requests, provided that you also specify a different idempotency
+	// token for each request.
 	//
 	// IdempotencyToken is a required field
 	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
@@ -5284,16 +6025,13 @@ func (s *CreatePortfolioOutput) SetTags(v []*Tag) *CreatePortfolioOutput {
 type CreatePortfolioShareInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The account ID with which to share the portfolio.
@@ -5373,16 +6111,13 @@ func (s CreatePortfolioShareOutput) GoString() string {
 type CreateProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The text description of the product.
@@ -5391,9 +6126,9 @@ type CreateProductInput struct {
 	// The distributor of the product.
 	Distributor *string `type:"string"`
 
-	// A token to disambiguate duplicate requests. You can create multiple resources
-	// using the same input in multiple requests, provided that you also specify
-	// a different idempotency token for each request.
+	// A token to disambiguate duplicate requests. You can use the same input in
+	// multiple requests, provided that you also specify a different idempotency
+	// token for each request.
 	//
 	// IdempotencyToken is a required field
 	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
@@ -5602,21 +6337,18 @@ func (s *CreateProductOutput) SetTags(v []*Tag) *CreateProductOutput {
 type CreateProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
-	// A token to disambiguate duplicate requests. You can create multiple resources
-	// using the same input in multiple requests, provided that you also specify
-	// a different idempotency token for each request.
+	// A token to disambiguate duplicate requests. You can use the same input in
+	// multiple requests, provided that you also specify a different idempotency
+	// token for each request.
 	//
 	// IdempotencyToken is a required field
 	IdempotencyToken *string `min:"1" type:"string" required:"true" idempotencyToken:"true"`
@@ -5825,16 +6557,13 @@ func (s *CreateTagOptionOutput) SetTagOptionDetail(v *TagOptionDetail) *CreateTa
 type DeleteConstraintInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the constraint to delete.
@@ -5900,16 +6629,13 @@ func (s DeleteConstraintOutput) GoString() string {
 type DeletePortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the portfolio for the delete request.
@@ -5975,16 +6701,13 @@ func (s DeletePortfolioOutput) GoString() string {
 type DeletePortfolioShareInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The account ID associated with the share to delete.
@@ -6064,16 +6787,13 @@ func (s DeletePortfolioShareOutput) GoString() string {
 type DeleteProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the product for the delete request.
@@ -6139,16 +6859,13 @@ func (s DeleteProductOutput) GoString() string {
 type DeleteProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The product identifier.
@@ -6232,16 +6949,13 @@ func (s DeleteProvisioningArtifactOutput) GoString() string {
 type DescribeConstraintInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the constraint.
@@ -6330,20 +7044,116 @@ func (s *DescribeConstraintOutput) SetStatus(v string) *DescribeConstraintOutput
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeCopyProductStatusInput
+type DescribeCopyProductStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The language code.
+	//
+	//    * en - English (default)
+	//
+	//    * jp - Japanese
+	//
+	//    * zh - Chinese
+	AcceptLanguage *string `type:"string"`
+
+	// The token returned from the call to CopyProduct that initiated the operation.
+	//
+	// CopyProductToken is a required field
+	CopyProductToken *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeCopyProductStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeCopyProductStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeCopyProductStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeCopyProductStatusInput"}
+	if s.CopyProductToken == nil {
+		invalidParams.Add(request.NewErrParamRequired("CopyProductToken"))
+	}
+	if s.CopyProductToken != nil && len(*s.CopyProductToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CopyProductToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceptLanguage sets the AcceptLanguage field's value.
+func (s *DescribeCopyProductStatusInput) SetAcceptLanguage(v string) *DescribeCopyProductStatusInput {
+	s.AcceptLanguage = &v
+	return s
+}
+
+// SetCopyProductToken sets the CopyProductToken field's value.
+func (s *DescribeCopyProductStatusInput) SetCopyProductToken(v string) *DescribeCopyProductStatusInput {
+	s.CopyProductToken = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeCopyProductStatusOutput
+type DescribeCopyProductStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status of the copy product operation.
+	CopyProductStatus *string `type:"string" enum:"CopyProductStatus"`
+
+	// The status message.
+	StatusDetail *string `type:"string"`
+
+	// The ID of the copied product.
+	TargetProductId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeCopyProductStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeCopyProductStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetCopyProductStatus sets the CopyProductStatus field's value.
+func (s *DescribeCopyProductStatusOutput) SetCopyProductStatus(v string) *DescribeCopyProductStatusOutput {
+	s.CopyProductStatus = &v
+	return s
+}
+
+// SetStatusDetail sets the StatusDetail field's value.
+func (s *DescribeCopyProductStatusOutput) SetStatusDetail(v string) *DescribeCopyProductStatusOutput {
+	s.StatusDetail = &v
+	return s
+}
+
+// SetTargetProductId sets the TargetProductId field's value.
+func (s *DescribeCopyProductStatusOutput) SetTargetProductId(v string) *DescribeCopyProductStatusOutput {
+	s.TargetProductId = &v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolioInput
 type DescribePortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the portfolio for which to retrieve information.
@@ -6436,16 +7246,13 @@ func (s *DescribePortfolioOutput) SetTags(v []*Tag) *DescribePortfolioOutput {
 type DescribeProductAsAdminInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the product for which to retrieve information.
@@ -6547,16 +7354,13 @@ func (s *DescribeProductAsAdminOutput) SetTags(v []*Tag) *DescribeProductAsAdmin
 type DescribeProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The ProductId of the product to describe.
@@ -6641,16 +7445,13 @@ func (s *DescribeProductOutput) SetProvisioningArtifacts(v []*ProvisioningArtifa
 type DescribeProductViewInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The ProductViewId of the product to describe.
@@ -6735,16 +7536,13 @@ func (s *DescribeProductViewOutput) SetProvisioningArtifacts(v []*ProvisioningAr
 type DescribeProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The provisioned product identifier.
@@ -6819,16 +7617,13 @@ func (s *DescribeProvisionedProductOutput) SetProvisionedProductDetail(v *Provis
 type DescribeProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The product identifier.
@@ -6948,16 +7743,13 @@ func (s *DescribeProvisioningArtifactOutput) SetStatus(v string) *DescribeProvis
 type DescribeProvisioningParametersInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the path for this product's provisioning. This value is
@@ -7093,16 +7885,13 @@ func (s *DescribeProvisioningParametersOutput) SetUsageInstructions(v []*UsageIn
 type DescribeRecordInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The record identifier of the ProvisionedProduct object for which to retrieve
@@ -7287,16 +8076,13 @@ func (s *DescribeTagOptionOutput) SetTagOptionDetail(v *TagOptionDetail) *Descri
 type DisassociatePrincipalFromPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The portfolio identifier.
@@ -7379,16 +8165,13 @@ func (s DisassociatePrincipalFromPortfolioOutput) GoString() string {
 type DisassociateProductFromPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The portfolio identifier.
@@ -7595,16 +8378,13 @@ func (s *LaunchPathSummary) SetTags(v []*Tag) *LaunchPathSummary {
 type ListAcceptedPortfolioSharesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The maximum number of items to return in the results. If more results exist
@@ -7683,16 +8463,13 @@ func (s *ListAcceptedPortfolioSharesOutput) SetPortfolioDetails(v []*PortfolioDe
 type ListConstraintsForPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The maximum number of items to return in the results. If more results exist
@@ -7810,16 +8587,13 @@ func (s *ListConstraintsForPortfolioOutput) SetNextPageToken(v string) *ListCons
 type ListLaunchPathsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The maximum number of items to return in the results. If more results exist
@@ -7926,16 +8700,13 @@ func (s *ListLaunchPathsOutput) SetNextPageToken(v string) *ListLaunchPathsOutpu
 type ListPortfolioAccessInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The portfolio identifier.
@@ -8020,16 +8791,13 @@ func (s *ListPortfolioAccessOutput) SetNextPageToken(v string) *ListPortfolioAcc
 type ListPortfoliosForProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The maximum number of items to return in the results. If more results exist
@@ -8135,16 +8903,13 @@ func (s *ListPortfoliosForProductOutput) SetPortfolioDetails(v []*PortfolioDetai
 type ListPortfoliosInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The maximum number of items to return in the results. If more results exist
@@ -8223,16 +8988,13 @@ func (s *ListPortfoliosOutput) SetPortfolioDetails(v []*PortfolioDetail) *ListPo
 type ListPrincipalsForPortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The maximum number of items to return in the results. If more results exist
@@ -8338,16 +9100,13 @@ func (s *ListPrincipalsForPortfolioOutput) SetPrincipals(v []*Principal) *ListPr
 type ListProvisioningArtifactsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The product identifier.
@@ -8432,16 +9191,13 @@ func (s *ListProvisioningArtifactsOutput) SetProvisioningArtifactDetails(v []*Pr
 type ListRecordHistoryInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The access level for obtaining results. If left unspecified, User level access
@@ -9178,16 +9934,13 @@ func (s *ProductViewSummary) SetType(v string) *ProductViewSummary {
 type ProvisionProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// Passed to CloudFormation. The SNS topic ARNs to which to publish stack-related
@@ -9392,9 +10145,9 @@ type ProvisionedProductDetail struct {
 	// The identifier of the ProvisionedProduct object.
 	Id *string `type:"string"`
 
-	// A token to disambiguate duplicate requests. You can create multiple resources
-	// using the same input in multiple requests, provided that you also specify
-	// a different idempotency token for each request.
+	// A token to disambiguate duplicate requests. You can use the same input in
+	// multiple requests, provided that you also specify a different idempotency
+	// token for each request.
 	IdempotencyToken *string `min:"1" type:"string"`
 
 	// The record identifier of the last request performed on this ProvisionedProduct
@@ -10136,16 +10889,13 @@ func (s *RecordTag) SetValue(v string) *RecordTag {
 type RejectPortfolioShareInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The portfolio identifier.
@@ -10272,16 +11022,13 @@ func (s *ResourceDetail) SetName(v string) *ResourceDetail {
 type ScanProvisionedProductsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The access level for obtaining results. If left unspecified, User level access
@@ -10370,16 +11117,13 @@ func (s *ScanProvisionedProductsOutput) SetProvisionedProducts(v []*ProvisionedP
 type SearchProductsAsAdminInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The list of filters with which to limit search results. If no search filters
@@ -10518,16 +11262,13 @@ func (s *SearchProductsAsAdminOutput) SetProductViewDetails(v []*ProductViewDeta
 type SearchProductsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The list of filters with which to limit search results. If no search filters
@@ -10791,16 +11532,13 @@ func (s *TagOptionSummary) SetValues(v []*string) *TagOptionSummary {
 type TerminateProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// If set to true, AWS Service Catalog stops managing the specified ProvisionedProduct
@@ -10917,16 +11655,13 @@ func (s *TerminateProvisionedProductOutput) SetRecordDetail(v *RecordDetail) *Te
 type UpdateConstraintInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The updated text description of the constraint.
@@ -11028,16 +11763,13 @@ func (s *UpdateConstraintOutput) SetStatus(v string) *UpdateConstraintOutput {
 type UpdatePortfolioInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// Tags to add to the existing list of tags associated with the portfolio.
@@ -11182,16 +11914,13 @@ func (s *UpdatePortfolioOutput) SetTags(v []*Tag) *UpdatePortfolioOutput {
 type UpdateProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// Tags to add to the existing list of tags associated with the product.
@@ -11366,16 +12095,13 @@ func (s *UpdateProductOutput) SetTags(v []*Tag) *UpdateProductOutput {
 type UpdateProvisionedProductInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The identifier of the path to use in the updated ProvisionedProduct object.
@@ -11538,16 +12264,13 @@ func (s *UpdateProvisionedProductOutput) SetRecordDetail(v *RecordDetail) *Updat
 type UpdateProvisioningArtifactInput struct {
 	_ struct{} `type:"structure"`
 
-	// The language code to use for this operation. Supported language codes are
-	// as follows:
+	// The language code.
 	//
-	// "en" (English)
+	//    * en - English (default)
 	//
-	// "jp" (Japanese)
+	//    * jp - Japanese
 	//
-	// "zh" (Chinese)
-	//
-	// If no code is specified, "en" is used as the default.
+	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
 	// The updated text description of the provisioning artifact.
@@ -11865,6 +12588,22 @@ const (
 )
 
 const (
+	// CopyOptionCopyTags is a CopyOption enum value
+	CopyOptionCopyTags = "CopyTags"
+)
+
+const (
+	// CopyProductStatusSucceeded is a CopyProductStatus enum value
+	CopyProductStatusSucceeded = "SUCCEEDED"
+
+	// CopyProductStatusInProgress is a CopyProductStatus enum value
+	CopyProductStatusInProgress = "IN_PROGRESS"
+
+	// CopyProductStatusFailed is a CopyProductStatus enum value
+	CopyProductStatusFailed = "FAILED"
+)
+
+const (
 	// PrincipalTypeIam is a PrincipalType enum value
 	PrincipalTypeIam = "IAM"
 )
@@ -11919,6 +12658,11 @@ const (
 
 	// ProvisionedProductStatusError is a ProvisionedProductStatus enum value
 	ProvisionedProductStatusError = "ERROR"
+)
+
+const (
+	// ProvisioningArtifactPropertyNameId is a ProvisioningArtifactPropertyName enum value
+	ProvisioningArtifactPropertyNameId = "Id"
 )
 
 const (

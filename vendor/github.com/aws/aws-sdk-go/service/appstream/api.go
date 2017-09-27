@@ -2260,13 +2260,15 @@ type CreateFleetInput struct {
 	// Enables or disables default internet access for the fleet.
 	EnableDefaultInternetAccess *bool `type:"boolean"`
 
+	FleetType *string `type:"string" enum:"FleetType"`
+
 	// Unique name of the image used by the fleet.
 	//
 	// ImageName is a required field
 	ImageName *string `min:"1" type:"string" required:"true"`
 
-	// The instance type of compute resources for the fleet. Fleet instances are
-	// launched from this instance type. Available instance types are:
+	// The instance type to use when launching fleet instances. The following instance
+	// types are available:
 	//
 	//    * stream.standard.medium
 	//
@@ -2292,13 +2294,21 @@ type CreateFleetInput struct {
 	//
 	//    * stream.memory.8xlarge
 	//
+	//    * stream.graphics-design.large
+	//
+	//    * stream.graphics-design.xlarge
+	//
+	//    * stream.graphics-design.2xlarge
+	//
+	//    * stream.graphics-design.4xlarge
+	//
+	//    * stream.graphics-desktop.2xlarge
+	//
 	//    * stream.graphics-pro.4xlarge
 	//
 	//    * stream.graphics-pro.8xlarge
 	//
 	//    * stream.graphics-pro.16xlarge
-	//
-	//    * stream.graphics-desktop.2xlarge
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
@@ -2392,6 +2402,12 @@ func (s *CreateFleetInput) SetDomainJoinInfo(v *DomainJoinInfo) *CreateFleetInpu
 // SetEnableDefaultInternetAccess sets the EnableDefaultInternetAccess field's value.
 func (s *CreateFleetInput) SetEnableDefaultInternetAccess(v bool) *CreateFleetInput {
 	s.EnableDefaultInternetAccess = &v
+	return s
+}
+
+// SetFleetType sets the FleetType field's value.
+func (s *CreateFleetInput) SetFleetType(v string) *CreateFleetInput {
+	s.FleetType = &v
 	return s
 }
 
@@ -3571,13 +3587,14 @@ type Fleet struct {
 	// The list of fleet errors is appended to this list.
 	FleetErrors []*FleetError `type:"list"`
 
+	FleetType *string `type:"string" enum:"FleetType"`
+
 	// The image used by the fleet.
 	//
 	// ImageName is a required field
 	ImageName *string `min:"1" type:"string" required:"true"`
 
-	// The instance type of compute resources for the fleet. The fleet instances
-	// are launched from this instance type.
+	// The instance type to use when launching fleet instances.
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
@@ -3661,6 +3678,12 @@ func (s *Fleet) SetEnableDefaultInternetAccess(v bool) *Fleet {
 // SetFleetErrors sets the FleetErrors field's value.
 func (s *Fleet) SetFleetErrors(v []*FleetError) *Fleet {
 	s.FleetErrors = v
+	return s
+}
+
+// SetFleetType sets the FleetType field's value.
+func (s *Fleet) SetFleetType(v string) *Fleet {
+	s.FleetType = &v
 	return s
 }
 
@@ -4637,8 +4660,8 @@ type UpdateFleetInput struct {
 	// The image name from which a fleet is created.
 	ImageName *string `min:"1" type:"string"`
 
-	// The instance type of compute resources for the fleet. Fleet instances are
-	// launched from this instance type. Available instance types are:
+	// The instance type to use when launching fleet instances. The following instance
+	// types are available:
 	//
 	//    * stream.standard.medium
 	//
@@ -4664,13 +4687,21 @@ type UpdateFleetInput struct {
 	//
 	//    * stream.memory.8xlarge
 	//
+	//    * stream.graphics-design.large
+	//
+	//    * stream.graphics-design.xlarge
+	//
+	//    * stream.graphics-design.2xlarge
+	//
+	//    * stream.graphics-design.4xlarge
+	//
+	//    * stream.graphics-desktop.2xlarge
+	//
 	//    * stream.graphics-pro.4xlarge
 	//
 	//    * stream.graphics-pro.8xlarge
 	//
 	//    * stream.graphics-pro.16xlarge
-	//
-	//    * stream.graphics-desktop.2xlarge
 	InstanceType *string `min:"1" type:"string"`
 
 	// The maximum time for which a streaming session can run. The input can be
@@ -5032,6 +5063,9 @@ const (
 	// FleetErrorCodeSecurityGroupsNotFound is a FleetErrorCode enum value
 	FleetErrorCodeSecurityGroupsNotFound = "SECURITY_GROUPS_NOT_FOUND"
 
+	// FleetErrorCodeIgwNotAttached is a FleetErrorCode enum value
+	FleetErrorCodeIgwNotAttached = "IGW_NOT_ATTACHED"
+
 	// FleetErrorCodeIamServiceRoleMissingDescribeSecurityGroupsAction is a FleetErrorCode enum value
 	FleetErrorCodeIamServiceRoleMissingDescribeSecurityGroupsAction = "IAM_SERVICE_ROLE_MISSING_DESCRIBE_SECURITY_GROUPS_ACTION"
 
@@ -5084,6 +5118,14 @@ const (
 
 	// FleetStateStopped is a FleetState enum value
 	FleetStateStopped = "STOPPED"
+)
+
+const (
+	// FleetTypeAlwaysOn is a FleetType enum value
+	FleetTypeAlwaysOn = "ALWAYS_ON"
+
+	// FleetTypeOnDemand is a FleetType enum value
+	FleetTypeOnDemand = "ON_DEMAND"
 )
 
 const (

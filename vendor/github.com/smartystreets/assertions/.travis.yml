@@ -2,11 +2,10 @@ language: go
 
 go:
   - 1.x
-  - master
 
 install:
   - go get -t ./...
 
-script: go test -v
+script: go test ./... -v
 
 sudo: false

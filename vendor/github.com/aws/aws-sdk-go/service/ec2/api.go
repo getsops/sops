@@ -2306,6 +2306,80 @@ func (c *EC2) ConfirmProductInstanceWithContext(ctx aws.Context, input *ConfirmP
 	return out, req.Send()
 }
 
+const opCopyFpgaImage = "CopyFpgaImage"
+
+// CopyFpgaImageRequest generates a "aws/request.Request" representing the
+// client's request for the CopyFpgaImage operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CopyFpgaImage for more information on using the CopyFpgaImage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CopyFpgaImageRequest method.
+//    req, resp := client.CopyFpgaImageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CopyFpgaImage
+func (c *EC2) CopyFpgaImageRequest(input *CopyFpgaImageInput) (req *request.Request, output *CopyFpgaImageOutput) {
+	op := &request.Operation{
+		Name:       opCopyFpgaImage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CopyFpgaImageInput{}
+	}
+
+	output = &CopyFpgaImageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CopyFpgaImage API operation for Amazon Elastic Compute Cloud.
+//
+// Copies the specified Amazon FPGA Image (AFI) to the current region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation CopyFpgaImage for usage and error information.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CopyFpgaImage
+func (c *EC2) CopyFpgaImage(input *CopyFpgaImageInput) (*CopyFpgaImageOutput, error) {
+	req, out := c.CopyFpgaImageRequest(input)
+	return out, req.Send()
+}
+
+// CopyFpgaImageWithContext is the same as CopyFpgaImage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CopyFpgaImage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) CopyFpgaImageWithContext(ctx aws.Context, input *CopyFpgaImageInput, opts ...request.Option) (*CopyFpgaImageOutput, error) {
+	req, out := c.CopyFpgaImageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCopyImage = "CopyImage"
 
 // CopyImageRequest generates a "aws/request.Request" representing the
@@ -5466,6 +5540,80 @@ func (c *EC2) DeleteFlowLogsWithContext(ctx aws.Context, input *DeleteFlowLogsIn
 	return out, req.Send()
 }
 
+const opDeleteFpgaImage = "DeleteFpgaImage"
+
+// DeleteFpgaImageRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteFpgaImage operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteFpgaImage for more information on using the DeleteFpgaImage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteFpgaImageRequest method.
+//    req, resp := client.DeleteFpgaImageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DeleteFpgaImage
+func (c *EC2) DeleteFpgaImageRequest(input *DeleteFpgaImageInput) (req *request.Request, output *DeleteFpgaImageOutput) {
+	op := &request.Operation{
+		Name:       opDeleteFpgaImage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteFpgaImageInput{}
+	}
+
+	output = &DeleteFpgaImageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteFpgaImage API operation for Amazon Elastic Compute Cloud.
+//
+// Deletes the specified Amazon FPGA Image (AFI).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DeleteFpgaImage for usage and error information.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DeleteFpgaImage
+func (c *EC2) DeleteFpgaImage(input *DeleteFpgaImageInput) (*DeleteFpgaImageOutput, error) {
+	req, out := c.DeleteFpgaImageRequest(input)
+	return out, req.Send()
+}
+
+// DeleteFpgaImageWithContext is the same as DeleteFpgaImage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteFpgaImage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DeleteFpgaImageWithContext(ctx aws.Context, input *DeleteFpgaImageInput, opts ...request.Option) (*DeleteFpgaImageOutput, error) {
+	req, out := c.DeleteFpgaImageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteInternetGateway = "DeleteInternetGateway"
 
 // DeleteInternetGatewayRequest generates a "aws/request.Request" representing the
@@ -8214,6 +8362,80 @@ func (c *EC2) DescribeFlowLogs(input *DescribeFlowLogsInput) (*DescribeFlowLogsO
 // for more information on using Contexts.
 func (c *EC2) DescribeFlowLogsWithContext(ctx aws.Context, input *DescribeFlowLogsInput, opts ...request.Option) (*DescribeFlowLogsOutput, error) {
 	req, out := c.DescribeFlowLogsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeFpgaImageAttribute = "DescribeFpgaImageAttribute"
+
+// DescribeFpgaImageAttributeRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeFpgaImageAttribute operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeFpgaImageAttribute for more information on using the DescribeFpgaImageAttribute
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeFpgaImageAttributeRequest method.
+//    req, resp := client.DescribeFpgaImageAttributeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeFpgaImageAttribute
+func (c *EC2) DescribeFpgaImageAttributeRequest(input *DescribeFpgaImageAttributeInput) (req *request.Request, output *DescribeFpgaImageAttributeOutput) {
+	op := &request.Operation{
+		Name:       opDescribeFpgaImageAttribute,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeFpgaImageAttributeInput{}
+	}
+
+	output = &DescribeFpgaImageAttributeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeFpgaImageAttribute API operation for Amazon Elastic Compute Cloud.
+//
+// Describes the specified attribute of the specified Amazon FPGA Image (AFI).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DescribeFpgaImageAttribute for usage and error information.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeFpgaImageAttribute
+func (c *EC2) DescribeFpgaImageAttribute(input *DescribeFpgaImageAttributeInput) (*DescribeFpgaImageAttributeOutput, error) {
+	req, out := c.DescribeFpgaImageAttributeRequest(input)
+	return out, req.Send()
+}
+
+// DescribeFpgaImageAttributeWithContext is the same as DescribeFpgaImageAttribute with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeFpgaImageAttribute for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeFpgaImageAttributeWithContext(ctx aws.Context, input *DescribeFpgaImageAttributeInput, opts ...request.Option) (*DescribeFpgaImageAttributeOutput, error) {
+	req, out := c.DescribeFpgaImageAttributeRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -15093,20 +15315,24 @@ func (c *EC2) GetPasswordDataRequest(input *GetPasswordDataInput) (req *request.
 
 // GetPasswordData API operation for Amazon Elastic Compute Cloud.
 //
-// Retrieves the encrypted administrator password for an instance running Windows.
+// Retrieves the encrypted administrator password for a running Windows instance.
 //
-// The Windows password is generated at boot if the EC2Config service plugin,
-// Ec2SetPassword, is enabled. This usually only happens the first time an AMI
-// is launched, and then Ec2SetPassword is automatically disabled. The password
-// is not generated for rebundled AMIs unless Ec2SetPassword is enabled before
-// bundling.
+// The Windows password is generated at boot by the EC2Config service or EC2Launch
+// scripts (Windows Server 2016 and later). This usually only happens the first
+// time an instance is launched. For more information, see EC2Config (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html)
+// and EC2Launch (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2launch.html)
+// in the Amazon Elastic Compute Cloud User Guide.
+//
+// For the EC2Config service, the password is not generated for rebundled AMIs
+// unless Ec2SetPassword is enabled before bundling.
 //
 // The password is encrypted using the key pair that you specified when you
 // launched the instance. You must provide the corresponding key pair file.
 //
-// Password generation and encryption takes a few moments. We recommend that
-// you wait up to 15 minutes after launching an instance before trying to retrieve
-// the generated password.
+// When you launch an instance, password generation and encryption may take
+// a few minutes. If you try to retrieve the password before it's available,
+// the output returns an empty string. We recommend that you wait up to 15 minutes
+// after launching an instance before trying to retrieve the generated password.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -15597,6 +15823,80 @@ func (c *EC2) ImportVolume(input *ImportVolumeInput) (*ImportVolumeOutput, error
 // for more information on using Contexts.
 func (c *EC2) ImportVolumeWithContext(ctx aws.Context, input *ImportVolumeInput, opts ...request.Option) (*ImportVolumeOutput, error) {
 	req, out := c.ImportVolumeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opModifyFpgaImageAttribute = "ModifyFpgaImageAttribute"
+
+// ModifyFpgaImageAttributeRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyFpgaImageAttribute operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyFpgaImageAttribute for more information on using the ModifyFpgaImageAttribute
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifyFpgaImageAttributeRequest method.
+//    req, resp := client.ModifyFpgaImageAttributeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyFpgaImageAttribute
+func (c *EC2) ModifyFpgaImageAttributeRequest(input *ModifyFpgaImageAttributeInput) (req *request.Request, output *ModifyFpgaImageAttributeOutput) {
+	op := &request.Operation{
+		Name:       opModifyFpgaImageAttribute,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyFpgaImageAttributeInput{}
+	}
+
+	output = &ModifyFpgaImageAttributeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyFpgaImageAttribute API operation for Amazon Elastic Compute Cloud.
+//
+// Modifies the specified attribute of the specified Amazon FPGA Image (AFI).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ModifyFpgaImageAttribute for usage and error information.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyFpgaImageAttribute
+func (c *EC2) ModifyFpgaImageAttribute(input *ModifyFpgaImageAttributeInput) (*ModifyFpgaImageAttributeOutput, error) {
+	req, out := c.ModifyFpgaImageAttributeRequest(input)
+	return out, req.Send()
+}
+
+// ModifyFpgaImageAttributeWithContext is the same as ModifyFpgaImageAttribute with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyFpgaImageAttribute for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ModifyFpgaImageAttributeWithContext(ctx aws.Context, input *ModifyFpgaImageAttributeInput, opts ...request.Option) (*ModifyFpgaImageAttributeOutput, error) {
+	req, out := c.ModifyFpgaImageAttributeRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -18460,6 +18760,81 @@ func (c *EC2) RequestSpotInstances(input *RequestSpotInstancesInput) (*RequestSp
 // for more information on using Contexts.
 func (c *EC2) RequestSpotInstancesWithContext(ctx aws.Context, input *RequestSpotInstancesInput, opts ...request.Option) (*RequestSpotInstancesOutput, error) {
 	req, out := c.RequestSpotInstancesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opResetFpgaImageAttribute = "ResetFpgaImageAttribute"
+
+// ResetFpgaImageAttributeRequest generates a "aws/request.Request" representing the
+// client's request for the ResetFpgaImageAttribute operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ResetFpgaImageAttribute for more information on using the ResetFpgaImageAttribute
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ResetFpgaImageAttributeRequest method.
+//    req, resp := client.ResetFpgaImageAttributeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ResetFpgaImageAttribute
+func (c *EC2) ResetFpgaImageAttributeRequest(input *ResetFpgaImageAttributeInput) (req *request.Request, output *ResetFpgaImageAttributeOutput) {
+	op := &request.Operation{
+		Name:       opResetFpgaImageAttribute,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ResetFpgaImageAttributeInput{}
+	}
+
+	output = &ResetFpgaImageAttributeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ResetFpgaImageAttribute API operation for Amazon Elastic Compute Cloud.
+//
+// Resets the specified attribute of the specified Amazon FPGA Image (AFI) to
+// its default value. You can only reset the load permission attribute.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ResetFpgaImageAttribute for usage and error information.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ResetFpgaImageAttribute
+func (c *EC2) ResetFpgaImageAttribute(input *ResetFpgaImageAttributeInput) (*ResetFpgaImageAttributeOutput, error) {
+	req, out := c.ResetFpgaImageAttributeRequest(input)
+	return out, req.Send()
+}
+
+// ResetFpgaImageAttributeWithContext is the same as ResetFpgaImageAttribute with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ResetFpgaImageAttribute for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ResetFpgaImageAttributeWithContext(ctx aws.Context, input *ResetFpgaImageAttributeInput, opts ...request.Option) (*ResetFpgaImageAttributeOutput, error) {
+	req, out := c.ResetFpgaImageAttributeRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -23511,6 +23886,123 @@ func (s *ConversionTask) SetTags(v []*Tag) *ConversionTask {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CopyFpgaImageRequest
+type CopyFpgaImageInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request. For more information, see Ensuring Idempotency (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
+	ClientToken *string `type:"string"`
+
+	// The description for the new AFI.
+	Description *string `type:"string"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The name for the new AFI. The default is the name of the source AFI.
+	Name *string `type:"string"`
+
+	// The ID of the source AFI.
+	//
+	// SourceFpgaImageId is a required field
+	SourceFpgaImageId *string `type:"string" required:"true"`
+
+	// The region that contains the source AFI.
+	//
+	// SourceRegion is a required field
+	SourceRegion *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CopyFpgaImageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CopyFpgaImageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CopyFpgaImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CopyFpgaImageInput"}
+	if s.SourceFpgaImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceFpgaImageId"))
+	}
+	if s.SourceRegion == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceRegion"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CopyFpgaImageInput) SetClientToken(v string) *CopyFpgaImageInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CopyFpgaImageInput) SetDescription(v string) *CopyFpgaImageInput {
+	s.Description = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *CopyFpgaImageInput) SetDryRun(v bool) *CopyFpgaImageInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CopyFpgaImageInput) SetName(v string) *CopyFpgaImageInput {
+	s.Name = &v
+	return s
+}
+
+// SetSourceFpgaImageId sets the SourceFpgaImageId field's value.
+func (s *CopyFpgaImageInput) SetSourceFpgaImageId(v string) *CopyFpgaImageInput {
+	s.SourceFpgaImageId = &v
+	return s
+}
+
+// SetSourceRegion sets the SourceRegion field's value.
+func (s *CopyFpgaImageInput) SetSourceRegion(v string) *CopyFpgaImageInput {
+	s.SourceRegion = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CopyFpgaImageResult
+type CopyFpgaImageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the new AFI.
+	FpgaImageId *string `locationName:"fpgaImageId" type:"string"`
+}
+
+// String returns the string representation
+func (s CopyFpgaImageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CopyFpgaImageOutput) GoString() string {
+	return s.String()
+}
+
+// SetFpgaImageId sets the FpgaImageId field's value.
+func (s *CopyFpgaImageOutput) SetFpgaImageId(v string) *CopyFpgaImageOutput {
+	s.FpgaImageId = &v
+	return s
+}
+
 // Contains the parameters for CopyImage.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CopyImageRequest
 type CopyImageInput struct {
@@ -27471,6 +27963,81 @@ func (s *DeleteFlowLogsOutput) SetUnsuccessful(v []*UnsuccessfulItem) *DeleteFlo
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DeleteFpgaImageRequest
+type DeleteFpgaImageInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the AFI.
+	//
+	// FpgaImageId is a required field
+	FpgaImageId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteFpgaImageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteFpgaImageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteFpgaImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteFpgaImageInput"}
+	if s.FpgaImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FpgaImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *DeleteFpgaImageInput) SetDryRun(v bool) *DeleteFpgaImageInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFpgaImageId sets the FpgaImageId field's value.
+func (s *DeleteFpgaImageInput) SetFpgaImageId(v string) *DeleteFpgaImageInput {
+	s.FpgaImageId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DeleteFpgaImageResult
+type DeleteFpgaImageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Is true if the request succeeds, and an error otherwise.
+	Return *bool `locationName:"return" type:"boolean"`
+}
+
+// String returns the string representation
+func (s DeleteFpgaImageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteFpgaImageOutput) GoString() string {
+	return s.String()
+}
+
+// SetReturn sets the Return field's value.
+func (s *DeleteFpgaImageOutput) SetReturn(v bool) *DeleteFpgaImageOutput {
+	s.Return = &v
+	return s
+}
+
 // Contains the parameters for DeleteInternetGateway.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DeleteInternetGatewayRequest
 type DeleteInternetGatewayInput struct {
@@ -29983,7 +30550,7 @@ type DescribeElasticGpusOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Information about the Elastic GPUs.
-	ElasticGpuSet []*ElasticGpus `locationName:"elasticGpuSet" type:"list"`
+	ElasticGpuSet []*ElasticGpus `locationName:"elasticGpuSet" locationNameList:"item" type:"list"`
 
 	// The total number of items to return. If the total number of items available
 	// is more than the value specified in max-items then a Next-Token will be provided
@@ -30171,6 +30738,95 @@ func (s *DescribeFlowLogsOutput) SetFlowLogs(v []*FlowLog) *DescribeFlowLogsOutp
 // SetNextToken sets the NextToken field's value.
 func (s *DescribeFlowLogsOutput) SetNextToken(v string) *DescribeFlowLogsOutput {
 	s.NextToken = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeFpgaImageAttributeRequest
+type DescribeFpgaImageAttributeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The AFI attribute.
+	//
+	// Attribute is a required field
+	Attribute *string `type:"string" required:"true" enum:"FpgaImageAttributeName"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the AFI.
+	//
+	// FpgaImageId is a required field
+	FpgaImageId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeFpgaImageAttributeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeFpgaImageAttributeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeFpgaImageAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeFpgaImageAttributeInput"}
+	if s.Attribute == nil {
+		invalidParams.Add(request.NewErrParamRequired("Attribute"))
+	}
+	if s.FpgaImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FpgaImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttribute sets the Attribute field's value.
+func (s *DescribeFpgaImageAttributeInput) SetAttribute(v string) *DescribeFpgaImageAttributeInput {
+	s.Attribute = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *DescribeFpgaImageAttributeInput) SetDryRun(v bool) *DescribeFpgaImageAttributeInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFpgaImageId sets the FpgaImageId field's value.
+func (s *DescribeFpgaImageAttributeInput) SetFpgaImageId(v string) *DescribeFpgaImageAttributeInput {
+	s.FpgaImageId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeFpgaImageAttributeResult
+type DescribeFpgaImageAttributeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the attribute.
+	FpgaImageAttribute *FpgaImageAttribute `locationName:"fpgaImageAttribute" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeFpgaImageAttributeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeFpgaImageAttributeOutput) GoString() string {
+	return s.String()
+}
+
+// SetFpgaImageAttribute sets the FpgaImageAttribute field's value.
+func (s *DescribeFpgaImageAttributeOutput) SetFpgaImageAttribute(v *FpgaImageAttribute) *DescribeFpgaImageAttributeOutput {
+	s.FpgaImageAttribute = v
 	return s
 }
 
@@ -39763,6 +40419,9 @@ type FpgaImage struct {
 	// The product codes for the AFI.
 	ProductCodes []*ProductCode `locationName:"productCodes" locationNameList:"item" type:"list"`
 
+	// Indicates whether the AFI is public.
+	Public *bool `locationName:"public" type:"boolean"`
+
 	// The version of the AWS Shell that was used to create the bitstream.
 	ShellVersion *string `locationName:"shellVersion" type:"string"`
 
@@ -39840,6 +40499,12 @@ func (s *FpgaImage) SetProductCodes(v []*ProductCode) *FpgaImage {
 	return s
 }
 
+// SetPublic sets the Public field's value.
+func (s *FpgaImage) SetPublic(v bool) *FpgaImage {
+	s.Public = &v
+	return s
+}
+
 // SetShellVersion sets the ShellVersion field's value.
 func (s *FpgaImage) SetShellVersion(v string) *FpgaImage {
 	s.ShellVersion = &v
@@ -39861,6 +40526,67 @@ func (s *FpgaImage) SetTags(v []*Tag) *FpgaImage {
 // SetUpdateTime sets the UpdateTime field's value.
 func (s *FpgaImage) SetUpdateTime(v time.Time) *FpgaImage {
 	s.UpdateTime = &v
+	return s
+}
+
+// Describes an Amazon FPGA image (AFI) attribute.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/FpgaImageAttribute
+type FpgaImageAttribute struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the AFI.
+	Description *string `locationName:"description" type:"string"`
+
+	// The ID of the AFI.
+	FpgaImageId *string `locationName:"fpgaImageId" type:"string"`
+
+	// One or more load permissions.
+	LoadPermissions []*LoadPermission `locationName:"loadPermissions" locationNameList:"item" type:"list"`
+
+	// The name of the AFI.
+	Name *string `locationName:"name" type:"string"`
+
+	// One or more product codes.
+	ProductCodes []*ProductCode `locationName:"productCodes" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation
+func (s FpgaImageAttribute) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FpgaImageAttribute) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *FpgaImageAttribute) SetDescription(v string) *FpgaImageAttribute {
+	s.Description = &v
+	return s
+}
+
+// SetFpgaImageId sets the FpgaImageId field's value.
+func (s *FpgaImageAttribute) SetFpgaImageId(v string) *FpgaImageAttribute {
+	s.FpgaImageId = &v
+	return s
+}
+
+// SetLoadPermissions sets the LoadPermissions field's value.
+func (s *FpgaImageAttribute) SetLoadPermissions(v []*LoadPermission) *FpgaImageAttribute {
+	s.LoadPermissions = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *FpgaImageAttribute) SetName(v string) *FpgaImageAttribute {
+	s.Name = &v
+	return s
+}
+
+// SetProductCodes sets the ProductCodes field's value.
+func (s *FpgaImageAttribute) SetProductCodes(v []*ProductCode) *FpgaImageAttribute {
+	s.ProductCodes = v
 	return s
 }
 
@@ -40266,7 +40992,8 @@ type GetPasswordDataOutput struct {
 	// The ID of the Windows instance.
 	InstanceId *string `locationName:"instanceId" type:"string"`
 
-	// The password of the instance.
+	// The password of the instance. Returns an empty string if the password is
+	// not available.
 	PasswordData *string `locationName:"passwordData" type:"string"`
 
 	// The time the data was last updated.
@@ -44638,6 +45365,259 @@ func (s *LaunchSpecification) SetSubnetId(v string) *LaunchSpecification {
 // SetUserData sets the UserData field's value.
 func (s *LaunchSpecification) SetUserData(v string) *LaunchSpecification {
 	s.UserData = &v
+	return s
+}
+
+// Describes a load permission.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/LoadPermission
+type LoadPermission struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the group.
+	Group *string `locationName:"group" type:"string" enum:"PermissionGroup"`
+
+	// The AWS account ID.
+	UserId *string `locationName:"userId" type:"string"`
+}
+
+// String returns the string representation
+func (s LoadPermission) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LoadPermission) GoString() string {
+	return s.String()
+}
+
+// SetGroup sets the Group field's value.
+func (s *LoadPermission) SetGroup(v string) *LoadPermission {
+	s.Group = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *LoadPermission) SetUserId(v string) *LoadPermission {
+	s.UserId = &v
+	return s
+}
+
+// Describes modifications to the load permissions of an Amazon FPGA image (AFI).
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/LoadPermissionModifications
+type LoadPermissionModifications struct {
+	_ struct{} `type:"structure"`
+
+	// The load permissions to add.
+	Add []*LoadPermissionRequest `locationNameList:"item" type:"list"`
+
+	// The load permissions to remove.
+	Remove []*LoadPermissionRequest `locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation
+func (s LoadPermissionModifications) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LoadPermissionModifications) GoString() string {
+	return s.String()
+}
+
+// SetAdd sets the Add field's value.
+func (s *LoadPermissionModifications) SetAdd(v []*LoadPermissionRequest) *LoadPermissionModifications {
+	s.Add = v
+	return s
+}
+
+// SetRemove sets the Remove field's value.
+func (s *LoadPermissionModifications) SetRemove(v []*LoadPermissionRequest) *LoadPermissionModifications {
+	s.Remove = v
+	return s
+}
+
+// Describes a load permission.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/LoadPermissionRequest
+type LoadPermissionRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the group.
+	Group *string `type:"string" enum:"PermissionGroup"`
+
+	// The AWS account ID.
+	UserId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s LoadPermissionRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LoadPermissionRequest) GoString() string {
+	return s.String()
+}
+
+// SetGroup sets the Group field's value.
+func (s *LoadPermissionRequest) SetGroup(v string) *LoadPermissionRequest {
+	s.Group = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *LoadPermissionRequest) SetUserId(v string) *LoadPermissionRequest {
+	s.UserId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyFpgaImageAttributeRequest
+type ModifyFpgaImageAttributeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the attribute.
+	Attribute *string `type:"string" enum:"FpgaImageAttributeName"`
+
+	// A description for the AFI.
+	Description *string `type:"string"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the AFI.
+	//
+	// FpgaImageId is a required field
+	FpgaImageId *string `type:"string" required:"true"`
+
+	// The load permission for the AFI.
+	LoadPermission *LoadPermissionModifications `type:"structure"`
+
+	// A name for the AFI.
+	Name *string `type:"string"`
+
+	// The operation type.
+	OperationType *string `type:"string" enum:"OperationType"`
+
+	// One or more product codes. After you add a product code to an AFI, it can't
+	// be removed. This parameter is valid only when modifying the productCodes
+	// attribute.
+	ProductCodes []*string `locationName:"ProductCode" locationNameList:"ProductCode" type:"list"`
+
+	// One or more user groups. This parameter is valid only when modifying the
+	// loadPermission attribute.
+	UserGroups []*string `locationName:"UserGroup" locationNameList:"UserGroup" type:"list"`
+
+	// One or more AWS account IDs. This parameter is valid only when modifying
+	// the loadPermission attribute.
+	UserIds []*string `locationName:"UserId" locationNameList:"UserId" type:"list"`
+}
+
+// String returns the string representation
+func (s ModifyFpgaImageAttributeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyFpgaImageAttributeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyFpgaImageAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyFpgaImageAttributeInput"}
+	if s.FpgaImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FpgaImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttribute sets the Attribute field's value.
+func (s *ModifyFpgaImageAttributeInput) SetAttribute(v string) *ModifyFpgaImageAttributeInput {
+	s.Attribute = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ModifyFpgaImageAttributeInput) SetDescription(v string) *ModifyFpgaImageAttributeInput {
+	s.Description = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ModifyFpgaImageAttributeInput) SetDryRun(v bool) *ModifyFpgaImageAttributeInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFpgaImageId sets the FpgaImageId field's value.
+func (s *ModifyFpgaImageAttributeInput) SetFpgaImageId(v string) *ModifyFpgaImageAttributeInput {
+	s.FpgaImageId = &v
+	return s
+}
+
+// SetLoadPermission sets the LoadPermission field's value.
+func (s *ModifyFpgaImageAttributeInput) SetLoadPermission(v *LoadPermissionModifications) *ModifyFpgaImageAttributeInput {
+	s.LoadPermission = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ModifyFpgaImageAttributeInput) SetName(v string) *ModifyFpgaImageAttributeInput {
+	s.Name = &v
+	return s
+}
+
+// SetOperationType sets the OperationType field's value.
+func (s *ModifyFpgaImageAttributeInput) SetOperationType(v string) *ModifyFpgaImageAttributeInput {
+	s.OperationType = &v
+	return s
+}
+
+// SetProductCodes sets the ProductCodes field's value.
+func (s *ModifyFpgaImageAttributeInput) SetProductCodes(v []*string) *ModifyFpgaImageAttributeInput {
+	s.ProductCodes = v
+	return s
+}
+
+// SetUserGroups sets the UserGroups field's value.
+func (s *ModifyFpgaImageAttributeInput) SetUserGroups(v []*string) *ModifyFpgaImageAttributeInput {
+	s.UserGroups = v
+	return s
+}
+
+// SetUserIds sets the UserIds field's value.
+func (s *ModifyFpgaImageAttributeInput) SetUserIds(v []*string) *ModifyFpgaImageAttributeInput {
+	s.UserIds = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyFpgaImageAttributeResult
+type ModifyFpgaImageAttributeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the attribute.
+	FpgaImageAttribute *FpgaImageAttribute `locationName:"fpgaImageAttribute" type:"structure"`
+}
+
+// String returns the string representation
+func (s ModifyFpgaImageAttributeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyFpgaImageAttributeOutput) GoString() string {
+	return s.String()
+}
+
+// SetFpgaImageAttribute sets the FpgaImageAttribute field's value.
+func (s *ModifyFpgaImageAttributeOutput) SetFpgaImageAttribute(v *FpgaImageAttribute) *ModifyFpgaImageAttributeOutput {
+	s.FpgaImageAttribute = v
 	return s
 }
 
@@ -50147,6 +51127,9 @@ type RequestSpotInstancesInput struct {
 	// Default: 1
 	InstanceCount *int64 `locationName:"instanceCount" type:"integer"`
 
+	// Indicates whether a Spot instance stops or terminates when it is interrupted.
+	InstanceInterruptionBehavior *string `type:"string" enum:"InstanceInterruptionBehavior"`
+
 	// The instance launch group. Launch groups are Spot instances that launch together
 	// and terminate together.
 	//
@@ -50240,6 +51223,12 @@ func (s *RequestSpotInstancesInput) SetDryRun(v bool) *RequestSpotInstancesInput
 // SetInstanceCount sets the InstanceCount field's value.
 func (s *RequestSpotInstancesInput) SetInstanceCount(v int64) *RequestSpotInstancesInput {
 	s.InstanceCount = &v
+	return s
+}
+
+// SetInstanceInterruptionBehavior sets the InstanceInterruptionBehavior field's value.
+func (s *RequestSpotInstancesInput) SetInstanceInterruptionBehavior(v string) *RequestSpotInstancesInput {
+	s.InstanceInterruptionBehavior = &v
 	return s
 }
 
@@ -51347,6 +52336,90 @@ func (s *ReservedInstancesOffering) SetScope(v string) *ReservedInstancesOfferin
 // SetUsagePrice sets the UsagePrice field's value.
 func (s *ReservedInstancesOffering) SetUsagePrice(v float64) *ReservedInstancesOffering {
 	s.UsagePrice = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ResetFpgaImageAttributeRequest
+type ResetFpgaImageAttributeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The attribute.
+	Attribute *string `type:"string" enum:"ResetFpgaImageAttributeName"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the AFI.
+	//
+	// FpgaImageId is a required field
+	FpgaImageId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ResetFpgaImageAttributeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResetFpgaImageAttributeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResetFpgaImageAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResetFpgaImageAttributeInput"}
+	if s.FpgaImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FpgaImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttribute sets the Attribute field's value.
+func (s *ResetFpgaImageAttributeInput) SetAttribute(v string) *ResetFpgaImageAttributeInput {
+	s.Attribute = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ResetFpgaImageAttributeInput) SetDryRun(v bool) *ResetFpgaImageAttributeInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFpgaImageId sets the FpgaImageId field's value.
+func (s *ResetFpgaImageAttributeInput) SetFpgaImageId(v string) *ResetFpgaImageAttributeInput {
+	s.FpgaImageId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ResetFpgaImageAttributeResult
+type ResetFpgaImageAttributeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Is true if the request succeeds, and an error otherwise.
+	Return *bool `locationName:"return" type:"boolean"`
+}
+
+// String returns the string representation
+func (s ResetFpgaImageAttributeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResetFpgaImageAttributeOutput) GoString() string {
+	return s.String()
+}
+
+// SetReturn sets the Return field's value.
+func (s *ResetFpgaImageAttributeOutput) SetReturn(v bool) *ResetFpgaImageAttributeOutput {
+	s.Return = &v
 	return s
 }
 
@@ -54984,6 +56057,9 @@ type SpotFleetRequestConfigData struct {
 	// IamFleetRole is a required field
 	IamFleetRole *string `locationName:"iamFleetRole" type:"string" required:"true"`
 
+	// Indicates whether a Spot instance stops or terminates when it is interrupted.
+	InstanceInterruptionBehavior *string `locationName:"instanceInterruptionBehavior" type:"string" enum:"InstanceInterruptionBehavior"`
+
 	// Information about the launch specifications for the Spot fleet request.
 	//
 	// LaunchSpecifications is a required field
@@ -55103,6 +56179,12 @@ func (s *SpotFleetRequestConfigData) SetIamFleetRole(v string) *SpotFleetRequest
 	return s
 }
 
+// SetInstanceInterruptionBehavior sets the InstanceInterruptionBehavior field's value.
+func (s *SpotFleetRequestConfigData) SetInstanceInterruptionBehavior(v string) *SpotFleetRequestConfigData {
+	s.InstanceInterruptionBehavior = &v
+	return s
+}
+
 // SetLaunchSpecifications sets the LaunchSpecifications field's value.
 func (s *SpotFleetRequestConfigData) SetLaunchSpecifications(v []*SpotFleetLaunchSpecification) *SpotFleetRequestConfigData {
 	s.LaunchSpecifications = v
@@ -55214,6 +56296,9 @@ type SpotInstanceRequest struct {
 	// request.
 	InstanceId *string `locationName:"instanceId" type:"string"`
 
+	// Indicates whether a Spot instance stops or terminates when it is interrupted.
+	InstanceInterruptionBehavior *string `locationName:"instanceInterruptionBehavior" type:"string" enum:"InstanceInterruptionBehavior"`
+
 	// The instance launch group. Launch groups are Spot instances that launch together
 	// and terminate together.
 	LaunchGroup *string `locationName:"launchGroup" type:"string"`
@@ -55303,6 +56388,12 @@ func (s *SpotInstanceRequest) SetFault(v *SpotInstanceStateFault) *SpotInstanceR
 // SetInstanceId sets the InstanceId field's value.
 func (s *SpotInstanceRequest) SetInstanceId(v string) *SpotInstanceRequest {
 	s.InstanceId = &v
+	return s
+}
+
+// SetInstanceInterruptionBehavior sets the InstanceInterruptionBehavior field's value.
+func (s *SpotInstanceRequest) SetInstanceInterruptionBehavior(v string) *SpotInstanceRequest {
+	s.InstanceInterruptionBehavior = &v
 	return s
 }
 
@@ -59106,6 +60197,20 @@ const (
 )
 
 const (
+	// FpgaImageAttributeNameDescription is a FpgaImageAttributeName enum value
+	FpgaImageAttributeNameDescription = "description"
+
+	// FpgaImageAttributeNameName is a FpgaImageAttributeName enum value
+	FpgaImageAttributeNameName = "name"
+
+	// FpgaImageAttributeNameLoadPermission is a FpgaImageAttributeName enum value
+	FpgaImageAttributeNameLoadPermission = "loadPermission"
+
+	// FpgaImageAttributeNameProductCodes is a FpgaImageAttributeName enum value
+	FpgaImageAttributeNameProductCodes = "productCodes"
+)
+
+const (
 	// FpgaImageStateCodePending is a FpgaImageStateCode enum value
 	FpgaImageStateCodePending = "pending"
 
@@ -59264,6 +60369,14 @@ const (
 )
 
 const (
+	// InstanceInterruptionBehaviorStop is a InstanceInterruptionBehavior enum value
+	InstanceInterruptionBehaviorStop = "stop"
+
+	// InstanceInterruptionBehaviorTerminate is a InstanceInterruptionBehavior enum value
+	InstanceInterruptionBehaviorTerminate = "terminate"
+)
+
+const (
 	// InstanceLifecycleTypeSpot is a InstanceLifecycleType enum value
 	InstanceLifecycleTypeSpot = "spot"
 
@@ -59408,6 +60521,9 @@ const (
 
 	// InstanceTypeX132xlarge is a InstanceType enum value
 	InstanceTypeX132xlarge = "x1.32xlarge"
+
+	// InstanceTypeX1e32xlarge is a InstanceType enum value
+	InstanceTypeX1e32xlarge = "x1e.32xlarge"
 
 	// InstanceTypeI2Xlarge is a InstanceType enum value
 	InstanceTypeI2Xlarge = "i2.xlarge"
@@ -59824,6 +60940,11 @@ const (
 
 	// ReservedInstanceStateRetired is a ReservedInstanceState enum value
 	ReservedInstanceStateRetired = "retired"
+)
+
+const (
+	// ResetFpgaImageAttributeNameLoadPermission is a ResetFpgaImageAttributeName enum value
+	ResetFpgaImageAttributeNameLoadPermission = "loadPermission"
 )
 
 const (

@@ -49,6 +49,7 @@ var (
 		}},
 	}
 	testTableExpiration time.Time
+	datasetIDs          = testutil.NewUIDSpace("dataset")
 )
 
 func TestMain(m *testing.M) {
@@ -82,13 +83,13 @@ func initIntegrationTest() {
 		log.Fatalf("NewClient: %v", err)
 	}
 	dataset = client.Dataset("bigquery_integration_test")
-	if err := dataset.Create(ctx); err != nil && !hasStatusCode(err, http.StatusConflict) { // AlreadyExists is 409
+	if err := dataset.Create(ctx, nil); err != nil && !hasStatusCode(err, http.StatusConflict) { // AlreadyExists is 409
 		log.Fatalf("creating dataset: %v", err)
 	}
 	testTableExpiration = time.Now().Add(10 * time.Minute).Round(time.Second)
 }
 
-func TestIntegration_Create(t *testing.T) {
+func TestIntegration_TableCreate(t *testing.T) {
 	// Check that creating a record field with an empty schema is an error.
 	if client == nil {
 		t.Skip("Integration tests skipped")
@@ -106,7 +107,7 @@ func TestIntegration_Create(t *testing.T) {
 	}
 }
 
-func TestIntegration_CreateView(t *testing.T) {
+func TestIntegration_TableCreateView(t *testing.T) {
 	if client == nil {
 		t.Skip("Integration tests skipped")
 	}
@@ -180,6 +181,33 @@ func TestIntegration_TableMetadata(t *testing.T) {
 	}
 }
 
+func TestIntegration_DatasetCreate(t *testing.T) {
+	if client == nil {
+		t.Skip("Integration tests skipped")
+	}
+	ctx := context.Background()
+	uid := strings.Replace(datasetIDs.New(), "-", "_", -1)
+	ds := client.Dataset(uid)
+	wmd := &DatasetMetadata{Name: "name", Location: "EU"}
+	err := ds.Create(ctx, wmd)
+	if err != nil {
+		t.Fatal(err)
+	}
+	gmd, err := ds.Metadata(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := gmd.Name, wmd.Name; got != want {
+		t.Errorf("name: got %q, want %q", got, want)
+	}
+	if got, want := gmd.Location, wmd.Location; got != want {
+		t.Errorf("location: got %q, want %q", got, want)
+	}
+	if err := ds.Delete(ctx); err != nil {
+		t.Fatalf("deleting dataset %s: %v", ds, err)
+	}
+}
+
 func TestIntegration_DatasetMetadata(t *testing.T) {
 	if client == nil {
 		t.Skip("Integration tests skipped")
@@ -189,8 +217,8 @@ func TestIntegration_DatasetMetadata(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := md.ID, fmt.Sprintf("%s:%s", dataset.ProjectID, dataset.DatasetID); got != want {
-		t.Errorf("ID: got %q, want %q", got, want)
+	if got, want := md.FullID, fmt.Sprintf("%s:%s", dataset.ProjectID, dataset.DatasetID); got != want {
+		t.Errorf("FullID: got %q, want %q", got, want)
 	}
 	jan2016 := time.Date(2016, 1, 1, 0, 0, 0, 0, time.UTC)
 	if md.CreationTime.Before(jan2016) {
@@ -213,7 +241,7 @@ func TestIntegration_DatasetDelete(t *testing.T) {
 	}
 	ctx := context.Background()
 	ds := client.Dataset("delete_test")
-	if err := ds.Create(ctx); err != nil && !hasStatusCode(err, http.StatusConflict) { // AlreadyExists is 409
+	if err := ds.Create(ctx, nil); err != nil && !hasStatusCode(err, http.StatusConflict) { // AlreadyExists is 409
 		t.Fatalf("creating dataset %s: %v", ds, err)
 	}
 	if err := ds.Delete(ctx); err != nil {
@@ -276,8 +304,7 @@ func TestIntegration_DatasetUpdateDefaultExpiration(t *testing.T) {
 		t.Fatal(err)
 	}
 	// Set the default expiration time.
-	md, err = dataset.Update(ctx,
-		DatasetMetadataToUpdate{DefaultTableExpiration: time.Hour}, "")
+	md, err = dataset.Update(ctx, DatasetMetadataToUpdate{DefaultTableExpiration: time.Hour}, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -293,8 +320,7 @@ func TestIntegration_DatasetUpdateDefaultExpiration(t *testing.T) {
 		t.Fatalf("got %s, want 1h", md.DefaultTableExpiration)
 	}
 	// Setting it to 0 deletes it (which looks like a 0 duration).
-	md, err = dataset.Update(ctx,
-		DatasetMetadataToUpdate{DefaultTableExpiration: time.Duration(0)}, "")
+	md, err = dataset.Update(ctx, DatasetMetadataToUpdate{DefaultTableExpiration: time.Duration(0)}, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -746,15 +772,7 @@ func TestIntegration_TableUpdate(t *testing.T) {
 			schema3[0], schema3[1], schema3[2],
 			{Name: "rec2", Type: RecordFieldType, Schema: Schema{}}}},
 	} {
-		for {
-			_, err = table.Update(ctx, TableMetadataToUpdate{Schema: Schema(test.fields)}, "")
-			if !hasStatusCode(err, 403) {
-				break
-			}
-			// We've hit the rate limit for updates. Wait a bit and retry.
-			t.Logf("%s: retrying after getting %v", test.desc, err)
-			time.Sleep(4 * time.Second)
-		}
+		_, err = table.Update(ctx, TableMetadataToUpdate{Schema: Schema(test.fields)}, "")
 		if err == nil {
 			t.Errorf("%s: want error, got nil", test.desc)
 		} else if !hasStatusCode(err, 400) {
@@ -818,7 +836,9 @@ func TestIntegration_DML(t *testing.T) {
 		q.UseStandardSQL = true // necessary for DML
 		job, err := q.Run(ctx)
 		if err != nil {
-			fmt.Printf("q.Run: %v\n", err)
+			if e, ok := err.(*googleapi.Error); ok && e.Code < 500 {
+				return true, err // fail on 4xx
+			}
 			return false, err
 		}
 		if err := wait(ctx, job); err != nil {
@@ -1124,6 +1144,38 @@ func TestIntegration_TableUseLegacySQL(t *testing.T) {
 			t.Errorf("%+v:\nsucceeded, but want error", test)
 		}
 		view.Delete(ctx)
+	}
+}
+
+func TestIntegration_ListJobs(t *testing.T) {
+	// It's difficult to test the list of jobs, because we can't easily
+	// control what's in it. Also, there are many jobs in the test project,
+	// and it takes considerable time to list them all.
+	if client == nil {
+		t.Skip("Integration tests skipped")
+	}
+	ctx := context.Background()
+
+	// About all we can do is list a few jobs.
+	const max = 20
+	var jis []JobInfo
+	it := client.Jobs(ctx)
+	for {
+		ji, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		jis = append(jis, ji)
+		if len(jis) >= max {
+			break
+		}
+	}
+	// We expect that there is at least one job in the last few months.
+	if len(jis) == 0 {
+		t.Fatal("did not get any jobs")
 	}
 }
 

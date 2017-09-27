@@ -233,7 +233,8 @@ func ExampleDataset_Create() {
 	if err != nil {
 		// TODO: Handle error.
 	}
-	if err := client.Dataset("my_dataset").Create(ctx); err != nil {
+	ds := client.Dataset("my_dataset")
+	if err := ds.Create(ctx, &bigquery.DatasetMetadata{Location: "EU"}); err != nil {
 		// TODO: Handle error.
 	}
 }

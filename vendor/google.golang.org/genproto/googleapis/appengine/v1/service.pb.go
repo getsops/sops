@@ -41,7 +41,7 @@ var TrafficSplit_ShardBy_value = map[string]int32{
 func (x TrafficSplit_ShardBy) String() string {
 	return proto.EnumName(TrafficSplit_ShardBy_name, int32(x))
 }
-func (TrafficSplit_ShardBy) EnumDescriptor() ([]byte, []int) { return fileDescriptor7, []int{1, 0} }
+func (TrafficSplit_ShardBy) EnumDescriptor() ([]byte, []int) { return fileDescriptor8, []int{1, 0} }
 
 // A Service resource is a logical component of an application that can share
 // state and communicate in a secure fashion with other services.
@@ -69,7 +69,7 @@ type Service struct {
 func (m *Service) Reset()                    { *m = Service{} }
 func (m *Service) String() string            { return proto.CompactTextString(m) }
 func (*Service) ProtoMessage()               {}
-func (*Service) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{0} }
+func (*Service) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{0} }
 
 func (m *Service) GetName() string {
 	if m != nil {
@@ -113,7 +113,7 @@ type TrafficSplit struct {
 func (m *TrafficSplit) Reset()                    { *m = TrafficSplit{} }
 func (m *TrafficSplit) String() string            { return proto.CompactTextString(m) }
 func (*TrafficSplit) ProtoMessage()               {}
-func (*TrafficSplit) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{1} }
+func (*TrafficSplit) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{1} }
 
 func (m *TrafficSplit) GetShardBy() TrafficSplit_ShardBy {
 	if m != nil {
@@ -135,9 +135,9 @@ func init() {
 	proto.RegisterEnum("google.appengine.v1.TrafficSplit_ShardBy", TrafficSplit_ShardBy_name, TrafficSplit_ShardBy_value)
 }
 
-func init() { proto.RegisterFile("google/appengine/v1/service.proto", fileDescriptor7) }
+func init() { proto.RegisterFile("google/appengine/v1/service.proto", fileDescriptor8) }
 
-var fileDescriptor7 = []byte{
+var fileDescriptor8 = []byte{
 	// 356 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0x51, 0x8b, 0xda, 0x40,
 	0x10, 0xc7, 0x9b, 0xb5, 0x6a, 0x3b, 0x11, 0x1b, 0xb6, 0x85, 0x06, 0xe9, 0x83, 0xfa, 0x64, 0x5f,

@@ -66,6 +66,23 @@
         {"shape":"LimitExceededException"}
       ]
     },
+    "CreateConfigurationSetTrackingOptions":{
+      "name":"CreateConfigurationSetTrackingOptions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateConfigurationSetTrackingOptionsRequest"},
+      "output":{
+        "shape":"CreateConfigurationSetTrackingOptionsResponse",
+        "resultWrapper":"CreateConfigurationSetTrackingOptionsResult"
+      },
+      "errors":[
+        {"shape":"ConfigurationSetDoesNotExistException"},
+        {"shape":"TrackingOptionsAlreadyExistsException"},
+        {"shape":"InvalidTrackingOptionsException"}
+      ]
+    },
     "CreateReceiptFilter":{
       "name":"CreateReceiptFilter",
       "http":{
@@ -148,6 +165,22 @@
       "errors":[
         {"shape":"ConfigurationSetDoesNotExistException"},
         {"shape":"EventDestinationDoesNotExistException"}
+      ]
+    },
+    "DeleteConfigurationSetTrackingOptions":{
+      "name":"DeleteConfigurationSetTrackingOptions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteConfigurationSetTrackingOptionsRequest"},
+      "output":{
+        "shape":"DeleteConfigurationSetTrackingOptionsResponse",
+        "resultWrapper":"DeleteConfigurationSetTrackingOptionsResult"
+      },
+      "errors":[
+        {"shape":"ConfigurationSetDoesNotExistException"},
+        {"shape":"TrackingOptionsDoesNotExistException"}
       ]
     },
     "DeleteIdentity":{
@@ -625,6 +658,23 @@
         {"shape":"InvalidSNSDestinationException"}
       ]
     },
+    "UpdateConfigurationSetTrackingOptions":{
+      "name":"UpdateConfigurationSetTrackingOptions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateConfigurationSetTrackingOptionsRequest"},
+      "output":{
+        "shape":"UpdateConfigurationSetTrackingOptionsResponse",
+        "resultWrapper":"UpdateConfigurationSetTrackingOptionsResult"
+      },
+      "errors":[
+        {"shape":"ConfigurationSetDoesNotExistException"},
+        {"shape":"TrackingOptionsDoesNotExistException"},
+        {"shape":"InvalidTrackingOptionsException"}
+      ]
+    },
     "UpdateReceiptRule":{
       "name":"UpdateReceiptRule",
       "http":{
@@ -853,7 +903,10 @@
     },
     "ConfigurationSetAttribute":{
       "type":"string",
-      "enum":["eventDestinations"]
+      "enum":[
+        "eventDestinations",
+        "trackingOptions"
+      ]
     },
     "ConfigurationSetAttributeList":{
       "type":"list",
@@ -913,6 +966,22 @@
       "members":{
       }
     },
+    "CreateConfigurationSetTrackingOptionsRequest":{
+      "type":"structure",
+      "required":[
+        "ConfigurationSetName",
+        "TrackingOptions"
+      ],
+      "members":{
+        "ConfigurationSetName":{"shape":"ConfigurationSetName"},
+        "TrackingOptions":{"shape":"TrackingOptions"}
+      }
+    },
+    "CreateConfigurationSetTrackingOptionsResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "CreateReceiptFilterRequest":{
       "type":"structure",
       "required":["Filter"],
@@ -963,6 +1032,7 @@
         "TemporaryFailure"
       ]
     },
+    "CustomRedirectDomain":{"type":"string"},
     "DefaultDimensionValue":{"type":"string"},
     "DeleteConfigurationSetEventDestinationRequest":{
       "type":"structure",
@@ -988,6 +1058,18 @@
       }
     },
     "DeleteConfigurationSetResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteConfigurationSetTrackingOptionsRequest":{
+      "type":"structure",
+      "required":["ConfigurationSetName"],
+      "members":{
+        "ConfigurationSetName":{"shape":"ConfigurationSetName"}
+      }
+    },
+    "DeleteConfigurationSetTrackingOptionsResponse":{
       "type":"structure",
       "members":{
       }
@@ -1091,7 +1173,8 @@
       "type":"structure",
       "members":{
         "ConfigurationSet":{"shape":"ConfigurationSet"},
-        "EventDestinations":{"shape":"EventDestinations"}
+        "EventDestinations":{"shape":"EventDestinations"},
+        "TrackingOptions":{"shape":"TrackingOptions"}
       }
     },
     "DescribeReceiptRuleRequest":{
@@ -1486,6 +1569,17 @@
       },
       "error":{
         "code":"InvalidSnsTopic",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "InvalidTrackingOptionsException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"InvalidTrackingOptions",
         "httpStatusCode":400,
         "senderFault":true
       },
@@ -2127,6 +2221,36 @@
         "Optional"
       ]
     },
+    "TrackingOptions":{
+      "type":"structure",
+      "members":{
+        "CustomRedirectDomain":{"shape":"CustomRedirectDomain"}
+      }
+    },
+    "TrackingOptionsAlreadyExistsException":{
+      "type":"structure",
+      "members":{
+        "ConfigurationSetName":{"shape":"ConfigurationSetName"}
+      },
+      "error":{
+        "code":"TrackingOptionsAlreadyExistsException",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "TrackingOptionsDoesNotExistException":{
+      "type":"structure",
+      "members":{
+        "ConfigurationSetName":{"shape":"ConfigurationSetName"}
+      },
+      "error":{
+        "code":"TrackingOptionsDoesNotExistException",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "UpdateConfigurationSetEventDestinationRequest":{
       "type":"structure",
       "required":[
@@ -2139,6 +2263,22 @@
       }
     },
     "UpdateConfigurationSetEventDestinationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "UpdateConfigurationSetTrackingOptionsRequest":{
+      "type":"structure",
+      "required":[
+        "ConfigurationSetName",
+        "TrackingOptions"
+      ],
+      "members":{
+        "ConfigurationSetName":{"shape":"ConfigurationSetName"},
+        "TrackingOptions":{"shape":"TrackingOptions"}
+      }
+    },
+    "UpdateConfigurationSetTrackingOptionsResponse":{
       "type":"structure",
       "members":{
       }

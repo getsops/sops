@@ -549,6 +549,18 @@
         {"shape":"InvalidOperationException"}
       ]
     },
+    "UpdateTerminationProtection":{
+      "name":"UpdateTerminationProtection",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateTerminationProtectionInput"},
+      "output":{
+        "shape":"UpdateTerminationProtectionOutput",
+        "resultWrapper":"UpdateTerminationProtectionResult"
+      }
+    },
     "ValidateTemplate":{
       "name":"ValidateTemplate",
       "http":{
@@ -809,7 +821,8 @@
         "StackPolicyBody":{"shape":"StackPolicyBody"},
         "StackPolicyURL":{"shape":"StackPolicyURL"},
         "Tags":{"shape":"Tags"},
-        "ClientRequestToken":{"shape":"ClientRequestToken"}
+        "ClientRequestToken":{"shape":"ClientRequestToken"},
+        "EnableTerminationProtection":{"shape":"EnableTerminationProtection"}
       }
     },
     "CreateStackInstancesInput":{
@@ -1096,6 +1109,7 @@
       "min":1
     },
     "DisableRollback":{"type":"boolean"},
+    "EnableTerminationProtection":{"type":"boolean"},
     "EstimateTemplateCostInput":{
       "type":"structure",
       "members":{
@@ -1734,6 +1748,7 @@
         "Description":{"shape":"Description"},
         "Parameters":{"shape":"Parameters"},
         "CreationTime":{"shape":"CreationTime"},
+        "DeletionTime":{"shape":"DeletionTime"},
         "LastUpdatedTime":{"shape":"LastUpdatedTime"},
         "RollbackConfiguration":{"shape":"RollbackConfiguration"},
         "StackStatus":{"shape":"StackStatus"},
@@ -1744,7 +1759,10 @@
         "Capabilities":{"shape":"Capabilities"},
         "Outputs":{"shape":"Outputs"},
         "RoleARN":{"shape":"RoleARN"},
-        "Tags":{"shape":"Tags"}
+        "Tags":{"shape":"Tags"},
+        "EnableTerminationProtection":{"shape":"EnableTerminationProtection"},
+        "ParentId":{"shape":"StackId"},
+        "RootId":{"shape":"StackId"}
       }
     },
     "StackEvent":{
@@ -2098,7 +2116,9 @@
         "LastUpdatedTime":{"shape":"LastUpdatedTime"},
         "DeletionTime":{"shape":"DeletionTime"},
         "StackStatus":{"shape":"StackStatus"},
-        "StackStatusReason":{"shape":"StackStatusReason"}
+        "StackStatusReason":{"shape":"StackStatusReason"},
+        "ParentId":{"shape":"StackId"},
+        "RootId":{"shape":"StackId"}
       }
     },
     "Stacks":{
@@ -2265,6 +2285,23 @@
       "type":"structure",
       "members":{
         "OperationId":{"shape":"ClientRequestToken"}
+      }
+    },
+    "UpdateTerminationProtectionInput":{
+      "type":"structure",
+      "required":[
+        "EnableTerminationProtection",
+        "StackName"
+      ],
+      "members":{
+        "EnableTerminationProtection":{"shape":"EnableTerminationProtection"},
+        "StackName":{"shape":"StackNameOrId"}
+      }
+    },
+    "UpdateTerminationProtectionOutput":{
+      "type":"structure",
+      "members":{
+        "StackId":{"shape":"StackId"}
       }
     },
     "Url":{"type":"string"},
