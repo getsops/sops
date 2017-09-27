@@ -22,14 +22,25 @@ Package main provides benchmark with setting flags.
 An example to run some benchmarks with profiling enabled:
 
 go run benchmark/benchmain/main.go -benchtime=10s -workloads=all \
-  -compression=on -maxConcurrentCalls=1 -traceMode=false \
-  -reqSizeBytes=1,1048576 -respSizeBytes=1,1048576 \
-  -latency=0s -kbps=0 -mtu=0 \
-  -cpuProfile=cpuProf -memProfile=memProf -memProfileRate=10000
+  -compression=on -maxConcurrentCalls=1 -trace=off \
+  -reqSizeBytes=1,1048576 -respSizeBytes=1,1048576 -networkMode=Local \
+  -cpuProfile=cpuProf -memProfile=memProf -memProfileRate=10000 -resultFile=result
+
+As a suggestion, when creating a branch, you can run this benchmark and save the result
+file "-resultFile=basePerf", and later when you at the middle of the work or finish the
+work, you can get the benchmark result and compare it with the base anytime.
+
+Assume there are two result files names as "basePerf" and "curPerf" created by adding
+-resultFile=basePerf and -resultFile=curPerf.
+	To format the curPerf, run:
+  	go run benchmark/benchresult/main.go curPerf
+	To observe how the performance changes based on a base result, run:
+  	go run benchmark/benchresult/main.go basePerf curPerf
 */
 package main
 
 import (
+	"encoding/gob"
 	"errors"
 	"flag"
 	"fmt"
@@ -58,12 +69,13 @@ import (
 )
 
 const (
-	compressionOn   = "on"
-	compressionOff  = "off"
-	compressionBoth = "both"
+	modeOn   = "on"
+	modeOff  = "off"
+	modeBoth = "both"
 )
 
-var allCompressionModes = []string{compressionOn, compressionOff, compressionBoth}
+var allCompressionModes = []string{modeOn, modeOff, modeBoth}
+var allTraceModes = []string{modeOn, modeOff, modeBoth}
 
 const (
 	workloadsUnary     = "unary"
@@ -83,26 +95,34 @@ var (
 	maxConcurrentCalls     = []int{1, 8, 64, 512}
 	reqSizeBytes           = []int{1, 1024, 1024 * 1024}
 	respSizeBytes          = []int{1, 1024, 1024 * 1024}
-	enableTrace            = []bool{false}
+	enableTrace            []bool
 	benchtime              time.Duration
 	memProfile, cpuProfile string
 	memProfileRate         int
 	enableCompressor       []bool
+	networkMode            string
+	benchmarkResultFile    string
+	networks               = map[string]latency.Network{
+		"Local":    latency.Local,
+		"LAN":      latency.LAN,
+		"WAN":      latency.WAN,
+		"Longhaul": latency.Longhaul,
+	}
 )
 
-func unaryBenchmark(startTimer func(), stopTimer func(int32), benchFeatures bm.Features, benchtime time.Duration, s *stats.Stats) {
+func unaryBenchmark(startTimer func(), stopTimer func(int32), benchFeatures stats.Features, benchtime time.Duration, s *stats.Stats) {
 	caller, close := makeFuncUnary(benchFeatures)
 	defer close()
 	runBenchmark(caller, startTimer, stopTimer, benchFeatures, benchtime, s)
 }
 
-func streamBenchmark(startTimer func(), stopTimer func(int32), benchFeatures bm.Features, benchtime time.Duration, s *stats.Stats) {
+func streamBenchmark(startTimer func(), stopTimer func(int32), benchFeatures stats.Features, benchtime time.Duration, s *stats.Stats) {
 	caller, close := makeFuncStream(benchFeatures)
 	defer close()
 	runBenchmark(caller, startTimer, stopTimer, benchFeatures, benchtime, s)
 }
 
-func makeFuncUnary(benchFeatures bm.Features) (func(int), func()) {
+func makeFuncUnary(benchFeatures stats.Features) (func(int), func()) {
 	nw := &latency.Network{Kbps: benchFeatures.Kbps, Latency: benchFeatures.Latency, MTU: benchFeatures.Mtu}
 	opts := []grpc.DialOption{}
 	sopts := []grpc.ServerOption{}
@@ -133,8 +153,7 @@ func makeFuncUnary(benchFeatures bm.Features) (func(int), func()) {
 		}
 }
 
-func makeFuncStream(benchFeatures bm.Features) (func(int), func()) {
-	fmt.Println(benchFeatures)
+func makeFuncStream(benchFeatures stats.Features) (func(int), func()) {
 	nw := &latency.Network{Kbps: benchFeatures.Kbps, Latency: benchFeatures.Latency, MTU: benchFeatures.Mtu}
 	opts := []grpc.DialOption{}
 	sopts := []grpc.ServerOption{}
@@ -185,7 +204,7 @@ func streamCaller(stream testpb.BenchmarkService_StreamingCallClient, reqSize, r
 	}
 }
 
-func runBenchmark(caller func(int), startTimer func(), stopTimer func(int32), benchFeatures bm.Features, benchtime time.Duration, s *stats.Stats) {
+func runBenchmark(caller func(int), startTimer func(), stopTimer func(int32), benchFeatures stats.Features, benchtime time.Duration, s *stats.Stats) {
 	// Warm up connection.
 	for i := 0; i < 10; i++ {
 		caller(0)
@@ -224,14 +243,14 @@ func runBenchmark(caller func(int), startTimer func(), stopTimer func(int32), be
 // Initiate main function to get settings of features.
 func init() {
 	var (
-		workloads, compressorMode, readLatency    string
-		readKbps, readMtu, readMaxConcurrentCalls intSliceType
-		readReqSizeBytes, readRespSizeBytes       intSliceType
-		traceMode                                 bool
+		workloads, traceMode, compressorMode, readLatency string
+		readKbps, readMtu, readMaxConcurrentCalls         intSliceType
+		readReqSizeBytes, readRespSizeBytes               intSliceType
 	)
 	flag.StringVar(&workloads, "workloads", workloadsAll,
 		fmt.Sprintf("Workloads to execute - One of: %v", strings.Join(allWorkloads, ", ")))
-	flag.BoolVar(&traceMode, "traceMode", false, "Enable gRPC tracing")
+	flag.StringVar(&traceMode, "trace", modeOff,
+		fmt.Sprintf("Trace mode - One of: %v", strings.Join(allTraceModes, ", ")))
 	flag.StringVar(&readLatency, "latency", "", "Simulated one-way network latency - may be a comma-separated list")
 	flag.DurationVar(&benchtime, "benchtime", time.Second, "Configures the amount of time to run each benchmark")
 	flag.Var(&readKbps, "kbps", "Simulated network throughput (in kbps) - may be a comma-separated list")
@@ -239,11 +258,15 @@ func init() {
 	flag.Var(&readMaxConcurrentCalls, "maxConcurrentCalls", "Number of concurrent RPCs during benchmarks")
 	flag.Var(&readReqSizeBytes, "reqSizeBytes", "Request size in bytes - may be a comma-separated list")
 	flag.Var(&readRespSizeBytes, "respSizeBytes", "Response size in bytes - may be a comma-separated list")
-	flag.StringVar(&memProfile, "memProfile", "", "Enables memory profiling output to the filename provided")
-	flag.IntVar(&memProfileRate, "memProfileRate", 0, "Configures the memory profiling rate")
+	flag.StringVar(&memProfile, "memProfile", "", "Enables memory profiling output to the filename provided.")
+	flag.IntVar(&memProfileRate, "memProfileRate", 512*1024, "Configures the memory profiling rate. \n"+
+		"memProfile should be set before setting profile rate. To include every allocated block in the profile, "+
+		"set MemProfileRate to 1. To turn off profiling entirely, set MemProfileRate to 0. 512 * 1024 by default.")
 	flag.StringVar(&cpuProfile, "cpuProfile", "", "Enables CPU profiling output to the filename provided")
-	flag.StringVar(&compressorMode, "compression", compressionOff,
+	flag.StringVar(&compressorMode, "compression", modeOff,
 		fmt.Sprintf("Compression mode - One of: %v", strings.Join(allCompressionModes, ", ")))
+	flag.StringVar(&benchmarkResultFile, "resultFile", "", "Save the benchmark result into a binary file")
+	flag.StringVar(&networkMode, "networkMode", "", "Network mode includes LAN, WAN, Local and Longhaul")
 	flag.Parse()
 	if flag.NArg() != 0 {
 		log.Fatal("Error: unparsed arguments: ", flag.Args())
@@ -262,20 +285,8 @@ func init() {
 		log.Fatalf("Unknown workloads setting: %v (want one of: %v)",
 			workloads, strings.Join(allWorkloads, ", "))
 	}
-	switch compressorMode {
-	case compressionOn:
-		enableCompressor = []bool{true}
-	case compressionOff:
-		enableCompressor = []bool{false}
-	case compressionBoth:
-		enableCompressor = []bool{false, true}
-	default:
-		log.Fatalf("Unknown compression mode setting: %v (want one of: %v)",
-			compressorMode, strings.Join(allCompressionModes, ", "))
-	}
-	if traceMode {
-		enableTrace = []bool{true}
-	}
+	enableCompressor = setMode(compressorMode)
+	enableTrace = setMode(traceMode)
 	// Time input formats as (time + unit).
 	readTimeFromInput(&ltc, readLatency)
 	readIntFromIntSlice(&kbps, readKbps)
@@ -283,6 +294,27 @@ func init() {
 	readIntFromIntSlice(&maxConcurrentCalls, readMaxConcurrentCalls)
 	readIntFromIntSlice(&reqSizeBytes, readReqSizeBytes)
 	readIntFromIntSlice(&respSizeBytes, readRespSizeBytes)
+	// Re-write latency, kpbs and mtu if network mode is set.
+	if network, ok := networks[networkMode]; ok {
+		ltc = []time.Duration{network.Latency}
+		kbps = []int{network.Kbps}
+		mtu = []int{network.MTU}
+	}
+}
+
+func setMode(name string) []bool {
+	switch name {
+	case modeOn:
+		return []bool{true}
+	case modeOff:
+		return []bool{false}
+	case modeBoth:
+		return []bool{false, true}
+	default:
+		log.Fatalf("Unknown %s setting: %v (want one of: %v)",
+			name, name, strings.Join(allCompressionModes, ", "))
+		return []bool{}
+	}
 }
 
 type intSliceType []int
@@ -334,6 +366,7 @@ func main() {
 		len(maxConcurrentCalls), len(reqSizeBytes), len(respSizeBytes), len(enableCompressor)}
 	initalPos := make([]int, len(featuresPos))
 	s := stats.NewStats(10)
+	s.SortLatency()
 	var memStats runtime.MemStats
 	var results testing.BenchmarkResult
 	var startAllocs, startBytes uint64
@@ -350,14 +383,19 @@ func main() {
 		results = testing.BenchmarkResult{N: int(count), T: time.Now().Sub(startTime),
 			Bytes: 0, MemAllocs: memStats.Mallocs - startAllocs, MemBytes: memStats.TotalAlloc - startBytes}
 	}
+	sharedPos := make([]bool, len(featuresPos))
+	for i := 0; i < len(featuresPos); i++ {
+		if featuresNum[i] <= 1 {
+			sharedPos[i] = true
+		}
+	}
+
 	// Run benchmarks
+	resultSlice := []stats.BenchResults{}
 	for !reflect.DeepEqual(featuresPos, initalPos) || start {
 		start = false
-		tracing := "Trace"
-		if !enableTrace[featuresPos[0]] {
-			tracing = "noTrace"
-		}
-		benchFeature := bm.Features{
+		benchFeature := stats.Features{
+			NetworkMode:        networkMode,
 			EnableTrace:        enableTrace[featuresPos[0]],
 			Latency:            ltc[featuresPos[1]],
 			Kbps:               kbps[featuresPos[2]],
@@ -370,28 +408,30 @@ func main() {
 
 		grpc.EnableTracing = enableTrace[featuresPos[0]]
 		if runMode[0] {
-			fmt.Printf("Unary-%s-%s:\n", tracing, benchFeature.String())
 			unaryBenchmark(startTimer, stopTimer, benchFeature, benchtime, s)
-			fmt.Println(results.String(), results.MemString())
+			s.SetBenchmarkResult("Unary", benchFeature, results.N,
+				results.AllocedBytesPerOp(), results.AllocsPerOp(), sharedPos)
+			fmt.Println(s.BenchString())
 			fmt.Println(s.String())
+			resultSlice = append(resultSlice, s.GetBenchmarkResults())
 			s.Clear()
 		}
-
 		if runMode[1] {
-			fmt.Printf("Stream-%s-%s\n", tracing, benchFeature.String())
 			streamBenchmark(startTimer, stopTimer, benchFeature, benchtime, s)
-			fmt.Println(results.String(), results.MemString())
+			s.SetBenchmarkResult("Stream", benchFeature, results.N,
+				results.AllocedBytesPerOp(), results.AllocsPerOp(), sharedPos)
+			fmt.Println(s.BenchString())
 			fmt.Println(s.String())
+			resultSlice = append(resultSlice, s.GetBenchmarkResults())
 			s.Clear()
 		}
 		bm.AddOne(featuresPos, featuresNum)
 	}
-	after()
-
+	after(resultSlice)
 }
 
 func before() {
-	if memProfileRate > 0 {
+	if memProfile != "" {
 		runtime.MemProfileRate = memProfileRate
 	}
 	if cpuProfile != "" {
@@ -408,7 +448,7 @@ func before() {
 	}
 }
 
-func after() {
+func after(data []stats.BenchResults) {
 	if cpuProfile != "" {
 		pprof.StopCPUProfile() // flushes profile to disk
 	}
@@ -420,9 +460,18 @@ func after() {
 		}
 		runtime.GC() // materialize all statistics
 		if err = pprof.WriteHeapProfile(f); err != nil {
-			fmt.Fprintf(os.Stderr, "testing: can't write %s: %s\n", memProfile, err)
+			fmt.Fprintf(os.Stderr, "testing: can't write heap profile %s: %s\n", memProfile, err)
 			os.Exit(2)
 		}
+		f.Close()
+	}
+	if benchmarkResultFile != "" {
+		f, err := os.Create(benchmarkResultFile)
+		if err != nil {
+			log.Fatalf("testing: can't write benchmark result %s: %s\n", benchmarkResultFile, err)
+		}
+		dataEncoder := gob.NewEncoder(f)
+		dataEncoder.Encode(data)
 		f.Close()
 	}
 }

@@ -40,6 +40,7 @@
     "StopStackSetOperation": "<p>Stops an in-progress operation on a stack set and its associated stack instances. </p>",
     "UpdateStack": "<p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html\">Updating a Stack</a>.</p>",
     "UpdateStackSet": "<p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>",
+    "UpdateTerminationProtection": "<p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html\">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html\">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>",
     "ValidateTemplate": "<p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>"
   },
   "shapes": {
@@ -378,6 +379,7 @@
     "DeletionTime": {
       "base": null,
       "refs": {
+        "Stack$DeletionTime": "<p>The time the stack was deleted.</p>",
         "StackSummary$DeletionTime": "<p>The time the stack was deleted.</p>"
       }
     },
@@ -496,6 +498,14 @@
       "refs": {
         "CreateStackInput$DisableRollback": "<p>Set to <code>true</code> to disable rollback of the stack if stack creation failed. You can specify either <code>DisableRollback</code> or <code>OnFailure</code>, but not both.</p> <p>Default: <code>false</code> </p>",
         "Stack$DisableRollback": "<p>Boolean to enable or disable rollback on stack creation failures:</p> <ul> <li> <p> <code>true</code>: disable rollback</p> </li> <li> <p> <code>false</code>: enable rollback</p> </li> </ul>"
+      }
+    },
+    "EnableTerminationProtection": {
+      "base": null,
+      "refs": {
+        "CreateStackInput$EnableTerminationProtection": "<p>Whether to enable termination protection on the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html\">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>. Termination protection is disabled on stacks by default. </p> <p> For <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html\">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>",
+        "Stack$EnableTerminationProtection": "<p>Whether termination protection is enabled for the stack.</p> <p> For <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html\">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack. For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html\">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p>",
+        "UpdateTerminationProtectionInput$EnableTerminationProtection": "<p>Whether to enable termination protection on the specified stack.</p>"
       }
     },
     "EstimateTemplateCostInput": {
@@ -757,13 +767,13 @@
     "MaxConcurrentCount": {
       "base": null,
       "refs": {
-        "StackSetOperationPreferences$MaxConcurrentCount": "<p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>FailureToleranceCount</code>—<code>MaxConcurrentCount</code> is at most one more than the <code>FailureToleranceCount</code> .</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>"
+        "StackSetOperationPreferences$MaxConcurrentCount": "<p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>FailureToleranceCount</code>—<code>MaxConcurrentCount</code> is at most one more than the <code>FailureToleranceCount</code> .</p> <p>Note that this setting lets you specify the <i>maximum</i> for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>"
       }
     },
     "MaxConcurrentPercentage": {
       "base": null,
       "refs": {
-        "StackSetOperationPreferences$MaxConcurrentPercentage": "<p>The maximum percentage of accounts in which to perform this operation at one time.</p> <p>When calculating the number of accounts based on the specified percentage, AWS CloudFormation rounds down to the next whole number. This is true except in cases where rounding down would result is zero. In this case, CloudFormation sets the number as one instead.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>"
+        "StackSetOperationPreferences$MaxConcurrentPercentage": "<p>The maximum percentage of accounts in which to perform this operation at one time.</p> <p>When calculating the number of accounts based on the specified percentage, AWS CloudFormation rounds down to the next whole number. This is true except in cases where rounding down would result is zero. In this case, CloudFormation sets the number as one instead.</p> <p>Note that this setting lets you specify the <i>maximum</i> for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>"
       }
     },
     "MaxResults": {
@@ -1201,13 +1211,18 @@
         "DescribeChangeSetOutput$StackId": "<p>The ARN of the stack that is associated with the change set.</p>",
         "Export$ExportingStackId": "<p>The stack that contains the exported output name and value.</p>",
         "Stack$StackId": "<p>Unique identifier of the stack.</p>",
+        "Stack$ParentId": "<p>For nested stacks--stacks created as resources for another stack--the stack ID of the direct parent of this stack. For the first level of nested stacks, the root stack is also the parent stack.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html\">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>",
+        "Stack$RootId": "<p>For nested stacks--stacks created as resources for another stack--the stack ID of the the top-level stack to which the nested stack ultimately belongs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html\">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>",
         "StackEvent$StackId": "<p>The unique ID name of the instance of the stack.</p>",
         "StackInstance$StackId": "<p>The ID of the stack instance.</p>",
         "StackInstanceSummary$StackId": "<p>The ID of the stack instance.</p>",
         "StackResource$StackId": "<p>Unique identifier of the stack.</p>",
         "StackResourceDetail$StackId": "<p>Unique identifier of the stack.</p>",
         "StackSummary$StackId": "<p>Unique stack identifier.</p>",
-        "UpdateStackOutput$StackId": "<p>Unique identifier of the stack.</p>"
+        "StackSummary$ParentId": "<p>For nested stacks--stacks created as resources for another stack--the stack ID of the direct parent of this stack. For the first level of nested stacks, the root stack is also the parent stack.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html\">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>",
+        "StackSummary$RootId": "<p>For nested stacks--stacks created as resources for another stack--the stack ID of the the top-level stack to which the nested stack ultimately belongs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html\">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>",
+        "UpdateStackOutput$StackId": "<p>Unique identifier of the stack.</p>",
+        "UpdateTerminationProtectionOutput$StackId": "<p>The unique ID of the stack.</p>"
       }
     },
     "StackInstance": {
@@ -1275,7 +1290,8 @@
         "ExecuteChangeSetInput$StackName": "<p>If you specified the name of a change set, specify the stack name or ID (ARN) that is associated with the change set you want to execute.</p>",
         "GetTemplateSummaryInput$StackName": "<p>The name or the stack ID that is associated with the stack, which are not always interchangeable. For running stacks, you can specify either the stack's name or its unique stack ID. For deleted stack, you must specify the unique stack ID.</p> <p>Conditional: You must specify only one of the following parameters: <code>StackName</code>, <code>StackSetName</code>, <code>TemplateBody</code>, or <code>TemplateURL</code>.</p>",
         "ListChangeSetsInput$StackName": "<p>The name or the Amazon Resource Name (ARN) of the stack for which you want to list change sets.</p>",
-        "SignalResourceInput$StackName": "<p>The stack name or unique stack ID that includes the resource that you want to signal.</p>"
+        "SignalResourceInput$StackName": "<p>The stack name or unique stack ID that includes the resource that you want to signal.</p>",
+        "UpdateTerminationProtectionInput$StackName": "<p>The name or unique ID of the stack for which you want to set termination protection.</p>"
       }
     },
     "StackPolicyBody": {
@@ -1672,6 +1688,16 @@
       }
     },
     "UpdateStackSetOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateTerminationProtectionInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateTerminationProtectionOutput": {
       "base": null,
       "refs": {
       }

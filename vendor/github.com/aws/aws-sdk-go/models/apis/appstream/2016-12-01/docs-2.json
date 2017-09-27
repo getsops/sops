@@ -373,6 +373,13 @@
         "Fleet$State": "<p>The current state for the fleet.</p>"
       }
     },
+    "FleetType": {
+      "base": null,
+      "refs": {
+        "CreateFleetRequest$FleetType": null,
+        "Fleet$FleetType": null
+      }
+    },
     "Image": {
       "base": "<p>New streaming instances are booted from images. The image stores the application catalog and is connected to fleets.</p>",
       "refs": {
@@ -652,7 +659,7 @@
         "AssociateFleetRequest$FleetName": "<p>The name of the fleet to associate.</p>",
         "AssociateFleetRequest$StackName": "<p>The name of the stack to which the fleet is associated.</p>",
         "CreateFleetRequest$ImageName": "<p>Unique name of the image used by the fleet.</p>",
-        "CreateFleetRequest$InstanceType": "<p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul>",
+        "CreateFleetRequest$InstanceType": "<p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul>",
         "CreateStackRequest$Name": "<p>The unique identifier for this stack.</p>",
         "CreateStreamingURLRequest$StackName": "<p>The stack for which the URL is generated.</p>",
         "CreateStreamingURLRequest$FleetName": "<p>The fleet for which the URL is generated.</p>",
@@ -678,7 +685,7 @@
         "Fleet$DisplayName": "<p>The name displayed to end users on the AppStream 2.0 portal.</p>",
         "Fleet$Description": "<p>The description displayed to end users on the AppStream 2.0 portal.</p>",
         "Fleet$ImageName": "<p>The image used by the fleet.</p>",
-        "Fleet$InstanceType": "<p>The instance type of compute resources for the fleet. The fleet instances are launched from this instance type. </p>",
+        "Fleet$InstanceType": "<p>The instance type to use when launching fleet instances.</p>",
         "FleetError$ErrorMessage": "<p>The error message generated when the fleet has errors.</p>",
         "Image$Name": "<p>The unique identifier for the image.</p>",
         "Image$DisplayName": "<p>The display name for the image.</p>",
@@ -706,7 +713,7 @@
         "SubnetIdList$member": null,
         "UpdateFleetRequest$ImageName": "<p>The image name from which a fleet is created.</p>",
         "UpdateFleetRequest$Name": "<p>The name of the fleet.</p>",
-        "UpdateFleetRequest$InstanceType": "<p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul>",
+        "UpdateFleetRequest$InstanceType": "<p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul>",
         "UpdateStackRequest$Name": "<p>The name of the stack to update.</p>"
       }
     },

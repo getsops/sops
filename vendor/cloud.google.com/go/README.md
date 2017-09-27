@@ -33,6 +33,29 @@ make backwards-incompatible changes.
 
 ## News
 
+_September 8, 2017_
+
+*v0.13.0*
+
+- bigquery: UseLegacySQL options for CreateTable and QueryConfig. Use these
+  options to continue using Legacy SQL after the client switches its default
+  to Standard SQL.
+
+- bigquery: Support for updating dataset labels.
+
+- bigquery: Set DatasetIterator.ProjectID to list datasets in a project other
+  than the client's. DatasetsInProject is no longer needed and is deprecated.
+
+- bigtable: Fail ListInstances when any zones fail.
+
+- spanner: support decoding of slices of basic types (e.g. []string, []int64,
+  etc.)
+
+- logging/logadmin: UpdateSink no longer creates a sink if it is missing
+  (actually a change to the underlying service, not the client)
+
+- profiler: Service and ServiceVersion replace Target in Config.
+
 _August 22, 2017_
 
 *v0.12.0*
@@ -101,11 +124,11 @@ Google API                       | Status       | Package
 [Bigtable][cloud-bigtable]       | beta         | [`cloud.google.com/go/bigtable`][cloud-bigtable-ref]
 [BigQuery][cloud-bigquery]       | beta         | [`cloud.google.com/go/bigquery`][cloud-bigquery-ref]
 [Logging][cloud-logging]         | stable       | [`cloud.google.com/go/logging`][cloud-logging-ref]
-[Monitoring][cloud-monitoring]   | alpha        | [`cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
+[Monitoring][cloud-monitoring]   | beta         | [`cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
 [Pub/Sub][cloud-pubsub]          | beta         | [`cloud.google.com/go/pubsub`][cloud-pubsub-ref]
-[Vision][cloud-vision]           | beta         | [`cloud.google.com/go/vision/apiv1`][cloud-vision-ref]
-[Language][cloud-language]       | beta         | [`cloud.google.com/go/language/apiv1`][cloud-language-ref]
-[Speech][cloud-speech]           | beta         | [`cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
+[Vision][cloud-vision]           | stable       | [`cloud.google.com/go/vision/apiv1`][cloud-vision-ref]
+[Language][cloud-language]       | stable       | [`cloud.google.com/go/language/apiv1`][cloud-language-ref]
+[Speech][cloud-speech]           | stable       | [`cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
 [Spanner][cloud-spanner]         | beta         | [`cloud.google.com/go/spanner`][cloud-spanner-ref]
 [Translation][cloud-translation] | stable       | [`cloud.google.com/go/translate`][cloud-translation-ref]
 [Trace][cloud-trace]             | alpha        | [`cloud.google.com/go/trace`][cloud-trace-ref]

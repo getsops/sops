@@ -14,6 +14,8 @@ if git status --porcelain | read; then
   die "Uncommitted or untracked files found; commit changes first"
 fi
 
+PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
+
 # Check proto in manual runs or cron runs.
 if [[ "$TRAVIS" != "true" || "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
   check_proto="true"
@@ -68,7 +70,7 @@ set -o pipefail
 git reset --hard HEAD
 
 if [[ "$check_proto" = "true" ]]; then
-  PATH=/home/travis/bin:$PATH make proto && \
+  PATH="/home/travis/bin:$PATH" make proto && \
     git status --porcelain 2>&1 | (! read) || \
     (git status; git --no-pager diff; exit 1)
 fi

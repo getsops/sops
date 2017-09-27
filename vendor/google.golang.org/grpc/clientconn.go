@@ -279,7 +279,7 @@ func WithUserAgent(s string) DialOption {
 	}
 }
 
-// WithKeepaliveParams returns a DialOption that specifies keepalive paramaters for the client transport.
+// WithKeepaliveParams returns a DialOption that specifies keepalive parameters for the client transport.
 func WithKeepaliveParams(kp keepalive.ClientParameters) DialOption {
 	return func(o *dialOptions) {
 		o.copts.KeepaliveParams = kp
@@ -483,7 +483,7 @@ type connectivityStateEvaluator struct {
 // recordTransition records state change happening in every addrConn and based on
 // that it evaluates what state the ClientConn is in.
 // It can only transition between connectivity.Ready, connectivity.Connecting and connectivity.TransientFailure. Other states,
-// Idle and connectivity.Shutdown are transitioned into by ClientConn; in the begining of the connection
+// Idle and connectivity.Shutdown are transitioned into by ClientConn; in the beginning of the connection
 // before any addrConn is created ClientConn is in idle state. In the end when ClientConn
 // closes it is in connectivity.Shutdown state.
 // TODO Note that in later releases, a ClientConn with no activity will be put into an Idle state.

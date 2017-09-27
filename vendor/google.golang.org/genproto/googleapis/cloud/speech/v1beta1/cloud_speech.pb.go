@@ -221,6 +221,8 @@ func (m *AsyncRecognizeRequest) GetAudio() *RecognitionAudio {
 // All subsequent messages must contain `audio` data and must not contain a
 // `streaming_config` message.
 type StreamingRecognizeRequest struct {
+	// The streaming request, which is either a streaming config or audio content.
+	//
 	// Types that are valid to be assigned to StreamingRequest:
 	//	*StreamingRecognizeRequest_StreamingConfig
 	//	*StreamingRecognizeRequest_AudioContent
@@ -496,6 +498,8 @@ func (m *SpeechContext) GetPhrases() []string {
 // returns [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]. See
 // [audio limits](https://cloud.google.com/speech/limits#content).
 type RecognitionAudio struct {
+	// The audio source, which is either inline content or a GCS uri.
+	//
 	// Types that are valid to be assigned to AudioSource:
 	//	*RecognitionAudio_Content
 	//	*RecognitionAudio_Uri
@@ -608,7 +612,7 @@ func _RecognitionAudio_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
-// The only message returned to the client by `SyncRecognize`. It
+// The only message returned to the client by `SyncRecognize`. method. It
 // contains the result as zero or more sequential `SpeechRecognitionResult`
 // messages.
 type SyncRecognizeResponse struct {

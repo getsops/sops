@@ -20,7 +20,7 @@
  "basePath": "/plus/v1/",
  "rootUrl": "https://www.googleapis.com/",
  "servicePath": "plus/v1/",
- "batchPath": "batch/plus/v1",
+ "batchPath": "batch",
  "parameters": {
   "alt": {
    "type": "string",

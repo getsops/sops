@@ -188,7 +188,8 @@
       "errors":[
         {"shape":"InternalErrorException"},
         {"shape":"InvalidParameterException"},
-        {"shape":"NotFoundException"}
+        {"shape":"NotFoundException"},
+        {"shape":"DuplicateRecordException"}
       ]
     },
     "UpdateSubscriber":{
@@ -202,7 +203,8 @@
       "errors":[
         {"shape":"InternalErrorException"},
         {"shape":"InvalidParameterException"},
-        {"shape":"NotFoundException"}
+        {"shape":"NotFoundException"},
+        {"shape":"DuplicateRecordException"}
       ]
     }
   },

@@ -1949,6 +1949,14 @@ type EnvironmentVariable struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
+	// The type of environment variable. Valid values include:
+	//
+	//    * PARAMETER_STORE: An environment variable stored in Amazon EC2 Systems
+	//    Manager Parameter Store.
+	//
+	//    * PLAINTEXT: An environment variable in plaintext format.
+	Type *string `locationName:"type" type:"string" enum:"EnvironmentVariableType"`
+
 	// The value of the environment variable.
 	//
 	// We strongly discourage using environment variables to store sensitive values,
@@ -1992,6 +2000,12 @@ func (s *EnvironmentVariable) Validate() error {
 // SetName sets the Name field's value.
 func (s *EnvironmentVariable) SetName(v string) *EnvironmentVariable {
 	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *EnvironmentVariable) SetType(v string) *EnvironmentVariable {
+	s.Type = &v
 	return s
 }
 
@@ -3554,6 +3568,14 @@ const (
 const (
 	// EnvironmentTypeLinuxContainer is a EnvironmentType enum value
 	EnvironmentTypeLinuxContainer = "LINUX_CONTAINER"
+)
+
+const (
+	// EnvironmentVariableTypePlaintext is a EnvironmentVariableType enum value
+	EnvironmentVariableTypePlaintext = "PLAINTEXT"
+
+	// EnvironmentVariableTypeParameterStore is a EnvironmentVariableType enum value
+	EnvironmentVariableTypeParameterStore = "PARAMETER_STORE"
 )
 
 const (

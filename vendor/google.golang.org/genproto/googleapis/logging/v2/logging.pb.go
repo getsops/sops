@@ -82,21 +82,27 @@ type WriteLogEntriesRequest struct {
 	// as a label in this parameter, then the log entry's label is not changed.
 	// See [LogEntry][google.logging.v2.LogEntry].
 	Labels map[string]string `protobuf:"bytes,3,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	// Required.  The log entries to write. Values supplied for the fields
-	// `log_name`, `resource`, and `labels` in this `entries.write` request are
-	// inserted into those log entries in this list that do not provide their own
-	// values.
+	// Required. The log entries to send to Stackdriver Logging. The order of log
+	// entries in this list does not matter. Values supplied in this method's
+	// `log_name`, `resource`, and `labels` fields are copied into those log
+	// entries in this list that do not include values for their corresponding
+	// fields. For more information, see the [LogEntry][google.logging.v2.LogEntry] type.
 	//
-	// Stackdriver Logging also creates and inserts values for `timestamp` and
-	// `insert_id` if the entries do not provide them. The created `insert_id` for
-	// the N'th entry in this list will be greater than earlier entries and less
-	// than later entries.  Otherwise, the order of log entries in this list does
-	// not matter.
+	// If the `timestamp` or `insert_id` fields are missing in log entries, then
+	// this method supplies the current time or a unique identifier, respectively.
+	// The supplied values are chosen so that, among the log entries that did not
+	// supply their own values, the entries earlier in the list will sort before
+	// the entries later in the list. See the `entries.list` method.
+	//
+	// Log entries with timestamps that are more than the
+	// [logs retention period](/logging/quota-policy) in the past or more than
+	// 24 hours in the future might be discarded. Discarding does not return
+	// an error.
 	//
 	// To improve throughput and to avoid exceeding the
 	// [quota limit](/logging/quota-policy) for calls to `entries.write`,
-	// you should write multiple log entries at once rather than
-	// calling this method for each individual log entry.
+	// you should try to include several log entries in this list,
+	// rather than calling this method for each individual log entry.
 	Entries []*LogEntry `protobuf:"bytes,4,rep,name=entries" json:"entries,omitempty"`
 	// Optional. Whether valid entries should be written even if some other
 	// entries fail due to INVALID_ARGUMENT or PERMISSION_DENIED errors. If any
@@ -272,7 +278,9 @@ func (m *ListLogEntriesRequest) GetPageToken() string {
 
 // Result returned from `ListLogEntries`.
 type ListLogEntriesResponse struct {
-	// A list of log entries.
+	// A list of log entries.  If `entries` is empty, `nextPageToken` may still be
+	// returned, indicating that more entries may exist.  See `nextPageToken` for
+	// more information.
 	Entries []*LogEntry `protobuf:"bytes,1,rep,name=entries" json:"entries,omitempty"`
 	// If there might be more results than those appearing in this response, then
 	// `nextPageToken` is included.  To get the next set of results, call this
@@ -481,7 +489,13 @@ type LoggingServiceV2Client interface {
 	// Log entries written shortly before the delete operation might not be
 	// deleted.
 	DeleteLog(ctx context.Context, in *DeleteLogRequest, opts ...grpc.CallOption) (*google_protobuf5.Empty, error)
-	// Writes log entries to Stackdriver Logging.
+	// ## Log entry resources
+	//
+	// Writes log entries to Stackdriver Logging. This API method is the
+	// only way to send log entries to Stackdriver Logging. This method
+	// is used, directly or indirectly, by the Stackdriver Logging agent
+	// (fluentd) and all logging libraries configured to use Stackdriver
+	// Logging.
 	WriteLogEntries(ctx context.Context, in *WriteLogEntriesRequest, opts ...grpc.CallOption) (*WriteLogEntriesResponse, error)
 	// Lists log entries.  Use this method to retrieve log entries from
 	// Stackdriver Logging.  For ways to export log entries, see
@@ -556,7 +570,13 @@ type LoggingServiceV2Server interface {
 	// Log entries written shortly before the delete operation might not be
 	// deleted.
 	DeleteLog(context.Context, *DeleteLogRequest) (*google_protobuf5.Empty, error)
-	// Writes log entries to Stackdriver Logging.
+	// ## Log entry resources
+	//
+	// Writes log entries to Stackdriver Logging. This API method is the
+	// only way to send log entries to Stackdriver Logging. This method
+	// is used, directly or indirectly, by the Stackdriver Logging agent
+	// (fluentd) and all logging libraries configured to use Stackdriver
+	// Logging.
 	WriteLogEntries(context.Context, *WriteLogEntriesRequest) (*WriteLogEntriesResponse, error)
 	// Lists log entries.  Use this method to retrieve log entries from
 	// Stackdriver Logging.  For ways to export log entries, see

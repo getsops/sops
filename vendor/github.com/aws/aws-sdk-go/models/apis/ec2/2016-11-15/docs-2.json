@@ -30,6 +30,7 @@
     "CancelSpotFleetRequests": "<p>Cancels the specified Spot fleet requests.</p> <p>After you cancel a Spot fleet request, the Spot fleet launches no new Spot instances. You must specify whether the Spot fleet should also terminate its Spot instances. If you terminate the instances, the Spot fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the Spot fleet request enters the <code>cancelled_running</code> state and the instances continue to run until they are interrupted or you terminate them manually.</p>",
     "CancelSpotInstanceRequests": "<p>Cancels one or more Spot instance requests. Spot instances are instances that Amazon EC2 starts on your behalf when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Canceling a Spot instance request does not terminate running Spot instances associated with the request.</p> </important>",
     "ConfirmProductInstance": "<p>Determines whether a product code is associated with an instance. This action can only be used by the owner of the product code. It is useful when a product code owner needs to verify whether another user's instance is eligible for support.</p>",
+    "CopyFpgaImage": "<p>Copies the specified Amazon FPGA Image (AFI) to the current region.</p>",
     "CopyImage": "<p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html\">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
     "CopySnapshot": "<p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same region or from one region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter. </p> <note> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> </note> <note> <p>Snapshots created by the CopySnapshot action have an arbitrary volume ID that should not be used for any purpose.</p> </note> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html\">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
     "CreateCustomerGateway": "<p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway's external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device's BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don't have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information about VPN customer gateways, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html\">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important>",
@@ -67,6 +68,7 @@
     "DeleteDhcpOptions": "<p>Deletes the specified set of DHCP options. You must disassociate the set of DHCP options before you can delete it. You can disassociate the set of DHCP options by associating either a new set of options or the default set of options with the VPC.</p>",
     "DeleteEgressOnlyInternetGateway": "<p>Deletes an egress-only Internet gateway.</p>",
     "DeleteFlowLogs": "<p>Deletes one or more flow logs.</p>",
+    "DeleteFpgaImage": "<p>Deletes the specified Amazon FPGA Image (AFI).</p>",
     "DeleteInternetGateway": "<p>Deletes the specified Internet gateway. You must detach the Internet gateway from the VPC before you can delete it.</p>",
     "DeleteKeyPair": "<p>Deletes the specified key pair, by removing the public key from Amazon EC2.</p>",
     "DeleteNatGateway": "<p>Deletes the specified NAT gateway. Deleting a NAT gateway disassociates its Elastic IP address, but does not release the address from your account. Deleting a NAT gateway does not delete any NAT gateway routes in your route tables.</p>",
@@ -102,6 +104,7 @@
     "DescribeElasticGpus": "<p>Describes the Elastic GPUs associated with your instances. For more information about Elastic GPUs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-gpus.html\">Amazon EC2 Elastic GPUs</a>.</p>",
     "DescribeExportTasks": "<p>Describes one or more of your export tasks.</p>",
     "DescribeFlowLogs": "<p>Describes one or more flow logs. To view the information in your flow logs (the log streams for the network interfaces), you must use the CloudWatch Logs console or the CloudWatch Logs API.</p>",
+    "DescribeFpgaImageAttribute": "<p>Describes the specified attribute of the specified Amazon FPGA Image (AFI).</p>",
     "DescribeFpgaImages": "<p>Describes one or more available Amazon FPGA Images (AFIs). These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>",
     "DescribeHostReservationOfferings": "<p>Describes the Dedicated Host Reservations that are available to purchase.</p> <p>The results describe all the Dedicated Host Reservation offerings, including offerings that may not match the instance family and region of your Dedicated Hosts. When purchasing an offering, ensure that the the instance family and region of the offering matches that of the Dedicated Host/s it will be associated with. For an overview of supported instance types, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html\">Dedicated Hosts Overview</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>",
     "DescribeHostReservations": "<p>Describes Dedicated Host Reservations which are associated with Dedicated Hosts in your account.</p>",
@@ -180,13 +183,14 @@
     "GetConsoleOutput": "<p>Gets the console output for the specified instance.</p> <p>Instances do not have a physical monitor through which you can view their console output. They also lack physical controls that allow you to power up, reboot, or shut them down. To allow these actions, we provide them through the Amazon EC2 API and command line interface.</p> <p>Instance console output is buffered and posted shortly after instance boot, reboot, and termination. Amazon EC2 preserves the most recent 64 KB output which is available for at least one hour after the most recent post.</p> <p>For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. This output is buffered because the instance produces it and then posts it to a store where the instance's owner can retrieve it.</p> <p>For Windows instances, the instance console output includes output from the EC2Config service.</p>",
     "GetConsoleScreenshot": "<p>Retrieve a JPG-format screenshot of a running instance to help with troubleshooting.</p> <p>The returned content is Base64-encoded.</p>",
     "GetHostReservationPurchasePreview": "<p>Preview a reservation purchase with configurations that match those of your Dedicated Host. You must have active Dedicated Hosts in your account before you purchase a reservation.</p> <p>This is a preview of the <a>PurchaseHostReservation</a> action and does not result in the offering being purchased.</p>",
-    "GetPasswordData": "<p>Retrieves the encrypted administrator password for an instance running Windows.</p> <p>The Windows password is generated at boot if the <code>EC2Config</code> service plugin, <code>Ec2SetPassword</code>, is enabled. This usually only happens the first time an AMI is launched, and then <code>Ec2SetPassword</code> is automatically disabled. The password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>Password generation and encryption takes a few moments. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>",
+    "GetPasswordData": "<p>Retrieves the encrypted administrator password for a running Windows instance.</p> <p>The Windows password is generated at boot by the <code>EC2Config</code> service or <code>EC2Launch</code> scripts (Windows Server 2016 and later). This usually only happens the first time an instance is launched. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html\">EC2Config</a> and <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2launch.html\">EC2Launch</a> in the Amazon Elastic Compute Cloud User Guide.</p> <p>For the <code>EC2Config</code> service, the password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>When you launch an instance, password generation and encryption may take a few minutes. If you try to retrieve the password before it's available, the output returns an empty string. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>",
     "GetReservedInstancesExchangeQuote": "<p>Returns details about the values and term of your specified Convertible Reserved Instances. When a target configuration is specified, it returns information about whether the exchange is valid and can be performed.</p>",
     "ImportImage": "<p>Import single or multi-volume disk images or EBS snapshots into an Amazon Machine Image (AMI). For more information, see <a href=\"http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html\">Importing a VM as an Image Using VM Import/Export</a> in the <i>VM Import/Export User Guide</i>.</p>",
     "ImportInstance": "<p>Creates an import instance task using metadata from the specified disk image. <code>ImportInstance</code> only supports single-volume VMs. To import multi-volume VMs, use <a>ImportImage</a>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ec2-cli-vmimport-export.html\">Importing a Virtual Machine Using the Amazon EC2 CLI</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>",
     "ImportKeyPair": "<p>Imports the public key from an RSA key pair that you created with a third-party tool. Compare this with <a>CreateKeyPair</a>, in which AWS creates the key pair and gives the keys to you (AWS keeps a copy of the public key). With ImportKeyPair, you create the key pair and give AWS just the public key. The private key is never transferred between you and AWS.</p> <p>For more information about key pairs, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html\">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
     "ImportSnapshot": "<p>Imports a disk into an EBS snapshot.</p>",
     "ImportVolume": "<p>Creates an import volume task using metadata from the specified disk image.For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/importing-your-volumes-into-amazon-ebs.html\">Importing Disks to Amazon EBS</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html\">VM Import Manifest</a>.</p>",
+    "ModifyFpgaImageAttribute": "<p>Modifies the specified attribute of the specified Amazon FPGA Image (AFI).</p>",
     "ModifyHosts": "<p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, AWS will place instances that you launch with a tenancy of <code>host</code>, but without targeting a specific host ID, onto any available Dedicated Host in your account which has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID if you want the instance to launch onto a specific host. If no host ID is provided, the instance will be launched onto a suitable host which has auto-placement enabled.</p>",
     "ModifyIdFormat": "<p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created. The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>",
     "ModifyIdentityIdFormat": "<p>Modifies the ID format of a resource for a specified IAM user, IAM role, or the root user for an account; or all IAM users, IAM roles, and the root user for an account. You can specify that resources should receive longer IDs (17-character IDs) when they are created. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html\">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>This setting applies to the principal specified in the request; it does not apply to the principal that makes the request. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>",
@@ -221,6 +225,7 @@
     "ReportInstanceStatus": "<p>Submits feedback about the status of an instance. The instance must be in the <code>running</code> state. If your experience with the instance differs from the instance status returned by <a>DescribeInstanceStatus</a>, use <a>ReportInstanceStatus</a> to report your experience with the instance. Amazon EC2 collects this information to improve the accuracy of status checks.</p> <p>Use of this action does not change the value returned by <a>DescribeInstanceStatus</a>.</p>",
     "RequestSpotFleet": "<p>Creates a Spot fleet request.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot fleet requests Spot instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot instances in your Spot fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html\">Spot Fleet Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
     "RequestSpotInstances": "<p>Creates a Spot instance request. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot Instance capacity and current Spot instance requests. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html\">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
+    "ResetFpgaImageAttribute": "<p>Resets the specified attribute of the specified Amazon FPGA Image (AFI) to its default value. You can only reset the load permission attribute.</p>",
     "ResetImageAttribute": "<p>Resets an attribute of an AMI to its default value.</p> <note> <p>The productCodes attribute can't be reset.</p> </note>",
     "ResetInstanceAttribute": "<p>Resets an attribute of an instance to its default value. To reset the <code>kernel</code> or <code>ramdisk</code>, the instance must be in a stopped state. To reset the <code>sourceDestCheck</code>, the instance can be either running or stopped.</p> <p>The <code>sourceDestCheck</code> attribute controls whether source/destination checking is enabled. The default value is <code>true</code>, which means checking is enabled. This value must be <code>false</code> for a NAT instance to perform NAT. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html\">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>",
     "ResetNetworkInterfaceAttribute": "<p>Resets a network interface attribute. You can specify only one attribute at a time.</p>",
@@ -697,6 +702,7 @@
         "ClassicLinkDnsSupport$ClassicLinkDnsSupported": "<p>Indicates whether ClassicLink DNS support is enabled for the VPC.</p>",
         "ConfirmProductInstanceRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "ConfirmProductInstanceResult$Return": "<p>The return value of the request. Returns <code>true</code> if the specified product code is owned by the requester and associated with the specified instance.</p>",
+        "CopyFpgaImageRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "CopyImageRequest$Encrypted": "<p>Specifies whether the destination snapshots of the copied image should be encrypted. The default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
         "CopyImageRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "CopySnapshotRequest$Encrypted": "<p>Specifies whether the destination snapshot should be encrypted. You can encrypt a copy of an unencrypted snapshot using this flag, but you cannot use it to create an unencrypted copy from an encrypted snapshot. Your default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html\">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
@@ -736,6 +742,8 @@
         "DeleteDhcpOptionsRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DeleteEgressOnlyInternetGatewayRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DeleteEgressOnlyInternetGatewayResult$ReturnCode": "<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>",
+        "DeleteFpgaImageRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
+        "DeleteFpgaImageResult$Return": "<p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>",
         "DeleteInternetGatewayRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DeleteKeyPairRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DeleteNetworkAclEntryRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
@@ -771,6 +779,7 @@
         "DescribeDhcpOptionsRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DescribeEgressOnlyInternetGatewaysRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DescribeElasticGpusRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
+        "DescribeFpgaImageAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DescribeFpgaImagesRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DescribeImageAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "DescribeImagesRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
@@ -841,6 +850,7 @@
         "EnableVpcClassicLinkDnsSupportResult$Return": "<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>",
         "EnableVpcClassicLinkRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "EnableVpcClassicLinkResult$Return": "<p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>",
+        "FpgaImage$Public": "<p>Indicates whether the AFI is public.</p>",
         "GetConsoleOutputRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "GetConsoleScreenshotRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "GetConsoleScreenshotRequest$WakeUp": "<p>When set to <code>true</code>, acts as keystroke input and wakes up an instance that's in standby or \"sleep\" mode.</p>",
@@ -865,6 +875,7 @@
         "InstanceNetworkInterfaceSpecification$DeleteOnTermination": "<p>If set to <code>true</code>, the interface is deleted when the instance is terminated. You can specify <code>true</code> only if creating a new network interface when launching an instance.</p>",
         "InstancePrivateIpAddress$Primary": "<p>Indicates whether this IPv4 address is the primary private IP address of the network interface.</p>",
         "LaunchSpecification$EbsOptimized": "<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>",
+        "ModifyFpgaImageAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "ModifyIdFormatRequest$UseLongIds": "<p>Indicate whether the resource should use longer IDs (17-character IDs).</p>",
         "ModifyIdentityIdFormatRequest$UseLongIds": "<p>Indicates whether the resource should use longer IDs (17-character IDs)</p>",
         "ModifyImageAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
@@ -914,6 +925,8 @@
         "RequestSpotInstancesRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "RequestSpotLaunchSpecification$EbsOptimized": "<p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>",
         "ReservedInstancesOffering$Marketplace": "<p>Indicates whether the offering is available through the Reserved Instance Marketplace (resale) or AWS. If it's a Reserved Instance Marketplace offering, this is <code>true</code>.</p>",
+        "ResetFpgaImageAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
+        "ResetFpgaImageAttributeResult$Return": "<p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>",
         "ResetImageAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "ResetInstanceAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
         "ResetNetworkInterfaceAttributeRequest$DryRun": "<p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>",
@@ -1198,6 +1211,16 @@
       "base": null,
       "refs": {
         "ConversionTask$State": "<p>The state of the conversion task.</p>"
+      }
+    },
+    "CopyFpgaImageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CopyFpgaImageResult": {
+      "base": null,
+      "refs": {
       }
     },
     "CopyImageRequest": {
@@ -1661,6 +1684,16 @@
       "refs": {
       }
     },
+    "DeleteFpgaImageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteFpgaImageResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteInternetGatewayRequest": {
       "base": "<p>Contains the parameters for DeleteInternetGateway.</p>",
       "refs": {
@@ -1919,6 +1952,16 @@
     },
     "DescribeFlowLogsResult": {
       "base": "<p>Contains the output of DescribeFlowLogs.</p>",
+      "refs": {
+      }
+    },
+    "DescribeFpgaImageAttributeRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeFpgaImageAttributeResult": {
+      "base": null,
       "refs": {
       }
     },
@@ -3007,6 +3050,20 @@
         "FpgaImageList$member": null
       }
     },
+    "FpgaImageAttribute": {
+      "base": "<p>Describes an Amazon FPGA image (AFI) attribute.</p>",
+      "refs": {
+        "DescribeFpgaImageAttributeResult$FpgaImageAttribute": "<p>Information about the attribute.</p>",
+        "ModifyFpgaImageAttributeResult$FpgaImageAttribute": "<p>Information about the attribute.</p>"
+      }
+    },
+    "FpgaImageAttributeName": {
+      "base": null,
+      "refs": {
+        "DescribeFpgaImageAttributeRequest$Attribute": "<p>The AFI attribute.</p>",
+        "ModifyFpgaImageAttributeRequest$Attribute": "<p>The name of the attribute.</p>"
+      }
+    },
     "FpgaImageIdList": {
       "base": null,
       "refs": {
@@ -3535,6 +3592,14 @@
         "UnmonitorInstancesRequest$InstanceIds": "<p>One or more instance IDs.</p>"
       }
     },
+    "InstanceInterruptionBehavior": {
+      "base": null,
+      "refs": {
+        "RequestSpotInstancesRequest$InstanceInterruptionBehavior": "<p>Indicates whether a Spot instance stops or terminates when it is interrupted.</p>",
+        "SpotFleetRequestConfigData$InstanceInterruptionBehavior": "<p>Indicates whether a Spot instance stops or terminates when it is interrupted.</p>",
+        "SpotInstanceRequest$InstanceInterruptionBehavior": "<p>Indicates whether a Spot instance stops or terminates when it is interrupted.</p>"
+      }
+    },
     "InstanceIpv6Address": {
       "base": "<p>Describes an IPv6 address.</p>",
       "refs": {
@@ -4032,6 +4097,37 @@
         "ReservedInstancesListing$Status": "<p>The status of the Reserved Instance listing.</p>"
       }
     },
+    "LoadPermission": {
+      "base": "<p>Describes a load permission.</p>",
+      "refs": {
+        "LoadPermissionList$member": null
+      }
+    },
+    "LoadPermissionList": {
+      "base": null,
+      "refs": {
+        "FpgaImageAttribute$LoadPermissions": "<p>One or more load permissions.</p>"
+      }
+    },
+    "LoadPermissionListRequest": {
+      "base": null,
+      "refs": {
+        "LoadPermissionModifications$Add": "<p>The load permissions to add.</p>",
+        "LoadPermissionModifications$Remove": "<p>The load permissions to remove.</p>"
+      }
+    },
+    "LoadPermissionModifications": {
+      "base": "<p>Describes modifications to the load permissions of an Amazon FPGA image (AFI).</p>",
+      "refs": {
+        "ModifyFpgaImageAttributeRequest$LoadPermission": "<p>The load permission for the AFI.</p>"
+      }
+    },
+    "LoadPermissionRequest": {
+      "base": "<p>Describes a load permission.</p>",
+      "refs": {
+        "LoadPermissionListRequest$member": null
+      }
+    },
     "Long": {
       "base": null,
       "refs": {
@@ -4057,6 +4153,16 @@
         "DescribeIamInstanceProfileAssociationsRequest$MaxResults": "<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>",
         "DescribeStaleSecurityGroupsRequest$MaxResults": "<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "DescribeVpcClassicLinkDnsSupportRequest$MaxResults": "<p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>"
+      }
+    },
+    "ModifyFpgaImageAttributeRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ModifyFpgaImageAttributeResult": {
+      "base": null,
+      "refs": {
       }
     },
     "ModifyHostsRequest": {
@@ -4463,6 +4569,7 @@
     "OperationType": {
       "base": null,
       "refs": {
+        "ModifyFpgaImageAttributeRequest$OperationType": "<p>The operation type.</p>",
         "ModifyImageAttributeRequest$OperationType": "<p>The operation type.</p>",
         "ModifySnapshotAttributeRequest$OperationType": "<p>The type of operation to perform to the attribute.</p>"
       }
@@ -4507,7 +4614,9 @@
       "base": null,
       "refs": {
         "CreateVolumePermission$Group": "<p>The specific group that is to be added or removed from a volume's list of create volume permissions.</p>",
-        "LaunchPermission$Group": "<p>The name of the group.</p>"
+        "LaunchPermission$Group": "<p>The name of the group.</p>",
+        "LoadPermission$Group": "<p>The name of the group.</p>",
+        "LoadPermissionRequest$Group": "<p>The name of the group.</p>"
       }
     },
     "Placement": {
@@ -4670,6 +4779,7 @@
         "DescribeSnapshotAttributeResult$ProductCodes": "<p>A list of product codes.</p>",
         "DescribeVolumeAttributeResult$ProductCodes": "<p>A list of product codes.</p>",
         "FpgaImage$ProductCodes": "<p>The product codes for the AFI.</p>",
+        "FpgaImageAttribute$ProductCodes": "<p>One or more product codes.</p>",
         "Image$ProductCodes": "<p>Any product codes associated with the AMI.</p>",
         "ImageAttribute$ProductCodes": "<p>One or more product codes.</p>",
         "Instance$ProductCodes": "<p>The product codes attached to this instance, if applicable.</p>",
@@ -4679,6 +4789,7 @@
     "ProductCodeStringList": {
       "base": null,
       "refs": {
+        "ModifyFpgaImageAttributeRequest$ProductCodes": "<p>One or more product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the <code>productCodes</code> attribute.</p>",
         "ModifyImageAttributeRequest$ProductCodes": "<p>One or more product codes. After you add a product code to an AMI, it can't be removed. This is only valid when modifying the <code>productCodes</code> attribute.</p>"
       }
     },
@@ -5132,6 +5243,22 @@
       "base": null,
       "refs": {
         "ReservedInstancesModification$ReservedInstancesIds": "<p>The IDs of one or more Reserved Instances.</p>"
+      }
+    },
+    "ResetFpgaImageAttributeName": {
+      "base": null,
+      "refs": {
+        "ResetFpgaImageAttributeRequest$Attribute": "<p>The attribute.</p>"
+      }
+    },
+    "ResetFpgaImageAttributeRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ResetFpgaImageAttributeResult": {
+      "base": null,
+      "refs": {
       }
     },
     "ResetImageAttributeName": {
@@ -5860,6 +5987,12 @@
         "ConversionTask$ConversionTaskId": "<p>The ID of the conversion task.</p>",
         "ConversionTask$ExpirationTime": "<p>The time when the task expires. If the upload isn't complete before the expiration time, we automatically cancel the task.</p>",
         "ConversionTask$StatusMessage": "<p>The status message related to the conversion task.</p>",
+        "CopyFpgaImageRequest$SourceFpgaImageId": "<p>The ID of the source AFI.</p>",
+        "CopyFpgaImageRequest$Description": "<p>The description for the new AFI.</p>",
+        "CopyFpgaImageRequest$Name": "<p>The name for the new AFI. The default is the name of the source AFI.</p>",
+        "CopyFpgaImageRequest$SourceRegion": "<p>The region that contains the source AFI.</p>",
+        "CopyFpgaImageRequest$ClientToken": "<p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">Ensuring Idempotency</a>.</p>",
+        "CopyFpgaImageResult$FpgaImageId": "<p>The ID of the new AFI.</p>",
         "CopyImageRequest$ClientToken": "<p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html\">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>",
         "CopyImageRequest$Description": "<p>A description for the new AMI in the destination region.</p>",
         "CopyImageRequest$KmsKeyId": "<p>The full ARN of the AWS Key Management Service (AWS KMS) CMK to use when encrypting the snapshots of an image during a copy operation. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. The specified CMK must exist in the region that the snapshot is being copied to. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>",
@@ -5961,6 +6094,7 @@
         "CustomerGatewayIdStringList$member": null,
         "DeleteCustomerGatewayRequest$CustomerGatewayId": "<p>The ID of the customer gateway.</p>",
         "DeleteDhcpOptionsRequest$DhcpOptionsId": "<p>The ID of the DHCP options set.</p>",
+        "DeleteFpgaImageRequest$FpgaImageId": "<p>The ID of the AFI.</p>",
         "DeleteInternetGatewayRequest$InternetGatewayId": "<p>The ID of the Internet gateway.</p>",
         "DeleteKeyPairRequest$KeyName": "<p>The name of the key pair.</p>",
         "DeleteNatGatewayRequest$NatGatewayId": "<p>The ID of the NAT gateway.</p>",
@@ -5994,6 +6128,7 @@
         "DescribeElasticGpusResult$NextToken": "<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>",
         "DescribeFlowLogsRequest$NextToken": "<p>The token to retrieve the next page of results.</p>",
         "DescribeFlowLogsResult$NextToken": "<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>",
+        "DescribeFpgaImageAttributeRequest$FpgaImageId": "<p>The ID of the AFI.</p>",
         "DescribeHostReservationOfferingsRequest$NextToken": "<p>The token to use to retrieve the next page of results.</p>",
         "DescribeHostReservationOfferingsRequest$OfferingId": "<p>The ID of the reservation offering.</p>",
         "DescribeHostReservationOfferingsResult$NextToken": "<p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>",
@@ -6145,6 +6280,9 @@
         "FpgaImage$ShellVersion": "<p>The version of the AWS Shell that was used to create the bitstream.</p>",
         "FpgaImage$OwnerId": "<p>The AWS account ID of the AFI owner.</p>",
         "FpgaImage$OwnerAlias": "<p>The alias of the AFI owner. Possible values include <code>self</code>, <code>amazon</code>, and <code>aws-marketplace</code>.</p>",
+        "FpgaImageAttribute$FpgaImageId": "<p>The ID of the AFI.</p>",
+        "FpgaImageAttribute$Name": "<p>The name of the AFI.</p>",
+        "FpgaImageAttribute$Description": "<p>The description of the AFI.</p>",
         "FpgaImageIdList$member": null,
         "FpgaImageState$Message": "<p>If the state is <code>failed</code>, this is the error message.</p>",
         "GetConsoleOutputRequest$InstanceId": "<p>The ID of the instance.</p>",
@@ -6158,7 +6296,7 @@
         "GetHostReservationPurchasePreviewResult$TotalUpfrontPrice": "<p>The potential total upfront price. This is billed immediately.</p>",
         "GetPasswordDataRequest$InstanceId": "<p>The ID of the Windows instance.</p>",
         "GetPasswordDataResult$InstanceId": "<p>The ID of the Windows instance.</p>",
-        "GetPasswordDataResult$PasswordData": "<p>The password of the instance.</p>",
+        "GetPasswordDataResult$PasswordData": "<p>The password of the instance. Returns an empty string if the password is not available.</p>",
         "GetReservedInstancesExchangeQuoteResult$CurrencyCode": "<p>The currency of the transaction.</p>",
         "GetReservedInstancesExchangeQuoteResult$PaymentDue": "<p>The total true upfront charge for the exchange.</p>",
         "GetReservedInstancesExchangeQuoteResult$ValidationFailureReason": "<p>Describes the reason why the exchange cannot be completed.</p>",
@@ -6334,6 +6472,11 @@
         "LaunchSpecification$KeyName": "<p>The name of the key pair.</p>",
         "LaunchSpecification$RamdiskId": "<p>The ID of the RAM disk.</p>",
         "LaunchSpecification$SubnetId": "<p>The ID of the subnet in which to launch the instance.</p>",
+        "LoadPermission$UserId": "<p>The AWS account ID.</p>",
+        "LoadPermissionRequest$UserId": "<p>The AWS account ID.</p>",
+        "ModifyFpgaImageAttributeRequest$FpgaImageId": "<p>The ID of the AFI.</p>",
+        "ModifyFpgaImageAttributeRequest$Description": "<p>A description for the AFI.</p>",
+        "ModifyFpgaImageAttributeRequest$Name": "<p>A name for the AFI.</p>",
         "ModifyIdFormatRequest$Resource": "<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>",
         "ModifyIdentityIdFormatRequest$PrincipalArn": "<p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. Specify <code>all</code> to modify the ID format for all IAM users, IAM roles, and the root user of the account.</p>",
         "ModifyIdentityIdFormatRequest$Resource": "<p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>",
@@ -6524,6 +6667,7 @@
         "ReservedInstancesOffering$AvailabilityZone": "<p>The Availability Zone in which the Reserved Instance can be used.</p>",
         "ReservedInstancesOffering$ReservedInstancesOfferingId": "<p>The ID of the Reserved Instance offering. This is the offering ID used in <a>GetReservedInstancesExchangeQuote</a> to confirm that an exchange can be made.</p>",
         "ReservedInstancesOfferingIdStringList$member": null,
+        "ResetFpgaImageAttributeRequest$FpgaImageId": "<p>The ID of the AFI.</p>",
         "ResetImageAttributeRequest$ImageId": "<p>The ID of the AMI.</p>",
         "ResetInstanceAttributeRequest$InstanceId": "<p>The ID of the instance.</p>",
         "ResetNetworkInterfaceAttributeRequest$NetworkInterfaceId": "<p>The ID of the network interface.</p>",
@@ -7072,6 +7216,7 @@
     "UserGroupStringList": {
       "base": null,
       "refs": {
+        "ModifyFpgaImageAttributeRequest$UserGroups": "<p>One or more user groups. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>",
         "ModifyImageAttributeRequest$UserGroups": "<p>One or more user groups. This is only valid when modifying the <code>launchPermission</code> attribute.</p>"
       }
     },
@@ -7097,6 +7242,7 @@
     "UserIdStringList": {
       "base": null,
       "refs": {
+        "ModifyFpgaImageAttributeRequest$UserIds": "<p>One or more AWS account IDs. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>",
         "ModifyImageAttributeRequest$UserIds": "<p>One or more AWS account IDs. This is only valid when modifying the <code>launchPermission</code> attribute.</p>",
         "ModifySnapshotAttributeRequest$UserIds": "<p>The account ID to modify for the snapshot.</p>"
       }
