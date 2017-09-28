@@ -14,16 +14,17 @@ import (
 	"github.com/fatih/color"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/common"
+	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 )
 
 type Opts struct {
 	InputPath   string
-	Groups      []sops.KeyGroup
 	GroupQuorum int
 	KeyServices []keyservice.KeyServiceClient
 	Interactive bool
+	ConfigPath  string
 }
 
 func UpdateKeys(opts Opts) error {
@@ -70,7 +71,11 @@ func syncFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	diffs := diffKeyGroups(tree.Metadata.KeyGroups, opts.Groups)
+	conf, err := config.LoadForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
+	if err != nil {
+		return err
+	}
+	diffs := diffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
 	keysWillChange := false
 	for _, diff := range diffs {
 		if len(diff.added) > 0 || len(diff.removed) > 0 {
@@ -112,7 +117,7 @@ func syncFile(opts Opts) error {
 	if err != nil {
 		return fmt.Errorf("error getting data key: %s", err)
 	}
-	tree.Metadata.KeyGroups = opts.Groups
+	tree.Metadata.KeyGroups = conf.KeyGroups
 	if opts.GroupQuorum != 0 {
 		tree.Metadata.ShamirThreshold = opts.GroupQuorum
 	}

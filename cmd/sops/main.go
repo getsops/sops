@@ -220,16 +220,16 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				keyGroups, err := keyGroups(c, c.String("file"))
+				configPath, err := config.FindConfigFile(".")
 				if err != nil {
 					return err
 				}
 				return updatekeys.UpdateKeys(updatekeys.Opts{
 					InputPath:   c.String("file"),
-					Groups:      keyGroups,
 					GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
 					KeyServices: keyservices(c),
 					Interactive: !c.Bool("yes"),
+					ConfigPath:  configPath,
 				})
 			},
 		},
