@@ -214,6 +214,10 @@ func main() {
 					Name:  "file, f",
 					Usage: `the file or directory that should be updated with the new keys. If providing a directory, SOPS will walk it and update all files in all subdirectories. '.git' directories and '.sops.yaml' files are ignored.`,
 				},
+				cli.BoolFlag{
+					Name:  "yes, y",
+					Usage: `automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.`,
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				keyGroups, err := keyGroups(c, c.String("file"))
@@ -225,6 +229,7 @@ func main() {
 					Groups:      keyGroups,
 					GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
 					KeyServices: keyservices(c),
+					Interactive: !c.Bool("yes"),
 				})
 			},
 		},

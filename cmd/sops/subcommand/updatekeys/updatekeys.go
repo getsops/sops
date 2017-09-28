@@ -23,6 +23,7 @@ type Opts struct {
 	Groups      []sops.KeyGroup
 	GroupQuorum int
 	KeyServices []keyservice.KeyServiceClient
+	Interactive bool
 }
 
 func UpdateKeys(opts Opts) error {
@@ -93,17 +94,19 @@ func syncFile(opts Opts) error {
 			color.New(color.FgRed).Printf("--- %s\n", c.ToString())
 		}
 	}
-	var response string
-	for response != "y" && response != "n" {
-		fmt.Printf("Is this okay? (y/n):")
-		_, err = fmt.Scanln(&response)
-		if err != nil {
-			return err
+	if opts.Interactive {
+		var response string
+		for response != "y" && response != "n" {
+			fmt.Printf("Is this okay? (y/n):")
+			_, err = fmt.Scanln(&response)
+			if err != nil {
+				return err
+			}
 		}
-	}
-	if response == "n" {
-		log.Printf("File %s left unchanged", opts.InputPath)
-		return nil
+		if response == "n" {
+			log.Printf("File %s left unchanged", opts.InputPath)
+			return nil
+		}
 	}
 	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
 	if err != nil {
