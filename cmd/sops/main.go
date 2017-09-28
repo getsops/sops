@@ -1,7 +1,6 @@
 package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
-	"log"
 	"net"
 	"net/url"
 
@@ -19,6 +18,7 @@ import (
 
 	"strconv"
 
+	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
@@ -30,11 +30,18 @@ import (
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
 	"gopkg.in/urfave/cli.v1"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("CMD")
+}
 
 func main() {
 	cli.VersionPrinter = printVersion
@@ -492,19 +499,21 @@ func main() {
 		}
 		// We open the file *after* the operations on the tree have been
 		// executed to avoid truncating it when there's errors
-		var outputFile *os.File
 		if c.Bool("in-place") || isEditMode || c.String("set") != "" {
-			var err error
-			outputFile, err = os.Create(fileName)
+			file, err := os.Create(fileName)
 			if err != nil {
 				return cli.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 			}
-			defer outputFile.Close()
-		} else {
-			outputFile = os.Stdout
+			defer file.Close()
+			_, err = file.Write(output)
+			if err != nil {
+				return err
+			}
+			log.Info("File written successfully")
+			return nil
 		}
-		outputFile.Write(output)
-		return nil
+		_, err = os.Stdout.Write(output)
+		return err
 	}
 	app.Run(os.Args)
 }
@@ -517,7 +526,8 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	for _, uri := range uris {
 		url, err := url.Parse(uri)
 		if err != nil {
-			log.Printf("Error parsing keyservice URI %s, skipping", uri)
+			log.WithField("uri", uri).
+				Warnf("Error parsing URI for keyservice, skipping")
 			continue
 		}
 		addr := url.Host
@@ -530,7 +540,10 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 				return net.DialTimeout(url.Scheme, addr, timeout)
 			}),
 		}
-		log.Printf("Connecting to key service %s://%s", url.Scheme, addr)
+		log.WithField(
+			"address",
+			fmt.Sprintf("%s://%s", url.Scheme, addr),
+		).Infof("Connecting to key service")
 		conn, err := grpc.Dial(addr, opts...)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)

@@ -378,7 +378,7 @@ func DoPerRPCCreds(tc testpb.TestServiceClient, serviceAccountKeyFile, oauthScop
 		FillOauthScope: proto.Bool(true),
 	}
 	token := GetToken(serviceAccountKeyFile, oauthScope)
-	kv := map[string]string{"authorization": token.TokenType + " " + token.AccessToken}
+	kv := map[string]string{"authorization": token.Type() + " " + token.AccessToken}
 	ctx := metadata.NewOutgoingContext(context.Background(), metadata.MD{"authorization": []string{kv["authorization"]}})
 	reply, err := tc.UnaryCall(ctx, req)
 	if err != nil {

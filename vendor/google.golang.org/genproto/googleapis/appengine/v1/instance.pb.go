@@ -37,7 +37,7 @@ var Instance_Availability_value = map[string]int32{
 func (x Instance_Availability) String() string {
 	return proto.EnumName(Instance_Availability_name, int32(x))
 }
-func (Instance_Availability) EnumDescriptor() ([]byte, []int) { return fileDescriptor4, []int{0, 0} }
+func (Instance_Availability) EnumDescriptor() ([]byte, []int) { return fileDescriptor5, []int{0, 0} }
 
 // An Instance resource is the computing unit that App Engine uses to
 // automatically scale an application.
@@ -114,7 +114,7 @@ type Instance struct {
 func (m *Instance) Reset()                    { *m = Instance{} }
 func (m *Instance) String() string            { return proto.CompactTextString(m) }
 func (*Instance) ProtoMessage()               {}
-func (*Instance) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
+func (*Instance) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
 
 func (m *Instance) GetName() string {
 	if m != nil {
@@ -226,9 +226,9 @@ func init() {
 	proto.RegisterEnum("google.appengine.v1.Instance_Availability", Instance_Availability_name, Instance_Availability_value)
 }
 
-func init() { proto.RegisterFile("google/appengine/v1/instance.proto", fileDescriptor4) }
+func init() { proto.RegisterFile("google/appengine/v1/instance.proto", fileDescriptor5) }
 
-var fileDescriptor4 = []byte{
+var fileDescriptor5 = []byte{
 	// 521 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x53, 0x5d, 0x6b, 0xdb, 0x3c,
 	0x14, 0x7e, 0x9d, 0xb6, 0xa9, 0x73, 0xe2, 0x26, 0x46, 0x85, 0xb7, 0x22, 0x1b, 0xcc, 0xcb, 0xcd,

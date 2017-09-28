@@ -8,6 +8,7 @@ It is generated from these files:
 	google/appengine/v1/app_yaml.proto
 	google/appengine/v1/appengine.proto
 	google/appengine/v1/application.proto
+	google/appengine/v1/audit_data.proto
 	google/appengine/v1/deploy.proto
 	google/appengine/v1/instance.proto
 	google/appengine/v1/location.proto
@@ -44,6 +45,9 @@ It has these top-level messages:
 	DebugInstanceRequest
 	Application
 	UrlDispatchRule
+	AuditData
+	UpdateServiceMethod
+	CreateVersionMethod
 	Deployment
 	FileInfo
 	ContainerInfo

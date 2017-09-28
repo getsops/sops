@@ -13,8 +13,16 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/logging"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("AES")
+}
 
 type encryptedValue struct {
 	data     []byte

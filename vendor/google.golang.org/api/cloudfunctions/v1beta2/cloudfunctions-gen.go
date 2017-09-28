@@ -221,6 +221,9 @@ type CloudFunction struct {
 	// via URL.
 	HttpsTrigger *HTTPSTrigger `json:"httpsTrigger,omitempty"`
 
+	// Labels: Labels associated with this Cloud Function.
+	Labels map[string]string `json:"labels,omitempty"`
+
 	// LatestOperation: Output only. Name of the most recent operation
 	// modifying the function. If
 	// the function status is `DEPLOYING` or `DELETING`, then it points to
@@ -257,13 +260,13 @@ type CloudFunction struct {
 	// ions/*/paths/*`
 	// To refer to a moveable alias
 	// (branch):
-	// `https://source.developers.google.com/projects/*/repos/*/ali
-	// ases/movable/*/paths/*`
+	// `https://source.developers.google.com/projects/*/repos/*/mov
+	// eable-aliases/*/paths/*`
 	// In particular, to refer to HEAD use `master` moveable alias.
 	// To refer to a specific fixed alias
 	// (tag):
-	// `https://source.developers.google.com/projects/*/repos/*/aliase
-	// s/fixed/*/paths/*`
+	// `https://source.developers.google.com/projects/*/repos/*/fixed-
+	// aliases/*/paths/*`
 	//
 	// You may omit `paths/*` if you want to use the main directory.
 	SourceRepositoryUrl string `json:"sourceRepositoryUrl,omitempty"`
@@ -290,6 +293,12 @@ type CloudFunction struct {
 	// UpdateTime: Output only. The last update timestamp of a Cloud
 	// Function.
 	UpdateTime string `json:"updateTime,omitempty"`
+
+	// VersionId: Output only.
+	// The version identifier of the Cloud Function. Each deployment
+	// attempt
+	// results in a new version of a function being created.
+	VersionId int64 `json:"versionId,omitempty,string"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -336,7 +345,7 @@ type EventTrigger struct {
 	//      `providers/cloud.storage/eventTypes/object.change`
 	//
 	//      Handle a write to the Firebase Realtime Database
-	//      `providers/firebase.database/eventTypes/data.write`
+	//      `providers/google.firebase.database/eventTypes/ref.write`
 	EventType string `json:"eventType,omitempty"`
 
 	// FailurePolicy: Specifies policy for failed executions.
@@ -352,6 +361,15 @@ type EventTrigger struct {
 	// of the
 	// project (`projects/*`)
 	Resource string `json:"resource,omitempty"`
+
+	// Service: The hostname of the service that should be observed.
+	//
+	// If no string is provided, the default service implementing the API
+	// will
+	// be used. For example, `storage.googleapis.com` is the default for
+	// all
+	// event types in the 'google.storage` namespace.
+	Service string `json:"service,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "EventType") to
 	// unconditionally include in API requests. By default, fields with
@@ -688,6 +706,11 @@ type OperationMetadataV1Beta2 struct {
 	//   "UPDATE_FUNCTION" - Triggered by UpdateFunction call
 	//   "DELETE_FUNCTION" - Triggered by DeleteFunction call.
 	Type string `json:"type,omitempty"`
+
+	// VersionId: Version id of the function created or updated by an API
+	// call.
+	// This field is only pupulated for Create and Update operations.
+	VersionId int64 `json:"versionId,omitempty,string"`
 
 	// ForceSendFields is a list of field names (e.g. "Request") to
 	// unconditionally include in API requests. By default, fields with

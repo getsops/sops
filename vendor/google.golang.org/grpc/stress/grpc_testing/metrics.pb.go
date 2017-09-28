@@ -34,7 +34,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Reponse message containing the gauge name and value
+// Response message containing the gauge name and value
 type GaugeResponse struct {
 	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// Types that are valid to be assigned to Value:

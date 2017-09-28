@@ -144,7 +144,7 @@ var ErrMissingLikelyTagsData = errors.New("missing likely tags data")
 
 // addLikelySubtags sets subtags to their most likely value, given the locale.
 // In most cases this means setting fields for unknown values, but in some
-// cases it may alter a value.  It returns a ErrMissingLikelyTagsData error
+// cases it may alter a value.  It returns an ErrMissingLikelyTagsData error
 // if the given locale cannot be expanded.
 func (t Tag) addLikelySubtags() (Tag, error) {
 	id, err := addTags(t)

@@ -66,7 +66,7 @@ var InboundServiceType_value = map[string]int32{
 func (x InboundServiceType) String() string {
 	return proto.EnumName(InboundServiceType_name, int32(x))
 }
-func (InboundServiceType) EnumDescriptor() ([]byte, []int) { return fileDescriptor8, []int{0} }
+func (InboundServiceType) EnumDescriptor() ([]byte, []int) { return fileDescriptor9, []int{0} }
 
 // Run states of a version.
 type ServingStatus int32
@@ -97,7 +97,7 @@ var ServingStatus_value = map[string]int32{
 func (x ServingStatus) String() string {
 	return proto.EnumName(ServingStatus_name, int32(x))
 }
-func (ServingStatus) EnumDescriptor() ([]byte, []int) { return fileDescriptor8, []int{1} }
+func (ServingStatus) EnumDescriptor() ([]byte, []int) { return fileDescriptor9, []int{1} }
 
 // A Version resource is a specific set of source code and configuration files
 // that are deployed into a service.
@@ -221,7 +221,7 @@ type Version struct {
 func (m *Version) Reset()                    { *m = Version{} }
 func (m *Version) String() string            { return proto.CompactTextString(m) }
 func (*Version) ProtoMessage()               {}
-func (*Version) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{0} }
+func (*Version) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{0} }
 
 type isVersion_Scaling interface {
 	isVersion_Scaling()
@@ -579,7 +579,7 @@ type AutomaticScaling struct {
 func (m *AutomaticScaling) Reset()                    { *m = AutomaticScaling{} }
 func (m *AutomaticScaling) String() string            { return proto.CompactTextString(m) }
 func (*AutomaticScaling) ProtoMessage()               {}
-func (*AutomaticScaling) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{1} }
+func (*AutomaticScaling) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{1} }
 
 func (m *AutomaticScaling) GetCoolDownPeriod() *google_protobuf1.Duration {
 	if m != nil {
@@ -680,7 +680,7 @@ type BasicScaling struct {
 func (m *BasicScaling) Reset()                    { *m = BasicScaling{} }
 func (m *BasicScaling) String() string            { return proto.CompactTextString(m) }
 func (*BasicScaling) ProtoMessage()               {}
-func (*BasicScaling) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{2} }
+func (*BasicScaling) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{2} }
 
 func (m *BasicScaling) GetIdleTimeout() *google_protobuf1.Duration {
 	if m != nil {
@@ -709,7 +709,7 @@ type ManualScaling struct {
 func (m *ManualScaling) Reset()                    { *m = ManualScaling{} }
 func (m *ManualScaling) String() string            { return proto.CompactTextString(m) }
 func (*ManualScaling) ProtoMessage()               {}
-func (*ManualScaling) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{3} }
+func (*ManualScaling) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{3} }
 
 func (m *ManualScaling) GetInstances() int32 {
 	if m != nil {
@@ -730,7 +730,7 @@ type CpuUtilization struct {
 func (m *CpuUtilization) Reset()                    { *m = CpuUtilization{} }
 func (m *CpuUtilization) String() string            { return proto.CompactTextString(m) }
 func (*CpuUtilization) ProtoMessage()               {}
-func (*CpuUtilization) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{4} }
+func (*CpuUtilization) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{4} }
 
 func (m *CpuUtilization) GetAggregationWindowLength() *google_protobuf1.Duration {
 	if m != nil {
@@ -757,7 +757,7 @@ type RequestUtilization struct {
 func (m *RequestUtilization) Reset()                    { *m = RequestUtilization{} }
 func (m *RequestUtilization) String() string            { return proto.CompactTextString(m) }
 func (*RequestUtilization) ProtoMessage()               {}
-func (*RequestUtilization) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{5} }
+func (*RequestUtilization) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{5} }
 
 func (m *RequestUtilization) GetTargetRequestCountPerSecond() int32 {
 	if m != nil {
@@ -788,7 +788,7 @@ type DiskUtilization struct {
 func (m *DiskUtilization) Reset()                    { *m = DiskUtilization{} }
 func (m *DiskUtilization) String() string            { return proto.CompactTextString(m) }
 func (*DiskUtilization) ProtoMessage()               {}
-func (*DiskUtilization) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{6} }
+func (*DiskUtilization) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{6} }
 
 func (m *DiskUtilization) GetTargetWriteBytesPerSecond() int32 {
 	if m != nil {
@@ -833,7 +833,7 @@ type NetworkUtilization struct {
 func (m *NetworkUtilization) Reset()                    { *m = NetworkUtilization{} }
 func (m *NetworkUtilization) String() string            { return proto.CompactTextString(m) }
 func (*NetworkUtilization) ProtoMessage()               {}
-func (*NetworkUtilization) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{7} }
+func (*NetworkUtilization) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{7} }
 
 func (m *NetworkUtilization) GetTargetSentBytesPerSecond() int32 {
 	if m != nil {
@@ -880,7 +880,7 @@ type Network struct {
 func (m *Network) Reset()                    { *m = Network{} }
 func (m *Network) String() string            { return proto.CompactTextString(m) }
 func (*Network) ProtoMessage()               {}
-func (*Network) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{8} }
+func (*Network) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{8} }
 
 func (m *Network) GetForwardedPorts() []string {
 	if m != nil {
@@ -916,7 +916,7 @@ type Resources struct {
 func (m *Resources) Reset()                    { *m = Resources{} }
 func (m *Resources) String() string            { return proto.CompactTextString(m) }
 func (*Resources) ProtoMessage()               {}
-func (*Resources) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{9} }
+func (*Resources) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{9} }
 
 func (m *Resources) GetCpu() float64 {
 	if m != nil {
@@ -954,9 +954,9 @@ func init() {
 	proto.RegisterEnum("google.appengine.v1.ServingStatus", ServingStatus_name, ServingStatus_value)
 }
 
-func init() { proto.RegisterFile("google/appengine/v1/version.proto", fileDescriptor8) }
+func init() { proto.RegisterFile("google/appengine/v1/version.proto", fileDescriptor9) }
 
-var fileDescriptor8 = []byte{
+var fileDescriptor9 = []byte{
 	// 1767 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x58, 0x5d, 0x73, 0xdb, 0xc6,
 	0x15, 0x0d, 0x29, 0x4b, 0x14, 0x2f, 0x3f, 0x04, 0xad, 0xd3, 0x08, 0x96, 0x64, 0x89, 0x66, 0x92,

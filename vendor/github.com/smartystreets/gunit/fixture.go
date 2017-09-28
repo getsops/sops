@@ -37,10 +37,7 @@ func newFixture(t testingT, verbose bool) *Fixture {
 // So is a convenience method for reporting assertion failure messages,
 // from the many assertion functions found in github.com/smartystreets/assertions/should.
 // Example: this.So(actual, should.Equal, expected)
-func (this *Fixture) So(
-	actual interface{},
-	assert func(actual interface{}, expected ...interface{}) string,
-	expected ...interface{}) bool {
+func (this *Fixture) So(actual interface{}, assert assertion, expected ...interface{}) bool {
 
 	failure := assert(actual, expected...)
 	failed := len(failure) > 0
@@ -109,3 +106,6 @@ func (this *Fixture) recoverPanic(r interface{}) {
 }
 
 const comparisonFormat = "Expected: [%s]\nActual:   [%s]"
+
+// assertion is a copy of github.com/smartystreets/assertions.assertion.
+type assertion func(actual interface{}, expected ...interface{}) string

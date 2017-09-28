@@ -31,6 +31,8 @@ import (
 	"net"
 	"net/url"
 	"os"
+	"os/user"
+	"path"
 	"strings"
 )
 
@@ -49,11 +51,25 @@ var (
 // NewConn connects to the GPG Agent as described in the
 // GPG_AGENT_INFO environment variable.
 func NewConn() (*Conn, error) {
-	sp := strings.SplitN(os.Getenv("GPG_AGENT_INFO"), ":", 3)
-	if len(sp) == 0 || len(sp[0]) == 0 {
-		return nil, ErrNoAgent
+	var addr *net.UnixAddr
+	if gpgAgentInfo, ok := os.LookupEnv("GPG_AGENT_INFO"); ok {
+		sp := strings.SplitN(gpgAgentInfo, ":", 3)
+		if len(sp) == 0 || len(sp[0]) == 0 {
+			return nil, ErrNoAgent
+		}
+		addr = &net.UnixAddr{Net: "unix", Name: sp[0]}
+	} else {
+		// If GPG_AGENT_INFO is not defined, we connect to the default socket,
+		// S.gpg-agent, as the gpg-agent documentation recommends.
+		// See the --use-standard-socket option in
+		// <https://gnupg.org/documentation/manuals/gnupg-2.0/Agent-Options.html>
+		currentUser, err := user.Current()
+		if err != nil {
+			return nil, ErrNoAgent
+		}
+		sockFile := path.Join(currentUser.HomeDir, ".gnupg", "S.gpg-agent")
+		addr = &net.UnixAddr{Net: "unix", Name: sockFile}
 	}
-	addr := &net.UnixAddr{Net: "unix", Name: sp[0]}
 	uc, err := net.DialUnix("unix", nil, addr)
 	if err != nil {
 		return nil, err

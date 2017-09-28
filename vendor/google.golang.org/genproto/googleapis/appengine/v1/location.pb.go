@@ -29,7 +29,7 @@ type LocationMetadata struct {
 func (m *LocationMetadata) Reset()                    { *m = LocationMetadata{} }
 func (m *LocationMetadata) String() string            { return proto.CompactTextString(m) }
 func (*LocationMetadata) ProtoMessage()               {}
-func (*LocationMetadata) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
+func (*LocationMetadata) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{0} }
 
 func (m *LocationMetadata) GetStandardEnvironmentAvailable() bool {
 	if m != nil {
@@ -49,9 +49,9 @@ func init() {
 	proto.RegisterType((*LocationMetadata)(nil), "google.appengine.v1.LocationMetadata")
 }
 
-func init() { proto.RegisterFile("google/appengine/v1/location.proto", fileDescriptor5) }
+func init() { proto.RegisterFile("google/appengine/v1/location.proto", fileDescriptor6) }
 
-var fileDescriptor5 = []byte{
+var fileDescriptor6 = []byte{
 	// 236 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x90, 0x41, 0x4b, 0xc3, 0x40,
 	0x10, 0x85, 0x89, 0x88, 0x48, 0x40, 0x90, 0x7a, 0xb0, 0x94, 0x22, 0xd2, 0x93, 0xa7, 0x5d, 0x8a,

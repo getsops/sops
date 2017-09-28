@@ -12,6 +12,109 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
+const opAssociateKmsKey = "AssociateKmsKey"
+
+// AssociateKmsKeyRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateKmsKey operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateKmsKey for more information on using the AssociateKmsKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateKmsKeyRequest method.
+//    req, resp := client.AssociateKmsKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/AssociateKmsKey
+func (c *CloudWatchLogs) AssociateKmsKeyRequest(input *AssociateKmsKeyInput) (req *request.Request, output *AssociateKmsKeyOutput) {
+	op := &request.Operation{
+		Name:       opAssociateKmsKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociateKmsKeyInput{}
+	}
+
+	output = &AssociateKmsKeyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AssociateKmsKey API operation for Amazon CloudWatch Logs.
+//
+// Associates the specified AWS Key Management Service (AWS KMS) customer master
+// key (CMK) with the specified log group.
+//
+// Associating an AWS KMS CMK with a log group overrides any existing associations
+// between the log group and a CMK. After a CMK is associated with a log group,
+// all newly ingested data for the log group is encrypted using the CMK. This
+// association is stored as long as the data encrypted with the CMK is still
+// within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt
+// this data whenever it is requested.
+//
+// Note that it can take up to 5 minutes for this operation to take effect.
+//
+// If you attempt to associate a CMK with a log group but the CMK does not exist
+// or the CMK is disabled, you will receive an InvalidParameterException error.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Logs's
+// API operation AssociateKmsKey for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A parameter is specified incorrectly.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeOperationAbortedException "OperationAbortedException"
+//   Multiple requests to update the same resource were in conflict.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service cannot complete the request.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/AssociateKmsKey
+func (c *CloudWatchLogs) AssociateKmsKey(input *AssociateKmsKeyInput) (*AssociateKmsKeyOutput, error) {
+	req, out := c.AssociateKmsKeyRequest(input)
+	return out, req.Send()
+}
+
+// AssociateKmsKeyWithContext is the same as AssociateKmsKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateKmsKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchLogs) AssociateKmsKeyWithContext(ctx aws.Context, input *AssociateKmsKeyInput, opts ...request.Option) (*AssociateKmsKeyOutput, error) {
+	req, out := c.AssociateKmsKeyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCancelExportTask = "CancelExportTask"
 
 // CancelExportTaskRequest generates a "aws/request.Request" representing the
@@ -267,6 +370,16 @@ func (c *CloudWatchLogs) CreateLogGroupRequest(input *CreateLogGroupInput) (req 
 //
 //    * Log group names consist of the following characters: a-z, A-Z, 0-9,
 //    '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).
+//
+// If you associate a AWS Key Management Service (AWS KMS) customer master key
+// (CMK) with the log group, ingested data is encrypted using the CMK. This
+// association is stored as long as the data encrypted with the CMK is still
+// within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt
+// this data whenever it is requested.
+//
+// If you attempt to associate a CMK with the log group but the CMK does not
+// exist or the CMK is disabled, you will receive an InvalidParameterException
+// error.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1607,7 +1720,7 @@ func (c *CloudWatchLogs) DescribeMetricFiltersRequest(input *DescribeMetricFilte
 // DescribeMetricFilters API operation for Amazon CloudWatch Logs.
 //
 // Lists the specified metric filters. You can list all the metric filters or
-// filter the results by log name, prefix, metric name, and metric namespace.
+// filter the results by log name, prefix, metric name, or metric namespace.
 // The results are ASCII-sorted by filter name.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1924,6 +2037,104 @@ func (c *CloudWatchLogs) DescribeSubscriptionFiltersPagesWithContext(ctx aws.Con
 	return p.Err()
 }
 
+const opDisassociateKmsKey = "DisassociateKmsKey"
+
+// DisassociateKmsKeyRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateKmsKey operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateKmsKey for more information on using the DisassociateKmsKey
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateKmsKeyRequest method.
+//    req, resp := client.DisassociateKmsKeyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DisassociateKmsKey
+func (c *CloudWatchLogs) DisassociateKmsKeyRequest(input *DisassociateKmsKeyInput) (req *request.Request, output *DisassociateKmsKeyOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateKmsKey,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociateKmsKeyInput{}
+	}
+
+	output = &DisassociateKmsKeyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisassociateKmsKey API operation for Amazon CloudWatch Logs.
+//
+// Disassociates the associated AWS Key Management Service (AWS KMS) customer
+// master key (CMK) from the specified log group.
+//
+// After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch
+// Logs stops encrypting newly ingested data for the log group. All previously
+// ingested data remains encrypted, and AWS CloudWatch Logs requires permissions
+// for the CMK whenever the encrypted data is requested.
+//
+// Note that it can take up to 5 minutes for this operation to take effect.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Logs's
+// API operation DisassociateKmsKey for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A parameter is specified incorrectly.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeOperationAbortedException "OperationAbortedException"
+//   Multiple requests to update the same resource were in conflict.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service cannot complete the request.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DisassociateKmsKey
+func (c *CloudWatchLogs) DisassociateKmsKey(input *DisassociateKmsKeyInput) (*DisassociateKmsKeyOutput, error) {
+	req, out := c.DisassociateKmsKeyRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateKmsKeyWithContext is the same as DisassociateKmsKey with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateKmsKey for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchLogs) DisassociateKmsKeyWithContext(ctx aws.Context, input *DisassociateKmsKeyInput, opts ...request.Option) (*DisassociateKmsKeyOutput, error) {
+	req, out := c.DisassociateKmsKeyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opFilterLogEvents = "FilterLogEvents"
 
 // FilterLogEventsRequest generates a "aws/request.Request" representing the
@@ -2127,7 +2338,7 @@ func (c *CloudWatchLogs) GetLogEventsRequest(input *GetLogEventsInput) (req *req
 // events or filter using a time range.
 //
 // By default, this operation returns as many log events as can fit in a response
-// size of 1 MB (up to 10,000 log events). You can get additional log events
+// size of 1MB (up to 10,000 log events). You can get additional log events
 // by specifying one of the tokens in a subsequent call.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2264,8 +2475,6 @@ func (c *CloudWatchLogs) ListTagsLogGroupRequest(input *ListTagsLogGroupInput) (
 // ListTagsLogGroup API operation for Amazon CloudWatch Logs.
 //
 // Lists the tags for the specified log group.
-//
-// To add tags, use TagLogGroup. To remove tags, use UntagLogGroup.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3255,6 +3464,79 @@ func (c *CloudWatchLogs) UntagLogGroupWithContext(ctx aws.Context, input *UntagL
 	return out, req.Send()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/AssociateKmsKeyRequest
+type AssociateKmsKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the CMK to use when encrypting log data.
+	// For more information, see Amazon Resource Names - AWS Key Management Service
+	// (AWS KMS) (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms).
+	//
+	// KmsKeyId is a required field
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string" required:"true"`
+
+	// The name of the log group.
+	//
+	// LogGroupName is a required field
+	LogGroupName *string `locationName:"logGroupName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AssociateKmsKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateKmsKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateKmsKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateKmsKeyInput"}
+	if s.KmsKeyId == nil {
+		invalidParams.Add(request.NewErrParamRequired("KmsKeyId"))
+	}
+	if s.LogGroupName == nil {
+		invalidParams.Add(request.NewErrParamRequired("LogGroupName"))
+	}
+	if s.LogGroupName != nil && len(*s.LogGroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LogGroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *AssociateKmsKeyInput) SetKmsKeyId(v string) *AssociateKmsKeyInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLogGroupName sets the LogGroupName field's value.
+func (s *AssociateKmsKeyInput) SetLogGroupName(v string) *AssociateKmsKeyInput {
+	s.LogGroupName = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/AssociateKmsKeyOutput
+type AssociateKmsKeyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AssociateKmsKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateKmsKeyOutput) GoString() string {
+	return s.String()
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/CancelExportTaskRequest
 type CancelExportTaskInput struct {
 	_ struct{} `type:"structure"`
@@ -3467,6 +3749,11 @@ func (s *CreateExportTaskOutput) SetTaskId(v string) *CreateExportTaskOutput {
 type CreateLogGroupInput struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the CMK to use when encrypting log data.
+	// For more information, see Amazon Resource Names - AWS Key Management Service
+	// (AWS KMS) (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms).
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
 	// The name of the log group.
 	//
 	// LogGroupName is a required field
@@ -3503,6 +3790,12 @@ func (s *CreateLogGroupInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *CreateLogGroupInput) SetKmsKeyId(v string) *CreateLogGroupInput {
+	s.KmsKeyId = &v
+	return s
 }
 
 // SetLogGroupName sets the LogGroupName field's value.
@@ -4501,7 +4794,8 @@ type DescribeMetricFiltersInput struct {
 	// The name of the log group.
 	LogGroupName *string `locationName:"logGroupName" min:"1" type:"string"`
 
-	// The name of the CloudWatch metric.
+	// The name of the CloudWatch metric to which the monitored log information
+	// should be published. For example, you may publish to a metric called ErrorCount.
 	MetricName *string `locationName:"metricName" type:"string"`
 
 	// The namespace of the CloudWatch metric.
@@ -4884,6 +5178,63 @@ func (s *Destination) SetRoleArn(v string) *Destination {
 func (s *Destination) SetTargetArn(v string) *Destination {
 	s.TargetArn = &v
 	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DisassociateKmsKeyRequest
+type DisassociateKmsKeyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the log group.
+	//
+	// LogGroupName is a required field
+	LogGroupName *string `locationName:"logGroupName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DisassociateKmsKeyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateKmsKeyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateKmsKeyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateKmsKeyInput"}
+	if s.LogGroupName == nil {
+		invalidParams.Add(request.NewErrParamRequired("LogGroupName"))
+	}
+	if s.LogGroupName != nil && len(*s.LogGroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LogGroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLogGroupName sets the LogGroupName field's value.
+func (s *DisassociateKmsKeyInput) SetLogGroupName(v string) *DisassociateKmsKeyInput {
+	s.LogGroupName = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/logs-2014-03-28/DisassociateKmsKeyOutput
+type DisassociateKmsKeyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisassociateKmsKeyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateKmsKeyOutput) GoString() string {
+	return s.String()
 }
 
 // Represents an export task.
@@ -5553,7 +5904,7 @@ func (s *ListTagsLogGroupInput) SetLogGroupName(v string) *ListTagsLogGroupInput
 type ListTagsLogGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The tags.
+	// The tags for the log group.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
@@ -5584,6 +5935,9 @@ type LogGroup struct {
 	// The creation time of the log group, expressed as the number of milliseconds
 	// after Jan 1, 1970 00:00:00 UTC.
 	CreationTime *int64 `locationName:"creationTime" type:"long"`
+
+	// The Amazon Resource Name (ARN) of the CMK to use when encrypting log data.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
 
 	// The name of the log group.
 	LogGroupName *string `locationName:"logGroupName" min:"1" type:"string"`
@@ -5619,6 +5973,12 @@ func (s *LogGroup) SetArn(v string) *LogGroup {
 // SetCreationTime sets the CreationTime field's value.
 func (s *LogGroup) SetCreationTime(v int64) *LogGroup {
 	s.CreationTime = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *LogGroup) SetKmsKeyId(v string) *LogGroup {
+	s.KmsKeyId = &v
 	return s
 }
 
@@ -6577,9 +6937,10 @@ type PutSubscriptionFilterInput struct {
 	// DestinationArn is a required field
 	DestinationArn *string `locationName:"destinationArn" min:"1" type:"string" required:"true"`
 
-	// The method used to distribute log data to the destination, when the destination
-	// is an Amazon Kinesis stream. By default, log data is grouped by log stream.
-	// For a more even distribution, you can group log data randomly.
+	// The method used to distribute log data to the destination. By default log
+	// data is grouped by log stream, but the grouping can be set to random for
+	// a more even distribution. This property is only applicable when the destination
+	// is an Amazon Kinesis stream.
 	Distribution *string `locationName:"distribution" type:"string" enum:"Distribution"`
 
 	// A name for the subscription filter. If you are updating an existing filter,
@@ -6836,8 +7197,8 @@ type SubscriptionFilter struct {
 	// The Amazon Resource Name (ARN) of the destination.
 	DestinationArn *string `locationName:"destinationArn" min:"1" type:"string"`
 
-	// The method used to distribute log data to the destination, when the destination
-	// is an Amazon Kinesis stream.
+	// The method used to distribute log data to the destination, which can be either
+	// random or grouped by log stream.
 	Distribution *string `locationName:"distribution" type:"string" enum:"Distribution"`
 
 	// The name of the subscription filter.
@@ -7138,6 +7499,8 @@ func (s UntagLogGroupOutput) GoString() string {
 	return s.String()
 }
 
+// The method used to distribute log data to the destination, which can be either
+// random or grouped by log stream.
 const (
 	// DistributionRandom is a Distribution enum value
 	DistributionRandom = "Random"

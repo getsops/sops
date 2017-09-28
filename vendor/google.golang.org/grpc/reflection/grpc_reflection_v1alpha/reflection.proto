@@ -72,7 +72,7 @@ message ExtensionRequest {
 message ServerReflectionResponse {
   string valid_host = 1;
   ServerReflectionRequest original_request = 2;
-  // The server set one of the following fields accroding to the message_request
+  // The server set one of the following fields according to the message_request
   // in the request.
   oneof message_response {
     // This message is used to answer file_by_filename, file_containing_symbol,

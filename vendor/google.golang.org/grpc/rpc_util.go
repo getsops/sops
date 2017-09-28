@@ -456,7 +456,7 @@ type MethodConfig struct {
 	// MaxReqSize is the maximum allowed payload size for an individual request in a
 	// stream (client->server) in bytes. The size which is measured is the serialized
 	// payload after per-message compression (but before stream compression) in bytes.
-	// The actual value used is the minumum of the value specified here and the value set
+	// The actual value used is the minimum of the value specified here and the value set
 	// by the application via the gRPC client API. If either one is not set, then the other
 	// will be used.  If neither is set, then the built-in default is used.
 	MaxReqSize *int
@@ -501,7 +501,7 @@ func getMaxSize(mcMax, doptMax *int, defaultVal int) *int {
 
 // SupportPackageIsVersion3 is referenced from generated protocol buffer files.
 // The latest support package version is 4.
-// SupportPackageIsVersion3 is kept for compability. It will be removed in the
+// SupportPackageIsVersion3 is kept for compatibility. It will be removed in the
 // next support package version update.
 const SupportPackageIsVersion3 = true
 
