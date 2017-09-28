@@ -1,20 +1,34 @@
+/*
+Package keyservice implements a gRPC API that can be used by SOPS to encrypt and decrypt the data key using remote
+master keys.
+*/
 package keyservice
 
 import (
 	"fmt"
 
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
 )
 
+// KeyFromMasterKey converts a SOPS internal MasterKey to an RPC Key that can be serialized with Protocol Buffers
 func KeyFromMasterKey(mk keys.MasterKey) Key {
 	switch mk := mk.(type) {
 	case *pgp.MasterKey:
 		return Key{
-			KeyType: &Key_GpgKey{
-				GpgKey: &GpgKey{
+			KeyType: &Key_PgpKey{
+				PgpKey: &PgpKey{
 					Fingerprint: mk.Fingerprint,
+				},
+			},
+		}
+	case *gcpkms.MasterKey:
+		return Key{
+			KeyType: &Key_GcpKmsKey{
+				GcpKmsKey: &GcpKmsKey{
+					ResourceId: mk.ResourceID,
 				},
 			},
 		}

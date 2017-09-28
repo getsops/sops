@@ -8,16 +8,18 @@ import (
 	"go.mozilla.org/sops/keyservice"
 )
 
+// AddOpts are the options for adding a key group to a SOPS file
 type AddOpts struct {
-	InputPath   string
-	InputStore  sops.Store
-	OutputStore sops.Store
-	Group       sops.KeyGroup
-	GroupQuorum int
-	InPlace     bool
-	KeyServices []keyservice.KeyServiceClient
+	InputPath      string
+	InputStore     sops.Store
+	OutputStore    sops.Store
+	Group          sops.KeyGroup
+	GroupThreshold int
+	InPlace        bool
+	KeyServices    []keyservice.KeyServiceClient
 }
 
+// Add adds a key group to a SOPS file
 func Add(opts AddOpts) error {
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
@@ -29,15 +31,15 @@ func Add(opts AddOpts) error {
 	}
 	tree.Metadata.KeyGroups = append(tree.Metadata.KeyGroups, opts.Group)
 
-	if opts.GroupQuorum != 0 {
-		tree.Metadata.ShamirQuorum = opts.GroupQuorum
+	if opts.GroupThreshold != 0 {
+		tree.Metadata.ShamirThreshold = opts.GroupThreshold
 	}
 	tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
 	output, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
 		return err
 	}
-	var outputFile *os.File = os.Stdout
+	var outputFile = os.Stdout
 	if opts.InPlace {
 		var err error
 		outputFile, err = os.Create(opts.InputPath)

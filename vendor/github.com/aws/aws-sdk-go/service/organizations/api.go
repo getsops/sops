@@ -16,19 +16,18 @@ const opAcceptHandshake = "AcceptHandshake"
 
 // AcceptHandshakeRequest generates a "aws/request.Request" representing the
 // client's request for the AcceptHandshake operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AcceptHandshake for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AcceptHandshake method directly
-// instead.
+// See AcceptHandshake for more information on using the AcceptHandshake
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AcceptHandshakeRequest method.
 //    req, resp := client.AcceptHandshakeRequest(params)
@@ -76,6 +75,9 @@ func (c *Organizations) AcceptHandshakeRequest(input *AcceptHandshakeInput) (req
 //    in Your Organization (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html)
 //    in the AWS Organizations User Guide.
 //
+// After you accept a handshake, it continues to appear in the results of relevant
+// APIs for only 30 days. After that it is deleted.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -99,6 +101,41 @@ func (c *Organizations) AcceptHandshakeRequest(input *AcceptHandshakeInput) (req
 //   The requested operation would violate the constraint identified in the reason
 //   code.
 //
+//      * ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on
+//      the number of accounts in an organization. Note: deleted and closed accounts
+//      still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//      for the organization or that you can"t add an account because your organization
+//      is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * ALREADY_IN_AN_ORGANIZATION: The handshake request is invalid because
+//      the invited account is already a member of an organization.
+//
+//      * ORGANIZATION_ALREADY_HAS_ALL_FEATURES: The handshake request is invalid
+//      because the organization has already enabled all features.
+//
+//      * INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES: You cannot issue new invitations
+//      to join an organization while it is in the process of enabling all features.
+//      You can resume inviting accounts after you finalize the process when all
+//      accounts have agreed to the change.
+//
+//      * PAYMENT_INSTRUMENT_REQUIRED: You cannot complete the operation with
+//      an account that does not have a payment instrument, such as a credit card,
+//      associated with it.
+//
+//      * ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD: The request failed because
+//      the account is from a different marketplace than the accounts in the organization.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be from the same
+//      marketplace.
+//
+//      * ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED: You attempted to
+//      change the membership of an account too quickly after its previous change.
+//
 //   * ErrCodeHandshakeNotFoundException "HandshakeNotFoundException"
 //   We can't find a handshake with the HandshakeId that you specified.
 //
@@ -112,7 +149,57 @@ func (c *Organizations) AcceptHandshakeRequest(input *AcceptHandshakeInput) (req
 //   can't accept a handshake that was already accepted.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
 //   The target of the operation is currently being modified by a different request.
@@ -152,19 +239,18 @@ const opAttachPolicy = "AttachPolicy"
 
 // AttachPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the AttachPolicy operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See AttachPolicy for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AttachPolicy method directly
-// instead.
+// See AttachPolicy for more information on using the AttachPolicy
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AttachPolicyRequest method.
 //    req, resp := client.AttachPolicyRequest(params)
@@ -262,13 +348,139 @@ func (c *Organizations) AttachPolicyRequest(input *AttachPolicyInput) (req *requ
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeDuplicatePolicyAttachmentException "DuplicatePolicyAttachmentException"
 //   The selected policy is already attached to the specified target.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodePolicyNotFoundException "PolicyNotFoundException"
 //   We can't find a policy with the PolicyId that you specified.
@@ -317,19 +529,18 @@ const opCancelHandshake = "CancelHandshake"
 
 // CancelHandshakeRequest generates a "aws/request.Request" representing the
 // client's request for the CancelHandshake operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CancelHandshake for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CancelHandshake method directly
-// instead.
+// See CancelHandshake for more information on using the CancelHandshake
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CancelHandshakeRequest method.
 //    req, resp := client.CancelHandshakeRequest(params)
@@ -365,6 +576,9 @@ func (c *Organizations) CancelHandshakeRequest(input *CancelHandshakeInput) (req
 // instead. After a handshake is canceled, the recipient can no longer respond
 // to that handshake.
 //
+// After you cancel a handshake, it continues to appear in the results of relevant
+// APIs for only 30 days. After that it is deleted.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -380,6 +594,10 @@ func (c *Organizations) CancelHandshakeRequest(input *CancelHandshakeInput) (req
 //   Access Management (http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
 //   in the IAM User Guide.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeHandshakeNotFoundException "HandshakeNotFoundException"
 //   We can't find a handshake with the HandshakeId that you specified.
 //
@@ -393,7 +611,57 @@ func (c *Organizations) CancelHandshakeRequest(input *CancelHandshakeInput) (req
 //   can't accept a handshake that was already accepted.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -429,19 +697,18 @@ const opCreateAccount = "CreateAccount"
 
 // CreateAccountRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAccount operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateAccount for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateAccount method directly
-// instead.
+// See CreateAccount for more information on using the CreateAccount
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateAccountRequest method.
 //    req, resp := client.CreateAccountRequest(params)
@@ -486,19 +753,28 @@ func (c *Organizations) CreateAccountRequest(input *CreateAccountInput) (req *re
 // in Your Organization (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html)
 // in the AWS Organizations User Guide.
 //
-// You cannot remove accounts that are created with this operation from an organization.
-// That also means that you cannot delete an organization that contains an account
-// that is created with this operation.
+// When you create an account in an organization using the AWS Organizations
+// console, API, or CLI commands, the information required for the account to
+// operate as a standalone account, such as a payment method and signing the
+// End User Licence Agreement (EULA) is not automatically collected. If you
+// must remove an account from your organization later, you can do so only after
+// you provide the missing information. Follow the steps at  To leave an organization
+// when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+// in the AWS Organizations User Guide.
 //
-// When you create a member account with this operation, the account is created
-// with the IAM User and Role Access to Billing Information switch enabled.
-// This allows IAM users and roles that are granted appropriate permissions
-// to view billing information. If this is disabled, then only the account root
-// user can access billing information. For information about how to disable
-// this for an account, see Granting Access to Your Billing Information and
-// Tools (http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html).
+// When you create a member account with this operation, you can choose whether
+// to create the account with the IAM User and Role Access to Billing Information
+// switch enabled. If you enable it, IAM users and roles that have appropriate
+// permissions can view billing information for the account. If you disable
+// this, then only the account root user can access billing information. For
+// information about how to disable this for an account, see Granting Access
+// to Your Billing Information and Tools (http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html).
 //
 // This operation can be called only from the organization's master account.
+//
+// If you get an exception that indicates that you exceeded your account limits
+// for the organization or that you can"t add an account because your organization
+// is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -519,14 +795,144 @@ func (c *Organizations) CreateAccountRequest(input *CreateAccountInput) (req *re
 //   Your account is not a member of an organization. To make this request, you
 //   must use the credentials of an account that belongs to an organization.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeConstraintViolationException "ConstraintViolationException"
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeFinalizingOrganizationException "FinalizingOrganizationException"
 //   AWS Organizations could not finalize the creation of your organization. Try
@@ -566,19 +972,18 @@ const opCreateOrganization = "CreateOrganization"
 
 // CreateOrganizationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateOrganization operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateOrganization for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateOrganization method directly
-// instead.
+// See CreateOrganization for more information on using the CreateOrganization
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateOrganizationRequest method.
 //    req, resp := client.CreateOrganizationRequest(params)
@@ -649,10 +1054,136 @@ func (c *Organizations) CreateOrganizationRequest(input *CreateOrganizationInput
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -688,19 +1219,18 @@ const opCreateOrganizationalUnit = "CreateOrganizationalUnit"
 
 // CreateOrganizationalUnitRequest generates a "aws/request.Request" representing the
 // client's request for the CreateOrganizationalUnit operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreateOrganizationalUnit for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateOrganizationalUnit method directly
-// instead.
+// See CreateOrganizationalUnit for more information on using the CreateOrganizationalUnit
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateOrganizationalUnitRequest method.
 //    req, resp := client.CreateOrganizationalUnitRequest(params)
@@ -759,17 +1289,147 @@ func (c *Organizations) CreateOrganizationalUnitRequest(input *CreateOrganizatio
 //   Your account is not a member of an organization. To make this request, you
 //   must use the credentials of an account that belongs to an organization.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeConstraintViolationException "ConstraintViolationException"
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeDuplicateOrganizationalUnitException "DuplicateOrganizationalUnitException"
 //   An organizational unit (OU) with the same name already exists.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeParentNotFoundException "ParentNotFoundException"
 //   We can't find a root or organizational unit (OU) with the ParentId that you
@@ -809,19 +1469,18 @@ const opCreatePolicy = "CreatePolicy"
 
 // CreatePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePolicy operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See CreatePolicy for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreatePolicy method directly
-// instead.
+// See CreatePolicy for more information on using the CreatePolicy
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreatePolicyRequest method.
 //    req, resp := client.CreatePolicyRequest(params)
@@ -885,13 +1544,139 @@ func (c *Organizations) CreatePolicyRequest(input *CreatePolicyInput) (req *requ
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeDuplicatePolicyException "DuplicatePolicyException"
 //   A policy with the same name already exists.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeMalformedPolicyDocumentException "MalformedPolicyDocumentException"
 //   The provided policy document does not meet the requirements of the specified
@@ -940,19 +1725,18 @@ const opDeclineHandshake = "DeclineHandshake"
 
 // DeclineHandshakeRequest generates a "aws/request.Request" representing the
 // client's request for the DeclineHandshake operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeclineHandshake for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeclineHandshake method directly
-// instead.
+// See DeclineHandshake for more information on using the DeclineHandshake
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeclineHandshakeRequest method.
 //    req, resp := client.DeclineHandshakeRequest(params)
@@ -989,6 +1773,9 @@ func (c *Organizations) DeclineHandshakeRequest(input *DeclineHandshakeInput) (r
 // can't reactivate a declined request, but can re-initiate the process with
 // a new handshake request.
 //
+// After you decline a handshake, it continues to appear in the results of relevant
+// APIs for only 30 days. After that it is deleted.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1004,6 +1791,10 @@ func (c *Organizations) DeclineHandshakeRequest(input *DeclineHandshakeInput) (r
 //   Access Management (http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
 //   in the IAM User Guide.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeHandshakeNotFoundException "HandshakeNotFoundException"
 //   We can't find a handshake with the HandshakeId that you specified.
 //
@@ -1017,7 +1808,57 @@ func (c *Organizations) DeclineHandshakeRequest(input *DeclineHandshakeInput) (r
 //   can't accept a handshake that was already accepted.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -1053,19 +1894,18 @@ const opDeleteOrganization = "DeleteOrganization"
 
 // DeleteOrganizationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteOrganization operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteOrganization for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteOrganization method directly
-// instead.
+// See DeleteOrganization for more information on using the DeleteOrganization
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteOrganizationRequest method.
 //    req, resp := client.DeleteOrganizationRequest(params)
@@ -1100,10 +1940,6 @@ func (c *Organizations) DeleteOrganizationRequest(input *DeleteOrganizationInput
 // from the master account. The organization must be empty of member accounts,
 // OUs, and policies.
 //
-// If you create any accounts using Organizations operations or the Organizations
-// console, you can't remove those accounts from the organization, which means
-// that you can't delete the organization.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1128,7 +1964,57 @@ func (c *Organizations) DeleteOrganizationRequest(input *DeleteOrganizationInput
 //   Try again later.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeOrganizationNotEmptyException "OrganizationNotEmptyException"
 //   The organization isn't empty. To delete an organization, you must first remove
@@ -1169,19 +2055,18 @@ const opDeleteOrganizationalUnit = "DeleteOrganizationalUnit"
 
 // DeleteOrganizationalUnitRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteOrganizationalUnit operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeleteOrganizationalUnit for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteOrganizationalUnit method directly
-// instead.
+// See DeleteOrganizationalUnit for more information on using the DeleteOrganizationalUnit
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteOrganizationalUnitRequest method.
 //    req, resp := client.DeleteOrganizationalUnitRequest(params)
@@ -1241,7 +2126,57 @@ func (c *Organizations) DeleteOrganizationalUnitRequest(input *DeleteOrganizatio
 //   Try again later.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeOrganizationalUnitNotEmptyException "OrganizationalUnitNotEmptyException"
 //   The specified organizational unit (OU) is not empty. Move all accounts to
@@ -1286,19 +2221,18 @@ const opDeletePolicy = "DeletePolicy"
 
 // DeletePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePolicy operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DeletePolicy for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeletePolicy method directly
-// instead.
+// See DeletePolicy for more information on using the DeletePolicy
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeletePolicyRequest method.
 //    req, resp := client.DeletePolicyRequest(params)
@@ -1358,7 +2292,57 @@ func (c *Organizations) DeletePolicyRequest(input *DeletePolicyInput) (req *requ
 //   Try again later.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodePolicyInUseException "PolicyInUseException"
 //   The policy is attached to one or more entities. You must detach it from all
@@ -1401,19 +2385,18 @@ const opDescribeAccount = "DescribeAccount"
 
 // DescribeAccountRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAccount operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeAccount for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeAccount method directly
-// instead.
+// See DescribeAccount for more information on using the DescribeAccount
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeAccountRequest method.
 //    req, resp := client.DescribeAccountRequest(params)
@@ -1471,7 +2454,57 @@ func (c *Organizations) DescribeAccountRequest(input *DescribeAccountInput) (req
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -1507,19 +2540,18 @@ const opDescribeCreateAccountStatus = "DescribeCreateAccountStatus"
 
 // DescribeCreateAccountStatusRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCreateAccountStatus operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeCreateAccountStatus for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeCreateAccountStatus method directly
-// instead.
+// See DescribeCreateAccountStatus for more information on using the DescribeCreateAccountStatus
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeCreateAccountStatusRequest method.
 //    req, resp := client.DescribeCreateAccountStatusRequest(params)
@@ -1576,7 +2608,57 @@ func (c *Organizations) DescribeCreateAccountStatusRequest(input *DescribeCreate
 //   you specified.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -1612,19 +2694,18 @@ const opDescribeHandshake = "DescribeHandshake"
 
 // DescribeHandshakeRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeHandshake operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeHandshake for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeHandshake method directly
-// instead.
+// See DescribeHandshake for more information on using the DescribeHandshake
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeHandshakeRequest method.
 //    req, resp := client.DescribeHandshakeRequest(params)
@@ -1657,6 +2738,10 @@ func (c *Organizations) DescribeHandshakeRequest(input *DescribeHandshakeInput) 
 // ID comes from the response to the original InviteAccountToOrganization operation
 // that generated the handshake.
 //
+// You can access handshakes that are ACCEPTED, DECLINED, or CANCELED for only
+// 30 days after they change to that state. They are then deleted and no longer
+// accessible.
+//
 // This operation can be called from any account in the organization.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1674,11 +2759,65 @@ func (c *Organizations) DescribeHandshakeRequest(input *DescribeHandshakeInput) 
 //   Access Management (http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
 //   in the IAM User Guide.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeHandshakeNotFoundException "HandshakeNotFoundException"
 //   We can't find a handshake with the HandshakeId that you specified.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -1714,19 +2853,18 @@ const opDescribeOrganization = "DescribeOrganization"
 
 // DescribeOrganizationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeOrganization operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeOrganization for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeOrganization method directly
-// instead.
+// See DescribeOrganization for more information on using the DescribeOrganization
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeOrganizationRequest method.
 //    req, resp := client.DescribeOrganizationRequest(params)
@@ -1779,6 +2917,10 @@ func (c *Organizations) DescribeOrganizationRequest(input *DescribeOrganizationI
 //   Your account is not a member of an organization. To make this request, you
 //   must use the credentials of an account that belongs to an organization.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
 //   error. Try again later.
@@ -1813,19 +2955,18 @@ const opDescribeOrganizationalUnit = "DescribeOrganizationalUnit"
 
 // DescribeOrganizationalUnitRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeOrganizationalUnit operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribeOrganizationalUnit for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeOrganizationalUnit method directly
-// instead.
+// See DescribeOrganizationalUnit for more information on using the DescribeOrganizationalUnit
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeOrganizationalUnitRequest method.
 //    req, resp := client.DescribeOrganizationalUnitRequest(params)
@@ -1878,7 +3019,57 @@ func (c *Organizations) DescribeOrganizationalUnitRequest(input *DescribeOrganiz
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeOrganizationalUnitNotFoundException "OrganizationalUnitNotFoundException"
 //   We can't find an organizational unit (OU) with the OrganizationalUnitId that
@@ -1918,19 +3109,18 @@ const opDescribePolicy = "DescribePolicy"
 
 // DescribePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePolicy operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DescribePolicy for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribePolicy method directly
-// instead.
+// See DescribePolicy for more information on using the DescribePolicy
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribePolicyRequest method.
 //    req, resp := client.DescribePolicyRequest(params)
@@ -1983,7 +3173,57 @@ func (c *Organizations) DescribePolicyRequest(input *DescribePolicyInput) (req *
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodePolicyNotFoundException "PolicyNotFoundException"
 //   We can't find a policy with the PolicyId that you specified.
@@ -2022,19 +3262,18 @@ const opDetachPolicy = "DetachPolicy"
 
 // DetachPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DetachPolicy operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DetachPolicy for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DetachPolicy method directly
-// instead.
+// See DetachPolicy for more information on using the DetachPolicy
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DetachPolicyRequest method.
 //    req, resp := client.DetachPolicyRequest(params)
@@ -2108,10 +3347,136 @@ func (c *Organizations) DetachPolicyRequest(input *DetachPolicyInput) (req *requ
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodePolicyNotAttachedException "PolicyNotAttachedException"
 //   The policy isn't attached to the specified target in the specified root.
@@ -2156,19 +3521,18 @@ const opDisablePolicyType = "DisablePolicyType"
 
 // DisablePolicyTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DisablePolicyType operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See DisablePolicyType for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DisablePolicyType method directly
-// instead.
+// See DisablePolicyType for more information on using the DisablePolicyType
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DisablePolicyTypeRequest method.
 //    req, resp := client.DisablePolicyTypeRequest(params)
@@ -2197,7 +3561,7 @@ func (c *Organizations) DisablePolicyTypeRequest(input *DisablePolicyTypeInput) 
 
 // DisablePolicyType API operation for AWS Organizations.
 //
-// Disables an organizational control policy type in a root. A poicy of a certain
+// Disables an organizational control policy type in a root. A policy of a certain
 // type can be attached to entities in a root only if that type is enabled in
 // the root. After you perform this operation, you no longer can attach policies
 // of the specified type to that root or to any OU or account in that root.
@@ -2232,10 +3596,136 @@ func (c *Organizations) DisablePolicyTypeRequest(input *DisablePolicyTypeInput) 
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodePolicyTypeNotEnabledException "PolicyTypeNotEnabledException"
 //   The specified policy type is not currently enabled in this root. You cannot
@@ -2281,19 +3771,18 @@ const opEnableAllFeatures = "EnableAllFeatures"
 
 // EnableAllFeaturesRequest generates a "aws/request.Request" representing the
 // client's request for the EnableAllFeatures operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See EnableAllFeatures for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the EnableAllFeatures method directly
-// instead.
+// See EnableAllFeatures for more information on using the EnableAllFeatures
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the EnableAllFeaturesRequest method.
 //    req, resp := client.EnableAllFeaturesRequest(params)
@@ -2369,12 +3858,101 @@ func (c *Organizations) EnableAllFeaturesRequest(input *EnableAllFeaturesInput) 
 //   Your account is not a member of an organization. To make this request, you
 //   must use the credentials of an account that belongs to an organization.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeHandshakeConstraintViolationException "HandshakeConstraintViolationException"
 //   The requested operation would violate the constraint identified in the reason
 //   code.
 //
+//      * ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on
+//      the number of accounts in an organization. Note: deleted and closed accounts
+//      still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//      for the organization or that you can"t add an account because your organization
+//      is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * ALREADY_IN_AN_ORGANIZATION: The handshake request is invalid because
+//      the invited account is already a member of an organization.
+//
+//      * ORGANIZATION_ALREADY_HAS_ALL_FEATURES: The handshake request is invalid
+//      because the organization has already enabled all features.
+//
+//      * INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES: You cannot issue new invitations
+//      to join an organization while it is in the process of enabling all features.
+//      You can resume inviting accounts after you finalize the process when all
+//      accounts have agreed to the change.
+//
+//      * PAYMENT_INSTRUMENT_REQUIRED: You cannot complete the operation with
+//      an account that does not have a payment instrument, such as a credit card,
+//      associated with it.
+//
+//      * ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD: The request failed because
+//      the account is from a different marketplace than the accounts in the organization.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be from the same
+//      marketplace.
+//
+//      * ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED: You attempted to
+//      change the membership of an account too quickly after its previous change.
+//
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -2410,19 +3988,18 @@ const opEnablePolicyType = "EnablePolicyType"
 
 // EnablePolicyTypeRequest generates a "aws/request.Request" representing the
 // client's request for the EnablePolicyType operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See EnablePolicyType for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the EnablePolicyType method directly
-// instead.
+// See EnablePolicyType for more information on using the EnablePolicyType
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the EnablePolicyTypeRequest method.
 //    req, resp := client.EnablePolicyTypeRequest(params)
@@ -2484,10 +4061,136 @@ func (c *Organizations) EnablePolicyTypeRequest(input *EnablePolicyTypeInput) (r
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodePolicyTypeAlreadyEnabledException "PolicyTypeAlreadyEnabledException"
 //   The specified policy type is already enabled in the specified root.
@@ -2536,19 +4239,18 @@ const opInviteAccountToOrganization = "InviteAccountToOrganization"
 
 // InviteAccountToOrganizationRequest generates a "aws/request.Request" representing the
 // client's request for the InviteAccountToOrganization operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See InviteAccountToOrganization for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the InviteAccountToOrganization method directly
-// instead.
+// See InviteAccountToOrganization for more information on using the InviteAccountToOrganization
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the InviteAccountToOrganizationRequest method.
 //    req, resp := client.InviteAccountToOrganizationRequest(params)
@@ -2582,7 +4284,18 @@ func (c *Organizations) InviteAccountToOrganizationRequest(input *InviteAccountT
 // is associated with the other account's owner. The invitation is implemented
 // as a Handshake whose details are in the response.
 //
+// You can invite AWS accounts only from the same seller as the master account.
+// For example, if your organization's master account was created by Amazon
+// Internet Services Pvt. Ltd (AISPL), an AWS seller in India, then you can
+// only invite other AISPL accounts to your organization. You can't combine
+// accounts from AISPL and AWS, or any other AWS seller. For more information,
+// see Consolidated Billing in India (http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilliing-India.html).
+//
 // This operation can be called only from the organization's master account.
+//
+// If you get an exception that indicates that you exceeded your account limits
+// for the organization or that you can"t add an account because your organization
+// is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2603,9 +4316,48 @@ func (c *Organizations) InviteAccountToOrganizationRequest(input *InviteAccountT
 //   Your account is not a member of an organization. To make this request, you
 //   must use the credentials of an account that belongs to an organization.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeHandshakeConstraintViolationException "HandshakeConstraintViolationException"
 //   The requested operation would violate the constraint identified in the reason
 //   code.
+//
+//      * ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on
+//      the number of accounts in an organization. Note: deleted and closed accounts
+//      still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//      for the organization or that you can"t add an account because your organization
+//      is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * ALREADY_IN_AN_ORGANIZATION: The handshake request is invalid because
+//      the invited account is already a member of an organization.
+//
+//      * ORGANIZATION_ALREADY_HAS_ALL_FEATURES: The handshake request is invalid
+//      because the organization has already enabled all features.
+//
+//      * INVITE_DISABLED_DURING_ENABLE_ALL_FEATURES: You cannot issue new invitations
+//      to join an organization while it is in the process of enabling all features.
+//      You can resume inviting accounts after you finalize the process when all
+//      accounts have agreed to the change.
+//
+//      * PAYMENT_INSTRUMENT_REQUIRED: You cannot complete the operation with
+//      an account that does not have a payment instrument, such as a credit card,
+//      associated with it.
+//
+//      * ORGANIZATION_FROM_DIFFERENT_SELLER_OF_RECORD: The request failed because
+//      the account is from a different marketplace than the accounts in the organization.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be from the same
+//      marketplace.
+//
+//      * ORGANIZATION_MEMBERSHIP_CHANGE_RATE_LIMIT_EXCEEDED: You attempted to
+//      change the membership of an account too quickly after its previous change.
 //
 //   * ErrCodeDuplicateHandshakeException "DuplicateHandshakeException"
 //   A handshake with the same action and target already exists. For example,
@@ -2615,7 +4367,57 @@ func (c *Organizations) InviteAccountToOrganizationRequest(input *InviteAccountT
 //   might be considered duplicates are canceled or declined.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeFinalizingOrganizationException "FinalizingOrganizationException"
 //   AWS Organizations could not finalize the creation of your organization. Try
@@ -2655,19 +4457,18 @@ const opLeaveOrganization = "LeaveOrganization"
 
 // LeaveOrganizationRequest generates a "aws/request.Request" representing the
 // client's request for the LeaveOrganization operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See LeaveOrganization for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the LeaveOrganization method directly
-// instead.
+// See LeaveOrganization for more information on using the LeaveOrganization
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the LeaveOrganizationRequest method.
 //    req, resp := client.LeaveOrganizationRequest(params)
@@ -2710,6 +4511,24 @@ func (c *Organizations) LeaveOrganizationRequest(input *LeaveOrganizationInput) 
 // can do, including preventing them from successfully calling LeaveOrganization
 // and leaving the organization.
 //
+// You can leave an organization as a member account only if the account is
+// configured with the information required to operate as a standalone account.
+// When you create an account in an organization using the AWS Organizations
+// console, API, or CLI commands, the information required of standalone accounts
+// is not automatically collected. For each account that you want to make standalone,
+// you must accept the End User License Agreement (EULA), choose a support plan,
+// provide and verify the required contact information, and provide a current
+// payment method. AWS uses the payment method to charge for any billable (not
+// free tier) AWS activity that occurs while the account is not attached to
+// an organization. Follow the steps at  To leave an organization when all required
+// account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+// in the AWS Organizations User Guide.
+//
+// You can leave an organization only after you enable IAM user access to billing
+// in your account. For more information, see Activating Access to the Billing
+// and Cost Management Console (http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate)
+// in the AWS Billing and Cost Management User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2742,10 +4561,136 @@ func (c *Organizations) LeaveOrganizationRequest(input *LeaveOrganizationInput) 
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeMasterCannotLeaveOrganizationException "MasterCannotLeaveOrganizationException"
 //   You can't remove a master account from an organization. If you want the master
@@ -2786,19 +4731,18 @@ const opListAccounts = "ListAccounts"
 
 // ListAccountsRequest generates a "aws/request.Request" representing the
 // client's request for the ListAccounts operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListAccounts for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListAccounts method directly
-// instead.
+// See ListAccounts for more information on using the ListAccounts
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListAccountsRequest method.
 //    req, resp := client.ListAccountsRequest(params)
@@ -2814,6 +4758,12 @@ func (c *Organizations) ListAccountsRequest(input *ListAccountsInput) (req *requ
 		Name:       opListAccounts,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2852,7 +4802,57 @@ func (c *Organizations) ListAccountsRequest(input *ListAccountsInput) (req *requ
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -2884,23 +4884,72 @@ func (c *Organizations) ListAccountsWithContext(ctx aws.Context, input *ListAcco
 	return out, req.Send()
 }
 
+// ListAccountsPages iterates over the pages of a ListAccounts operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAccounts method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAccounts operation.
+//    pageNum := 0
+//    err := client.ListAccountsPages(params,
+//        func(page *ListAccountsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListAccountsPages(input *ListAccountsInput, fn func(*ListAccountsOutput, bool) bool) error {
+	return c.ListAccountsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAccountsPagesWithContext same as ListAccountsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListAccountsPagesWithContext(ctx aws.Context, input *ListAccountsInput, fn func(*ListAccountsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAccountsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAccountsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAccountsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListAccountsForParent = "ListAccountsForParent"
 
 // ListAccountsForParentRequest generates a "aws/request.Request" representing the
 // client's request for the ListAccountsForParent operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListAccountsForParent for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListAccountsForParent method directly
-// instead.
+// See ListAccountsForParent for more information on using the ListAccountsForParent
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListAccountsForParentRequest method.
 //    req, resp := client.ListAccountsForParentRequest(params)
@@ -2916,6 +4965,12 @@ func (c *Organizations) ListAccountsForParentRequest(input *ListAccountsForParen
 		Name:       opListAccountsForParent,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -2956,7 +5011,57 @@ func (c *Organizations) ListAccountsForParentRequest(input *ListAccountsForParen
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeParentNotFoundException "ParentNotFoundException"
 //   We can't find a root or organizational unit (OU) with the ParentId that you
@@ -2992,23 +5097,72 @@ func (c *Organizations) ListAccountsForParentWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+// ListAccountsForParentPages iterates over the pages of a ListAccountsForParent operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAccountsForParent method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAccountsForParent operation.
+//    pageNum := 0
+//    err := client.ListAccountsForParentPages(params,
+//        func(page *ListAccountsForParentOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListAccountsForParentPages(input *ListAccountsForParentInput, fn func(*ListAccountsForParentOutput, bool) bool) error {
+	return c.ListAccountsForParentPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAccountsForParentPagesWithContext same as ListAccountsForParentPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListAccountsForParentPagesWithContext(ctx aws.Context, input *ListAccountsForParentInput, fn func(*ListAccountsForParentOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAccountsForParentInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAccountsForParentRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAccountsForParentOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListChildren = "ListChildren"
 
 // ListChildrenRequest generates a "aws/request.Request" representing the
 // client's request for the ListChildren operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListChildren for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListChildren method directly
-// instead.
+// See ListChildren for more information on using the ListChildren
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListChildrenRequest method.
 //    req, resp := client.ListChildrenRequest(params)
@@ -3024,6 +5178,12 @@ func (c *Organizations) ListChildrenRequest(input *ListChildrenInput) (req *requ
 		Name:       opListChildren,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3061,7 +5221,57 @@ func (c *Organizations) ListChildrenRequest(input *ListChildrenInput) (req *requ
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeParentNotFoundException "ParentNotFoundException"
 //   We can't find a root or organizational unit (OU) with the ParentId that you
@@ -3097,23 +5307,72 @@ func (c *Organizations) ListChildrenWithContext(ctx aws.Context, input *ListChil
 	return out, req.Send()
 }
 
+// ListChildrenPages iterates over the pages of a ListChildren operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListChildren method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListChildren operation.
+//    pageNum := 0
+//    err := client.ListChildrenPages(params,
+//        func(page *ListChildrenOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListChildrenPages(input *ListChildrenInput, fn func(*ListChildrenOutput, bool) bool) error {
+	return c.ListChildrenPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListChildrenPagesWithContext same as ListChildrenPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListChildrenPagesWithContext(ctx aws.Context, input *ListChildrenInput, fn func(*ListChildrenOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListChildrenInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListChildrenRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListChildrenOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListCreateAccountStatus = "ListCreateAccountStatus"
 
 // ListCreateAccountStatusRequest generates a "aws/request.Request" representing the
 // client's request for the ListCreateAccountStatus operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListCreateAccountStatus for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListCreateAccountStatus method directly
-// instead.
+// See ListCreateAccountStatus for more information on using the ListCreateAccountStatus
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListCreateAccountStatusRequest method.
 //    req, resp := client.ListCreateAccountStatusRequest(params)
@@ -3129,6 +5388,12 @@ func (c *Organizations) ListCreateAccountStatusRequest(input *ListCreateAccountS
 		Name:       opListCreateAccountStatus,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3167,7 +5432,57 @@ func (c *Organizations) ListCreateAccountStatusRequest(input *ListCreateAccountS
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -3199,23 +5514,72 @@ func (c *Organizations) ListCreateAccountStatusWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+// ListCreateAccountStatusPages iterates over the pages of a ListCreateAccountStatus operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCreateAccountStatus method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCreateAccountStatus operation.
+//    pageNum := 0
+//    err := client.ListCreateAccountStatusPages(params,
+//        func(page *ListCreateAccountStatusOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListCreateAccountStatusPages(input *ListCreateAccountStatusInput, fn func(*ListCreateAccountStatusOutput, bool) bool) error {
+	return c.ListCreateAccountStatusPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCreateAccountStatusPagesWithContext same as ListCreateAccountStatusPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListCreateAccountStatusPagesWithContext(ctx aws.Context, input *ListCreateAccountStatusInput, fn func(*ListCreateAccountStatusOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCreateAccountStatusInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCreateAccountStatusRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListCreateAccountStatusOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListHandshakesForAccount = "ListHandshakesForAccount"
 
 // ListHandshakesForAccountRequest generates a "aws/request.Request" representing the
 // client's request for the ListHandshakesForAccount operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListHandshakesForAccount for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListHandshakesForAccount method directly
-// instead.
+// See ListHandshakesForAccount for more information on using the ListHandshakesForAccount
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListHandshakesForAccountRequest method.
 //    req, resp := client.ListHandshakesForAccountRequest(params)
@@ -3231,6 +5595,12 @@ func (c *Organizations) ListHandshakesForAccountRequest(input *ListHandshakesFor
 		Name:       opListHandshakesForAccount,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3246,6 +5616,10 @@ func (c *Organizations) ListHandshakesForAccountRequest(input *ListHandshakesFor
 //
 // Lists the current handshakes that are associated with the account of the
 // requesting user.
+//
+// Handshakes that are ACCEPTED, DECLINED, or CANCELED appear in the results
+// of this API for only 30 days after changing to that state. After that they
+// are deleted and no longer accessible.
 //
 // This operation can be called from any account in the organization.
 //
@@ -3264,8 +5638,62 @@ func (c *Organizations) ListHandshakesForAccountRequest(input *ListHandshakesFor
 //   Access Management (http://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
 //   in the IAM User Guide.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -3297,23 +5725,72 @@ func (c *Organizations) ListHandshakesForAccountWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+// ListHandshakesForAccountPages iterates over the pages of a ListHandshakesForAccount operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListHandshakesForAccount method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListHandshakesForAccount operation.
+//    pageNum := 0
+//    err := client.ListHandshakesForAccountPages(params,
+//        func(page *ListHandshakesForAccountOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListHandshakesForAccountPages(input *ListHandshakesForAccountInput, fn func(*ListHandshakesForAccountOutput, bool) bool) error {
+	return c.ListHandshakesForAccountPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListHandshakesForAccountPagesWithContext same as ListHandshakesForAccountPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListHandshakesForAccountPagesWithContext(ctx aws.Context, input *ListHandshakesForAccountInput, fn func(*ListHandshakesForAccountOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListHandshakesForAccountInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListHandshakesForAccountRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListHandshakesForAccountOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListHandshakesForOrganization = "ListHandshakesForOrganization"
 
 // ListHandshakesForOrganizationRequest generates a "aws/request.Request" representing the
 // client's request for the ListHandshakesForOrganization operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListHandshakesForOrganization for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListHandshakesForOrganization method directly
-// instead.
+// See ListHandshakesForOrganization for more information on using the ListHandshakesForOrganization
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListHandshakesForOrganizationRequest method.
 //    req, resp := client.ListHandshakesForOrganizationRequest(params)
@@ -3329,6 +5806,12 @@ func (c *Organizations) ListHandshakesForOrganizationRequest(input *ListHandshak
 		Name:       opListHandshakesForOrganization,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3346,6 +5829,10 @@ func (c *Organizations) ListHandshakesForOrganizationRequest(input *ListHandshak
 // user is part of. The ListHandshakesForOrganization operation returns a list
 // of handshake structures. Each structure contains details and status about
 // a handshake.
+//
+// Handshakes that are ACCEPTED, DECLINED, or CANCELED appear in the results
+// of this API for only 30 days after changing to that state. After that they
+// are deleted and no longer accessible.
 //
 // This operation can be called only from the organization's master account.
 //
@@ -3368,8 +5855,62 @@ func (c *Organizations) ListHandshakesForOrganizationRequest(input *ListHandshak
 //   Your account is not a member of an organization. To make this request, you
 //   must use the credentials of an account that belongs to an organization.
 //
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   The target of the operation is currently being modified by a different request.
+//   Try again later.
+//
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -3401,23 +5942,72 @@ func (c *Organizations) ListHandshakesForOrganizationWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+// ListHandshakesForOrganizationPages iterates over the pages of a ListHandshakesForOrganization operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListHandshakesForOrganization method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListHandshakesForOrganization operation.
+//    pageNum := 0
+//    err := client.ListHandshakesForOrganizationPages(params,
+//        func(page *ListHandshakesForOrganizationOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListHandshakesForOrganizationPages(input *ListHandshakesForOrganizationInput, fn func(*ListHandshakesForOrganizationOutput, bool) bool) error {
+	return c.ListHandshakesForOrganizationPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListHandshakesForOrganizationPagesWithContext same as ListHandshakesForOrganizationPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListHandshakesForOrganizationPagesWithContext(ctx aws.Context, input *ListHandshakesForOrganizationInput, fn func(*ListHandshakesForOrganizationOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListHandshakesForOrganizationInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListHandshakesForOrganizationRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListHandshakesForOrganizationOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListOrganizationalUnitsForParent = "ListOrganizationalUnitsForParent"
 
 // ListOrganizationalUnitsForParentRequest generates a "aws/request.Request" representing the
 // client's request for the ListOrganizationalUnitsForParent operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListOrganizationalUnitsForParent for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListOrganizationalUnitsForParent method directly
-// instead.
+// See ListOrganizationalUnitsForParent for more information on using the ListOrganizationalUnitsForParent
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListOrganizationalUnitsForParentRequest method.
 //    req, resp := client.ListOrganizationalUnitsForParentRequest(params)
@@ -3433,6 +6023,12 @@ func (c *Organizations) ListOrganizationalUnitsForParentRequest(input *ListOrgan
 		Name:       opListOrganizationalUnitsForParent,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3470,7 +6066,57 @@ func (c *Organizations) ListOrganizationalUnitsForParentRequest(input *ListOrgan
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeParentNotFoundException "ParentNotFoundException"
 //   We can't find a root or organizational unit (OU) with the ParentId that you
@@ -3506,23 +6152,72 @@ func (c *Organizations) ListOrganizationalUnitsForParentWithContext(ctx aws.Cont
 	return out, req.Send()
 }
 
+// ListOrganizationalUnitsForParentPages iterates over the pages of a ListOrganizationalUnitsForParent operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListOrganizationalUnitsForParent method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListOrganizationalUnitsForParent operation.
+//    pageNum := 0
+//    err := client.ListOrganizationalUnitsForParentPages(params,
+//        func(page *ListOrganizationalUnitsForParentOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListOrganizationalUnitsForParentPages(input *ListOrganizationalUnitsForParentInput, fn func(*ListOrganizationalUnitsForParentOutput, bool) bool) error {
+	return c.ListOrganizationalUnitsForParentPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListOrganizationalUnitsForParentPagesWithContext same as ListOrganizationalUnitsForParentPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListOrganizationalUnitsForParentPagesWithContext(ctx aws.Context, input *ListOrganizationalUnitsForParentInput, fn func(*ListOrganizationalUnitsForParentOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListOrganizationalUnitsForParentInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListOrganizationalUnitsForParentRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListOrganizationalUnitsForParentOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListParents = "ListParents"
 
 // ListParentsRequest generates a "aws/request.Request" representing the
 // client's request for the ListParents operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListParents for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListParents method directly
-// instead.
+// See ListParents for more information on using the ListParents
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListParentsRequest method.
 //    req, resp := client.ListParentsRequest(params)
@@ -3538,6 +6233,12 @@ func (c *Organizations) ListParentsRequest(input *ListParentsInput) (req *reques
 		Name:       opListParents,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3583,7 +6284,57 @@ func (c *Organizations) ListParentsRequest(input *ListParentsInput) (req *reques
 //   that you specified.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -3615,23 +6366,72 @@ func (c *Organizations) ListParentsWithContext(ctx aws.Context, input *ListParen
 	return out, req.Send()
 }
 
+// ListParentsPages iterates over the pages of a ListParents operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListParents method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListParents operation.
+//    pageNum := 0
+//    err := client.ListParentsPages(params,
+//        func(page *ListParentsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListParentsPages(input *ListParentsInput, fn func(*ListParentsOutput, bool) bool) error {
+	return c.ListParentsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListParentsPagesWithContext same as ListParentsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListParentsPagesWithContext(ctx aws.Context, input *ListParentsInput, fn func(*ListParentsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListParentsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListParentsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListParentsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListPolicies = "ListPolicies"
 
 // ListPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListPolicies operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListPolicies for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListPolicies method directly
-// instead.
+// See ListPolicies for more information on using the ListPolicies
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListPoliciesRequest method.
 //    req, resp := client.ListPoliciesRequest(params)
@@ -3647,6 +6447,12 @@ func (c *Organizations) ListPoliciesRequest(input *ListPoliciesInput) (req *requ
 		Name:       opListPolicies,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3684,7 +6490,57 @@ func (c *Organizations) ListPoliciesRequest(input *ListPoliciesInput) (req *requ
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -3716,23 +6572,72 @@ func (c *Organizations) ListPoliciesWithContext(ctx aws.Context, input *ListPoli
 	return out, req.Send()
 }
 
+// ListPoliciesPages iterates over the pages of a ListPolicies operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPolicies method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPolicies operation.
+//    pageNum := 0
+//    err := client.ListPoliciesPages(params,
+//        func(page *ListPoliciesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListPoliciesPages(input *ListPoliciesInput, fn func(*ListPoliciesOutput, bool) bool) error {
+	return c.ListPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPoliciesPagesWithContext same as ListPoliciesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListPoliciesPagesWithContext(ctx aws.Context, input *ListPoliciesInput, fn func(*ListPoliciesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPoliciesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPoliciesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPoliciesOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListPoliciesForTarget = "ListPoliciesForTarget"
 
 // ListPoliciesForTargetRequest generates a "aws/request.Request" representing the
 // client's request for the ListPoliciesForTarget operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListPoliciesForTarget for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListPoliciesForTarget method directly
-// instead.
+// See ListPoliciesForTarget for more information on using the ListPoliciesForTarget
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListPoliciesForTargetRequest method.
 //    req, resp := client.ListPoliciesForTargetRequest(params)
@@ -3748,6 +6653,12 @@ func (c *Organizations) ListPoliciesForTargetRequest(input *ListPoliciesForTarge
 		Name:       opListPoliciesForTarget,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3787,7 +6698,57 @@ func (c *Organizations) ListPoliciesForTargetRequest(input *ListPoliciesForTarge
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -3822,23 +6783,72 @@ func (c *Organizations) ListPoliciesForTargetWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+// ListPoliciesForTargetPages iterates over the pages of a ListPoliciesForTarget operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPoliciesForTarget method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPoliciesForTarget operation.
+//    pageNum := 0
+//    err := client.ListPoliciesForTargetPages(params,
+//        func(page *ListPoliciesForTargetOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListPoliciesForTargetPages(input *ListPoliciesForTargetInput, fn func(*ListPoliciesForTargetOutput, bool) bool) error {
+	return c.ListPoliciesForTargetPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPoliciesForTargetPagesWithContext same as ListPoliciesForTargetPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListPoliciesForTargetPagesWithContext(ctx aws.Context, input *ListPoliciesForTargetInput, fn func(*ListPoliciesForTargetOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPoliciesForTargetInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPoliciesForTargetRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPoliciesForTargetOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListRoots = "ListRoots"
 
 // ListRootsRequest generates a "aws/request.Request" representing the
 // client's request for the ListRoots operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListRoots for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListRoots method directly
-// instead.
+// See ListRoots for more information on using the ListRoots
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListRootsRequest method.
 //    req, resp := client.ListRootsRequest(params)
@@ -3854,6 +6864,12 @@ func (c *Organizations) ListRootsRequest(input *ListRootsInput) (req *request.Re
 		Name:       opListRoots,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3891,7 +6907,57 @@ func (c *Organizations) ListRootsRequest(input *ListRootsInput) (req *request.Re
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeServiceException "ServiceException"
 //   AWS Organizations can't complete your request because of an internal service
@@ -3923,23 +6989,72 @@ func (c *Organizations) ListRootsWithContext(ctx aws.Context, input *ListRootsIn
 	return out, req.Send()
 }
 
+// ListRootsPages iterates over the pages of a ListRoots operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListRoots method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListRoots operation.
+//    pageNum := 0
+//    err := client.ListRootsPages(params,
+//        func(page *ListRootsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListRootsPages(input *ListRootsInput, fn func(*ListRootsOutput, bool) bool) error {
+	return c.ListRootsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListRootsPagesWithContext same as ListRootsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListRootsPagesWithContext(ctx aws.Context, input *ListRootsInput, fn func(*ListRootsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListRootsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListRootsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListRootsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListTargetsForPolicy = "ListTargetsForPolicy"
 
 // ListTargetsForPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the ListTargetsForPolicy operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See ListTargetsForPolicy for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListTargetsForPolicy method directly
-// instead.
+// See ListTargetsForPolicy for more information on using the ListTargetsForPolicy
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListTargetsForPolicyRequest method.
 //    req, resp := client.ListTargetsForPolicyRequest(params)
@@ -3955,6 +7070,12 @@ func (c *Organizations) ListTargetsForPolicyRequest(input *ListTargetsForPolicyI
 		Name:       opListTargetsForPolicy,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3992,7 +7113,57 @@ func (c *Organizations) ListTargetsForPolicyRequest(input *ListTargetsForPolicyI
 //   must use the credentials of an account that belongs to an organization.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodePolicyNotFoundException "PolicyNotFoundException"
 //   We can't find a policy with the PolicyId that you specified.
@@ -4027,23 +7198,72 @@ func (c *Organizations) ListTargetsForPolicyWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+// ListTargetsForPolicyPages iterates over the pages of a ListTargetsForPolicy operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListTargetsForPolicy method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListTargetsForPolicy operation.
+//    pageNum := 0
+//    err := client.ListTargetsForPolicyPages(params,
+//        func(page *ListTargetsForPolicyOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Organizations) ListTargetsForPolicyPages(input *ListTargetsForPolicyInput, fn func(*ListTargetsForPolicyOutput, bool) bool) error {
+	return c.ListTargetsForPolicyPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListTargetsForPolicyPagesWithContext same as ListTargetsForPolicyPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Organizations) ListTargetsForPolicyPagesWithContext(ctx aws.Context, input *ListTargetsForPolicyInput, fn func(*ListTargetsForPolicyOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListTargetsForPolicyInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListTargetsForPolicyRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListTargetsForPolicyOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opMoveAccount = "MoveAccount"
 
 // MoveAccountRequest generates a "aws/request.Request" representing the
 // client's request for the MoveAccount operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See MoveAccount for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the MoveAccount method directly
-// instead.
+// See MoveAccount for more information on using the MoveAccount
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the MoveAccountRequest method.
 //    req, resp := client.MoveAccountRequest(params)
@@ -4095,7 +7315,57 @@ func (c *Organizations) MoveAccountRequest(input *MoveAccountInput) (req *reques
 //   in the IAM User Guide.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeSourceParentNotFoundException "SourceParentNotFoundException"
 //   We can't find a source root or OU with the ParentId that you specified.
@@ -4154,19 +7424,18 @@ const opRemoveAccountFromOrganization = "RemoveAccountFromOrganization"
 
 // RemoveAccountFromOrganizationRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveAccountFromOrganization operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See RemoveAccountFromOrganization for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RemoveAccountFromOrganization method directly
-// instead.
+// See RemoveAccountFromOrganization for more information on using the RemoveAccountFromOrganization
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RemoveAccountFromOrganizationRequest method.
 //    req, resp := client.RemoveAccountFromOrganizationRequest(params)
@@ -4208,8 +7477,25 @@ func (c *Organizations) RemoveAccountFromOrganizationRequest(input *RemoveAccoun
 // This operation can be called only from the organization's master account.
 // Member accounts can remove themselves with LeaveOrganization instead.
 //
-// You can remove only existing accounts that were invited to join the organization.
-// You cannot remove accounts that were created by AWS Organizations.
+// You can remove an account from your organization only if the account is configured
+// with the information required to operate as a standalone account. When you
+// create an account in an organization using the AWS Organizations console,
+// API, or CLI commands, the information required of standalone accounts is
+// not automatically collected. For an account that you want to make standalone,
+// you must accept the End User License Agreement (EULA), choose a support plan,
+// provide and verify the required contact information, and provide a current
+// payment method. AWS uses the payment method to charge for any billable (not
+// free tier) AWS activity that occurs while the account is not attached to
+// an organization. To remove an account that does not yet have this information,
+// you must sign in as the member account and follow the steps at  To leave
+// an organization when all required account information has not yet been provided
+// (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+// in the AWS Organizations User Guide.
+//
+// You can remove a member account only after you enable IAM user access to
+// billing in the member account. For more information, see Activating Access
+// to the Billing and Cost Management Console (http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate)
+// in the AWS Billing and Cost Management User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4243,10 +7529,136 @@ func (c *Organizations) RemoveAccountFromOrganizationRequest(input *RemoveAccoun
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeMasterCannotLeaveOrganizationException "MasterCannotLeaveOrganizationException"
 //   You can't remove a master account from an organization. If you want the master
@@ -4287,19 +7699,18 @@ const opUpdateOrganizationalUnit = "UpdateOrganizationalUnit"
 
 // UpdateOrganizationalUnitRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateOrganizationalUnit operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdateOrganizationalUnit for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdateOrganizationalUnit method directly
-// instead.
+// See UpdateOrganizationalUnit for more information on using the UpdateOrganizationalUnit
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdateOrganizationalUnitRequest method.
 //    req, resp := client.UpdateOrganizationalUnitRequest(params)
@@ -4361,7 +7772,57 @@ func (c *Organizations) UpdateOrganizationalUnitRequest(input *UpdateOrganizatio
 //   An organizational unit (OU) with the same name already exists.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeOrganizationalUnitNotFoundException "OrganizationalUnitNotFoundException"
 //   We can't find an organizational unit (OU) with the OrganizationalUnitId that
@@ -4401,19 +7862,18 @@ const opUpdatePolicy = "UpdatePolicy"
 
 // UpdatePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePolicy operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request complets
+// successfuly.
 //
-// See UpdatePolicy for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the UpdatePolicy method directly
-// instead.
+// See UpdatePolicy for more information on using the UpdatePolicy
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the UpdatePolicyRequest method.
 //    req, resp := client.UpdatePolicyRequest(params)
@@ -4475,13 +7935,139 @@ func (c *Organizations) UpdatePolicyRequest(input *UpdatePolicyInput) (req *requ
 //   Performing this operation violates a minimum or maximum value limit. For
 //   example, attempting to removing the last SCP from an OU or root, inviting
 //   or creating too many accounts to the organization, or attaching too many
-//   policies to an account, OU, or root.
+//   policies to an account, OU, or root. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//   ACCOUNT_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the limit on the number
+//   of accounts in an organization. If you need more accounts, contact AWS Support
+//   to request an increase in your limit.
+//
+//   Or, The number of invitations that you tried to send would cause you to exceed
+//   the limit of accounts in your organization. Send fewer invitations, or contact
+//   AWS Support to request an increase in the number of accounts.
+//
+//   Note: deleted and closed accounts still count toward your limit.
+//
+//   If you get an exception that indicates that you exceeded your account limits
+//   for the organization or that you can"t add an account because your organization
+//   is still initializing, please contact  AWS Customer Support (https://console.aws.amazon.com/support/home#/).
+//
+//      * HANDSHAKE_RATE_LIMIT_EXCEEDED: You attempted to exceed the number of
+//      handshakes you can send in one day.
+//
+//      * OU_NUMBER_LIMIT_EXCEEDED: You attempted to exceed the number of organizational
+//      units you can have in an organization.
+//
+//      * OU_DEPTH_LIMIT_EXCEEDED: You attempted to create an organizational unit
+//      tree that is too many levels deep.
+//
+//      * POLICY_NUMBER_LIMIT_EXCEEDED. You attempted to exceed the number of
+//      policies that you can have in an organization.
+//
+//      * MAX_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to exceed the
+//      number of policies of a certain type that can be attached to an entity
+//      at one time.
+//
+//      * MIN_POLICY_TYPE_ATTACHMENT_LIMIT_EXCEEDED: You attempted to detach a
+//      policy from an entity that would cause the entity to have fewer than the
+//      minimum number of policies of a certain type required.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA: You attempted to remove an account
+//      from the organization that does not yet have enough information to exist
+//      as a stand-alone account. This account requires you to first agree to
+//      the AWS Customer Agreement. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION: You attempted to remove
+//      an account from the organization that does not yet have enough information
+//      to exist as a stand-alone account. This account requires you to first
+//      complete phone verification. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To create an organization
+//      with this account, you first must associate a payment instrument, such
+//      as a credit card, with the account. Follow the steps at To leave an organization
+//      when all required account information has not yet been provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED: To complete this operation
+//      with this member account, you first must associate a payment instrument,
+//      such as a credit card, with the account. Follow the steps at To leave
+//      an organization when all required account information has not yet been
+//      provided (http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_remove.html#leave-without-all-info)
+//      in the AWS Organizations User Guide.
+//
+//      * ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED: You attempted to exceed the number
+//      of accounts that you can create in one day.
+//
+//      * MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE: To create an account
+//      in this organization, you first must migrate the organization's master
+//      account to the marketplace that corresponds to the master account's address.
+//      For example, accounts with India addresses must be associated with the
+//      AISPL marketplace. All accounts in an organization must be associated
+//      with the same marketplace.
+//
+//      * MASTER_ACCOUNT_MISSING_CONTACT_INFO: To complete this operation, you
+//      must first provide contact a valid address and phone number for the master
+//      account. Then try the operation again.
 //
 //   * ErrCodeDuplicatePolicyException "DuplicatePolicyException"
 //   A policy with the same name already exists.
 //
 //   * ErrCodeInvalidInputException "InvalidInputException"
-//   You provided invalid values for one or more of the request parameters.
+//   The requested operation failed because you provided invalid values for one
+//   or more of the request parameters. This exception includes a reason that
+//   contains additional information about the violated limit:
+//
+//      * INVALID_PARTY_TYPE_TARGET: You specified the wrong type of entity (account,
+//      organization, or email) as a party.
+//
+//      * INVALID_SYNTAX_ORGANIZATION_ARN: You specified an invalid ARN for the
+//      organization.
+//
+//      * INVALID_SYNTAX_POLICY_ID: You specified an invalid policy ID.
+//
+//      * INVALID_ENUM: You specified a value that is not valid for that parameter.
+//
+//      * INVALID_FULL_NAME_TARGET: You specified a full name that contains invalid
+//      characters.
+//
+//      * INVALID_LIST_MEMBER: You provided a list to a parameter that contains
+//      at least one invalid value.
+//
+//      * MAX_LENGTH_EXCEEDED: You provided a string parameter that is longer
+//      than allowed.
+//
+//      * MAX_VALUE_EXCEEDED: You provided a numeric parameter that has a larger
+//      value than allowed.
+//
+//      * MIN_LENGTH_EXCEEDED: You provided a string parameter that is shorter
+//      than allowed.
+//
+//      * MIN_VALUE_EXCEEDED: You provided a numeric parameter that has a smaller
+//      value than allowed.
+//
+//      * IMMUTABLE_POLICY: You specified a policy that is managed by AWS and
+//      cannot be modified.
+//
+//      * INVALID_PATTERN: You provided a value that doesn't match the required
+//      pattern.
+//
+//      * INVALID_PATTERN_TARGET_ID: You specified a policy target ID that doesn't
+//      match the required pattern.
+//
+//      * INPUT_REQUIRED: You must include a value for all required parameters.
+//
+//      * INVALID_PAGINATION_TOKEN: Get the value for the NextToken parameter
+//      from the response to a previous call of the operation.
+//
+//      * MAX_FILTER_LIMIT_EXCEEDED: You can specify only one filter parameter
+//      for the operation.
+//
+//      * MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS: You can move an account only
+//      between entities in the same root.
 //
 //   * ErrCodeMalformedPolicyDocumentException "MalformedPolicyDocumentException"
 //   The provided policy document does not meet the requirements of the specified
@@ -4600,6 +8186,12 @@ type Account struct {
 	// in the AWS Organizations User Guide.
 	Arn *string `type:"string"`
 
+	// The email address associated with the AWS account.
+	//
+	// The regex pattern (http://wikipedia.org/wiki/regex) for this parameter is
+	// a string of characters that represents a standard Internet email address.
+	Email *string `min:"6" type:"string"`
+
 	// The unique identifier (ID) of the account.
 	//
 	// The regex pattern (http://wikipedia.org/wiki/regex) for an account ID string
@@ -4636,6 +8228,12 @@ func (s Account) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *Account) SetArn(v string) *Account {
 	s.Arn = &v
+	return s
+}
+
+// SetEmail sets the Email field's value.
+func (s *Account) SetEmail(v string) *Account {
+	s.Email = &v
 	return s
 }
 
@@ -4877,7 +8475,10 @@ type CreateAccountInput struct {
 	AccountName *string `min:"1" type:"string" required:"true"`
 
 	// The email address of the owner to assign to the new member account. This
-	// email address must not already be associated with another AWS account.
+	// email address must not already be associated with another AWS account. You
+	// must use a valid email address to complete account creation. You cannot access
+	// the root user of the account or remove an account that was created with an
+	// invalid email address.
 	//
 	// Email is a required field
 	Email *string `min:"6" type:"string" required:"true"`
@@ -4888,6 +8489,10 @@ type CreateAccountInput struct {
 	// For more information, see Activating Access to the Billing and Cost Management
 	// Console (http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html#ControllingAccessWebsite-Activate)
 	// in the AWS Billing and Cost Management User Guide.
+	//
+	// If you do not specify this parameter, the value defaults to ALLOW, and IAM
+	// users and roles with the required permissions can access billing information
+	// for the new account.
 	IamUserAccessToBilling *string `type:"string" enum:"IAMUserAccessToBilling"`
 
 	// (Optional)
@@ -5017,6 +8622,21 @@ type CreateAccountStatus struct {
 	CompletedTimestamp *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// If the request failed, a description of the reason for the failure.
+	//
+	//    * ACCOUNT_LIMIT_EXCEEDED: The account could not be created because you
+	//    have reached the limit on the number of accounts in your organization.
+	//
+	//    * EMAIL_ALREADY_EXISTS: The account could not be created because another
+	//    AWS account with that email address already exists.
+	//
+	//    * INVALID_ADDRESS: The account could not be created because the address
+	//    you provided is not valid.
+	//
+	//    * INVALID_EMAIL: The account could not be created because the email address
+	//    you provided is not valid.
+	//
+	//    * INTERNAL_FAILURE: The account could not be created because of an internal
+	//    failure. Try again later. If the problem persists, contact Customer Support.
 	FailureReason *string `type:"string" enum:"CreateAccountFailureReason"`
 
 	// The unique identifier (ID) that references this request. You get this value
@@ -6251,6 +9871,9 @@ func (s *EnablePolicyTypeOutput) SetRoot(v *Root) *EnablePolicyTypeOutput {
 // master account (the originator) invites another account (the recipient) to
 // join its organization, the two accounts exchange information as a series
 // of handshake requests and responses.
+//
+// Note: Handshakes that are CANCELED, ACCEPTED, or DECLINED show up in lists
+// for only 30 days after entering that state After that they are deleted.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/organizations-2016-11-28/Handshake
 type Handshake struct {
 	_ struct{} `type:"structure"`
@@ -6541,13 +10164,13 @@ type InviteAccountToOrganizationInput struct {
 	// If you use the AWS CLI, you can submit this as a single string, similar to
 	// the following example:
 	//
-	// --target id=123456789012,type=ACCOUNT
+	// --target Id=123456789012,Type=ACCOUNT
 	//
 	// If you specify "Type": "ACCOUNT", then you must provide the AWS account ID
 	// number as the Id. If you specify "Type": "EMAIL", then you must specify the
 	// email address that is associated with the account.
 	//
-	// --target id=bill@example.com,type=EMAIL
+	// --target Id=bill@example.com,Type=EMAIL
 	//
 	// Target is a required field
 	Target *HandshakeParty `type:"structure" required:"true"`
@@ -8928,11 +12551,26 @@ const (
 	// ConstraintViolationExceptionReasonAccountCannotLeaveOrganization is a ConstraintViolationExceptionReason enum value
 	ConstraintViolationExceptionReasonAccountCannotLeaveOrganization = "ACCOUNT_CANNOT_LEAVE_ORGANIZATION"
 
+	// ConstraintViolationExceptionReasonAccountCannotLeaveWithoutEula is a ConstraintViolationExceptionReason enum value
+	ConstraintViolationExceptionReasonAccountCannotLeaveWithoutEula = "ACCOUNT_CANNOT_LEAVE_WITHOUT_EULA"
+
+	// ConstraintViolationExceptionReasonAccountCannotLeaveWithoutPhoneVerification is a ConstraintViolationExceptionReason enum value
+	ConstraintViolationExceptionReasonAccountCannotLeaveWithoutPhoneVerification = "ACCOUNT_CANNOT_LEAVE_WITHOUT_PHONE_VERIFICATION"
+
 	// ConstraintViolationExceptionReasonMasterAccountPaymentInstrumentRequired is a ConstraintViolationExceptionReason enum value
 	ConstraintViolationExceptionReasonMasterAccountPaymentInstrumentRequired = "MASTER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED"
 
+	// ConstraintViolationExceptionReasonMemberAccountPaymentInstrumentRequired is a ConstraintViolationExceptionReason enum value
+	ConstraintViolationExceptionReasonMemberAccountPaymentInstrumentRequired = "MEMBER_ACCOUNT_PAYMENT_INSTRUMENT_REQUIRED"
+
 	// ConstraintViolationExceptionReasonAccountCreationRateLimitExceeded is a ConstraintViolationExceptionReason enum value
 	ConstraintViolationExceptionReasonAccountCreationRateLimitExceeded = "ACCOUNT_CREATION_RATE_LIMIT_EXCEEDED"
+
+	// ConstraintViolationExceptionReasonMasterAccountAddressDoesNotMatchMarketplace is a ConstraintViolationExceptionReason enum value
+	ConstraintViolationExceptionReasonMasterAccountAddressDoesNotMatchMarketplace = "MASTER_ACCOUNT_ADDRESS_DOES_NOT_MATCH_MARKETPLACE"
+
+	// ConstraintViolationExceptionReasonMasterAccountMissingContactInfo is a ConstraintViolationExceptionReason enum value
+	ConstraintViolationExceptionReasonMasterAccountMissingContactInfo = "MASTER_ACCOUNT_MISSING_CONTACT_INFO"
 )
 
 const (
@@ -8944,6 +12582,9 @@ const (
 
 	// CreateAccountFailureReasonInvalidAddress is a CreateAccountFailureReason enum value
 	CreateAccountFailureReasonInvalidAddress = "INVALID_ADDRESS"
+
+	// CreateAccountFailureReasonInvalidEmail is a CreateAccountFailureReason enum value
+	CreateAccountFailureReasonInvalidEmail = "INVALID_EMAIL"
 
 	// CreateAccountFailureReasonInternalFailure is a CreateAccountFailureReason enum value
 	CreateAccountFailureReasonInternalFailure = "INTERNAL_FAILURE"
@@ -9099,6 +12740,9 @@ const (
 
 	// InvalidInputExceptionReasonMovingAccountBetweenDifferentRoots is a InvalidInputExceptionReason enum value
 	InvalidInputExceptionReasonMovingAccountBetweenDifferentRoots = "MOVING_ACCOUNT_BETWEEN_DIFFERENT_ROOTS"
+
+	// InvalidInputExceptionReasonInvalidFullNameTarget is a InvalidInputExceptionReason enum value
+	InvalidInputExceptionReasonInvalidFullNameTarget = "INVALID_FULL_NAME_TARGET"
 )
 
 const (

@@ -123,7 +123,9 @@ func (c *funcContext) translateStmt(stmt ast.Stmt, label *types.Label) {
 			var bodyPrefix []ast.Stmt
 			if implicit := c.p.Implicits[clause]; implicit != nil {
 				value := refVar
-				if _, isInterface := implicit.Type().Underlying().(*types.Interface); !isInterface {
+				if typesutil.IsJsObject(implicit.Type().Underlying()) {
+					value += ".$val.object"
+				} else if _, ok := implicit.Type().Underlying().(*types.Interface); !ok {
 					value += ".$val"
 				}
 				bodyPrefix = []ast.Stmt{&ast.AssignStmt{

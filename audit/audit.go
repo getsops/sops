@@ -1,13 +1,23 @@
 package audit
 
 import (
-	"log"
 	"os/user"
+
+	"go.mozilla.org/sops/logging"
 
 	"database/sql"
 
+	"fmt"
+
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("AUDIT")
+}
 
 var auditors []Auditor
 
@@ -54,7 +64,8 @@ func (p *PostgresAuditor) Handle(event interface{}) {
 	switch event := event.(type) {
 	case DecryptEvent:
 		// Save the event to the database
-		log.Printf("Saving decrypt event for file %s to database", event.File)
+		log.WithField("file", event.File).
+			Info("Saving decrypt event to database")
 		u, err := user.Current()
 		if err != nil {
 			log.Fatalf("Error getting current user for auditing: %s", err)
@@ -64,6 +75,7 @@ func (p *PostgresAuditor) Handle(event interface{}) {
 			log.Fatalf("Failed to insert audit record: %s", err)
 		}
 	default:
-		log.Printf("Received event of unknown type %T", event)
+		log.WithField("type", fmt.Sprintf("%T", event)).
+			Info("Received unknown event")
 	}
 }

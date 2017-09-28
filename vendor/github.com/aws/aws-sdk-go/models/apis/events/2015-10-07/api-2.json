@@ -23,6 +23,19 @@
         {"shape":"InternalException"}
       ]
     },
+    "DescribeEventBus":{
+      "name":"DescribeEventBus",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeEventBusRequest"},
+      "output":{"shape":"DescribeEventBusResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"}
+      ]
+    },
     "DescribeRule":{
       "name":"DescribeRule",
       "http":{
@@ -111,6 +124,20 @@
         {"shape":"InternalException"}
       ]
     },
+    "PutPermission":{
+      "name":"PutPermission",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutPermissionRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"PolicyLengthExceededException"},
+        {"shape":"InternalException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
+    },
     "PutRule":{
       "name":"PutRule",
       "http":{
@@ -139,6 +166,19 @@
         {"shape":"ConcurrentModificationException"},
         {"shape":"LimitExceededException"},
         {"shape":"InternalException"}
+      ]
+    },
+    "RemovePermission":{
+      "name":"RemovePermission",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RemovePermissionRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "RemoveTargets":{
@@ -170,6 +210,12 @@
     }
   },
   "shapes":{
+    "Action":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"events:[a-zA-Z]+"
+    },
     "Arn":{
       "type":"string",
       "max":1600,
@@ -187,6 +233,19 @@
       "required":["Name"],
       "members":{
         "Name":{"shape":"RuleName"}
+      }
+    },
+    "DescribeEventBusRequest":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DescribeEventBusResponse":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Arn":{"shape":"String"},
+        "Policy":{"shape":"String"}
       }
     },
     "DescribeRuleRequest":{
@@ -345,6 +404,18 @@
       "max":2048,
       "min":1
     },
+    "PolicyLengthExceededException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "Principal":{
+      "type":"string",
+      "max":12,
+      "min":1,
+      "pattern":"(\\d{12}|\\*)"
+    },
     "PutEventsRequest":{
       "type":"structure",
       "required":["Entries"],
@@ -386,6 +457,19 @@
     "PutEventsResultEntryList":{
       "type":"list",
       "member":{"shape":"PutEventsResultEntry"}
+    },
+    "PutPermissionRequest":{
+      "type":"structure",
+      "required":[
+        "Action",
+        "Principal",
+        "StatementId"
+      ],
+      "members":{
+        "Action":{"shape":"Action"},
+        "Principal":{"shape":"Principal"},
+        "StatementId":{"shape":"StatementId"}
+      }
     },
     "PutRuleRequest":{
       "type":"structure",
@@ -434,6 +518,13 @@
     "PutTargetsResultEntryList":{
       "type":"list",
       "member":{"shape":"PutTargetsResultEntry"}
+    },
+    "RemovePermissionRequest":{
+      "type":"structure",
+      "required":["StatementId"],
+      "members":{
+        "StatementId":{"shape":"StatementId"}
+      }
     },
     "RemoveTargetsRequest":{
       "type":"structure",
@@ -562,6 +653,12 @@
     "ScheduleExpression":{
       "type":"string",
       "max":256
+    },
+    "StatementId":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"[a-zA-Z0-9-_]+"
     },
     "String":{"type":"string"},
     "Target":{

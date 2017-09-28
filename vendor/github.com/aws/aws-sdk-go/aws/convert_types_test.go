@@ -435,3 +435,36 @@ func TestTimeMap(t *testing.T) {
 		assert.Equal(t, in, out2, "Unexpected value at idx %d", idx)
 	}
 }
+
+type TimeValueTestCase struct {
+	in        int64
+	outSecs   time.Time
+	outMillis time.Time
+}
+
+var testCasesTimeValue = []TimeValueTestCase{
+	{
+		in:        int64(1501558289000),
+		outSecs:   time.Unix(1501558289, 0),
+		outMillis: time.Unix(1501558289, 0),
+	},
+	{
+		in:        int64(1501558289001),
+		outSecs:   time.Unix(1501558289, 0),
+		outMillis: time.Unix(1501558289, 1*1000000),
+	},
+}
+
+func TestSecondsTimeValue(t *testing.T) {
+	for idx, testCase := range testCasesTimeValue {
+		out := SecondsTimeValue(&testCase.in)
+		assert.Equal(t, testCase.outSecs, out, "Unexpected value for time value at %d", idx)
+	}
+}
+
+func TestMillisecondsTimeValue(t *testing.T) {
+	for idx, testCase := range testCasesTimeValue {
+		out := MillisecondsTimeValue(&testCase.in)
+		assert.Equal(t, testCase.outMillis, out, "Unexpected value for time value at %d", idx)
+	}
+}

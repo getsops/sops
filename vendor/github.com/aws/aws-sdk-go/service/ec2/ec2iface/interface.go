@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon Elastic Compute Cloud.
@@ -172,6 +172,10 @@ type EC2API interface {
 	ConfirmProductInstanceWithContext(aws.Context, *ec2.ConfirmProductInstanceInput, ...request.Option) (*ec2.ConfirmProductInstanceOutput, error)
 	ConfirmProductInstanceRequest(*ec2.ConfirmProductInstanceInput) (*request.Request, *ec2.ConfirmProductInstanceOutput)
 
+	CopyFpgaImage(*ec2.CopyFpgaImageInput) (*ec2.CopyFpgaImageOutput, error)
+	CopyFpgaImageWithContext(aws.Context, *ec2.CopyFpgaImageInput, ...request.Option) (*ec2.CopyFpgaImageOutput, error)
+	CopyFpgaImageRequest(*ec2.CopyFpgaImageInput) (*request.Request, *ec2.CopyFpgaImageOutput)
+
 	CopyImage(*ec2.CopyImageInput) (*ec2.CopyImageOutput, error)
 	CopyImageWithContext(aws.Context, *ec2.CopyImageInput, ...request.Option) (*ec2.CopyImageOutput, error)
 	CopyImageRequest(*ec2.CopyImageInput) (*request.Request, *ec2.CopyImageOutput)
@@ -183,6 +187,10 @@ type EC2API interface {
 	CreateCustomerGateway(*ec2.CreateCustomerGatewayInput) (*ec2.CreateCustomerGatewayOutput, error)
 	CreateCustomerGatewayWithContext(aws.Context, *ec2.CreateCustomerGatewayInput, ...request.Option) (*ec2.CreateCustomerGatewayOutput, error)
 	CreateCustomerGatewayRequest(*ec2.CreateCustomerGatewayInput) (*request.Request, *ec2.CreateCustomerGatewayOutput)
+
+	CreateDefaultVpc(*ec2.CreateDefaultVpcInput) (*ec2.CreateDefaultVpcOutput, error)
+	CreateDefaultVpcWithContext(aws.Context, *ec2.CreateDefaultVpcInput, ...request.Option) (*ec2.CreateDefaultVpcOutput, error)
+	CreateDefaultVpcRequest(*ec2.CreateDefaultVpcInput) (*request.Request, *ec2.CreateDefaultVpcOutput)
 
 	CreateDhcpOptions(*ec2.CreateDhcpOptionsInput) (*ec2.CreateDhcpOptionsOutput, error)
 	CreateDhcpOptionsWithContext(aws.Context, *ec2.CreateDhcpOptionsInput, ...request.Option) (*ec2.CreateDhcpOptionsOutput, error)
@@ -231,6 +239,10 @@ type EC2API interface {
 	CreateNetworkInterface(*ec2.CreateNetworkInterfaceInput) (*ec2.CreateNetworkInterfaceOutput, error)
 	CreateNetworkInterfaceWithContext(aws.Context, *ec2.CreateNetworkInterfaceInput, ...request.Option) (*ec2.CreateNetworkInterfaceOutput, error)
 	CreateNetworkInterfaceRequest(*ec2.CreateNetworkInterfaceInput) (*request.Request, *ec2.CreateNetworkInterfaceOutput)
+
+	CreateNetworkInterfacePermission(*ec2.CreateNetworkInterfacePermissionInput) (*ec2.CreateNetworkInterfacePermissionOutput, error)
+	CreateNetworkInterfacePermissionWithContext(aws.Context, *ec2.CreateNetworkInterfacePermissionInput, ...request.Option) (*ec2.CreateNetworkInterfacePermissionOutput, error)
+	CreateNetworkInterfacePermissionRequest(*ec2.CreateNetworkInterfacePermissionInput) (*request.Request, *ec2.CreateNetworkInterfacePermissionOutput)
 
 	CreatePlacementGroup(*ec2.CreatePlacementGroupInput) (*ec2.CreatePlacementGroupOutput, error)
 	CreatePlacementGroupWithContext(aws.Context, *ec2.CreatePlacementGroupInput, ...request.Option) (*ec2.CreatePlacementGroupOutput, error)
@@ -312,6 +324,10 @@ type EC2API interface {
 	DeleteFlowLogsWithContext(aws.Context, *ec2.DeleteFlowLogsInput, ...request.Option) (*ec2.DeleteFlowLogsOutput, error)
 	DeleteFlowLogsRequest(*ec2.DeleteFlowLogsInput) (*request.Request, *ec2.DeleteFlowLogsOutput)
 
+	DeleteFpgaImage(*ec2.DeleteFpgaImageInput) (*ec2.DeleteFpgaImageOutput, error)
+	DeleteFpgaImageWithContext(aws.Context, *ec2.DeleteFpgaImageInput, ...request.Option) (*ec2.DeleteFpgaImageOutput, error)
+	DeleteFpgaImageRequest(*ec2.DeleteFpgaImageInput) (*request.Request, *ec2.DeleteFpgaImageOutput)
+
 	DeleteInternetGateway(*ec2.DeleteInternetGatewayInput) (*ec2.DeleteInternetGatewayOutput, error)
 	DeleteInternetGatewayWithContext(aws.Context, *ec2.DeleteInternetGatewayInput, ...request.Option) (*ec2.DeleteInternetGatewayOutput, error)
 	DeleteInternetGatewayRequest(*ec2.DeleteInternetGatewayInput) (*request.Request, *ec2.DeleteInternetGatewayOutput)
@@ -335,6 +351,10 @@ type EC2API interface {
 	DeleteNetworkInterface(*ec2.DeleteNetworkInterfaceInput) (*ec2.DeleteNetworkInterfaceOutput, error)
 	DeleteNetworkInterfaceWithContext(aws.Context, *ec2.DeleteNetworkInterfaceInput, ...request.Option) (*ec2.DeleteNetworkInterfaceOutput, error)
 	DeleteNetworkInterfaceRequest(*ec2.DeleteNetworkInterfaceInput) (*request.Request, *ec2.DeleteNetworkInterfaceOutput)
+
+	DeleteNetworkInterfacePermission(*ec2.DeleteNetworkInterfacePermissionInput) (*ec2.DeleteNetworkInterfacePermissionOutput, error)
+	DeleteNetworkInterfacePermissionWithContext(aws.Context, *ec2.DeleteNetworkInterfacePermissionInput, ...request.Option) (*ec2.DeleteNetworkInterfacePermissionOutput, error)
+	DeleteNetworkInterfacePermissionRequest(*ec2.DeleteNetworkInterfacePermissionInput) (*request.Request, *ec2.DeleteNetworkInterfacePermissionOutput)
 
 	DeletePlacementGroup(*ec2.DeletePlacementGroupInput) (*ec2.DeletePlacementGroupOutput, error)
 	DeletePlacementGroupWithContext(aws.Context, *ec2.DeletePlacementGroupInput, ...request.Option) (*ec2.DeletePlacementGroupOutput, error)
@@ -436,6 +456,10 @@ type EC2API interface {
 	DescribeEgressOnlyInternetGatewaysWithContext(aws.Context, *ec2.DescribeEgressOnlyInternetGatewaysInput, ...request.Option) (*ec2.DescribeEgressOnlyInternetGatewaysOutput, error)
 	DescribeEgressOnlyInternetGatewaysRequest(*ec2.DescribeEgressOnlyInternetGatewaysInput) (*request.Request, *ec2.DescribeEgressOnlyInternetGatewaysOutput)
 
+	DescribeElasticGpus(*ec2.DescribeElasticGpusInput) (*ec2.DescribeElasticGpusOutput, error)
+	DescribeElasticGpusWithContext(aws.Context, *ec2.DescribeElasticGpusInput, ...request.Option) (*ec2.DescribeElasticGpusOutput, error)
+	DescribeElasticGpusRequest(*ec2.DescribeElasticGpusInput) (*request.Request, *ec2.DescribeElasticGpusOutput)
+
 	DescribeExportTasks(*ec2.DescribeExportTasksInput) (*ec2.DescribeExportTasksOutput, error)
 	DescribeExportTasksWithContext(aws.Context, *ec2.DescribeExportTasksInput, ...request.Option) (*ec2.DescribeExportTasksOutput, error)
 	DescribeExportTasksRequest(*ec2.DescribeExportTasksInput) (*request.Request, *ec2.DescribeExportTasksOutput)
@@ -443,6 +467,14 @@ type EC2API interface {
 	DescribeFlowLogs(*ec2.DescribeFlowLogsInput) (*ec2.DescribeFlowLogsOutput, error)
 	DescribeFlowLogsWithContext(aws.Context, *ec2.DescribeFlowLogsInput, ...request.Option) (*ec2.DescribeFlowLogsOutput, error)
 	DescribeFlowLogsRequest(*ec2.DescribeFlowLogsInput) (*request.Request, *ec2.DescribeFlowLogsOutput)
+
+	DescribeFpgaImageAttribute(*ec2.DescribeFpgaImageAttributeInput) (*ec2.DescribeFpgaImageAttributeOutput, error)
+	DescribeFpgaImageAttributeWithContext(aws.Context, *ec2.DescribeFpgaImageAttributeInput, ...request.Option) (*ec2.DescribeFpgaImageAttributeOutput, error)
+	DescribeFpgaImageAttributeRequest(*ec2.DescribeFpgaImageAttributeInput) (*request.Request, *ec2.DescribeFpgaImageAttributeOutput)
+
+	DescribeFpgaImages(*ec2.DescribeFpgaImagesInput) (*ec2.DescribeFpgaImagesOutput, error)
+	DescribeFpgaImagesWithContext(aws.Context, *ec2.DescribeFpgaImagesInput, ...request.Option) (*ec2.DescribeFpgaImagesOutput, error)
+	DescribeFpgaImagesRequest(*ec2.DescribeFpgaImagesInput) (*request.Request, *ec2.DescribeFpgaImagesOutput)
 
 	DescribeHostReservationOfferings(*ec2.DescribeHostReservationOfferingsInput) (*ec2.DescribeHostReservationOfferingsOutput, error)
 	DescribeHostReservationOfferingsWithContext(aws.Context, *ec2.DescribeHostReservationOfferingsInput, ...request.Option) (*ec2.DescribeHostReservationOfferingsOutput, error)
@@ -528,6 +560,10 @@ type EC2API interface {
 	DescribeNetworkInterfaceAttribute(*ec2.DescribeNetworkInterfaceAttributeInput) (*ec2.DescribeNetworkInterfaceAttributeOutput, error)
 	DescribeNetworkInterfaceAttributeWithContext(aws.Context, *ec2.DescribeNetworkInterfaceAttributeInput, ...request.Option) (*ec2.DescribeNetworkInterfaceAttributeOutput, error)
 	DescribeNetworkInterfaceAttributeRequest(*ec2.DescribeNetworkInterfaceAttributeInput) (*request.Request, *ec2.DescribeNetworkInterfaceAttributeOutput)
+
+	DescribeNetworkInterfacePermissions(*ec2.DescribeNetworkInterfacePermissionsInput) (*ec2.DescribeNetworkInterfacePermissionsOutput, error)
+	DescribeNetworkInterfacePermissionsWithContext(aws.Context, *ec2.DescribeNetworkInterfacePermissionsInput, ...request.Option) (*ec2.DescribeNetworkInterfacePermissionsOutput, error)
+	DescribeNetworkInterfacePermissionsRequest(*ec2.DescribeNetworkInterfacePermissionsInput) (*request.Request, *ec2.DescribeNetworkInterfacePermissionsOutput)
 
 	DescribeNetworkInterfaces(*ec2.DescribeNetworkInterfacesInput) (*ec2.DescribeNetworkInterfacesOutput, error)
 	DescribeNetworkInterfacesWithContext(aws.Context, *ec2.DescribeNetworkInterfacesInput, ...request.Option) (*ec2.DescribeNetworkInterfacesOutput, error)
@@ -809,6 +845,10 @@ type EC2API interface {
 	ImportVolumeWithContext(aws.Context, *ec2.ImportVolumeInput, ...request.Option) (*ec2.ImportVolumeOutput, error)
 	ImportVolumeRequest(*ec2.ImportVolumeInput) (*request.Request, *ec2.ImportVolumeOutput)
 
+	ModifyFpgaImageAttribute(*ec2.ModifyFpgaImageAttributeInput) (*ec2.ModifyFpgaImageAttributeOutput, error)
+	ModifyFpgaImageAttributeWithContext(aws.Context, *ec2.ModifyFpgaImageAttributeInput, ...request.Option) (*ec2.ModifyFpgaImageAttributeOutput, error)
+	ModifyFpgaImageAttributeRequest(*ec2.ModifyFpgaImageAttributeInput) (*request.Request, *ec2.ModifyFpgaImageAttributeOutput)
+
 	ModifyHosts(*ec2.ModifyHostsInput) (*ec2.ModifyHostsOutput, error)
 	ModifyHostsWithContext(aws.Context, *ec2.ModifyHostsInput, ...request.Option) (*ec2.ModifyHostsOutput, error)
 	ModifyHostsRequest(*ec2.ModifyHostsInput) (*request.Request, *ec2.ModifyHostsOutput)
@@ -945,6 +985,10 @@ type EC2API interface {
 	RequestSpotInstancesWithContext(aws.Context, *ec2.RequestSpotInstancesInput, ...request.Option) (*ec2.RequestSpotInstancesOutput, error)
 	RequestSpotInstancesRequest(*ec2.RequestSpotInstancesInput) (*request.Request, *ec2.RequestSpotInstancesOutput)
 
+	ResetFpgaImageAttribute(*ec2.ResetFpgaImageAttributeInput) (*ec2.ResetFpgaImageAttributeOutput, error)
+	ResetFpgaImageAttributeWithContext(aws.Context, *ec2.ResetFpgaImageAttributeInput, ...request.Option) (*ec2.ResetFpgaImageAttributeOutput, error)
+	ResetFpgaImageAttributeRequest(*ec2.ResetFpgaImageAttributeInput) (*request.Request, *ec2.ResetFpgaImageAttributeOutput)
+
 	ResetImageAttribute(*ec2.ResetImageAttributeInput) (*ec2.ResetImageAttributeOutput, error)
 	ResetImageAttributeWithContext(aws.Context, *ec2.ResetImageAttributeInput, ...request.Option) (*ec2.ResetImageAttributeOutput, error)
 	ResetImageAttributeRequest(*ec2.ResetImageAttributeInput) (*request.Request, *ec2.ResetImageAttributeOutput)
@@ -1004,6 +1048,14 @@ type EC2API interface {
 	UnmonitorInstances(*ec2.UnmonitorInstancesInput) (*ec2.UnmonitorInstancesOutput, error)
 	UnmonitorInstancesWithContext(aws.Context, *ec2.UnmonitorInstancesInput, ...request.Option) (*ec2.UnmonitorInstancesOutput, error)
 	UnmonitorInstancesRequest(*ec2.UnmonitorInstancesInput) (*request.Request, *ec2.UnmonitorInstancesOutput)
+
+	UpdateSecurityGroupRuleDescriptionsEgress(*ec2.UpdateSecurityGroupRuleDescriptionsEgressInput) (*ec2.UpdateSecurityGroupRuleDescriptionsEgressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsEgressWithContext(aws.Context, *ec2.UpdateSecurityGroupRuleDescriptionsEgressInput, ...request.Option) (*ec2.UpdateSecurityGroupRuleDescriptionsEgressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsEgressRequest(*ec2.UpdateSecurityGroupRuleDescriptionsEgressInput) (*request.Request, *ec2.UpdateSecurityGroupRuleDescriptionsEgressOutput)
+
+	UpdateSecurityGroupRuleDescriptionsIngress(*ec2.UpdateSecurityGroupRuleDescriptionsIngressInput) (*ec2.UpdateSecurityGroupRuleDescriptionsIngressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsIngressWithContext(aws.Context, *ec2.UpdateSecurityGroupRuleDescriptionsIngressInput, ...request.Option) (*ec2.UpdateSecurityGroupRuleDescriptionsIngressOutput, error)
+	UpdateSecurityGroupRuleDescriptionsIngressRequest(*ec2.UpdateSecurityGroupRuleDescriptionsIngressInput) (*request.Request, *ec2.UpdateSecurityGroupRuleDescriptionsIngressOutput)
 
 	WaitUntilBundleTaskComplete(*ec2.DescribeBundleTasksInput) error
 	WaitUntilBundleTaskCompleteWithContext(aws.Context, *ec2.DescribeBundleTasksInput, ...request.WaiterOption) error

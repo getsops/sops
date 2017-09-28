@@ -1,0 +1,19 @@
+sudo: false
+language: go
+
+go:
+  - 1.4
+  - 1.5
+  - 1.6
+  - 1.7
+  - tip
+
+matrix:
+  allow_failures:
+    - go: tip
+
+install:
+  - go get github.com/onsi/ginkgo
+  - go get github.com/onsi/gomega
+  - mkdir -p $HOME/gopath/src/gopkg.in/airbrake
+  - mv `pwd` $HOME/gopath/src/gopkg.in/airbrake/gobrake.v2

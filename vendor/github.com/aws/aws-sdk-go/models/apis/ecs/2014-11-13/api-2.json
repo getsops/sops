@@ -578,6 +578,7 @@
         "environment":{"shape":"EnvironmentVariables"},
         "mountPoints":{"shape":"MountPointList"},
         "volumesFrom":{"shape":"VolumeFromList"},
+        "linuxParameters":{"shape":"LinuxParameters"},
         "hostname":{"shape":"String"},
         "user":{"shape":"String"},
         "workingDirectory":{"shape":"String"},
@@ -611,7 +612,8 @@
         "runningTasksCount":{"shape":"Integer"},
         "pendingTasksCount":{"shape":"Integer"},
         "agentUpdateStatus":{"shape":"AgentUpdateStatus"},
-        "attributes":{"shape":"Attributes"}
+        "attributes":{"shape":"Attributes"},
+        "registeredAt":{"shape":"Timestamp"}
       }
     },
     "ContainerInstanceStatus":{
@@ -630,7 +632,10 @@
       "members":{
         "name":{"shape":"String"},
         "command":{"shape":"StringList"},
-        "environment":{"shape":"EnvironmentVariables"}
+        "environment":{"shape":"EnvironmentVariables"},
+        "cpu":{"shape":"BoxedInteger"},
+        "memory":{"shape":"BoxedInteger"},
+        "memoryReservation":{"shape":"BoxedInteger"}
       }
     },
     "ContainerOverrides":{
@@ -914,11 +919,24 @@
       },
       "exception":true
     },
+    "KernelCapabilities":{
+      "type":"structure",
+      "members":{
+        "add":{"shape":"StringList"},
+        "drop":{"shape":"StringList"}
+      }
+    },
     "KeyValuePair":{
       "type":"structure",
       "members":{
         "name":{"shape":"String"},
         "value":{"shape":"String"}
+      }
+    },
+    "LinuxParameters":{
+      "type":"structure",
+      "members":{
+        "capabilities":{"shape":"KernelCapabilities"}
       }
     },
     "ListAttributesRequest":{

@@ -1501,6 +1501,50 @@
         {"shape":"AuthorizationNotFoundFault"},
         {"shape":"InvalidDBSecurityGroupStateFault"}
       ]
+    },
+    "StartDBInstance":{
+      "name":"StartDBInstance",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartDBInstanceMessage"},
+      "output":{
+        "shape":"StartDBInstanceResult",
+        "resultWrapper":"StartDBInstanceResult"
+      },
+      "errors":[
+        {"shape":"DBInstanceNotFoundFault"},
+        {"shape":"InvalidDBInstanceStateFault"},
+        {"shape":"InsufficientDBInstanceCapacityFault"},
+        {"shape":"DBSubnetGroupNotFoundFault"},
+        {"shape":"DBSubnetGroupDoesNotCoverEnoughAZs"},
+        {"shape":"InvalidDBClusterStateFault"},
+        {"shape":"InvalidSubnet"},
+        {"shape":"InvalidVPCNetworkStateFault"},
+        {"shape":"DBClusterNotFoundFault"},
+        {"shape":"AuthorizationNotFoundFault"},
+        {"shape":"KMSKeyNotAccessibleFault"}
+      ]
+    },
+    "StopDBInstance":{
+      "name":"StopDBInstance",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StopDBInstanceMessage"},
+      "output":{
+        "shape":"StopDBInstanceResult",
+        "resultWrapper":"StopDBInstanceResult"
+      },
+      "errors":[
+        {"shape":"DBInstanceNotFoundFault"},
+        {"shape":"InvalidDBInstanceStateFault"},
+        {"shape":"DBSnapshotAlreadyExistsFault"},
+        {"shape":"SnapshotQuotaExceededFault"},
+        {"shape":"InvalidDBClusterStateFault"}
+      ]
     }
   },
   "shapes":{
@@ -1788,7 +1832,8 @@
         "KmsKeyId":{"shape":"String"},
         "Tags":{"shape":"TagList"},
         "CopyTags":{"shape":"BooleanOptional"},
-        "PreSignedUrl":{"shape":"String"}
+        "PreSignedUrl":{"shape":"String"},
+        "OptionGroupName":{"shape":"String"}
       }
     },
     "CopyDBSnapshotResult":{
@@ -1938,7 +1983,9 @@
         "DomainIAMRoleName":{"shape":"String"},
         "PromotionTier":{"shape":"IntegerOptional"},
         "Timezone":{"shape":"String"},
-        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"}
+        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
+        "EnablePerformanceInsights":{"shape":"BooleanOptional"},
+        "PerformanceInsightsKMSKeyId":{"shape":"String"}
       }
     },
     "CreateDBInstanceReadReplicaMessage":{
@@ -1965,7 +2012,9 @@
         "MonitoringRoleArn":{"shape":"String"},
         "KmsKeyId":{"shape":"String"},
         "PreSignedUrl":{"shape":"String"},
-        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"}
+        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
+        "EnablePerformanceInsights":{"shape":"BooleanOptional"},
+        "PerformanceInsightsKMSKeyId":{"shape":"String"}
       }
     },
     "CreateDBInstanceReadReplicaResult":{
@@ -2136,6 +2185,7 @@
         "DBClusterArn":{"shape":"String"},
         "AssociatedRoles":{"shape":"DBClusterRoles"},
         "IAMDatabaseAuthenticationEnabled":{"shape":"Boolean"},
+        "CloneGroupId":{"shape":"String"},
         "ClusterCreateTime":{"shape":"TStamp"}
       },
       "wrapper":true
@@ -2476,7 +2526,9 @@
         "PromotionTier":{"shape":"IntegerOptional"},
         "DBInstanceArn":{"shape":"String"},
         "Timezone":{"shape":"String"},
-        "IAMDatabaseAuthenticationEnabled":{"shape":"Boolean"}
+        "IAMDatabaseAuthenticationEnabled":{"shape":"Boolean"},
+        "PerformanceInsightsEnabled":{"shape":"BooleanOptional"},
+        "PerformanceInsightsKMSKeyId":{"shape":"String"}
       },
       "wrapper":true
     },
@@ -3906,7 +3958,9 @@
         "MonitoringRoleArn":{"shape":"String"},
         "DomainIAMRoleName":{"shape":"String"},
         "PromotionTier":{"shape":"IntegerOptional"},
-        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"}
+        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
+        "EnablePerformanceInsights":{"shape":"BooleanOptional"},
+        "PerformanceInsightsKMSKeyId":{"shape":"String"}
       }
     },
     "ModifyDBInstanceResult":{
@@ -3950,7 +4004,8 @@
       "required":["DBSnapshotIdentifier"],
       "members":{
         "DBSnapshotIdentifier":{"shape":"String"},
-        "EngineVersion":{"shape":"String"}
+        "EngineVersion":{"shape":"String"},
+        "OptionGroupName":{"shape":"String"}
       }
     },
     "ModifyDBSnapshotResult":{
@@ -4107,6 +4162,9 @@
         "OptionsConflictsWith":{"shape":"OptionsConflictsWith"},
         "Persistent":{"shape":"Boolean"},
         "Permanent":{"shape":"Boolean"},
+        "RequiresAutoMinorEngineVersionUpgrade":{"shape":"Boolean"},
+        "VpcOnly":{"shape":"Boolean"},
+        "SupportsOptionVersionDowngrade":{"shape":"BooleanOptional"},
         "OptionGroupOptionSettings":{"shape":"OptionGroupOptionSettingsList"},
         "OptionGroupOptionVersions":{"shape":"OptionGroupOptionVersionsList"}
       }
@@ -4250,7 +4308,8 @@
         "StorageType":{"shape":"String"},
         "SupportsIops":{"shape":"Boolean"},
         "SupportsEnhancedMonitoring":{"shape":"Boolean"},
-        "SupportsIAMDatabaseAuthentication":{"shape":"Boolean"}
+        "SupportsIAMDatabaseAuthentication":{"shape":"Boolean"},
+        "SupportsPerformanceInsights":{"shape":"Boolean"}
       },
       "wrapper":true
     },
@@ -4724,6 +4783,7 @@
       ],
       "members":{
         "DBClusterIdentifier":{"shape":"String"},
+        "RestoreType":{"shape":"String"},
         "SourceDBClusterIdentifier":{"shape":"String"},
         "RestoreToTime":{"shape":"TStamp"},
         "UseLatestRestorableTime":{"shape":"Boolean"},
@@ -4940,6 +5000,33 @@
         "db-cluster",
         "db-cluster-snapshot"
       ]
+    },
+    "StartDBInstanceMessage":{
+      "type":"structure",
+      "required":["DBInstanceIdentifier"],
+      "members":{
+        "DBInstanceIdentifier":{"shape":"String"}
+      }
+    },
+    "StartDBInstanceResult":{
+      "type":"structure",
+      "members":{
+        "DBInstance":{"shape":"DBInstance"}
+      }
+    },
+    "StopDBInstanceMessage":{
+      "type":"structure",
+      "required":["DBInstanceIdentifier"],
+      "members":{
+        "DBInstanceIdentifier":{"shape":"String"},
+        "DBSnapshotIdentifier":{"shape":"String"}
+      }
+    },
+    "StopDBInstanceResult":{
+      "type":"structure",
+      "members":{
+        "DBInstance":{"shape":"DBInstance"}
+      }
     },
     "StorageQuotaExceededFault":{
       "type":"structure",

@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   pre:
-    - cd /usr/local && sudo rm -rf go && curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz | sudo tar -xz && sudo chmod a+w go/src/path/filepath
+    - cd /usr/local && sudo rm -rf go && curl https://storage.googleapis.com/golang/go1.9.linux-amd64.tar.gz | sudo tar -xz && sudo chmod a+w go/src/path/filepath
   post:
     - mv ./gopherjs $HOME/bin
     - npm install --global node-gyp
@@ -17,8 +17,10 @@ test:
     - diff -u <(echo -n) <(gofmt -d .)
     - go tool vet *.go                                                   # Go package in root directory.
     - for d in */; do echo $d; done | grep -v tests/ | grep -v third_party/ | xargs go tool vet # All subdirectories except "tests", "third_party".
+    - diff -u <(echo -n) <(go list ./compiler/natives/src/...) # All those packages should have // +build js.
+    - gopherjs install -v net/http # Should build successfully (can't run tests, since only client is supported).
     - >
-      gopherjs test --short --minify
+      ulimit -s 10000 && gopherjs test --minify -v --short
       github.com/gopherjs/gopherjs/tests
       github.com/gopherjs/gopherjs/tests/main
       github.com/gopherjs/gopherjs/js
@@ -96,6 +98,7 @@ test:
       io/ioutil
       math
       math/big
+      math/bits
       math/cmplx
       math/rand
       mime
@@ -107,6 +110,7 @@ test:
       net/rpc/jsonrpc
       net/textproto
       net/url
+      os/user
       path
       path/filepath
       reflect
@@ -127,3 +131,4 @@ test:
       unicode/utf16
       unicode/utf8
     - go test -v -race ./...
+    - gopherjs test -v fmt # No minification should work.

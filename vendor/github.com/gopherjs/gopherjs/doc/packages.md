@@ -100,6 +100,7 @@ log                | ✅ yes       |
 -- syslog          | ❌ no        |
 math               | ✅ yes       |
 -- big             | ✅ yes       |
+-- bits            | ✅ yes       |
 -- cmplx           | ✅ yes       |
 -- rand            | ✅ yes       |
 mime               | ✅ yes       |

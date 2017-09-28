@@ -10,8 +10,8 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-type SetOpts struct {
-	Cipher      sops.DataKeyCipher
+type setOpts struct {
+	Cipher      sops.Cipher
 	InputStore  sops.Store
 	OutputStore sops.Store
 	InputPath   string
@@ -21,7 +21,7 @@ type SetOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func Set(opts SetOpts) ([]byte, error) {
+func set(opts setOpts) ([]byte, error) {
 	// Load the file
 	// TODO: Issue #173: if the file does not exist, create it with the contents passed in as opts.Value
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
@@ -31,7 +31,6 @@ func Set(opts SetOpts) ([]byte, error) {
 
 	// Decrypt the file
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Stash:       make(map[string][]interface{}),
 		Cipher:      opts.Cipher,
 		IgnoreMac:   opts.IgnoreMAC,
 		Tree:        tree,
@@ -52,7 +51,7 @@ func Set(opts SetOpts) ([]byte, error) {
 	tree.Branch = branch.InsertOrReplaceValue(key, opts.Value)
 
 	err = common.EncryptTree(common.EncryptTreeOpts{
-		Stash: make(map[string][]interface{}), DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
+		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
 		return nil, err

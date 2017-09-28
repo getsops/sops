@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS CodeDeploy.
@@ -193,6 +193,10 @@ type CodeDeployAPI interface {
 
 	ListDeploymentsPages(*codedeploy.ListDeploymentsInput, func(*codedeploy.ListDeploymentsOutput, bool) bool) error
 	ListDeploymentsPagesWithContext(aws.Context, *codedeploy.ListDeploymentsInput, func(*codedeploy.ListDeploymentsOutput, bool) bool, ...request.Option) error
+
+	ListGitHubAccountTokenNames(*codedeploy.ListGitHubAccountTokenNamesInput) (*codedeploy.ListGitHubAccountTokenNamesOutput, error)
+	ListGitHubAccountTokenNamesWithContext(aws.Context, *codedeploy.ListGitHubAccountTokenNamesInput, ...request.Option) (*codedeploy.ListGitHubAccountTokenNamesOutput, error)
+	ListGitHubAccountTokenNamesRequest(*codedeploy.ListGitHubAccountTokenNamesInput) (*request.Request, *codedeploy.ListGitHubAccountTokenNamesOutput)
 
 	ListOnPremisesInstances(*codedeploy.ListOnPremisesInstancesInput) (*codedeploy.ListOnPremisesInstancesOutput, error)
 	ListOnPremisesInstancesWithContext(aws.Context, *codedeploy.ListOnPremisesInstancesInput, ...request.Option) (*codedeploy.ListOnPremisesInstancesOutput, error)
