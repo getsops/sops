@@ -583,6 +583,33 @@ in `/tmp/sops.sock` and not the local key service, you can run:
 
 `sops --enable-local-keyservice=false --keyservice unix:///tmp/sops.sock -d file.yaml`
 
+Auditing
+~~~~~~~~
+
+Sometimes, users want to be able to tell what files were accessed by whom in an
+environment they control. For this reason, SOPS includes a way to log the
+decryption of files to PostgreSQL. The log includes a timestamp, the username
+SOPS is running as, and the file that was decrypted.
+
+Because we don't want users of SOPS to be able to control auditing, the audit
+configuration is baked in statically in the binary at compile time using Go's
+linker -X ldflag. Currently, there's two configurable options:
+
+:code:`main.auditor`: the audit backend to use. Can currently only be
+:code:`postgres`
+
+:code:`go.mozilla.org/sops/audit.postgresConnStr`: the PostgreSQL connection
+string for the :code:`postgres` audit backend
+
+For example, to enable auditing to a PostgreSQL database names :code:`sops`
+running on localhost, using the user :code:`sops` and the password :code:`sops`,
+SOPS should be built as follows:
+
+.. code::
+
+    go install -ldflags="-X 'main.auditor=postgres' -X 'go.mozilla.org/sops/audit.postgresConnStr=postgres://sops:sops@localhost/sops?sslmode=disable'" go.mozilla.org/sops/cmd/sops
+
+
 Important information on types
 ------------------------------
 
