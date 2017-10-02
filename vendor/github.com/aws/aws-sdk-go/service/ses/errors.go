@@ -103,6 +103,17 @@ const (
 	// about giving permissions, see the Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
 	ErrCodeInvalidSnsTopicException = "InvalidSnsTopic"
 
+	// ErrCodeInvalidTrackingOptionsException for service response error code
+	// "InvalidTrackingOptions".
+	//
+	// Indicates that the custom domain to be used for open and click tracking redirects
+	// is invalid. This error appears most often in the following situations:
+	//
+	//    * When the tracking domain you specified is not verified in Amazon SES.
+	//
+	//    * When the tracking domain you specified is not a valid domain or subdomain.
+	ErrCodeInvalidTrackingOptionsException = "InvalidTrackingOptions"
+
 	// ErrCodeLimitExceededException for service response error code
 	// "LimitExceeded".
 	//
@@ -137,4 +148,17 @@ const (
 	//
 	// Indicates that the provided receipt rule set does not exist.
 	ErrCodeRuleSetDoesNotExistException = "RuleSetDoesNotExist"
+
+	// ErrCodeTrackingOptionsAlreadyExistsException for service response error code
+	// "TrackingOptionsAlreadyExistsException".
+	//
+	// Indicates that the configuration set you specified already contains a TrackingOptions
+	// object.
+	ErrCodeTrackingOptionsAlreadyExistsException = "TrackingOptionsAlreadyExistsException"
+
+	// ErrCodeTrackingOptionsDoesNotExistException for service response error code
+	// "TrackingOptionsDoesNotExistException".
+	//
+	// Indicates that the TrackingOptions object you specified does not exist.
+	ErrCodeTrackingOptionsDoesNotExistException = "TrackingOptionsDoesNotExistException"
 )

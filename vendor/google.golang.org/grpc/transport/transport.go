@@ -67,20 +67,20 @@ func newRecvBuffer() *recvBuffer {
 
 func (b *recvBuffer) put(r recvMsg) {
 	b.mu.Lock()
-	defer b.mu.Unlock()
 	if len(b.backlog) == 0 {
 		select {
 		case b.c <- r:
+			b.mu.Unlock()
 			return
 		default:
 		}
 	}
 	b.backlog = append(b.backlog, r)
+	b.mu.Unlock()
 }
 
 func (b *recvBuffer) load() {
 	b.mu.Lock()
-	defer b.mu.Unlock()
 	if len(b.backlog) > 0 {
 		select {
 		case b.c <- b.backlog[0]:
@@ -89,6 +89,7 @@ func (b *recvBuffer) load() {
 		default:
 		}
 	}
+	b.mu.Unlock()
 }
 
 // get returns the channel that receives a recvMsg in the buffer.
@@ -164,20 +165,20 @@ func newControlBuffer() *controlBuffer {
 
 func (b *controlBuffer) put(r item) {
 	b.mu.Lock()
-	defer b.mu.Unlock()
 	if len(b.backlog) == 0 {
 		select {
 		case b.c <- r:
+			b.mu.Unlock()
 			return
 		default:
 		}
 	}
 	b.backlog = append(b.backlog, r)
+	b.mu.Unlock()
 }
 
 func (b *controlBuffer) load() {
 	b.mu.Lock()
-	defer b.mu.Unlock()
 	if len(b.backlog) > 0 {
 		select {
 		case b.c <- b.backlog[0]:
@@ -186,6 +187,7 @@ func (b *controlBuffer) load() {
 		default:
 		}
 	}
+	b.mu.Unlock()
 }
 
 // get returns the channel that receives an item in the buffer.
@@ -235,7 +237,8 @@ type Stream struct {
 	// is used to adjust flow control, if need be.
 	requestRead func(int)
 
-	sendQuotaPool *quotaPool
+	sendQuotaPool  *quotaPool
+	localSendQuota *quotaPool
 	// Close headerChan to indicate the end of reception of header metadata.
 	headerChan chan struct{}
 	// header caches the received header metadata.
@@ -313,8 +316,9 @@ func (s *Stream) Header() (metadata.MD, error) {
 // side only.
 func (s *Stream) Trailer() metadata.MD {
 	s.mu.RLock()
-	defer s.mu.RUnlock()
-	return s.trailer.Copy()
+	c := s.trailer.Copy()
+	s.mu.RUnlock()
+	return c
 }
 
 // ServerTransport returns the underlying ServerTransport for the stream.
@@ -342,14 +346,16 @@ func (s *Stream) Status() *status.Status {
 // Server side only.
 func (s *Stream) SetHeader(md metadata.MD) error {
 	s.mu.Lock()
-	defer s.mu.Unlock()
 	if s.headerOk || s.state == streamDone {
+		s.mu.Unlock()
 		return ErrIllegalHeaderWrite
 	}
 	if md.Len() == 0 {
+		s.mu.Unlock()
 		return nil
 	}
 	s.header = metadata.Join(s.header, md)
+	s.mu.Unlock()
 	return nil
 }
 
@@ -360,8 +366,8 @@ func (s *Stream) SetTrailer(md metadata.MD) error {
 		return nil
 	}
 	s.mu.Lock()
-	defer s.mu.Unlock()
 	s.trailer = metadata.Join(s.trailer, md)
+	s.mu.Unlock()
 	return nil
 }
 
@@ -412,15 +418,17 @@ func (s *Stream) finish(st *status.Status) {
 // BytesSent indicates whether any bytes have been sent on this stream.
 func (s *Stream) BytesSent() bool {
 	s.mu.Lock()
-	defer s.mu.Unlock()
-	return s.bytesSent
+	bs := s.bytesSent
+	s.mu.Unlock()
+	return bs
 }
 
 // BytesReceived indicates whether any bytes have been received on this stream.
 func (s *Stream) BytesReceived() bool {
 	s.mu.Lock()
-	defer s.mu.Unlock()
-	return s.bytesReceived
+	br := s.bytesReceived
+	s.mu.Unlock()
+	return br
 }
 
 // GoString is implemented by Stream so context.String() won't
@@ -491,9 +499,9 @@ type ConnectOptions struct {
 	KeepaliveParams keepalive.ClientParameters
 	// StatsHandler stores the handler for stats.
 	StatsHandler stats.Handler
-	// InitialWindowSize sets the intial window size for a stream.
+	// InitialWindowSize sets the initial window size for a stream.
 	InitialWindowSize int32
-	// InitialConnWindowSize sets the intial window size for a connection.
+	// InitialConnWindowSize sets the initial window size for a connection.
 	InitialConnWindowSize int32
 }
 
@@ -700,12 +708,6 @@ func wait(ctx context.Context, done, goAway, closing <-chan struct{}, proceed <-
 	case <-ctx.Done():
 		return 0, ContextErr(ctx.Err())
 	case <-done:
-		// User cancellation has precedence.
-		select {
-		case <-ctx.Done():
-			return 0, ContextErr(ctx.Err())
-		default:
-		}
 		return 0, io.EOF
 	case <-goAway:
 		return 0, ErrStreamDrain
@@ -725,6 +727,39 @@ const (
 	// NoReason is the default value when GoAway frame is received.
 	NoReason GoAwayReason = 1
 	// TooManyPings indicates that a GoAway frame with ErrCodeEnhanceYourCalm
-	// was recieved and that the debug data said "too_many_pings".
+	// was received and that the debug data said "too_many_pings".
 	TooManyPings GoAwayReason = 2
 )
+
+// loopyWriter is run in a separate go routine. It is the single code path that will
+// write data on wire.
+func loopyWriter(cbuf *controlBuffer, done chan struct{}, handler func(item) error) {
+	for {
+		select {
+		case i := <-cbuf.get():
+			cbuf.load()
+			if err := handler(i); err != nil {
+				return
+			}
+		case <-done:
+			return
+		}
+	hasData:
+		for {
+			select {
+			case i := <-cbuf.get():
+				cbuf.load()
+				if err := handler(i); err != nil {
+					return
+				}
+			case <-done:
+				return
+			default:
+				if err := handler(&flushIO{}); err != nil {
+					return
+				}
+				break hasData
+			}
+		}
+	}
+}

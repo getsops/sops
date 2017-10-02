@@ -3561,7 +3561,7 @@ func (c *Organizations) DisablePolicyTypeRequest(input *DisablePolicyTypeInput) 
 
 // DisablePolicyType API operation for AWS Organizations.
 //
-// Disables an organizational control policy type in a root. A poicy of a certain
+// Disables an organizational control policy type in a root. A policy of a certain
 // type can be attached to entities in a root only if that type is enabled in
 // the root. After you perform this operation, you no longer can attach policies
 // of the specified type to that root or to any OU or account in that root.
@@ -8475,7 +8475,10 @@ type CreateAccountInput struct {
 	AccountName *string `min:"1" type:"string" required:"true"`
 
 	// The email address of the owner to assign to the new member account. This
-	// email address must not already be associated with another AWS account.
+	// email address must not already be associated with another AWS account. You
+	// must use a valid email address to complete account creation. You cannot access
+	// the root user of the account or remove an account that was created with an
+	// invalid email address.
 	//
 	// Email is a required field
 	Email *string `min:"6" type:"string" required:"true"`
@@ -10161,13 +10164,13 @@ type InviteAccountToOrganizationInput struct {
 	// If you use the AWS CLI, you can submit this as a single string, similar to
 	// the following example:
 	//
-	// --target id=123456789012,type=ACCOUNT
+	// --target Id=123456789012,Type=ACCOUNT
 	//
 	// If you specify "Type": "ACCOUNT", then you must provide the AWS account ID
 	// number as the Id. If you specify "Type": "EMAIL", then you must specify the
 	// email address that is associated with the account.
 	//
-	// --target id=bill@example.com,type=EMAIL
+	// --target Id=bill@example.com,Type=EMAIL
 	//
 	// Target is a required field
 	Target *HandshakeParty `type:"structure" required:"true"`

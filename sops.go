@@ -45,10 +45,10 @@ import (
 	"strings"
 	"time"
 
-	"log"
-
+	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/shamir"
 	"golang.org/x/net/context"
 )
@@ -67,6 +67,12 @@ const MacMismatch = sopsError("MAC mismatch")
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("SOPS")
+}
 
 // Cipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the
 // data key can be stored alongside the encrypted content. A Cipher must be able to decrypt the values it encrypts.
@@ -118,7 +124,7 @@ type Tree struct {
 
 // Truncate truncates the tree to the path specified
 func (branch TreeBranch) Truncate(path []interface{}) (interface{}, error) {
-	log.Printf("Truncating tree to %s", path)
+	log.WithField("path", path).Info("Truncating tree")
 	var current interface{} = branch
 	for _, component := range path {
 		switch component := component.(type) {
@@ -159,10 +165,16 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, onLeaves func(
 		return onLeaves(in, path)
 	case float64:
 		return onLeaves(in, path)
+	case Comment:
+		return onLeaves(in, path)
 	case TreeBranch:
 		return branch.walkBranch(in, path, onLeaves)
 	case []interface{}:
 		return branch.walkSlice(in, path, onLeaves)
+	case nil:
+		// the value returned remains the same since it doesn't make
+		// sense to encrypt or decrypt a nil value
+		return nil, nil
 	default:
 		return nil, fmt.Errorf("Cannot walk value, unknown type: %T", in)
 	}
@@ -170,9 +182,6 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, onLeaves func(
 
 func (branch TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
 	for i, v := range in {
-		if _, ok := v.(Comment); ok {
-			continue
-		}
 		newV, err := branch.walkValue(v, path, onLeaves)
 		if err != nil {
 			return nil, err
@@ -185,7 +194,19 @@ func (branch TreeBranch) walkSlice(in []interface{}, path []string, onLeaves fun
 func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
 	for i, item := range in {
 		if _, ok := item.Key.(Comment); ok {
-			continue
+			enc, err := branch.walkValue(item.Key, path, onLeaves)
+			if err != nil {
+				return nil, err
+			}
+			if encComment, ok := enc.(Comment); ok {
+				in[i].Key = encComment
+				continue
+			} else if comment, ok := enc.(string); ok {
+				in[i].Key = Comment{Value: comment}
+				continue
+			} else {
+				return nil, fmt.Errorf("walkValue of Comment should be either Comment or string, was %T", enc)
+			}
 		}
 		key, ok := item.Key.(string)
 		if !ok {
@@ -205,14 +226,21 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		bytes, err := ToBytes(in)
-		unencrypted := false
+		// Only add to MAC if not a comment
+		if _, ok := in.(Comment); !ok {
+			bytes, err := ToBytes(in)
+			if err != nil {
+				return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+			}
+			hash.Write(bytes)
+		}
+		encrypted := true
 		for _, v := range path {
 			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
-				unencrypted = true
+				encrypted = false
 			}
 		}
-		if !unencrypted {
+		if encrypted {
 			var err error
 			pathString := strings.Join(path, ":") + ":"
 			in, err = cipher.Encrypt(in, key, pathString)
@@ -220,11 +248,7 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 				return nil, fmt.Errorf("Could not encrypt value: %s", err)
 			}
 		}
-		if err != nil {
-			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
-		}
-		hash.Write(bytes)
-		return in, err
+		return in, nil
 	})
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
@@ -234,38 +258,53 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
-	log.Print("Decrypting SOPS tree")
+	log.Debug("Decrypting tree")
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-		var v interface{}
-		unencrypted := false
-		for _, v := range path {
-			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
-				unencrypted = true
+		encrypted := true
+		for _, p := range path {
+			if strings.HasSuffix(p, tree.Metadata.UnencryptedSuffix) {
+				encrypted = false
 			}
 		}
-		if !unencrypted {
+		var v interface{}
+		if encrypted {
 			var err error
 			pathString := strings.Join(path, ":") + ":"
-			v, err = cipher.Decrypt(in.(string), key, pathString)
-			if err != nil {
-				return nil, fmt.Errorf("Could not decrypt value: %s", err)
+			if c, ok := in.(Comment); ok {
+				v, err = cipher.Decrypt(c.Value, key, pathString)
+				if err != nil {
+					// Assume the comment was not encrypted in the first place
+					log.WithField("comment", c.Value).
+						Warn("Found possibly unencrypted field in file. " +
+							"This is to be expected if the file being " +
+							"decrypted was created with an older version of " +
+							"SOPS.")
+					v = c
+				}
+			} else {
+				v, err = cipher.Decrypt(in.(string), key, pathString)
+				if err != nil {
+					return nil, fmt.Errorf("Could not decrypt value: %s", err)
+				}
 			}
 		} else {
 			v = in
 		}
-		bytes, err := ToBytes(v)
-		if err != nil {
-			return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+		// Only add to MAC if not a comment
+		if _, ok := v.(Comment); !ok {
+			bytes, err := ToBytes(v)
+			if err != nil {
+				return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+			}
+			hash.Write(bytes)
 		}
-		hash.Write(bytes)
-		return v, err
+		return v, nil
 	})
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
-
 }
 
 // GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
@@ -340,8 +379,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 		if m.ShamirThreshold == 0 {
 			m.ShamirThreshold = len(m.KeyGroups)
 		}
-		log.Printf("Multiple KeyGroups found, proceeding with Shamir with threshold %d", m.ShamirThreshold)
-		parts, err = shamir.Split(dataKey, len(m.KeyGroups), m.ShamirThreshold)
+		log.WithFields(logrus.Fields{
+			"quorum": m.ShamirThreshold,
+			"parts":  len(m.KeyGroups),
+		}).Info("Splitting data key with Shamir Secret Sharing")
+		parts, err = shamir.Split(dataKey, len(m.KeyGroups), int(m.ShamirThreshold))
 		if err != nil {
 			errs = append(errs, fmt.Errorf("could not split data key into parts for Shamir: %s", err))
 			return
@@ -434,6 +476,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 		}
 		dataKey = parts[0]
 	}
+	log.Info("Data key recovered successfully")
 	m.DataKey = dataKey
 	return dataKey, nil
 }
@@ -459,6 +502,8 @@ func ToBytes(in interface{}) ([]byte, error) {
 		return []byte(strings.Title(strconv.FormatBool(in))), nil
 	case []byte:
 		return in, nil
+	case Comment:
+		return ToBytes(in.Value)
 	default:
 		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
 	}
