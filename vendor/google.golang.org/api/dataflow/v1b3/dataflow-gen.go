@@ -1327,9 +1327,8 @@ type DistributionUpdate struct {
 	// distribution.
 	Count *SplitInt64 `json:"count,omitempty"`
 
-	// LogBuckets: (Optional) Logarithmic histogram of values.
-	// Each log may be in no more than one bucket. Order does not matter.
-	LogBuckets []*LogBucket `json:"logBuckets,omitempty"`
+	// Histogram: (Optional) Histogram of value counts for the distribution.
+	Histogram *Histogram `json:"histogram,omitempty"`
 
 	// Max: The maximum value present in the distribution.
 	Max *SplitInt64 `json:"max,omitempty"`
@@ -1922,6 +1921,57 @@ type GetTemplateResponse struct {
 
 func (s *GetTemplateResponse) MarshalJSON() ([]byte, error) {
 	type noMethod GetTemplateResponse
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// Histogram: Histogram of value counts for a distribution.
+//
+// Buckets have an inclusive lower bound and exclusive upper bound and
+// use
+// "1,2,5 bucketing": The first bucket range is from [0,1) and all
+// subsequent
+// bucket boundaries are powers of ten multiplied by 1, 2, or 5. Thus,
+// bucket
+// boundaries are 0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000,
+// ...
+// Negative values are not supported.
+type Histogram struct {
+	// BucketCounts: Counts of values in each bucket. For efficiency, prefix
+	// and trailing
+	// buckets with count = 0 are elided. Buckets can store the full range
+	// of
+	// values of an unsigned long, with ULLONG_MAX falling into the 59th
+	// bucket
+	// with range [1e19, 2e19).
+	BucketCounts googleapi.Int64s `json:"bucketCounts,omitempty"`
+
+	// FirstBucketOffset: Starting index of first stored bucket. The
+	// non-inclusive upper-bound of
+	// the ith bucket is given by:
+	//   pow(10,(i-first_bucket_offset)/3) *
+	// (1,2,5)[(i-first_bucket_offset)%3]
+	FirstBucketOffset int64 `json:"firstBucketOffset,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "BucketCounts") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "BucketCounts") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Histogram) MarshalJSON() ([]byte, error) {
+	type noMethod Histogram
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -2904,44 +2954,6 @@ type ListJobsResponse struct {
 
 func (s *ListJobsResponse) MarshalJSON() ([]byte, error) {
 	type noMethod ListJobsResponse
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
-}
-
-// LogBucket: Bucket of values for Distribution's logarithmic histogram.
-type LogBucket struct {
-	// Count: Number of values in this bucket.
-	Count int64 `json:"count,omitempty,string"`
-
-	// Log: floor(log2(value)); defined to be zero for nonpositive values.
-	//   log(-1) = 0
-	//   log(0) = 0
-	//   log(1) = 0
-	//   log(2) = 1
-	//   log(3) = 1
-	//   log(4) = 2
-	//   log(5) = 2
-	Log int64 `json:"log,omitempty"`
-
-	// ForceSendFields is a list of field names (e.g. "Count") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-
-	// NullFields is a list of field names (e.g. "Count") to include in API
-	// requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
-	// null. It is an error if a field in this list has a non-empty value.
-	// This may be used to include null fields in Patch requests.
-	NullFields []string `json:"-"`
-}
-
-func (s *LogBucket) MarshalJSON() ([]byte, error) {
-	type noMethod LogBucket
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -5959,6 +5971,10 @@ type WorkItemStatus struct {
 	// P' and R' must be together equivalent to P, etc.
 	StopPosition *Position `json:"stopPosition,omitempty"`
 
+	// TotalThrottlerWaitTimeSeconds: Total time the worker spent being
+	// throttled by external systems.
+	TotalThrottlerWaitTimeSeconds float64 `json:"totalThrottlerWaitTimeSeconds,omitempty"`
+
 	// WorkItemId: Identifies the WorkItem.
 	WorkItemId string `json:"workItemId,omitempty"`
 
@@ -5983,6 +5999,20 @@ func (s *WorkItemStatus) MarshalJSON() ([]byte, error) {
 	type noMethod WorkItemStatus
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+func (s *WorkItemStatus) UnmarshalJSON(data []byte) error {
+	type noMethod WorkItemStatus
+	var s1 struct {
+		TotalThrottlerWaitTimeSeconds gensupport.JSONFloat64 `json:"totalThrottlerWaitTimeSeconds"`
+		*noMethod
+	}
+	s1.noMethod = (*noMethod)(s)
+	if err := json.Unmarshal(data, &s1); err != nil {
+		return err
+	}
+	s.TotalThrottlerWaitTimeSeconds = float64(s1.TotalThrottlerWaitTimeSeconds)
+	return nil
 }
 
 // WorkerHealthReport: WorkerHealthReport contains information about the
@@ -6510,10 +6540,15 @@ func (s *WorkerSettings) MarshalJSON() ([]byte, error) {
 // being
 // shut down.
 type WorkerShutdownNotice struct {
-	// Reason: Optional reason to be attached for the shutdown notice.
-	// For example: "PREEMPTION" would indicate the VM is being shut down
-	// because
-	// of preemption. Other possible reasons may be added in the future.
+	// Reason: The reason for the worker shutdown.
+	// Current possible values are:
+	//   "UNKNOWN": shutdown reason is unknown.
+	//   "PREEMPTION": shutdown reason is preemption.
+	// Other possible reasons may be added in the future.
+	// Note that this must match the names of the enum specified
+	// in
+	// google3/cloud/dataflow/router/protos/cloud_worker_messages_service.
+	// proto.
 	Reason string `json:"reason,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Reason") to

@@ -11,6 +11,20 @@
     "uid":"logs-2014-03-28"
   },
   "operations":{
+    "AssociateKmsKey":{
+      "name":"AssociateKmsKey",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AssociateKmsKeyRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationAbortedException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "CancelExportTask":{
       "name":"CancelExportTask",
       "http":{
@@ -262,6 +276,20 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "DisassociateKmsKey":{
+      "name":"DisassociateKmsKey",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisassociateKmsKeyRequest"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationAbortedException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "FilterLogEvents":{
       "name":"FilterLogEvents",
       "http":{
@@ -447,6 +475,17 @@
       "min":1
     },
     "Arn":{"type":"string"},
+    "AssociateKmsKeyRequest":{
+      "type":"structure",
+      "required":[
+        "logGroupName",
+        "kmsKeyId"
+      ],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
+      }
+    },
     "CancelExportTaskRequest":{
       "type":"structure",
       "required":["taskId"],
@@ -483,6 +522,7 @@
       "required":["logGroupName"],
       "members":{
         "logGroupName":{"shape":"LogGroupName"},
+        "kmsKeyId":{"shape":"KmsKeyId"},
         "tags":{"shape":"Tags"}
       }
     },
@@ -711,6 +751,13 @@
       "type":"list",
       "member":{"shape":"Destination"}
     },
+    "DisassociateKmsKeyRequest":{
+      "type":"structure",
+      "required":["logGroupName"],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"}
+      }
+    },
     "Distribution":{
       "type":"string",
       "enum":[
@@ -909,6 +956,10 @@
       },
       "exception":true
     },
+    "KmsKeyId":{
+      "type":"string",
+      "max":256
+    },
     "LimitExceededException":{
       "type":"structure",
       "members":{
@@ -937,7 +988,8 @@
         "retentionInDays":{"shape":"Days"},
         "metricFilterCount":{"shape":"FilterCount"},
         "arn":{"shape":"Arn"},
-        "storedBytes":{"shape":"StoredBytes"}
+        "storedBytes":{"shape":"StoredBytes"},
+        "kmsKeyId":{"shape":"KmsKeyId"}
       }
     },
     "LogGroupName":{

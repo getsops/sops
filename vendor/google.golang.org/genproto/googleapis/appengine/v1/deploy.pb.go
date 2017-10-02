@@ -29,7 +29,7 @@ type Deployment struct {
 func (m *Deployment) Reset()                    { *m = Deployment{} }
 func (m *Deployment) String() string            { return proto.CompactTextString(m) }
 func (*Deployment) ProtoMessage()               {}
-func (*Deployment) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (*Deployment) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
 
 func (m *Deployment) GetFiles() map[string]*FileInfo {
 	if m != nil {
@@ -70,7 +70,7 @@ type FileInfo struct {
 func (m *FileInfo) Reset()                    { *m = FileInfo{} }
 func (m *FileInfo) String() string            { return proto.CompactTextString(m) }
 func (*FileInfo) ProtoMessage()               {}
-func (*FileInfo) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
+func (*FileInfo) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{1} }
 
 func (m *FileInfo) GetSourceUrl() string {
 	if m != nil {
@@ -105,7 +105,7 @@ type ContainerInfo struct {
 func (m *ContainerInfo) Reset()                    { *m = ContainerInfo{} }
 func (m *ContainerInfo) String() string            { return proto.CompactTextString(m) }
 func (*ContainerInfo) ProtoMessage()               {}
-func (*ContainerInfo) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{2} }
+func (*ContainerInfo) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{2} }
 
 func (m *ContainerInfo) GetImage() string {
 	if m != nil {
@@ -128,7 +128,7 @@ type ZipInfo struct {
 func (m *ZipInfo) Reset()                    { *m = ZipInfo{} }
 func (m *ZipInfo) String() string            { return proto.CompactTextString(m) }
 func (*ZipInfo) ProtoMessage()               {}
-func (*ZipInfo) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{3} }
+func (*ZipInfo) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{3} }
 
 func (m *ZipInfo) GetSourceUrl() string {
 	if m != nil {
@@ -151,9 +151,9 @@ func init() {
 	proto.RegisterType((*ZipInfo)(nil), "google.appengine.v1.ZipInfo")
 }
 
-func init() { proto.RegisterFile("google/appengine/v1/deploy.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("google/appengine/v1/deploy.proto", fileDescriptor4) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor4 = []byte{
 	// 394 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0xd1, 0xab, 0xd3, 0x30,
 	0x14, 0xc6, 0xe9, 0x6a, 0xbd, 0xeb, 0x29, 0x82, 0x44, 0xc1, 0x7a, 0xbd, 0x17, 0x4b, 0x41, 0x28,

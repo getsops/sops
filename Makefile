@@ -28,6 +28,7 @@ test:
 	$(GO) test -coverprofile=coverage_tmp.txt -covermode=atomic $(PROJECT) && cat coverage_tmp.txt >> coverage.txt
 	$(GO) test $(PROJECT)/aes -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 	$(GO) test $(PROJECT)/cmd/sops -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
+	$(GO) test $(PROJECT)/decrypt -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 	$(GO) test $(PROJECT)/config -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 	$(GO) test $(PROJECT)/stores/yaml -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt
 	$(GO) test $(PROJECT)/stores/json -coverprofile=coverage_tmp.txt -covermode=atomic && cat coverage_tmp.txt >> coverage.txt

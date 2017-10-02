@@ -1102,7 +1102,8 @@
             "UNSUPPORTED",
             "APP_INSTALLED",
             "PENDING",
-            "APP_INCOMPATIBLE"
+            "APP_INCOMPATIBLE",
+            "APP_NOT_UPDATED"
           ],
           "enumDescriptions": [
             "This value is disallowed.",
@@ -1114,7 +1115,8 @@
             "The policy is not supported by the version of Android Device Policy on the device.",
             "A blocked application is installed.",
             "The setting was not applied yet at the time of the report, but is expected to be applied shortly.",
-            "The setting cannot be applied to the application because its target SDK version is not high enough."
+            "The setting cannot be applied to the application because the application doesn't support it, for example because its target SDK version is not high enough.",
+            "The application is installed but not updated to the minimum version code specified by policy"
           ],
           "type": "string"
         },
@@ -1123,7 +1125,7 @@
           "type": "string"
         },
         "packageName": {
-          "description": "The package name indicating which application is out of compliance. If not set, then this condition matches any package name. If this field is set, then setting_name must be unset or set to applications; otherwise, the condition would never be satisfied.",
+          "description": "The package name indicating which application is out of compliance. If not set, then this condition matches any package name.",
           "type": "string"
         }
       },
@@ -1146,7 +1148,7 @@
           "type": "string"
         },
         "installationFailureReason": {
-          "description": "If package_name is set and the non-compliance reason is APP_NOT_INSTALLED, the detailed reason the app cannot be installed.",
+          "description": "If package_name is set and the non-compliance reason is APP_NOT_INSTALLED or APP_NOT_UPDATED, the detailed reason the app cannot be installed or updated.",
           "enum": [
             "INSTALLATION_FAILURE_REASON_UNSPECIFIED",
             "INSTALLATION_FAILURE_REASON_UNKNOWN",
@@ -1191,7 +1193,8 @@
             "UNSUPPORTED",
             "APP_INSTALLED",
             "PENDING",
-            "APP_INCOMPATIBLE"
+            "APP_INCOMPATIBLE",
+            "APP_NOT_UPDATED"
           ],
           "enumDescriptions": [
             "This value is disallowed.",
@@ -1203,7 +1206,8 @@
             "The policy is not supported by the version of Android Device Policy on the device.",
             "A blocked application is installed.",
             "The setting was not applied yet at the time of the report, but is expected to be applied shortly.",
-            "The setting cannot be applied to the application because its target SDK version is not high enough."
+            "The setting cannot be applied to the application because the application doesn't support it, for example because its target SDK version is not high enough.",
+            "The application is installed but not updated to the minimum version code specified by policy"
           ],
           "type": "string"
         }
@@ -1323,6 +1327,10 @@
           "description": "Whether the user is allowed to enable the \"Unknown Sources\" setting, which allows installation of apps from unknown sources.",
           "type": "boolean"
         },
+        "autoTimeRequired": {
+          "description": "Whether auto time is required, which prevents the user from manually setting the date and time.",
+          "type": "boolean"
+        },
         "removeUserDisabled": {
           "description": "Whether removing other users is disabled.",
           "type": "boolean"
@@ -1395,7 +1403,7 @@
           }
         },
         "networkEscapeHatchEnabled": {
-          "description": "Flag to specify if network escape hatch is enabled. If this flag has been enabled then upon device boot if device has no network connection, then an activity will be shown that allows the user to temporarily connect to a network to fetch the latest policy. The launched activity will time out if no network has been connected for a given while and will return to the previous activity that was shown.",
+          "description": "Whether the network escape hatch is enabled. If a network connection can't be made at boot time, the escape hatch prompts the user to temporarily connect to a network in order to refresh the device policy. After applying policy, the temporary network will be forgotten and the device will continue booting. This prevents being unable to connect to a network if there is no suitable network in the last policy and the device boots into an app in lock task mode, or the user is otherwise unable to reach device settings.",
           "type": "boolean"
         },
         "systemUpdate": {
@@ -1468,14 +1476,16 @@
           "enumDescriptions": [
             "This value is ignored.",
             "Don't allow other admins to change the password again until the user has entered it.",
-            "Don't ask for user credentials on device boot."
+            "Don't ask for user credentials on device boot.",
+            "Lock the device after password reset."
           ],
           "type": "array",
           "items": {
             "enum": [
               "RESET_PASSWORD_FLAG_UNSPECIFIED",
               "REQUIRE_ENTRY",
-              "DO_NOT_ASK_CREDENTIALS_ON_BOOT"
+              "DO_NOT_ASK_CREDENTIALS_ON_BOOT",
+              "LOCK_NOW"
             ],
             "type": "string"
           }
@@ -2242,7 +2252,7 @@
       "id": "HardwareStatus"
     }
   },
-  "revision": "20170828",
+  "revision": "20170918",
   "basePath": "",
   "icons": {
     "x32": "http://www.google.com/images/icons/product/search-32.gif",

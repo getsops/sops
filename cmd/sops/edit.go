@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
 	"crypto/md5"
@@ -204,14 +203,23 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 		}
 		newBranch, err := opts.InputStore.Unmarshal(edited)
 		if err != nil {
-			log.Printf("Could not load tree: %s\nProbably invalid syntax. Press a key to return to the editor, or Ctrl+C to exit.", err)
+			log.WithField(
+				"error",
+				err,
+			).Errorf("Could not load tree, probably due to invalid " +
+				"syntax. Press a key to return to the editor, or Ctrl+C to " +
+				"exit.")
 			bufio.NewReader(os.Stdin).ReadByte()
 			continue
 		}
 		if opts.ShowMasterKeys {
 			metadata, err := opts.InputStore.UnmarshalMetadata(edited)
 			if err != nil {
-				log.Printf("sops metadata is invalid: %s.\nPress a key to return to the editor, or Ctrl+C to exit.", err)
+				log.WithField(
+					"error",
+					err,
+				).Errorf("SOPS metadata is invalid. Press a key to " +
+					"return to the editor, or Ctrl+C to exit.")
 				bufio.NewReader(os.Stdin).ReadByte()
 				continue
 			}
@@ -226,7 +234,9 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			opts.Tree.Metadata.Version = version
 		}
 		if opts.Tree.Metadata.MasterKeyCount() == 0 {
-			log.Println("No master keys were provided, so sops can't encrypt the file.\nPress a key to return to the editor, or Ctrl+C to exit.")
+			log.Error("No master keys were provided, so sops can't " +
+				"encrypt the file. Press a key to return to the editor, or " +
+				"Ctrl+C to exit.")
 			bufio.NewReader(os.Stdin).ReadByte()
 			continue
 		}

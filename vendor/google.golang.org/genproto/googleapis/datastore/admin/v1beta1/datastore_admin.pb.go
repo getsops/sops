@@ -81,7 +81,7 @@ const (
 	// Request is actively being processed.
 	CommonMetadata_PROCESSING CommonMetadata_State = 2
 	// Request is in the process of being cancelled after user called
-	// longrunning.Operations.CancelOperation on the operation.
+	// google.longrunning.Operations.CancelOperation on the operation.
 	CommonMetadata_CANCELLING CommonMetadata_State = 3
 	// Request has been processed and is in its finalization stage.
 	CommonMetadata_FINALIZING CommonMetadata_State = 4
@@ -90,7 +90,7 @@ const (
 	// Request has finished being processed, but encountered an error.
 	CommonMetadata_FAILED CommonMetadata_State = 6
 	// Request has finished being cancelled after user called
-	// longrunning.Operations.CancelOperation.
+	// google.longrunning.Operations.CancelOperation.
 	CommonMetadata_CANCELLED CommonMetadata_State = 7
 )
 
@@ -126,11 +126,11 @@ type CommonMetadata struct {
 	StartTime *google_protobuf3.Timestamp `protobuf:"bytes,1,opt,name=start_time,json=startTime" json:"start_time,omitempty"`
 	// The time the operation ended, either successfully or otherwise.
 	EndTime *google_protobuf3.Timestamp `protobuf:"bytes,2,opt,name=end_time,json=endTime" json:"end_time,omitempty"`
-	// The type of the operation.  Can be used as a filter in
+	// The type of the operation. Can be used as a filter in
 	// ListOperationsRequest.
 	OperationType OperationType `protobuf:"varint,3,opt,name=operation_type,json=operationType,enum=google.datastore.admin.v1beta1.OperationType" json:"operation_type,omitempty"`
 	// The client-assigned labels which were provided when the operation was
-	// created.  May also include additional labels.
+	// created. May also include additional labels.
 	Labels map[string]string `protobuf:"bytes,4,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// The current state of the Operation.
 	State CommonMetadata_State `protobuf:"varint,5,opt,name=state,enum=google.datastore.admin.v1beta1.CommonMetadata_State" json:"state,omitempty"`
@@ -178,9 +178,10 @@ func (m *CommonMetadata) GetState() CommonMetadata_State {
 
 // Measures the progress of a particular metric.
 type Progress struct {
-	// Note that this may be greater than work_estimated.
+	// The amount of work that has been completed. Note that this may be greater
+	// than work_estimated.
 	WorkCompleted int64 `protobuf:"varint,1,opt,name=work_completed,json=workCompleted" json:"work_completed,omitempty"`
-	// An estimate of how much work needs to be performed.  May be zero if the
+	// An estimate of how much work needs to be performed. May be zero if the
 	// work estimate is unavailable.
 	WorkEstimated int64 `protobuf:"varint,2,opt,name=work_estimated,json=workEstimated" json:"work_estimated,omitempty"`
 }
@@ -274,7 +275,7 @@ type ImportEntitiesRequest struct {
 	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId" json:"project_id,omitempty"`
 	// Client-assigned labels.
 	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	// The full resource URL of the external storage location.  Currently, only
+	// The full resource URL of the external storage location. Currently, only
 	// Google Cloud Storage is supported. So input_url should be of the form:
 	// `gs://BUCKET_NAME[/NAMESPACE_PATH]/OVERALL_EXPORT_METADATA_FILE`, where
 	// `BUCKET_NAME` is the name of the Cloud Storage bucket, `NAMESPACE_PATH` is
@@ -464,8 +465,8 @@ func (m *ImportEntitiesMetadata) GetInputUrl() string {
 	return ""
 }
 
-// Identifies a subset of entities in a project.  This is specified as
-// combinations of kind + namespace (either or both of which may be all, as
+// Identifies a subset of entities in a project. This is specified as
+// combinations of kinds and namespaces (either or both of which may be all, as
 // described in the following examples).
 // Example usage:
 //
@@ -486,10 +487,10 @@ func (m *ImportEntitiesMetadata) GetInputUrl() string {
 type EntityFilter struct {
 	// If empty, then this represents all kinds.
 	Kinds []string `protobuf:"bytes,1,rep,name=kinds" json:"kinds,omitempty"`
-	// An empty list represents all namespaces.  This is the preferred
+	// An empty list represents all namespaces. This is the preferred
 	// usage for projects that don't use namespaces.
 	//
-	// An empty string element represents the default namespace.  This should be
+	// An empty string element represents the default namespace. This should be
 	// used if the project has data in non-default namespaces, but doesn't want to
 	// include them.
 	// Each namespace in this list must be unique.
@@ -543,7 +544,7 @@ type DatastoreAdminClient interface {
 	// to another storage system, such as Google Cloud Storage. Recent updates to
 	// entities may not be reflected in the export. The export occurs in the
 	// background and its progress can be monitored and managed via the
-	// Operation resource that is created.  The output of an export may only be
+	// Operation resource that is created. The output of an export may only be
 	// used once the associated operation is done. If an export operation is
 	// cancelled before completion it may leave partial data behind in Google
 	// Cloud Storage.
@@ -551,7 +552,7 @@ type DatastoreAdminClient interface {
 	// Imports entities into Google Cloud Datastore. Existing entities with the
 	// same key are overwritten. The import occurs in the background and its
 	// progress can be monitored and managed via the Operation resource that is
-	// created.  If an ImportEntities operation is cancelled, it is possible
+	// created. If an ImportEntities operation is cancelled, it is possible
 	// that a subset of the data has already been imported to Cloud Datastore.
 	ImportEntities(ctx context.Context, in *ImportEntitiesRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error)
 }
@@ -589,7 +590,7 @@ type DatastoreAdminServer interface {
 	// to another storage system, such as Google Cloud Storage. Recent updates to
 	// entities may not be reflected in the export. The export occurs in the
 	// background and its progress can be monitored and managed via the
-	// Operation resource that is created.  The output of an export may only be
+	// Operation resource that is created. The output of an export may only be
 	// used once the associated operation is done. If an export operation is
 	// cancelled before completion it may leave partial data behind in Google
 	// Cloud Storage.
@@ -597,7 +598,7 @@ type DatastoreAdminServer interface {
 	// Imports entities into Google Cloud Datastore. Existing entities with the
 	// same key are overwritten. The import occurs in the background and its
 	// progress can be monitored and managed via the Operation resource that is
-	// created.  If an ImportEntities operation is cancelled, it is possible
+	// created. If an ImportEntities operation is cancelled, it is possible
 	// that a subset of the data has already been imported to Cloud Datastore.
 	ImportEntities(context.Context, *ImportEntitiesRequest) (*google_longrunning.Operation, error)
 }

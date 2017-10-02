@@ -210,6 +210,12 @@
         "EnvironmentVariables$member": null
       }
     },
+    "EnvironmentVariableType": {
+      "base": null,
+      "refs": {
+        "EnvironmentVariable$type": "<p>The type of environment variable. Valid values include:</p> <ul> <li> <p> <code>PARAMETER_STORE</code>: An environment variable stored in Amazon EC2 Systems Manager Parameter Store.</p> </li> <li> <p> <code>PLAINTEXT</code>: An environment variable in plaintext format.</p> </li> </ul>"
+      }
+    },
     "EnvironmentVariables": {
       "base": null,
       "refs": {

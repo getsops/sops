@@ -403,8 +403,16 @@
       ],
       "members":{
         "name":{"shape":"NonEmptyString"},
-        "value":{"shape":"String"}
+        "value":{"shape":"String"},
+        "type":{"shape":"EnvironmentVariableType"}
       }
+    },
+    "EnvironmentVariableType":{
+      "type":"string",
+      "enum":[
+        "PLAINTEXT",
+        "PARAMETER_STORE"
+      ]
     },
     "EnvironmentVariables":{
       "type":"list",

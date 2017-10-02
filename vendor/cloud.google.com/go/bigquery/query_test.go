@@ -15,7 +15,6 @@
 package bigquery
 
 import (
-	"fmt"
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
@@ -27,7 +26,7 @@ import (
 
 func defaultQueryJob() *bq.Job {
 	return &bq.Job{
-		JobReference: &bq.JobReference{ProjectId: "client-project-id"},
+		JobReference: &bq.JobReference{JobId: "RANDOM", ProjectId: "client-project-id"},
 		Configuration: &bq.JobConfiguration{
 			Query: &bq.JobConfigurationQuery{
 				DestinationTable: &bq.TableReference{
@@ -46,6 +45,7 @@ func defaultQueryJob() *bq.Job {
 }
 
 func TestQuery(t *testing.T) {
+	defer fixRandomJobID("RANDOM")()
 	c := &Client{
 		projectID: "client-project-id",
 	}
@@ -67,6 +67,20 @@ func TestQuery(t *testing.T) {
 			want: func() *bq.Job {
 				j := defaultQueryJob()
 				j.Configuration.Query.DefaultDataset = nil
+				return j
+			}(),
+		},
+		{
+			dst: c.Dataset("dataset-id").Table("table-id"),
+			src: &QueryConfig{
+				Q:              "query string",
+				JobID:          "jobID",
+				AddJobIDSuffix: true,
+			},
+			want: func() *bq.Job {
+				j := defaultQueryJob()
+				j.Configuration.Query.DefaultDataset = nil
+				j.JobReference.JobId = "jobID-RANDOM"
 				return j
 			}(),
 		},
@@ -324,7 +338,5 @@ func TestQueryLegacySQL(t *testing.T) {
 	_, err = q.Run(context.Background())
 	if err == nil {
 		t.Error("Parameters and UseLegacySQL: got nil, want error")
-	} else {
-		fmt.Println(err)
 	}
 }

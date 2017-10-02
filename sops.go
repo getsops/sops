@@ -40,14 +40,15 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
-	"log"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/shamir"
 	"golang.org/x/net/context"
 )
@@ -66,6 +67,12 @@ const MacMismatch = sopsError("MAC mismatch")
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("SOPS")
+}
 
 // Cipher provides a way to encrypt and decrypt the data key used to encrypt and decrypt sops files, so that the
 // data key can be stored alongside the encrypted content. A Cipher must be able to decrypt the values it encrypts.
@@ -117,7 +124,7 @@ type Tree struct {
 
 // Truncate truncates the tree to the path specified
 func (branch TreeBranch) Truncate(path []interface{}) (interface{}, error) {
-	log.Printf("Truncating tree to %s", path)
+	log.WithField("path", path).Info("Truncating tree")
 	var current interface{} = branch
 	for _, component := range path {
 		switch component := component.(type) {
@@ -251,7 +258,7 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
-	log.Print("Decrypting SOPS tree")
+	log.Debug("Decrypting tree")
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		encrypted := true
@@ -268,7 +275,11 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 				v, err = cipher.Decrypt(c.Value, key, pathString)
 				if err != nil {
 					// Assume the comment was not encrypted in the first place
-					log.Printf("[WARNING] Found possibly unencrypted comment in file (#%s). This is to be expected if the file being decrypted was created with an older version of SOPS.", c.Value)
+					log.WithField("comment", c.Value).
+						Warn("Found possibly unencrypted field in file. " +
+							"This is to be expected if the file being " +
+							"decrypted was created with an older version of " +
+							"SOPS.")
 					v = c
 				}
 			} else {
@@ -368,8 +379,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 		if m.ShamirThreshold == 0 {
 			m.ShamirThreshold = len(m.KeyGroups)
 		}
-		log.Printf("Multiple KeyGroups found, proceeding with Shamir with threshold %d", m.ShamirThreshold)
-		parts, err = shamir.Split(dataKey, len(m.KeyGroups), m.ShamirThreshold)
+		log.WithFields(logrus.Fields{
+			"quorum": m.ShamirThreshold,
+			"parts":  len(m.KeyGroups),
+		}).Info("Splitting data key with Shamir Secret Sharing")
+		parts, err = shamir.Split(dataKey, len(m.KeyGroups), int(m.ShamirThreshold))
 		if err != nil {
 			errs = append(errs, fmt.Errorf("could not split data key into parts for Shamir: %s", err))
 			return
@@ -462,6 +476,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 		}
 		dataKey = parts[0]
 	}
+	log.Info("Data key recovered successfully")
 	m.DataKey = dataKey
 	return dataKey, nil
 }

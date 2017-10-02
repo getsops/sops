@@ -284,6 +284,10 @@ type GreengrassAPI interface {
 	ListSubscriptionDefinitionsWithContext(aws.Context, *greengrass.ListSubscriptionDefinitionsInput, ...request.Option) (*greengrass.ListSubscriptionDefinitionsOutput, error)
 	ListSubscriptionDefinitionsRequest(*greengrass.ListSubscriptionDefinitionsInput) (*request.Request, *greengrass.ListSubscriptionDefinitionsOutput)
 
+	ResetDeployments(*greengrass.ResetDeploymentsInput) (*greengrass.ResetDeploymentsOutput, error)
+	ResetDeploymentsWithContext(aws.Context, *greengrass.ResetDeploymentsInput, ...request.Option) (*greengrass.ResetDeploymentsOutput, error)
+	ResetDeploymentsRequest(*greengrass.ResetDeploymentsInput) (*request.Request, *greengrass.ResetDeploymentsOutput)
+
 	UpdateConnectivityInfo(*greengrass.UpdateConnectivityInfoInput) (*greengrass.UpdateConnectivityInfoOutput, error)
 	UpdateConnectivityInfoWithContext(aws.Context, *greengrass.UpdateConnectivityInfoInput, ...request.Option) (*greengrass.UpdateConnectivityInfoOutput, error)
 	UpdateConnectivityInfoRequest(*greengrass.UpdateConnectivityInfoInput) (*request.Request, *greengrass.UpdateConnectivityInfoOutput)

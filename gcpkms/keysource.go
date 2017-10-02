@@ -7,11 +7,20 @@ import (
 	"strings"
 	"time"
 
+	"go.mozilla.org/sops/logging"
+
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2/google"
 
+	"github.com/sirupsen/logrus"
 	cloudkms "google.golang.org/api/cloudkms/v1"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("GCPKMS")
+}
 
 // MasterKey is a GCP KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -34,6 +43,7 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
+		log.WithField("resourceID", key.ResourceID).Warn("Encryption failed")
 		return fmt.Errorf("Cannot create GCP KMS service: %v", err)
 	}
 	req := &cloudkms.EncryptRequest{
@@ -41,9 +51,10 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Encrypt(key.ResourceID, req).Do()
 	if err != nil {
+		log.WithField("resourceID", key.ResourceID).Warn("Encryption failed")
 		return fmt.Errorf("Failed to call GCP KMS encryption service: %v", err)
 	}
-
+	log.WithField("resourceID", key.ResourceID).Warn("Encryption succeeded")
 	key.EncryptedKey = resp.Ciphertext
 	return nil
 }
@@ -60,6 +71,7 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
+		log.WithField("resourceID", key.ResourceID).Warn("Decryption failed")
 		return nil, fmt.Errorf("Cannot create GCP KMS service: %v", err)
 	}
 
@@ -68,9 +80,16 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Decrypt(key.ResourceID, req).Do()
 	if err != nil {
+		log.WithField("resourceID", key.ResourceID).Warn("Decryption failed")
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
 	}
-	return base64.StdEncoding.DecodeString(resp.Plaintext)
+	encryptedKey, err := base64.StdEncoding.DecodeString(resp.Plaintext)
+	if err != nil {
+		log.WithField("resourceID", key.ResourceID).Warn("Decryption failed")
+		return nil, err
+	}
+	log.WithField("resourceID", key.ResourceID).Warn("Decryption succeeded")
+	return encryptedKey, nil
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not.

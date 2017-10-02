@@ -35,6 +35,7 @@ import (
 	"runtime"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"syscall"
 	"testing"
 	"time"
@@ -107,6 +108,7 @@ type testServer struct {
 	setAndSendHeader   bool   // whether to call setHeader and sendHeader.
 	setHeaderOnly      bool   // whether to only call setHeader, not sendHeader.
 	multipleSetTrailer bool   // whether to call setTrailer multiple times.
+	unaryCallSleepTime time.Duration
 }
 
 func (s *testServer) EmptyCall(ctx context.Context, in *testpb.Empty) (*testpb.Empty, error) {
@@ -202,7 +204,7 @@ func (s *testServer) UnaryCall(ctx context.Context, in *testpb.SimpleRequest) (*
 		}
 	}
 	// Simulate some service delay.
-	time.Sleep(time.Second)
+	time.Sleep(s.unaryCallSleepTime)
 
 	payload, err := newPayload(in.GetResponseType(), in.GetResponseSize())
 	if err != nil {
@@ -365,11 +367,12 @@ func (s *testServer) HalfDuplexCall(stream testpb.TestService_HalfDuplexCallServ
 }
 
 type env struct {
-	name        string
-	network     string // The type of network such as tcp, unix, etc.
-	security    string // The security protocol such as TLS, SSH, etc.
-	httpHandler bool   // whether to use the http.Handler ServerTransport; requires TLS
-	balancer    bool   // whether to use balancer
+	name         string
+	network      string // The type of network such as tcp, unix, etc.
+	security     string // The security protocol such as TLS, SSH, etc.
+	httpHandler  bool   // whether to use the http.Handler ServerTransport; requires TLS
+	balancer     bool   // whether to use balancer
+	customDialer func(string, string, time.Duration) (net.Conn, error)
 }
 
 func (e env) runnable() bool {
@@ -380,6 +383,9 @@ func (e env) runnable() bool {
 }
 
 func (e env) dialer(addr string, timeout time.Duration) (net.Conn, error) {
+	if e.customDialer != nil {
+		return e.customDialer(e.network, addr, timeout)
+	}
 	return net.DialTimeout(e.network, addr, timeout)
 }
 
@@ -678,6 +684,53 @@ func (te *test) withServerTester(fn func(st *serverTester)) {
 	st := newServerTesterFromConn(te.t, c)
 	st.greet()
 	fn(st)
+}
+
+type lazyConn struct {
+	net.Conn
+	beLazy int32
+}
+
+func (l *lazyConn) Write(b []byte) (int, error) {
+	if atomic.LoadInt32(&(l.beLazy)) == 1 {
+		// The sleep duration here needs to less than the leakCheck deadline.
+		time.Sleep(time.Second)
+	}
+	return l.Conn.Write(b)
+}
+
+func TestContextDeadlineNotIgnored(t *testing.T) {
+	defer leakcheck.Check(t)
+	e := noBalancerEnv
+	var lc *lazyConn
+	e.customDialer = func(network, addr string, timeout time.Duration) (net.Conn, error) {
+		conn, err := net.DialTimeout(network, addr, timeout)
+		if err != nil {
+			return nil, err
+		}
+		lc = &lazyConn{Conn: conn}
+		return lc, nil
+	}
+
+	te := newTest(t, e)
+	te.startServer(&testServer{security: e.security})
+	defer te.tearDown()
+
+	cc := te.clientConn()
+	tc := testpb.NewTestServiceClient(cc)
+	if _, err := tc.EmptyCall(context.Background(), &testpb.Empty{}); err != nil {
+		t.Fatalf("TestService/EmptyCall(_, _) = _, %v, want _, <nil>", err)
+	}
+	atomic.StoreInt32(&(lc.beLazy), 1)
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+	defer cancel()
+	t1 := time.Now()
+	if _, err := tc.EmptyCall(ctx, &testpb.Empty{}); grpc.Code(err) != codes.DeadlineExceeded {
+		t.Fatalf("TestService/EmptyCall(_, _) = _, %v, want _, context.DeadlineExceeded", err)
+	}
+	if time.Since(t1) > 2*time.Second {
+		t.Fatalf("TestService/EmptyCall(_, _) ran over the deadline")
+	}
 }
 
 func TestTimeoutOnDeadServer(t *testing.T) {
@@ -1073,7 +1126,7 @@ func testClientConnCloseAfterGoAwayWithActiveStream(t *testing.T, e env) {
 		te.srv.GracefulStop()
 		close(done)
 	}()
-	time.Sleep(time.Second)
+	time.Sleep(50 * time.Millisecond)
 	cc.Close()
 	timeout := time.NewTimer(time.Second)
 	select {
@@ -2122,7 +2175,7 @@ func testLargeUnary(t *testing.T, e env) {
 	}
 }
 
-// Test backward-compatability API for setting msg size limit.
+// Test backward-compatibility API for setting msg size limit.
 func TestExceedMsgLimit(t *testing.T) {
 	defer leakcheck.Check(t)
 	for _, e := range listTestEnv() {
@@ -2870,7 +2923,7 @@ func TestRPCTimeout(t *testing.T) {
 // TODO(zhaoq): Have a better test coverage of timeout and cancellation mechanism.
 func testRPCTimeout(t *testing.T, e env) {
 	te := newTest(t, e)
-	te.startServer(&testServer{security: e.security})
+	te.startServer(&testServer{security: e.security, unaryCallSleepTime: 50 * time.Millisecond})
 	defer te.tearDown()
 
 	cc := te.clientConn()
@@ -2908,7 +2961,7 @@ func TestCancel(t *testing.T) {
 func testCancel(t *testing.T, e env) {
 	te := newTest(t, e)
 	te.declareLogNoise("grpc: the client connection is closing; please retry")
-	te.startServer(&testServer{security: e.security})
+	te.startServer(&testServer{security: e.security, unaryCallSleepTime: time.Second})
 	defer te.tearDown()
 
 	cc := te.clientConn()
@@ -2968,11 +3021,10 @@ func testCancelNoIO(t *testing.T, e env) {
 	// succeeding.
 	// TODO(bradfitz): add internal test hook for this (Issue 534)
 	for {
-		ctx, cancelSecond := context.WithTimeout(context.Background(), 250*time.Millisecond)
+		ctx, cancelSecond := context.WithTimeout(context.Background(), 50*time.Millisecond)
 		_, err := tc.StreamingInputCall(ctx)
 		cancelSecond()
 		if err == nil {
-			time.Sleep(50 * time.Millisecond)
 			continue
 		}
 		if grpc.Code(err) == codes.DeadlineExceeded {
@@ -2983,21 +3035,19 @@ func testCancelNoIO(t *testing.T, e env) {
 	// If there are any RPCs in flight before the client receives
 	// the max streams setting, let them be expired.
 	// TODO(bradfitz): add internal test hook for this (Issue 534)
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(50 * time.Millisecond)
 
-	ch := make(chan struct{})
 	go func() {
-		defer close(ch)
-
-		// This should be blocked until the 1st is canceled.
-		ctx, cancelThird := context.WithTimeout(context.Background(), 2*time.Second)
-		if _, err := tc.StreamingInputCall(ctx); err != nil {
-			t.Errorf("%v.StreamingInputCall(_) = _, %v, want _, <nil>", tc, err)
-		}
-		cancelThird()
+		time.Sleep(50 * time.Millisecond)
+		cancelFirst()
 	}()
-	cancelFirst()
-	<-ch
+
+	// This should be blocked until the 1st is canceled, then succeed.
+	ctx, cancelThird := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	if _, err := tc.StreamingInputCall(ctx); err != nil {
+		t.Errorf("%v.StreamingInputCall(_) = _, %v, want _, <nil>", tc, err)
+	}
+	cancelThird()
 }
 
 // The following tests the gRPC streaming RPC implementations.
@@ -3475,11 +3525,11 @@ func testExceedMaxStreamsLimit(t *testing.T, e env) {
 	}
 	// Loop until receiving the new max stream setting from the server.
 	for {
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 		defer cancel()
 		_, err := tc.StreamingInputCall(ctx)
 		if err == nil {
-			time.Sleep(time.Second)
+			time.Sleep(50 * time.Millisecond)
 			continue
 		}
 		if grpc.Code(err) == codes.DeadlineExceeded {
@@ -3527,7 +3577,7 @@ func testExceedDefaultMaxStreamsLimit(t *testing.T, e env) {
 	}
 
 	// Trying to create one more should timeout.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 	_, err := tc.StreamingInputCall(ctx)
 	if err == nil || grpc.Code(err) != codes.DeadlineExceeded {
@@ -3560,11 +3610,11 @@ func testStreamsQuotaRecovery(t *testing.T, e env) {
 	}
 	// Loop until the new max stream setting is effective.
 	for {
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 		defer cancel()
 		_, err := tc.StreamingInputCall(ctx)
 		if err == nil {
-			time.Sleep(time.Second)
+			time.Sleep(50 * time.Millisecond)
 			continue
 		}
 		if grpc.Code(err) == codes.DeadlineExceeded {

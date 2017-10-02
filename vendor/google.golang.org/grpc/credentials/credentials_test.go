@@ -128,7 +128,7 @@ func launchServer(t *testing.T, hs serverHandshake, done chan AuthInfo) net.List
 	return lis
 }
 
-// Is run in a seperate goroutine.
+// Is run in a separate goroutine.
 func serverHandle(t *testing.T, hs serverHandshake, done chan AuthInfo, lis net.Listener) {
 	serverRawConn, err := lis.Accept()
 	if err != nil {

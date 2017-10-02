@@ -16,25 +16,29 @@
 //
 // This package is still experimental and subject to change.
 //
+// Usage example:
+//
+//   import "cloud.google.com/go/profiler"
+//   ...
+//   err := profiler.Start(profiler.Config{Service: "my-service"})
+//   if err != nil {
+//       // TODO: Handle error.
+//   }
+//
 // Calling Start will start a goroutine to collect profiles and
 // upload to Cloud Profiler server, at the rhythm specified by
 // the server.
 //
-// The caller should provide the target string in the config so Cloud
-// Profiler knows how to group the profile data. Otherwise the target
-// string is set to "unknown".
-//
-// Optionally DebugLogging can be set in the config to enable detailed
-// logging from profiler.
-//
-// Start should only be called once. The first call will start
-// the profiling goroutine. Any additional calls will be ignored.
+// The caller must provide the service string in the config, and
+// may provide other information as well. See Config for details.
 package profiler
 
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"log"
+	"os"
 	"runtime/pprof"
 	"sync"
 	"time"
@@ -58,8 +62,7 @@ import (
 var (
 	config    Config
 	startOnce sync.Once
-	// getProjectID, getInstanceName, getZone, startCPUProfile, stopCPUProfile,
-	// writeHeapProfile and sleep are overrideable for testing.
+	// The functions below are stubbed to be overrideable for testing.
 	getProjectID     = gcemd.ProjectID
 	getInstanceName  = gcemd.InstanceName
 	getZone          = gcemd.Zone
@@ -67,12 +70,15 @@ var (
 	stopCPUProfile   = pprof.StopCPUProfile
 	writeHeapProfile = pprof.WriteHeapProfile
 	sleep            = gax.Sleep
+	dialGRPC         = gtransport.Dial
+	onGCE            = gcemd.OnGCE
 )
 
 const (
 	apiAddress       = "cloudprofiler.googleapis.com:443"
 	xGoogAPIMetadata = "x-goog-api-client"
 	zoneNameLabel    = "zone"
+	versionLabel     = "version"
 	instanceLabel    = "instance"
 	scope            = "https://www.googleapis.com/auth/monitoring.write"
 
@@ -85,10 +91,25 @@ const (
 
 // Config is the profiler configuration.
 type Config struct {
-	// Target groups related deployments together, defaults to "unknown".
-	Target string
+	// Service (or deprecated Target) must be provided to start the profiler.
+	// It specifies the name of the service under which the profiled data
+	// will be recorded and exposed at the Cloud Profiler UI for the project.
+	// You can specify an arbitrary string, but see Deployment.target at
+	// https://github.com/googleapis/googleapis/blob/master/google/devtools/cloudprofiler/v2/profiler.proto
+	// for restrictions.
+	// NOTE: The string should be the same across different replicas of
+	// your service so that the globally constant profiling rate is
+	// maintained. Do not put things like PID or unique pod ID in the name.
+	Service string
 
-	// DebugLogging enables detailed debug logging from profiler.
+	// ServiceVersion is an optional field specifying the version of the
+	// service. It can be an arbitrary string. Cloud Profiler profiles
+	// once per minute for each version of each service in each zone.
+	// ServiceVersion defaults to an empty string.
+	ServiceVersion string
+
+	// DebugLogging enables detailed debug logging from profiler. It
+	// defaults to false.
 	DebugLogging bool
 
 	// ProjectID is the Cloud Console project ID to use instead of
@@ -98,32 +119,26 @@ type Config struct {
 	// or anywhere else outside of Google Cloud Platform.
 	ProjectID string
 
-	// InstanceName is the name of the VM instance to use instead of
-	// the one read from the VM metadata server.
-	//
-	// Set this if you are running the agent in your local environment
-	// or anywhere else outside of Google Cloud Platform.
-	InstanceName string
-
-	// ZoneName is the name of the zone to use instead of
-	// the one read from the VM metadata server.
-	//
-	// Set this if you are running the agent in your local environment
-	// or anywhere else outside of Google Cloud Platform.
-	ZoneName string
-
 	// APIAddr is the HTTP endpoint to use to connect to the profiler
 	// agent API. Defaults to the production environment, overridable
 	// for testing.
 	APIAddr string
+
+	// Target is deprecated, use Service instead.
+	Target string
+
+	instance string
+	zone     string
 }
 
 // startError represents the error occured during the
 // initializating and starting of the agent.
 var startError error
 
-// Start starts a goroutine to collect and upload profiles.
-// See package level documentation for details.
+// Start starts a goroutine to collect and upload profiles. The
+// caller must provide the service string in the config. See
+// Config for details. Start should only be called once. Any
+// additional calls will be ignored.
 func Start(cfg Config, options ...option.ClientOption) error {
 	startOnce.Do(func() {
 		startError = start(cfg, options...)
@@ -132,7 +147,10 @@ func Start(cfg Config, options ...option.ClientOption) error {
 }
 
 func start(cfg Config, options ...option.ClientOption) error {
-	initializeConfig(cfg)
+	if err := initializeConfig(cfg); err != nil {
+		debugLog("failed to initialize config: %v", err)
+		return err
+	}
 
 	ctx := context.Background()
 
@@ -142,22 +160,14 @@ func start(cfg Config, options ...option.ClientOption) error {
 	}
 	opts = append(opts, options...)
 
-	conn, err := gtransport.Dial(ctx, opts...)
+	conn, err := dialGRPC(ctx, opts...)
 	if err != nil {
 		debugLog("failed to dial GRPC: %v", err)
 		return err
 	}
 
-	d, err := initializeDeployment()
-	if err != nil {
-		debugLog("failed to initialize deployment: %v", err)
-		return err
-	}
-
-	l := initializeProfileLabels()
-
-	a, ctx := initializeResources(ctx, conn, d, l)
-	go pollProfilerService(ctx, a)
+	a := initializeAgent(pb.NewProfilerServiceClient(conn))
+	go pollProfilerService(withXGoogHeader(ctx), a)
 	return nil
 }
 
@@ -170,7 +180,7 @@ func debugLog(format string, e ...interface{}) {
 // agent polls Cloud Profiler server for instructions on behalf of
 // a task, and collects and uploads profiles as requested.
 type agent struct {
-	client        *client
+	client        pb.ProfilerServiceClient
 	deployment    *pb.Deployment
 	profileLabels map[string]string
 }
@@ -228,7 +238,7 @@ func (a *agent) createProfile(ctx context.Context) *pb.Profile {
 
 	gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
-		p, err = a.client.client.CreateProfile(ctx, &req, grpc.Trailer(&md))
+		p, err = a.client.CreateProfile(ctx, &req, grpc.Trailer(&md))
 		return err
 	}, gax.WithRetry(func() gax.Retryer {
 		return &retryer{
@@ -287,100 +297,95 @@ func (a *agent) profileAndUpload(ctx context.Context, p *pb.Profile) {
 
 	// Upload profile, discard profile in case of error.
 	debugLog("start uploading profile")
-	if _, err := a.client.client.UpdateProfile(ctx, &req); err != nil {
+	if _, err := a.client.UpdateProfile(ctx, &req); err != nil {
 		debugLog("failed to upload profile: %v", err)
 	}
 }
 
-// client is a client for interacting with Cloud Profiler API.
-type client struct {
-	// gRPC API client.
-	client pb.ProfilerServiceClient
-
-	// Metadata for google API to be sent with each request.
-	xGoogHeader []string
-}
-
-// setXGoogHeader sets the name and version of the application in
+// withXGoogHeader sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *client) setXGoogHeader(keyval ...string) {
+func withXGoogHeader(ctx context.Context, keyval ...string) context.Context {
 	kv := append([]string{"gl-go", version.Go(), "gccl", version.Repo}, keyval...)
 	kv = append(kv, "gax", gax.Version, "grpc", grpc.Version)
-	c.xGoogHeader = []string{gax.XGoogHeader(kv...)}
-}
 
-func (c *client) insertMetadata(ctx context.Context) context.Context {
 	md, _ := grpcmd.FromOutgoingContext(ctx)
 	md = md.Copy()
-	md[xGoogAPIMetadata] = c.xGoogHeader
+	md[xGoogAPIMetadata] = []string{gax.XGoogHeader(kv...)}
 	return grpcmd.NewOutgoingContext(ctx, md)
 }
 
-func initializeDeployment() (*pb.Deployment, error) {
-	var err error
-
-	projectID := config.ProjectID
-	if projectID == "" {
-		projectID, err = getProjectID()
-		if err != nil {
-			return nil, err
-		}
+func initializeAgent(c pb.ProfilerServiceClient) *agent {
+	labels := map[string]string{}
+	if config.zone != "" {
+		labels[zoneNameLabel] = config.zone
 	}
-
-	zone := config.ZoneName
-	if zone == "" {
-		zone, err = getZone()
-		if err != nil {
-			return nil, err
-		}
+	if config.ServiceVersion != "" {
+		labels[versionLabel] = config.ServiceVersion
 	}
-
-	return &pb.Deployment{
-		ProjectId: projectID,
+	d := &pb.Deployment{
+		ProjectId: config.ProjectID,
 		Target:    config.Target,
-		Labels: map[string]string{
-			zoneNameLabel: zone,
-		},
-	}, nil
-}
-
-func initializeProfileLabels() map[string]string {
-	instance := config.InstanceName
-	if instance == "" {
-		var err error
-		if instance, err = getInstanceName(); err != nil {
-			instance = "unknown"
-			debugLog("failed to get instance name: %v", err)
-		}
+		Labels:    labels,
 	}
 
-	return map[string]string{instanceLabel: instance}
-}
+	profileLabels := map[string]string{}
 
-func initializeResources(ctx context.Context, conn *grpc.ClientConn, d *pb.Deployment, l map[string]string) (*agent, context.Context) {
-	c := &client{
-		client: pb.NewProfilerServiceClient(conn),
+	if config.instance != "" {
+		profileLabels[instanceLabel] = config.instance
 	}
-	c.setXGoogHeader()
 
-	ctx = c.insertMetadata(ctx)
 	return &agent{
 		client:        c,
 		deployment:    d,
-		profileLabels: l,
-	}, ctx
+		profileLabels: profileLabels,
+	}
 }
 
-func initializeConfig(cfg Config) {
+func initializeConfig(cfg Config) error {
 	config = cfg
 
-	if config.Target == "" {
-		config.Target = "unknown"
+	switch {
+	case config.Service != "":
+		config.Target = config.Service
+	case config.Target == "":
+		config.Target = os.Getenv("GAE_SERVICE")
 	}
+
+	if config.Target == "" {
+		return errors.New("service name must be specified in the configuration")
+	}
+
+	if config.ServiceVersion == "" {
+		config.ServiceVersion = os.Getenv("GAE_VERSION")
+	}
+
+	if onGCE() {
+		var err error
+		if config.ProjectID == "" {
+			if config.ProjectID, err = getProjectID(); err != nil {
+				return fmt.Errorf("failed to get the project ID from Compute Engine: %v", err)
+			}
+		}
+
+		if config.zone, err = getZone(); err != nil {
+			return fmt.Errorf("failed to get zone from Compute Engine: %v", err)
+		}
+
+		if config.instance, err = getInstanceName(); err != nil {
+			return fmt.Errorf("failed to get instance from Compute Engine: %v", err)
+		}
+
+	} else {
+		if config.ProjectID == "" {
+			return fmt.Errorf("project ID must be specified in the configuration if running outside of GCP")
+		}
+	}
+
 	if config.APIAddr == "" {
 		config.APIAddr = apiAddress
 	}
+	return nil
 }
 
 // pollProfilerService starts an endless loop to poll Cloud Profiler

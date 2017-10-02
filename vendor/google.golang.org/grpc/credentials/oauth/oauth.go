@@ -80,7 +80,7 @@ func (j jwtAccess) GetRequestMetadata(ctx context.Context, uri ...string) (map[s
 		return nil, err
 	}
 	return map[string]string{
-		"authorization": token.TokenType + " " + token.AccessToken,
+		"authorization": token.Type() + " " + token.AccessToken,
 	}, nil
 }
 
@@ -100,7 +100,7 @@ func NewOauthAccess(token *oauth2.Token) credentials.PerRPCCredentials {
 
 func (oa oauthAccess) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
 	return map[string]string{
-		"authorization": oa.token.TokenType + " " + oa.token.AccessToken,
+		"authorization": oa.token.Type() + " " + oa.token.AccessToken,
 	}, nil
 }
 
@@ -134,7 +134,7 @@ func (s *serviceAccount) GetRequestMetadata(ctx context.Context, uri ...string) 
 		}
 	}
 	return map[string]string{
-		"authorization": s.t.TokenType + " " + s.t.AccessToken,
+		"authorization": s.t.Type() + " " + s.t.AccessToken,
 	}, nil
 }
 
