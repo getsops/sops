@@ -20,7 +20,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/audit"
+	_ "go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
@@ -36,9 +36,6 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-// auditor should be overwritten on build time using the -X ldflag
-var auditor string
-
 var log *logrus.Logger
 
 func init() {
@@ -46,9 +43,6 @@ func init() {
 }
 
 func main() {
-	if auditor == "postgres" {
-		audit.Register(audit.NewPostgresAuditor())
-	}
 	cli.VersionPrinter = printVersion
 	app := cli.NewApp()
 

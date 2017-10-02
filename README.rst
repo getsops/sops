@@ -587,27 +587,40 @@ Auditing
 ~~~~~~~~
 
 Sometimes, users want to be able to tell what files were accessed by whom in an
-environment they control. For this reason, SOPS includes a way to log the
-decryption of files to PostgreSQL. The log includes a timestamp, the username
-SOPS is running as, and the file that was decrypted.
+environment they control. For this reason, SOPS can generate audit logs to
+record activity on encrypted files. When enabled, SOPS will write a log entry
+into a pre-configured PostgreSQL database when a file is decrypted. The log
+includes a timestamp, the username SOPS is running as, and the file that was
+decrypted.
 
 Because we don't want users of SOPS to be able to control auditing, the audit
-configuration is baked in statically in the binary at compile time using Go's
-linker -X ldflag. Currently, there's two configurable options:
+configuration file location is not configurable, and must be at
+:code:`/etc/sops/audit.yaml`
 
-:code:`main.auditor`: the audit backend to use. Can currently only be
-:code:`postgres`
-
-:code:`go.mozilla.org/sops/audit.postgresConnStr`: the PostgreSQL connection
-string for the :code:`postgres` audit backend
-
-For example, to enable auditing to a PostgreSQL database names :code:`sops`
+For example, to enable auditing to a PostgreSQL database named :code:`sops`
 running on localhost, using the user :code:`sops` and the password :code:`sops`,
-SOPS should be built as follows:
+:code:`/etc/sops/audit.yaml` should have the following contents:
 
-.. code::
+.. code:: yaml
 
-    go install -ldflags="-X 'main.auditor=postgres' -X 'go.mozilla.org/sops/audit.postgresConnStr=postgres://sops:sops@localhost/sops?sslmode=disable'" go.mozilla.org/sops/cmd/sops
+    backends:
+        postgres:
+            - connection_string: "postgres://sops:sops@localhost/sops?sslmode=disable"
+
+
+Under the :code:`postgres` map entry in the above YAML is a list, so one can
+provide more than one backend, and SOPS will log to all of them:
+
+.. code:: yaml
+
+    backends:
+        postgres:
+            - connection_string: "postgres://sops:sops@localhost/sops?sslmode=disable"
+            - connection_string: "postgres://sops:sops@remotehost/sops?sslmode=verify-full"
+
+The schema your database should have can be found at :code:`audit/schema.sql`.
+This schema defines the tables that store the audit events and a role named
+:code:`sops` that only has permission to add entries to the audit event tables.
 
 
 Important information on types
