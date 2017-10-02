@@ -2,14 +2,9 @@ package updatekeys
 
 import (
 	"fmt"
-
 	"log"
-
-	"path/filepath"
-
 	"os"
-
-	"strings"
+	"path/filepath"
 
 	"github.com/fatih/color"
 	"go.mozilla.org/sops"
@@ -37,34 +32,12 @@ func UpdateKeys(opts Opts) error {
 		return err
 	}
 	if info.IsDir() {
-		filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-			if info.IsDir() {
-				return nil
-			}
-			ignoredPaths := []string{
-				"/.git/",
-				".sops.yaml",
-			}
-			for _, ignoredPath := range ignoredPaths {
-				if strings.Contains(path, ignoredPath) {
-					return nil
-				}
-			}
-			o := opts
-			o.InputPath = path
-			err = syncFile(o)
-			if err != nil {
-				log.Printf("Failed to sync %s: %s", path, err)
-			}
-			return nil
-		})
-	} else {
-		syncFile(opts)
+		return fmt.Errorf("can't operate on a directory")
 	}
-	return nil
+	return updateFile(opts)
 }
 
-func syncFile(opts Opts) error {
+func updateFile(opts Opts) error {
 	store := common.DefaultStoreForPath(opts.InputPath)
 	log.Printf("Syncing keys for file %s", opts.InputPath)
 	tree, err := common.LoadEncryptedFile(store, opts.InputPath)

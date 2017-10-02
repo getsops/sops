@@ -207,16 +207,13 @@ func main() {
 			},
 		},
 		{
-			Name:  "updatekeys",
-			Usage: "update the keys of a SOPS file using the config file",
+			Name:      "updatekeys",
+			Usage:     "update the keys of a SOPS file using the config file",
+			ArgsUsage: `file`,
 			Flags: append([]cli.Flag{
-				cli.StringFlag{
-					Name:  "file, f",
-					Usage: `the file or directory that should be updated with the new keys. If providing a directory, SOPS will walk it and update all files in all subdirectories. '.git' directories and '.sops.yaml' files are ignored.`,
-				},
 				cli.BoolFlag{
 					Name:  "yes, y",
-					Usage: `automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.`,
+					Usage: `pre-approve all changes and run non-interactively`,
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -224,13 +221,22 @@ func main() {
 				if err != nil {
 					return err
 				}
-				return updatekeys.UpdateKeys(updatekeys.Opts{
-					InputPath:   c.String("file"),
+				if c.NArg() < 1 {
+					return cli.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+				err = updatekeys.UpdateKeys(updatekeys.Opts{
+					InputPath:   c.Args()[0],
 					GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
 					KeyServices: keyservices(c),
 					Interactive: !c.Bool("yes"),
 					ConfigPath:  configPath,
 				})
+				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+					return cliErr
+				} else if err != nil {
+					return cli.NewExitError(err, codes.ErrorGeneric)
+				}
+				return nil
 			},
 		},
 	}
