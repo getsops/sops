@@ -5,10 +5,11 @@ Changelog
 -----
 
 * Shamir secret sharing scheme support allows SOPS to require multiple master
-  keys to access a data key and decrypt a file. See `sops groups -help`.
+  keys to access a data key and decrypt a file. See `sops groups -help` and the
+  documentation in README.
 
 * Keyservice to forward access to a local master key on a socket, similar to
-  gpg-agent. See `sops keyservice --help`.
+  gpg-agent. See `sops keyservice --help` and the documentation in README.
 
 * Encrypt comments by default
 
@@ -17,8 +18,11 @@ Changelog
 * Refactor of the store logic to separate the internal representation SOPS
   has of files from the external representation used in JSON and YAML files
 
-* Reencoding of versions as string on sops 1.X files, may break backward
-  compatibility but will be handled automatically.
+* Reencoding of versions as string on sops 1.X files.
+  **WARNING** this change breaks backward compatibility.
+  The following error will be shown on messages that have old versions:
+  `Error loading file metadata: Error unmarshalling input json: json: cannot unmarshal number into Go struct field Metadata.version of type string`
+
 
 2.0.0
 -----
