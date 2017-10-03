@@ -149,5 +149,8 @@ func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 	if err != nil {
 		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input yaml: %s", err)
 	}
+	if file.Metadata == nil {
+		return sops.Metadata{}, sops.MetadataNotFound
+	}
 	return file.Metadata.ToInternal()
 }
