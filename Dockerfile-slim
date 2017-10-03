@@ -1,0 +1,10 @@
+FROM golang:1.9
+
+COPY . /go/src/go.mozilla.org/sops
+WORKDIR /go/src/go.mozilla.org/sops
+RUN mkdir /app/
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /app/sops go.mozilla.org/sops/cmd/sops
+
+FROM scratch
+COPY --from=0 /app/sops /usr/bin/sops
+CMD ["sops"]
