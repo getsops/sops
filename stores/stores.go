@@ -22,7 +22,11 @@ import (
 
 // SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata
 type SopsFile struct {
-	Metadata Metadata `yaml:"sops" json:"sops"`
+	// Metadata is a pointer so we can easily tell when the field is not present
+	// in the SOPS file by checking for nil. This way we can show the user a
+	// helpful error message indicating that the metadata wasn't found, instead
+	// of showing a cryptic parsing error
+	Metadata *Metadata `yaml:"sops" json:"sops"`
 }
 
 // Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.

@@ -264,5 +264,8 @@ func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 		}
 		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
+	if file.Metadata == nil {
+		return sops.Metadata{}, sops.MetadataNotFound
+	}
 	return file.Metadata.ToInternal()
 }
