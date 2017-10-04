@@ -226,7 +226,7 @@ func main() {
 			Action: func(c *cli.Context) error {
 				configPath, err := config.FindConfigFile(".")
 				if err != nil {
-					return err
+					return cli.NewExitError(err, codes.ErrorGeneric)
 				}
 				if c.NArg() < 1 {
 					return cli.NewExitError("Error: no file specified", codes.NoFileSpecified)
