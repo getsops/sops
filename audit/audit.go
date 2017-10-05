@@ -2,6 +2,7 @@ package audit
 
 import (
 	"database/sql"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os/user"
@@ -27,8 +28,14 @@ func init() {
 		log.WithField("error", err).Debugf("Error unmarshalling config")
 		return
 	}
-	for _, pgConf := range conf.Backends.Postgres {
-		auditors = append(auditors, NewPostgresAuditor(pgConf.ConnStr))
+	// Only create auditors if not running tests
+	// This is pretty hacky, but doing it The Right Way would require
+	// restructuring SOPS to use dependency injection instead of just using
+	// globals everywhere.
+	if flag.Lookup("test.v") == nil {
+		for _, pgConf := range conf.Backends.Postgres {
+			auditors = append(auditors, NewPostgresAuditor(pgConf.ConnStr))
+		}
 	}
 }
 
