@@ -18,13 +18,13 @@ func init() {
 	log = logging.NewLogger("AUDIT")
 	confBytes, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		log.WithField("error", err).Errorf("Error reading config")
+		log.WithField("error", err).Debugf("Error reading config")
 		return
 	}
 	var conf config
 	err = yaml.Unmarshal(confBytes, &conf)
 	if err != nil {
-		log.WithField("error", err).Errorf("Error unmarshalling config")
+		log.WithField("error", err).Debugf("Error unmarshalling config")
 		return
 	}
 	for _, pgConf := range conf.Backends.Postgres {
