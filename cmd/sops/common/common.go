@@ -2,15 +2,16 @@ package common
 
 import (
 	"fmt"
-	"time"
-
 	"io/ioutil"
-
 	"path/filepath"
+	"strings"
+	"time"
 
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/stores/json"
+	"go.mozilla.org/sops/stores/yaml"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -97,4 +98,21 @@ func LoadEncryptedFile(inputStore sops.Store, inputPath string) (*sops.Tree, err
 		FilePath: path,
 	}
 	return &tree, nil
+}
+
+func IsYAMLFile(path string) bool {
+	return strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml")
+}
+
+func IsJSONFile(path string) bool {
+	return strings.HasSuffix(path, ".json")
+}
+
+func DefaultStoreForPath(path string) sops.Store {
+	if IsYAMLFile(path) {
+		return &yaml.Store{}
+	} else if IsJSONFile(path) {
+		return &json.Store{}
+	}
+	return &json.BinaryStore{}
 }

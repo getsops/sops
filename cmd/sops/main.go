@@ -22,8 +22,10 @@ import (
 	"go.mozilla.org/sops/aes"
 	_ "go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/cmd/sops/codes"
+	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
+	"go.mozilla.org/sops/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
@@ -210,6 +212,39 @@ func main() {
 						})
 					},
 				},
+			},
+		},
+		{
+			Name:      "updatekeys",
+			Usage:     "update the keys of a SOPS file using the config file",
+			ArgsUsage: `file`,
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name:  "yes, y",
+					Usage: `pre-approve all changes and run non-interactively`,
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				configPath, err := config.FindConfigFile(".")
+				if err != nil {
+					return cli.NewExitError(err, codes.ErrorGeneric)
+				}
+				if c.NArg() < 1 {
+					return cli.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+				err = updatekeys.UpdateKeys(updatekeys.Opts{
+					InputPath:   c.Args()[0],
+					GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
+					KeyServices: keyservices(c),
+					Interactive: !c.Bool("yes"),
+					ConfigPath:  configPath,
+				})
+				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+					return cliErr
+				} else if err != nil {
+					return cli.NewExitError(err, codes.ErrorGeneric)
+				}
+				return nil
 			},
 		},
 	}
@@ -532,7 +567,7 @@ func inputStore(context *cli.Context, path string) sops.Store {
 	case "json":
 		return &json.Store{}
 	default:
-		return defaultStore(path)
+		return common.DefaultStoreForPath(path)
 	}
 }
 func outputStore(context *cli.Context, path string) sops.Store {
@@ -542,17 +577,8 @@ func outputStore(context *cli.Context, path string) sops.Store {
 	case "json":
 		return &json.Store{}
 	default:
-		return defaultStore(path)
+		return common.DefaultStoreForPath(path)
 	}
-}
-
-func defaultStore(path string) sops.Store {
-	if strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml") {
-		return &yamlstores.Store{}
-	} else if strings.HasSuffix(path, ".json") {
-		return &json.Store{}
-	}
-	return &json.BinaryStore{}
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
