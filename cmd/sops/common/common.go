@@ -32,7 +32,7 @@ type DecryptTreeOpts struct {
 func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
 	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
 	if err != nil {
-		return nil, cli.NewExitError(err.Error(), codes.CouldNotRetrieveKey)
+		return nil, NewExitError(err, codes.CouldNotRetrieveKey)
 	}
 	computedMac, err := opts.Tree.Decrypt(dataKey, opts.Cipher)
 	if err != nil {
@@ -94,6 +94,13 @@ func LoadEncryptedFile(inputStore sops.Store, inputPath string) (*sops.Tree, err
 		Metadata: metadata,
 	}
 	return &tree, nil
+}
+
+func NewExitError(i interface{}, exitCode int) *cli.ExitError {
+	if userErr, ok := i.(sops.UserError); ok {
+		return cli.NewExitError(userErr.UserError(), exitCode)
+	}
+	return cli.NewExitError(i, exitCode)
 }
 
 func IsYAMLFile(path string) bool {
