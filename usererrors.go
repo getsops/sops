@@ -77,7 +77,7 @@ type decryptGroupError struct {
 }
 
 func (r *decryptGroupError) Error() string {
-	return fmt.Sprintf("could not decryt group %s: %s", r.groupName, r.err)
+	return fmt.Sprintf("could not decrypt group %s: %s", r.groupName, r.err)
 }
 
 func (r *decryptGroupError) UserError() string {
@@ -96,6 +96,7 @@ func (r *decryptGroupError) UserError() string {
 		message = userError.UserError()
 	}
 	reader := prefixer.New(strings.NewReader(message), "  ")
+	// Safe to ignore this error, as reading from a strings.Reader can't fail
 	errMsg, _ := ioutil.ReadAll(reader)
 	return fmt.Sprintf("%s\n%s", header, string(errMsg))
 }
@@ -151,6 +152,7 @@ func (e *decryptKeyError) UserError() string {
 	for _, err := range e.errs {
 		wrappedErr := wordwrap.WrapString(err.Error(), 60)
 		reader := prefixer.New(strings.NewReader(wrappedErr), "  | ")
+		// Safe to ignore this error, as reading from a strings.Reader can't fail
 		errMsg, _ := ioutil.ReadAll(reader)
 		errMsg[0] = '-'
 		errMessages = append(errMessages, string(errMsg))
