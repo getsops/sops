@@ -4457,7 +4457,7 @@ type BonusPayment struct {
 	// The ID of the assignment associated with this bonus payment.
 	AssignmentId *string `min:"1" type:"string"`
 
-	// A string representing a numeric value.
+	// A string representing a currency amount.
 	BonusAmount *string `type:"string"`
 
 	// The date and time of when the bonus was granted.
@@ -4520,7 +4520,9 @@ type CreateAdditionalAssignmentsForHITInput struct {
 	HITId *string `min:"1" type:"string" required:"true"`
 
 	// The number of additional assignments to request for this HIT.
-	NumberOfAdditionalAssignments *int64 `type:"integer"`
+	//
+	// NumberOfAdditionalAssignments is a required field
+	NumberOfAdditionalAssignments *int64 `type:"integer" required:"true"`
 
 	// A unique identifier for this request, which allows you to retry the call
 	// on error without extending the HIT multiple times. This is useful in cases
@@ -4549,6 +4551,9 @@ func (s *CreateAdditionalAssignmentsForHITInput) Validate() error {
 	}
 	if s.HITId != nil && len(*s.HITId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("HITId", 1))
+	}
+	if s.NumberOfAdditionalAssignments == nil {
+		invalidParams.Add(request.NewErrParamRequired("NumberOfAdditionalAssignments"))
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
@@ -4741,6 +4746,26 @@ func (s *CreateHITInput) Validate() error {
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
+	}
+	if s.AssignmentReviewPolicy != nil {
+		if err := s.AssignmentReviewPolicy.Validate(); err != nil {
+			invalidParams.AddNested("AssignmentReviewPolicy", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.HITLayoutParameters != nil {
+		for i, v := range s.HITLayoutParameters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "HITLayoutParameters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.HITReviewPolicy != nil {
+		if err := s.HITReviewPolicy.Validate(); err != nil {
+			invalidParams.AddNested("HITReviewPolicy", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.QualificationRequirements != nil {
 		for i, v := range s.QualificationRequirements {
@@ -5140,6 +5165,26 @@ func (s *CreateHITWithHITTypeInput) Validate() error {
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
+	}
+	if s.AssignmentReviewPolicy != nil {
+		if err := s.AssignmentReviewPolicy.Validate(); err != nil {
+			invalidParams.AddNested("AssignmentReviewPolicy", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.HITLayoutParameters != nil {
+		for i, v := range s.HITLayoutParameters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "HITLayoutParameters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.HITReviewPolicy != nil {
+		if err := s.HITReviewPolicy.Validate(); err != nil {
+			invalidParams.AddNested("HITReviewPolicy", err.(request.ErrInvalidParams))
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5778,10 +5823,10 @@ func (s GetAccountBalanceInput) GoString() string {
 type GetAccountBalanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A string representing a numeric value.
+	// A string representing a currency amount.
 	AvailableBalance *string `type:"string"`
 
-	// A string representing a numeric value.
+	// A string representing a currency amount.
 	OnHoldBalance *string `type:"string"`
 }
 
@@ -6259,7 +6304,7 @@ type HIT struct {
 	// is visible only to the creator of the HIT.
 	RequesterAnnotation *string `type:"string"`
 
-	// A string representing a numeric value.
+	// A string representing a currency amount.
 	Reward *string `type:"string"`
 
 	// The title of the HIT.
@@ -6410,10 +6455,14 @@ type HITLayoutParameter struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the parameter in the HITLayout.
-	Name *string `type:"string"`
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
 
 	// The value substituted for the parameter referenced in the HITLayout.
-	Value *string `type:"string"`
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -6424,6 +6473,22 @@ func (s HITLayoutParameter) String() string {
 // GoString returns the string representation
 func (s HITLayoutParameter) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *HITLayoutParameter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "HITLayoutParameter"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetName sets the Name field's value.
@@ -7690,10 +7755,14 @@ func (s *Locale) SetSubdivision(v string) *Locale {
 type NotificationSpecification struct {
 	_ struct{} `type:"structure"`
 
-	// The destination for notification messages. or email notifications (if Transport
-	// is Email), this is an email address. For Amazon Simple Queue Service (Amazon
-	// SQS) notifications (if Transport is SQS), this is the URL for your Amazon
-	// SQS queue.
+	// The target for notification messages. The Destination’s format is determined
+	// by the specified Transport:
+	//
+	//    * When Transport is Email, the Destination is your email address.
+	//
+	//    * When Transport is SQS, the Destination is your queue URL.
+	//
+	//    * When Transport is SNS, the Destination is the ARN of your topic.
 	//
 	// Destination is a required field
 	Destination *string `type:"string" required:"true"`
@@ -7703,16 +7772,20 @@ type NotificationSpecification struct {
 	// | AssignmentRejected | AssignmentApproved | HITCreated | HITExtended | HITDisposed
 	// | HITReviewable | HITExpired | Ping. The Ping event is only valid for the
 	// SendTestEventNotification operation.
-	EventTypes []*string `type:"list"`
+	//
+	// EventTypes is a required field
+	EventTypes []*string `type:"list" required:"true"`
 
 	// The method Amazon Mechanical Turk uses to send the notification. Valid Values:
-	// Email | SQS.
+	// Email | SQS | SNS.
 	//
 	// Transport is a required field
 	Transport *string `type:"string" required:"true" enum:"NotificationTransport"`
 
 	// The version of the Notification API to use. Valid value is 2006-05-05.
-	Version *string `type:"string"`
+	//
+	// Version is a required field
+	Version *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -7731,8 +7804,14 @@ func (s *NotificationSpecification) Validate() error {
 	if s.Destination == nil {
 		invalidParams.Add(request.NewErrParamRequired("Destination"))
 	}
+	if s.EventTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypes"))
+	}
 	if s.Transport == nil {
 		invalidParams.Add(request.NewErrParamRequired("Transport"))
+	}
+	if s.Version == nil {
+		invalidParams.Add(request.NewErrParamRequired("Version"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8429,7 +8508,9 @@ type RejectAssignmentInput struct {
 
 	// A message for the Worker, which the Worker can see in the Status section
 	// of the web site.
-	RequesterFeedback *string `type:"string"`
+	//
+	// RequesterFeedback is a required field
+	RequesterFeedback *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -8450,6 +8531,9 @@ func (s *RejectAssignmentInput) Validate() error {
 	}
 	if s.AssignmentId != nil && len(*s.AssignmentId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AssignmentId", 1))
+	}
+	if s.RequesterFeedback == nil {
+		invalidParams.Add(request.NewErrParamRequired("RequesterFeedback"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8652,7 +8736,9 @@ type ReviewPolicy struct {
 	Parameters []*PolicyParameter `type:"list"`
 
 	// Name of a Review Policy: SimplePlurality/2011-09-01 or ScoreMyKnownAnswers/2011-09-01
-	PolicyName *string `type:"string"`
+	//
+	// PolicyName is a required field
+	PolicyName *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -8663,6 +8749,19 @@ func (s ReviewPolicy) String() string {
 // GoString returns the string representation
 func (s ReviewPolicy) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReviewPolicy) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReviewPolicy"}
+	if s.PolicyName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetParameters sets the Parameters field's value.
@@ -8808,7 +8907,9 @@ type SendBonusInput struct {
 
 	// A message that explains the reason for the bonus payment. The Worker receiving
 	// the bonus can see this message.
-	Reason *string `type:"string"`
+	//
+	// Reason is a required field
+	Reason *string `type:"string" required:"true"`
 
 	// A unique identifier for this request, which allows you to retry the call
 	// on error without granting multiple bonuses. This is useful in cases such
@@ -8845,6 +8946,9 @@ func (s *SendBonusInput) Validate() error {
 	}
 	if s.BonusAmount == nil {
 		invalidParams.Add(request.NewErrParamRequired("BonusAmount"))
+	}
+	if s.Reason == nil {
+		invalidParams.Add(request.NewErrParamRequired("Reason"))
 	}
 	if s.UniqueRequestToken != nil && len(*s.UniqueRequestToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("UniqueRequestToken", 1))
@@ -8990,7 +9094,9 @@ type UpdateExpirationForHITInput struct {
 	_ struct{} `type:"structure"`
 
 	// The date and time at which you want the HIT to expire
-	ExpireAt *time.Time `type:"timestamp" timestampFormat:"unix"`
+	//
+	// ExpireAt is a required field
+	ExpireAt *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
 
 	// The HIT to update.
 	//
@@ -9011,6 +9117,9 @@ func (s UpdateExpirationForHITInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateExpirationForHITInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateExpirationForHITInput"}
+	if s.ExpireAt == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExpireAt"))
+	}
 	if s.HITId == nil {
 		invalidParams.Add(request.NewErrParamRequired("HITId"))
 	}
@@ -9591,6 +9700,9 @@ const (
 
 	// NotificationTransportSqs is a NotificationTransport enum value
 	NotificationTransportSqs = "SQS"
+
+	// NotificationTransportSns is a NotificationTransport enum value
+	NotificationTransportSns = "SNS"
 )
 
 const (

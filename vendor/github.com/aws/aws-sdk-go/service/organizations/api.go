@@ -9674,7 +9674,7 @@ type DisablePolicyTypeInput struct {
 	PolicyType *string `type:"string" required:"true" enum:"PolicyType"`
 
 	// The unique identifier (ID) of the root in which you want to disable a policy
-	// type. You can get the ID from the ListPolicies operation.
+	// type. You can get the ID from the ListRoots operation.
 	//
 	// The regex pattern (http://wikipedia.org/wiki/regex) for a root ID string
 	// requires "r-" followed by from 4 to 32 lower-case letters or digits.
@@ -10046,10 +10046,14 @@ type HandshakeParty struct {
 	//
 	// The regex pattern (http://wikipedia.org/wiki/regex) for handshake ID string
 	// requires "h-" followed by from 8 to 32 lower-case letters or digits.
-	Id *string `min:"1" type:"string"`
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
 
 	// The type of party.
-	Type *string `type:"string" enum:"HandshakePartyType"`
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"HandshakePartyType"`
 }
 
 // String returns the string representation
@@ -10065,8 +10069,14 @@ func (s HandshakeParty) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *HandshakeParty) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "HandshakeParty"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
 	if s.Id != nil && len(*s.Id) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
 	}
 
 	if invalidParams.Len() > 0 {

@@ -117,6 +117,9 @@ type UploadInput struct {
 	// The language the content is in.
 	ContentLanguage *string `location:"header" locationName:"Content-Language" type:"string"`
 
+	// The base64-encoded 128-bit MD5 digest of the part data.
+	ContentMD5 *string `location:"header" locationName:"Content-MD5" type:"string"`
+
 	// A standard MIME type describing the format of the object data.
 	ContentType *string `location:"header" locationName:"Content-Type" type:"string"`
 

@@ -195,7 +195,7 @@ func main() {
 	grpc.EnableTracing = false
 
 	flag.Parse()
-	lis, err := net.Listen("tcp", "localhost:"+strconv.Itoa(*driverPort))
+	lis, err := net.Listen("tcp", ":"+strconv.Itoa(*driverPort))
 	if err != nil {
 		grpclog.Fatalf("failed to listen: %v", err)
 	}

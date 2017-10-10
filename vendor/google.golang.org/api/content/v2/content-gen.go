@@ -2963,6 +2963,10 @@ type OrderLineItem struct {
 	// Cancellations: Cancellations of the line item.
 	Cancellations []*OrderCancellation `json:"cancellations,omitempty"`
 
+	// ChannelType: The channel type of the order: "purchaseOnGoogle" or
+	// "googleExpress".
+	ChannelType string `json:"channelType,omitempty"`
+
 	// Id: The id of the line item.
 	Id string `json:"id,omitempty"`
 
@@ -7319,8 +7323,7 @@ func (c *AccountsDeleteCall) DryRun(dryRun bool) *AccountsDeleteCall {
 }
 
 // Force sets the optional parameter "force": Flag to delete
-// sub-accounts with products. The default value of false will become
-// active on September 28, 2017.
+// sub-accounts with products. The default value is false.
 func (c *AccountsDeleteCall) Force(force bool) *AccountsDeleteCall {
 	c.urlParams_.Set("force", fmt.Sprint(force))
 	return c
@@ -7404,8 +7407,8 @@ func (c *AccountsDeleteCall) Do(opts ...googleapi.CallOption) error {
 	//       "type": "boolean"
 	//     },
 	//     "force": {
-	//       "default": "true",
-	//       "description": "Flag to delete sub-accounts with products. The default value of false will become active on September 28, 2017.",
+	//       "default": "false",
+	//       "description": "Flag to delete sub-accounts with products. The default value is false.",
 	//       "location": "query",
 	//       "type": "boolean"
 	//     },

@@ -194,7 +194,7 @@ func (s *server) createGauge(name string) *gauge {
 }
 
 func startServer(server *server, port int) {
-	lis, err := net.Listen("tcp", "localhost:"+strconv.Itoa(port))
+	lis, err := net.Listen("tcp", ":"+strconv.Itoa(port))
 	if err != nil {
 		grpclog.Fatalf("failed to listen: %v", err)
 	}

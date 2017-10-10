@@ -117,6 +117,7 @@ func (h *testStreamHandler) handleStream(t *testing.T, s *transport.Stream) {
 type server struct {
 	lis        net.Listener
 	port       string
+	addr       string
 	startedErr chan error // sent nil or an error after server starts
 	mu         sync.Mutex
 	conns      map[transport.ServerTransport]bool
@@ -138,7 +139,8 @@ func (s *server) start(t *testing.T, port int, maxStreams uint32) {
 		s.startedErr <- fmt.Errorf("failed to listen: %v", err)
 		return
 	}
-	_, p, err := net.SplitHostPort(s.lis.Addr().String())
+	s.addr = s.lis.Addr().String()
+	_, p, err := net.SplitHostPort(s.addr)
 	if err != nil {
 		s.startedErr <- fmt.Errorf("failed to parse listener address: %v", err)
 		return

@@ -12102,7 +12102,10 @@
     },
     "PurchaseSet":{
       "type":"list",
-      "member":{"shape":"Purchase"}
+      "member":{
+        "shape":"Purchase",
+        "locationName":"item"
+      }
     },
     "PurchasedScheduledInstanceSet":{
       "type":"list",
@@ -15193,6 +15196,13 @@
         "ALL"
       ]
     },
+    "TunnelOptionsList":{
+      "type":"list",
+      "member":{
+        "shape":"VpnTunnelOptionsSpecification",
+        "locationName":"item"
+      }
+    },
     "UnassignIpv6AddressesRequest":{
       "type":"structure",
       "required":[
@@ -16193,6 +16203,10 @@
           "shape":"String",
           "locationName":"customerGatewayId"
         },
+        "Category":{
+          "shape":"String",
+          "locationName":"category"
+        },
         "State":{
           "shape":"VpnState",
           "locationName":"state"
@@ -16256,7 +16270,8 @@
         "StaticRoutesOnly":{
           "shape":"Boolean",
           "locationName":"staticRoutesOnly"
-        }
+        },
+        "TunnelOptions":{"shape":"TunnelOptionsList"}
       }
     },
     "VpnGateway":{
@@ -16338,6 +16353,13 @@
     "VpnStaticRouteSource":{
       "type":"string",
       "enum":["Static"]
+    },
+    "VpnTunnelOptionsSpecification":{
+      "type":"structure",
+      "members":{
+        "TunnelInsideCidr":{"shape":"String"},
+        "PreSharedKey":{"shape":"String"}
+      }
     },
     "ZoneNameStringList":{
       "type":"list",

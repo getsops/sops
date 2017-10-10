@@ -89,8 +89,7 @@ type QueryConfig struct {
 	// used.
 	MaxBytesBilled int64
 
-	// UseStandardSQL causes the query to use standard SQL.
-	// The default is false (using legacy SQL).
+	// UseStandardSQL causes the query to use standard SQL. The default.
 	UseStandardSQL bool
 
 	// UseLegacySQL causes the query to use legacy SQL.
@@ -189,12 +188,11 @@ func (q *QueryConfig) populateJobQueryConfig(conf *bq.JobConfigurationQuery) err
 	if len(q.Parameters) > 0 && q.UseLegacySQL {
 		return errors.New("bigquery: cannot provide both Parameters (implying standard SQL) and UseLegacySQL")
 	}
-	if q.UseStandardSQL || len(q.Parameters) > 0 {
-		conf.UseLegacySql = false
-		conf.ForceSendFields = append(conf.ForceSendFields, "UseLegacySql")
-	}
 	if q.UseLegacySQL {
 		conf.UseLegacySql = true
+	} else {
+		conf.UseLegacySql = false
+		conf.ForceSendFields = append(conf.ForceSendFields, "UseLegacySql")
 	}
 	if q.Dst != nil && !q.Dst.implicitTable() {
 		conf.DestinationTable = q.Dst.tableRefProto()
