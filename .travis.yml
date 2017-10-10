@@ -8,6 +8,7 @@ addons:
       - rpm
       - ruby
       - python3
+      - docker-ce
 
 before_install:
   - gem install fpm || sudo gem install fpm
@@ -34,3 +35,10 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker build -t mozilla/sops:slim -f Dockerfile-slim .;
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push mozilla/sops:slim;
+    fi
