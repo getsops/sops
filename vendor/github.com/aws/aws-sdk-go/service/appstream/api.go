@@ -55,7 +55,7 @@ func (c *AppStream) AssociateFleetRequest(input *AssociateFleetInput) (req *requ
 
 // AssociateFleet API operation for Amazon AppStream.
 //
-// Associate a fleet to a stack.
+// Associates the specified fleet with the specified stack.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -146,7 +146,7 @@ func (c *AppStream) CreateDirectoryConfigRequest(input *CreateDirectoryConfigInp
 
 // CreateDirectoryConfig API operation for Amazon AppStream.
 //
-// Creates a directory configuration with the given parameters.
+// Creates a directory configuration.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -228,7 +228,7 @@ func (c *AppStream) CreateFleetRequest(input *CreateFleetInput) (req *request.Re
 
 // CreateFleet API operation for Amazon AppStream.
 //
-// Creates a new fleet.
+// Creates a fleet.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -284,6 +284,184 @@ func (c *AppStream) CreateFleetWithContext(ctx aws.Context, input *CreateFleetIn
 	return out, req.Send()
 }
 
+const opCreateImageBuilder = "CreateImageBuilder"
+
+// CreateImageBuilderRequest generates a "aws/request.Request" representing the
+// client's request for the CreateImageBuilder operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateImageBuilder for more information on using the CreateImageBuilder
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateImageBuilderRequest method.
+//    req, resp := client.CreateImageBuilderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilder
+func (c *AppStream) CreateImageBuilderRequest(input *CreateImageBuilderInput) (req *request.Request, output *CreateImageBuilderOutput) {
+	op := &request.Operation{
+		Name:       opCreateImageBuilder,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateImageBuilderInput{}
+	}
+
+	output = &CreateImageBuilderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateImageBuilder API operation for Amazon AppStream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon AppStream's
+// API operation CreateImageBuilder for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   The requested limit exceeds the permitted limit for an account.
+//
+//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
+//   The specified resource already exists.
+//
+//   * ErrCodeResourceNotAvailableException "ResourceNotAvailableException"
+//   The specified resource exists and is not in use, but isn't available.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+//   * ErrCodeInvalidRoleException "InvalidRoleException"
+//   The specified role is invalid.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   An API error occurred. Wait a few minutes and try again.
+//
+//   * ErrCodeInvalidParameterCombinationException "InvalidParameterCombinationException"
+//   Indicates an incorrect combination of parameters, or a missing parameter.
+//
+//   * ErrCodeIncompatibleImageException "IncompatibleImageException"
+//   The image does not support storage connectors.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilder
+func (c *AppStream) CreateImageBuilder(input *CreateImageBuilderInput) (*CreateImageBuilderOutput, error) {
+	req, out := c.CreateImageBuilderRequest(input)
+	return out, req.Send()
+}
+
+// CreateImageBuilderWithContext is the same as CreateImageBuilder with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateImageBuilder for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppStream) CreateImageBuilderWithContext(ctx aws.Context, input *CreateImageBuilderInput, opts ...request.Option) (*CreateImageBuilderOutput, error) {
+	req, out := c.CreateImageBuilderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateImageBuilderStreamingURL = "CreateImageBuilderStreamingURL"
+
+// CreateImageBuilderStreamingURLRequest generates a "aws/request.Request" representing the
+// client's request for the CreateImageBuilderStreamingURL operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateImageBuilderStreamingURL for more information on using the CreateImageBuilderStreamingURL
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateImageBuilderStreamingURLRequest method.
+//    req, resp := client.CreateImageBuilderStreamingURLRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilderStreamingURL
+func (c *AppStream) CreateImageBuilderStreamingURLRequest(input *CreateImageBuilderStreamingURLInput) (req *request.Request, output *CreateImageBuilderStreamingURLOutput) {
+	op := &request.Operation{
+		Name:       opCreateImageBuilderStreamingURL,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateImageBuilderStreamingURLInput{}
+	}
+
+	output = &CreateImageBuilderStreamingURLOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateImageBuilderStreamingURL API operation for Amazon AppStream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon AppStream's
+// API operation CreateImageBuilderStreamingURL for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   The attempted operation is not permitted.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilderStreamingURL
+func (c *AppStream) CreateImageBuilderStreamingURL(input *CreateImageBuilderStreamingURLInput) (*CreateImageBuilderStreamingURLOutput, error) {
+	req, out := c.CreateImageBuilderStreamingURLRequest(input)
+	return out, req.Send()
+}
+
+// CreateImageBuilderStreamingURLWithContext is the same as CreateImageBuilderStreamingURL with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateImageBuilderStreamingURL for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppStream) CreateImageBuilderStreamingURLWithContext(ctx aws.Context, input *CreateImageBuilderStreamingURLInput, opts ...request.Option) (*CreateImageBuilderStreamingURLOutput, error) {
+	req, out := c.CreateImageBuilderStreamingURLRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateStack = "CreateStack"
 
 // CreateStackRequest generates a "aws/request.Request" representing the
@@ -328,7 +506,7 @@ func (c *AppStream) CreateStackRequest(input *CreateStackInput) (req *request.Re
 
 // CreateStack API operation for Amazon AppStream.
 //
-// Create a new stack.
+// Creates a stack.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -422,8 +600,10 @@ func (c *AppStream) CreateStreamingURLRequest(input *CreateStreamingURLInput) (r
 
 // CreateStreamingURL API operation for Amazon AppStream.
 //
-// Creates a URL to start an AppStream 2.0 streaming session for a user. By
-// default, the URL is valid only for 1 minute from the time that it is generated.
+// Creates a URL to start a streaming session for the specified user.
+//
+// By default, the URL is valid only for one minute from the time that it is
+// generated.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -511,7 +691,7 @@ func (c *AppStream) DeleteDirectoryConfigRequest(input *DeleteDirectoryConfigInp
 
 // DeleteDirectoryConfig API operation for Amazon AppStream.
 //
-// Deletes the directory configuration with the given parameters.
+// Deletes the specified directory configuration.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -593,7 +773,7 @@ func (c *AppStream) DeleteFleetRequest(input *DeleteFleetInput) (req *request.Re
 
 // DeleteFleet API operation for Amazon AppStream.
 //
-// Deletes a fleet.
+// Deletes the specified fleet.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -629,6 +809,175 @@ func (c *AppStream) DeleteFleet(input *DeleteFleetInput) (*DeleteFleetOutput, er
 // for more information on using Contexts.
 func (c *AppStream) DeleteFleetWithContext(ctx aws.Context, input *DeleteFleetInput, opts ...request.Option) (*DeleteFleetOutput, error) {
 	req, out := c.DeleteFleetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteImage = "DeleteImage"
+
+// DeleteImageRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteImage operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteImage for more information on using the DeleteImage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteImageRequest method.
+//    req, resp := client.DeleteImageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImage
+func (c *AppStream) DeleteImageRequest(input *DeleteImageInput) (req *request.Request, output *DeleteImageOutput) {
+	op := &request.Operation{
+		Name:       opDeleteImage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteImageInput{}
+	}
+
+	output = &DeleteImageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteImage API operation for Amazon AppStream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon AppStream's
+// API operation DeleteImage for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   The specified resource is in use.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   The attempted operation is not permitted.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   An API error occurred. Wait a few minutes and try again.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImage
+func (c *AppStream) DeleteImage(input *DeleteImageInput) (*DeleteImageOutput, error) {
+	req, out := c.DeleteImageRequest(input)
+	return out, req.Send()
+}
+
+// DeleteImageWithContext is the same as DeleteImage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteImage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppStream) DeleteImageWithContext(ctx aws.Context, input *DeleteImageInput, opts ...request.Option) (*DeleteImageOutput, error) {
+	req, out := c.DeleteImageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteImageBuilder = "DeleteImageBuilder"
+
+// DeleteImageBuilderRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteImageBuilder operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteImageBuilder for more information on using the DeleteImageBuilder
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteImageBuilderRequest method.
+//    req, resp := client.DeleteImageBuilderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImageBuilder
+func (c *AppStream) DeleteImageBuilderRequest(input *DeleteImageBuilderInput) (req *request.Request, output *DeleteImageBuilderOutput) {
+	op := &request.Operation{
+		Name:       opDeleteImageBuilder,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteImageBuilderInput{}
+	}
+
+	output = &DeleteImageBuilderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteImageBuilder API operation for Amazon AppStream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon AppStream's
+// API operation DeleteImageBuilder for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   The attempted operation is not permitted.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   An API error occurred. Wait a few minutes and try again.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImageBuilder
+func (c *AppStream) DeleteImageBuilder(input *DeleteImageBuilderInput) (*DeleteImageBuilderOutput, error) {
+	req, out := c.DeleteImageBuilderRequest(input)
+	return out, req.Send()
+}
+
+// DeleteImageBuilderWithContext is the same as DeleteImageBuilder with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteImageBuilder for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppStream) DeleteImageBuilderWithContext(ctx aws.Context, input *DeleteImageBuilderInput, opts ...request.Option) (*DeleteImageBuilderOutput, error) {
+	req, out := c.DeleteImageBuilderRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -678,8 +1027,8 @@ func (c *AppStream) DeleteStackRequest(input *DeleteStackInput) (req *request.Re
 
 // DeleteStack API operation for Amazon AppStream.
 //
-// Deletes the stack. After this operation completes, the environment can no
-// longer be activated, and any reservations made for the stack are released.
+// Deletes the specified stack. After this operation completes, the environment
+// can no longer be activated and any reservations made for the stack are released.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -764,7 +1113,7 @@ func (c *AppStream) DescribeDirectoryConfigsRequest(input *DescribeDirectoryConf
 
 // DescribeDirectoryConfigs API operation for Amazon AppStream.
 //
-// Returns a list describing the specified directory configurations.
+// Describes the specified directory configurations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -843,8 +1192,7 @@ func (c *AppStream) DescribeFleetsRequest(input *DescribeFleetsInput) (req *requ
 
 // DescribeFleets API operation for Amazon AppStream.
 //
-// If fleet names are provided, this operation describes the specified fleets;
-// otherwise, all the fleets in the account are described.
+// Describes the specified fleets or all fleets in the account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -874,6 +1222,83 @@ func (c *AppStream) DescribeFleets(input *DescribeFleetsInput) (*DescribeFleetsO
 // for more information on using Contexts.
 func (c *AppStream) DescribeFleetsWithContext(ctx aws.Context, input *DescribeFleetsInput, opts ...request.Option) (*DescribeFleetsOutput, error) {
 	req, out := c.DescribeFleetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeImageBuilders = "DescribeImageBuilders"
+
+// DescribeImageBuildersRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeImageBuilders operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeImageBuilders for more information on using the DescribeImageBuilders
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeImageBuildersRequest method.
+//    req, resp := client.DescribeImageBuildersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DescribeImageBuilders
+func (c *AppStream) DescribeImageBuildersRequest(input *DescribeImageBuildersInput) (req *request.Request, output *DescribeImageBuildersOutput) {
+	op := &request.Operation{
+		Name:       opDescribeImageBuilders,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeImageBuildersInput{}
+	}
+
+	output = &DescribeImageBuildersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeImageBuilders API operation for Amazon AppStream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon AppStream's
+// API operation DescribeImageBuilders for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DescribeImageBuilders
+func (c *AppStream) DescribeImageBuilders(input *DescribeImageBuildersInput) (*DescribeImageBuildersOutput, error) {
+	req, out := c.DescribeImageBuildersRequest(input)
+	return out, req.Send()
+}
+
+// DescribeImageBuildersWithContext is the same as DescribeImageBuilders with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeImageBuilders for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppStream) DescribeImageBuildersWithContext(ctx aws.Context, input *DescribeImageBuildersInput, opts ...request.Option) (*DescribeImageBuildersOutput, error) {
+	req, out := c.DescribeImageBuildersRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -923,8 +1348,7 @@ func (c *AppStream) DescribeImagesRequest(input *DescribeImagesInput) (req *requ
 
 // DescribeImages API operation for Amazon AppStream.
 //
-// Describes the images. If a list of names is not provided, all images in your
-// account are returned. This operation does not return a paginated result.
+// Describes the specified images or all images in the account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1003,12 +1427,10 @@ func (c *AppStream) DescribeSessionsRequest(input *DescribeSessionsInput) (req *
 
 // DescribeSessions API operation for Amazon AppStream.
 //
-// Describes the streaming sessions for a stack and a fleet. If a user ID is
-// provided, this operation returns streaming sessions for only that user. To
-// retrieve the next set of items, pass this value for the nextToken parameter
-// in a subsequent call to this operation. If an authentication type is not
-// provided, the operation defaults to users authenticated using a streaming
-// URL.
+// Describes the streaming sessions for the specified stack and fleet. If a
+// user ID is provided, only the streaming sessions for only that user are returned.
+// If an authentication type is not provided, the default is to authenticate
+// users using a streaming URL.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1087,9 +1509,7 @@ func (c *AppStream) DescribeStacksRequest(input *DescribeStacksInput) (req *requ
 
 // DescribeStacks API operation for Amazon AppStream.
 //
-// If stack names are not provided, this operation describes the specified stacks;
-// otherwise, all stacks in the account are described. To retrieve the next
-// set of items, pass the nextToken value in a subsequent call to this operation.
+// Describes the specified stacks or all stacks in the account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1168,7 +1588,7 @@ func (c *AppStream) DisassociateFleetRequest(input *DisassociateFleetInput) (req
 
 // DisassociateFleet API operation for Amazon AppStream.
 //
-// Disassociates a fleet from a stack.
+// Disassociates the specified fleet from the specified stack.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1253,7 +1673,7 @@ func (c *AppStream) ExpireSessionRequest(input *ExpireSessionInput) (req *reques
 
 // ExpireSession API operation for Amazon AppStream.
 //
-// This operation immediately stops a streaming session.
+// Stops the specified streaming session.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1327,7 +1747,7 @@ func (c *AppStream) ListAssociatedFleetsRequest(input *ListAssociatedFleetsInput
 
 // ListAssociatedFleets API operation for Amazon AppStream.
 //
-// Lists all fleets associated with the stack.
+// Lists the fleets associated with the specified stack.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1401,7 +1821,7 @@ func (c *AppStream) ListAssociatedStacksRequest(input *ListAssociatedStacksInput
 
 // ListAssociatedStacks API operation for Amazon AppStream.
 //
-// Lists all stacks to which the specified fleet is associated.
+// Lists the stacks associated with the specified fleet.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1475,7 +1895,7 @@ func (c *AppStream) StartFleetRequest(input *StartFleetInput) (req *request.Requ
 
 // StartFleet API operation for Amazon AppStream.
 //
-// Starts a fleet.
+// Starts the specified fleet.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1514,6 +1934,89 @@ func (c *AppStream) StartFleet(input *StartFleetInput) (*StartFleetOutput, error
 // for more information on using Contexts.
 func (c *AppStream) StartFleetWithContext(ctx aws.Context, input *StartFleetInput, opts ...request.Option) (*StartFleetOutput, error) {
 	req, out := c.StartFleetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartImageBuilder = "StartImageBuilder"
+
+// StartImageBuilderRequest generates a "aws/request.Request" representing the
+// client's request for the StartImageBuilder operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartImageBuilder for more information on using the StartImageBuilder
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartImageBuilderRequest method.
+//    req, resp := client.StartImageBuilderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StartImageBuilder
+func (c *AppStream) StartImageBuilderRequest(input *StartImageBuilderInput) (req *request.Request, output *StartImageBuilderOutput) {
+	op := &request.Operation{
+		Name:       opStartImageBuilder,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartImageBuilderInput{}
+	}
+
+	output = &StartImageBuilderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartImageBuilder API operation for Amazon AppStream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon AppStream's
+// API operation StartImageBuilder for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotAvailableException "ResourceNotAvailableException"
+//   The specified resource exists and is not in use, but isn't available.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   An API error occurred. Wait a few minutes and try again.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StartImageBuilder
+func (c *AppStream) StartImageBuilder(input *StartImageBuilderInput) (*StartImageBuilderOutput, error) {
+	req, out := c.StartImageBuilderRequest(input)
+	return out, req.Send()
+}
+
+// StartImageBuilderWithContext is the same as StartImageBuilder with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartImageBuilder for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppStream) StartImageBuilderWithContext(ctx aws.Context, input *StartImageBuilderInput, opts ...request.Option) (*StartImageBuilderOutput, error) {
+	req, out := c.StartImageBuilderRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1563,7 +2066,7 @@ func (c *AppStream) StopFleetRequest(input *StopFleetInput) (req *request.Reques
 
 // StopFleet API operation for Amazon AppStream.
 //
-// Stops a fleet.
+// Stops the specified fleet.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1596,6 +2099,89 @@ func (c *AppStream) StopFleet(input *StopFleetInput) (*StopFleetOutput, error) {
 // for more information on using Contexts.
 func (c *AppStream) StopFleetWithContext(ctx aws.Context, input *StopFleetInput, opts ...request.Option) (*StopFleetOutput, error) {
 	req, out := c.StopFleetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopImageBuilder = "StopImageBuilder"
+
+// StopImageBuilderRequest generates a "aws/request.Request" representing the
+// client's request for the StopImageBuilder operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopImageBuilder for more information on using the StopImageBuilder
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopImageBuilderRequest method.
+//    req, resp := client.StopImageBuilderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StopImageBuilder
+func (c *AppStream) StopImageBuilderRequest(input *StopImageBuilderInput) (req *request.Request, output *StopImageBuilderOutput) {
+	op := &request.Operation{
+		Name:       opStopImageBuilder,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopImageBuilderInput{}
+	}
+
+	output = &StopImageBuilderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopImageBuilder API operation for Amazon AppStream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon AppStream's
+// API operation StopImageBuilder for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   The attempted operation is not permitted.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   An API error occurred. Wait a few minutes and try again.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StopImageBuilder
+func (c *AppStream) StopImageBuilder(input *StopImageBuilderInput) (*StopImageBuilderOutput, error) {
+	req, out := c.StopImageBuilderRequest(input)
+	return out, req.Send()
+}
+
+// StopImageBuilderWithContext is the same as StopImageBuilder with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopImageBuilder for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppStream) StopImageBuilderWithContext(ctx aws.Context, input *StopImageBuilderInput, opts ...request.Option) (*StopImageBuilderOutput, error) {
+	req, out := c.StopImageBuilderRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1645,7 +2231,7 @@ func (c *AppStream) UpdateDirectoryConfigRequest(input *UpdateDirectoryConfigInp
 
 // UpdateDirectoryConfig API operation for Amazon AppStream.
 //
-// Updates the directory configuration with the given parameters.
+// Updates the specified directory configuration.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1730,10 +2316,12 @@ func (c *AppStream) UpdateFleetRequest(input *UpdateFleetInput) (req *request.Re
 
 // UpdateFleet API operation for Amazon AppStream.
 //
-// Updates an existing fleet. All the attributes except the fleet name can be
-// updated in the STOPPED state. When a fleet is in the RUNNING state, only
-// DisplayName and ComputeCapacity can be updated. A fleet cannot be updated
-// in a status of STARTING or STOPPING.
+// Updates the specified fleet.
+//
+// If the fleet is in the STOPPED state, you can update any attribute except
+// the fleet name. If the fleet is in the RUNNING state, you can update the
+// DisplayName and ComputeCapacity attributes. If the fleet is in the STARTING
+// or STOPPING state, you can't update it.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1836,7 +2424,7 @@ func (c *AppStream) UpdateStackRequest(input *UpdateStackInput) (req *request.Re
 
 // UpdateStack API operation for Amazon AppStream.
 //
-// Updates the specified fields in the stack with the specified name.
+// Updates the specified stack.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1886,21 +2474,21 @@ func (c *AppStream) UpdateStackWithContext(ctx aws.Context, input *UpdateStackIn
 	return out, req.Send()
 }
 
-// An entry for a single application in the application catalog.
+// Describes an application in the application catalog.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/Application
 type Application struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the application shown to the end users.
+	// The application name displayed to end users.
 	DisplayName *string `min:"1" type:"string"`
 
-	// If there is a problem, an application can be disabled after image creation.
+	// If there is a problem, the application can be disabled after image creation.
 	Enabled *bool `type:"boolean"`
 
-	// The URL for the application icon. This URL may be time-limited.
+	// The URL for the application icon. This URL might be time-limited.
 	IconURL *string `min:"1" type:"string"`
 
-	// A list of arguments that are passed to the application at launch.
+	// The arguments that are passed to the application at launch.
 	LaunchParameters *string `min:"1" type:"string"`
 
 	// The path to the application executable in the instance.
@@ -1909,7 +2497,7 @@ type Application struct {
 	// Additional attributes that describe the application.
 	Metadata map[string]*string `type:"map"`
 
-	// The unique identifier for the application.
+	// The name of the application.
 	Name *string `min:"1" type:"string"`
 }
 
@@ -1969,12 +2557,12 @@ func (s *Application) SetName(v string) *Application {
 type AssociateFleetInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the fleet to associate.
+	// The name of the fleet.
 	//
 	// FleetName is a required field
 	FleetName *string `min:"1" type:"string" required:"true"`
 
-	// The name of the stack to which the fleet is associated.
+	// The name of the stack.
 	//
 	// StackName is a required field
 	StackName *string `min:"1" type:"string" required:"true"`
@@ -2039,7 +2627,7 @@ func (s AssociateFleetOutput) GoString() string {
 	return s.String()
 }
 
-// The capacity configuration for the fleet.
+// Describes the capacity for a fleet.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ComputeCapacity
 type ComputeCapacity struct {
 	_ struct{} `type:"structure"`
@@ -2079,7 +2667,7 @@ func (s *ComputeCapacity) SetDesiredInstances(v int64) *ComputeCapacity {
 	return s
 }
 
-// The capacity information for the fleet.
+// Describes the capacity status for a fleet.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ComputeCapacityStatus
 type ComputeCapacityStatus struct {
 	_ struct{} `type:"structure"`
@@ -2092,7 +2680,7 @@ type ComputeCapacityStatus struct {
 	// Desired is a required field
 	Desired *int64 `type:"integer" required:"true"`
 
-	// The number of instances that are being used for streaming.
+	// The number of instances in use for streaming.
 	InUse *int64 `type:"integer"`
 
 	// The total number of simultaneous streaming instances that are running.
@@ -2137,19 +2725,18 @@ func (s *ComputeCapacityStatus) SetRunning(v int64) *ComputeCapacityStatus {
 type CreateDirectoryConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The fully qualified name of the directory, such as corp.example.com
+	// The fully qualified name of the directory (for example, corp.example.com).
 	//
 	// DirectoryName is a required field
 	DirectoryName *string `type:"string" required:"true"`
 
-	// The list of the distinguished names of organizational units to place computer
-	// accounts in.
+	// The distinguished names of the organizational units for computer accounts.
 	//
 	// OrganizationalUnitDistinguishedNames is a required field
 	OrganizationalUnitDistinguishedNames []*string `type:"list" required:"true"`
 
-	// The AccountName and AccountPassword values for the service account, which
-	// are used by the streaming instance to connect to the directory.
+	// The credentials for the service account used by the streaming instance to
+	// connect to the directory.
 	//
 	// ServiceAccountCredentials is a required field
 	ServiceAccountCredentials *ServiceAccountCredentials `type:"structure" required:"true"`
@@ -2211,7 +2798,7 @@ func (s *CreateDirectoryConfigInput) SetServiceAccountCredentials(v *ServiceAcco
 type CreateDirectoryConfigOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Directory configuration details.
+	// Information about the directory configuration.
 	DirectoryConfig *DirectoryConfig `type:"structure"`
 }
 
@@ -2231,42 +2818,42 @@ func (s *CreateDirectoryConfigOutput) SetDirectoryConfig(v *DirectoryConfig) *Cr
 	return s
 }
 
-// Contains the parameters for the new fleet to create.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateFleetRequest
 type CreateFleetInput struct {
 	_ struct{} `type:"structure"`
 
-	// The parameters for the capacity allocated to the fleet.
+	// The desired capacity for the fleet.
 	//
 	// ComputeCapacity is a required field
 	ComputeCapacity *ComputeCapacity `type:"structure" required:"true"`
 
-	// The description of the fleet.
+	// The description displayed to end users.
 	Description *string `type:"string"`
 
-	// The time after disconnection when a session is considered to have ended.
-	// If a user who got disconnected reconnects within this timeout interval, the
-	// user is connected back to their previous session. The input can be any numeric
-	// value in seconds between 60 and 57600.
+	// The time after disconnection when a session is considered to have ended,
+	// in seconds. If a user who was disconnected reconnects within this time interval,
+	// the user is connected to their previous session. Specify a value between
+	// 60 and 57600.
 	DisconnectTimeoutInSeconds *int64 `type:"integer"`
 
-	// The display name of the fleet.
+	// The fleet name displayed to end users.
 	DisplayName *string `type:"string"`
 
-	// The DirectoryName and OrganizationalUnitDistinguishedName values, which are
-	// used to join domains for the AppStream 2.0 streaming instances.
+	// The information needed for streaming instances to join a domain.
 	DomainJoinInfo *DomainJoinInfo `type:"structure"`
 
 	// Enables or disables default internet access for the fleet.
 	EnableDefaultInternetAccess *bool `type:"boolean"`
 
-	// Unique name of the image used by the fleet.
+	FleetType *string `type:"string" enum:"FleetType"`
+
+	// The name of the image used by the fleet.
 	//
 	// ImageName is a required field
 	ImageName *string `min:"1" type:"string" required:"true"`
 
-	// The instance type of compute resources for the fleet. Fleet instances are
-	// launched from this instance type. Available instance types are:
+	// The instance type to use when launching fleet instances. The following instance
+	// types are available:
 	//
 	//    * stream.standard.medium
 	//
@@ -2292,22 +2879,30 @@ type CreateFleetInput struct {
 	//
 	//    * stream.memory.8xlarge
 	//
+	//    * stream.graphics-design.large
+	//
+	//    * stream.graphics-design.xlarge
+	//
+	//    * stream.graphics-design.2xlarge
+	//
+	//    * stream.graphics-design.4xlarge
+	//
+	//    * stream.graphics-desktop.2xlarge
+	//
 	//    * stream.graphics-pro.4xlarge
 	//
 	//    * stream.graphics-pro.8xlarge
 	//
 	//    * stream.graphics-pro.16xlarge
 	//
-	//    * stream.graphics-desktop.2xlarge
-	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
 
-	// The maximum time for which a streaming session can run. The input can be
-	// any numeric value in seconds between 600 and 57600.
+	// The maximum time that a streaming session can run, in seconds. Specify a
+	// value between 600 and 57600.
 	MaxUserDurationInSeconds *int64 `type:"integer"`
 
-	// A unique identifier for the fleet.
+	// A unique name for the fleet.
 	//
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
@@ -2395,6 +2990,12 @@ func (s *CreateFleetInput) SetEnableDefaultInternetAccess(v bool) *CreateFleetIn
 	return s
 }
 
+// SetFleetType sets the FleetType field's value.
+func (s *CreateFleetInput) SetFleetType(v string) *CreateFleetInput {
+	s.FleetType = &v
+	return s
+}
+
 // SetImageName sets the ImageName field's value.
 func (s *CreateFleetInput) SetImageName(v string) *CreateFleetInput {
 	s.ImageName = &v
@@ -2429,7 +3030,7 @@ func (s *CreateFleetInput) SetVpcConfig(v *VpcConfig) *CreateFleetInput {
 type CreateFleetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The details for the created fleet.
+	// Information about the fleet.
 	Fleet *Fleet `type:"structure"`
 }
 
@@ -2449,22 +3050,233 @@ func (s *CreateFleetOutput) SetFleet(v *Fleet) *CreateFleetOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilderRequest
+type CreateImageBuilderInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `type:"string"`
+
+	DisplayName *string `type:"string"`
+
+	// Contains the information needed for streaming instances to join a domain.
+	DomainJoinInfo *DomainJoinInfo `type:"structure"`
+
+	EnableDefaultInternetAccess *bool `type:"boolean"`
+
+	// ImageName is a required field
+	ImageName *string `min:"1" type:"string" required:"true"`
+
+	// InstanceType is a required field
+	InstanceType *string `min:"1" type:"string" required:"true"`
+
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Describes VPC configuration information.
+	VpcConfig *VpcConfig `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateImageBuilderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateImageBuilderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateImageBuilderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateImageBuilderInput"}
+	if s.ImageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageName"))
+	}
+	if s.ImageName != nil && len(*s.ImageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ImageName", 1))
+	}
+	if s.InstanceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceType"))
+	}
+	if s.InstanceType != nil && len(*s.InstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceType", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateImageBuilderInput) SetDescription(v string) *CreateImageBuilderInput {
+	s.Description = &v
+	return s
+}
+
+// SetDisplayName sets the DisplayName field's value.
+func (s *CreateImageBuilderInput) SetDisplayName(v string) *CreateImageBuilderInput {
+	s.DisplayName = &v
+	return s
+}
+
+// SetDomainJoinInfo sets the DomainJoinInfo field's value.
+func (s *CreateImageBuilderInput) SetDomainJoinInfo(v *DomainJoinInfo) *CreateImageBuilderInput {
+	s.DomainJoinInfo = v
+	return s
+}
+
+// SetEnableDefaultInternetAccess sets the EnableDefaultInternetAccess field's value.
+func (s *CreateImageBuilderInput) SetEnableDefaultInternetAccess(v bool) *CreateImageBuilderInput {
+	s.EnableDefaultInternetAccess = &v
+	return s
+}
+
+// SetImageName sets the ImageName field's value.
+func (s *CreateImageBuilderInput) SetImageName(v string) *CreateImageBuilderInput {
+	s.ImageName = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *CreateImageBuilderInput) SetInstanceType(v string) *CreateImageBuilderInput {
+	s.InstanceType = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateImageBuilderInput) SetName(v string) *CreateImageBuilderInput {
+	s.Name = &v
+	return s
+}
+
+// SetVpcConfig sets the VpcConfig field's value.
+func (s *CreateImageBuilderInput) SetVpcConfig(v *VpcConfig) *CreateImageBuilderInput {
+	s.VpcConfig = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilderResult
+type CreateImageBuilderOutput struct {
+	_ struct{} `type:"structure"`
+
+	ImageBuilder *ImageBuilder `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateImageBuilderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateImageBuilderOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBuilder sets the ImageBuilder field's value.
+func (s *CreateImageBuilderOutput) SetImageBuilder(v *ImageBuilder) *CreateImageBuilderOutput {
+	s.ImageBuilder = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilderStreamingURLRequest
+type CreateImageBuilderStreamingURLInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	Validity *int64 `type:"long"`
+}
+
+// String returns the string representation
+func (s CreateImageBuilderStreamingURLInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateImageBuilderStreamingURLInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateImageBuilderStreamingURLInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateImageBuilderStreamingURLInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *CreateImageBuilderStreamingURLInput) SetName(v string) *CreateImageBuilderStreamingURLInput {
+	s.Name = &v
+	return s
+}
+
+// SetValidity sets the Validity field's value.
+func (s *CreateImageBuilderStreamingURLInput) SetValidity(v int64) *CreateImageBuilderStreamingURLInput {
+	s.Validity = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateImageBuilderStreamingURLResult
+type CreateImageBuilderStreamingURLOutput struct {
+	_ struct{} `type:"structure"`
+
+	Expires *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	StreamingURL *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateImageBuilderStreamingURLOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateImageBuilderStreamingURLOutput) GoString() string {
+	return s.String()
+}
+
+// SetExpires sets the Expires field's value.
+func (s *CreateImageBuilderStreamingURLOutput) SetExpires(v time.Time) *CreateImageBuilderStreamingURLOutput {
+	s.Expires = &v
+	return s
+}
+
+// SetStreamingURL sets the StreamingURL field's value.
+func (s *CreateImageBuilderStreamingURLOutput) SetStreamingURL(v string) *CreateImageBuilderStreamingURLOutput {
+	s.StreamingURL = &v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/CreateStackRequest
 type CreateStackInput struct {
 	_ struct{} `type:"structure"`
 
-	// The description displayed to end users on the AppStream 2.0 portal.
+	// The description displayed to end users.
 	Description *string `type:"string"`
 
-	// The name displayed to end users on the AppStream 2.0 portal.
+	// The stack name displayed to end users.
 	DisplayName *string `type:"string"`
 
-	// The unique identifier for this stack.
+	// The name of the stack.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The storage connectors to be enabled for the stack.
+	// The storage connectors to enable.
 	StorageConnectors []*StorageConnector `type:"list"`
 }
 
@@ -2532,7 +3344,7 @@ func (s *CreateStackInput) SetStorageConnectors(v []*StorageConnector) *CreateSt
 type CreateStackOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The details for the created stack.
+	// Information about the stack.
 	Stack *Stack `type:"structure"`
 }
 
@@ -2559,26 +3371,26 @@ type CreateStreamingURLInput struct {
 	// The ID of the application that must be launched after the session starts.
 	ApplicationId *string `min:"1" type:"string"`
 
-	// The fleet for which the URL is generated.
+	// The name of the fleet.
 	//
 	// FleetName is a required field
 	FleetName *string `min:"1" type:"string" required:"true"`
 
-	// The sessionContext of the streaming URL.
+	// The session context of the streaming URL.
 	SessionContext *string `min:"1" type:"string"`
 
-	// The stack for which the URL is generated.
+	// The name of the stack.
 	//
 	// StackName is a required field
 	StackName *string `min:"1" type:"string" required:"true"`
 
-	// A unique user ID for whom the URL is generated.
+	// The ID of the user.
 	//
 	// UserId is a required field
 	UserId *string `min:"2" type:"string" required:"true"`
 
-	// The duration up to which the URL returned by this action is valid. The input
-	// can be any numeric value in seconds between 1 and 604800 seconds.
+	// The time that the streaming URL will be valid, in seconds. Specify a value
+	// between 1 and 604800 seconds.
 	Validity *int64 `type:"long"`
 }
 
@@ -2666,7 +3478,7 @@ func (s *CreateStreamingURLInput) SetValidity(v int64) *CreateStreamingURLInput 
 type CreateStreamingURLOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Elapsed seconds after the Unix epoch, when this URL expires.
+	// The elapsed time, in seconds after the Unix epoch, when this URL expires.
 	Expires *time.Time `type:"timestamp" timestampFormat:"unix"`
 
 	// The URL to start the AppStream 2.0 streaming session.
@@ -2699,7 +3511,7 @@ func (s *CreateStreamingURLOutput) SetStreamingURL(v string) *CreateStreamingURL
 type DeleteDirectoryConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the directory configuration to be deleted.
+	// The name of the directory configuration.
 	//
 	// DirectoryName is a required field
 	DirectoryName *string `type:"string" required:"true"`
@@ -2753,7 +3565,7 @@ func (s DeleteDirectoryConfigOutput) GoString() string {
 type DeleteFleetInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the fleet to be deleted.
+	// The name of the fleet.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -2806,11 +3618,132 @@ func (s DeleteFleetOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImageBuilderRequest
+type DeleteImageBuilderInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteImageBuilderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteImageBuilderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteImageBuilderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteImageBuilderInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteImageBuilderInput) SetName(v string) *DeleteImageBuilderInput {
+	s.Name = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImageBuilderResult
+type DeleteImageBuilderOutput struct {
+	_ struct{} `type:"structure"`
+
+	ImageBuilder *ImageBuilder `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteImageBuilderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteImageBuilderOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBuilder sets the ImageBuilder field's value.
+func (s *DeleteImageBuilderOutput) SetImageBuilder(v *ImageBuilder) *DeleteImageBuilderOutput {
+	s.ImageBuilder = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImageRequest
+type DeleteImageInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteImageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteImageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteImageInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteImageInput) SetName(v string) *DeleteImageInput {
+	s.Name = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteImageResult
+type DeleteImageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes an image.
+	Image *Image `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteImageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteImageOutput) GoString() string {
+	return s.String()
+}
+
+// SetImage sets the Image field's value.
+func (s *DeleteImageOutput) SetImage(v *Image) *DeleteImageOutput {
+	s.Image = v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DeleteStackRequest
 type DeleteStackInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the stack to delete.
+	// The name of the stack.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -2867,14 +3800,14 @@ func (s DeleteStackOutput) GoString() string {
 type DescribeDirectoryConfigsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A specific list of directory names.
+	// The directory names.
 	DirectoryNames []*string `type:"list"`
 
-	// The size of each page of results.
+	// The maximum size of each page of results.
 	MaxResults *int64 `type:"integer"`
 
-	// The DescribeDirectoryConfigsResult.NextToken from a previous call to DescribeDirectoryConfigs.
-	// If this is the first call, pass null.
+	// The pagination token to use to retrieve the next page of results for this
+	// operation. If this value is null, it retrieves the first page.
 	NextToken *string `min:"1" type:"string"`
 }
 
@@ -2923,11 +3856,11 @@ func (s *DescribeDirectoryConfigsInput) SetNextToken(v string) *DescribeDirector
 type DescribeDirectoryConfigsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of directory configurations.
+	// Information about the directory configurations.
 	DirectoryConfigs []*DirectoryConfig `type:"list"`
 
-	// If not null, more results are available. To retrieve the next set of items,
-	// pass this value for the NextToken parameter in a subsequent call to DescribeDirectoryConfigs.
+	// The pagination token to use to retrieve the next page of results for this
+	// operation. If there are no more pages, this value is null.
 	NextToken *string `min:"1" type:"string"`
 }
 
@@ -2957,8 +3890,7 @@ func (s *DescribeDirectoryConfigsOutput) SetNextToken(v string) *DescribeDirecto
 type DescribeFleetsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The fleet names to describe. Use null to describe all the fleets for the
-	// AWS account.
+	// The names of the fleets to describe.
 	Names []*string `type:"list"`
 
 	// The pagination token to use to retrieve the next page of results for this
@@ -3005,7 +3937,7 @@ func (s *DescribeFleetsInput) SetNextToken(v string) *DescribeFleetsInput {
 type DescribeFleetsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of fleet details.
+	// Information about the fleets.
 	Fleets []*Fleet `type:"list"`
 
 	// The pagination token to use to retrieve the next page of results for this
@@ -3035,11 +3967,94 @@ func (s *DescribeFleetsOutput) SetNextToken(v string) *DescribeFleetsOutput {
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DescribeImageBuildersRequest
+type DescribeImageBuildersInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `type:"integer"`
+
+	Names []*string `type:"list"`
+
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeImageBuildersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeImageBuildersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeImageBuildersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeImageBuildersInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeImageBuildersInput) SetMaxResults(v int64) *DescribeImageBuildersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNames sets the Names field's value.
+func (s *DescribeImageBuildersInput) SetNames(v []*string) *DescribeImageBuildersInput {
+	s.Names = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeImageBuildersInput) SetNextToken(v string) *DescribeImageBuildersInput {
+	s.NextToken = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DescribeImageBuildersResult
+type DescribeImageBuildersOutput struct {
+	_ struct{} `type:"structure"`
+
+	ImageBuilders []*ImageBuilder `type:"list"`
+
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeImageBuildersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeImageBuildersOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBuilders sets the ImageBuilders field's value.
+func (s *DescribeImageBuildersOutput) SetImageBuilders(v []*ImageBuilder) *DescribeImageBuildersOutput {
+	s.ImageBuilders = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeImageBuildersOutput) SetNextToken(v string) *DescribeImageBuildersOutput {
+	s.NextToken = &v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DescribeImagesRequest
 type DescribeImagesInput struct {
 	_ struct{} `type:"structure"`
 
-	// A specific list of images to describe.
+	// The names of the images to describe.
 	Names []*string `type:"list"`
 }
 
@@ -3063,7 +4078,7 @@ func (s *DescribeImagesInput) SetNames(v []*string) *DescribeImagesInput {
 type DescribeImagesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of images.
+	// Information about the images.
 	Images []*Image `type:"list"`
 }
 
@@ -3087,32 +4102,30 @@ func (s *DescribeImagesOutput) SetImages(v []*Image) *DescribeImagesOutput {
 type DescribeSessionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The authentication method of the user. It can be API for a user authenticated
-	// using a streaming URL, or SAML for a SAML federated user. If an authentication
-	// type is not provided, the operation defaults to users authenticated using
-	// a streaming URL.
+	// The authentication method. Specify API for a user authenticated using a streaming
+	// URL or SAML for a SAML federated user. The default is to authenticate users
+	// using a streaming URL.
 	AuthenticationType *string `type:"string" enum:"AuthenticationType"`
 
-	// The name of the fleet for which to list sessions.
+	// The name of the fleet.
 	//
 	// FleetName is a required field
 	FleetName *string `min:"1" type:"string" required:"true"`
 
 	// The size of each page of results. The default value is 20 and the maximum
-	// supported value is 50.
+	// value is 50.
 	Limit *int64 `type:"integer"`
 
 	// The pagination token to use to retrieve the next page of results for this
 	// operation. If this value is null, it retrieves the first page.
 	NextToken *string `min:"1" type:"string"`
 
-	// The name of the stack for which to list sessions.
+	// The name of the stack.
 	//
 	// StackName is a required field
 	StackName *string `min:"1" type:"string" required:"true"`
 
-	// The user for whom to list sessions. Use null to describe all the sessions
-	// for the stack and fleet.
+	// The user ID.
 	UserId *string `min:"2" type:"string"`
 }
 
@@ -3198,7 +4211,7 @@ type DescribeSessionsOutput struct {
 	// operation. If there are no more pages, this value is null.
 	NextToken *string `min:"1" type:"string"`
 
-	// The list of streaming sessions.
+	// Information about the streaming sessions.
 	Sessions []*Session `type:"list"`
 }
 
@@ -3228,8 +4241,7 @@ func (s *DescribeSessionsOutput) SetSessions(v []*Session) *DescribeSessionsOutp
 type DescribeStacksInput struct {
 	_ struct{} `type:"structure"`
 
-	// The stack names to describe. Use null to describe all the stacks for the
-	// AWS account.
+	// The names of the stacks to describe.
 	Names []*string `type:"list"`
 
 	// The pagination token to use to retrieve the next page of results for this
@@ -3280,7 +4292,7 @@ type DescribeStacksOutput struct {
 	// operation. If there are no more pages, this value is null.
 	NextToken *string `min:"1" type:"string"`
 
-	// The list of stack details.
+	// Information about the stacks.
 	Stacks []*Stack `type:"list"`
 }
 
@@ -3306,27 +4318,24 @@ func (s *DescribeStacksOutput) SetStacks(v []*Stack) *DescribeStacksOutput {
 	return s
 }
 
-// Full directory configuration details, which are used to join domains for
-// the AppStream 2.0 streaming instances.
+// Configuration information for the directory used to join domains.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DirectoryConfig
 type DirectoryConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The time stamp when the directory configuration was created within AppStream
-	// 2.0.
+	// The time the directory configuration was created.
 	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// The fully qualified name of the directory, such as corp.example.com
+	// The fully qualified name of the directory (for example, corp.example.com).
 	//
 	// DirectoryName is a required field
 	DirectoryName *string `type:"string" required:"true"`
 
-	// The list of the distinguished names of organizational units in which to place
-	// computer accounts.
+	// The distinguished names of the organizational units for computer accounts.
 	OrganizationalUnitDistinguishedNames []*string `type:"list"`
 
-	// The AccountName and AccountPassword of the service account, to be used by
-	// the streaming instance to connect to the directory.
+	// The credentials for the service account used by the streaming instance to
+	// connect to the directory.
 	ServiceAccountCredentials *ServiceAccountCredentials `type:"structure"`
 }
 
@@ -3368,12 +4377,12 @@ func (s *DirectoryConfig) SetServiceAccountCredentials(v *ServiceAccountCredenti
 type DisassociateFleetInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the fleet to disassociate.
+	// The name of the fleet.
 	//
 	// FleetName is a required field
 	FleetName *string `min:"1" type:"string" required:"true"`
 
-	// The name of the stack with which the fleet is associated.
+	// The name of the stack.
 	//
 	// StackName is a required field
 	StackName *string `min:"1" type:"string" required:"true"`
@@ -3438,17 +4447,15 @@ func (s DisassociateFleetOutput) GoString() string {
 	return s.String()
 }
 
-// The DirectoryName and OrganizationalUnitDistinguishedName values, which are
-// used to join domains for the AppStream 2.0 streaming instances.
+// Contains the information needed for streaming instances to join a domain.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/DomainJoinInfo
 type DomainJoinInfo struct {
 	_ struct{} `type:"structure"`
 
-	// The fully qualified name of the directory, such as corp.example.com
+	// The fully qualified name of the directory (for example, corp.example.com).
 	DirectoryName *string `type:"string"`
 
-	// The distinguished name of the organizational unit to place the computer account
-	// in.
+	// The distinguished name of the organizational unit for computer accounts.
 	OrganizationalUnitDistinguishedName *string `type:"string"`
 }
 
@@ -3478,7 +4485,7 @@ func (s *DomainJoinInfo) SetOrganizationalUnitDistinguishedName(v string) *Domai
 type ExpireSessionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the streaming session to be stopped.
+	// The ID of the streaming session.
 	//
 	// SessionId is a required field
 	SessionId *string `min:"1" type:"string" required:"true"`
@@ -3541,49 +4548,49 @@ type Fleet struct {
 	// Arn is a required field
 	Arn *string `type:"string" required:"true"`
 
-	// The capacity information for the fleet.
+	// The capacity status for the fleet.
 	//
 	// ComputeCapacityStatus is a required field
 	ComputeCapacityStatus *ComputeCapacityStatus `type:"structure" required:"true"`
 
-	// The time at which the fleet was created.
+	// The time the fleet was created.
 	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// The description displayed to end users on the AppStream 2.0 portal.
+	// The description displayed to end users.
 	Description *string `min:"1" type:"string"`
 
-	// The time after disconnection when a session is considered to have ended.
-	// If a user who got disconnected reconnects within this timeout interval, the
-	// user is connected back to their previous session. The input can be any numeric
-	// value in seconds between 60 and 57600.
+	// The time after disconnection when a session is considered to have ended,
+	// in seconds. If a user who was disconnected reconnects within this time interval,
+	// the user is connected to their previous session. Specify a value between
+	// 60 and 57600.
 	DisconnectTimeoutInSeconds *int64 `type:"integer"`
 
-	// The name displayed to end users on the AppStream 2.0 portal.
+	// The fleet name displayed to end users.
 	DisplayName *string `min:"1" type:"string"`
 
-	// The DirectoryName and OrganizationalUnitDistinguishedName values, which are
-	// used to join domains for the AppStream 2.0 streaming instances.
+	// The information needed for streaming instances to join a domain.
 	DomainJoinInfo *DomainJoinInfo `type:"structure"`
 
-	// Whether default internet access is enabled for the fleet.
+	// Indicates whether default internet access is enabled for the fleet.
 	EnableDefaultInternetAccess *bool `type:"boolean"`
 
-	// The list of fleet errors is appended to this list.
+	// The fleet errors.
 	FleetErrors []*FleetError `type:"list"`
+
+	FleetType *string `type:"string" enum:"FleetType"`
 
 	// The image used by the fleet.
 	//
 	// ImageName is a required field
 	ImageName *string `min:"1" type:"string" required:"true"`
 
-	// The instance type of compute resources for the fleet. The fleet instances
-	// are launched from this instance type.
+	// The instance type to use when launching fleet instances.
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
 
-	// The maximum time for which a streaming session can run. The value can be
-	// any numeric value in seconds between 600 and 57600.
+	// The maximum time that a streaming session can run, in seconds. Specify a
+	// value between 600 and 57600.
 	MaxUserDurationInSeconds *int64 `type:"integer"`
 
 	// The name of the fleet.
@@ -3664,6 +4671,12 @@ func (s *Fleet) SetFleetErrors(v []*FleetError) *Fleet {
 	return s
 }
 
+// SetFleetType sets the FleetType field's value.
+func (s *Fleet) SetFleetType(v string) *Fleet {
+	s.FleetType = &v
+	return s
+}
+
 // SetImageName sets the ImageName field's value.
 func (s *Fleet) SetImageName(v string) *Fleet {
 	s.ImageName = &v
@@ -3700,15 +4713,15 @@ func (s *Fleet) SetVpcConfig(v *VpcConfig) *Fleet {
 	return s
 }
 
-// The details of the fleet error.
+// Describes a fleet error.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/FleetError
 type FleetError struct {
 	_ struct{} `type:"structure"`
 
-	// The error code for the fleet error.
+	// The error code.
 	ErrorCode *string `type:"string" enum:"FleetErrorCode"`
 
-	// The error message generated when the fleet has errors.
+	// The error message.
 	ErrorMessage *string `min:"1" type:"string"`
 }
 
@@ -3734,34 +4747,33 @@ func (s *FleetError) SetErrorMessage(v string) *FleetError {
 	return s
 }
 
-// New streaming instances are booted from images. The image stores the application
-// catalog and is connected to fleets.
+// Describes an image.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/Image
 type Image struct {
 	_ struct{} `type:"structure"`
 
-	// The applications associated with an image.
+	// The applications associated with the image.
 	Applications []*Application `type:"list"`
 
-	// The ARN for the image.
+	// The ARN of the image.
 	Arn *string `type:"string"`
 
-	// The source image ARN from which this image was created.
+	// The ARN of the image from which this image was created.
 	BaseImageArn *string `type:"string"`
 
-	// The time stamp when the image was created.
+	// The time the image was created.
 	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// A meaningful description for the image.
+	// The description displayed to end users.
 	Description *string `min:"1" type:"string"`
 
-	// The display name for the image.
+	// The image name displayed to end users.
 	DisplayName *string `min:"1" type:"string"`
 
-	// Whether an image builder can be launched from this image.
+	// Indicates whether an image builder can be launched from this image.
 	ImageBuilderSupported *bool `type:"boolean"`
 
-	// The unique identifier for the image.
+	// The name of the image.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -3769,18 +4781,18 @@ type Image struct {
 	// The operating system platform of the image.
 	Platform *string `type:"string" enum:"PlatformType"`
 
-	// The AWS release date of the public base image. For private images, this date
+	// The release date of the public base image. For private images, this date
 	// is the release date of the base image from which the image was created.
 	PublicBaseImageReleasedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// The image starts in the PENDING state. If image creation succeeds, it moves
-	// to AVAILABLE. If image creation fails, it moves to FAILED.
+	// The image starts in the PENDING state. If image creation succeeds, the state
+	// is AVAILABLE. If image creation fails, the state is FAILED.
 	State *string `type:"string" enum:"ImageState"`
 
 	// The reason why the last state change occurred.
 	StateChangeReason *ImageStateChangeReason `type:"structure"`
 
-	// The visibility of an image to the user; images can be public or private.
+	// Indicates whether the image is public or private.
 	Visibility *string `type:"string" enum:"VisibilityType"`
 }
 
@@ -3872,15 +4884,176 @@ func (s *Image) SetVisibility(v string) *Image {
 	return s
 }
 
-// The reason why the last state change occurred.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ImageBuilder
+type ImageBuilder struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `type:"string"`
+
+	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+
+	Description *string `min:"1" type:"string"`
+
+	DisplayName *string `min:"1" type:"string"`
+
+	// Contains the information needed for streaming instances to join a domain.
+	DomainJoinInfo *DomainJoinInfo `type:"structure"`
+
+	EnableDefaultInternetAccess *bool `type:"boolean"`
+
+	ImageArn *string `type:"string"`
+
+	ImageBuilderErrors []*ResourceError `type:"list"`
+
+	InstanceType *string `min:"1" type:"string"`
+
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	Platform *string `type:"string" enum:"PlatformType"`
+
+	State *string `type:"string" enum:"ImageBuilderState"`
+
+	StateChangeReason *ImageBuilderStateChangeReason `type:"structure"`
+
+	// Describes VPC configuration information.
+	VpcConfig *VpcConfig `type:"structure"`
+}
+
+// String returns the string representation
+func (s ImageBuilder) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ImageBuilder) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ImageBuilder) SetArn(v string) *ImageBuilder {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *ImageBuilder) SetCreatedTime(v time.Time) *ImageBuilder {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ImageBuilder) SetDescription(v string) *ImageBuilder {
+	s.Description = &v
+	return s
+}
+
+// SetDisplayName sets the DisplayName field's value.
+func (s *ImageBuilder) SetDisplayName(v string) *ImageBuilder {
+	s.DisplayName = &v
+	return s
+}
+
+// SetDomainJoinInfo sets the DomainJoinInfo field's value.
+func (s *ImageBuilder) SetDomainJoinInfo(v *DomainJoinInfo) *ImageBuilder {
+	s.DomainJoinInfo = v
+	return s
+}
+
+// SetEnableDefaultInternetAccess sets the EnableDefaultInternetAccess field's value.
+func (s *ImageBuilder) SetEnableDefaultInternetAccess(v bool) *ImageBuilder {
+	s.EnableDefaultInternetAccess = &v
+	return s
+}
+
+// SetImageArn sets the ImageArn field's value.
+func (s *ImageBuilder) SetImageArn(v string) *ImageBuilder {
+	s.ImageArn = &v
+	return s
+}
+
+// SetImageBuilderErrors sets the ImageBuilderErrors field's value.
+func (s *ImageBuilder) SetImageBuilderErrors(v []*ResourceError) *ImageBuilder {
+	s.ImageBuilderErrors = v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *ImageBuilder) SetInstanceType(v string) *ImageBuilder {
+	s.InstanceType = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ImageBuilder) SetName(v string) *ImageBuilder {
+	s.Name = &v
+	return s
+}
+
+// SetPlatform sets the Platform field's value.
+func (s *ImageBuilder) SetPlatform(v string) *ImageBuilder {
+	s.Platform = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ImageBuilder) SetState(v string) *ImageBuilder {
+	s.State = &v
+	return s
+}
+
+// SetStateChangeReason sets the StateChangeReason field's value.
+func (s *ImageBuilder) SetStateChangeReason(v *ImageBuilderStateChangeReason) *ImageBuilder {
+	s.StateChangeReason = v
+	return s
+}
+
+// SetVpcConfig sets the VpcConfig field's value.
+func (s *ImageBuilder) SetVpcConfig(v *VpcConfig) *ImageBuilder {
+	s.VpcConfig = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ImageBuilderStateChangeReason
+type ImageBuilderStateChangeReason struct {
+	_ struct{} `type:"structure"`
+
+	Code *string `type:"string" enum:"ImageBuilderStateChangeReasonCode"`
+
+	Message *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ImageBuilderStateChangeReason) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ImageBuilderStateChangeReason) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *ImageBuilderStateChangeReason) SetCode(v string) *ImageBuilderStateChangeReason {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *ImageBuilderStateChangeReason) SetMessage(v string) *ImageBuilderStateChangeReason {
+	s.Message = &v
+	return s
+}
+
+// Describes the reason why the last state change occurred.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ImageStateChangeReason
 type ImageStateChangeReason struct {
 	_ struct{} `type:"structure"`
 
-	// The state change reason code of the image.
+	// The state change reason code.
 	Code *string `type:"string" enum:"ImageStateChangeReasonCode"`
 
-	// The state change reason message to the end user.
+	// The state change reason message.
 	Message *string `min:"1" type:"string"`
 }
 
@@ -3914,7 +5087,7 @@ type ListAssociatedFleetsInput struct {
 	// operation. If this value is null, it retrieves the first page.
 	NextToken *string `min:"1" type:"string"`
 
-	// The name of the stack whose associated fleets are listed.
+	// The name of the stack.
 	//
 	// StackName is a required field
 	StackName *string `min:"1" type:"string" required:"true"`
@@ -3961,12 +5134,11 @@ func (s *ListAssociatedFleetsInput) SetStackName(v string) *ListAssociatedFleets
 	return s
 }
 
-// The response from a successful operation.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ListAssociatedFleetsResult
 type ListAssociatedFleetsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The names of associated fleets.
+	// The names of the fleets.
 	Names []*string `type:"list"`
 
 	// The pagination token to use to retrieve the next page of results for this
@@ -4000,7 +5172,7 @@ func (s *ListAssociatedFleetsOutput) SetNextToken(v string) *ListAssociatedFleet
 type ListAssociatedStacksInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the fleet whose associated stacks are listed.
+	// The name of the fleet.
 	//
 	// FleetName is a required field
 	FleetName *string `min:"1" type:"string" required:"true"`
@@ -4051,12 +5223,11 @@ func (s *ListAssociatedStacksInput) SetNextToken(v string) *ListAssociatedStacks
 	return s
 }
 
-// The response from a successful operation.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ListAssociatedStacksResult
 type ListAssociatedStacksOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The names of associated stacks.
+	// The names of the stacks.
 	Names []*string `type:"list"`
 
 	// The pagination token to use to retrieve the next page of results for this
@@ -4086,22 +5257,59 @@ func (s *ListAssociatedStacksOutput) SetNextToken(v string) *ListAssociatedStack
 	return s
 }
 
-// The AccountName and AccountPassword of the service account, to be used by
-// the streaming instance to connect to the directory.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ResourceError
+type ResourceError struct {
+	_ struct{} `type:"structure"`
+
+	ErrorCode *string `type:"string" enum:"FleetErrorCode"`
+
+	ErrorMessage *string `min:"1" type:"string"`
+
+	ErrorTimestamp *time.Time `type:"timestamp" timestampFormat:"unix"`
+}
+
+// String returns the string representation
+func (s ResourceError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceError) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *ResourceError) SetErrorCode(v string) *ResourceError {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *ResourceError) SetErrorMessage(v string) *ResourceError {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetErrorTimestamp sets the ErrorTimestamp field's value.
+func (s *ResourceError) SetErrorTimestamp(v time.Time) *ResourceError {
+	s.ErrorTimestamp = &v
+	return s
+}
+
+// Describes the credentials for the service account used by the streaming instance
+// to connect to the directory.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/ServiceAccountCredentials
 type ServiceAccountCredentials struct {
 	_ struct{} `type:"structure"`
 
-	// The user name of an account in the directory that is used by AppStream 2.0
-	// streaming instances to connect to the directory. This account must have the
-	// following privileges: create computer objects, join computers to the domain,
-	// change/reset the password on descendant computer objects for the organizational
-	// units specified.
+	// The user name of the account. This account must have the following privileges:
+	// create computer objects, join computers to the domain, and change/reset the
+	// password on descendant computer objects for the organizational units specified.
 	//
 	// AccountName is a required field
 	AccountName *string `min:"1" type:"string" required:"true"`
 
-	// The password for the user account for directory actions.
+	// The password for the account.
 	//
 	// AccountPassword is a required field
 	AccountPassword *string `min:"1" type:"string" required:"true"`
@@ -4151,27 +5359,26 @@ func (s *ServiceAccountCredentials) SetAccountPassword(v string) *ServiceAccount
 	return s
 }
 
-// Contains the parameters for a streaming session.
+// Describes a streaming session.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/Session
 type Session struct {
 	_ struct{} `type:"structure"`
 
-	// The authentication method of the user for whom the session was created. It
-	// can be API for a user authenticated using a streaming URL or SAML for a SAML
-	// federated user.
+	// The authentication method. The user is authenticated using a streaming URL
+	// (API) or SAML federation (SAML).
 	AuthenticationType *string `type:"string" enum:"AuthenticationType"`
 
-	// The name of the fleet for which the streaming session was created.
+	// The name of the fleet for the streaming session.
 	//
 	// FleetName is a required field
 	FleetName *string `min:"1" type:"string" required:"true"`
 
-	// The unique ID for a streaming session.
+	// The ID of the streaming session.
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
 
-	// The name of the stack for which the streaming session was created.
+	// The name of the stack for the streaming session.
 	//
 	// StackName is a required field
 	StackName *string `min:"1" type:"string" required:"true"`
@@ -4233,7 +5440,7 @@ func (s *Session) SetUserId(v string) *Session {
 	return s
 }
 
-// Details about a stack.
+// Describes a stack.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/Stack
 type Stack struct {
 	_ struct{} `type:"structure"`
@@ -4241,24 +5448,24 @@ type Stack struct {
 	// The ARN of the stack.
 	Arn *string `type:"string"`
 
-	// The time stamp when the stack was created.
+	// The time the stack was created.
 	CreatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
 
-	// A meaningful description for the stack.
+	// The description displayed to end users.
 	Description *string `min:"1" type:"string"`
 
-	// A display name for the stack.
+	// The stack name displayed to end users.
 	DisplayName *string `min:"1" type:"string"`
 
-	// The unique identifier of the stack.
+	// The name of the stack.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The list of errors associated with the stack.
+	// The errors for the stack.
 	StackErrors []*StackError `type:"list"`
 
-	// The storage connectors to be enabled for the stack.
+	// The storage connectors to enable.
 	StorageConnectors []*StorageConnector `type:"list"`
 }
 
@@ -4314,15 +5521,15 @@ func (s *Stack) SetStorageConnectors(v []*StorageConnector) *Stack {
 	return s
 }
 
-// Contains the parameters for a stack error.
+// Describes a stack error.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StackError
 type StackError struct {
 	_ struct{} `type:"structure"`
 
-	// The error code of a stack error.
+	// The error code.
 	ErrorCode *string `type:"string" enum:"StackErrorCode"`
 
-	// The error message of a stack error.
+	// The error message.
 	ErrorMessage *string `min:"1" type:"string"`
 }
 
@@ -4352,7 +5559,7 @@ func (s *StackError) SetErrorMessage(v string) *StackError {
 type StartFleetInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the fleet to start.
+	// The name of the fleet.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -4405,11 +5612,74 @@ func (s StartFleetOutput) GoString() string {
 	return s.String()
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StartImageBuilderRequest
+type StartImageBuilderInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartImageBuilderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartImageBuilderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartImageBuilderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartImageBuilderInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *StartImageBuilderInput) SetName(v string) *StartImageBuilderInput {
+	s.Name = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StartImageBuilderResult
+type StartImageBuilderOutput struct {
+	_ struct{} `type:"structure"`
+
+	ImageBuilder *ImageBuilder `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartImageBuilderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartImageBuilderOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBuilder sets the ImageBuilder field's value.
+func (s *StartImageBuilderOutput) SetImageBuilder(v *ImageBuilder) *StartImageBuilderOutput {
+	s.ImageBuilder = v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StopFleetRequest
 type StopFleetInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the fleet to stop.
+	// The name of the fleet.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -4462,17 +5732,80 @@ func (s StopFleetOutput) GoString() string {
 	return s.String()
 }
 
-// Contains the parameters for a storage connector.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StopImageBuilderRequest
+type StopImageBuilderInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopImageBuilderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopImageBuilderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopImageBuilderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopImageBuilderInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *StopImageBuilderInput) SetName(v string) *StopImageBuilderInput {
+	s.Name = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StopImageBuilderResult
+type StopImageBuilderOutput struct {
+	_ struct{} `type:"structure"`
+
+	ImageBuilder *ImageBuilder `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopImageBuilderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopImageBuilderOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBuilder sets the ImageBuilder field's value.
+func (s *StopImageBuilderOutput) SetImageBuilder(v *ImageBuilder) *StopImageBuilderOutput {
+	s.ImageBuilder = v
+	return s
+}
+
+// Describes a storage connector.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/StorageConnector
 type StorageConnector struct {
 	_ struct{} `type:"structure"`
 
-	// The type of storage connector. The possible values include: HOMEFOLDERS.
+	// The type of storage connector.
 	//
 	// ConnectorType is a required field
 	ConnectorType *string `type:"string" required:"true" enum:"StorageConnectorType"`
 
-	// The ARN associated with the storage connector.
+	// The ARN of the storage connector.
 	ResourceIdentifier *string `min:"1" type:"string"`
 }
 
@@ -4518,17 +5851,16 @@ func (s *StorageConnector) SetResourceIdentifier(v string) *StorageConnector {
 type UpdateDirectoryConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the existing directory configuration to be updated.
+	// The name of the directory configuration.
 	//
 	// DirectoryName is a required field
 	DirectoryName *string `type:"string" required:"true"`
 
-	// The list of the distinguished names of organizational units to place computer
-	// accounts in.
+	// The distinguished names of the organizational units for computer accounts.
 	OrganizationalUnitDistinguishedNames []*string `type:"list"`
 
-	// The AccountName and AccountPassword values for the service account, which
-	// are used by the streaming instance to connect to the directory
+	// The credentials for the service account used by the streaming instance to
+	// connect to the directory.
 	ServiceAccountCredentials *ServiceAccountCredentials `type:"structure"`
 }
 
@@ -4582,7 +5914,7 @@ func (s *UpdateDirectoryConfigInput) SetServiceAccountCredentials(v *ServiceAcco
 type UpdateDirectoryConfigOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The updated directory configuration details.
+	// Information about the directory configuration.
 	DirectoryConfig *DirectoryConfig `type:"structure"`
 }
 
@@ -4606,39 +5938,38 @@ func (s *UpdateDirectoryConfigOutput) SetDirectoryConfig(v *DirectoryConfig) *Up
 type UpdateFleetInput struct {
 	_ struct{} `type:"structure"`
 
-	// Fleet attributes to be deleted.
+	// The fleet attributes to delete.
 	AttributesToDelete []*string `type:"list"`
 
-	// The parameters for the capacity allocated to the fleet.
+	// The desired capacity for the fleet.
 	ComputeCapacity *ComputeCapacity `type:"structure"`
 
-	// Delete the VPC association for the specified fleet.
+	// Deletes the VPC association for the specified fleet.
 	DeleteVpcConfig *bool `deprecated:"true" type:"boolean"`
 
-	// The description displayed to end users on the AppStream 2.0 portal.
+	// The description displayed to end users.
 	Description *string `type:"string"`
 
-	// The time after disconnection when a session is considered to have ended.
-	// If a user who got disconnected reconnects within this timeout interval, the
-	// user is connected back to their previous session. The input can be any numeric
-	// value in seconds between 60 and 57600.
+	// The time after disconnection when a session is considered to have ended,
+	// in seconds. If a user who was disconnected reconnects within this time interval,
+	// the user is connected to their previous session. Specify a value between
+	// 60 and 57600.
 	DisconnectTimeoutInSeconds *int64 `type:"integer"`
 
-	// The name displayed to end users on the AppStream 2.0 portal.
+	// The fleet name displayed to end users.
 	DisplayName *string `type:"string"`
 
-	// The DirectoryName and OrganizationalUnitDistinguishedName values, which are
-	// used to join domains for the AppStream 2.0 streaming instances.
+	// The information needed for streaming instances to join a domain.
 	DomainJoinInfo *DomainJoinInfo `type:"structure"`
 
 	// Enables or disables default internet access for the fleet.
 	EnableDefaultInternetAccess *bool `type:"boolean"`
 
-	// The image name from which a fleet is created.
+	// The name of the image used by the fleet.
 	ImageName *string `min:"1" type:"string"`
 
-	// The instance type of compute resources for the fleet. Fleet instances are
-	// launched from this instance type. Available instance types are:
+	// The instance type to use when launching fleet instances. The following instance
+	// types are available:
 	//
 	//    * stream.standard.medium
 	//
@@ -4664,20 +5995,28 @@ type UpdateFleetInput struct {
 	//
 	//    * stream.memory.8xlarge
 	//
+	//    * stream.graphics-design.large
+	//
+	//    * stream.graphics-design.xlarge
+	//
+	//    * stream.graphics-design.2xlarge
+	//
+	//    * stream.graphics-design.4xlarge
+	//
+	//    * stream.graphics-desktop.2xlarge
+	//
 	//    * stream.graphics-pro.4xlarge
 	//
 	//    * stream.graphics-pro.8xlarge
 	//
 	//    * stream.graphics-pro.16xlarge
-	//
-	//    * stream.graphics-desktop.2xlarge
 	InstanceType *string `min:"1" type:"string"`
 
-	// The maximum time for which a streaming session can run. The input can be
-	// any numeric value in seconds between 600 and 57600.
+	// The maximum time that a streaming session can run, in seconds. Specify a
+	// value between 600 and 57600.
 	MaxUserDurationInSeconds *int64 `type:"integer"`
 
-	// The name of the fleet.
+	// A unique name for the fleet.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -4805,7 +6144,7 @@ func (s *UpdateFleetInput) SetVpcConfig(v *VpcConfig) *UpdateFleetInput {
 type UpdateFleetOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of fleet details.
+	// Information about the fleet.
 	Fleet *Fleet `type:"structure"`
 }
 
@@ -4829,21 +6168,21 @@ func (s *UpdateFleetOutput) SetFleet(v *Fleet) *UpdateFleetOutput {
 type UpdateStackInput struct {
 	_ struct{} `type:"structure"`
 
-	// Remove all the storage connectors currently enabled for the stack.
+	// Deletes the storage connectors currently enabled for the stack.
 	DeleteStorageConnectors *bool `type:"boolean"`
 
-	// The description displayed to end users on the AppStream 2.0 portal.
+	// The description displayed to end users.
 	Description *string `type:"string"`
 
-	// The name displayed to end users on the AppStream 2.0 portal.
+	// The stack name displayed to end users.
 	DisplayName *string `type:"string"`
 
-	// The name of the stack to update.
+	// The name of the stack.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The storage connectors to be enabled for the stack.
+	// The storage connectors to enable.
 	StorageConnectors []*StorageConnector `type:"list"`
 }
 
@@ -4917,7 +6256,7 @@ func (s *UpdateStackInput) SetStorageConnectors(v []*StorageConnector) *UpdateSt
 type UpdateStackOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of stack details.
+	// Information about the stack.
 	Stack *Stack `type:"structure"`
 }
 
@@ -4937,16 +6276,15 @@ func (s *UpdateStackOutput) SetStack(v *Stack) *UpdateStackOutput {
 	return s
 }
 
-// VPC configuration information.
+// Describes VPC configuration information.
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01/VpcConfig
 type VpcConfig struct {
 	_ struct{} `type:"structure"`
 
-	// Security groups associated with the fleet.
+	// The security groups for the fleet.
 	SecurityGroupIds []*string `type:"list"`
 
-	// The list of subnets to which a network interface is established from the
-	// fleet instance.
+	// The subnets to which a network interface is established from the fleet instance.
 	SubnetIds []*string `type:"list"`
 }
 
@@ -4983,7 +6321,7 @@ const (
 	AuthenticationTypeUserpool = "USERPOOL"
 )
 
-// Fleet attribute.
+// The fleet attribute.
 const (
 	// FleetAttributeVpcConfiguration is a FleetAttribute enum value
 	FleetAttributeVpcConfiguration = "VPC_CONFIGURATION"
@@ -5031,6 +6369,9 @@ const (
 
 	// FleetErrorCodeSecurityGroupsNotFound is a FleetErrorCode enum value
 	FleetErrorCodeSecurityGroupsNotFound = "SECURITY_GROUPS_NOT_FOUND"
+
+	// FleetErrorCodeIgwNotAttached is a FleetErrorCode enum value
+	FleetErrorCodeIgwNotAttached = "IGW_NOT_ATTACHED"
 
 	// FleetErrorCodeIamServiceRoleMissingDescribeSecurityGroupsAction is a FleetErrorCode enum value
 	FleetErrorCodeIamServiceRoleMissingDescribeSecurityGroupsAction = "IAM_SERVICE_ROLE_MISSING_DESCRIBE_SECURITY_GROUPS_ACTION"
@@ -5087,6 +6428,48 @@ const (
 )
 
 const (
+	// FleetTypeAlwaysOn is a FleetType enum value
+	FleetTypeAlwaysOn = "ALWAYS_ON"
+
+	// FleetTypeOnDemand is a FleetType enum value
+	FleetTypeOnDemand = "ON_DEMAND"
+)
+
+const (
+	// ImageBuilderStatePending is a ImageBuilderState enum value
+	ImageBuilderStatePending = "PENDING"
+
+	// ImageBuilderStateRunning is a ImageBuilderState enum value
+	ImageBuilderStateRunning = "RUNNING"
+
+	// ImageBuilderStateStopping is a ImageBuilderState enum value
+	ImageBuilderStateStopping = "STOPPING"
+
+	// ImageBuilderStateStopped is a ImageBuilderState enum value
+	ImageBuilderStateStopped = "STOPPED"
+
+	// ImageBuilderStateRebooting is a ImageBuilderState enum value
+	ImageBuilderStateRebooting = "REBOOTING"
+
+	// ImageBuilderStateSnapshotting is a ImageBuilderState enum value
+	ImageBuilderStateSnapshotting = "SNAPSHOTTING"
+
+	// ImageBuilderStateDeleting is a ImageBuilderState enum value
+	ImageBuilderStateDeleting = "DELETING"
+
+	// ImageBuilderStateFailed is a ImageBuilderState enum value
+	ImageBuilderStateFailed = "FAILED"
+)
+
+const (
+	// ImageBuilderStateChangeReasonCodeInternalError is a ImageBuilderStateChangeReasonCode enum value
+	ImageBuilderStateChangeReasonCodeInternalError = "INTERNAL_ERROR"
+
+	// ImageBuilderStateChangeReasonCodeImageUnavailable is a ImageBuilderStateChangeReasonCode enum value
+	ImageBuilderStateChangeReasonCodeImageUnavailable = "IMAGE_UNAVAILABLE"
+)
+
+const (
 	// ImageStatePending is a ImageState enum value
 	ImageStatePending = "PENDING"
 
@@ -5133,7 +6516,7 @@ const (
 	StackErrorCodeInternalServiceError = "INTERNAL_SERVICE_ERROR"
 )
 
-// The type of storage connector. The possible values include: HOMEFOLDERS.
+// The type of storage connector.
 const (
 	// StorageConnectorTypeHomefolders is a StorageConnectorType enum value
 	StorageConnectorTypeHomefolders = "HOMEFOLDERS"

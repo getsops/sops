@@ -1310,6 +1310,10 @@
     },
     "HandshakeParty":{
       "type":"structure",
+      "required":[
+        "Id",
+        "Type"
+      ],
       "members":{
         "Id":{"shape":"HandshakePartyId"},
         "Type":{"shape":"HandshakePartyType"}

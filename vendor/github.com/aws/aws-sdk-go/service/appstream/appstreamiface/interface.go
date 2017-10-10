@@ -72,6 +72,14 @@ type AppStreamAPI interface {
 	CreateFleetWithContext(aws.Context, *appstream.CreateFleetInput, ...request.Option) (*appstream.CreateFleetOutput, error)
 	CreateFleetRequest(*appstream.CreateFleetInput) (*request.Request, *appstream.CreateFleetOutput)
 
+	CreateImageBuilder(*appstream.CreateImageBuilderInput) (*appstream.CreateImageBuilderOutput, error)
+	CreateImageBuilderWithContext(aws.Context, *appstream.CreateImageBuilderInput, ...request.Option) (*appstream.CreateImageBuilderOutput, error)
+	CreateImageBuilderRequest(*appstream.CreateImageBuilderInput) (*request.Request, *appstream.CreateImageBuilderOutput)
+
+	CreateImageBuilderStreamingURL(*appstream.CreateImageBuilderStreamingURLInput) (*appstream.CreateImageBuilderStreamingURLOutput, error)
+	CreateImageBuilderStreamingURLWithContext(aws.Context, *appstream.CreateImageBuilderStreamingURLInput, ...request.Option) (*appstream.CreateImageBuilderStreamingURLOutput, error)
+	CreateImageBuilderStreamingURLRequest(*appstream.CreateImageBuilderStreamingURLInput) (*request.Request, *appstream.CreateImageBuilderStreamingURLOutput)
+
 	CreateStack(*appstream.CreateStackInput) (*appstream.CreateStackOutput, error)
 	CreateStackWithContext(aws.Context, *appstream.CreateStackInput, ...request.Option) (*appstream.CreateStackOutput, error)
 	CreateStackRequest(*appstream.CreateStackInput) (*request.Request, *appstream.CreateStackOutput)
@@ -88,6 +96,14 @@ type AppStreamAPI interface {
 	DeleteFleetWithContext(aws.Context, *appstream.DeleteFleetInput, ...request.Option) (*appstream.DeleteFleetOutput, error)
 	DeleteFleetRequest(*appstream.DeleteFleetInput) (*request.Request, *appstream.DeleteFleetOutput)
 
+	DeleteImage(*appstream.DeleteImageInput) (*appstream.DeleteImageOutput, error)
+	DeleteImageWithContext(aws.Context, *appstream.DeleteImageInput, ...request.Option) (*appstream.DeleteImageOutput, error)
+	DeleteImageRequest(*appstream.DeleteImageInput) (*request.Request, *appstream.DeleteImageOutput)
+
+	DeleteImageBuilder(*appstream.DeleteImageBuilderInput) (*appstream.DeleteImageBuilderOutput, error)
+	DeleteImageBuilderWithContext(aws.Context, *appstream.DeleteImageBuilderInput, ...request.Option) (*appstream.DeleteImageBuilderOutput, error)
+	DeleteImageBuilderRequest(*appstream.DeleteImageBuilderInput) (*request.Request, *appstream.DeleteImageBuilderOutput)
+
 	DeleteStack(*appstream.DeleteStackInput) (*appstream.DeleteStackOutput, error)
 	DeleteStackWithContext(aws.Context, *appstream.DeleteStackInput, ...request.Option) (*appstream.DeleteStackOutput, error)
 	DeleteStackRequest(*appstream.DeleteStackInput) (*request.Request, *appstream.DeleteStackOutput)
@@ -99,6 +115,10 @@ type AppStreamAPI interface {
 	DescribeFleets(*appstream.DescribeFleetsInput) (*appstream.DescribeFleetsOutput, error)
 	DescribeFleetsWithContext(aws.Context, *appstream.DescribeFleetsInput, ...request.Option) (*appstream.DescribeFleetsOutput, error)
 	DescribeFleetsRequest(*appstream.DescribeFleetsInput) (*request.Request, *appstream.DescribeFleetsOutput)
+
+	DescribeImageBuilders(*appstream.DescribeImageBuildersInput) (*appstream.DescribeImageBuildersOutput, error)
+	DescribeImageBuildersWithContext(aws.Context, *appstream.DescribeImageBuildersInput, ...request.Option) (*appstream.DescribeImageBuildersOutput, error)
+	DescribeImageBuildersRequest(*appstream.DescribeImageBuildersInput) (*request.Request, *appstream.DescribeImageBuildersOutput)
 
 	DescribeImages(*appstream.DescribeImagesInput) (*appstream.DescribeImagesOutput, error)
 	DescribeImagesWithContext(aws.Context, *appstream.DescribeImagesInput, ...request.Option) (*appstream.DescribeImagesOutput, error)
@@ -132,9 +152,17 @@ type AppStreamAPI interface {
 	StartFleetWithContext(aws.Context, *appstream.StartFleetInput, ...request.Option) (*appstream.StartFleetOutput, error)
 	StartFleetRequest(*appstream.StartFleetInput) (*request.Request, *appstream.StartFleetOutput)
 
+	StartImageBuilder(*appstream.StartImageBuilderInput) (*appstream.StartImageBuilderOutput, error)
+	StartImageBuilderWithContext(aws.Context, *appstream.StartImageBuilderInput, ...request.Option) (*appstream.StartImageBuilderOutput, error)
+	StartImageBuilderRequest(*appstream.StartImageBuilderInput) (*request.Request, *appstream.StartImageBuilderOutput)
+
 	StopFleet(*appstream.StopFleetInput) (*appstream.StopFleetOutput, error)
 	StopFleetWithContext(aws.Context, *appstream.StopFleetInput, ...request.Option) (*appstream.StopFleetOutput, error)
 	StopFleetRequest(*appstream.StopFleetInput) (*request.Request, *appstream.StopFleetOutput)
+
+	StopImageBuilder(*appstream.StopImageBuilderInput) (*appstream.StopImageBuilderOutput, error)
+	StopImageBuilderWithContext(aws.Context, *appstream.StopImageBuilderInput, ...request.Option) (*appstream.StopImageBuilderOutput, error)
+	StopImageBuilderRequest(*appstream.StopImageBuilderInput) (*request.Request, *appstream.StopImageBuilderOutput)
 
 	UpdateDirectoryConfig(*appstream.UpdateDirectoryConfigInput) (*appstream.UpdateDirectoryConfigOutput, error)
 	UpdateDirectoryConfigWithContext(aws.Context, *appstream.UpdateDirectoryConfigInput, ...request.Option) (*appstream.UpdateDirectoryConfigOutput, error)

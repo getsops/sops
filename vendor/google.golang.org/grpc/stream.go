@@ -107,7 +107,7 @@ func newClientStream(ctx context.Context, desc *StreamDesc, cc *ClientConn, meth
 	var (
 		t      transport.ClientTransport
 		s      *transport.Stream
-		put    func(balancer.DoneInfo)
+		done   func(balancer.DoneInfo)
 		cancel context.CancelFunc
 	)
 	c := defaultCallInfo()
@@ -189,11 +189,8 @@ func newClientStream(ctx context.Context, desc *StreamDesc, cc *ClientConn, meth
 			}
 		}()
 	}
-	gopts := BalancerGetOptions{
-		BlockingWait: !c.failFast,
-	}
 	for {
-		t, put, err = cc.getTransport(ctx, gopts)
+		t, done, err = cc.getTransport(ctx, c.failFast)
 		if err != nil {
 			// TODO(zhaoq): Probably revisit the error handling.
 			if _, ok := status.FromError(err); ok {
@@ -211,15 +208,15 @@ func newClientStream(ctx context.Context, desc *StreamDesc, cc *ClientConn, meth
 
 		s, err = t.NewStream(ctx, callHdr)
 		if err != nil {
-			if _, ok := err.(transport.ConnectionError); ok && put != nil {
+			if _, ok := err.(transport.ConnectionError); ok && done != nil {
 				// If error is connection error, transport was sending data on wire,
 				// and we are not sure if anything has been sent on wire.
 				// If error is not connection error, we are sure nothing has been sent.
 				updateRPCInfoInContext(ctx, rpcInfo{bytesSent: true, bytesReceived: false})
 			}
-			if put != nil {
-				put(balancer.DoneInfo{Err: err})
-				put = nil
+			if done != nil {
+				done(balancer.DoneInfo{Err: err})
+				done = nil
 			}
 			if _, ok := err.(transport.ConnectionError); (ok || err == transport.ErrStreamDrain) && !c.failFast {
 				continue
@@ -241,19 +238,16 @@ func newClientStream(ctx context.Context, desc *StreamDesc, cc *ClientConn, meth
 		dc:     cc.dopts.dc,
 		cancel: cancel,
 
-		put: put,
-		t:   t,
-		s:   s,
-		p:   &parser{r: s},
+		done: done,
+		t:    t,
+		s:    s,
+		p:    &parser{r: s},
 
 		tracing: EnableTracing,
 		trInfo:  trInfo,
 
 		statsCtx:     ctx,
 		statsHandler: cc.dopts.copts.StatsHandler,
-	}
-	if cc.dopts.cp != nil {
-		cs.cbuf = new(bytes.Buffer)
 	}
 	// Listen on ctx.Done() to detect cancellation and s.Done() to detect normal termination
 	// when there is no pending I/O operations on this stream.
@@ -291,14 +285,13 @@ type clientStream struct {
 	desc   *StreamDesc
 	codec  Codec
 	cp     Compressor
-	cbuf   *bytes.Buffer
 	dc     Decompressor
 	cancel context.CancelFunc
 
 	tracing bool // set to EnableTracing when the clientStream is created.
 
 	mu       sync.Mutex
-	put      func(balancer.DoneInfo)
+	done     func(balancer.DoneInfo)
 	closed   bool
 	finished bool
 	// trInfo.tr is set when the clientStream is created (if EnableTracing is true),
@@ -368,12 +361,7 @@ func (cs *clientStream) SendMsg(m interface{}) (err error) {
 			Client: true,
 		}
 	}
-	hdr, data, err := encode(cs.codec, m, cs.cp, cs.cbuf, outPayload)
-	defer func() {
-		if cs.cbuf != nil {
-			cs.cbuf.Reset()
-		}
-	}()
+	hdr, data, err := encode(cs.codec, m, cs.cp, bytes.NewBuffer([]byte{}), outPayload)
 	if err != nil {
 		return err
 	}
@@ -497,13 +485,13 @@ func (cs *clientStream) finish(err error) {
 	for _, o := range cs.opts {
 		o.after(cs.c)
 	}
-	if cs.put != nil {
+	if cs.done != nil {
 		updateRPCInfoInContext(cs.s.Context(), rpcInfo{
 			bytesSent:     cs.s.BytesSent(),
 			bytesReceived: cs.s.BytesReceived(),
 		})
-		cs.put(balancer.DoneInfo{Err: err})
-		cs.put = nil
+		cs.done(balancer.DoneInfo{Err: err})
+		cs.done = nil
 	}
 	if cs.statsHandler != nil {
 		end := &stats.End{
@@ -558,7 +546,6 @@ type serverStream struct {
 	codec                 Codec
 	cp                    Compressor
 	dc                    Decompressor
-	cbuf                  *bytes.Buffer
 	maxReceiveMessageSize int
 	maxSendMessageSize    int
 	trInfo                *traceInfo
@@ -614,12 +601,7 @@ func (ss *serverStream) SendMsg(m interface{}) (err error) {
 	if ss.statsHandler != nil {
 		outPayload = &stats.OutPayload{}
 	}
-	hdr, data, err := encode(ss.codec, m, ss.cp, ss.cbuf, outPayload)
-	defer func() {
-		if ss.cbuf != nil {
-			ss.cbuf.Reset()
-		}
-	}()
+	hdr, data, err := encode(ss.codec, m, ss.cp, bytes.NewBuffer([]byte{}), outPayload)
 	if err != nil {
 		return err
 	}

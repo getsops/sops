@@ -1,8 +1,8 @@
 {
   "version": "2.0",
-  "service": "<fullname>Amazon EC2 Systems Manager</fullname> <p>Amazon EC2 Systems Manager is a collection of capabilities that helps you automate management tasks such as collecting system inventory, applying operating system (OS) patches, automating the creation of Amazon Machine Images (AMIs), and configuring operating systems (OSs) and applications at scale. Systems Manager lets you remotely and securely manage the configuration of your managed instances. A <i>managed instance</i> is any Amazon EC2 instance or on-premises machine in your hybrid environment that has been configured for Systems Manager.</p> <p>This reference is intended to be used with the <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/\">Amazon EC2 Systems Manager User Guide</a>.</p> <p>To get started, verify prerequisites and configure managed instances. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html\">Systems Manager Prerequisites</a>.</p>",
+  "service": "<fullname>Amazon EC2 Systems Manager</fullname> <p>Amazon EC2 Systems Manager is a collection of capabilities that helps you automate management tasks such as collecting system inventory, applying operating system (OS) patches, automating the creation of Amazon Machine Images (AMIs), and configuring operating systems (OSs) and applications at scale. Systems Manager lets you remotely and securely manage the configuration of your managed instances. A <i>managed instance</i> is any Amazon EC2 instance or on-premises machine in your hybrid environment that has been configured for Systems Manager.</p> <p>This reference is intended to be used with the <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/\">Amazon EC2 Systems Manager User Guide</a>.</p> <p>To get started, verify prerequisites and configure managed instances. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up.html\">Systems Manager Prerequisites</a>.</p> <p>For information about other API actions you can perform on Amazon EC2 instances, see the <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/\">Amazon EC2 API Reference</a>. For information about how to use a Query API, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/APIReference/making-api-requests.html\">Making API Requests</a>. </p>",
   "operations": {
-    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>",
+    "AddTagsToResource": "<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>",
     "CancelCommand": "<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>",
     "CreateActivation": "<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>",
     "CreateAssociation": "<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>",
@@ -27,7 +27,7 @@
     "DescribeAssociation": "<p>Describes the associations for the specified Systems Manager document or instance.</p>",
     "DescribeAutomationExecutions": "<p>Provides details about all active and terminated Automation executions.</p>",
     "DescribeAvailablePatches": "<p>Lists all patches that could possibly be included in a patch baseline.</p>",
-    "DescribeDocument": "<p>Describes the specified SSM document.</p>",
+    "DescribeDocument": "<p>Describes the specified Systems Manager document.</p>",
     "DescribeDocumentPermission": "<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>",
     "DescribeEffectiveInstanceAssociations": "<p>All associations for the instance(s).</p>",
     "DescribeEffectivePatchesForPatchBaseline": "<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>",
@@ -50,7 +50,7 @@
     "GetCommandInvocation": "<p>Returns detailed information about command execution for an invocation or plugin. </p>",
     "GetDefaultPatchBaseline": "<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>",
     "GetDeployablePatchSnapshotForInstance": "<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>",
-    "GetDocument": "<p>Gets the contents of the specified SSM document.</p>",
+    "GetDocument": "<p>Gets the contents of the specified Systems Manager document.</p>",
     "GetInventory": "<p>Query inventory information.</p>",
     "GetInventorySchema": "<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>",
     "GetMaintenanceWindow": "<p>Retrieves a Maintenance Window.</p>",
@@ -71,7 +71,7 @@
     "ListComplianceItems": "<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>",
     "ListComplianceSummaries": "<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>",
     "ListDocumentVersions": "<p>List all versions for a document.</p>",
-    "ListDocuments": "<p>Describes one or more of your SSM documents.</p>",
+    "ListDocuments": "<p>Describes one or more of your Systems Manager documents.</p>",
     "ListInventoryEntries": "<p>A list of inventory items returned by the request.</p>",
     "ListResourceComplianceSummaries": "<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>",
     "ListResourceDataSync": "<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>",
@@ -1440,11 +1440,11 @@
     "DocumentARN": {
       "base": null,
       "refs": {
-        "DescribeDocumentRequest$Name": "<p>The name of the SSM document.</p>",
-        "DocumentDescription$Name": "<p>The name of the SSM document.</p>",
-        "DocumentIdentifier$Name": "<p>The name of the SSM document.</p>",
-        "GetDocumentRequest$Name": "<p>The name of the SSM document.</p>",
-        "GetDocumentResult$Name": "<p>The name of the SSM document.</p>",
+        "DescribeDocumentRequest$Name": "<p>The name of the Systems Manager document.</p>",
+        "DocumentDescription$Name": "<p>The name of the Systems Manager document.</p>",
+        "DocumentIdentifier$Name": "<p>The name of the Systems Manager document.</p>",
+        "GetDocumentRequest$Name": "<p>The name of the Systems Manager document.</p>",
+        "GetDocumentResult$Name": "<p>The name of the Systems Manager document.</p>",
         "SendCommandRequest$DocumentName": "<p>Required. The name of the Systems Manager document to execute. This can be a public document or a custom document.</p>",
         "StartAutomationExecutionRequest$DocumentName": "<p>The name of the Automation document to use for this execution.</p>"
       }
@@ -1458,7 +1458,7 @@
       "base": null,
       "refs": {
         "CreateDocumentRequest$Content": "<p>A valid JSON string.</p>",
-        "GetDocumentResult$Content": "<p>The contents of the SSM document.</p>",
+        "GetDocumentResult$Content": "<p>The contents of the Systems Manager document.</p>",
         "InstanceAssociation$Content": "<p>The content of the association document for the instance(s).</p>",
         "UpdateDocumentRequest$Content": "<p>The content in a document that you want to update.</p>"
       }
@@ -1470,10 +1470,10 @@
       }
     },
     "DocumentDescription": {
-      "base": "<p>Describes an SSM document. </p>",
+      "base": "<p>Describes a Systems Manager document. </p>",
       "refs": {
         "CreateDocumentResult$DocumentDescription": "<p>Information about the Systems Manager document.</p>",
-        "DescribeDocumentResult$Document": "<p>Information about the SSM document.</p>",
+        "DescribeDocumentResult$Document": "<p>Information about the Systems Manager document.</p>",
         "UpdateDocumentResult$DocumentDescription": "<p>A description of the document that was updated.</p>"
       }
     },
@@ -1518,7 +1518,7 @@
       }
     },
     "DocumentIdentifier": {
-      "base": "<p>Describes the name of an SSM document.</p>",
+      "base": "<p>Describes the name of a Systems Manager document.</p>",
       "refs": {
         "DocumentIdentifierList$member": null
       }
@@ -1526,19 +1526,49 @@
     "DocumentIdentifierList": {
       "base": null,
       "refs": {
-        "ListDocumentsResult$DocumentIdentifiers": "<p>The names of the SSM documents.</p>"
+        "ListDocumentsResult$DocumentIdentifiers": "<p>The names of the Systems Manager documents.</p>"
+      }
+    },
+    "DocumentKeyValuesFilter": {
+      "base": "<p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>Other valid values include Owner, Name, PlatformTypes, and DocumentType.</p> <p>Note that only one Owner can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <p>If you use Name as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:[tagName],Values=[valueName]</code>.</p> <p>For example, if you created a Key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>",
+      "refs": {
+        "DocumentKeyValuesFilterList$member": null
+      }
+    },
+    "DocumentKeyValuesFilterKey": {
+      "base": null,
+      "refs": {
+        "DocumentKeyValuesFilter$Key": "<p>The name of the filter key.</p>"
+      }
+    },
+    "DocumentKeyValuesFilterList": {
+      "base": null,
+      "refs": {
+        "ListDocumentsRequest$Filters": "<p>One or more filters. Use a filter to return a more specific list of results.</p>"
+      }
+    },
+    "DocumentKeyValuesFilterValue": {
+      "base": null,
+      "refs": {
+        "DocumentKeyValuesFilterValues$member": null
+      }
+    },
+    "DocumentKeyValuesFilterValues": {
+      "base": null,
+      "refs": {
+        "DocumentKeyValuesFilter$Values": "<p>The value for the filter key.</p>"
       }
     },
     "DocumentLimitExceeded": {
-      "base": "<p>You can have at most 200 active SSM documents.</p>",
+      "base": "<p>You can have at most 200 active Systems Manager documents.</p>",
       "refs": {
       }
     },
     "DocumentName": {
       "base": null,
       "refs": {
-        "Association$Name": "<p>The name of the SSM document.</p>",
-        "AssociationDescription$Name": "<p>The name of the SSM document.</p>",
+        "Association$Name": "<p>The name of the Systems Manager document.</p>",
+        "AssociationDescription$Name": "<p>The name of the Systems Manager document.</p>",
         "AssociationVersionInfo$Name": "<p>The name specified when the association was created.</p>",
         "AutomationExecution$DocumentName": "<p>The name of the Automation document used during the execution.</p>",
         "AutomationExecutionMetadata$DocumentName": "<p>The name of the Automation document used during execution.</p>",
@@ -1549,7 +1579,7 @@
         "CreateDocumentRequest$Name": "<p>A name for the Systems Manager document.</p>",
         "DeleteAssociationRequest$Name": "<p>The name of the Systems Manager document.</p>",
         "DeleteDocumentRequest$Name": "<p>The name of the document.</p>",
-        "DescribeAssociationRequest$Name": "<p>The name of the SSM document.</p>",
+        "DescribeAssociationRequest$Name": "<p>The name of the Systems Manager document.</p>",
         "DescribeDocumentPermissionRequest$Name": "<p>The name of the document for which you are the owner.</p>",
         "DocumentDefaultVersionDescription$Name": "<p>The name of the document.</p>",
         "DocumentVersionInfo$Name": "<p>The document name.</p>",
@@ -1558,7 +1588,7 @@
         "ListDocumentVersionsRequest$Name": "<p>The name of the document about which you want version information.</p>",
         "ModifyDocumentPermissionRequest$Name": "<p>The name of the document that you want to share.</p>",
         "UpdateAssociationRequest$Name": "<p>The name of the association document.</p>",
-        "UpdateAssociationStatusRequest$Name": "<p>The name of the SSM document.</p>",
+        "UpdateAssociationStatusRequest$Name": "<p>The name of the Systems Manager document.</p>",
         "UpdateDocumentDefaultVersionRequest$Name": "<p>The name of a custom document that you want to set as the default version.</p>",
         "UpdateDocumentRequest$Name": "<p>The name of the document that you want to update.</p>"
       }
@@ -1566,8 +1596,8 @@
     "DocumentOwner": {
       "base": null,
       "refs": {
-        "DocumentDescription$Owner": "<p>The AWS user account of the person who created the document.</p>",
-        "DocumentIdentifier$Owner": "<p>The AWS user account of the person who created the document.</p>"
+        "DocumentDescription$Owner": "<p>The AWS user account that created the document.</p>",
+        "DocumentIdentifier$Owner": "<p>The AWS user account that created the document.</p>"
       }
     },
     "DocumentParameter": {
@@ -1628,13 +1658,13 @@
     "DocumentSha1": {
       "base": null,
       "refs": {
-        "DocumentDescription$Sha1": "<p>The SHA1 hash of the document, which you can use for verification purposes.</p>"
+        "DocumentDescription$Sha1": "<p>The SHA1 hash of the document, which you can use for verification.</p>"
       }
     },
     "DocumentStatus": {
       "base": null,
       "refs": {
-        "DocumentDescription$Status": "<p>The status of the SSM document.</p>"
+        "DocumentDescription$Status": "<p>The status of the Systems Manager document.</p>"
       }
     },
     "DocumentType": {
@@ -1651,7 +1681,7 @@
       "refs": {
         "Association$DocumentVersion": "<p>The version of the document used in the association.</p>",
         "AssociationDescription$DocumentVersion": "<p>The document version.</p>",
-        "AssociationVersionInfo$DocumentVersion": "<p>The version of an SSM document used when the association version was created.</p>",
+        "AssociationVersionInfo$DocumentVersion": "<p>The version of a Systems Manager document used when the association version was created.</p>",
         "AutomationExecution$DocumentVersion": "<p>The version of the document to use during execution.</p>",
         "AutomationExecutionMetadata$DocumentVersion": "<p>The document version used during the execution.</p>",
         "CreateAssociationBatchRequestEntry$DocumentVersion": "<p>The document version.</p>",
@@ -2366,7 +2396,7 @@
       }
     },
     "InvalidParameters": {
-      "base": "<p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>",
+      "base": "<p>You must specify values for all required parameters in the Systems Manager document. You can only supply values to parameters defined in the Systems Manager document.</p>",
       "refs": {
       }
     },
@@ -2386,7 +2416,7 @@
       }
     },
     "InvalidResourceType": {
-      "base": "<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>",
+      "base": "<p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>",
       "refs": {
       }
     },
@@ -3170,9 +3200,9 @@
       "base": null,
       "refs": {
         "GetMaintenanceWindowExecutionTaskResult$TaskArn": "<p>The ARN of the executed task.</p>",
-        "GetMaintenanceWindowTaskResult$TaskArn": "<p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>",
+        "GetMaintenanceWindowTaskResult$TaskArn": "<p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>",
         "MaintenanceWindowExecutionTaskIdentity$TaskArn": "<p>The ARN of the executed task.</p>",
-        "MaintenanceWindowTask$TaskArn": "<p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the SSM document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>",
+        "MaintenanceWindowTask$TaskArn": "<p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>",
         "RegisterTaskWithMaintenanceWindowRequest$TaskArn": "<p>The ARN of the task to execute </p>",
         "UpdateMaintenanceWindowTaskRequest$TaskArn": "<p>The task ARN to modify.</p>",
         "UpdateMaintenanceWindowTaskResult$TaskArn": "<p>The updated task ARN value.</p>"
@@ -4067,7 +4097,7 @@
     "PlatformTypeList": {
       "base": null,
       "refs": {
-        "DocumentDescription$PlatformTypes": "<p>The list of OS platforms compatible with this SSM document. </p>",
+        "DocumentDescription$PlatformTypes": "<p>The list of OS platforms compatible with this Systems Manager document. </p>",
         "DocumentIdentifier$PlatformTypes": "<p>The operating system platform. </p>"
       }
     },
@@ -4629,7 +4659,7 @@
       }
     },
     "Tag": {
-      "base": "<p>Metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment.</p>",
+      "base": "<p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines.</p>",
       "refs": {
         "TagList$member": null
       }
@@ -4645,6 +4675,8 @@
       "base": null,
       "refs": {
         "AddTagsToResourceRequest$Tags": "<p> One or more tags. The value parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>",
+        "DocumentDescription$Tags": "<p>The tags, or metadata, that have been applied to the document.</p>",
+        "DocumentIdentifier$Tags": "<p>The tags, or metadata, that have been applied to the document.</p>",
         "ListTagsForResourceResult$TagList": "<p>A list of tags.</p>"
       }
     },

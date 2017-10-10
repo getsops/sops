@@ -167,14 +167,13 @@ func (c *SQS) ChangeMessageVisibilityRequest(input *ChangeMessageVisibilityInput
 // timeout of 12 hours. For more information, see Visibility Timeout (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html)
 // in the Amazon SQS Developer Guide.
 //
-// For example, you have a message and with the default visibility timeout of
-// 5 minutes. After 3 minutes, you call ChangeMessageVisiblity with a timeout
-// of 10 minutes. At that time, the timeout for the message is extended by 10
-// minutes beyond the time of the ChangeMessageVisibility action. This results
-// in a total visibility timeout of 13 minutes. You can continue to call the
-// ChangeMessageVisibility to extend the visibility timeout to a maximum of
-// 12 hours. If you try to extend the visibility timeout beyond 12 hours, your
-// request is rejected.
+// For example, you have a message with a visibility timeout of 5 minutes. After
+// 3 minutes, you call ChangeMessageVisiblity with a timeout of 10 minutes.
+// At that time, the timeout for the message is extended by 10 minutes beyond
+// the time of the ChangeMessageVisibility action. This results in a total visibility
+// timeout of 13 minutes. You can continue to call the ChangeMessageVisibility
+// to extend the visibility timeout to a maximum of 12 hours. If you try to
+// extend the visibility timeout beyond 12 hours, your request is rejected.
 //
 // A message is considered to be in flight after it's received from a queue
 // by a consumer, but not yet deleted from the queue.
@@ -713,7 +712,7 @@ func (c *SQS) DeleteQueueRequest(input *DeleteQueueInput) (req *request.Request,
 
 // DeleteQueue API operation for Amazon Simple Queue Service.
 //
-// Deletes the queue specified by the QueueUrl, even if the queue is empty.
+// Deletes the queue specified by the QueueUrl, regardless of the queue's contents.
 // If the specified queue doesn't exist, Amazon SQS returns a successful response.
 //
 // Be careful with the DeleteQueue action: When you delete a queue, any messages
@@ -976,10 +975,10 @@ func (c *SQS) ListDeadLetterSourceQueuesRequest(input *ListDeadLetterSourceQueue
 // ListDeadLetterSourceQueues API operation for Amazon Simple Queue Service.
 //
 // Returns a list of your queues that have the RedrivePolicy queue attribute
-// configured with a dead letter queue.
+// configured with a dead-letter queue.
 //
-// For more information about using dead letter queues, see Using Amazon SQS
-// Dead Letter Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+// For more information about using dead-letter queues, see Using Amazon SQS
+// Dead-Letter Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
 // in the Amazon SQS Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1271,8 +1270,8 @@ func (c *SQS) ReceiveMessageRequest(input *ReceiveMessageInput) (req *request.Re
 //
 // A message that isn't deleted or a message whose visibility isn't extended
 // before the visibility timeout expires counts as a failed receive. Depending
-// on the configuration of the queue, the message might be sent to the dead
-// letter queue.
+// on the configuration of the queue, the message might be sent to the dead-letter
+// queue.
 //
 // In the future, new attributes might be added. If you write code that calls
 // this action, we recommend that you structure your code so that it can handle
@@ -2203,13 +2202,21 @@ type CreateQueueInput struct {
 	//    which a ReceiveMessage action waits for a message to arrive. Valid values:
 	//    An integer from 0 to 20 (seconds). The default is 0 (zero).
 	//
-	//    * RedrivePolicy - The parameters for the dead letter queue functionality
-	//    of the source queue. For more information about the redrive policy and
-	//    dead letter queues, see Using Amazon SQS Dead Letter Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+	//    * RedrivePolicy - The string that includes the parameters for the dead-letter
+	//    queue functionality of the source queue. For more information about the
+	//    redrive policy and dead-letter queues, see Using Amazon SQS Dead-Letter
+	//    Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
 	//    in the Amazon SQS Developer Guide.
 	//
-	// The dead letter queue of a FIFO queue must also be a FIFO queue. Similarly,
-	//    the dead letter queue of a standard queue must also be a standard queue.
+	// deadLetterTargetArn - The Amazon Resource Name (ARN) of the dead-letter queue
+	//    to which Amazon SQS moves messages after the value of maxReceiveCount
+	//    is exceeded.
+	//
+	// maxReceiveCount - The number of times a message is delivered to the source
+	//    queue before being moved to the dead-letter queue.
+	//
+	// The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly,
+	//    the dead-letter queue of a standard queue must also be a standard queue.
 	//
 	//    * VisibilityTimeout - The visibility timeout for the queue. Valid values:
 	//    An integer from 0 to 43,200 (12 hours). The default is 30. For more information
@@ -2221,7 +2228,7 @@ type CreateQueueInput struct {
 	//    * KmsMasterKeyId - The ID of an AWS-managed customer master key (CMK)
 	//    for Amazon SQS or a custom CMK. For more information, see Key Terms (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms).
 	//    While the alias of the AWS-managed CMK for Amazon SQS is always alias/aws/sqs,
-	//    the alias of a custom CMK can, for example, be alias/aws/sqs. For more
+	//    the alias of a custom CMK can, for example, be alias/MyAlias. For more
 	//    examples, see KeyId (http://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)
 	//    in the AWS Key Management Service API Reference.
 	//
@@ -2230,9 +2237,9 @@ type CreateQueueInput struct {
 	//    to encrypt or decrypt messages before calling AWS KMS again. An integer
 	//    representing seconds, between 60 seconds (1 minute) and 86,400 seconds
 	//    (24 hours). The default is 300 (5 minutes). A shorter time period provides
-	//    better security but results in more calls to KMS which incur charges after
-	//    Free Tier. For more information, see How Does the Data Key Reuse Period
-	//    Work? (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work).
+	//    better security but results in more calls to KMS which might incur charges
+	//    after Free Tier. For more information, see How Does the Data Key Reuse
+	//    Period Work? (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work).
 	//
 	//
 	// The following attributes apply only to FIFO (first-in-first-out) queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html):
@@ -2727,10 +2734,18 @@ type GetQueueAttributesInput struct {
 	//    * ReceiveMessageWaitTimeSeconds - Returns the length of time, in seconds,
 	//    for which the ReceiveMessage action waits for a message to arrive.
 	//
-	//    * RedrivePolicy - Returns the parameters for dead letter queue functionality
-	//    of the source queue. For more information about the redrive policy and
-	//    dead letter queues, see Using Amazon SQS Dead Letter Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+	//    * RedrivePolicy - Returns the string that includes the parameters for
+	//    dead-letter queue functionality of the source queue. For more information
+	//    about the redrive policy and dead-letter queues, see Using Amazon SQS
+	//    Dead-Letter Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
 	//    in the Amazon SQS Developer Guide.
+	//
+	// deadLetterTargetArn - The Amazon Resource Name (ARN) of the dead-letter queue
+	//    to which Amazon SQS moves messages after the value of maxReceiveCount
+	//    is exceeded.
+	//
+	// maxReceiveCount - The number of times a message is delivered to the source
+	//    queue before being moved to the dead-letter queue.
 	//
 	//    * VisibilityTimeout - Returns the visibility timeout for the queue. For
 	//    more information about the visibility timeout, see Visibility Timeout
@@ -2746,7 +2761,9 @@ type GetQueueAttributesInput struct {
 	//
 	//    * KmsDataKeyReusePeriodSeconds - Returns the length of time, in seconds,
 	//    for which Amazon SQS can reuse a data key to encrypt or decrypt messages
-	//    before calling AWS KMS again.
+	//    before calling AWS KMS again. For more information, see How Does the Data
+	//    Key Reuse Period Work? (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work).
+	//
 	//
 	// The following attributes apply only to FIFO (first-in-first-out) queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html):
 	//
@@ -2912,7 +2929,7 @@ func (s *GetQueueUrlOutput) SetQueueUrl(v string) *GetQueueUrlOutput {
 type ListDeadLetterSourceQueuesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The URL of a dead letter queue.
+	// The URL of a dead-letter queue.
 	//
 	// Queue URLs are case-sensitive.
 	//
@@ -2955,7 +2972,7 @@ type ListDeadLetterSourceQueuesOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A list of source queue URLs that have the RedrivePolicy queue attribute configured
-	// with a dead letter queue.
+	// with a dead-letter queue.
 	//
 	// QueueUrls is a required field
 	QueueUrls []*string `locationName:"queueUrls" locationNameList:"QueueUrl" type:"list" flattened:"true" required:"true"`
@@ -3428,7 +3445,8 @@ type ReceiveMessageInput struct {
 
 	// The duration (in seconds) for which the call waits for a message to arrive
 	// in the queue before returning. If a message is available, the call returns
-	// sooner than WaitTimeSeconds.
+	// sooner than WaitTimeSeconds. If no messages are available and the wait time
+	// expires, the call returns successfully with an empty list of messages.
 	WaitTimeSeconds *int64 `type:"integer"`
 }
 
@@ -4240,13 +4258,21 @@ type SetQueueAttributesInput struct {
 	//    which a ReceiveMessage action waits for a message to arrive. Valid values:
 	//    an integer from 0 to 20 (seconds). The default is 0.
 	//
-	//    * RedrivePolicy - The parameters for the dead letter queue functionality
-	//    of the source queue. For more information about the redrive policy and
-	//    dead letter queues, see Using Amazon SQS Dead Letter Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+	//    * RedrivePolicy - The string that includes the parameters for the dead-letter
+	//    queue functionality of the source queue. For more information about the
+	//    redrive policy and dead-letter queues, see Using Amazon SQS Dead-Letter
+	//    Queues (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
 	//    in the Amazon SQS Developer Guide.
 	//
-	// The dead letter queue of a FIFO queue must also be a FIFO queue. Similarly,
-	//    the dead letter queue of a standard queue must also be a standard queue.
+	// deadLetterTargetArn - The Amazon Resource Name (ARN) of the dead-letter queue
+	//    to which Amazon SQS moves messages after the value of maxReceiveCount
+	//    is exceeded.
+	//
+	// maxReceiveCount - The number of times a message is delivered to the source
+	//    queue before being moved to the dead-letter queue.
+	//
+	// The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly,
+	//    the dead-letter queue of a standard queue must also be a standard queue.
 	//
 	//    * VisibilityTimeout - The visibility timeout for the queue. Valid values:
 	//    an integer from 0 to 43,200 (12 hours). The default is 30. For more information
@@ -4258,7 +4284,7 @@ type SetQueueAttributesInput struct {
 	//    * KmsMasterKeyId - The ID of an AWS-managed customer master key (CMK)
 	//    for Amazon SQS or a custom CMK. For more information, see Key Terms (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms).
 	//    While the alias of the AWS-managed CMK for Amazon SQS is always alias/aws/sqs,
-	//    the alias of a custom CMK can, for example, be alias/aws/sqs. For more
+	//    the alias of a custom CMK can, for example, be alias/MyAlias. For more
 	//    examples, see KeyId (http://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)
 	//    in the AWS Key Management Service API Reference.
 	//
@@ -4267,9 +4293,9 @@ type SetQueueAttributesInput struct {
 	//    to encrypt or decrypt messages before calling AWS KMS again. An integer
 	//    representing seconds, between 60 seconds (1 minute) and 86,400 seconds
 	//    (24 hours). The default is 300 (5 minutes). A shorter time period provides
-	//    better security but results in more calls to KMS which incur charges after
-	//    Free Tier. For more information, see How Does the Data Key Reuse Period
-	//    Work? (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work).
+	//    better security but results in more calls to KMS which might incur charges
+	//    after Free Tier. For more information, see How Does the Data Key Reuse
+	//    Period Work? (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work).
 	//
 	//
 	// The following attribute applies only to FIFO (first-in-first-out) queues

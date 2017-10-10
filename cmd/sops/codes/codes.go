@@ -3,6 +3,7 @@ package codes
 
 // Exit statuses returned by the binary
 const (
+	ErrorGeneric                           int = 1
 	CouldNotReadInputFile                  int = 2
 	CouldNotWriteOutputFile                int = 3
 	ErrorDumpingTree                       int = 4

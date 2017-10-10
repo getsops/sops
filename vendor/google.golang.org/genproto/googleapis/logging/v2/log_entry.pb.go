@@ -31,6 +31,13 @@ It has these top-level messages:
 	CreateSinkRequest
 	UpdateSinkRequest
 	DeleteSinkRequest
+	LogExclusion
+	ListExclusionsRequest
+	ListExclusionsResponse
+	GetExclusionRequest
+	CreateExclusionRequest
+	UpdateExclusionRequest
+	DeleteExclusionRequest
 	LogMetric
 	ListLogMetricsRequest
 	ListLogMetricsResponse
@@ -96,11 +103,15 @@ type LogEntry struct {
 	//	*LogEntry_TextPayload
 	//	*LogEntry_JsonPayload
 	Payload isLogEntry_Payload `protobuf_oneof:"payload"`
-	// Optional. The time the event described by the log entry occurred.  If
-	// omitted in a new log entry, Stackdriver Logging will insert the time the
-	// log entry is received.  Stackdriver Logging might reject log entries whose
-	// time stamps are more than a couple of hours in the future. Log entries
-	// with time stamps in the past are accepted.
+	// Optional. The time the event described by the log entry occurred.
+	// This time is used to compute the log entry's age and to enforce
+	// the logs retention period. If this field is omitted in a new log
+	// entry, then Stackdriver Logging assigns it the current time.
+	//
+	// Incoming log entries should have timestamps that are no more than
+	// the [logs retention period](/logging/quota-policy) in the past,
+	// and no more than 24 hours in the future.
+	// See the `entries.write` API method for more information.
 	Timestamp *google_protobuf4.Timestamp `protobuf:"bytes,9,opt,name=timestamp" json:"timestamp,omitempty"`
 	// Output only. The time the log entry was received by Stackdriver Logging.
 	ReceiveTimestamp *google_protobuf4.Timestamp `protobuf:"bytes,24,opt,name=receive_timestamp,json=receiveTimestamp" json:"receive_timestamp,omitempty"`
@@ -111,7 +122,7 @@ type LogEntry struct {
 	// then Stackdriver Logging considers other log entries in the same project,
 	// with the same `timestamp`, and with the same `insert_id` to be duplicates
 	// which can be removed.  If omitted in new log entries, then Stackdriver
-	// Logging will insert its own unique identifier. The `insert_id` is used
+	// Logging assigns its own unique identifier. The `insert_id` is also used
 	// to order log entries that have the same `timestamp` value.
 	InsertId string `protobuf:"bytes,4,opt,name=insert_id,json=insertId" json:"insert_id,omitempty"`
 	// Optional. Information about the HTTP request associated with this

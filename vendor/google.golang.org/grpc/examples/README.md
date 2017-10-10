@@ -8,7 +8,7 @@ For this sample, we've already generated the server and client stubs from [hello
 PREREQUISITES
 -------------
 
-- This requires Go 1.5 or later
+- This requires Go 1.7 or later
 - Requires that [GOPATH is set](https://golang.org/doc/code.html#GOPATH)
 
 ```

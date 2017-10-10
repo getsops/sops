@@ -102,13 +102,21 @@ type ClientConn interface {
 	NewServiceConfig(serviceConfig string)
 }
 
+// Target represents a target for gRPC, as specified in:
+// https://github.com/grpc/grpc/blob/master/doc/naming.md.
+type Target struct {
+	Scheme    string
+	Authority string
+	Endpoint  string
+}
+
 // Builder creates a resolver that will be used to watch name resolution updates.
 type Builder interface {
 	// Build creates a new resolver for the given target.
 	//
 	// gRPC dial calls Build synchronously, and fails if the returned error is
 	// not nil.
-	Build(target string, cc ClientConn, opts BuildOption) (Resolver, error)
+	Build(target Target, cc ClientConn, opts BuildOption) (Resolver, error)
 	// Scheme returns the scheme supported by this resolver.
 	// Scheme is defined at https://github.com/grpc/grpc/blob/master/doc/naming.md.
 	Scheme() string
@@ -125,4 +133,11 @@ type Resolver interface {
 	ResolveNow(ResolveNowOption)
 	// Close closes the resolver.
 	Close()
+}
+
+// UnregisterForTesting removes the resolver builder with the given scheme from the
+// resolver map.
+// This function is for testing only.
+func UnregisterForTesting(scheme string) {
+	delete(m, scheme)
 }

@@ -60,6 +60,38 @@
         {"shape":"IncompatibleImageException"}
       ]
     },
+    "CreateImageBuilder":{
+      "name":"CreateImageBuilder",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateImageBuilderRequest"},
+      "output":{"shape":"CreateImageBuilderResult"},
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"ResourceNotAvailableException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidRoleException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"InvalidParameterCombinationException"},
+        {"shape":"IncompatibleImageException"}
+      ]
+    },
+    "CreateImageBuilderStreamingURL":{
+      "name":"CreateImageBuilderStreamingURL",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateImageBuilderStreamingURLRequest"},
+      "output":{"shape":"CreateImageBuilderStreamingURLResult"},
+      "errors":[
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "CreateStack":{
       "name":"CreateStack",
       "http":{
@@ -119,6 +151,35 @@
         {"shape":"ConcurrentModificationException"}
       ]
     },
+    "DeleteImage":{
+      "name":"DeleteImage",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteImageRequest"},
+      "output":{"shape":"DeleteImageResult"},
+      "errors":[
+        {"shape":"ResourceInUseException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
+    },
+    "DeleteImageBuilder":{
+      "name":"DeleteImageBuilder",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteImageBuilderRequest"},
+      "output":{"shape":"DeleteImageBuilderResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
+    },
     "DeleteStack":{
       "name":"DeleteStack",
       "http":{
@@ -153,6 +214,18 @@
       },
       "input":{"shape":"DescribeFleetsRequest"},
       "output":{"shape":"DescribeFleetsResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DescribeImageBuilders":{
+      "name":"DescribeImageBuilders",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeImageBuildersRequest"},
+      "output":{"shape":"DescribeImageBuildersResult"},
       "errors":[
         {"shape":"ResourceNotFoundException"}
       ]
@@ -249,6 +322,20 @@
         {"shape":"ConcurrentModificationException"}
       ]
     },
+    "StartImageBuilder":{
+      "name":"StartImageBuilder",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartImageBuilderRequest"},
+      "output":{"shape":"StartImageBuilderResult"},
+      "errors":[
+        {"shape":"ResourceNotAvailableException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
+    },
     "StopFleet":{
       "name":"StopFleet",
       "http":{
@@ -259,6 +346,20 @@
       "output":{"shape":"StopFleetResult"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
+    },
+    "StopImageBuilder":{
+      "name":"StopImageBuilder",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StopImageBuilderRequest"},
+      "output":{"shape":"StopImageBuilderResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationNotPermittedException"},
         {"shape":"ConcurrentModificationException"}
       ]
     },
@@ -427,6 +528,7 @@
         "Name":{"shape":"Name"},
         "ImageName":{"shape":"String"},
         "InstanceType":{"shape":"String"},
+        "FleetType":{"shape":"FleetType"},
         "ComputeCapacity":{"shape":"ComputeCapacity"},
         "VpcConfig":{"shape":"VpcConfig"},
         "MaxUserDurationInSeconds":{"shape":"Integer"},
@@ -441,6 +543,45 @@
       "type":"structure",
       "members":{
         "Fleet":{"shape":"Fleet"}
+      }
+    },
+    "CreateImageBuilderRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "ImageName",
+        "InstanceType"
+      ],
+      "members":{
+        "Name":{"shape":"Name"},
+        "ImageName":{"shape":"String"},
+        "InstanceType":{"shape":"String"},
+        "Description":{"shape":"Description"},
+        "DisplayName":{"shape":"DisplayName"},
+        "VpcConfig":{"shape":"VpcConfig"},
+        "EnableDefaultInternetAccess":{"shape":"BooleanObject"},
+        "DomainJoinInfo":{"shape":"DomainJoinInfo"}
+      }
+    },
+    "CreateImageBuilderResult":{
+      "type":"structure",
+      "members":{
+        "ImageBuilder":{"shape":"ImageBuilder"}
+      }
+    },
+    "CreateImageBuilderStreamingURLRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"String"},
+        "Validity":{"shape":"Long"}
+      }
+    },
+    "CreateImageBuilderStreamingURLResult":{
+      "type":"structure",
+      "members":{
+        "StreamingURL":{"shape":"String"},
+        "Expires":{"shape":"Timestamp"}
       }
     },
     "CreateStackRequest":{
@@ -506,6 +647,32 @@
       "members":{
       }
     },
+    "DeleteImageBuilderRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"Name"}
+      }
+    },
+    "DeleteImageBuilderResult":{
+      "type":"structure",
+      "members":{
+        "ImageBuilder":{"shape":"ImageBuilder"}
+      }
+    },
+    "DeleteImageRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"Name"}
+      }
+    },
+    "DeleteImageResult":{
+      "type":"structure",
+      "members":{
+        "Image":{"shape":"Image"}
+      }
+    },
     "DeleteStackRequest":{
       "type":"structure",
       "required":["Name"],
@@ -544,6 +711,21 @@
       "type":"structure",
       "members":{
         "Fleets":{"shape":"FleetList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "DescribeImageBuildersRequest":{
+      "type":"structure",
+      "members":{
+        "Names":{"shape":"StringList"},
+        "MaxResults":{"shape":"Integer"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "DescribeImageBuildersResult":{
+      "type":"structure",
+      "members":{
+        "ImageBuilders":{"shape":"ImageBuilderList"},
         "NextToken":{"shape":"String"}
       }
     },
@@ -675,6 +857,7 @@
         "Description":{"shape":"String"},
         "ImageName":{"shape":"String"},
         "InstanceType":{"shape":"String"},
+        "FleetType":{"shape":"FleetType"},
         "ComputeCapacityStatus":{"shape":"ComputeCapacityStatus"},
         "MaxUserDurationInSeconds":{"shape":"Integer"},
         "DisconnectTimeoutInSeconds":{"shape":"Integer"},
@@ -720,6 +903,7 @@
         "IMAGE_NOT_FOUND",
         "INVALID_SUBNET_CONFIGURATION",
         "SECURITY_GROUPS_NOT_FOUND",
+        "IGW_NOT_ATTACHED",
         "IAM_SERVICE_ROLE_MISSING_DESCRIBE_SECURITY_GROUPS_ACTION",
         "DOMAIN_JOIN_ERROR_FILE_NOT_FOUND",
         "DOMAIN_JOIN_ERROR_ACCESS_DENIED",
@@ -752,6 +936,13 @@
         "STOPPED"
       ]
     },
+    "FleetType":{
+      "type":"string",
+      "enum":[
+        "ALWAYS_ON",
+        "ON_DEMAND"
+      ]
+    },
     "Image":{
       "type":"structure",
       "required":["Name"],
@@ -770,6 +961,57 @@
         "CreatedTime":{"shape":"Timestamp"},
         "PublicBaseImageReleasedDate":{"shape":"Timestamp"}
       }
+    },
+    "ImageBuilder":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"String"},
+        "Arn":{"shape":"Arn"},
+        "ImageArn":{"shape":"Arn"},
+        "Description":{"shape":"String"},
+        "DisplayName":{"shape":"String"},
+        "VpcConfig":{"shape":"VpcConfig"},
+        "InstanceType":{"shape":"String"},
+        "Platform":{"shape":"PlatformType"},
+        "State":{"shape":"ImageBuilderState"},
+        "StateChangeReason":{"shape":"ImageBuilderStateChangeReason"},
+        "CreatedTime":{"shape":"Timestamp"},
+        "EnableDefaultInternetAccess":{"shape":"BooleanObject"},
+        "DomainJoinInfo":{"shape":"DomainJoinInfo"},
+        "ImageBuilderErrors":{"shape":"ResourceErrors"}
+      }
+    },
+    "ImageBuilderList":{
+      "type":"list",
+      "member":{"shape":"ImageBuilder"}
+    },
+    "ImageBuilderState":{
+      "type":"string",
+      "enum":[
+        "PENDING",
+        "RUNNING",
+        "STOPPING",
+        "STOPPED",
+        "REBOOTING",
+        "SNAPSHOTTING",
+        "DELETING",
+        "FAILED"
+      ]
+    },
+    "ImageBuilderStateChangeReason":{
+      "type":"structure",
+      "members":{
+        "Code":{"shape":"ImageBuilderStateChangeReasonCode"},
+        "Message":{"shape":"String"}
+      }
+    },
+    "ImageBuilderStateChangeReasonCode":{
+      "type":"string",
+      "enum":[
+        "INTERNAL_ERROR",
+        "IMAGE_UNAVAILABLE"
+      ]
     },
     "ImageList":{
       "type":"list",
@@ -893,6 +1135,18 @@
       },
       "exception":true
     },
+    "ResourceError":{
+      "type":"structure",
+      "members":{
+        "ErrorCode":{"shape":"FleetErrorCode"},
+        "ErrorMessage":{"shape":"String"},
+        "ErrorTimestamp":{"shape":"Timestamp"}
+      }
+    },
+    "ResourceErrors":{
+      "type":"list",
+      "member":{"shape":"ResourceError"}
+    },
     "ResourceIdentifier":{
       "type":"string",
       "min":1
@@ -1011,6 +1265,19 @@
       "members":{
       }
     },
+    "StartImageBuilderRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"String"}
+      }
+    },
+    "StartImageBuilderResult":{
+      "type":"structure",
+      "members":{
+        "ImageBuilder":{"shape":"ImageBuilder"}
+      }
+    },
     "StopFleetRequest":{
       "type":"structure",
       "required":["Name"],
@@ -1021,6 +1288,19 @@
     "StopFleetResult":{
       "type":"structure",
       "members":{
+      }
+    },
+    "StopImageBuilderRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"String"}
+      }
+    },
+    "StopImageBuilderResult":{
+      "type":"structure",
+      "members":{
+        "ImageBuilder":{"shape":"ImageBuilder"}
       }
     },
     "StorageConnector":{

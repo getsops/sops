@@ -1039,6 +1039,10 @@ func (c *Budgets) UpdateNotificationRequest(input *UpdateNotificationInput) (req
 //   This exception is thrown if a requested entity is not found. E.g., if a budget
 //   id doesn't exist for an account ID.
 //
+//   * ErrCodeDuplicateRecordException "DuplicateRecordException"
+//   The exception is thrown when customer tries to create a record (e.g. budget)
+//   that already exists.
+//
 func (c *Budgets) UpdateNotification(input *UpdateNotificationInput) (*UpdateNotificationOutput, error) {
 	req, out := c.UpdateNotificationRequest(input)
 	return out, req.Send()
@@ -1122,6 +1126,10 @@ func (c *Budgets) UpdateSubscriberRequest(input *UpdateSubscriberInput) (req *re
 //   * ErrCodeNotFoundException "NotFoundException"
 //   This exception is thrown if a requested entity is not found. E.g., if a budget
 //   id doesn't exist for an account ID.
+//
+//   * ErrCodeDuplicateRecordException "DuplicateRecordException"
+//   The exception is thrown when customer tries to create a record (e.g. budget)
+//   that already exists.
 //
 func (c *Budgets) UpdateSubscriber(input *UpdateSubscriberInput) (*UpdateSubscriberOutput, error) {
 	req, out := c.UpdateSubscriberRequest(input)
