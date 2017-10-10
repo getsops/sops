@@ -24,7 +24,6 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 	"github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil"
 	"github.com/aws/aws-sdk-go/private/util"
-	"github.com/stretchr/testify/assert"
 )
 
 var _ bytes.Buffer // always import bytes
@@ -1654,10 +1653,14 @@ func TestInputService1ProtocolTestScalarMembersCase1(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"Name":"myname"}`, util.Trim(string(body)))
 
@@ -1665,8 +1668,12 @@ func TestInputService1ProtocolTestScalarMembersCase1(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1680,10 +1687,14 @@ func TestInputService2ProtocolTestTimestampValuesCase1(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"TimeArg":1422172800}`, util.Trim(string(body)))
 
@@ -1691,8 +1702,12 @@ func TestInputService2ProtocolTestTimestampValuesCase1(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1706,10 +1721,14 @@ func TestInputService3ProtocolTestBase64EncodedBlobsCase1(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"BlobArg":"Zm9v"}`, util.Trim(string(body)))
 
@@ -1717,8 +1736,12 @@ func TestInputService3ProtocolTestBase64EncodedBlobsCase1(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1735,10 +1758,14 @@ func TestInputService3ProtocolTestBase64EncodedBlobsCase2(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"BlobMap":{"key1":"Zm9v","key2":"YmFy"}}`, util.Trim(string(body)))
 
@@ -1746,8 +1773,12 @@ func TestInputService3ProtocolTestBase64EncodedBlobsCase2(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1764,10 +1795,14 @@ func TestInputService4ProtocolTestNestedBlobsCase1(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"ListParam":["Zm9v","YmFy"]}`, util.Trim(string(body)))
 
@@ -1775,8 +1810,12 @@ func TestInputService4ProtocolTestNestedBlobsCase1(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1792,10 +1831,14 @@ func TestInputService5ProtocolTestRecursiveShapesCase1(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"RecursiveStruct":{"NoRecurse":"foo"}}`, util.Trim(string(body)))
 
@@ -1803,8 +1846,12 @@ func TestInputService5ProtocolTestRecursiveShapesCase1(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1822,10 +1869,14 @@ func TestInputService5ProtocolTestRecursiveShapesCase2(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"RecursiveStruct":{"RecursiveStruct":{"NoRecurse":"foo"}}}`, util.Trim(string(body)))
 
@@ -1833,8 +1884,12 @@ func TestInputService5ProtocolTestRecursiveShapesCase2(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1856,10 +1911,14 @@ func TestInputService5ProtocolTestRecursiveShapesCase3(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"RecursiveStruct":{"RecursiveStruct":{"RecursiveStruct":{"RecursiveStruct":{"NoRecurse":"foo"}}}}}`, util.Trim(string(body)))
 
@@ -1867,8 +1926,12 @@ func TestInputService5ProtocolTestRecursiveShapesCase3(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1891,10 +1954,14 @@ func TestInputService5ProtocolTestRecursiveShapesCase4(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"RecursiveStruct":{"RecursiveList":[{"NoRecurse":"foo"},{"NoRecurse":"bar"}]}}`, util.Trim(string(body)))
 
@@ -1902,8 +1969,12 @@ func TestInputService5ProtocolTestRecursiveShapesCase4(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1928,10 +1999,14 @@ func TestInputService5ProtocolTestRecursiveShapesCase5(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"RecursiveStruct":{"RecursiveList":[{"NoRecurse":"foo"},{"RecursiveStruct":{"NoRecurse":"bar"}}]}}`, util.Trim(string(body)))
 
@@ -1939,8 +2014,12 @@ func TestInputService5ProtocolTestRecursiveShapesCase5(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1963,10 +2042,14 @@ func TestInputService5ProtocolTestRecursiveShapesCase6(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"RecursiveStruct":{"RecursiveMap":{"foo":{"NoRecurse":"foo"},"bar":{"NoRecurse":"bar"}}}}`, util.Trim(string(body)))
 
@@ -1974,8 +2057,12 @@ func TestInputService5ProtocolTestRecursiveShapesCase6(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -1989,10 +2076,14 @@ func TestInputService6ProtocolTestEmptyMapsCase1(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"Map":{}}`, util.Trim(string(body)))
 
@@ -2000,8 +2091,12 @@ func TestInputService6ProtocolTestEmptyMapsCase1(t *testing.T) {
 	awstesting.AssertURL(t, "https://test/", r.URL.String())
 
 	// assert headers
-	assert.Equal(t, "application/x-amz-json-1.1", r.Header.Get("Content-Type"))
-	assert.Equal(t, "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"))
+	if e, a := "application/x-amz-json-1.1", r.Header.Get("Content-Type"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
+	if e, a := "com.amazonaws.foo.OperationName", r.Header.Get("X-Amz-Target"); e != a {
+		t.Errorf("expect %v to be %v", e, a)
+	}
 
 }
 
@@ -2015,10 +2110,14 @@ func TestInputService7ProtocolTestIdempotencyTokenAutoFillCase1(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"Token":"abc123"}`, util.Trim(string(body)))
 
@@ -2037,10 +2136,14 @@ func TestInputService7ProtocolTestIdempotencyTokenAutoFillCase2(t *testing.T) {
 
 	// build request
 	jsonrpc.Build(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect no error, got %v", req.Error)
+	}
 
 	// assert body
-	assert.NotNil(t, r.Body)
+	if r.Body == nil {
+		t.Errorf("expect body not to be nil")
+	}
 	body, _ := ioutil.ReadAll(r.Body)
 	awstesting.AssertJSON(t, `{"Token":"00000000-0000-4000-8000-000000000000"}`, util.Trim(string(body)))
 

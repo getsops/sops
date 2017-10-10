@@ -209,6 +209,98 @@ func (c *KinesisAnalytics) AddApplicationInputWithContext(ctx aws.Context, input
 	return out, req.Send()
 }
 
+const opAddApplicationInputProcessingConfiguration = "AddApplicationInputProcessingConfiguration"
+
+// AddApplicationInputProcessingConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the AddApplicationInputProcessingConfiguration operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AddApplicationInputProcessingConfiguration for more information on using the AddApplicationInputProcessingConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AddApplicationInputProcessingConfigurationRequest method.
+//    req, resp := client.AddApplicationInputProcessingConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationInputProcessingConfiguration
+func (c *KinesisAnalytics) AddApplicationInputProcessingConfigurationRequest(input *AddApplicationInputProcessingConfigurationInput) (req *request.Request, output *AddApplicationInputProcessingConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opAddApplicationInputProcessingConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AddApplicationInputProcessingConfigurationInput{}
+	}
+
+	output = &AddApplicationInputProcessingConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AddApplicationInputProcessingConfiguration API operation for Amazon Kinesis Analytics.
+//
+// Adds an InputProcessingConfiguration to an application. An input processor
+// preprocesses records on the input stream before the application's SQL code
+// executes. Currently, the only input processor available is AWS Lambda (https://aws.amazon.com/documentation/lambda/).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Kinesis Analytics's
+// API operation AddApplicationInputProcessingConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   Specified application can't be found.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   Application is not available for this operation.
+//
+//   * ErrCodeInvalidArgumentException "InvalidArgumentException"
+//   Specified input parameter value is invalid.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Exception thrown as a result of concurrent modification to an application.
+//   For example, two individuals attempting to edit the same application at the
+//   same time.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationInputProcessingConfiguration
+func (c *KinesisAnalytics) AddApplicationInputProcessingConfiguration(input *AddApplicationInputProcessingConfigurationInput) (*AddApplicationInputProcessingConfigurationOutput, error) {
+	req, out := c.AddApplicationInputProcessingConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// AddApplicationInputProcessingConfigurationWithContext is the same as AddApplicationInputProcessingConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AddApplicationInputProcessingConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *KinesisAnalytics) AddApplicationInputProcessingConfigurationWithContext(ctx aws.Context, input *AddApplicationInputProcessingConfigurationInput, opts ...request.Option) (*AddApplicationInputProcessingConfigurationOutput, error) {
+	req, out := c.AddApplicationInputProcessingConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opAddApplicationOutput = "AddApplicationOutput"
 
 // AddApplicationOutputRequest generates a "aws/request.Request" representing the
@@ -718,6 +810,96 @@ func (c *KinesisAnalytics) DeleteApplicationCloudWatchLoggingOption(input *Delet
 // for more information on using Contexts.
 func (c *KinesisAnalytics) DeleteApplicationCloudWatchLoggingOptionWithContext(ctx aws.Context, input *DeleteApplicationCloudWatchLoggingOptionInput, opts ...request.Option) (*DeleteApplicationCloudWatchLoggingOptionOutput, error) {
 	req, out := c.DeleteApplicationCloudWatchLoggingOptionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteApplicationInputProcessingConfiguration = "DeleteApplicationInputProcessingConfiguration"
+
+// DeleteApplicationInputProcessingConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteApplicationInputProcessingConfiguration operation. The "output" return
+// value will be populated with the request's response once the request complets
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteApplicationInputProcessingConfiguration for more information on using the DeleteApplicationInputProcessingConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteApplicationInputProcessingConfigurationRequest method.
+//    req, resp := client.DeleteApplicationInputProcessingConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationInputProcessingConfiguration
+func (c *KinesisAnalytics) DeleteApplicationInputProcessingConfigurationRequest(input *DeleteApplicationInputProcessingConfigurationInput) (req *request.Request, output *DeleteApplicationInputProcessingConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteApplicationInputProcessingConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteApplicationInputProcessingConfigurationInput{}
+	}
+
+	output = &DeleteApplicationInputProcessingConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteApplicationInputProcessingConfiguration API operation for Amazon Kinesis Analytics.
+//
+// Deletes an InputProcessingConfiguration from an input.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Kinesis Analytics's
+// API operation DeleteApplicationInputProcessingConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   Specified application can't be found.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   Application is not available for this operation.
+//
+//   * ErrCodeInvalidArgumentException "InvalidArgumentException"
+//   Specified input parameter value is invalid.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Exception thrown as a result of concurrent modification to an application.
+//   For example, two individuals attempting to edit the same application at the
+//   same time.
+//
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationInputProcessingConfiguration
+func (c *KinesisAnalytics) DeleteApplicationInputProcessingConfiguration(input *DeleteApplicationInputProcessingConfigurationInput) (*DeleteApplicationInputProcessingConfigurationOutput, error) {
+	req, out := c.DeleteApplicationInputProcessingConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteApplicationInputProcessingConfigurationWithContext is the same as DeleteApplicationInputProcessingConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteApplicationInputProcessingConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *KinesisAnalytics) DeleteApplicationInputProcessingConfigurationWithContext(ctx aws.Context, input *DeleteApplicationInputProcessingConfigurationInput, opts ...request.Option) (*DeleteApplicationInputProcessingConfigurationOutput, error) {
+	req, out := c.DeleteApplicationInputProcessingConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1594,9 +1776,7 @@ type AddApplicationInputInput struct {
 	// CurrentApplicationVersionId is a required field
 	CurrentApplicationVersionId *int64 `min:"1" type:"long" required:"true"`
 
-	// When you configure the application input, you specify the streaming source,
-	// the in-application stream name that is created, and the mapping between the
-	// two. For more information, see Configuring Application Input (http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html).
+	// The Input to add.
 	//
 	// Input is a required field
 	Input *Input `type:"structure" required:"true"`
@@ -1672,6 +1852,121 @@ func (s AddApplicationInputOutput) String() string {
 
 // GoString returns the string representation
 func (s AddApplicationInputOutput) GoString() string {
+	return s.String()
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationInputProcessingConfigurationRequest
+type AddApplicationInputProcessingConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of the application to which you want to add the input processing configuration.
+	//
+	// ApplicationName is a required field
+	ApplicationName *string `min:"1" type:"string" required:"true"`
+
+	// Version of the application to which you want to add the input processing
+	// configuration. You can use the DescribeApplication operation to get the current
+	// application version. If the version specified is not the current version,
+	// the ConcurrentModificationException is returned.
+	//
+	// CurrentApplicationVersionId is a required field
+	CurrentApplicationVersionId *int64 `min:"1" type:"long" required:"true"`
+
+	// The ID of the input configuration to which to add the input configuration.
+	// You can get a list of the input IDs for an application using the DescribeApplication
+	// operation.
+	//
+	// InputId is a required field
+	InputId *string `min:"1" type:"string" required:"true"`
+
+	// The InputProcessingConfiguration to add to the application.
+	//
+	// InputProcessingConfiguration is a required field
+	InputProcessingConfiguration *InputProcessingConfiguration `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s AddApplicationInputProcessingConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddApplicationInputProcessingConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddApplicationInputProcessingConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddApplicationInputProcessingConfigurationInput"}
+	if s.ApplicationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApplicationName"))
+	}
+	if s.ApplicationName != nil && len(*s.ApplicationName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApplicationName", 1))
+	}
+	if s.CurrentApplicationVersionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CurrentApplicationVersionId"))
+	}
+	if s.CurrentApplicationVersionId != nil && *s.CurrentApplicationVersionId < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("CurrentApplicationVersionId", 1))
+	}
+	if s.InputId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputId"))
+	}
+	if s.InputId != nil && len(*s.InputId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputId", 1))
+	}
+	if s.InputProcessingConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputProcessingConfiguration"))
+	}
+	if s.InputProcessingConfiguration != nil {
+		if err := s.InputProcessingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("InputProcessingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApplicationName sets the ApplicationName field's value.
+func (s *AddApplicationInputProcessingConfigurationInput) SetApplicationName(v string) *AddApplicationInputProcessingConfigurationInput {
+	s.ApplicationName = &v
+	return s
+}
+
+// SetCurrentApplicationVersionId sets the CurrentApplicationVersionId field's value.
+func (s *AddApplicationInputProcessingConfigurationInput) SetCurrentApplicationVersionId(v int64) *AddApplicationInputProcessingConfigurationInput {
+	s.CurrentApplicationVersionId = &v
+	return s
+}
+
+// SetInputId sets the InputId field's value.
+func (s *AddApplicationInputProcessingConfigurationInput) SetInputId(v string) *AddApplicationInputProcessingConfigurationInput {
+	s.InputId = &v
+	return s
+}
+
+// SetInputProcessingConfiguration sets the InputProcessingConfiguration field's value.
+func (s *AddApplicationInputProcessingConfigurationInput) SetInputProcessingConfiguration(v *InputProcessingConfiguration) *AddApplicationInputProcessingConfigurationInput {
+	s.InputProcessingConfiguration = v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/AddApplicationInputProcessingConfigurationResponse
+type AddApplicationInputProcessingConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AddApplicationInputProcessingConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddApplicationInputProcessingConfigurationOutput) GoString() string {
 	return s.String()
 }
 
@@ -2764,6 +3059,99 @@ func (s *DeleteApplicationInput) SetCreateTimestamp(v time.Time) *DeleteApplicat
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationInputProcessingConfigurationRequest
+type DeleteApplicationInputProcessingConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Kinesis Analytics application name.
+	//
+	// ApplicationName is a required field
+	ApplicationName *string `min:"1" type:"string" required:"true"`
+
+	// The version ID of the Kinesis Analytics application.
+	//
+	// CurrentApplicationVersionId is a required field
+	CurrentApplicationVersionId *int64 `min:"1" type:"long" required:"true"`
+
+	// The ID of the input configuration from which to delete the input configuration.
+	// You can get a list of the input IDs for an application using the DescribeApplication
+	// operation.
+	//
+	// InputId is a required field
+	InputId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteApplicationInputProcessingConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteApplicationInputProcessingConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteApplicationInputProcessingConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteApplicationInputProcessingConfigurationInput"}
+	if s.ApplicationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApplicationName"))
+	}
+	if s.ApplicationName != nil && len(*s.ApplicationName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApplicationName", 1))
+	}
+	if s.CurrentApplicationVersionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CurrentApplicationVersionId"))
+	}
+	if s.CurrentApplicationVersionId != nil && *s.CurrentApplicationVersionId < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("CurrentApplicationVersionId", 1))
+	}
+	if s.InputId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputId"))
+	}
+	if s.InputId != nil && len(*s.InputId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApplicationName sets the ApplicationName field's value.
+func (s *DeleteApplicationInputProcessingConfigurationInput) SetApplicationName(v string) *DeleteApplicationInputProcessingConfigurationInput {
+	s.ApplicationName = &v
+	return s
+}
+
+// SetCurrentApplicationVersionId sets the CurrentApplicationVersionId field's value.
+func (s *DeleteApplicationInputProcessingConfigurationInput) SetCurrentApplicationVersionId(v int64) *DeleteApplicationInputProcessingConfigurationInput {
+	s.CurrentApplicationVersionId = &v
+	return s
+}
+
+// SetInputId sets the InputId field's value.
+func (s *DeleteApplicationInputProcessingConfigurationInput) SetInputId(v string) *DeleteApplicationInputProcessingConfigurationInput {
+	s.InputId = &v
+	return s
+}
+
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationInputProcessingConfigurationResponse
+type DeleteApplicationInputProcessingConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteApplicationInputProcessingConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteApplicationInputProcessingConfigurationOutput) GoString() string {
+	return s.String()
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DeleteApplicationResponse
 type DeleteApplicationOutput struct {
 	_ struct{} `type:"structure"`
@@ -3073,22 +3461,22 @@ func (s *DestinationSchema) SetRecordFormatType(v string) *DestinationSchema {
 type DiscoverInputSchemaInput struct {
 	_ struct{} `type:"structure"`
 
+	// The InputProcessingConfiguration to use to preprocess the records before
+	// discovering the schema of the records.
+	InputProcessingConfiguration *InputProcessingConfiguration `type:"structure"`
+
 	// Point at which you want Amazon Kinesis Analytics to start reading records
 	// from the specified streaming source discovery purposes.
-	//
-	// InputStartingPositionConfiguration is a required field
-	InputStartingPositionConfiguration *InputStartingPositionConfiguration `type:"structure" required:"true"`
+	InputStartingPositionConfiguration *InputStartingPositionConfiguration `type:"structure"`
 
 	// Amazon Resource Name (ARN) of the streaming source.
-	//
-	// ResourceARN is a required field
-	ResourceARN *string `min:"1" type:"string" required:"true"`
+	ResourceARN *string `min:"1" type:"string"`
 
 	// ARN of the IAM role that Amazon Kinesis Analytics can assume to access the
 	// stream on your behalf.
-	//
-	// RoleARN is a required field
-	RoleARN *string `min:"1" type:"string" required:"true"`
+	RoleARN *string `min:"1" type:"string"`
+
+	S3Configuration *S3Configuration `type:"structure"`
 }
 
 // String returns the string representation
@@ -3104,26 +3492,33 @@ func (s DiscoverInputSchemaInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DiscoverInputSchemaInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DiscoverInputSchemaInput"}
-	if s.InputStartingPositionConfiguration == nil {
-		invalidParams.Add(request.NewErrParamRequired("InputStartingPositionConfiguration"))
-	}
-	if s.ResourceARN == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
-	}
 	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
 	}
-	if s.RoleARN == nil {
-		invalidParams.Add(request.NewErrParamRequired("RoleARN"))
-	}
 	if s.RoleARN != nil && len(*s.RoleARN) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("RoleARN", 1))
+	}
+	if s.InputProcessingConfiguration != nil {
+		if err := s.InputProcessingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("InputProcessingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3Configuration != nil {
+		if err := s.S3Configuration.Validate(); err != nil {
+			invalidParams.AddNested("S3Configuration", err.(request.ErrInvalidParams))
+		}
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetInputProcessingConfiguration sets the InputProcessingConfiguration field's value.
+func (s *DiscoverInputSchemaInput) SetInputProcessingConfiguration(v *InputProcessingConfiguration) *DiscoverInputSchemaInput {
+	s.InputProcessingConfiguration = v
+	return s
 }
 
 // SetInputStartingPositionConfiguration sets the InputStartingPositionConfiguration field's value.
@@ -3144,6 +3539,12 @@ func (s *DiscoverInputSchemaInput) SetRoleARN(v string) *DiscoverInputSchemaInpu
 	return s
 }
 
+// SetS3Configuration sets the S3Configuration field's value.
+func (s *DiscoverInputSchemaInput) SetS3Configuration(v *S3Configuration) *DiscoverInputSchemaInput {
+	s.S3Configuration = v
+	return s
+}
+
 // Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/DiscoverInputSchemaResponse
 type DiscoverInputSchemaOutput struct {
 	_ struct{} `type:"structure"`
@@ -3156,6 +3557,10 @@ type DiscoverInputSchemaOutput struct {
 	// An array of elements, where each element corresponds to a row in a stream
 	// record (a stream record can have more than one row).
 	ParsedInputRecords [][]*string `type:"list"`
+
+	// Stream data that was modified by the processor specified in the InputProcessingConfiguration
+	// parameter.
+	ProcessedInputRecords []*string `type:"list"`
 
 	// Raw stream data that was sampled to infer the schema.
 	RawInputRecords []*string `type:"list"`
@@ -3183,6 +3588,12 @@ func (s *DiscoverInputSchemaOutput) SetParsedInputRecords(v [][]*string) *Discov
 	return s
 }
 
+// SetProcessedInputRecords sets the ProcessedInputRecords field's value.
+func (s *DiscoverInputSchemaOutput) SetProcessedInputRecords(v []*string) *DiscoverInputSchemaOutput {
+	s.ProcessedInputRecords = v
+	return s
+}
+
 // SetRawInputRecords sets the RawInputRecords field's value.
 func (s *DiscoverInputSchemaOutput) SetRawInputRecords(v []*string) *DiscoverInputSchemaOutput {
 	s.RawInputRecords = v
@@ -3202,6 +3613,12 @@ type Input struct {
 	//
 	// (see Configuring Application Input (http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html).
 	InputParallelism *InputParallelism `type:"structure"`
+
+	// The InputProcessingConfiguration for the Input. An input processor transforms
+	// records as they are received from the stream, before the application's SQL
+	// code executes. Currently, the only input processing configuration available
+	// is InputLambdaProcessor.
+	InputProcessingConfiguration *InputProcessingConfiguration `type:"structure"`
 
 	// Describes the format of the data in the streaming source, and how each data
 	// element maps to corresponding columns in the in-application stream that is
@@ -3263,6 +3680,11 @@ func (s *Input) Validate() error {
 			invalidParams.AddNested("InputParallelism", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.InputProcessingConfiguration != nil {
+		if err := s.InputProcessingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("InputProcessingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.InputSchema != nil {
 		if err := s.InputSchema.Validate(); err != nil {
 			invalidParams.AddNested("InputSchema", err.(request.ErrInvalidParams))
@@ -3288,6 +3710,12 @@ func (s *Input) Validate() error {
 // SetInputParallelism sets the InputParallelism field's value.
 func (s *Input) SetInputParallelism(v *InputParallelism) *Input {
 	s.InputParallelism = v
+	return s
+}
+
+// SetInputProcessingConfiguration sets the InputProcessingConfiguration field's value.
+func (s *Input) SetInputProcessingConfiguration(v *InputProcessingConfiguration) *Input {
+	s.InputProcessingConfiguration = v
 	return s
 }
 
@@ -3392,8 +3820,13 @@ type InputDescription struct {
 	// to the streaming source).
 	InputParallelism *InputParallelism `type:"structure"`
 
+	// The description of the preprocessor that executes on records in this input
+	// before the application's code is run.
+	InputProcessingConfigurationDescription *InputProcessingConfigurationDescription `type:"structure"`
+
 	// Describes the format of the data in the streaming source, and how each data
-	// element maps to corresponding columns created in the in-application stream.
+	// element maps to corresponding columns in the in-application stream that is
+	// being created.
 	InputSchema *SourceSchema `type:"structure"`
 
 	// Point at which the application is configured to read from the input stream.
@@ -3442,6 +3875,12 @@ func (s *InputDescription) SetInputParallelism(v *InputParallelism) *InputDescri
 	return s
 }
 
+// SetInputProcessingConfigurationDescription sets the InputProcessingConfigurationDescription field's value.
+func (s *InputDescription) SetInputProcessingConfigurationDescription(v *InputProcessingConfigurationDescription) *InputDescription {
+	s.InputProcessingConfigurationDescription = v
+	return s
+}
+
 // SetInputSchema sets the InputSchema field's value.
 func (s *InputDescription) SetInputSchema(v *SourceSchema) *InputDescription {
 	s.InputSchema = v
@@ -3469,6 +3908,158 @@ func (s *InputDescription) SetKinesisStreamsInputDescription(v *KinesisStreamsIn
 // SetNamePrefix sets the NamePrefix field's value.
 func (s *InputDescription) SetNamePrefix(v string) *InputDescription {
 	s.NamePrefix = &v
+	return s
+}
+
+// An object that contains the ARN of the AWS Lambda (https://aws.amazon.com/documentation/lambda/)
+// function that is used to preprocess records in the stream, and the ARN of
+// the IAM role used to access the AWS Lambda function.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/InputLambdaProcessor
+type InputLambdaProcessor struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the AWS Lambda (https://aws.amazon.com/documentation/lambda/)
+	// function that operates on records in the stream.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+
+	// The ARN of the IAM role used to access the AWS Lambda function.
+	//
+	// RoleARN is a required field
+	RoleARN *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s InputLambdaProcessor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputLambdaProcessor) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputLambdaProcessor) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputLambdaProcessor"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+	if s.RoleARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleARN"))
+	}
+	if s.RoleARN != nil && len(*s.RoleARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleARN", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *InputLambdaProcessor) SetResourceARN(v string) *InputLambdaProcessor {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetRoleARN sets the RoleARN field's value.
+func (s *InputLambdaProcessor) SetRoleARN(v string) *InputLambdaProcessor {
+	s.RoleARN = &v
+	return s
+}
+
+// An object that contains the ARN of the AWS Lambda (https://aws.amazon.com/documentation/lambda/)
+// function that is used to preprocess records in the stream, and the ARN of
+// the IAM role used to access the AWS Lambda expression.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/InputLambdaProcessorDescription
+type InputLambdaProcessorDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the AWS Lambda (https://aws.amazon.com/documentation/lambda/)
+	// function that is used to preprocess the records in the stream.
+	ResourceARN *string `min:"1" type:"string"`
+
+	// The ARN of the IAM role used to access the AWS Lambda function.
+	RoleARN *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s InputLambdaProcessorDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputLambdaProcessorDescription) GoString() string {
+	return s.String()
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *InputLambdaProcessorDescription) SetResourceARN(v string) *InputLambdaProcessorDescription {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetRoleARN sets the RoleARN field's value.
+func (s *InputLambdaProcessorDescription) SetRoleARN(v string) *InputLambdaProcessorDescription {
+	s.RoleARN = &v
+	return s
+}
+
+// Represents an update to the InputLambdaProcessor that is used to preprocess
+// the records in the stream.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/InputLambdaProcessorUpdate
+type InputLambdaProcessorUpdate struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the new AWS Lambda (https://aws.amazon.com/documentation/lambda/)
+	// function that is used to preprocess the records in the stream.
+	ResourceARNUpdate *string `min:"1" type:"string"`
+
+	// The ARN of the new IAM role used to access the AWS Lambda function.
+	RoleARNUpdate *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s InputLambdaProcessorUpdate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputLambdaProcessorUpdate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputLambdaProcessorUpdate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputLambdaProcessorUpdate"}
+	if s.ResourceARNUpdate != nil && len(*s.ResourceARNUpdate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARNUpdate", 1))
+	}
+	if s.RoleARNUpdate != nil && len(*s.RoleARNUpdate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleARNUpdate", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARNUpdate sets the ResourceARNUpdate field's value.
+func (s *InputLambdaProcessorUpdate) SetResourceARNUpdate(v string) *InputLambdaProcessorUpdate {
+	s.ResourceARNUpdate = &v
+	return s
+}
+
+// SetRoleARNUpdate sets the RoleARNUpdate field's value.
+func (s *InputLambdaProcessorUpdate) SetRoleARNUpdate(v string) *InputLambdaProcessorUpdate {
+	s.RoleARNUpdate = &v
 	return s
 }
 
@@ -3548,6 +4139,125 @@ func (s *InputParallelismUpdate) Validate() error {
 // SetCountUpdate sets the CountUpdate field's value.
 func (s *InputParallelismUpdate) SetCountUpdate(v int64) *InputParallelismUpdate {
 	s.CountUpdate = &v
+	return s
+}
+
+// Provides a description of a processor that is used to preprocess the records
+// in the stream prior to being processed by your application code. Currently,
+// the only input processor available is AWS Lambda (https://aws.amazon.com/documentation/lambda/).
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/InputProcessingConfiguration
+type InputProcessingConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The InputLambdaProcessor that is used to preprocess the records in the stream
+	// prior to being processed by your application code.
+	//
+	// InputLambdaProcessor is a required field
+	InputLambdaProcessor *InputLambdaProcessor `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s InputProcessingConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputProcessingConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputProcessingConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputProcessingConfiguration"}
+	if s.InputLambdaProcessor == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputLambdaProcessor"))
+	}
+	if s.InputLambdaProcessor != nil {
+		if err := s.InputLambdaProcessor.Validate(); err != nil {
+			invalidParams.AddNested("InputLambdaProcessor", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputLambdaProcessor sets the InputLambdaProcessor field's value.
+func (s *InputProcessingConfiguration) SetInputLambdaProcessor(v *InputLambdaProcessor) *InputProcessingConfiguration {
+	s.InputLambdaProcessor = v
+	return s
+}
+
+// Provides configuration information about an input processor. Currently, the
+// only input processor available is AWS Lambda (https://aws.amazon.com/documentation/lambda/).
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/InputProcessingConfigurationDescription
+type InputProcessingConfigurationDescription struct {
+	_ struct{} `type:"structure"`
+
+	// Provides configuration information about the associated InputLambdaProcessorDescription.
+	InputLambdaProcessorDescription *InputLambdaProcessorDescription `type:"structure"`
+}
+
+// String returns the string representation
+func (s InputProcessingConfigurationDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputProcessingConfigurationDescription) GoString() string {
+	return s.String()
+}
+
+// SetInputLambdaProcessorDescription sets the InputLambdaProcessorDescription field's value.
+func (s *InputProcessingConfigurationDescription) SetInputLambdaProcessorDescription(v *InputLambdaProcessorDescription) *InputProcessingConfigurationDescription {
+	s.InputLambdaProcessorDescription = v
+	return s
+}
+
+// Describes updates to an InputProcessingConfiguration.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/InputProcessingConfigurationUpdate
+type InputProcessingConfigurationUpdate struct {
+	_ struct{} `type:"structure"`
+
+	// Provides update information for an InputLambdaProcessor.
+	//
+	// InputLambdaProcessorUpdate is a required field
+	InputLambdaProcessorUpdate *InputLambdaProcessorUpdate `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s InputProcessingConfigurationUpdate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputProcessingConfigurationUpdate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputProcessingConfigurationUpdate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputProcessingConfigurationUpdate"}
+	if s.InputLambdaProcessorUpdate == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputLambdaProcessorUpdate"))
+	}
+	if s.InputLambdaProcessorUpdate != nil {
+		if err := s.InputLambdaProcessorUpdate.Validate(); err != nil {
+			invalidParams.AddNested("InputLambdaProcessorUpdate", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputLambdaProcessorUpdate sets the InputLambdaProcessorUpdate field's value.
+func (s *InputProcessingConfigurationUpdate) SetInputLambdaProcessorUpdate(v *InputLambdaProcessorUpdate) *InputProcessingConfigurationUpdate {
+	s.InputLambdaProcessorUpdate = v
 	return s
 }
 
@@ -3675,6 +4385,9 @@ type InputUpdate struct {
 	// Kinesis Analytics creates for the specific streaming source).
 	InputParallelismUpdate *InputParallelismUpdate `type:"structure"`
 
+	// Describes updates for an input processing configuration.
+	InputProcessingConfigurationUpdate *InputProcessingConfigurationUpdate `type:"structure"`
+
 	// Describes the data format on the streaming source, and how record elements
 	// on the streaming source map to columns of the in-application stream that
 	// is created.
@@ -3721,6 +4434,11 @@ func (s *InputUpdate) Validate() error {
 			invalidParams.AddNested("InputParallelismUpdate", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.InputProcessingConfigurationUpdate != nil {
+		if err := s.InputProcessingConfigurationUpdate.Validate(); err != nil {
+			invalidParams.AddNested("InputProcessingConfigurationUpdate", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.InputSchemaUpdate != nil {
 		if err := s.InputSchemaUpdate.Validate(); err != nil {
 			invalidParams.AddNested("InputSchemaUpdate", err.(request.ErrInvalidParams))
@@ -3752,6 +4470,12 @@ func (s *InputUpdate) SetInputId(v string) *InputUpdate {
 // SetInputParallelismUpdate sets the InputParallelismUpdate field's value.
 func (s *InputUpdate) SetInputParallelismUpdate(v *InputParallelismUpdate) *InputUpdate {
 	s.InputParallelismUpdate = v
+	return s
+}
+
+// SetInputProcessingConfigurationUpdate sets the InputProcessingConfigurationUpdate field's value.
+func (s *InputUpdate) SetInputProcessingConfigurationUpdate(v *InputProcessingConfigurationUpdate) *InputUpdate {
+	s.InputProcessingConfigurationUpdate = v
 	return s
 }
 
@@ -3788,7 +4512,7 @@ type JSONMappingParameters struct {
 	// Path to the top-level parent that contains the records.
 	//
 	// RecordRowPath is a required field
-	RecordRowPath *string `type:"string" required:"true"`
+	RecordRowPath *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -3806,6 +4530,9 @@ func (s *JSONMappingParameters) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "JSONMappingParameters"}
 	if s.RecordRowPath == nil {
 		invalidParams.Add(request.NewErrParamRequired("RecordRowPath"))
+	}
+	if s.RecordRowPath != nil && len(*s.RecordRowPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RecordRowPath", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4857,7 +5584,7 @@ type RecordColumn struct {
 	// Type of column created in the in-application input stream or reference table.
 	//
 	// SqlType is a required field
-	SqlType *string `type:"string" required:"true"`
+	SqlType *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -4878,6 +5605,9 @@ func (s *RecordColumn) Validate() error {
 	}
 	if s.SqlType == nil {
 		invalidParams.Add(request.NewErrParamRequired("SqlType"))
+	}
+	if s.SqlType != nil && len(*s.SqlType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SqlType", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5204,6 +5934,76 @@ func (s *ReferenceDataSourceUpdate) SetTableNameUpdate(v string) *ReferenceDataS
 	return s
 }
 
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/kinesisanalytics-2015-08-14/S3Configuration
+type S3Configuration struct {
+	_ struct{} `type:"structure"`
+
+	// BucketARN is a required field
+	BucketARN *string `min:"1" type:"string" required:"true"`
+
+	// FileKey is a required field
+	FileKey *string `min:"1" type:"string" required:"true"`
+
+	// RoleARN is a required field
+	RoleARN *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s S3Configuration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3Configuration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3Configuration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3Configuration"}
+	if s.BucketARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketARN"))
+	}
+	if s.BucketARN != nil && len(*s.BucketARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketARN", 1))
+	}
+	if s.FileKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("FileKey"))
+	}
+	if s.FileKey != nil && len(*s.FileKey) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileKey", 1))
+	}
+	if s.RoleARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleARN"))
+	}
+	if s.RoleARN != nil && len(*s.RoleARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleARN", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketARN sets the BucketARN field's value.
+func (s *S3Configuration) SetBucketARN(v string) *S3Configuration {
+	s.BucketARN = &v
+	return s
+}
+
+// SetFileKey sets the FileKey field's value.
+func (s *S3Configuration) SetFileKey(v string) *S3Configuration {
+	s.FileKey = &v
+	return s
+}
+
+// SetRoleARN sets the RoleARN field's value.
+func (s *S3Configuration) SetRoleARN(v string) *S3Configuration {
+	s.RoleARN = &v
+	return s
+}
+
 // Identifies the S3 bucket and object that contains the reference data. Also
 // identifies the IAM role Amazon Kinesis Analytics can assume to read this
 // object on your behalf.
@@ -5223,7 +6023,7 @@ type S3ReferenceDataSource struct {
 	// Object key name containing reference data.
 	//
 	// FileKey is a required field
-	FileKey *string `type:"string" required:"true"`
+	FileKey *string `min:"1" type:"string" required:"true"`
 
 	// ARN of the IAM role that the service can assume to read data on your behalf.
 	// This role must have permission for the s3:GetObject action on the object
@@ -5255,6 +6055,9 @@ func (s *S3ReferenceDataSource) Validate() error {
 	}
 	if s.FileKey == nil {
 		invalidParams.Add(request.NewErrParamRequired("FileKey"))
+	}
+	if s.FileKey != nil && len(*s.FileKey) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileKey", 1))
 	}
 	if s.ReferenceRoleARN == nil {
 		invalidParams.Add(request.NewErrParamRequired("ReferenceRoleARN"))
@@ -5300,7 +6103,7 @@ type S3ReferenceDataSourceDescription struct {
 	// Amazon S3 object key name.
 	//
 	// FileKey is a required field
-	FileKey *string `type:"string" required:"true"`
+	FileKey *string `min:"1" type:"string" required:"true"`
 
 	// ARN of the IAM role that Amazon Kinesis Analytics can assume to read the
 	// Amazon S3 object on your behalf to populate the in-application reference
@@ -5349,7 +6152,7 @@ type S3ReferenceDataSourceUpdate struct {
 	BucketARNUpdate *string `min:"1" type:"string"`
 
 	// Object key name.
-	FileKeyUpdate *string `type:"string"`
+	FileKeyUpdate *string `min:"1" type:"string"`
 
 	// ARN of the IAM role that Amazon Kinesis Analytics can assume to read the
 	// Amazon S3 object and populate the in-application.
@@ -5371,6 +6174,9 @@ func (s *S3ReferenceDataSourceUpdate) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "S3ReferenceDataSourceUpdate"}
 	if s.BucketARNUpdate != nil && len(*s.BucketARNUpdate) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("BucketARNUpdate", 1))
+	}
+	if s.FileKeyUpdate != nil && len(*s.FileKeyUpdate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileKeyUpdate", 1))
 	}
 	if s.ReferenceRoleARNUpdate != nil && len(*s.ReferenceRoleARNUpdate) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ReferenceRoleARNUpdate", 1))

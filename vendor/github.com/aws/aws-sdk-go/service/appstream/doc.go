@@ -3,7 +3,8 @@
 // Package appstream provides the client and types for making API
 // requests to Amazon AppStream.
 //
-// API documentation for Amazon AppStream 2.0.
+// You can use Amazon AppStream 2.0 to stream desktop applications to any device
+// running a web browser, without rewriting them.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/appstream-2016-12-01 for more information on this service.
 //

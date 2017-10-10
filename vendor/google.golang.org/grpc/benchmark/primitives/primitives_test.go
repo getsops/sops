@@ -187,3 +187,49 @@ func BenchmarkMutexWithoutDefer(b *testing.B) {
 		b.Fatal("error")
 	}
 }
+
+type myFooer struct{}
+
+func (myFooer) Foo() {}
+
+type fooer interface {
+	Foo()
+}
+
+func BenchmarkInterfaceTypeAssertion(b *testing.B) {
+	// Call a separate function to avoid compiler optimizations.
+	runInterfaceTypeAssertion(b, myFooer{})
+}
+
+func runInterfaceTypeAssertion(b *testing.B, fer interface{}) {
+	x := 0
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		if _, ok := fer.(fooer); ok {
+			x++
+		}
+	}
+	b.StopTimer()
+	if x != b.N {
+		b.Fatal("error")
+	}
+}
+
+func BenchmarkStructTypeAssertion(b *testing.B) {
+	// Call a separate function to avoid compiler optimizations.
+	runStructTypeAssertion(b, myFooer{})
+}
+
+func runStructTypeAssertion(b *testing.B, fer interface{}) {
+	x := 0
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		if _, ok := fer.(myFooer); ok {
+			x++
+		}
+	}
+	b.StopTimer()
+	if x != b.N {
+		b.Fatal("error")
+	}
+}

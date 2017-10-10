@@ -601,6 +601,10 @@ func (s *AppUpdateEvent) MarshalJSON() ([]byte, error) {
 
 // AppVersion: This represents a single version of the app.
 type AppVersion struct {
+	// Track: The track that this app was published in. For example if track
+	// is "alpha", this is an alpha version of the app.
+	Track string `json:"track,omitempty"`
+
 	// VersionCode: Unique increasing identifier for the app version.
 	VersionCode int64 `json:"versionCode,omitempty"`
 
@@ -609,7 +613,7 @@ type AppVersion struct {
 	// localized (for example, the string could be "1.4").
 	VersionString string `json:"versionString,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "VersionCode") to
+	// ForceSendFields is a list of field names (e.g. "Track") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -617,10 +621,10 @@ type AppVersion struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "VersionCode") to include
-	// in API requests with the JSON null value. By default, fields with
-	// empty values are omitted from API requests. However, any field with
-	// an empty value appearing in NullFields will be sent to the server as
+	// NullFields is a list of field names (e.g. "Track") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
 	// null. It is an error if a field in this list has a non-empty value.
 	// This may be used to include null fields in Patch requests.
 	NullFields []string `json:"-"`
@@ -1962,6 +1966,9 @@ type Product struct {
 	// app developer).
 	AuthorName string `json:"authorName,omitempty"`
 
+	// AvailableTracks: The tracks that are visible to the enterprise.
+	AvailableTracks []string `json:"availableTracks,omitempty"`
+
 	// DetailsUrl: A link to the (consumer) Google Play details page for the
 	// product.
 	DetailsUrl string `json:"detailsUrl,omitempty"`
@@ -2210,6 +2217,15 @@ type ProductSet struct {
 	// per user.
 	ProductSetBehavior string `json:"productSetBehavior,omitempty"`
 
+	// ProductVisibility: Other products that are part of the set, in
+	// addition to those specified in the productId array. The only
+	// difference between this field and the productId array is that it's
+	// possible to specify additional information about this product
+	// visibility, see ProductVisibility and its fields for more
+	// information. Specifying the same product ID both here and in the
+	// productId array is not allowed and it will result in an error.
+	ProductVisibility []*ProductVisibility `json:"productVisibility,omitempty"`
+
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
@@ -2267,6 +2283,54 @@ type ProductSigningCertificate struct {
 
 func (s *ProductSigningCertificate) MarshalJSON() ([]byte, error) {
 	type noMethod ProductSigningCertificate
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ProductVisibility: A product to be made visible to a user.
+type ProductVisibility struct {
+	// ProductId: The product ID that should be made visible to the user.
+	// This is required.
+	ProductId string `json:"productId,omitempty"`
+
+	// Tracks: This allows to only grant visibility to the specified tracks
+	// of the app. For example, if an app has a prod version, a beta version
+	// and an alpha version and the enterprise has been granted visibility
+	// to both the alpha and beta tracks, if tracks is {"beta",
+	// "production"} the user will be able to install the app and they will
+	// get the beta version of the app. If there are no app versions in the
+	// specified track or if the enterprise wasn't granted visibility for
+	// the track, adding the "alpha" and "beta" values to the list of tracks
+	// will have no effect for now; however they will take effect once both
+	// conditions are met. Note that the enterprise itself needs to be
+	// granted access to the alpha and/or beta tracks, regardless of whether
+	// individual users or admins have access to those tracks.
+	//
+	// The allowed sets are: {} (considered equivalent to {"production"})
+	// {"production"} {"beta", "production"} {"alpha", "beta", "production"}
+	// The order of elements is not relevant. Any other set of tracks will
+	// be rejected with an error.
+	Tracks []string `json:"tracks,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ProductId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ProductId") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ProductVisibility) MarshalJSON() ([]byte, error) {
+	type noMethod ProductVisibility
 	raw := noMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }

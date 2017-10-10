@@ -21,10 +21,12 @@ package grpc
 import (
 	"bytes"
 	"compress/gzip"
+	stdctx "context"
 	"encoding/binary"
 	"io"
 	"io/ioutil"
 	"math"
+	"os"
 	"sync"
 	"time"
 
@@ -408,6 +410,57 @@ func updateRPCInfoInContext(ctx context.Context, s rpcInfo) {
 		ss.bytesSent = s.bytesSent
 	}
 	return
+}
+
+// toRPCErr converts an error into an error from the status package.
+func toRPCErr(err error) error {
+	if _, ok := status.FromError(err); ok {
+		return err
+	}
+	switch e := err.(type) {
+	case transport.StreamError:
+		return status.Error(e.Code, e.Desc)
+	case transport.ConnectionError:
+		return status.Error(codes.Unavailable, e.Desc)
+	default:
+		switch err {
+		case context.DeadlineExceeded, stdctx.DeadlineExceeded:
+			return status.Error(codes.DeadlineExceeded, err.Error())
+		case context.Canceled, stdctx.Canceled:
+			return status.Error(codes.Canceled, err.Error())
+		case ErrClientConnClosing:
+			return status.Error(codes.FailedPrecondition, err.Error())
+		}
+	}
+	return status.Error(codes.Unknown, err.Error())
+}
+
+// convertCode converts a standard Go error into its canonical code. Note that
+// this is only used to translate the error returned by the server applications.
+func convertCode(err error) codes.Code {
+	switch err {
+	case nil:
+		return codes.OK
+	case io.EOF:
+		return codes.OutOfRange
+	case io.ErrClosedPipe, io.ErrNoProgress, io.ErrShortBuffer, io.ErrShortWrite, io.ErrUnexpectedEOF:
+		return codes.FailedPrecondition
+	case os.ErrInvalid:
+		return codes.InvalidArgument
+	case context.Canceled, stdctx.Canceled:
+		return codes.Canceled
+	case context.DeadlineExceeded, stdctx.DeadlineExceeded:
+		return codes.DeadlineExceeded
+	}
+	switch {
+	case os.IsExist(err):
+		return codes.AlreadyExists
+	case os.IsNotExist(err):
+		return codes.NotFound
+	case os.IsPermission(err):
+		return codes.PermissionDenied
+	}
+	return codes.Unknown
 }
 
 // Code returns the error code for err if it was produced by the rpc system.

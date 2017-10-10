@@ -232,7 +232,7 @@ func (c *CloudHSM) CreateHsmRequest(input *CreateHsmInput) (req *request.Request
 // There is an upfront fee charged for each HSM instance that you create with
 // the CreateHsm operation. If you accidentally provision an HSM and want to
 // request a refund, delete the instance using the DeleteHsm operation, go to
-// the AWS Support Center (https://console.aws.amazon.com/support/home#/), create
+// the AWS Support Center (https://console.aws.amazon.com/support/home), create
 // a new case, and select Account and Billing Support.
 //
 // It can take up to 20 minutes to create and provision an HSM. You can monitor
@@ -1939,6 +1939,7 @@ type CreateHsmInput struct {
 	// Specifies the type of subscription for the HSM.
 	//
 	//    * PRODUCTION - The HSM is being used in a production environment.
+	//
 	//    * TRIAL - The HSM is being used in a product trial.
 	//
 	// SubscriptionType is a required field
@@ -2567,6 +2568,7 @@ type DescribeHsmOutput struct {
 	// Specifies the type of subscription for the HSM.
 	//
 	//    * PRODUCTION - The HSM is being used in a production environment.
+	//
 	//    * TRIAL - The HSM is being used in a product trial.
 	SubscriptionType *string `type:"string" enum:"SubscriptionType"`
 
@@ -3666,6 +3668,7 @@ const (
 // Specifies the type of subscription for the HSM.
 //
 //    * PRODUCTION - The HSM is being used in a production environment.
+//
 //    * TRIAL - The HSM is being used in a product trial.
 const (
 	// SubscriptionTypeProduction is a SubscriptionType enum value

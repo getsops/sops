@@ -107,6 +107,7 @@ func main() {
 	} else {
 		opts = append(opts, grpc.WithInsecure())
 	}
+	opts = append(opts, grpc.WithBlock())
 	conn, err := grpc.Dial(serverAddr, opts...)
 	if err != nil {
 		grpclog.Fatalf("Fail to dial: %v", err)
