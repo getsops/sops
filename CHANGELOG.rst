@@ -20,8 +20,14 @@ Changelog
 
 * Reencoding of versions as string on sops 1.X files.
   **WARNING** this change breaks backward compatibility.
-  The following error will be shown on messages that have old versions:
-  `Error loading file metadata: Error unmarshalling input json: json: cannot unmarshal number into Go struct field Metadata.version of type string`
+  SOPS shows an error message with instructions on how to solve
+  this if it happens.
+  
+* Added command to reconfigure the keys used to encrypt/decrypt a file based on the .sops.yaml config file
+
+* Retrieve missing PGP keys from gpg.mozilla.org
+
+* Improved error messages for errors when decrypting files
 
 
 2.0.0
