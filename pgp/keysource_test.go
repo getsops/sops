@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"testing"
 	"testing/quick"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPGP(t *testing.T) {
@@ -39,4 +41,10 @@ func TestPGPKeySourceFromString(t *testing.T) {
 	if ks[1].Fingerprint != expected {
 		t.Error("Fingerprint does not match")
 	}
+}
+
+func TestRetrievePGPKey(t *testing.T) {
+	fingerprint := "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A"
+	_, err := getKeyFromKeyServer("gpg.mozilla.org", fingerprint)
+	assert.NoError(t, err)
 }
