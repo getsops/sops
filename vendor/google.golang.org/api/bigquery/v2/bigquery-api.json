@@ -1,11 +1,11 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/RJ9KKUbfMw7IvtOPKrwn45TxAuo\"",
+ "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/_ivfsuMhJTcIgYAnI7IQ9ZbgoAw\"",
  "discoveryVersion": "v1",
  "id": "bigquery:v2",
  "name": "bigquery",
  "version": "v2",
- "revision": "20170910",
+ "revision": "20170930",
  "title": "BigQuery API",
  "description": "A data platform for customers to create, manage, share and query data.",
  "ownerDomain": "google.com",
@@ -1888,6 +1888,16 @@
      "items": {
       "type": "object",
       "properties": {
+       "creationTime": {
+        "type": "string",
+        "description": "The time when this table was created, in milliseconds since the epoch.",
+        "format": "int64"
+       },
+       "expirationTime": {
+        "type": "string",
+        "description": "[Optional] The time when this table expires, in milliseconds since the epoch. If not present, the table will persist indefinitely. Expired tables will be deleted and their storage reclaimed.",
+        "format": "int64"
+       },
        "friendlyName": {
         "type": "string",
         "description": "The user-friendly name for this table."

@@ -236,6 +236,13 @@ type AddonsConfig struct {
 	// KubernetesDashboard: Configuration for the Kubernetes Dashboard.
 	KubernetesDashboard *KubernetesDashboard `json:"kubernetesDashboard,omitempty"`
 
+	// NetworkPolicyConfig: Configuration for NetworkPolicy. This only
+	// tracks whether the addon
+	// is enabled or not on the Master, it does not track whether network
+	// policy
+	// is enabled for the nodes.
+	NetworkPolicyConfig *NetworkPolicyConfig `json:"networkPolicyConfig,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g.
 	// "HorizontalPodAutoscaling") to unconditionally include in API
 	// requests. By default, fields with empty values are omitted from API
@@ -612,6 +619,10 @@ type Cluster struct {
 	// specified.
 	NodePools []*NodePool `json:"nodePools,omitempty"`
 
+	// PodSecurityPolicyConfig: Configuration for the PodSecurityPolicy
+	// feature.
+	PodSecurityPolicyConfig *PodSecurityPolicyConfig `json:"podSecurityPolicyConfig,omitempty"`
+
 	// SelfLink: [Output only] Server-defined URL for the resource.
 	SelfLink string `json:"selfLink,omitempty"`
 
@@ -759,6 +770,10 @@ type ClusterUpdate struct {
 	// upgrade). Use `-` to upgrade to the latest version supported by
 	// the server.
 	DesiredNodeVersion string `json:"desiredNodeVersion,omitempty"`
+
+	// DesiredPodSecurityPolicyConfig: The desired configuration options for
+	// the PodSecurityPolicy feature.
+	DesiredPodSecurityPolicyConfig *PodSecurityPolicyConfig `json:"desiredPodSecurityPolicyConfig,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "DesiredAddonsConfig")
 	// to unconditionally include in API requests. By default, fields with
@@ -1556,6 +1571,38 @@ func (s *NetworkPolicy) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// NetworkPolicyConfig: Configuration for NetworkPolicy. This only
+// tracks whether the addon
+// is enabled or not on the Master, it does not track whether network
+// policy
+// is enabled for the nodes.
+type NetworkPolicyConfig struct {
+	// Disabled: Whether NetworkPolicy is enabled for this cluster.
+	Disabled bool `json:"disabled,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Disabled") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Disabled") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *NetworkPolicyConfig) MarshalJSON() ([]byte, error) {
+	type noMethod NetworkPolicyConfig
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // NodeConfig: Parameters that describe the nodes in a cluster.
 type NodeConfig struct {
 	// Accelerators: A list of hardware accelerators to be attached to each
@@ -1636,18 +1683,18 @@ type NodeConfig struct {
 	// The total size of all keys and values must be less than 512 KB.
 	Metadata map[string]string `json:"metadata,omitempty"`
 
-	// MinCpuPlatform: Minimum cpu/platform to be used by this instance. The
+	// MinCpuPlatform: Minimum CPU platform to be used by this instance. The
 	// instance may be
-	// scheduled on the specified or newer cpu/platform. Applicable values
+	// scheduled on the specified or newer CPU platform. Applicable values
 	// are the
 	// friendly names of CPU platforms, such as
 	// <code>minCpuPlatform: &quot;Intel Haswell&quot;</code>
 	// or
 	// <code>minCpuPlatform: &quot;Intel Sandy Bridge&quot;</code>. For
 	// more
-	// information, read <a
-	// href="/compute/docs/instances/specify-min-cpu-platform">Specifying a
-	// Minimum CPU Platform</a>.
+	// information, read [how to specify min CPU
+	// platform](https://cloud.google.com/compute/docs/instances/specify-min-
+	// cpu-platform)
 	MinCpuPlatform string `json:"minCpuPlatform,omitempty"`
 
 	// OauthScopes: The set of Google API scopes to be made available on all
@@ -2060,6 +2107,37 @@ func (s *Operation) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// PodSecurityPolicyConfig: Configuration for the PodSecurityPolicy
+// feature.
+type PodSecurityPolicyConfig struct {
+	// Enabled: Enable the PodSecurityPolicy controller for this cluster. If
+	// enabled, pods
+	// must be valid under a PodSecurityPolicy to be created.
+	Enabled bool `json:"enabled,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Enabled") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Enabled") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *PodSecurityPolicyConfig) MarshalJSON() ([]byte, error) {
+	type noMethod PodSecurityPolicyConfig
+	raw := noMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // RollbackNodePoolUpgradeRequest: RollbackNodePoolUpgradeRequest
 // rollbacks the previously Aborted or Failed
 // NodePool upgrade. This will be an no-op if the last upgrade
@@ -2343,12 +2421,19 @@ func (s *SetMaintenancePolicyRequest) MarshalJSON() ([]byte, error) {
 // SetMasterAuthRequest: SetMasterAuthRequest updates the admin password
 // of a cluster.
 type SetMasterAuthRequest struct {
-	// Action: The exact form of action to be taken on the master auth
+	// Action: The exact form of action to be taken on the master auth.
 	//
 	// Possible values:
-	//   "UNKNOWN" - Operation is unknown and will error out
+	//   "UNKNOWN" - Operation is unknown and will error out.
 	//   "SET_PASSWORD" - Set the password to a user generated value.
 	//   "GENERATE_PASSWORD" - Generate a new password and set it to that.
+	//   "SET_USERNAME" - Set the username.  If an empty username is
+	// provided, basic authentication
+	// is disabled for the cluster.  If a non-empty username is provided,
+	// basic
+	// authentication is enabled, with either a provided password or a
+	// generated
+	// one.
 	Action string `json:"action,omitempty"`
 
 	// ClusterId: The name of the cluster to upgrade.

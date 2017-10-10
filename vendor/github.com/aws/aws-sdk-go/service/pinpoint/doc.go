@@ -3,6 +3,8 @@
 // Package pinpoint provides the client and types for making API
 // requests to Amazon Pinpoint.
 //
+// See https://docs.aws.amazon.com/goto/WebAPI/pinpoint-2016-12-01 for more information on this service.
+//
 // See pinpoint package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/pinpoint/
 //

@@ -16,7 +16,7 @@ $ go get -u google.golang.org/grpc
 Prerequisites
 -------------
 
-This requires Go 1.6 or later.
+This requires Go 1.7 or later.
 
 Constraints
 -----------

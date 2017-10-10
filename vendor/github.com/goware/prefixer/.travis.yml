@@ -1,0 +1,9 @@
+language: go
+
+go:
+  - 1.4
+  - tip
+
+script:
+  - go test
+  - cd example && go build -o prefix && echo -e "1\n2\n3\n" | ./prefix | grep "> "

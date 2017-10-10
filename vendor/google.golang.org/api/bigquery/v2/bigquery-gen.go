@@ -2991,6 +2991,16 @@ func (s *TableList) MarshalJSON() ([]byte, error) {
 }
 
 type TableListTables struct {
+	// CreationTime: The time when this table was created, in milliseconds
+	// since the epoch.
+	CreationTime int64 `json:"creationTime,omitempty,string"`
+
+	// ExpirationTime: [Optional] The time when this table expires, in
+	// milliseconds since the epoch. If not present, the table will persist
+	// indefinitely. Expired tables will be deleted and their storage
+	// reclaimed.
+	ExpirationTime int64 `json:"expirationTime,omitempty,string"`
+
 	// FriendlyName: The user-friendly name for this table.
 	FriendlyName string `json:"friendlyName,omitempty"`
 
@@ -3017,7 +3027,7 @@ type TableListTables struct {
 	// View: Additional details for a view.
 	View *TableListTablesView `json:"view,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "FriendlyName") to
+	// ForceSendFields is a list of field names (e.g. "CreationTime") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -3025,7 +3035,7 @@ type TableListTables struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "FriendlyName") to include
+	// NullFields is a list of field names (e.g. "CreationTime") to include
 	// in API requests with the JSON null value. By default, fields with
 	// empty values are omitted from API requests. However, any field with
 	// an empty value appearing in NullFields will be sent to the server as

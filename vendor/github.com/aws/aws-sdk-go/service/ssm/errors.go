@@ -92,7 +92,7 @@ const (
 	// ErrCodeDocumentLimitExceeded for service response error code
 	// "DocumentLimitExceeded".
 	//
-	// You can have at most 200 active SSM documents.
+	// You can have at most 200 active Systems Manager documents.
 	ErrCodeDocumentLimitExceeded = "DocumentLimitExceeded"
 
 	// ErrCodeDocumentPermissionLimit for service response error code
@@ -342,8 +342,9 @@ const (
 	// ErrCodeInvalidParameters for service response error code
 	// "InvalidParameters".
 	//
-	// You must specify values for all required parameters in the SSM document.
-	// You can only supply values to parameters defined in the SSM document.
+	// You must specify values for all required parameters in the Systems Manager
+	// document. You can only supply values to parameters defined in the Systems
+	// Manager document.
 	ErrCodeInvalidParameters = "InvalidParameters"
 
 	// ErrCodeInvalidPermissionType for service response error code
@@ -369,8 +370,8 @@ const (
 	// ErrCodeInvalidResourceType for service response error code
 	// "InvalidResourceType".
 	//
-	// The resource type is not valid. If you are attempting to tag an instance,
-	// the instance must be a registered, managed instance.
+	// The resource type is not valid. For example, if you are attempting to tag
+	// an instance, the instance must be a registered, managed instance.
 	ErrCodeInvalidResourceType = "InvalidResourceType"
 
 	// ErrCodeInvalidResultAttributeException for service response error code
