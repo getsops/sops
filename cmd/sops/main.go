@@ -367,13 +367,15 @@ func main() {
 		var output []byte
 		var err error
 		if c.Bool("encrypt") {
-			keyGroups, err := keyGroups(c, fileName)
+			var groups []sops.KeyGroup
+			groups, err = keyGroups(c, fileName)
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
-			shamirThreshold, err := shamirThreshold(c, fileName)
+			var threshold int
+			threshold, err = shamirThreshold(c, fileName)
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			output, err = encrypt(encryptOpts{
 				OutputStore:       outputStore,
@@ -382,16 +384,14 @@ func main() {
 				Cipher:            aes.NewCipher(),
 				UnencryptedSuffix: c.String("unencrypted-suffix"),
 				KeyServices:       svcs,
-				KeyGroups:         keyGroups,
-				GroupThreshold:    shamirThreshold,
+				KeyGroups:         groups,
+				GroupThreshold:    threshold,
 			})
-			if err != nil {
-				return err
-			}
 		}
 
 		if c.Bool("decrypt") {
-			extract, err := parseTreePath(c.String("extract"))
+			var extract []interface{}
+			extract, err = parseTreePath(c.String("extract"))
 			if err != nil {
 				return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
@@ -404,9 +404,6 @@ func main() {
 				KeyServices: svcs,
 				IgnoreMAC:   c.Bool("ignore-mac"),
 			})
-			if err != nil {
-				return err
-			}
 		}
 		if c.Bool("rotate") {
 			var addMasterKeys []keys.MasterKey
@@ -441,15 +438,14 @@ func main() {
 				AddMasterKeys:    addMasterKeys,
 				RemoveMasterKeys: rmMasterKeys,
 			})
-			if err != nil {
-				return err
-			}
 		}
 
 		if c.String("set") != "" {
-			path, value, err := extractSetArguments(c.String("set"))
+			var path []interface{}
+			var value interface{}
+			path, value, err = extractSetArguments(c.String("set"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			output, err = set(setOpts{
 				OutputStore: outputStore,
@@ -461,9 +457,6 @@ func main() {
 				Value:       value,
 				TreePath:    path,
 			})
-			if err != nil {
-				return err
-			}
 		}
 
 		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == ""
@@ -483,25 +476,27 @@ func main() {
 				output, err = edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
-				keyGroups, err := keyGroups(c, fileName)
+				var groups []sops.KeyGroup
+				groups, err := keyGroups(c, fileName)
 				if err != nil {
-					return err
+					return toExitError(err)
 				}
-				shamirThreshold, err := shamirThreshold(c, fileName)
+				var threshold int
+				threshold, err = shamirThreshold(c, fileName)
 				if err != nil {
-					return err
+					return toExitError(err)
 				}
 				output, err = editExample(editExampleOpts{
 					editOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
-					KeyGroups:         keyGroups,
-					GroupThreshold:    shamirThreshold,
+					KeyGroups:         groups,
+					GroupThreshold:    threshold,
 				})
 			}
 		}
 
 		if err != nil {
-			return err
+			return toExitError(err)
 		}
 		// We open the file *after* the operations on the tree have been
 		// executed to avoid truncating it when there's errors
@@ -513,15 +508,24 @@ func main() {
 			defer file.Close()
 			_, err = file.Write(output)
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			log.Info("File written successfully")
 			return nil
 		}
 		_, err = os.Stdout.Write(output)
-		return err
+		return toExitError(err)
 	}
 	app.Run(os.Args)
+}
+
+func toExitError(err error) error {
+	if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+		return cliErr
+	} else if err != nil {
+		return cli.NewExitError(err, codes.ErrorGeneric)
+	}
+	return nil
 }
 
 func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
@@ -634,6 +638,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		var err error
 		var configPath string
 		if c.String("config") != "" {
+			configPath = c.String("config")
 		} else {
 			configPath, err = config.FindConfigFile(".")
 			if err != nil {
@@ -660,10 +665,13 @@ func shamirThreshold(c *cli.Context, file string) (int, error) {
 	var err error
 	var configPath string
 	if c.String("config") != "" {
+		configPath = c.String("config")
 	} else {
 		configPath, err = config.FindConfigFile(".")
 		if err != nil {
-			return 0, fmt.Errorf("config file not found and no keys provided through command line options")
+			// If shamir flag isn't set and we can't find a config file,
+			// assume we don't want Shamir
+			return 0, nil
 		}
 	}
 	conf, err := config.LoadForFile(configPath, file, nil)
