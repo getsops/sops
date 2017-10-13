@@ -8,9 +8,6 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: Build Sops
-          command: make
-      - run:
           name: Build containers
           command: |
             docker build -t mozilla/sops .
