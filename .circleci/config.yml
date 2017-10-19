@@ -16,6 +16,6 @@ jobs:
           name: Push containers
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ./bin/ci/deploy_dockerhub.sh "latest"
-                ./bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
+                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
+                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
             fi
