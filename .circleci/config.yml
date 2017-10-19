@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/mozilla/sops
+    docker:
+      - image: circleci/golang:1.8
+    steps:
+      - checkout
+      - run:
+          name: Build Sops
+          command: make 
+      - setup_remote_docker                                                                                                                                                                                                                                    
+      - run:                                                                                                                                                                                                                                                   
+          name: Build containers                                                                                                                                                                                                                               
+          command: |                                                                                                                                                                                                                                           
+            docker build -t mozilla/sops .                                                                                                                                                                                                          
+            docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"                                                                                                                                                                          
+      - run:
+          name: Push containers
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                ./bin/ci/deploy_dockerhub.sh "latest"
+                ./bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
+            fi
+

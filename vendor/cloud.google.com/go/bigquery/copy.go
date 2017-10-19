@@ -38,7 +38,7 @@ type CopyConfig struct {
 	CreateDisposition TableCreateDisposition
 
 	// WriteDisposition specifies how existing data in the destination table is treated.
-	// The default is WriteAppend.
+	// The default is WriteEmpty.
 	WriteDisposition TableWriteDisposition
 }
 
@@ -49,7 +49,7 @@ type Copier struct {
 }
 
 // CopierFrom returns a Copier which can be used to copy data into a
-// BigQuery table from  one or more BigQuery tables.
+// BigQuery table from one or more BigQuery tables.
 // The returned Copier may optionally be further configured before its Run method is called.
 func (t *Table) CopierFrom(srcs ...*Table) *Copier {
 	return &Copier{

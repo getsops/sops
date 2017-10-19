@@ -46,6 +46,8 @@ import (
 	"golang.org/x/net/http2"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/balancer"
+	_ "google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials"
@@ -55,6 +57,7 @@ import (
 	"google.golang.org/grpc/internal"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
+	_ "google.golang.org/grpc/resolver/passthrough"
 	"google.golang.org/grpc/stats"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/tap"
@@ -371,7 +374,7 @@ type env struct {
 	network      string // The type of network such as tcp, unix, etc.
 	security     string // The security protocol such as TLS, SSH, etc.
 	httpHandler  bool   // whether to use the http.Handler ServerTransport; requires TLS
-	balancer     bool   // whether to use balancer
+	balancer     string // One of "roundrobin", "pickfirst", "v1", or "".
 	customDialer func(string, string, time.Duration) (net.Conn, error)
 }
 
@@ -390,13 +393,13 @@ func (e env) dialer(addr string, timeout time.Duration) (net.Conn, error) {
 }
 
 var (
-	tcpClearEnv   = env{name: "tcp-clear", network: "tcp", balancer: true}
-	tcpTLSEnv     = env{name: "tcp-tls", network: "tcp", security: "tls", balancer: true}
-	unixClearEnv  = env{name: "unix-clear", network: "unix", balancer: true}
-	unixTLSEnv    = env{name: "unix-tls", network: "unix", security: "tls", balancer: true}
-	handlerEnv    = env{name: "handler-tls", network: "tcp", security: "tls", httpHandler: true, balancer: true}
-	noBalancerEnv = env{name: "no-balancer", network: "tcp", security: "tls", balancer: false}
-	allEnv        = []env{tcpClearEnv, tcpTLSEnv, unixClearEnv, unixTLSEnv, handlerEnv, noBalancerEnv}
+	tcpClearEnv   = env{name: "tcp-clear-v1-balancer", network: "tcp", balancer: "v1"}
+	tcpTLSEnv     = env{name: "tcp-tls-v1-balancer", network: "tcp", security: "tls", balancer: "v1"}
+	tcpClearRREnv = env{name: "tcp-clear", network: "tcp", balancer: "roundrobin"}
+	tcpTLSRREnv   = env{name: "tcp-tls", network: "tcp", security: "tls", balancer: "roundrobin"}
+	handlerEnv    = env{name: "handler-tls", network: "tcp", security: "tls", httpHandler: true, balancer: "roundrobin"}
+	noBalancerEnv = env{name: "no-balancer", network: "tcp", security: "tls"}
+	allEnv        = []env{tcpClearEnv, tcpTLSEnv, tcpClearRREnv, tcpTLSRREnv, handlerEnv, noBalancerEnv}
 )
 
 var onlyEnv = flag.String("only_env", "", "If non-empty, one of 'tcp-clear', 'tcp-tls', 'unix-clear', 'unix-tls', or 'handler-tls' to only run the tests for that environment. Empty means all.")
@@ -638,8 +641,18 @@ func (te *test) clientConn() *grpc.ClientConn {
 	default:
 		opts = append(opts, grpc.WithInsecure())
 	}
-	if te.e.balancer {
+	// TODO(bar) switch balancer case "pickfirst".
+	var scheme string
+	switch te.e.balancer {
+	case "v1":
 		opts = append(opts, grpc.WithBalancer(grpc.RoundRobin(nil)))
+	case "roundrobin":
+		rr := balancer.Get("roundrobin")
+		if rr == nil {
+			te.t.Fatalf("got nil when trying to get roundrobin balancer builder")
+		}
+		opts = append(opts, grpc.WithBalancerBuilder(rr))
+		scheme = "passthrough:///"
 	}
 	if te.clientInitialWindowSize > 0 {
 		opts = append(opts, grpc.WithInitialWindowSize(te.clientInitialWindowSize))
@@ -658,9 +671,9 @@ func (te *test) clientConn() *grpc.ClientConn {
 		opts = append(opts, grpc.WithBlock())
 	}
 	var err error
-	te.cc, err = grpc.Dial(te.srvAddr, opts...)
+	te.cc, err = grpc.Dial(scheme+te.srvAddr, opts...)
 	if err != nil {
-		te.t.Fatalf("Dial(%q) = %v", te.srvAddr, err)
+		te.t.Fatalf("Dial(%q) = %v", scheme+te.srvAddr, err)
 	}
 	return te.cc
 }
@@ -760,7 +773,7 @@ func testTimeoutOnDeadServer(t *testing.T, e env) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond)
 	_, err := tc.EmptyCall(ctx, &testpb.Empty{}, grpc.FailFast(false))
 	cancel()
-	if e.balancer && grpc.Code(err) != codes.DeadlineExceeded {
+	if e.balancer != "" && grpc.Code(err) != codes.DeadlineExceeded {
 		// If e.balancer == nil, the ac will stop reconnecting because the dialer returns non-temp error,
 		// the error will be an internal error.
 		t.Fatalf("TestService/EmptyCall(%v, _) = _, %v, want _, error code: %s", ctx, err, codes.DeadlineExceeded)
@@ -2861,7 +2874,7 @@ func TestRetry(t *testing.T) {
 	defer leakcheck.Check(t)
 	for _, e := range listTestEnv() {
 		if e.name == "handler-tls" {
-			// In race mode, with go1.6, the test never returns with handler_server.
+			// Fails with RST_STREAM / FLOW_CONTROL_ERROR
 			continue
 		}
 		testRetry(t, e)
@@ -4078,7 +4091,7 @@ func (c clientAlwaysFailCred) OverrideServerName(s string) error {
 }
 
 func TestDialWithBlockErrorOnBadCertificates(t *testing.T) {
-	te := newTest(t, env{name: "bad-cred", network: "tcp", security: "clientAlwaysFailCred", balancer: true})
+	te := newTest(t, env{name: "bad-cred", network: "tcp", security: "clientAlwaysFailCred", balancer: "v1"})
 	te.startServer(&testServer{security: te.e.security})
 	defer te.tearDown()
 
@@ -4090,61 +4103,6 @@ func TestDialWithBlockErrorOnBadCertificates(t *testing.T) {
 	te.cc, err = grpc.Dial(te.srvAddr, opts...)
 	if err != errClientAlwaysFailCred {
 		te.t.Fatalf("Dial(%q) = %v, want %v", te.srvAddr, err, errClientAlwaysFailCred)
-	}
-}
-
-func TestFailFastRPCErrorOnBadCertificates(t *testing.T) {
-	te := newTest(t, env{name: "bad-cred", network: "tcp", security: "clientAlwaysFailCred", balancer: true})
-	te.startServer(&testServer{security: te.e.security})
-	defer te.tearDown()
-
-	te.nonBlockingDial = true // Connection will never be successful because server is not set up correctly.
-	cc := te.clientConn()
-	tc := testpb.NewTestServiceClient(cc)
-	var err error
-	for i := 0; i < 1000; i++ {
-		// This loop runs for at most 1 second.
-		// The first several RPCs will fail with Unavailable because the connection hasn't started.
-		// When the first connection failed with creds error, the next RPC should also fail with the expected error.
-		if _, err = tc.EmptyCall(context.Background(), &testpb.Empty{}); strings.Contains(err.Error(), clientAlwaysFailCredErrorMsg) {
-			return
-		}
-		time.Sleep(time.Millisecond)
-	}
-	te.t.Fatalf("TestService/EmptyCall(_, _) = _, %v, want err.Error() contains %q", err, clientAlwaysFailCredErrorMsg)
-}
-
-func TestFailFastRPCWithNoBalancerErrorOnBadCertificates(t *testing.T) {
-	te := newTest(t, env{name: "bad-cred", network: "tcp", security: "clientAlwaysFailCred", balancer: false})
-	te.startServer(&testServer{security: te.e.security})
-	defer te.tearDown()
-
-	te.nonBlockingDial = true
-	cc := te.clientConn()
-	tc := testpb.NewTestServiceClient(cc)
-	var err error
-	for i := 0; i < 1000; i++ {
-		// This loop runs for at most 1 second.
-		// The first several RPCs will fail with Unavailable because the connection hasn't started.
-		// When the first connection failed with creds error, the next RPC should also fail with the expected error.
-		if _, err := tc.EmptyCall(context.Background(), &testpb.Empty{}); strings.Contains(err.Error(), clientAlwaysFailCredErrorMsg) {
-			return
-		}
-		time.Sleep(time.Millisecond)
-	}
-	te.t.Fatalf("TestService/EmptyCall(_, _) = _, %v, want err.Error() contains %q", err, clientAlwaysFailCredErrorMsg)
-}
-
-func TestNonFailFastRPCWithNoBalancerErrorOnBadCertificates(t *testing.T) {
-	te := newTest(t, env{name: "bad-cred", network: "tcp", security: "clientAlwaysFailCred", balancer: false})
-	te.startServer(&testServer{security: te.e.security})
-	defer te.tearDown()
-
-	te.nonBlockingDial = true
-	cc := te.clientConn()
-	tc := testpb.NewTestServiceClient(cc)
-	if _, err := tc.EmptyCall(context.Background(), &testpb.Empty{}, grpc.FailFast(false)); !strings.Contains(err.Error(), clientAlwaysFailCredErrorMsg) {
-		te.t.Fatalf("TestService/EmptyCall(_, _) = _, %v, want err.Error() contains %q", err, clientAlwaysFailCredErrorMsg)
 	}
 }
 
@@ -4173,7 +4131,7 @@ func (c *clientTimeoutCreds) OverrideServerName(s string) error {
 }
 
 func TestNonFailFastRPCSucceedOnTimeoutCreds(t *testing.T) {
-	te := newTest(t, env{name: "timeout-cred", network: "tcp", security: "clientTimeoutCreds", balancer: false})
+	te := newTest(t, env{name: "timeout-cred", network: "tcp", security: "clientTimeoutCreds", balancer: "v1"})
 	te.userAgent = testAppUA
 	te.startServer(&testServer{security: te.e.security})
 	defer te.tearDown()
@@ -4187,21 +4145,22 @@ func TestNonFailFastRPCSucceedOnTimeoutCreds(t *testing.T) {
 }
 
 type serverDispatchCred struct {
-	ready   chan struct{}
-	rawConn net.Conn
+	rawConnCh chan net.Conn
 }
 
 func newServerDispatchCred() *serverDispatchCred {
 	return &serverDispatchCred{
-		ready: make(chan struct{}),
+		rawConnCh: make(chan net.Conn, 1),
 	}
 }
 func (c *serverDispatchCred) ClientHandshake(ctx context.Context, addr string, rawConn net.Conn) (net.Conn, credentials.AuthInfo, error) {
 	return rawConn, nil, nil
 }
 func (c *serverDispatchCred) ServerHandshake(rawConn net.Conn) (net.Conn, credentials.AuthInfo, error) {
-	c.rawConn = rawConn
-	close(c.ready)
+	select {
+	case c.rawConnCh <- rawConn:
+	default:
+	}
 	return nil, nil, credentials.ErrConnDispatched
 }
 func (c *serverDispatchCred) Info() credentials.ProtocolInfo {
@@ -4214,8 +4173,7 @@ func (c *serverDispatchCred) OverrideServerName(s string) error {
 	return nil
 }
 func (c *serverDispatchCred) getRawConn() net.Conn {
-	<-c.ready
-	return c.rawConn
+	return <-c.rawConnCh
 }
 
 func TestServerCredsDispatch(t *testing.T) {
@@ -4234,8 +4192,12 @@ func TestServerCredsDispatch(t *testing.T) {
 	}
 	defer cc.Close()
 
+	rawConn := cred.getRawConn()
+	// Give grpc a chance to see the error and potentially close the connection.
+	// And check that connection is not closed after that.
+	time.Sleep(100 * time.Millisecond)
 	// Check rawConn is not closed.
-	if n, err := cred.getRawConn().Write([]byte{0}); n <= 0 || err != nil {
+	if n, err := rawConn.Write([]byte{0}); n <= 0 || err != nil {
 		t.Errorf("Read() = %v, %v; want n>0, <nil>", n, err)
 	}
 }

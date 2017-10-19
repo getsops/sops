@@ -5540,12 +5540,16 @@ type AliasTarget struct {
 	// Elastic Load Balancing API: Use DescribeLoadBalancers to get the value of
 	// DNSName. For more information, see the applicable guide:
 	//
-	// Classic Load Balancer: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html)
+	// Classic Load Balancers: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html)
 	//
-	// Application Load Balancer: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html)
+	// Application and Network Load Balancers: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html)
 	//
-	// AWS CLI: Use describe-load-balancers (http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html)
-	// to get the value of DNSName.
+	// AWS CLI: Use describe-load-balancers to get the value of DNSName. For more
+	// information, see the applicable guide:
+	//
+	// Classic Load Balancers: describe-load-balancers (http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html)
+	//
+	// Application and Network Load Balancers: describe-load-balancers (http://docs.aws.amazon.com/cli/latest/reference/elbv2/describe-load-balancers.html)
 	//
 	// Amazon S3 bucket that is configured as a static websiteSpecify the domain
 	// name of the Amazon S3 website endpoint in which you created the bucket, for
@@ -5634,23 +5638,28 @@ type AliasTarget struct {
 	//
 	// Elastic Load Balancing (http://docs.aws.amazon.com/general/latest/gr/rande.html#elb_region)
 	// table in the "AWS Regions and Endpoints" chapter of the Amazon Web Services
-	// General Reference: Use the value in the "Amazon Route 53 Hosted Zone ID"
-	// column that corresponds with the region that you created your load balancer
-	// in.
+	// General Reference: Use the value that corresponds with the region that you
+	// created your load balancer in. Note that there are separate columns for Application
+	// and Classic Load Balancers and for Network Load Balancers.
 	//
-	// AWS Management Console: Go to the Amazon EC2 page, click Load Balancers in
-	// the navigation pane, select the load balancer, and get the value of the Hosted
-	// zone field on the Description tab.
+	// AWS Management Console: Go to the Amazon EC2 page, choose Load Balancers
+	// in the navigation pane, select the load balancer, and get the value of the
+	// Hosted zone field on the Description tab.
 	//
 	// Elastic Load Balancing API: Use DescribeLoadBalancers to get the value of
 	// CanonicalHostedZoneNameId. For more information, see the applicable guide:
 	//
-	// Classic Load Balancer: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html)
+	// Classic Load Balancers: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html)
 	//
-	// Application Load Balancer: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html)
+	// Application and Network Load Balancers: DescribeLoadBalancers (http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html)
 	//
-	// AWS CLI: Use describe-load-balancers (http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html)
-	// to get the value of CanonicalHostedZoneNameID.
+	// AWS CLI: Use describe-load-balancers to get the value of CanonicalHostedZoneNameID
+	// (for Classic Load Balancers) or CanonicalHostedZoneNameID (for Application
+	// and Network Load Balancers). For more information, see the applicable guide:
+	//
+	// Classic Load Balancers: describe-load-balancers (http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html)
+	//
+	// Application and Network Load Balancers: describe-load-balancers (http://docs.aws.amazon.com/cli/latest/reference/elbv2/describe-load-balancers.html)
 	//
 	// An Amazon S3 bucket configured as a static websiteSpecify the hosted zone
 	// ID for the region that you created the bucket in. For more information about
@@ -13342,6 +13351,23 @@ type UpdateHealthCheckInput struct {
 	// want Amazon Route 53 health checkers to check the specified endpoint from.
 	Regions []*string `locationNameList:"Region" min:"3" type:"list"`
 
+	// A complex type that contains one ResetElement element for each element that
+	// you want to reset to the default value. Valid values for ResetElement include
+	// the following:
+	//
+	//    * ChildHealthChecks: Amazon Route 53 resets HealthCheckConfig$ChildHealthChecks
+	//    to null.
+	//
+	//    * FullyQualifiedDomainName: Amazon Route 53 resets HealthCheckConfig$FullyQualifiedDomainName
+	//    to null.
+	//
+	//    * Regions: Amazon Route 53 resets the HealthCheckConfig$Regions list to
+	//    the default set of regions.
+	//
+	//    * ResourcePath: Amazon Route 53 resets HealthCheckConfig$ResourcePath
+	//    to null.
+	ResetElements []*string `locationNameList:"ResettableElementName" type:"list"`
+
 	// The path that you want Amazon Route 53 to request when performing health
 	// checks. The path can be any value for which your endpoint will return an
 	// HTTP status code of 2xx or 3xx when the endpoint is healthy, for example
@@ -13473,6 +13499,12 @@ func (s *UpdateHealthCheckInput) SetPort(v int64) *UpdateHealthCheckInput {
 // SetRegions sets the Regions field's value.
 func (s *UpdateHealthCheckInput) SetRegions(v []*string) *UpdateHealthCheckInput {
 	s.Regions = v
+	return s
+}
+
+// SetResetElements sets the ResetElements field's value.
+func (s *UpdateHealthCheckInput) SetResetElements(v []*string) *UpdateHealthCheckInput {
+	s.ResetElements = v
 	return s
 }
 
@@ -14041,6 +14073,20 @@ const (
 
 	// RRTypeCaa is a RRType enum value
 	RRTypeCaa = "CAA"
+)
+
+const (
+	// ResettableElementNameFullyQualifiedDomainName is a ResettableElementName enum value
+	ResettableElementNameFullyQualifiedDomainName = "FullyQualifiedDomainName"
+
+	// ResettableElementNameRegions is a ResettableElementName enum value
+	ResettableElementNameRegions = "Regions"
+
+	// ResettableElementNameResourcePath is a ResettableElementName enum value
+	ResettableElementNameResourcePath = "ResourcePath"
+
+	// ResettableElementNameChildHealthChecks is a ResettableElementName enum value
+	ResettableElementNameChildHealthChecks = "ChildHealthChecks"
 )
 
 const (

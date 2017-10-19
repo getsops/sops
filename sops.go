@@ -435,35 +435,22 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 	if m.DataKey != nil {
 		return m.DataKey, nil
 	}
-	errMsg := "Could not decrypt the data key with any of the master keys:\n"
+	getDataKeyErr := getDataKeyError{
+		RequiredSuccessfulKeyGroups: m.ShamirThreshold,
+		GroupResults:                make([]error, len(m.KeyGroups)),
+	}
 	var parts [][]byte
-	for _, group := range m.KeyGroups {
-	keysLoop:
-		for _, key := range group {
-			svcKey := keyservice.KeyFromMasterKey(key)
-			for _, svc := range svcs {
-				rsp, err := svc.Decrypt(
-					context.Background(),
-					&keyservice.DecryptRequest{
-						Ciphertext: key.EncryptedDataKey(),
-						Key:        &svcKey,
-					})
-				if err != nil {
-					errMsg += fmt.Sprintf("\t%s: %s", key.ToString(), err)
-					continue
-				}
-				parts = append(parts, rsp.Plaintext)
-				// All keys in a key group encrypt the same part, so as soon
-				// as we decrypt it successfully with one key, we need to
-				// proceed with the next group
-				break keysLoop
-			}
+	for i, group := range m.KeyGroups {
+		part, err := decryptKeyGroup(group, svcs)
+		if err == nil {
+			parts = append(parts, part)
 		}
+		getDataKeyErr.GroupResults[i] = err
 	}
 	var dataKey []byte
 	if len(m.KeyGroups) > 1 {
 		if len(parts) < m.ShamirThreshold {
-			return nil, fmt.Errorf("not enough parts to recover data key with Shamir: need %d, have %d", m.ShamirThreshold, len(parts))
+			return nil, &getDataKeyErr
 		}
 		var err error
 		dataKey, err = shamir.Combine(parts)
@@ -472,13 +459,62 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 		}
 	} else {
 		if len(parts) != 1 {
-			return nil, fmt.Errorf("%s", errMsg)
+			return nil, &getDataKeyErr
 		}
 		dataKey = parts[0]
 	}
 	log.Info("Data key recovered successfully")
 	m.DataKey = dataKey
 	return dataKey, nil
+}
+
+// decryptKeyGroup tries to decrypt the contents of the provided KeyGroup with
+// any of the MasterKeys in the KeyGroup with any of the provided key services,
+// returning as soon as one key service succeeds.
+func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+	var keyErrs []error
+	for _, key := range group {
+		part, err := decryptKey(key, svcs)
+		if err != nil {
+			keyErrs = append(keyErrs, err)
+		} else {
+			return part, nil
+		}
+	}
+	return nil, decryptKeyErrors(keyErrs)
+}
+
+// decryptKey tries to decrypt the contents of the provided MasterKey with any
+// of the key services, returning as soon as one key service succeeds.
+func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+	svcKey := keyservice.KeyFromMasterKey(key)
+	var part []byte = nil
+	decryptErr := decryptKeyError{
+		keyName: key.ToString(),
+	}
+	for _, svc := range svcs {
+		// All keys in a key group encrypt the same part, so as soon
+		// as we decrypt it successfully with one key, we need to
+		// proceed with the next group
+		var err error
+		if part == nil {
+			var rsp *keyservice.DecryptResponse
+			rsp, err = svc.Decrypt(
+				context.Background(),
+				&keyservice.DecryptRequest{
+					Ciphertext: key.EncryptedDataKey(),
+					Key:        &svcKey,
+				})
+			if err == nil {
+				part = rsp.Plaintext
+			}
+		}
+		decryptErr.errs = append(decryptErr.errs, err)
+	}
+	if part != nil {
+		return part, nil
+	}
+	return nil, &decryptErr
 }
 
 // GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it,

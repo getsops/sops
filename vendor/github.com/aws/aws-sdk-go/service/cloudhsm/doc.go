@@ -3,7 +3,12 @@
 // Package cloudhsm provides the client and types for making API
 // requests to Amazon CloudHSM.
 //
-// AWS CloudHSM Service
+// This is the reference for AWS CloudHSM Classic. For more information, see
+// AWS CloudHSM Classic FAQs (http://aws.amazon.com/cloudhsm/faqs-classic/)
+// and the AWS CloudHSM Classic User Guide (http://docs.aws.amazon.com/cloudhsm/classic/userguide/).
+//
+// For more information about AWS CloudHSM, see AWS CloudHSM (http://aws.amazon.com/cloudhsm/)
+// and the AWS CloudHSM User Guide (http://docs.aws.amazon.com/cloudhsm/latest/userguide/).
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/cloudhsm-2014-05-30 for more information on this service.
 //

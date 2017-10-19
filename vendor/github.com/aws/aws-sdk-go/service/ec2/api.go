@@ -2275,8 +2275,7 @@ func (c *EC2) ConfirmProductInstanceRequest(input *ConfirmProductInstanceInput) 
 //
 // Determines whether a product code is associated with an instance. This action
 // can only be used by the owner of the product code. It is useful when a product
-// code owner needs to verify whether another user's instance is eligible for
-// support.
+// code owner must verify whether another user's instance is eligible for support.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3867,8 +3866,8 @@ func (c *EC2) CreatePlacementGroupRequest(input *CreatePlacementGroupInput) (req
 
 // CreatePlacementGroup API operation for Amazon Elastic Compute Cloud.
 //
-// Creates a placement group that you launch cluster instances into. You must
-// give the group a name that's unique within the scope of your account.
+// Creates a placement group that you launch cluster instances into. Give the
+// group a name that's unique within the scope of your account.
 //
 // For more information about placement groups and cluster instances, see Cluster
 // Instances (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html)
@@ -5041,8 +5040,7 @@ func (c *EC2) CreateVpnConnectionRequest(input *CreateVpnConnectionInput) (req *
 // This is an idempotent operation. If you perform the operation more than once,
 // Amazon EC2 doesn't return an error.
 //
-// For more information about VPN connections, see Adding a Hardware Virtual
-// Private Gateway to Your VPC (http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html)
+// For more information, see AWS Managed VPN Connections (http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html)
 // in the Amazon Virtual Private Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -15077,7 +15075,7 @@ func (c *EC2) GetConsoleOutputRequest(input *GetConsoleOutputInput) (req *reques
 // the Amazon EC2 API and command line interface.
 //
 // Instance console output is buffered and posted shortly after instance boot,
-// reboot, and termination. Amazon EC2 preserves the most recent 64 KB output
+// reboot, and termination. Amazon EC2 preserves the most recent 64 KB output,
 // which is available for at least one hour after the most recent post.
 //
 // For Linux instances, the instance console output displays the exact console
@@ -19490,8 +19488,8 @@ func (c *EC2) RunInstancesRequest(input *RunInstancesInput) (req *request.Reques
 //    not subscribed, the request fails.
 //
 // To ensure faster instance launches, break up large requests into smaller
-// batches. For example, create 5 separate launch requests for 100 instances
-// each instead of 1 launch request for 500 instances.
+// batches. For example, create five separate launch requests for 100 instances
+// each instead of one launch request for 500 instances.
 //
 // An instance is ready for you to use when it's in the running state. You can
 // check the state of your instance using DescribeInstances. You can tag instances
@@ -19665,16 +19663,20 @@ func (c *EC2) StartInstancesRequest(input *StartInstancesInput) (req *request.Re
 
 // StartInstances API operation for Amazon Elastic Compute Cloud.
 //
-// Starts an Amazon EBS-backed AMI that you've previously stopped.
+// Starts an Amazon EBS-backed instance that you've previously stopped.
 //
 // Instances that use Amazon EBS volumes as their root devices can be quickly
 // stopped and started. When an instance is stopped, the compute resources are
-// released and you are not billed for hourly instance usage. However, your
-// root partition Amazon EBS volume remains, continues to persist your data,
-// and you are charged for Amazon EBS volume usage. You can restart your instance
-// at any time. Each time you transition an instance from stopped to started,
-// Amazon EC2 charges a full instance hour, even if transitions happen multiple
-// times within a single hour.
+// released and you are not billed for instance usage. However, your root partition
+// Amazon EBS volume remains and continues to persist your data, and you are
+// charged for Amazon EBS volume usage. You can restart your instance at any
+// time. Every time you start your Windows instance, Amazon EC2 charges you
+// for a full instance hour. If you stop and restart your Windows instance,
+// a new instance hour begins and Amazon EC2 charges you for another full instance
+// hour even if you are still within the same 60-minute period when it was stopped.
+// Every time you start your Linux instance, Amazon EC2 charges a one-minute
+// minimum for instance usage, and thereafter charges per second for instance
+// usage.
 //
 // Before stopping an instance, make sure it is in a state from which it can
 // be restarted. Stopping an instance does not preserve data stored in RAM.
@@ -19759,14 +19761,17 @@ func (c *EC2) StopInstancesRequest(input *StopInstancesInput) (req *request.Requ
 //
 // Stops an Amazon EBS-backed instance.
 //
-// We don't charge hourly usage for a stopped instance, or data transfer fees;
-// however, your root partition Amazon EBS volume remains, continues to persist
-// your data, and you are charged for Amazon EBS volume usage. Each time you
-// transition an instance from stopped to started, Amazon EC2 charges a full
-// instance hour, even if transitions happen multiple times within a single
-// hour.
+// We don't charge usage for a stopped instance, or data transfer fees; however,
+// your root partition Amazon EBS volume remains and continues to persist your
+// data, and you are charged for Amazon EBS volume usage. Every time you start
+// your Windows instance, Amazon EC2 charges you for a full instance hour. If
+// you stop and restart your Windows instance, a new instance hour begins and
+// Amazon EC2 charges you for another full instance hour even if you are still
+// within the same 60-minute period when it was stopped. Every time you start
+// your Linux instance, Amazon EC2 charges a one-minute minimum for instance
+// usage, and thereafter charges per second for instance usage.
 //
-// You can't start or stop Spot instances, and you can't stop instance store-backed
+// You can't start or stop Spot Instances, and you can't stop instance store-backed
 // instances.
 //
 // When you stop an instance, we shut it down. You can restart your instance
@@ -27360,11 +27365,7 @@ type CreateVpnConnectionInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
-	// Indicates whether the VPN connection requires static routes. If you are creating
-	// a VPN connection for a device that does not support BGP, you must specify
-	// true.
-	//
-	// Default: false
+	// The options for the VPN connection.
 	Options *VpnConnectionOptionsSpecification `locationName:"options" type:"structure"`
 
 	// The type of VPN connection (ipsec.1).
@@ -32156,7 +32157,7 @@ type DescribeInstanceAttributeOutput struct {
 	// EC2 console, CLI, or API; otherwise, you can.
 	DisableApiTermination *AttributeBooleanValue `locationName:"disableApiTermination" type:"structure"`
 
-	// Indicates whether the instance is optimized for EBS I/O.
+	// Indicates whether the instance is optimized for Amazon EBS I/O.
 	EbsOptimized *AttributeBooleanValue `locationName:"ebsOptimized" type:"structure"`
 
 	// Indicates whether enhanced networking with ENA is enabled.
@@ -32188,8 +32189,8 @@ type DescribeInstanceAttributeOutput struct {
 	RootDeviceName *AttributeValue `locationName:"rootDeviceName" type:"structure"`
 
 	// Indicates whether source/destination checking is enabled. A value of true
-	// means checking is enabled, and false means checking is disabled. This value
-	// must be false for a NAT instance to perform NAT.
+	// means that checking is enabled, and false means that checking is disabled.
+	// This value must be false for a NAT instance to perform NAT.
 	SourceDestCheck *AttributeBooleanValue `locationName:"sourceDestCheck" type:"structure"`
 
 	// Indicates whether enhanced networking with the Intel 82599 Virtual Function
@@ -32620,10 +32621,10 @@ type DescribeInstancesInput struct {
 	//    | in-use).
 	//
 	//    * network-interface.source-dest-check - Whether the network interface
-	//    performs source/destination checking. A value of true means checking is
-	//    enabled, and false means checking is disabled. The value must be false
-	//    for the network interface to perform network address translation (NAT)
-	//    in your VPC.
+	//    performs source/destination checking. A value of true means that checking
+	//    is enabled, and false means that checking is disabled. The value must
+	//    be false for the network interface to perform network address translation
+	//    (NAT) in your VPC.
 	//
 	//    * network-interface.subnet-id - The ID of the subnet for the network interface.
 	//
@@ -32658,9 +32659,9 @@ type DescribeInstancesInput struct {
 	//    ID is created any time you launch an instance. A reservation ID has a
 	//    one-to-one relationship with an instance launch request, but can be associated
 	//    with more than one instance if you launch multiple instances using the
-	//    same launch request. For example, if you launch one instance, you'll get
+	//    same launch request. For example, if you launch one instance, you get
 	//    one reservation ID. If you launch ten instances using the same launch
-	//    request, you'll also get one reservation ID.
+	//    request, you also get one reservation ID.
 	//
 	//    * root-device-name - The name of the root device for the instance (for
 	//    example, /dev/sda1 or /dev/xvda).
@@ -32670,10 +32671,10 @@ type DescribeInstancesInput struct {
 	//
 	//    * source-dest-check - Indicates whether the instance performs source/destination
 	//    checking. A value of true means that checking is enabled, and false means
-	//    checking is disabled. The value must be false for the instance to perform
-	//    network address translation (NAT) in your VPC.
+	//    that checking is disabled. The value must be false for the instance to
+	//    perform network address translation (NAT) in your VPC.
 	//
-	//    * spot-instance-request-id - The ID of the Spot instance request.
+	//    * spot-instance-request-id - The ID of the Spot Instance request.
 	//
 	//    * state-reason-code - The reason code for the state change.
 	//
@@ -32690,9 +32691,8 @@ type DescribeInstancesInput struct {
 	//    independent of the tag-value filter. For example, if you use both the
 	//    filter "tag-key=Purpose" and the filter "tag-value=X", you get any resources
 	//    assigned both the tag key Purpose (regardless of what the tag's value
-	//    is), and the tag value X (regardless of what the tag's key is). If you
-	//    want to list only resources where Purpose is X, see the tag:key=value
-	//    filter.
+	//    is), and the tag value X (regardless of the tag's key). If you want to
+	//    list only resources where Purpose is X, see the tag:key=value filter.
 	//
 	//    * tag-value - The value of a tag assigned to the resource. This filter
 	//    is independent of the tag-key filter.
@@ -35961,34 +35961,34 @@ type DescribeSpotInstanceRequestsInput struct {
 	//
 	//    * launch.key-name - The name of the key pair the instance launched with.
 	//
-	//    * launch.monitoring-enabled - Whether monitoring is enabled for the Spot
-	//    instance.
+	//    * launch.monitoring-enabled - Whether detailed monitoring is enabled for
+	//    the Spot instance.
 	//
 	//    * launch.ramdisk-id - The RAM disk ID.
 	//
-	//    * network-interface.network-interface-id - The ID of the network interface.
+	//    * launched-availability-zone - The Availability Zone in which the bid
+	//    is launched.
 	//
-	//    * network-interface.device-index - The index of the device for the network
-	//    interface attachment on the instance.
-	//
-	//    * network-interface.subnet-id - The ID of the subnet for the instance.
-	//
-	//    * network-interface.description - A description of the network interface.
-	//
-	//    * network-interface.private-ip-address - The primary private IP address
-	//    of the network interface.
+	//    * network-interface.addresses.primary - Indicates whether the IP address
+	//    is the primary private IP address.
 	//
 	//    * network-interface.delete-on-termination - Indicates whether the network
 	//    interface is deleted when the instance is terminated.
 	//
+	//    * network-interface.description - A description of the network interface.
+	//
+	//    * network-interface.device-index - The index of the device for the network
+	//    interface attachment on the instance.
+	//
 	//    * network-interface.group-id - The ID of the security group associated
 	//    with the network interface.
 	//
-	//    * network-interface.group-name - The name of the security group associated
-	//    with the network interface.
+	//    * network-interface.network-interface-id - The ID of the network interface.
 	//
-	//    * network-interface.addresses.primary - Indicates whether the IP address
-	//    is the primary private IP address.
+	//    * network-interface.private-ip-address - The primary private IP address
+	//    of the network interface.
+	//
+	//    * network-interface.subnet-id - The ID of the subnet for the instance.
 	//
 	//    * product-description - The product description associated with the instance
 	//    (Linux/UNIX | Windows).
@@ -36027,9 +36027,6 @@ type DescribeSpotInstanceRequestsInput struct {
 	//    is independent of the tag-key filter.
 	//
 	//    * type - The type of Spot instance request (one-time | persistent).
-	//
-	//    * launched-availability-zone - The Availability Zone in which the bid
-	//    is launched.
 	//
 	//    * valid-from - The start date of the request.
 	//
@@ -40889,7 +40886,7 @@ type GetHostReservationPurchasePreviewOutput struct {
 
 	// The purchase information of the Dedicated Host Reservation and the Dedicated
 	// Hosts associated with it.
-	Purchase []*Purchase `locationName:"purchase" type:"list"`
+	Purchase []*Purchase `locationName:"purchase" locationNameList:"item" type:"list"`
 
 	// The potential total hourly price of the reservation per hour.
 	TotalHourlyPrice *string `locationName:"totalHourlyPrice" type:"string"`
@@ -43417,7 +43414,7 @@ type Instance struct {
 	// The idempotency token you provided when you launched the instance, if applicable.
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
-	// Indicates whether the instance is optimized for EBS I/O. This optimization
+	// Indicates whether the instance is optimized for Amazon EBS I/O. This optimization
 	// provides dedicated throughput to Amazon EBS and an optimized configuration
 	// stack to provide optimal I/O performance. This optimization isn't available
 	// with all instance types. Additional usage charges apply when using an EBS
@@ -43442,7 +43439,7 @@ type Instance struct {
 	// The ID of the instance.
 	InstanceId *string `locationName:"instanceId" type:"string"`
 
-	// Indicates whether this is a Spot instance or a Scheduled Instance.
+	// Indicates whether this is a Spot Instance or a Scheduled Instance.
 	InstanceLifecycle *string `locationName:"instanceLifecycle" type:"string" enum:"InstanceLifecycleType"`
 
 	// The instance type.
@@ -43474,7 +43471,7 @@ type Instance struct {
 	// DNS hostname can only be used inside the Amazon EC2 network. This name is
 	// not available until the instance enters the running state.
 	//
-	// [EC2-VPC] The Amazon-provided DNS server will resolve Amazon-provided private
+	// [EC2-VPC] The Amazon-provided DNS server resolves Amazon-provided private
 	// DNS hostnames if you've enabled DNS resolution and DNS hostnames in your
 	// VPC. If you are not using the Amazon-provided DNS server in your VPC, your
 	// custom domain name servers must resolve the hostname as appropriate.
@@ -43509,13 +43506,13 @@ type Instance struct {
 
 	// Specifies whether to enable an instance launched in a VPC to perform NAT.
 	// This controls whether source/destination checking is enabled on the instance.
-	// A value of true means checking is enabled, and false means checking is disabled.
-	// The value must be false for the instance to perform NAT. For more information,
-	// see NAT Instances (http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html)
+	// A value of true means that checking is enabled, and false means that checking
+	// is disabled. The value must be false for the instance to perform NAT. For
+	// more information, see NAT Instances (http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html)
 	// in the Amazon Virtual Private Cloud User Guide.
 	SourceDestCheck *bool `locationName:"sourceDestCheck" type:"boolean"`
 
-	// If the request is a Spot instance request, the ID of the request.
+	// If the request is a Spot Instance request, the ID of the request.
 	SpotInstanceRequestId *string `locationName:"spotInstanceRequestId" type:"string"`
 
 	// Specifies whether enhanced networking with the Intel 82599 Virtual Function
@@ -46037,7 +46034,7 @@ type ModifyInstanceAttributeInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
-	// Specifies whether the instance is optimized for EBS I/O. This optimization
+	// Specifies whether the instance is optimized for Amazon EBS I/O. This optimization
 	// provides dedicated throughput to Amazon EBS and an optimized configuration
 	// stack to provide optimal EBS I/O performance. This optimization isn't available
 	// with all instance types. Additional usage charges apply when using an EBS
@@ -46080,8 +46077,8 @@ type ModifyInstanceAttributeInput struct {
 	Ramdisk *AttributeValue `locationName:"ramdisk" type:"structure"`
 
 	// Specifies whether source/destination checking is enabled. A value of true
-	// means that checking is enabled, and false means checking is disabled. This
-	// value must be false for a NAT instance to perform NAT.
+	// means that checking is enabled, and false means that checking is disabled.
+	// This value must be false for a NAT instance to perform NAT.
 	SourceDestCheck *AttributeBooleanValue `type:"structure"`
 
 	// Set to simple to enable enhanced networking with the Intel 82599 Virtual
@@ -46095,8 +46092,8 @@ type ModifyInstanceAttributeInput struct {
 	SriovNetSupport *AttributeValue `locationName:"sriovNetSupport" type:"structure"`
 
 	// Changes the instance's user data to the specified value. If you are using
-	// an AWS SDK or command line tool, Base64-encoding is performed for you, and
-	// you can load the text from a file. Otherwise, you must provide Base64-encoded
+	// an AWS SDK or command line tool, base64-encoding is performed for you, and
+	// you can load the text from a file. Otherwise, you must provide base64-encoded
 	// text.
 	UserData *BlobAttributeValue `locationName:"userData" type:"structure"`
 
@@ -49423,7 +49420,7 @@ type PurchaseHostReservationOutput struct {
 	CurrencyCode *string `locationName:"currencyCode" type:"string" enum:"CurrencyCodeValues"`
 
 	// Describes the details of the purchase.
-	Purchase []*Purchase `locationName:"purchase" type:"list"`
+	Purchase []*Purchase `locationName:"purchase" locationNameList:"item" type:"list"`
 
 	// The total hourly price of the reservation calculated per hour.
 	TotalHourlyPrice *string `locationName:"totalHourlyPrice" type:"string"`
@@ -50867,7 +50864,7 @@ type ReportInstanceStatusInput struct {
 	// Instances is a required field
 	Instances []*string `locationName:"instanceId" locationNameList:"InstanceId" type:"list" required:"true"`
 
-	// One or more reason codes that describes the health state of your instance.
+	// One or more reason codes that describe the health state of your instance.
 	//
 	//    * instance-stuck-in-state: My instance is stuck in a state.
 	//
@@ -50878,13 +50875,13 @@ type ReportInstanceStatusInput struct {
 	//    * password-not-available: A password is not available for my instance.
 	//
 	//    * performance-network: My instance is experiencing performance problems
-	//    which I believe are network related.
+	//    that I believe are network related.
 	//
 	//    * performance-instance-store: My instance is experiencing performance
-	//    problems which I believe are related to the instance stores.
+	//    problems that I believe are related to the instance stores.
 	//
 	//    * performance-ebs-volume: My instance is experiencing performance problems
-	//    which I believe are related to an EBS volume.
+	//    that I believe are related to an EBS volume.
 	//
 	//    * performance-other: My instance is experiencing performance problems.
 	//
@@ -53405,11 +53402,11 @@ type RunInstancesInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
-	// Indicates whether the instance is optimized for EBS I/O. This optimization
+	// Indicates whether the instance is optimized for Amazon EBS I/O. This optimization
 	// provides dedicated throughput to Amazon EBS and an optimized configuration
-	// stack to provide optimal EBS I/O performance. This optimization isn't available
-	// with all instance types. Additional usage charges apply when using an EBS-optimized
-	// instance.
+	// stack to provide optimal Amazon EBS I/O performance. This optimization isn't
+	// available with all instance types. Additional usage charges apply when using
+	// an EBS-optimized instance.
 	//
 	// Default: false
 	EbsOptimized *bool `locationName:"ebsOptimized" type:"boolean"`
@@ -53536,9 +53533,9 @@ type RunInstancesInput struct {
 	// The user data to make available to the instance. For more information, see
 	// Running Commands on Your Linux Instance at Launch (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
 	// (Linux) and Adding User Data (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data)
-	// (Windows). If you are using an AWS SDK or command line tool, Base64-encoding
+	// (Windows). If you are using an AWS SDK or command line tool, base64-encoding
 	// is performed for you, and you can load the text from a file. Otherwise, you
-	// must provide Base64-encoded text.
+	// must provide base64-encoded text.
 	UserData *string `type:"string"`
 }
 
@@ -56909,7 +56906,7 @@ type StateReason struct {
 	//
 	//    * Server.ScheduledStop: The instance was stopped due to a scheduled retirement.
 	//
-	//    * Server.SpotInstanceTermination: A Spot instance was terminated due to
+	//    * Server.SpotInstanceTermination: A Spot Instance was terminated due to
 	//    an increase in the market price.
 	//
 	//    * Client.InternalError: A client error caused the instance to terminate
@@ -59598,6 +59595,12 @@ func (s *VpcPeeringConnectionVpcInfo) SetVpcId(v string) *VpcPeeringConnectionVp
 type VpnConnection struct {
 	_ struct{} `type:"structure"`
 
+	// The category of the VPN connection. A value of VPN indicates an AWS VPN connection.
+	// A value of VPN-Classic indicates an AWS Classic VPN connection. For more
+	// information, see AWS Managed VPN Categories (http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html#vpn-categories)
+	// in the Amazon Virtual Private Cloud User Guide.
+	Category *string `locationName:"category" type:"string"`
+
 	// The configuration information for the VPN connection's customer gateway (in
 	// the native XML format). This element is always present in the CreateVpnConnection
 	// response; however, it's present in the DescribeVpnConnections response only
@@ -59640,6 +59643,12 @@ func (s VpnConnection) String() string {
 // GoString returns the string representation
 func (s VpnConnection) GoString() string {
 	return s.String()
+}
+
+// SetCategory sets the Category field's value.
+func (s *VpnConnection) SetCategory(v string) *VpnConnection {
+	s.Category = &v
+	return s
 }
 
 // SetCustomerGatewayConfiguration sets the CustomerGatewayConfiguration field's value.
@@ -59733,9 +59742,15 @@ func (s *VpnConnectionOptions) SetStaticRoutesOnly(v bool) *VpnConnectionOptions
 type VpnConnectionOptionsSpecification struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether the VPN connection uses static routes only. Static routes
-	// must be used for devices that don't support BGP.
+	// Indicate whether the VPN connection uses static routes only. If you are creating
+	// a VPN connection for a device that does not support BGP, you must specify
+	// true.
+	//
+	// Default: false
 	StaticRoutesOnly *bool `locationName:"staticRoutesOnly" type:"boolean"`
+
+	// The tunnel options for the VPN connection.
+	TunnelOptions []*VpnTunnelOptionsSpecification `locationNameList:"item" type:"list"`
 }
 
 // String returns the string representation
@@ -59751,6 +59766,12 @@ func (s VpnConnectionOptionsSpecification) GoString() string {
 // SetStaticRoutesOnly sets the StaticRoutesOnly field's value.
 func (s *VpnConnectionOptionsSpecification) SetStaticRoutesOnly(v bool) *VpnConnectionOptionsSpecification {
 	s.StaticRoutesOnly = &v
+	return s
+}
+
+// SetTunnelOptions sets the TunnelOptions field's value.
+func (s *VpnConnectionOptionsSpecification) SetTunnelOptions(v []*VpnTunnelOptionsSpecification) *VpnConnectionOptionsSpecification {
+	s.TunnelOptions = v
 	return s
 }
 
@@ -59865,6 +59886,63 @@ func (s *VpnStaticRoute) SetSource(v string) *VpnStaticRoute {
 // SetState sets the State field's value.
 func (s *VpnStaticRoute) SetState(v string) *VpnStaticRoute {
 	s.State = &v
+	return s
+}
+
+// The tunnel options for a VPN connection.
+// Please also see https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/VpnTunnelOptionsSpecification
+type VpnTunnelOptionsSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The pre-shared key (PSK) to establish initial authentication between the
+	// virtual private gateway and customer gateway.
+	//
+	// Constraints: Allowed characters are alphanumeric characters and ._. Must
+	// be between 8 and 64 characters in length and cannot start with zero (0).
+	PreSharedKey *string `type:"string"`
+
+	// The range of inside IP addresses for the tunnel. Any specified CIDR blocks
+	// must be unique across all VPN connections that use the same virtual private
+	// gateway.
+	//
+	// Constraints: A size /30 CIDR block from the 169.254.0.0/16 range. The following
+	// CIDR blocks are reserved and cannot be used:
+	//
+	//    * 169.254.0.0/30
+	//
+	//    * 169.254.1.0/30
+	//
+	//    * 169.254.2.0/30
+	//
+	//    * 169.254.3.0/30
+	//
+	//    * 169.254.4.0/30
+	//
+	//    * 169.254.5.0/30
+	//
+	//    * 169.254.169.252/30
+	TunnelInsideCidr *string `type:"string"`
+}
+
+// String returns the string representation
+func (s VpnTunnelOptionsSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpnTunnelOptionsSpecification) GoString() string {
+	return s.String()
+}
+
+// SetPreSharedKey sets the PreSharedKey field's value.
+func (s *VpnTunnelOptionsSpecification) SetPreSharedKey(v string) *VpnTunnelOptionsSpecification {
+	s.PreSharedKey = &v
+	return s
+}
+
+// SetTunnelInsideCidr sets the TunnelInsideCidr field's value.
+func (s *VpnTunnelOptionsSpecification) SetTunnelInsideCidr(v string) *VpnTunnelOptionsSpecification {
+	s.TunnelInsideCidr = &v
 	return s
 }
 

@@ -26,6 +26,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"reflect"
+	"sync"
 	"testing"
 	"time"
 
@@ -388,6 +389,30 @@ func TestHandlerTransport_HandleStreams_Timeout(t *testing.T) {
 	if !reflect.DeepEqual(rw.HeaderMap, wantHeader) {
 		t.Errorf("Header+Trailer Map mismatch.\n got: %#v\nwant: %#v", rw.HeaderMap, wantHeader)
 	}
+}
+
+func TestHandlerTransport_HandleStreams_MultiWriteStatus(t *testing.T) {
+	st := newHandleStreamTest(t)
+	handleStream := func(s *Stream) {
+		if want := "/service/foo.bar"; s.method != want {
+			t.Errorf("stream method = %q; want %q", s.method, want)
+		}
+		st.bodyw.Close() // no body
+
+		var wg sync.WaitGroup
+		wg.Add(5)
+		for i := 0; i < 5; i++ {
+			go func() {
+				defer wg.Done()
+				st.ht.WriteStatus(s, status.New(codes.OK, ""))
+			}()
+		}
+		wg.Wait()
+	}
+	st.ht.HandleStreams(
+		func(s *Stream) { go handleStream(s) },
+		func(ctx context.Context, method string) context.Context { return ctx },
+	)
 }
 
 func TestHandlerTransport_HandleStreams_ErrDetails(t *testing.T) {
