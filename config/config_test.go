@@ -141,7 +141,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 
 func TestLoadInvalidConfigFile(t *testing.T) {
 	_, err := loadForFileFromBytes(sampleInvalidConfig, "foobar2000", nil)
-	assert.Equal(t, err.Error(), "error loading config: no creation rules found")
+	assert.NotNil(t, err)
 }
 
 func TestKeyGroupsForFile(t *testing.T) {
