@@ -325,7 +325,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "unencrypted-suffix",
-			Usage: "override the unencrypted key suffix. default: unencrypted_",
+			Usage: "override the unencrypted key suffix.",
 			Value: sops.DefaultUnencryptedSuffix,
 		},
 		cli.StringFlag{
