@@ -165,7 +165,7 @@ the example files and pgp key provided with the repository::
 
 	$ git clone https://github.com/mozilla/sops.git
 	$ cd sops
-	$ gpg --import tests/sops_functional_tests_key.asc
+	$ gpg --import pgp/sops_functional_tests_key.asc
 	$ sops example.yaml
 
 This last step will decrypt `example.yaml` using the test private key.
