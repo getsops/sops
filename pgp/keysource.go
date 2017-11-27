@@ -127,7 +127,7 @@ func (key *MasterKey) encryptWithCryptoOpenPGP(dataKey []byte) error {
 	if err != nil {
 		return err
 	}
-	plaintextbuf, err := openpgp.Encrypt(armorbuf, []*openpgp.Entity{&entity}, nil, nil, nil)
+	plaintextbuf, err := openpgp.Encrypt(armorbuf, []*openpgp.Entity{&entity}, nil, &openpgp.FileHints{IsBinary: true}, nil)
 	if err != nil {
 		return err
 	}
