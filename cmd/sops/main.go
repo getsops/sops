@@ -344,6 +344,10 @@ func main() {
 			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
+		cli.BoolFlag{
+			Name:  "validate-all-kms-keys",
+			Usage: "when decrypting ensure all KMS keys are valid",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -396,13 +400,14 @@ func main() {
 				return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
 			output, err = decrypt(decryptOpts{
-				OutputStore: outputStore,
-				InputStore:  inputStore,
-				InputPath:   fileName,
-				Cipher:      aes.NewCipher(),
-				Extract:     extract,
-				KeyServices: svcs,
-				IgnoreMAC:   c.Bool("ignore-mac"),
+				OutputStore:        outputStore,
+				InputStore:         inputStore,
+				InputPath:          fileName,
+				Cipher:             aes.NewCipher(),
+				Extract:            extract,
+				KeyServices:        svcs,
+				IgnoreMAC:          c.Bool("ignore-mac"),
+				ValidateAllKMSKeys: c.Bool("validate-all-kms-keys"),
 			})
 		}
 		if c.Bool("rotate") {

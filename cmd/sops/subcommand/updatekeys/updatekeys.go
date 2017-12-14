@@ -86,7 +86,7 @@ func updateFile(opts Opts) error {
 			return nil
 		}
 	}
-	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, false)
 	if err != nil {
 		return fmt.Errorf("error getting data key: %s", err)
 	}

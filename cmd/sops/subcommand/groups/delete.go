@@ -27,7 +27,7 @@ func Delete(opts DeleteOpts) error {
 	if err != nil {
 		return err
 	}
-	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, false)
 	if err != nil {
 		return err
 	}
