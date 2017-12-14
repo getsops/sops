@@ -26,11 +26,13 @@ type DecryptTreeOpts struct {
 	IgnoreMac bool
 	// Cipher is the cryptographic cipher to use to decrypt the values inside the tree
 	Cipher sops.Cipher
+	// ValidateKeys will ensure that the object can be decrypted by all keys in that slice, rather than by any available
+	ValidateKeys []string
 }
 
 // DecryptTree decrypts the tree passed in through the DecryptTreeOpts and additionally returns the decrypted data key
 func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
-	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.ValidateKeys)
 	if err != nil {
 		return nil, NewExitError(err, codes.CouldNotRetrieveKey)
 	}

@@ -431,7 +431,7 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
-func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient, validateKeys []string) ([]byte, error) {
 	if m.DataKey != nil {
 		return m.DataKey, nil
 	}
@@ -441,8 +441,8 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 	}
 	var parts [][]byte
 	for i, group := range m.KeyGroups {
-		part, err := decryptKeyGroup(group, svcs)
-		if err == nil {
+		part, err := decryptKeyGroup(group, svcs, validateKeys)
+		if part != nil {
 			parts = append(parts, part)
 		}
 		getDataKeyErr.GroupResults[i] = err
@@ -463,6 +463,9 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 		}
 		dataKey = parts[0]
 	}
+	if len(validateKeys) >= 1 && getDataKeyErr.GroupResults[0] != nil {
+		log.Warn("At least one Key Service is unable to recover the Data Key: %s", getDataKeyErr.GroupResults)
+	}
 	log.Info("Data key recovered successfully")
 	m.DataKey = dataKey
 	return dataKey, nil
@@ -470,16 +473,42 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 
 // decryptKeyGroup tries to decrypt the contents of the provided KeyGroup with
 // any of the MasterKeys in the KeyGroup with any of the provided key services,
-// returning as soon as one key service succeeds.
-func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+// normally returning as soon as one key service succeeds.
+// However if validateKeys is set, it will ensure that all key services matching
+// the string(s) in the slice are validated against.
+func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient, validateKeys []string) ([]byte, error) {
 	var keyErrs []error
+	var part []byte
 	for _, key := range group {
-		part, err := decryptKey(key, svcs)
+		if part != nil {
+			if len(validateKeys) == 0 {
+				return part, nil
+			}
+			var shouldValidate bool = false
+
+			for _, validateKey := range validateKeys {
+				if strings.Contains(key.ToString(), validateKey) {
+					shouldValidate = true
+				}
+			}
+			if !shouldValidate {
+				continue
+			}
+
+		}
+		rsp, err := decryptKey(key, svcs)
 		if err != nil {
 			keyErrs = append(keyErrs, err)
-		} else {
+		}
+		if rsp != nil {
+			part = rsp
+		}
+	}
+	if part != nil {
+		if len(keyErrs) == 0 {
 			return part, nil
 		}
+		return part, decryptKeyErrors(keyErrs)
 	}
 	return nil, decryptKeyErrors(keyErrs)
 }
@@ -522,7 +551,7 @@ func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte,
 func (m Metadata) GetDataKey() ([]byte, error) {
 	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceClient{
 		keyservice.NewLocalClient(),
-	})
+	}, nil)
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.

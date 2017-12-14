@@ -10,13 +10,14 @@ import (
 )
 
 type decryptOpts struct {
-	Cipher      sops.Cipher
-	InputStore  sops.Store
-	OutputStore sops.Store
-	InputPath   string
-	IgnoreMAC   bool
-	Extract     []interface{}
-	KeyServices []keyservice.KeyServiceClient
+	Cipher       sops.Cipher
+	InputStore   sops.Store
+	OutputStore  sops.Store
+	InputPath    string
+	IgnoreMAC    bool
+	Extract      []interface{}
+	KeyServices  []keyservice.KeyServiceClient
+	ValidateKeys []string
 }
 
 func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
@@ -26,10 +27,11 @@ func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	}
 
 	_, err = common.DecryptTree(common.DecryptTreeOpts{
-		Cipher:      opts.Cipher,
-		IgnoreMac:   opts.IgnoreMAC,
-		Tree:        tree,
-		KeyServices: opts.KeyServices,
+		Cipher:       opts.Cipher,
+		IgnoreMac:    opts.IgnoreMAC,
+		Tree:         tree,
+		KeyServices:  opts.KeyServices,
+		ValidateKeys: opts.ValidateKeys,
 	})
 	if err != nil {
 		return nil, err

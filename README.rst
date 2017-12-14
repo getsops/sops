@@ -590,6 +590,22 @@ in `/tmp/sops.sock` and not the local key service, you can run:
 
 `sops --enable-local-keyservice=false --keyservice unix:///tmp/sops.sock -d file.yaml`
 
+Validate Keys
+~~~~~~~~~~~~~
+
+Normally on decryption, SOPS will try each key service in turn, returning as soon
+as one has succeeded.
+There are times when it may be useful to validate that all keys from a particular
+key service are working. For example prior to or following significant infrastructure
+changes, or when cycling upstream keys.
+
+You can enable this behavior by passing in `--validate-key <keyservice>`.
+
+For example to ensure all KMS keys are validated you can run:
+
+`sops --decrypt --validate-key kms file.yml`
+
+
 Important information on types
 ------------------------------
 

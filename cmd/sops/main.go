@@ -344,6 +344,10 @@ func main() {
 			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
+		cli.StringSliceFlag{
+			Name:  "validate-key",
+			Usage: `used when decrypting. Can be used more than once e.g. --validate-key kms --validate-key gpg`,
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -396,13 +400,14 @@ func main() {
 				return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
 			output, err = decrypt(decryptOpts{
-				OutputStore: outputStore,
-				InputStore:  inputStore,
-				InputPath:   fileName,
-				Cipher:      aes.NewCipher(),
-				Extract:     extract,
-				KeyServices: svcs,
-				IgnoreMAC:   c.Bool("ignore-mac"),
+				OutputStore:  outputStore,
+				InputStore:   inputStore,
+				InputPath:    fileName,
+				Cipher:       aes.NewCipher(),
+				Extract:      extract,
+				KeyServices:  svcs,
+				IgnoreMAC:    c.Bool("ignore-mac"),
+				ValidateKeys: c.StringSlice("validate-key"),
 			})
 		}
 		if c.Bool("rotate") {
@@ -558,6 +563,7 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
+
 		svcs = append(svcs, keyservice.NewKeyServiceClient(conn))
 	}
 	return
