@@ -84,7 +84,7 @@ var errEndOfObject = fmt.Errorf("End of object")
 func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, error) {
 	var item sops.TreeItem
 	key, err := dec.Token()
-	if err != nil {
+	if err != nil && err != io.EOF {
 		return item, err
 	}
 	if k, ok := key.(string); ok {
