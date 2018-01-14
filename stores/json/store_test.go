@@ -126,6 +126,12 @@ func TestDecodeSimpleJSONObject(t *testing.T) {
 	assert.Equal(t, expected, branch)
 }
 
+func TestDecodeNumber(t *testing.T) {
+	in := `42`
+	_, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.NotNil(t, err)
+}
+
 func TestDecodeNestedJSONObject(t *testing.T) {
 	in := `{"foo": {"foo": "bar"}}`
 	expected := sops.TreeBranch{
