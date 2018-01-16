@@ -175,8 +175,13 @@ Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS uses `Application Default Credentials
 <https://developers.google.com/identity/protocols/application-default-credentials>`_.
-If you already logged in using :bash:`gcloud auth login` you can enable application
-default credentials using the sdk::
+If you already logged in using 
+
+.. code:: bash
+
+	$ gcloud auth login
+
+you can enable application default credentials using the sdk::
 
 	$ gcloud auth application-default login
 
