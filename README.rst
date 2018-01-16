@@ -201,7 +201,7 @@ sdk:
 
 Now you can encrypt a file using::
 
-	$ sops --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml
+	$ sops -e --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml
 
 
 
