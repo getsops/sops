@@ -201,8 +201,11 @@ sdk:
 
 Now you can encrypt a file using::
 
-	$ sops -e --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml
+	$ sops --encrypt --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml > test.enc.yaml
 
+And decrypt it using::
+
+	 $ sops --decrypt test.enc.yaml
 
 
 Adding and removing keys
