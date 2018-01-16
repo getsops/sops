@@ -775,7 +775,7 @@ values, like keys, without needing an extra parser.
 
 .. code:: bash
 
-	$ sops -d ~/git/svc/sops/example.yaml --extract '["app2"]["key"]'
+	$ sops -d --extract '["app2"]["key"]' ~/git/svc/sops/example.yaml
 	-----BEGIN RSA PRIVATE KEY-----
 	MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
 	ImcbNkqAKnELzFAPSBeEMhrBN0PyOC9lYlMCAwEAAQJBALXD4sjuBn1E7Y9aGiMz
@@ -792,7 +792,7 @@ them.
 
 .. code:: bash
 
-	$ sops -d ~/git/svc/sops/example.yaml --extract '["an_array"][1]'
+	$ sops -d --extract '["an_array"][1]' ~/git/svc/sops/example.yaml
 	secretuser2
 
 Set a sub-part in a document tree
@@ -804,7 +804,7 @@ set specific values, like keys, without needing an editor.
 
 .. code:: bash
 
-	$ sops ~/git/svc/sops/example.yaml --set '["app2"]["key"]' '"app2keystringvalue"'
+	$ sops --set '["app2"]["key"] "app2keystringvalue"'  ~/git/svc/sops/example.yaml
 
 The tree path syntax uses regular python dictionary syntax, without the
 variable name. Set to keys by naming them, and array elements by
@@ -812,13 +812,13 @@ numbering them.
 
 .. code:: bash
 
-	$ sops ~/git/svc/sops/example.yaml --set '["an_array"][1]' '"secretuser2"'
+	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml 
 
 The value must be formatted as json.
 
 .. code:: bash
 
-	$ sops ~/git/svc/sops/example.yaml --set '["an_array"][1]' '{"uid1":null,"uid2":1000,"uid3":["bob"]}'
+	$ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
 
 Using sops as a library in a python script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
