@@ -76,6 +76,10 @@ creation_rules:
       - resource_id: baz
 `)
 
+var sampleInvalidConfig = []byte(`
+creation_rules:
+`)
+
 func TestLoadConfigFile(t *testing.T) {
 	expected := configFile{
 		CreationRules: []creationRule{
@@ -133,6 +137,11 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 	err := conf.load(sampleConfigWithGroups)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expected, conf)
+}
+
+func TestLoadInvalidConfigFile(t *testing.T) {
+	_, err := loadForFileFromBytes(sampleInvalidConfig, "foobar2000", nil)
+	assert.NotNil(t, err)
 }
 
 func TestKeyGroupsForFile(t *testing.T) {
