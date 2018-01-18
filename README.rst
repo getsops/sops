@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **sops** is an editor of encrypted files that supports YAML, JSON and BINARY
-formats and encrypts with AWS KMS and PGP.
+formats and encrypts with AWS KMS, GCP KMS and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -175,8 +175,13 @@ Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS uses `Application Default Credentials
 <https://developers.google.com/identity/protocols/application-default-credentials>`_.
-If you already logged in using :bash:`gcloud auth login` you can enable application
-default credentials using the sdk::
+If you already logged in using 
+
+.. code:: bash
+
+	$ gcloud auth login
+
+you can enable application default credentials using the sdk::
 
 	$ gcloud auth application-default login
 
@@ -196,8 +201,11 @@ sdk:
 
 Now you can encrypt a file using::
 
-	$ sops --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml
+	$ sops --encrypt --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml > test.enc.yaml
 
+And decrypt it using::
+
+	 $ sops --decrypt test.enc.yaml
 
 
 Adding and removing keys
