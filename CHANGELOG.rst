@@ -1,6 +1,15 @@
 Changelog
 =========
 
+3.0.1
+-----
+
+* Don't consider io.EOF returned by Decoder.Token as error
+
+* add IsBinary: true to FileHints when encoding with crypto/openpgp 
+
+* some improvements to error messages
+
 3.0.0
 -----
 
