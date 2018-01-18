@@ -1,5 +1,16 @@
 package shamir
 
+// Some comments in this file were written by @autrilla
+// The code was written by HashiCorp as part of Vault.
+
+// This implementation of Shamir's Secret Sharing matches the definition
+// of the scheme. Other tools used, such as GF(2^8) arithmetic, Lagrange
+// interpolation and Horner's method also match their definitions and should
+// therefore be correct.
+// More information about Shamir's Secret Sharing and Lagrange interpolation
+// can be found in README.md
+
+
 import (
 	"crypto/rand"
 	"crypto/subtle"
@@ -40,6 +51,8 @@ func makePolynomial(intercept, degree uint8) (polynomial, error) {
 }
 
 // evaluate returns the value of the polynomial for the given x
+// Uses Horner's method <https://en.wikipedia.org/wiki/Horner%27s_method> to
+// evaluate the polynomial at point x
 func (p *polynomial) evaluate(x uint8) uint8 {
 	// Special case the origin
 	if x == 0 {
@@ -58,6 +71,9 @@ func (p *polynomial) evaluate(x uint8) uint8 {
 
 // interpolatePolynomial takes N sample points and returns
 // the value at a given x using a lagrange interpolation.
+// An implementation of Lagrange interpolation
+// <https://en.wikipedia.org/wiki/Lagrange_polynomial>
+// For this particular implementation, x is always 0
 func interpolatePolynomial(x_samples, y_samples []uint8, x uint8) uint8 {
 	limit := len(x_samples)
 	var result, basis uint8
@@ -79,6 +95,7 @@ func interpolatePolynomial(x_samples, y_samples []uint8, x uint8) uint8 {
 }
 
 // div divides two numbers in GF(2^8)
+// GF(2^8) division using log/exp tables
 func div(a, b uint8) uint8 {
 	if b == 0 {
 		// leaks some timing information but we don't care anyways as this
@@ -109,6 +126,7 @@ func div(a, b uint8) uint8 {
 }
 
 // mult multiplies two numbers in GF(2^8)
+// GF(2^8) multiplication using log/exp tables
 func mult(a, b uint8) (out uint8) {
 	var goodVal, zero uint8
 	log_a := logTable[a]
@@ -168,7 +186,11 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 		return nil, fmt.Errorf("cannot split an empty secret")
 	}
 
-	// Generate random list of x coordinates
+	// Generate random x coordinates for computing points. I don't know
+	// why random x coordinates are used, and I also don't know why
+	// a non-cryptographically secure source of randomness is used.
+	// As far as I know the x coordinates do not need to be random.
+
 	mathrand.Seed(time.Now().UnixNano())
 	xCoordinates := mathrand.Perm(255)
 
@@ -177,6 +199,10 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 	// output is {y1, y2, .., yN, x}.
 	out := make([][]byte, parts)
 	for idx := range out {
+		// Store the x coordinate for each part as its last byte
+		// Add 1 to the xCoordinate because if the x coordinate is 0,
+		// then the result of evaluating the polynomial at that point
+		// will be our secret
 		out[idx] = make([]byte, len(secret)+1)
 		out[idx][len(secret)] = uint8(xCoordinates[idx]) + 1
 	}
@@ -186,6 +212,8 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 	// a single byte as the intercept of the polynomial, so we must
 	// use a new polynomial for each byte.
 	for idx, val := range secret {
+		// Create a random polynomial for each point.
+		// This polynomial crosses the y axis at `val`.
 		p, err := makePolynomial(val, uint8(threshold-1))
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate polynomial: %v", err)
@@ -195,7 +223,10 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 		// We cheat by encoding the x value once as the final index,
 		// so that it only needs to be stored once.
 		for i := 0; i < parts; i++ {
+			// Add 1 to the xCoordinate because if it's 0,
+			// then the result of p.evaluate(x) will be our secret
 			x := uint8(xCoordinates[i]) + 1
+			// Evaluate the polynomial at x
 			y := p.evaluate(x)
 			out[i][idx] = y
 		}
@@ -233,6 +264,8 @@ func Combine(parts [][]byte) ([]byte, error) {
 
 	// Set the x value for each sample and ensure no x_sample values are the same,
 	// otherwise div() can be unhappy
+	// Check that we don't have any duplicate parts, that is, two or
+	// more parts with the same x coordinate.
 	checkMap := map[byte]bool{}
 	for i, part := range parts {
 		samp := part[firstPartLen-1]
@@ -250,7 +283,8 @@ func Combine(parts [][]byte) ([]byte, error) {
 			y_samples[i] = part[idx]
 		}
 
-		// Interpolte the polynomial and compute the value at 0
+		// Use Lagrange interpolation to retrieve the free term
+		// of the original polynomial
 		val := interpolatePolynomial(x_samples, y_samples, 0)
 
 		// Evaluate the 0th value to get the intercept
