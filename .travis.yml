@@ -19,6 +19,14 @@ script:
   - bash <(curl -s https://codecov.io/bash)
 
 before_deploy:
+  - >
+      if [ ! -z ${TRAVIS_TAG} ]; then
+        version="$(grep -E '^const version' cmd/sops/version.go | cut -d '"' -f 2)"
+        if [ ${TRAVIS_TAG} != ${version} ]; then
+          echo "git tag ${TRAVIS_TAG} does not map sops version ${version}"
+          exit 1
+        fi
+      fi
   - mkdir dist
   - make deb-pkg rpm-pkg
   - mv *.deb *.rpm dist/
