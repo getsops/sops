@@ -375,7 +375,7 @@ KMS and PGP master keys defined in the file.
 Using .sops.yaml conf to select KMS/PGP for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is often tedious to specify the `--kms` and `--pgp` parameters for creation
+It is often tedious to specify the `--kms` `--gcp-kms` and `--pgp` parameters for creation
 of all new files. If your secrets are stored under a specific directory, like a
 `git` repository, you can create a `.sops.yaml` configuration file at the root
 directory to define which keys are used for which filename.
@@ -404,6 +404,10 @@ can manage the three sets of configurations for the three types of files:
 		- filename_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+
+		# gcp files using GCP KMS
+		- filename_regex: \.gcp\.yaml$
+		  gcp_kms: projects/mygcproject/locations/global/keyRings/mykeyring/cryptoKeys/thekey
 
 		# Finally, if the rules above have not matched, this one is a
 		# catchall that will encrypt the file using KMS set C
