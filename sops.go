@@ -256,6 +256,9 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
+	audit.SubmitEvent(audit.EncryptEvent{
+		File: tree.FilePath,
+	})
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
