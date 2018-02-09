@@ -175,27 +175,15 @@ type AllocateQuotaResponse struct {
 	// Depending on the
 	// request, one or more of the following metrics will be included:
 	//
-	// 1. For rate quota, per quota group or per quota metric incremental
-	// usage
-	// will be specified using the following delta metric:
+	// 1. Per quota group or per quota metric incremental usage will be
+	// specified
+	// using the following delta metric :
 	//   "serviceruntime.googleapis.com/api/consumer/quota_used_count"
 	//
-	// 2. For allocation quota, per quota metric total usage will be
-	// specified
-	// using the following gauge metric:
-	//
-	// "serviceruntime.googleapis.com/allocation/consumer/quota_used_count"
-	//
-	//
-	// 3. For both rate quota and allocation quota, the quota limit
-	// reached
-	// condition will be specified using the following boolean metric:
+	// 2. The quota limit reached condition will be specified using the
+	// following
+	// boolean metric :
 	//   "serviceruntime.googleapis.com/quota/exceeded"
-	//
-	// 4. For allocation quota, value for each quota limit associated
-	// with
-	// the metrics will be specified using the following gauge metric:
-	//   "serviceruntime.googleapis.com/quota/limit"
 	QuotaMetrics []*MetricValueSet `json:"quotaMetrics,omitempty"`
 
 	// ServiceConfigId: ID of the actual config used to process the request.
@@ -246,7 +234,7 @@ type AuditLog struct {
 	// Metadata: Other service-specific data about the request, response,
 	// and other
 	// information associated with the current audited event.
-	Metadata []googleapi.RawMessage `json:"metadata,omitempty"`
+	Metadata googleapi.RawMessage `json:"metadata,omitempty"`
 
 	// MethodName: The name of the service method or operation.
 	// For API calls, this should be the name of the API method.
@@ -1411,11 +1399,15 @@ type Operation struct {
 
 	// QuotaProperties: Represents the properties needed for quota check.
 	// Applicable only if this
-	// operation is for a quota check request.
+	// operation is for a quota check request. If this is not specified, no
+	// quota
+	// check will be performed.
 	QuotaProperties *QuotaProperties `json:"quotaProperties,omitempty"`
 
-	// ResourceContainer: The resource name of the parent of a resource in
-	// the resource hierarchy.
+	// ResourceContainer: DO NOT USE. This field is deprecated, use
+	// "resources" field instead.
+	// The resource name of the parent of a resource in the resource
+	// hierarchy.
 	//
 	// This can be in one of the following formats:
 	//     - “projects/<project-id or project-number>”
@@ -1673,41 +1665,18 @@ type QuotaOperation struct {
 	// amount is higher than the available quota, allocation error will
 	// be
 	// returned and no quota will be allocated.
-	// For ReleaseQuota request, this mode is supported only for precise
-	// quota
-	// limits. In this case, this operation releases quota for the
-	// amount
-	// specified in the service configuration or specified using the
-	// quota
-	// metrics. If the release can make used quota negative, release
-	// error
-	// will be returned and no quota will be released.
-	//   "BEST_EFFORT" - For AllocateQuota request, this mode is supported
-	// only for imprecise
-	// quota limits. In this case, the operation allocates quota for the
-	// amount
-	// specified in the service configuration or specified using the
-	// quota
-	// metrics. If the amount is higher than the available quota, request
-	// does
-	// not fail but all available quota will be allocated.
-	// For ReleaseQuota request, this mode is supported for both precise
-	// quota
-	// limits and imprecise quota limits. In this case, this operation
-	// releases
-	// quota for the amount specified in the service configuration or
-	// specified
-	// using the quota metrics. If the release can make used quota
-	// negative, request does not fail but only the used quota will
-	// be
-	// released. After the ReleaseQuota request completes, the used
-	// quota
-	// will be 0, and never goes to negative.
+	//   "BEST_EFFORT" - The operation allocates quota for the amount
+	// specified in the service
+	// configuration or specified using the quota metrics. If the amount
+	// is
+	// higher than the available quota, request does not fail but all
+	// available
+	// quota will be allocated.
 	//   "CHECK_ONLY" - For AllocateQuota request, only checks if there is
 	// enough quota
 	// available and does not change the available quota. No lock is placed
 	// on
-	// the available quota either. Not supported for ReleaseQuota request.
+	// the available quota either.
 	QuotaMode string `json:"quotaMode,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ConsumerId") to
@@ -1736,28 +1705,6 @@ func (s *QuotaOperation) MarshalJSON() ([]byte, error) {
 // QuotaProperties: Represents the properties needed for quota
 // operations.
 type QuotaProperties struct {
-	// LimitByIds: LimitType IDs that should be used for checking quota. Key
-	// in this map
-	// should be a valid LimitType string, and the value is the ID to be
-	// used. For
-	// example, an entry <USER, 123> will cause all user quota limits to use
-	// 123
-	// as the user ID. See google/api/quota.proto for the definition of
-	// LimitType.
-	// CLIENT_PROJECT: Not supported.
-	// USER: Value of this entry will be used for enforcing user-level
-	// quota
-	//       limits. If none specified, caller IP passed in the
-	//       servicecontrol.googleapis.com/caller_ip label will be used
-	// instead.
-	//       If the server cannot resolve a value for this LimitType, an
-	// error
-	//       will be thrown. No validation will be performed on this
-	// ID.
-	// Deprecated: use servicecontrol.googleapis.com/user label to send user
-	// ID.
-	LimitByIds map[string]string `json:"limitByIds,omitempty"`
-
 	// QuotaMode: Quota mode for this operation.
 	//
 	// Possible values:
@@ -1780,7 +1727,7 @@ type QuotaProperties struct {
 	// operation.
 	QuotaMode string `json:"quotaMode,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "LimitByIds") to
+	// ForceSendFields is a list of field names (e.g. "QuotaMode") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -1788,7 +1735,7 @@ type QuotaProperties struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "LimitByIds") to include in
+	// NullFields is a list of field names (e.g. "QuotaMode") to include in
 	// API requests with the JSON null value. By default, fields with empty
 	// values are omitted from API requests. However, any field with an
 	// empty value appearing in NullFields will be sent to the server as
@@ -2088,17 +2035,32 @@ type RequestMetadata struct {
 	// CallerIp: The IP address of the caller.
 	// For caller from internet, this will be public IPv4 or IPv6
 	// address.
-	// For caller from GCE VM with external IP address, this will be the
-	// VM's
-	// external IP address. For caller from GCE VM without external IP
-	// address, if
-	// the VM is in the same GCP organization (or project) as the
-	// accessed
-	// resource, `caller_ip` will be the GCE VM's internal IPv4 address,
-	// otherwise
-	// it will be redacted to "gce-internal-ip".
+	// For caller from a Compute Engine VM with external IP address,
+	// this
+	// will be the VM's external IP address. For caller from a
+	// Compute
+	// Engine VM without external IP address, if the VM is in the
+	// same
+	// organization (or project) as the accessed resource, `caller_ip`
+	// will
+	// be the VM's internal IPv4 address, otherwise the `caller_ip` will
+	// be
+	// redacted to "gce-internal-ip".
 	// See https://cloud.google.com/compute/docs/vpc/ for more information.
 	CallerIp string `json:"callerIp,omitempty"`
+
+	// CallerNetwork: The network of the caller.
+	// Set only if the network host project is part of the same GCP
+	// organization
+	// (or project) as the accessed resource.
+	// See https://cloud.google.com/compute/docs/vpc/ for more
+	// information.
+	// This is a scheme-less URI full resource name. For example:
+	//
+	//
+	// "//compute.googleapis.com/projects/PROJECT_ID/global/networks/NETWORK_
+	// ID"
+	CallerNetwork string `json:"callerNetwork,omitempty"`
 
 	// CallerSuppliedUserAgent: The user agent of the caller.
 	// This information is not authenticated and should be treated
@@ -2138,8 +2100,7 @@ func (s *RequestMetadata) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// ResourceInfo: DO NOT USE.
-// This definition is not ready for use yet.
+// ResourceInfo: Describes a resource associated with this operation.
 type ResourceInfo struct {
 	// ResourceContainer: The identifier of the parent of this resource
 	// instance.

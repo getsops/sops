@@ -108,6 +108,11 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 			break
 		}
 	}
+
+	if rule == nil {
+		return nil, fmt.Errorf("error loading config: no matching creation rules found")
+	}
+
 	var groups []sops.KeyGroup
 	if len(rule.KeyGroups) > 0 {
 		for _, group := range rule.KeyGroups {

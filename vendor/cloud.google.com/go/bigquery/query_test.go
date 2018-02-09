@@ -39,6 +39,8 @@ func defaultQueryJob() *bq.Job {
 					ProjectId: "def-project-id",
 					DatasetId: "def-dataset-id",
 				},
+				UseLegacySql:    false,
+				ForceSendFields: []string{"UseLegacySql"},
 			},
 		},
 	}
@@ -260,10 +262,20 @@ func TestQuery(t *testing.T) {
 				DefaultDatasetID: "def-dataset-id",
 				UseStandardSQL:   true,
 			},
+			want: defaultQueryJob(),
+		},
+		{
+			dst: c.Dataset("dataset-id").Table("table-id"),
+			src: &QueryConfig{
+				Q:                "query string",
+				DefaultProjectID: "def-project-id",
+				DefaultDatasetID: "def-dataset-id",
+				UseLegacySQL:     true,
+			},
 			want: func() *bq.Job {
 				j := defaultQueryJob()
-				j.Configuration.Query.UseLegacySql = false
-				j.Configuration.Query.ForceSendFields = []string{"UseLegacySql"}
+				j.Configuration.Query.UseLegacySql = true
+				j.Configuration.Query.ForceSendFields = nil
 				return j
 			}(),
 		},
@@ -304,6 +316,8 @@ func TestConfiguringQuery(t *testing.T) {
 					ProjectId: "def-project-id",
 					DatasetId: "def-dataset-id",
 				},
+				UseLegacySql:    false,
+				ForceSendFields: []string{"UseLegacySql"},
 			},
 		},
 		JobReference: &bq.JobReference{
@@ -315,8 +329,8 @@ func TestConfiguringQuery(t *testing.T) {
 	if _, err := query.Run(context.Background()); err != nil {
 		t.Fatalf("err calling Query.Run: %v", err)
 	}
-	if !testutil.Equal(s.Job, want) {
-		t.Errorf("querying: got:\n%v\nwant:\n%v", s.Job, want)
+	if diff := testutil.Diff(s.Job, want); diff != "" {
+		t.Errorf("querying: -got +want:\n%s", diff)
 	}
 }
 

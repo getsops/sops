@@ -76,9 +76,17 @@ type CodeBuildAPI interface {
 	CreateProjectWithContext(aws.Context, *codebuild.CreateProjectInput, ...request.Option) (*codebuild.CreateProjectOutput, error)
 	CreateProjectRequest(*codebuild.CreateProjectInput) (*request.Request, *codebuild.CreateProjectOutput)
 
+	CreateWebhook(*codebuild.CreateWebhookInput) (*codebuild.CreateWebhookOutput, error)
+	CreateWebhookWithContext(aws.Context, *codebuild.CreateWebhookInput, ...request.Option) (*codebuild.CreateWebhookOutput, error)
+	CreateWebhookRequest(*codebuild.CreateWebhookInput) (*request.Request, *codebuild.CreateWebhookOutput)
+
 	DeleteProject(*codebuild.DeleteProjectInput) (*codebuild.DeleteProjectOutput, error)
 	DeleteProjectWithContext(aws.Context, *codebuild.DeleteProjectInput, ...request.Option) (*codebuild.DeleteProjectOutput, error)
 	DeleteProjectRequest(*codebuild.DeleteProjectInput) (*request.Request, *codebuild.DeleteProjectOutput)
+
+	DeleteWebhook(*codebuild.DeleteWebhookInput) (*codebuild.DeleteWebhookOutput, error)
+	DeleteWebhookWithContext(aws.Context, *codebuild.DeleteWebhookInput, ...request.Option) (*codebuild.DeleteWebhookOutput, error)
+	DeleteWebhookRequest(*codebuild.DeleteWebhookInput) (*request.Request, *codebuild.DeleteWebhookOutput)
 
 	ListBuilds(*codebuild.ListBuildsInput) (*codebuild.ListBuildsOutput, error)
 	ListBuildsWithContext(aws.Context, *codebuild.ListBuildsInput, ...request.Option) (*codebuild.ListBuildsOutput, error)

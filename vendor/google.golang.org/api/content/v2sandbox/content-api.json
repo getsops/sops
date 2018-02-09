@@ -1,12 +1,12 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/5vl5aa2CUylrEFA9Igu87wDe8Ug\"",
+ "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/QmLvLWNsI9BfMK5wWeN2hMPf260\"",
  "discoveryVersion": "v1",
  "id": "content:v2sandbox",
  "name": "content",
  "canonicalName": "Shopping Content",
  "version": "v2sandbox",
- "revision": "20170926",
+ "revision": "20170928",
  "title": "Content API for Shopping",
  "description": "Manages product items, inventory, and Merchant Center accounts for Google Shopping.",
  "ownerDomain": "google.com",
@@ -331,6 +331,10 @@
      "items": {
       "$ref": "OrderCancellation"
      }
+    },
+    "channelType": {
+     "type": "string",
+     "description": "The channel type of the order: \"purchaseOnGoogle\" or \"googleExpress\"."
     },
     "id": {
      "type": "string",

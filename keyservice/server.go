@@ -23,7 +23,7 @@ func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) 
 }
 
 func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) {
-	var ctx map[string]*string
+	ctx := make(map[string]*string)
 	for k, v := range key.Context {
 		ctx[k] = &v
 	}
@@ -58,7 +58,7 @@ func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error)
 }
 
 func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error) {
-	var ctx map[string]*string
+	ctx := make(map[string]*string)
 	for k, v := range key.Context {
 		ctx[k] = &v
 	}

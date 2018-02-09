@@ -698,6 +698,36 @@
   },
   {
    "kind": "discovery#directoryItem",
+   "id": "cloudiot:v1",
+   "name": "cloudiot",
+   "version": "v1",
+   "title": "Google Cloud IoT API",
+   "description": "Registers and manages IoT (Internet of Things) devices that connect to the Google Cloud Platform.",
+   "discoveryRestUrl": "https://cloudiot.googleapis.com/$discovery/rest?version=v1",
+   "icons": {
+    "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
+    "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
+   },
+   "documentationLink": "https://cloud.google.com/iot",
+   "preferred": true
+  },
+  {
+   "kind": "discovery#directoryItem",
+   "id": "cloudiot:v1beta1",
+   "name": "cloudiot",
+   "version": "v1beta1",
+   "title": "Google Cloud IoT API",
+   "description": "Registers and manages IoT (Internet of Things) devices that connect to the Google Cloud Platform.",
+   "discoveryRestUrl": "https://cloudiot.googleapis.com/$discovery/rest?version=v1beta1",
+   "icons": {
+    "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
+    "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
+   },
+   "documentationLink": "https://cloud.google.com/iot",
+   "preferred": false
+  },
+  {
+   "kind": "discovery#directoryItem",
    "id": "cloudkms:v1",
    "name": "cloudkms",
    "version": "v1",
@@ -1369,6 +1399,21 @@
   },
   {
    "kind": "discovery#directoryItem",
+   "id": "firestore:v1beta1",
+   "name": "firestore",
+   "version": "v1beta1",
+   "title": "Google Cloud Firestore API",
+   "description": "",
+   "discoveryRestUrl": "https://firestore.googleapis.com/$discovery/rest?version=v1beta1",
+   "icons": {
+    "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
+    "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
+   },
+   "documentationLink": "https://cloud.google.com/firestore",
+   "preferred": true
+  },
+  {
+   "kind": "discovery#directoryItem",
    "id": "fitness:v1",
    "name": "fitness",
    "version": "v1",
@@ -1726,21 +1771,6 @@
    },
    "documentationLink": "https://cloud.google.com/ml/",
    "preferred": true
-  },
-  {
-   "kind": "discovery#directoryItem",
-   "id": "ml:v1beta1",
-   "name": "ml",
-   "version": "v1beta1",
-   "title": "Google Cloud Machine Learning Engine",
-   "description": "An API to enable creating and using machine learning models.",
-   "discoveryRestUrl": "https://ml.googleapis.com/$discovery/rest?version=v1beta1",
-   "icons": {
-    "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
-    "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
-   },
-   "documentationLink": "https://cloud.google.com/ml/",
-   "preferred": false
   },
   {
    "kind": "discovery#directoryItem",
@@ -2265,7 +2295,7 @@
    "name": "script",
    "version": "v1",
    "title": "Google Apps Script Execution API",
-   "description": "Executes functions in Google Apps Script projects.",
+   "description": "An API for managing and executing Google Apps Script projects.",
    "discoveryRestUrl": "https://script.googleapis.com/$discovery/rest?version=v1",
    "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
@@ -2752,8 +2782,8 @@
    "id": "videointelligence:v1beta1",
    "name": "videointelligence",
    "version": "v1beta1",
-   "title": "Google Cloud Video Intelligence API",
-   "description": "Google Cloud Video Intelligence API.",
+   "title": "Cloud Video Intelligence API",
+   "description": "Cloud Video Intelligence API.",
    "discoveryRestUrl": "https://videointelligence.googleapis.com/$discovery/rest?version=v1beta1",
    "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",

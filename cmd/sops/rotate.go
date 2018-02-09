@@ -8,7 +8,6 @@ import (
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
-	cli "gopkg.in/urfave/cli.v1"
 )
 
 type rotateOpts struct {
@@ -68,7 +67,7 @@ func rotate(opts rotateOpts) ([]byte, error) {
 
 	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
 	if err != nil {
-		return nil, cli.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	return encryptedFile, nil
 }

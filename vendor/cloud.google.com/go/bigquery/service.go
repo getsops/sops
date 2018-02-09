@@ -44,7 +44,7 @@ type service interface {
 	listJobs(ctx context.Context, projectId string, maxResults int, pageToken string, all bool, state string) ([]JobInfo, string, error)
 
 	// Tables
-	createTable(ctx context.Context, conf *createTableConf) error
+	createTable(ctx context.Context, projectID, datasetID, tableID string, tm *TableMetadata) error
 	getTableMetadata(ctx context.Context, projectID, datasetID, tableID string) (*TableMetadata, error)
 	deleteTable(ctx context.Context, projectID, datasetID, tableID string) error
 
@@ -502,63 +502,88 @@ func (s *bigqueryService) listTables(ctx context.Context, projectID, datasetID s
 	return tables, res.NextPageToken, nil
 }
 
-type createTableConf struct {
-	projectID, datasetID, tableID string
-	expiration                    time.Time
-	viewQuery                     string
-	schema                        *bq.TableSchema
-	useStandardSQL                bool
-	useLegacySQL                  bool
-	timePartitioning              *TimePartitioning
-}
-
 // createTable creates a table in the BigQuery service.
-// expiration is an optional time after which the table will be deleted and its storage reclaimed.
-// If viewQuery is non-empty, the created table will be of type VIEW.
+// If tm.ViewQuery is non-empty, the created table will be of type VIEW.
 // Note: expiration can only be set during table creation.
 // Note: after table creation, a view can be modified only if its table was initially created with a view.
-func (s *bigqueryService) createTable(ctx context.Context, conf *createTableConf) error {
-	if conf.useStandardSQL && conf.useLegacySQL {
-		return errors.New("bigquery: cannot provide both UseStandardSQL and UseLegacySQL")
+func (s *bigqueryService) createTable(ctx context.Context, projectID, datasetID, tableID string, tm *TableMetadata) error {
+	table, err := bqTableFromMetadata(tm)
+	if err != nil {
+		return err
 	}
-	table := &bq.Table{
-		// TODO(jba): retry? Is this always idempotent?
-		TableReference: &bq.TableReference{
-			ProjectId: conf.projectID,
-			DatasetId: conf.datasetID,
-			TableId:   conf.tableID,
-		},
+	table.TableReference = &bq.TableReference{
+		ProjectId: projectID,
+		DatasetId: datasetID,
+		TableId:   tableID,
 	}
-	if !conf.expiration.IsZero() {
-		table.ExpirationTime = conf.expiration.UnixNano() / 1e6
+	req := s.s.Tables.Insert(projectID, datasetID, table).Context(ctx)
+	setClientHeader(req.Header())
+	_, err = req.Do()
+	return err
+}
+
+func bqTableFromMetadata(tm *TableMetadata) (*bq.Table, error) {
+	t := &bq.Table{}
+	if tm == nil {
+		return t, nil
 	}
-	// TODO(jba): make it impossible to provide both a view query and a schema.
-	if conf.viewQuery != "" {
-		table.View = &bq.ViewDefinition{
-			Query: conf.viewQuery,
+	if tm.Schema != nil && tm.ViewQuery != "" {
+		return nil, errors.New("bigquery: provide Schema or ViewQuery, not both")
+	}
+	t.FriendlyName = tm.Name
+	t.Description = tm.Description
+	if tm.Schema != nil {
+		t.Schema = tm.Schema.asTableSchema()
+	}
+	if tm.ViewQuery != "" {
+		if tm.UseStandardSQL && tm.UseLegacySQL {
+			return nil, errors.New("bigquery: cannot provide both UseStandardSQL and UseLegacySQL")
 		}
-		if conf.useStandardSQL {
-			table.View.UseLegacySql = false
-			table.View.ForceSendFields = append(table.View.ForceSendFields, "UseLegacySql")
+		t.View = &bq.ViewDefinition{Query: tm.ViewQuery}
+		if tm.UseLegacySQL {
+			t.View.UseLegacySql = true
+		} else {
+			t.View.UseLegacySql = false
+			t.View.ForceSendFields = append(t.View.ForceSendFields, "UseLegacySql")
 		}
-		if conf.useLegacySQL {
-			table.View.UseLegacySql = true
-		}
+	} else if tm.UseLegacySQL || tm.UseStandardSQL {
+		return nil, errors.New("bigquery: UseLegacy/StandardSQL requires ViewQuery")
 	}
-	if conf.schema != nil {
-		table.Schema = conf.schema
-	}
-	if conf.timePartitioning != nil {
-		table.TimePartitioning = &bq.TimePartitioning{
+	if tm.TimePartitioning != nil {
+		t.TimePartitioning = &bq.TimePartitioning{
 			Type:         "DAY",
-			ExpirationMs: int64(conf.timePartitioning.Expiration.Seconds() * 1000),
+			ExpirationMs: int64(tm.TimePartitioning.Expiration / time.Millisecond),
 		}
+	}
+	if !tm.ExpirationTime.IsZero() {
+		t.ExpirationTime = tm.ExpirationTime.UnixNano() / 1e6
 	}
 
-	req := s.s.Tables.Insert(conf.projectID, conf.datasetID, table).Context(ctx)
-	setClientHeader(req.Header())
-	_, err := req.Do()
-	return err
+	if tm.FullID != "" {
+		return nil, errors.New("cannot set FullID on create")
+	}
+	if tm.Type != "" {
+		return nil, errors.New("cannot set Type on create")
+	}
+	if !tm.CreationTime.IsZero() {
+		return nil, errors.New("cannot set CreationTime on create")
+	}
+	if !tm.LastModifiedTime.IsZero() {
+		return nil, errors.New("cannot set LastModifiedTime on create")
+	}
+	if tm.NumBytes != 0 {
+		return nil, errors.New("cannot set NumBytes on create")
+	}
+	if tm.NumRows != 0 {
+		return nil, errors.New("cannot set NumRows on create")
+	}
+	if tm.StreamingBuffer != nil {
+		return nil, errors.New("cannot set StreamingBuffer on create")
+	}
+	if tm.ETag != "" {
+		return nil, errors.New("cannot set ETag on create")
+	}
+	return t, nil
 }
 
 func (s *bigqueryService) getTableMetadata(ctx context.Context, projectID, datasetID, tableID string) (*TableMetadata, error) {
@@ -586,7 +611,7 @@ func bqTableToMetadata(t *bq.Table) *TableMetadata {
 		Description:      t.Description,
 		Name:             t.FriendlyName,
 		Type:             TableType(t.Type),
-		ID:               t.Id,
+		FullID:           t.Id,
 		NumBytes:         t.NumBytes,
 		NumRows:          t.NumRows,
 		ExpirationTime:   unixMillisToTime(t.ExpirationTime),
@@ -598,7 +623,8 @@ func bqTableToMetadata(t *bq.Table) *TableMetadata {
 		md.Schema = convertTableSchema(t.Schema)
 	}
 	if t.View != nil {
-		md.View = t.View.Query
+		md.ViewQuery = t.View.Query
+		md.UseLegacySQL = t.View.UseLegacySql
 	}
 	if t.TimePartitioning != nil {
 		md.TimePartitioning = &TimePartitioning{
@@ -729,21 +755,11 @@ func bqDatasetFromMetadata(dm *DatasetMetadata) (*bq.Dataset, error) {
 	if dm == nil {
 		return ds, nil
 	}
-	if dm.Name != "" {
-		ds.FriendlyName = dm.Name
-	}
-	if dm.Description != "" {
-		ds.Description = dm.Description
-	}
-	if dm.Location != "" {
-		ds.Location = dm.Location
-	}
-	if dm.DefaultTableExpiration != 0 {
-		ds.DefaultTableExpirationMs = int64(dm.DefaultTableExpiration / time.Millisecond)
-	}
-	if dm.Labels != nil {
-		ds.Labels = dm.Labels
-	}
+	ds.FriendlyName = dm.Name
+	ds.Description = dm.Description
+	ds.Location = dm.Location
+	ds.DefaultTableExpirationMs = int64(dm.DefaultTableExpiration / time.Millisecond)
+	ds.Labels = dm.Labels
 	if !dm.CreationTime.IsZero() {
 		return nil, errors.New("bigquery: Dataset.CreationTime is not writable")
 	}

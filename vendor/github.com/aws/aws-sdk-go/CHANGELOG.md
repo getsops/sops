@@ -1,3 +1,73 @@
+Release v1.12.7 (2017-10-06)
+===
+
+### Service Client Updates
+* `service/sqs`: Updates service documentation
+  * Documentation updates regarding availability of FIFO queues and miscellaneous corrections.
+
+Release v1.12.6 (2017-10-05)
+===
+
+### Service Client Updates
+* `service/redshift`: Updates service API and documentation
+  * DescribeEventSubscriptions API supports tag keys and tag values as request parameters.
+
+Release v1.12.5 (2017-10-04)
+===
+
+### Service Client Updates
+* `service/kinesisanalytics`: Updates service API and documentation
+  * Kinesis Analytics now supports schema discovery on objects in S3. Additionally, Kinesis Analytics now supports input data preprocessing through Lambda.
+* `service/route53domains`: Updates service API and documentation
+  * Added a new API that checks whether a domain name can be transferred to Amazon Route 53.
+
+### SDK Bugs
+* `service/s3/s3crypto`: Correct PutObjectRequest documentation ([#1568](https://github.com/aws/aws-sdk-go/pull/1568))
+  * s3Crypto's PutObjectRequest docstring example was using an incorrect value. Corrected the type used in the example.
+Release v1.12.4 (2017-10-03)
+===
+
+### Service Client Updates
+* `service/ec2`: Updates service API, documentation, and waiters
+  * This release includes service updates to AWS VPN.
+* `service/ssm`: Updates service API and documentation
+  * EC2 Systems Manager support for tagging SSM Documents. Also support for tag-based permissions to restrict access to SSM Documents based on these tags.
+
+Release v1.12.3 (2017-10-02)
+===
+
+### Service Client Updates
+* `service/cloudhsm`: Updates service documentation and paginators
+  * Documentation updates for CloudHSM
+
+Release v1.12.2 (2017-09-29)
+===
+
+### Service Client Updates
+* `service/appstream`: Updates service API and documentation
+  * Includes APIs for managing and accessing image builders, and deleting images.
+* `service/codebuild`: Updates service API and documentation
+  * Adding support for Building GitHub Pull Requests in AWS CodeBuild
+* `service/mturk-requester`: Updates service API and documentation
+* `service/organizations`: Updates service API and documentation
+  * This release flags the HandshakeParty structure's Type and Id fields as 'required'. They effectively were required in the past, as you received an error if you did not include them. This is now reflected at the API definition level.
+* `service/route53`: Updates service API and documentation
+  * This change allows customers to reset elements of health check.
+
+### SDK Bugs
+* `private/protocol/query`: Fix query protocol handling of nested byte slices ([#1557](https://github.com/aws/aws-sdk-go/issues/1557))
+  * Fixes the query protocol to correctly marshal nested []byte values of API operations.
+* `service/s3`: Fix PutObject and UploadPart API to include ContentMD5 field ([#1559](https://github.com/aws/aws-sdk-go/pull/1559))
+  * Fixes the SDK's S3 PutObject and UploadPart API code generation to correctly render the ContentMD5 field into the associated input types for these two API operations.
+  * Fixes [#1553](https://github.com/aws/aws-sdk-go/pull/1553)
+Release v1.12.1 (2017-09-27)
+===
+
+### Service Client Updates
+* `aws/endpoints`: Updated Regions and Endpoints metadata.
+* `service/pinpoint`: Updates service API and documentation
+  * Added two new push notification channels: Amazon Device Messaging (ADM) and, for push notification support in China, Baidu Cloud Push. Added support for APNs auth via .p8 key file. Added operation for direct message deliveries to user IDs, enabling you to message an individual user on multiple endpoints.
+
 Release v1.12.0 (2017-09-26)
 ===
 

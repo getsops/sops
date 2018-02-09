@@ -41,7 +41,7 @@ var (
 func main() {
 	flag.Parse()
 	p := strconv.Itoa(*port)
-	lis, err := net.Listen("tcp", "localhost:"+p)
+	lis, err := net.Listen("tcp", ":"+p)
 	if err != nil {
 		grpclog.Fatalf("failed to listen: %v", err)
 	}

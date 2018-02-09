@@ -3064,7 +3064,8 @@
         "DocumentType":{"shape":"DocumentType"},
         "SchemaVersion":{"shape":"DocumentSchemaVersion"},
         "LatestVersion":{"shape":"DocumentVersion"},
-        "DefaultVersion":{"shape":"DocumentVersion"}
+        "DefaultVersion":{"shape":"DocumentVersion"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "DocumentFilter":{
@@ -3118,7 +3119,8 @@
         "PlatformTypes":{"shape":"PlatformTypeList"},
         "DocumentVersion":{"shape":"DocumentVersion"},
         "DocumentType":{"shape":"DocumentType"},
-        "SchemaVersion":{"shape":"DocumentSchemaVersion"}
+        "SchemaVersion":{"shape":"DocumentSchemaVersion"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "DocumentIdentifierList":{
@@ -3127,6 +3129,33 @@
         "shape":"DocumentIdentifier",
         "locationName":"DocumentIdentifier"
       }
+    },
+    "DocumentKeyValuesFilter":{
+      "type":"structure",
+      "members":{
+        "Key":{"shape":"DocumentKeyValuesFilterKey"},
+        "Values":{"shape":"DocumentKeyValuesFilterValues"}
+      }
+    },
+    "DocumentKeyValuesFilterKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "DocumentKeyValuesFilterList":{
+      "type":"list",
+      "member":{"shape":"DocumentKeyValuesFilter"},
+      "max":5,
+      "min":0
+    },
+    "DocumentKeyValuesFilterValue":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
+    "DocumentKeyValuesFilterValues":{
+      "type":"list",
+      "member":{"shape":"DocumentKeyValuesFilterValue"}
     },
     "DocumentLimitExceeded":{
       "type":"structure",
@@ -4631,6 +4660,7 @@
       "type":"structure",
       "members":{
         "DocumentFilterList":{"shape":"DocumentFilterList"},
+        "Filters":{"shape":"DocumentKeyValuesFilterList"},
         "MaxResults":{
           "shape":"MaxResults",
           "box":true
@@ -6010,9 +6040,11 @@
     "ResourceTypeForTagging":{
       "type":"string",
       "enum":[
+        "Document",
         "ManagedInstance",
         "MaintenanceWindow",
-        "Parameter"
+        "Parameter",
+        "PatchBaseline"
       ]
     },
     "ResponseCode":{"type":"integer"},

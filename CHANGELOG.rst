@@ -1,6 +1,44 @@
 Changelog
 =========
 
+3.0.1
+-----
+
+* Don't consider io.EOF returned by Decoder.Token as error
+
+* add IsBinary: true to FileHints when encoding with crypto/openpgp 
+
+* some improvements to error messages
+
+3.0.0
+-----
+
+* Shamir secret sharing scheme support allows SOPS to require multiple master
+  keys to access a data key and decrypt a file. See `sops groups -help` and the
+  documentation in README.
+
+* Keyservice to forward access to a local master key on a socket, similar to
+  gpg-agent. See `sops keyservice --help` and the documentation in README.
+
+* Encrypt comments by default
+
+* Support for Google Compute Platform KMS
+
+* Refactor of the store logic to separate the internal representation SOPS
+  has of files from the external representation used in JSON and YAML files
+
+* Reencoding of versions as string on sops 1.X files.
+  **WARNING** this change breaks backward compatibility.
+  SOPS shows an error message with instructions on how to solve
+  this if it happens.
+  
+* Added command to reconfigure the keys used to encrypt/decrypt a file based on the .sops.yaml config file
+
+* Retrieve missing PGP keys from gpg.mozilla.org
+
+* Improved error messages for errors when decrypting files
+
+
 2.0.0
 -----
 

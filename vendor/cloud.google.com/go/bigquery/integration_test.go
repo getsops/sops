@@ -98,7 +98,10 @@ func TestIntegration_TableCreate(t *testing.T) {
 	schema := Schema{
 		{Name: "rec", Type: RecordFieldType, Schema: Schema{}},
 	}
-	err := table.Create(context.Background(), schema, TableExpiration(time.Now().Add(5*time.Minute)))
+	err := table.Create(context.Background(), &TableMetadata{
+		Schema:         schema,
+		ExpirationTime: time.Now().Add(5 * time.Minute),
+	})
 	if err == nil {
 		t.Fatal("want error, got nil")
 	}
@@ -117,8 +120,12 @@ func TestIntegration_TableCreateView(t *testing.T) {
 
 	// Test that standard SQL views work.
 	view := dataset.Table("t_view_standardsql")
-	query := ViewQuery(fmt.Sprintf("SELECT APPROX_COUNT_DISTINCT(name) FROM `%s.%s.%s`", dataset.ProjectID, dataset.DatasetID, table.TableID))
-	err := view.Create(context.Background(), UseStandardSQL(), query)
+	query := fmt.Sprintf("SELECT APPROX_COUNT_DISTINCT(name) FROM `%s.%s.%s`",
+		dataset.ProjectID, dataset.DatasetID, table.TableID)
+	err := view.Create(context.Background(), &TableMetadata{
+		ViewQuery:      query,
+		UseStandardSQL: true,
+	})
 	if err != nil {
 		t.Fatalf("table.create: Did not expect an error, got: %v", err)
 	}
@@ -138,8 +145,8 @@ func TestIntegration_TableMetadata(t *testing.T) {
 		t.Fatal(err)
 	}
 	// TODO(jba): check md more thorougly.
-	if got, want := md.ID, fmt.Sprintf("%s:%s.%s", dataset.ProjectID, dataset.DatasetID, table.TableID); got != want {
-		t.Errorf("metadata.ID: got %q, want %q", got, want)
+	if got, want := md.FullID, fmt.Sprintf("%s:%s.%s", dataset.ProjectID, dataset.DatasetID, table.TableID); got != want {
+		t.Errorf("metadata.FullID: got %q, want %q", got, want)
 	}
 	if got, want := md.Type, RegularTable; got != want {
 		t.Errorf("metadata.Type: got %v, want %v", got, want)
@@ -163,7 +170,11 @@ func TestIntegration_TableMetadata(t *testing.T) {
 	}
 	for i, c := range partitionCases {
 		table := dataset.Table(fmt.Sprintf("t_metadata_partition_%v", i))
-		err = table.Create(context.Background(), schema, c.timePartitioning, TableExpiration(time.Now().Add(5*time.Minute)))
+		err = table.Create(context.Background(), &TableMetadata{
+			Schema:           schema,
+			TimePartitioning: &c.timePartitioning,
+			ExpirationTime:   time.Now().Add(5 * time.Minute),
+		})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -981,6 +992,7 @@ func TestIntegration_LegacyQuery(t *testing.T) {
 	}
 	for _, c := range testCases {
 		q := client.Query(c.query)
+		q.UseLegacySQL = true
 		it, err := q.Read(ctx)
 		if err != nil {
 			t.Fatal(err)
@@ -1090,11 +1102,11 @@ var useLegacySqlTests = []struct {
 }{
 	{t: legacyName, std: false, legacy: true, err: false},
 	{t: legacyName, std: true, legacy: false, err: true},
-	{t: legacyName, std: false, legacy: false, err: false}, // legacy SQL is default
+	{t: legacyName, std: false, legacy: false, err: true}, // standard SQL is default
 	{t: legacyName, std: true, legacy: true, err: true},
 	{t: stdName, std: false, legacy: true, err: true},
 	{t: stdName, std: true, legacy: false, err: false},
-	{t: stdName, std: false, legacy: false, err: true}, // legacy SQL is default
+	{t: stdName, std: false, legacy: false, err: false}, // standard SQL is default
 	{t: stdName, std: true, legacy: true, err: true},
 }
 
@@ -1119,7 +1131,7 @@ func TestIntegration_QueryUseLegacySQL(t *testing.T) {
 }
 
 func TestIntegration_TableUseLegacySQL(t *testing.T) {
-	// Test the UseLegacySQL and UseStandardSQL options for CreateTable.
+	// Test UseLegacySQL and UseStandardSQL for Table.Create.
 	if client == nil {
 		t.Skip("Integration tests skipped")
 	}
@@ -1128,15 +1140,12 @@ func TestIntegration_TableUseLegacySQL(t *testing.T) {
 	defer table.Delete(ctx)
 	for i, test := range useLegacySqlTests {
 		view := dataset.Table(fmt.Sprintf("t_view_%d", i))
-		vq := ViewQuery(fmt.Sprintf("SELECT word from %s", test.t))
-		opts := []CreateTableOption{vq}
-		if test.std {
-			opts = append(opts, UseStandardSQL())
+		tm := &TableMetadata{
+			ViewQuery:      fmt.Sprintf("SELECT word from %s", test.t),
+			UseStandardSQL: test.std,
+			UseLegacySQL:   test.legacy,
 		}
-		if test.legacy {
-			opts = append(opts, UseLegacySQL())
-		}
-		err := view.Create(ctx, opts...)
+		err := view.Create(ctx, tm)
 		gotErr := err != nil
 		if gotErr && !test.err {
 			t.Errorf("%+v:\nunexpected error: %v", test, err)
@@ -1183,7 +1192,10 @@ func TestIntegration_ListJobs(t *testing.T) {
 func newTable(t *testing.T, s Schema) *Table {
 	name := fmt.Sprintf("t%d", time.Now().UnixNano())
 	table := dataset.Table(name)
-	err := table.Create(context.Background(), s, TableExpiration(testTableExpiration))
+	err := table.Create(context.Background(), &TableMetadata{
+		Schema:         s,
+		ExpirationTime: testTableExpiration,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}

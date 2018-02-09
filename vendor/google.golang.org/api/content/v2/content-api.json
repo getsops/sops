@@ -1,12 +1,12 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/e0JuGPKREEjV0KDWNAvNTkBRhXc\"",
+ "etag": "\"YWOzh2SDasdU84ArJnpYek-OMdg/dPMCZ2Ey4YVlnyiRa2uPlyOUPp4\"",
  "discoveryVersion": "v1",
  "id": "content:v2",
  "name": "content",
  "canonicalName": "Shopping Content",
  "version": "v2",
- "revision": "20170926",
+ "revision": "20170928",
  "title": "Content API for Shopping",
  "description": "Manages product items, inventory, and Merchant Center accounts for Google Shopping.",
  "ownerDomain": "google.com",
@@ -1860,6 +1860,10 @@
      "items": {
       "$ref": "OrderCancellation"
      }
+    },
+    "channelType": {
+     "type": "string",
+     "description": "The channel type of the order: \"purchaseOnGoogle\" or \"googleExpress\"."
     },
     "id": {
      "type": "string",
@@ -4600,8 +4604,8 @@
       },
       "force": {
        "type": "boolean",
-       "description": "Flag to delete sub-accounts with products. The default value of false will become active on September 28, 2017.",
-       "default": "true",
+       "description": "Flag to delete sub-accounts with products. The default value is false.",
+       "default": "false",
        "location": "query"
       },
       "merchantId": {

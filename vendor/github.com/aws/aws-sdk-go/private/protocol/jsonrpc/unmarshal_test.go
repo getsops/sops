@@ -24,7 +24,6 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 	"github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil"
 	"github.com/aws/aws-sdk-go/private/util"
-	"github.com/stretchr/testify/assert"
 )
 
 var _ bytes.Buffer // always import bytes
@@ -1109,18 +1108,38 @@ func TestOutputService1ProtocolTestScalarMembersCase1(t *testing.T) {
 	// unmarshal response
 	jsonrpc.UnmarshalMeta(req)
 	jsonrpc.Unmarshal(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
 
 	// assert response
-	assert.NotNil(t, out) // ensure out variable is used
-	assert.Equal(t, "a", *out.Char)
-	assert.Equal(t, 1.3, *out.Double)
-	assert.Equal(t, false, *out.FalseBool)
-	assert.Equal(t, 1.2, *out.Float)
-	assert.Equal(t, int64(200), *out.Long)
-	assert.Equal(t, int64(123), *out.Num)
-	assert.Equal(t, "myname", *out.Str)
-	assert.Equal(t, true, *out.TrueBool)
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+	if e, a := "a", *out.Char; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := 1.3, *out.Double; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := false, *out.FalseBool; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := 1.2, *out.Float; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := int64(200), *out.Long; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := int64(123), *out.Num; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "myname", *out.Str; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := true, *out.TrueBool; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 
 }
 
@@ -1136,12 +1155,20 @@ func TestOutputService2ProtocolTestBlobMembersCase1(t *testing.T) {
 	// unmarshal response
 	jsonrpc.UnmarshalMeta(req)
 	jsonrpc.Unmarshal(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
 
 	// assert response
-	assert.NotNil(t, out) // ensure out variable is used
-	assert.Equal(t, "hi!", string(out.BlobMember))
-	assert.Equal(t, "there!", string(out.StructMember.Foo))
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+	if e, a := "hi!", string(out.BlobMember); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "there!", string(out.StructMember.Foo); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 
 }
 
@@ -1157,12 +1184,20 @@ func TestOutputService3ProtocolTestTimestampMembersCase1(t *testing.T) {
 	// unmarshal response
 	jsonrpc.UnmarshalMeta(req)
 	jsonrpc.Unmarshal(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
 
 	// assert response
-	assert.NotNil(t, out) // ensure out variable is used
-	assert.Equal(t, time.Unix(1.398796238e+09, 0).UTC().String(), out.StructMember.Foo.String())
-	assert.Equal(t, time.Unix(1.398796238e+09, 0).UTC().String(), out.TimeMember.String())
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+	if e, a := time.Unix(1.398796238e+09, 0).UTC().String(), out.StructMember.Foo.String(); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := time.Unix(1.398796238e+09, 0).UTC().String(), out.TimeMember.String(); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 
 }
 
@@ -1178,12 +1213,20 @@ func TestOutputService4ProtocolTestListsCase1(t *testing.T) {
 	// unmarshal response
 	jsonrpc.UnmarshalMeta(req)
 	jsonrpc.Unmarshal(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
 
 	// assert response
-	assert.NotNil(t, out) // ensure out variable is used
-	assert.Equal(t, "a", *out.ListMember[0])
-	assert.Equal(t, "b", *out.ListMember[1])
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+	if e, a := "a", *out.ListMember[0]; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "b", *out.ListMember[1]; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 
 }
 
@@ -1199,16 +1242,32 @@ func TestOutputService4ProtocolTestListsCase2(t *testing.T) {
 	// unmarshal response
 	jsonrpc.UnmarshalMeta(req)
 	jsonrpc.Unmarshal(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
 
 	// assert response
-	assert.NotNil(t, out) // ensure out variable is used
-	assert.Equal(t, "a", *out.ListMember[0])
-	assert.Nil(t, out.ListMember[1])
-	assert.Nil(t, out.ListMemberMap[1])
-	assert.Nil(t, out.ListMemberMap[2])
-	assert.Nil(t, out.ListMemberStruct[1])
-	assert.Nil(t, out.ListMemberStruct[2])
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+	if e, a := "a", *out.ListMember[0]; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e := out.ListMember[1]; e != nil {
+		t.Errorf("expect nil, got %v", e)
+	}
+	if e := out.ListMemberMap[1]; e != nil {
+		t.Errorf("expect nil, got %v", e)
+	}
+	if e := out.ListMemberMap[2]; e != nil {
+		t.Errorf("expect nil, got %v", e)
+	}
+	if e := out.ListMemberStruct[1]; e != nil {
+		t.Errorf("expect nil, got %v", e)
+	}
+	if e := out.ListMemberStruct[2]; e != nil {
+		t.Errorf("expect nil, got %v", e)
+	}
 
 }
 
@@ -1224,14 +1283,26 @@ func TestOutputService5ProtocolTestMapsCase1(t *testing.T) {
 	// unmarshal response
 	jsonrpc.UnmarshalMeta(req)
 	jsonrpc.Unmarshal(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
 
 	// assert response
-	assert.NotNil(t, out) // ensure out variable is used
-	assert.Equal(t, int64(1), *out.MapMember["a"][0])
-	assert.Equal(t, int64(2), *out.MapMember["a"][1])
-	assert.Equal(t, int64(3), *out.MapMember["b"][0])
-	assert.Equal(t, int64(4), *out.MapMember["b"][1])
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+	if e, a := int64(1), *out.MapMember["a"][0]; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := int64(2), *out.MapMember["a"][1]; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := int64(3), *out.MapMember["b"][0]; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := int64(4), *out.MapMember["b"][1]; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 
 }
 
@@ -1247,9 +1318,13 @@ func TestOutputService6ProtocolTestIgnoresExtraDataCase1(t *testing.T) {
 	// unmarshal response
 	jsonrpc.UnmarshalMeta(req)
 	jsonrpc.Unmarshal(req)
-	assert.NoError(t, req.Error)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
 
 	// assert response
-	assert.NotNil(t, out) // ensure out variable is used
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
 
 }

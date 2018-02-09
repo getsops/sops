@@ -37,7 +37,7 @@ var (
 func main() {
 	flag.Parse()
 	go func() {
-		lis, err := net.Listen("tcp", "localhost:0")
+		lis, err := net.Listen("tcp", ":0")
 		if err != nil {
 			grpclog.Fatalf("Failed to listen: %v", err)
 		}
