@@ -22,13 +22,11 @@ func init() {
 		log.WithField("error", err).Debugf("Error reading config")
 		return
 	}
-
 	var conf config
 	err = yaml.Unmarshal(confBytes, &conf)
 	if err != nil {
 		log.WithField("error", err).Panicf("Error unmarshalling config")
 	}
-
 	// If we are running test, then don't create auditors.
 	// This is pretty hacky, but doing it The Right Way would require
 	// restructuring SOPS to use dependency injection instead of just using
@@ -36,7 +34,6 @@ func init() {
 	if flag.Lookup("test.v") != nil {
 		return
 	}
-
 	for _, pgConf := range conf.Backends.Postgres {
 		auditors = append(auditors, NewPostgresAuditor(pgConf.ConnStr))
 	}
