@@ -74,6 +74,10 @@ type EncryptEvent struct {
 	File string
 }
 
+type RotateEvent struct {
+	File string
+}
+
 type PostgresAuditor struct {
 	DB *sql.DB
 }
@@ -118,6 +122,18 @@ func (p *PostgresAuditor) Handle(event interface{}) {
 			log.Fatalf("Error getting current user for auditing: %s", err)
 		}
 		_, err = p.DB.Exec("INSERT INTO encrypt_event (username, file) VALUES ($1, $2)", u.Username, event.File)
+		if err != nil {
+			log.Fatalf("Failed to insert audit record: %s", err)
+		}
+	case RotateEvent:
+		// Save the event to the database
+		log.WithField("file", event.File).
+			Debug("Saving rotate event to database")
+		u, err := user.Current()
+		if err != nil {
+			log.Fatalf("Error getting current user for auditing: %s", err)
+		}
+		_, err = p.DB.Exec("INSERT INTO rotate_event (username, file) VALUES ($1, $2)", u.Username, event.File)
 		if err != nil {
 			log.Fatalf("Failed to insert audit record: %s", err)
 		}
