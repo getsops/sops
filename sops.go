@@ -152,7 +152,7 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 	case []interface{}:
 		position := path[0].(int)
 		if len(path) == 1 {
-			if position > len(branch) {
+			if position >= len(branch) {
 				return append(branch, value)
 			} else {
 				branch[position] = value
