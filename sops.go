@@ -99,21 +99,80 @@ type TreeItem struct {
 // TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
 type TreeBranch []TreeItem
 
-// InsertOrReplaceValue replaces the value under the provided key with the newValue provided,
-// or inserts a new key-value if it didn't exist already.
-func (branch TreeBranch) InsertOrReplaceValue(key interface{}, newValue interface{}) TreeBranch {
-	replaced := false
-	for i, kv := range branch {
-		if kv.Key == key {
-			branch[i].Value = newValue
-			replaced = true
-			break
+func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
+	switch component := path[0].(type) {
+	case int:
+		if len(path) == 1 {
+			return []interface{}{
+				leaf,
+			}
+		} else {
+			return []interface{} {
+				valueFromPathAndLeaf(path[1:], leaf),
+			}
+		}
+	default:
+		if len(path) == 1 {
+			return TreeBranch{
+				TreeItem{
+					Key: component,
+					Value: leaf,
+				},
+			}
+		} else {
+			return TreeBranch{
+				TreeItem{
+					Key: component,
+					Value: valueFromPathAndLeaf(path[1:], leaf),
+				},
+			}
 		}
 	}
-	if !replaced {
-		return append(branch, TreeItem{Key: key, Value: newValue})
+}
+
+func set(branch interface{}, path []interface{}, value interface{}) interface{} {
+	switch branch := branch.(type) {
+	case TreeBranch:
+		for i, item := range branch {
+			if item.Key == path[0] {
+				if len(path) == 1 {
+					branch[i].Value = value
+				} else {
+					branch[i].Value = set(item.Value, path[1:], value)
+				}
+				return branch
+			}
+		}
+		// Not found, need to add the next path entry to the branch
+		if len(path) == 1 {
+			return append(branch, TreeItem{Key: path[0], Value: value})
+		} else {
+			return valueFromPathAndLeaf(path, value)
+		}
+	case []interface{}:
+		position := path[0].(int)
+		if len(path) == 1 {
+			if position > len(branch) {
+				return append(branch, value)
+			} else {
+				branch[position] = value
+			}
+			return branch
+		} else {
+			if position >= len(branch) {
+				branch = append(branch, valueFromPathAndLeaf(path[1:], value))
+			} else {
+				branch[position] = set(branch[position], path[1:], value)
+			}
+			return branch
+		}
+	default:
+		return valueFromPathAndLeaf(path, value)
 	}
-	return branch
+}
+
+func (branch TreeBranch) Set(path []interface{}, value interface{}) (TreeBranch) {
+	return set(branch, path, value).(TreeBranch)
 }
 
 // Tree is the data structure used by sops to represent documents internally
