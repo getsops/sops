@@ -248,74 +248,6 @@ func TestTruncateTree(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-func TestInsertOrReplaceValue(t *testing.T) {
-	tree := TreeBranch{
-		TreeItem{
-			Key:   "foo",
-			Value: 2,
-		},
-		TreeItem{
-			Key: "bar",
-			Value: TreeBranch{
-				TreeItem{
-					Key: "foobar",
-					Value: []int{
-						1,
-						2,
-						3,
-						4,
-					},
-				},
-			},
-		},
-	}
-	tree = tree.InsertOrReplaceValue("foo", 57)
-	assert.Equal(t, tree, TreeBranch{
-		TreeItem{
-			Key:   "foo",
-			Value: 57,
-		},
-		TreeItem{
-			Key: "bar",
-			Value: TreeBranch{
-				TreeItem{
-					Key: "foobar",
-					Value: []int{
-						1,
-						2,
-						3,
-						4,
-					},
-				},
-			},
-		},
-	})
-	tree = tree.InsertOrReplaceValue("foobar", 100)
-	assert.Equal(t, tree, TreeBranch{
-		TreeItem{
-			Key:   "foo",
-			Value: 57,
-		},
-		TreeItem{
-			Key: "bar",
-			Value: TreeBranch{
-				TreeItem{
-					Key: "foobar",
-					Value: []int{
-						1,
-						2,
-						3,
-						4,
-					},
-				},
-			},
-		},
-		TreeItem{
-			Key:   "foobar",
-			Value: 100,
-		},
-	})
-}
 
 func TestEncryptComments(t *testing.T) {
 	tree := Tree{
@@ -384,4 +316,133 @@ func TestDecryptUnencryptedComments(t *testing.T) {
 	}
 	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
 	assert.Equal(t, "error", tree.Branch[0].Key.(Comment).Value)
+}
+
+func TestSetNewKey(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: TreeBranch{
+						TreeItem{
+							Key: "baz",
+							Value: "foobar",
+						},
+					},
+				},
+			},
+		},
+	}
+	set := branch.Set([]interface{}{"foo", "bar", "foo"}, "hello")
+	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[1].Value)
+}
+
+func TestSetArrayDeepNew(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				"one",
+				"two",
+			},
+		},
+	}
+	set := branch.Set([]interface{}{"foo", 2, "bar"}, "hello")
+	assert.Equal(t, "hello", set[0].Value.([]interface{})[2].(TreeBranch)[0].Value)
+}
+
+func TestSetNewKeyDeep(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: "bar",
+		},
+	}
+	set := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
+}
+
+
+func TestSetNewKeyOnEmptyBranch(t *testing.T) {
+	branch := TreeBranch{}
+	set := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
+}
+
+func TestSetArray(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				"one",
+				"two",
+				"three",
+			},
+		},
+	}
+	set := branch.Set([]interface{}{"foo", 0}, "uno")
+	assert.Equal(t, "uno", set[0].Value.([]interface{})[0])
+}
+
+
+func TestSetArrayNew(t *testing.T) {
+	branch := TreeBranch{}
+	set := branch.Set([]interface{}{"foo", 0, 0}, "uno")
+	assert.Equal(t, "uno", set[0].Value.([]interface{})[0].([]interface{})[0])
+}
+
+func TestSetExisting(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: "foobar",
+		},
+	}
+	set := branch.Set([]interface{}{"foo"}, "bar")
+	assert.Equal(t, "bar", set[0].Value)
+}
+
+func TestSetArrayLeafNewItem(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "array",
+			Value: []interface{}{},
+		},
+	}
+	set := branch.Set([]interface{}{"array", 2}, "hello")
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "array",
+			Value: []interface{}{
+				"hello",
+			},
+		},
+	}, set)
+}
+
+func TestSetArrayNonLeaf(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "array",
+			Value: []interface{}{
+				1,
+			},
+		},
+	}
+	set := branch.Set([]interface{}{"array", 0, "hello"}, "hello")
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "array",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "hello",
+						Value: "hello",
+					},
+				},
+			},
+		},
+	}, set)
 }
