@@ -139,7 +139,12 @@ func (p *parser) document() *node {
 	n.anchors = make(map[string]*node)
 	p.doc = n
 	p.skip()
-	n.children = append(n.children, p.parse())
+	next := p.parse()
+	// Chomp all comments, as they can't be part of the top-level YAML structure
+	for next.kind == commentNode {
+		next = p.parse()
+	}
+	n.children = append(n.children, next)
 	if p.event.typ != yaml_DOCUMENT_END_EVENT {
 		panic("expected end of document event but got " + strconv.Itoa(int(p.event.typ)))
 	}
