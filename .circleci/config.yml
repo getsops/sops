@@ -1,21 +1,71 @@
 version: 2
 jobs:
-  build:
-    working_directory: /go/src/go.mozilla.org/sops
+  build_and_push:
     docker:
-      - image: circleci/golang:1.8
+      - image: ubuntu:16.04
+    working_directory: ~/sops
     steps:
       - checkout
-      - setup_remote_docker
+
       - run:
-          name: Build containers
+          name: Install Docker
           command: |
-            docker build -t mozilla/sops .
-            docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
+            set -x
+            VER="17.09.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+
+      # Required for building docker images
+      - setup_remote_docker:
+          version: 17.09.0-ce
+
       - run:
-          name: Push containers
+          name: Create version.json
+          working_directory: ~/sops
           command: |
+            # create a version.json per https://github.com/mozilla-services/Dockerflow/blob/master/docs/version_object.md
+            printf '{"commit":"%s","version":"%s","source":"https://github.com/%s/%s","build":"%s"}\n' \
+            "$CIRCLE_SHA1" \
+            "$CIRCLE_TAG" \
+            "$CIRCLE_PROJECT_USERNAME" \
+            "$CIRCLE_PROJECT_REPONAME" \
+            "$CIRCLE_BUILD_URL" > version.json
+
+      - run:
+          name: Build Docker images
+          working_directory: ~/sops
+          command: |
+            docker info
+            docker build -t sops:build .
+
+      - run:
+          name: Push to Dockerhub
+          working_directory: ~/sops
+          command: |
+            # set DOCKER_DEPLOY=true in Circle UI to push to Dockerhub
+            DOCKER_DEPLOY="${DOCKER_DEPLOY:-false}"
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
-                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
+              bin/ci/deploy-dockerhub.sh latest
             fi
+            if [ -n "${CIRCLE_TAG}" ]; then
+              bin/ci/deploy-dockerhub.sh "$CIRCLE_TAG"
+            fi
+
+workflows:
+  version: 2
+
+  # workflow jobs are _not_ run in tag builds by default
+  # we use filters to whitelist jobs that should be run for tags
+
+  # workflow jobs are run in _all_ branch builds by default
+  # we use filters to blacklist jobs that shouldn't be run for a branch
+
+  # see: https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+
+  build-and-push:
+    jobs:
+      - build_and_push:
+          filters:
+            tags:
+              only: /.*/
