@@ -26,6 +26,9 @@ var unmarshalTests = []struct {
 		"v: hi",
 		map[string]string{"v": "hi"},
 	}, {
+		"#hi\nv: hi",
+		map[string]string{"v": "hi"},
+	}, {
 		"v: hi", map[string]interface{}{"v": "hi"},
 	}, {
 		"v: true",

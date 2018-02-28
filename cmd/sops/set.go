@@ -40,14 +40,7 @@ func set(opts setOpts) ([]byte, error) {
 	}
 
 	// Set the value
-	key := opts.TreePath[len(opts.TreePath)-1]
-	path := opts.TreePath[:len(opts.TreePath)-1]
-	parent, err := tree.Branch.Truncate(path)
-	if err != nil {
-		return nil, common.NewExitError("Could not truncate tree to the provided path", codes.ErrorInvalidSetFormat)
-	}
-	branch := parent.(sops.TreeBranch)
-	tree.Branch = branch.InsertOrReplaceValue(key, opts.Value)
+	tree.Branch = tree.Branch.Set(opts.TreePath, opts.Value)
 
 	err = common.EncryptTree(common.EncryptTreeOpts{
 		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
