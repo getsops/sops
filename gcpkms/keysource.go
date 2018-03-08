@@ -43,7 +43,7 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
-		log.WithField("resourceID", key.ResourceID).Warn("Encryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
 		return fmt.Errorf("Cannot create GCP KMS service: %v", err)
 	}
 	req := &cloudkms.EncryptRequest{
@@ -51,10 +51,10 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Encrypt(key.ResourceID, req).Do()
 	if err != nil {
-		log.WithField("resourceID", key.ResourceID).Warn("Encryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
 		return fmt.Errorf("Failed to call GCP KMS encryption service: %v", err)
 	}
-	log.WithField("resourceID", key.ResourceID).Warn("Encryption succeeded")
+	log.WithField("resourceID", key.ResourceID).Info("Encryption succeeded")
 	key.EncryptedKey = resp.Ciphertext
 	return nil
 }
@@ -71,7 +71,7 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
-		log.WithField("resourceID", key.ResourceID).Warn("Decryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, fmt.Errorf("Cannot create GCP KMS service: %v", err)
 	}
 
@@ -80,15 +80,15 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Decrypt(key.ResourceID, req).Do()
 	if err != nil {
-		log.WithField("resourceID", key.ResourceID).Warn("Decryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
 	}
 	encryptedKey, err := base64.StdEncoding.DecodeString(resp.Plaintext)
 	if err != nil {
-		log.WithField("resourceID", key.ResourceID).Warn("Decryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, err
 	}
-	log.WithField("resourceID", key.ResourceID).Warn("Decryption succeeded")
+	log.WithField("resourceID", key.ResourceID).Info("Decryption succeeded")
 	return encryptedKey, nil
 }
 

@@ -32,4 +32,10 @@ func NewLogger(name string) *logrus.Logger {
 	return log
 }
 
+func SetLevel(level logrus.Level) {
+	for k := range Loggers {
+		Loggers[k].SetLevel(level)
+	}
+}
+
 var Loggers map[string]*logrus.Logger
