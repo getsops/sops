@@ -28,8 +28,9 @@ func rotate(opts rotateOpts) ([]byte, error) {
 		return nil, err
 	}
 
-	audit.SubmitEvent(audit.RotateEvent{
-		File: tree.FilePath,
+	audit.SubmitEvent(audit.AuditEvent{
+		File:   tree.FilePath,
+		Action: "rotate",
 	})
 
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
