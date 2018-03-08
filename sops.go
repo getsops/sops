@@ -286,9 +286,8 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 
 // Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
-	audit.SubmitEvent(audit.AuditEvent{
-		File:   tree.FilePath,
-		Action: "encrypt",
+	audit.SubmitEvent(audit.EncryptEvent{
+		File: tree.FilePath,
 	})
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
@@ -325,9 +324,8 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
-	audit.SubmitEvent(audit.AuditEvent{
-		File:   tree.FilePath,
-		Action: "decrypt",
+	audit.SubmitEvent(audit.DecryptEvent{
+		File: tree.FilePath,
 	})
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {

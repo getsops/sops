@@ -66,9 +66,16 @@ type Auditor interface {
 	Handle(event interface{})
 }
 
-type AuditEvent struct {
-	File   string
-	Action string
+type DecryptEvent struct {
+	File string
+}
+
+type EncryptEvent struct {
+	File string
+}
+
+type RotateEvent struct {
+	File string
 }
 
 type PostgresAuditor struct {
@@ -97,22 +104,33 @@ func (p *PostgresAuditor) Handle(event interface{}) {
 	if err != nil {
 		log.Fatalf("Error getting current user for auditing: %s", err)
 	}
-
 	switch event := event.(type) {
-	case AuditEvent:
+	case DecryptEvent:
 		// Save the event to the database
 		log.WithField("file", event.File).
-			Debugf("Saving %s event to database", event.Action)
-		_, err = p.DB.Exec(`
-			INSERT INTO audit_event (action, file, username)
-			VALUES ($1, $2, $3)
-		`, event.Action, event.File, u.Username)
+			Debug("Saving decrypt event to database")
+		_, err = p.DB.Exec("INSERT INTO decrypt_event (username, file) VALUES ($1, $2)", u.Username, event.File)
+		if err != nil {
+			log.Fatalf("Failed to insert audit record: %s", err)
+		}
+	case EncryptEvent:
+		// Save the event to the database
+		log.WithField("file", event.File).
+			Debug("Saving encrypt event to database")
+		_, err = p.DB.Exec("INSERT INTO encrypt_event (username, file) VALUES ($1, $2)", u.Username, event.File)
+		if err != nil {
+			log.Fatalf("Failed to insert audit record: %s", err)
+		}
+	case RotateEvent:
+		// Save the event to the database
+		log.WithField("file", event.File).
+			Debug("Saving rotate event to database")
+		_, err = p.DB.Exec("INSERT INTO rotate_event (username, file) VALUES ($1, $2)", u.Username, event.File)
 		if err != nil {
 			log.Fatalf("Failed to insert audit record: %s", err)
 		}
 	default:
 		log.WithField("type", fmt.Sprintf("%T", event)).
 			Info("Received unknown event")
-		return
 	}
 }
