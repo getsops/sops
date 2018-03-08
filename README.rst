@@ -621,7 +621,8 @@ the role :code:`sops` is :code:`sops`. You should change this password.
 Once you have created the database, you have to tell SOPS how to connect to it.
 Because we don't want users of SOPS to be able to control auditing, the audit
 configuration file location is not configurable, and must be at
-:code:`/etc/sops/audit.yaml`
+:code:`/etc/sops/audit.yaml`. This file should have strict permissions such
+that only the root user can modify it.
 
 For example, to enable auditing to a PostgreSQL database named :code:`sops`
 running on localhost, using the user :code:`sops` and the password :code:`sops`,

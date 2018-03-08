@@ -108,7 +108,7 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 				leaf,
 			}
 		} else {
-			return []interface{} {
+			return []interface{}{
 				valueFromPathAndLeaf(path[1:], leaf),
 			}
 		}
@@ -116,14 +116,14 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 		if len(path) == 1 {
 			return TreeBranch{
 				TreeItem{
-					Key: component,
+					Key:   component,
 					Value: leaf,
 				},
 			}
 		} else {
 			return TreeBranch{
 				TreeItem{
-					Key: component,
+					Key:   component,
 					Value: valueFromPathAndLeaf(path[1:], leaf),
 				},
 			}
@@ -172,7 +172,7 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 	}
 }
 
-func (branch TreeBranch) Set(path []interface{}, value interface{}) (TreeBranch) {
+func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 	return set(branch, path, value).(TreeBranch)
 }
 
@@ -286,6 +286,9 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 
 // Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
+	audit.SubmitEvent(audit.EncryptEvent{
+		File: tree.FilePath,
+	})
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		// Only add to MAC if not a comment
@@ -315,15 +318,15 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
-	audit.SubmitEvent(audit.EncryptEvent{
-		File: tree.FilePath,
-	})
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
 // Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
+	audit.SubmitEvent(audit.DecryptEvent{
+		File: tree.FilePath,
+	})
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		encrypted := true
@@ -369,9 +372,6 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
-	audit.SubmitEvent(audit.DecryptEvent{
-		File: tree.FilePath,
-	})
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 

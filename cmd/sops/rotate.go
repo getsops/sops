@@ -23,6 +23,10 @@ type rotateOpts struct {
 }
 
 func rotate(opts rotateOpts) ([]byte, error) {
+	audit.SubmitEvent(audit.RotateEvent{
+		File: tree.FilePath,
+	})
+
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
@@ -70,8 +74,5 @@ func rotate(opts rotateOpts) ([]byte, error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
-	audit.SubmitEvent(audit.RotateEvent{
-		File: tree.FilePath,
-	})
 	return encryptedFile, nil
 }
