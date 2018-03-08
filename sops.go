@@ -335,7 +335,7 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 				if err != nil {
 					// Assume the comment was not encrypted in the first place
 					log.WithField("comment", c.Value).
-						Warn("Found possibly unencrypted field in file. " +
+						Warn("Found possibly unencrypted comment in file. " +
 							"This is to be expected if the file being " +
 							"decrypted was created with an older version of " +
 							"SOPS.")

@@ -344,9 +344,18 @@ func main() {
 			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
+		cli.BoolFlag{
+			Name:  "verbose",
+			Usage: "Enable verbose logging output",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
+		if c.Bool("verbose") {
+			logging.SetLevel(logrus.DebugLevel)
+		} else {
+			logging.SetLevel(logrus.WarnLevel)
+		}
 		if c.NArg() < 1 {
 			return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 		}
