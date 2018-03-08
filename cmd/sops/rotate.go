@@ -23,14 +23,14 @@ type rotateOpts struct {
 }
 
 func rotate(opts rotateOpts) ([]byte, error) {
-	audit.SubmitEvent(audit.RotateEvent{
-		File: tree.FilePath,
-	})
-
 	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
 		return nil, err
 	}
+
+	audit.SubmitEvent(audit.RotateEvent{
+		File: tree.FilePath,
+	})
 
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
 		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
