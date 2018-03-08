@@ -10,7 +10,6 @@ package shamir
 // More information about Shamir's Secret Sharing and Lagrange interpolation
 // can be found in README.md
 
-
 import (
 	"crypto/rand"
 	"crypto/subtle"
