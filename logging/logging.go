@@ -25,6 +25,7 @@ func (f *TextFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 func NewLogger(name string) *logrus.Logger {
 	log := logrus.New()
+	log.SetLevel(logrus.WarnLevel)
 	log.Formatter = &TextFormatter{
 		LoggerName: name,
 	}
