@@ -11,11 +11,19 @@ import (
 	"regexp"
 
 	"github.com/mozilla-services/yaml"
+	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("CONFIG")
+}
 
 type fileSystem interface {
 	Stat(name string) (os.FileInfo, error)
@@ -72,6 +80,7 @@ type kmsKey struct {
 
 type creationRule struct {
 	FilenameRegex   string `yaml:"filename_regex"`
+	PathRegex       string `yaml:"path_regex"`
 	KMS             string
 	PGP             string
 	GCPKMS          string     `yaml:"gcp_kms"`
@@ -103,9 +112,25 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 	var rule *creationRule
 
 	for _, r := range conf.CreationRules {
-		if match, _ := regexp.MatchString(r.FilenameRegex, filePath); match {
+		if r.PathRegex == "" && r.FilenameRegex == "" {
 			rule = &r
 			break
+		}
+		if r.PathRegex != "" && r.FilenameRegex != "" {
+			return nil, fmt.Errorf("error loading config: both filename_regex and path_regex were found, use only path_regex")
+		}
+		if r.FilenameRegex != "" {
+			if match, _ := regexp.MatchString(r.FilenameRegex, filePath); match {
+				log.Warn("The key: filename_regex will be removed in a future release. Instead use key: path_regex in your .sops.yaml file")
+				rule = &r
+				break
+			}
+		}
+		if r.PathRegex != "" {
+			if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
+				rule = &r
+				break
+			}
 		}
 	}
 
