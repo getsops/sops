@@ -22,9 +22,9 @@ before_deploy:
   - mkdir dist
   - make deb-pkg rpm-pkg
   - mv *.deb *.rpm dist/
-  - GOOS=darwin go build -o dist/sops-${TRAVIS_TAG}.darwin go.mozilla.org/sops/cmd/sops
-  - GOOS=windows go build -o dist/sops-${TRAVIS_TAG}.exe go.mozilla.org/sops/cmd/sops
-  - GOOS=linux go build -o dist/sops-${TRAVIS_TAG}.linux go.mozilla.org/sops/cmd/sops
+  - GOOS=darwin CGO_ENABLED=0 go build -o dist/sops-${TRAVIS_TAG}.darwin go.mozilla.org/sops/cmd/sops
+  - GOOS=windows CGO_ENABLED=0 go build -o dist/sops-${TRAVIS_TAG}.exe go.mozilla.org/sops/cmd/sops
+  - GOOS=linux CGO_ENABLED=0 go build -o dist/sops-${TRAVIS_TAG}.linux go.mozilla.org/sops/cmd/sops
 
 deploy:
   provider: releases
