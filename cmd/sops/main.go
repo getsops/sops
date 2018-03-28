@@ -486,7 +486,7 @@ func main() {
 			} else {
 				// File doesn't exist, edit the example file instead
 				var groups []sops.KeyGroup
-				groups, err := keyGroups(c, fileName)
+				groups, err = keyGroups(c, fileName)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -507,6 +507,7 @@ func main() {
 		if err != nil {
 			return toExitError(err)
 		}
+
 		// We open the file *after* the operations on the tree have been
 		// executed to avoid truncating it when there's errors
 		if c.Bool("in-place") || isEditMode || c.String("set") != "" {
