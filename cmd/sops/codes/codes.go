@@ -26,4 +26,5 @@ const (
 	FileHasNotBeenModified                 int = 200
 	NoEditorFound                          int = 201
 	FailedToCompareVersions                int = 202
+	FileAlreadyEncrypted                   int = 203
 )
