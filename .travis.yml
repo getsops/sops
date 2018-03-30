@@ -34,15 +34,10 @@ matrix:
           language: generic
           osx_image: xcode7.1
           env: SYSTEM_TEST=1
-        # test with default python on trusty and precise
+        # test with default python on trusty
         - os: linux
           sudo: required
           dist: trusty
-          language: generic
-          env: SYSTEM_TEST=1
-        - os: linux
-          sudo: required
-          dist: precise
           language: generic
           env: SYSTEM_TEST=1
 addons:
