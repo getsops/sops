@@ -1,6 +1,22 @@
 Changelog
 =========
 
+3.0.3
+----
+
+* --set now works with nested data structures and not just simple
+  values
+
+* Changed default log level to warn instead of info
+
+* Avoid creating empty files when using the editor mode to create new
+  files and not making any changes to the example files
+
+* Output unformatted strings when using --extract instead of encoding
+  them to yaml
+
+* Allow forcing binary input and output types from command line flags
+
 3.0.1
 -----
 
