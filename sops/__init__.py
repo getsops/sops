@@ -416,7 +416,7 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None,
     need_key = False
     try:
         existing_file = os.stat(path)
-    except:
+    except Exception:
         existing_file = False
     if existing_file:
         # read the encrypted file from disk
@@ -431,13 +431,13 @@ def initialize_tree(path, itype, kms_arns=None, pgp_fps=None, configloc=None,
         try:
             global INPUT_VERSION
             INPUT_VERSION = tree['sops']['version']
-        except:
+        except Exception:
             None
         # try to set the unencrypted suffix to the one set in the file
         try:
             global UNENCRYPTED_SUFFIX
             UNENCRYPTED_SUFFIX = tree['sops']['unencrypted_suffix']
-        except:
+        except Exception:
             None
     else:
         # The file does not exist, create a new tree using DEFAULT data
@@ -487,7 +487,7 @@ def load_file_into_tree(path, filetype, restore_sops=None):
                                   object_pairs_hook=OrderedDict)
                 if "version" not in tree['sops']:
                     tree['data'] = data
-            except:
+            except Exception:
                 tree = OrderedDict()
                 valre = b'(.+)^SOPS=({.+})$'
                 res = re.match(valre, data, flags=(re.MULTILINE | re.DOTALL))
@@ -516,7 +516,7 @@ def find_config_for_file(filename, configloc):
         for i in range(DEFAULT_CONFIG_FILE_SEARCH_DEPTH):
             try:
                 os.stat((i * "../") + DEFAULT_CONFIG_FILE)
-            except:
+            except Exception:
                 continue
             # when we find a file, exit the loop
             configloc = (i * "../") + DEFAULT_CONFIG_FILE
@@ -1180,14 +1180,14 @@ def get_aws_session_for_entry(entry):
         return (None, "Invalid ARN '%s' in entry" % entry['arn'])
     try:
         region = res.group(1)
-    except:
+    except Exception:
         return (None, "Unable to find region from ARN '%s' in entry" %
                       entry['arn'])
     # if there are no role to assume, return the client directly
     if not ('role' in entry):
         try:
             cli = boto3.client('kms', region_name=region)
-        except:
+        except Exception:
             return (None, "Unable to get boto3 client in %s" % region)
         return (cli, "")
     # otherwise, create a client using temporary tokens that assume the role
@@ -1331,7 +1331,7 @@ def write_file(tree, path=None, filetype=None):
             else:
                 try:
                     fd.write(tree['data'].encode('utf-8'))
-                except:
+                except Exception:
                     fd.write(tree['data'])
         if 'sops' in tree:
             jsonstr = json.dumps(tree['sops'], sort_keys=True)
@@ -1521,7 +1521,7 @@ def check_latest_version():
             else:
                 print("INFO: to update to sops " + latest + ", use:"
                       " $ pip install sops=="+latest)
-    except:
+    except Exception:
         pass
 
 
