@@ -28,12 +28,6 @@ matrix:
           language: generic
           osx_image: xcode7.3
           env: SYSTEM_TEST=1
-        # test on osx yosemite
-        - os: osx
-          sudo: required
-          language: generic
-          osx_image: xcode7.1
-          env: SYSTEM_TEST=1
         # test with default python on trusty
         - os: linux
           sudo: required
