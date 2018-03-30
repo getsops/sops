@@ -281,7 +281,7 @@ func (m *ExtensionRequest) GetExtensionNumber() int32 {
 type ServerReflectionResponse struct {
 	ValidHost       string                   `protobuf:"bytes,1,opt,name=valid_host,json=validHost" json:"valid_host,omitempty"`
 	OriginalRequest *ServerReflectionRequest `protobuf:"bytes,2,opt,name=original_request,json=originalRequest" json:"original_request,omitempty"`
-	// The server set one of the following fields accroding to the message_request
+	// The server set one of the following fields according to the message_request
 	// in the request.
 	//
 	// Types that are valid to be assigned to MessageResponse:

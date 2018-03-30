@@ -1,9 +1,11 @@
 language: go
+go_import_path: github.com/davecgh/go-spew
 go:
     - 1.6.x
     - 1.7.x
     - 1.8.x
     - 1.9.x
+    - tip
 sudo: false
 install:
     - go get -v github.com/alecthomas/gometalinter

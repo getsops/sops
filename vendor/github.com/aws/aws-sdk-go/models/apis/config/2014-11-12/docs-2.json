@@ -180,7 +180,7 @@
       }
     },
     "ConfigExportDeliveryInfo": {
-      "base": "<p>A list that contains the status of the delivery of either the snapshot or the configuration history to the specified Amazon S3 bucket.</p>",
+      "base": "<p>Provides status of the delivery of the snapshot or the configuration history to the specified Amazon S3 bucket. Also provides the status of notifications about the Amazon S3 delivery to the specified Amazon SNS topic.</p>",
       "refs": {
         "DeliveryChannelStatus$configSnapshotDeliveryInfo": "<p>A list containing the status of the delivery of the snapshot to the specified Amazon S3 bucket.</p>",
         "DeliveryChannelStatus$configHistoryDeliveryInfo": "<p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>"
@@ -1086,7 +1086,7 @@
     "StringWithCharLimit128": {
       "base": null,
       "refs": {
-        "Scope$TagKey": "<p>The tag key that is applied to only those AWS resources that you want you want to trigger an evaluation for the rule.</p>"
+        "Scope$TagKey": "<p>The tag key that is applied to only those AWS resources that you want to trigger an evaluation for the rule.</p>"
       }
     },
     "StringWithCharLimit256": {

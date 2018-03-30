@@ -2913,6 +2913,25 @@
       "max":30,
       "min":10
     },
+    "ResettableElementName":{
+      "type":"string",
+      "enum":[
+        "FullyQualifiedDomainName",
+        "Regions",
+        "ResourcePath",
+        "ChildHealthChecks"
+      ],
+      "max":64,
+      "min":1
+    },
+    "ResettableElementNameList":{
+      "type":"list",
+      "member":{
+        "shape":"ResettableElementName",
+        "locationName":"ResettableElementName"
+      },
+      "max":64
+    },
     "ResourceDescription":{
       "type":"string",
       "max":256
@@ -3382,7 +3401,8 @@
         "EnableSNI":{"shape":"EnableSNI"},
         "Regions":{"shape":"HealthCheckRegionList"},
         "AlarmIdentifier":{"shape":"AlarmIdentifier"},
-        "InsufficientDataHealthStatus":{"shape":"InsufficientDataHealthStatus"}
+        "InsufficientDataHealthStatus":{"shape":"InsufficientDataHealthStatus"},
+        "ResetElements":{"shape":"ResettableElementNameList"}
       }
     },
     "UpdateHealthCheckResponse":{

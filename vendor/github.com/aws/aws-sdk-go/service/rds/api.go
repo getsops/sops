@@ -2510,7 +2510,7 @@ func (c *RDS) DeleteDBInstanceRequest(input *DeleteDBInstanceInput) (req *reques
 // the SkipFinalSnapshot parameter is set to true.
 //
 // If the specified DB instance is part of an Amazon Aurora DB cluster, you
-// cannot delete the DB instance if the following are true:
+// cannot delete the DB instance if both of the following conditions are true:
 //
 //    * The DB cluster is a Read Replica of another Amazon Aurora DB cluster.
 //
@@ -7140,11 +7140,9 @@ func (c *RDS) ModifyDBSnapshotRequest(input *ModifyDBSnapshotInput) (req *reques
 // ModifyDBSnapshot API operation for Amazon Relational Database Service.
 //
 // Updates a manual DB snapshot, which can be encrypted or not encrypted, with
-// a new engine version. You can update the engine version to either a new major
-// or minor engine version.
+// a new engine version.
 //
-// Amazon RDS supports upgrading a MySQL DB snapshot from MySQL 5.1 to MySQL
-// 5.5.
+// Amazon RDS supports upgrading DB snapshots for MySQL and Oracle.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8531,10 +8529,15 @@ func (c *RDS) RestoreDBClusterFromSnapshotRequest(input *RestoreDBClusterFromSna
 
 // RestoreDBClusterFromSnapshot API operation for Amazon Relational Database Service.
 //
-// Creates a new DB cluster from a DB cluster snapshot. The target DB cluster
-// is created from the source DB cluster restore point with the same configuration
-// as the original source DB cluster, except that the new DB cluster is created
-// with the default security group.
+// Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
+//
+// If a DB snapshot is specified, the target DB cluster is created from the
+// source DB snapshot with a default configuration and default security group.
+//
+// If a DB cluster snapshot is specified, the target DB cluster is created from
+// the source DB cluster restore point with the same configuration as the original
+// source DB cluster, except that the new DB cluster is created with the default
+// security group.
 //
 // For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
 // in the Amazon RDS User Guide.
@@ -10960,10 +10963,17 @@ type CreateDBClusterInput struct {
 	// the KMS encryption key used to encrypt the new DB cluster, then you can use
 	// the KMS key alias instead of the ARN for the KMS encryption key.
 	//
-	// If the StorageEncrypted parameter is true, and you do not specify a value
-	// for the KmsKeyId parameter, then Amazon RDS will use your default encryption
-	// key. AWS KMS creates the default encryption key for your AWS account. Your
-	// AWS account has a different default encryption key for each AWS Region.
+	// If an encryption key is not specified in KmsKeyId:
+	//
+	//    * If ReplicationSourceIdentifier identifies an encrypted source, then
+	//    Amazon RDS will use the encryption key used to encrypt the source. Otherwise,
+	//    Amazon RDS will use your default encryption key.
+	//
+	//    * If the StorageEncrypted parameter is true and ReplicationSourceIdentifier
+	//    is not specified, then Amazon RDS will use your default encryption key.
+	//
+	// AWS KMS creates the default encryption key for your AWS account. Your AWS
+	// account has a different default encryption key for each AWS Region.
 	//
 	// If you create a Read Replica of an encrypted DB cluster in another AWS Region,
 	// you must set KmsKeyId to a KMS key ID that is valid in the destination AWS
@@ -11808,6 +11818,8 @@ type CreateDBInstanceInput struct {
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
+	EnablePerformanceInsights *bool `type:"boolean"`
+
 	// The name of the database engine to be used for this instance.
 	//
 	// Not every database engine is available for every AWS Region.
@@ -11972,7 +11984,7 @@ type CreateDBInstanceInput struct {
 	//
 	// PostgreSQL
 	//
-	// Version 9.6.x: 9.6.1 | 9.6.2
+	// Version 9.6.x: 9.6.1 | 9.6.2 | 9.6.3
 	//
 	// Version 9.5.x:9.5.6 | 9.5.4 | 9.5.2
 	//
@@ -12128,6 +12140,8 @@ type CreateDBInstanceInput struct {
 	// cannot be removed from an option group, and that option group cannot be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
+
+	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The port number on which the database accepts connections.
 	//
@@ -12413,6 +12427,12 @@ func (s *CreateDBInstanceInput) SetEnableIAMDatabaseAuthentication(v bool) *Crea
 	return s
 }
 
+// SetEnablePerformanceInsights sets the EnablePerformanceInsights field's value.
+func (s *CreateDBInstanceInput) SetEnablePerformanceInsights(v bool) *CreateDBInstanceInput {
+	s.EnablePerformanceInsights = &v
+	return s
+}
+
 // SetEngine sets the Engine field's value.
 func (s *CreateDBInstanceInput) SetEngine(v string) *CreateDBInstanceInput {
 	s.Engine = &v
@@ -12476,6 +12496,12 @@ func (s *CreateDBInstanceInput) SetMultiAZ(v bool) *CreateDBInstanceInput {
 // SetOptionGroupName sets the OptionGroupName field's value.
 func (s *CreateDBInstanceInput) SetOptionGroupName(v string) *CreateDBInstanceInput {
 	s.OptionGroupName = &v
+	return s
+}
+
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *CreateDBInstanceInput) SetPerformanceInsightsKMSKeyId(v string) *CreateDBInstanceInput {
+	s.PerformanceInsightsKMSKeyId = &v
 	return s
 }
 
@@ -12672,6 +12698,8 @@ type CreateDBInstanceReadReplicaInput struct {
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
+	EnablePerformanceInsights *bool `type:"boolean"`
+
 	// The amount of Provisioned IOPS (input/output operations per second) to be
 	// initially allocated for the DB instance.
 	Iops *int64 `type:"integer"`
@@ -12715,6 +12743,8 @@ type CreateDBInstanceReadReplicaInput struct {
 	// The option group the DB instance will be associated with. If omitted, the
 	// default option group for the engine specified will be used.
 	OptionGroupName *string `type:"string"`
+
+	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The port number that the DB instance uses for connections.
 	//
@@ -12904,6 +12934,12 @@ func (s *CreateDBInstanceReadReplicaInput) SetEnableIAMDatabaseAuthentication(v 
 	return s
 }
 
+// SetEnablePerformanceInsights sets the EnablePerformanceInsights field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetEnablePerformanceInsights(v bool) *CreateDBInstanceReadReplicaInput {
+	s.EnablePerformanceInsights = &v
+	return s
+}
+
 // SetIops sets the Iops field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetIops(v int64) *CreateDBInstanceReadReplicaInput {
 	s.Iops = &v
@@ -12931,6 +12967,12 @@ func (s *CreateDBInstanceReadReplicaInput) SetMonitoringRoleArn(v string) *Creat
 // SetOptionGroupName sets the OptionGroupName field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetOptionGroupName(v string) *CreateDBInstanceReadReplicaInput {
 	s.OptionGroupName = &v
+	return s
+}
+
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetPerformanceInsightsKMSKeyId(v string) *CreateDBInstanceReadReplicaInput {
+	s.PerformanceInsightsKMSKeyId = &v
 	return s
 }
 
@@ -14919,6 +14961,10 @@ type DBInstance struct {
 	// included when changes are pending. Specific changes are identified by subelements.
 	PendingModifiedValues *PendingModifiedValues `type:"structure"`
 
+	PerformanceInsightsEnabled *bool `type:"boolean"`
+
+	PerformanceInsightsKMSKeyId *string `type:"string"`
+
 	// Specifies the daily time range during which automated backups are created
 	// if automated backups are enabled, as determined by the BackupRetentionPeriod.
 	PreferredBackupWindow *string `type:"string"`
@@ -15207,6 +15253,18 @@ func (s *DBInstance) SetOptionGroupMemberships(v []*OptionGroupMembership) *DBIn
 // SetPendingModifiedValues sets the PendingModifiedValues field's value.
 func (s *DBInstance) SetPendingModifiedValues(v *PendingModifiedValues) *DBInstance {
 	s.PendingModifiedValues = v
+	return s
+}
+
+// SetPerformanceInsightsEnabled sets the PerformanceInsightsEnabled field's value.
+func (s *DBInstance) SetPerformanceInsightsEnabled(v bool) *DBInstance {
+	s.PerformanceInsightsEnabled = &v
+	return s
+}
+
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *DBInstance) SetPerformanceInsightsKMSKeyId(v string) *DBInstance {
+	s.PerformanceInsightsKMSKeyId = &v
 	return s
 }
 
@@ -22128,6 +22186,8 @@ type ModifyDBInstanceInput struct {
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
+	EnablePerformanceInsights *bool `type:"boolean"`
+
 	// The version number of the database engine to upgrade to. Changing this parameter
 	// results in an outage and the change is applied during the next maintenance
 	// window unless the ApplyImmediately parameter is set to true for this request.
@@ -22257,6 +22317,8 @@ type ModifyDBInstanceInput struct {
 	// cannot be removed from an option group, and that option group cannot be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
+
+	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled, as determined by the BackupRetentionPeriod parameter.
@@ -22475,6 +22537,12 @@ func (s *ModifyDBInstanceInput) SetEnableIAMDatabaseAuthentication(v bool) *Modi
 	return s
 }
 
+// SetEnablePerformanceInsights sets the EnablePerformanceInsights field's value.
+func (s *ModifyDBInstanceInput) SetEnablePerformanceInsights(v bool) *ModifyDBInstanceInput {
+	s.EnablePerformanceInsights = &v
+	return s
+}
+
 // SetEngineVersion sets the EngineVersion field's value.
 func (s *ModifyDBInstanceInput) SetEngineVersion(v string) *ModifyDBInstanceInput {
 	s.EngineVersion = &v
@@ -22526,6 +22594,12 @@ func (s *ModifyDBInstanceInput) SetNewDBInstanceIdentifier(v string) *ModifyDBIn
 // SetOptionGroupName sets the OptionGroupName field's value.
 func (s *ModifyDBInstanceInput) SetOptionGroupName(v string) *ModifyDBInstanceInput {
 	s.OptionGroupName = &v
+	return s
+}
+
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *ModifyDBInstanceInput) SetPerformanceInsightsKMSKeyId(v string) *ModifyDBInstanceInput {
+	s.PerformanceInsightsKMSKeyId = &v
 	return s
 }
 
@@ -22810,8 +22884,31 @@ type ModifyDBSnapshotInput struct {
 	// DBSnapshotIdentifier is a required field
 	DBSnapshotIdentifier *string `type:"string" required:"true"`
 
-	// The engine version to update the DB snapshot to.
+	// The engine version to upgrade the DB snapshot to.
+	//
+	// The following are the database engines and engine versions that are available
+	// when you upgrade a DB snapshot.
+	//
+	// MySQL
+	//
+	//    * 5.5.46 (supported for 5.1 DB snapshots)
+	//
+	// Oracle
+	//
+	//    * 12.1.0.2.v8 (supported for 12.1.0.1 DB snapshots)
+	//
+	//    * 11.2.0.4.v12 (supported for 11.2.0.2 DB snapshots)
+	//
+	//    * 11.2.0.4.v11 (supported for 11.2.0.3 DB snapshots)
 	EngineVersion *string `type:"string"`
+
+	// The option group to identify with the upgraded DB snapshot.
+	//
+	// You can specify this parameter when you upgrade an Oracle DB snapshot. The
+	// same option group considerations apply when upgrading a DB snapshot as when
+	// upgrading a DB instance. For more information, see Option Group Considerations
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Oracle.html#USER_UpgradeDBInstance.Oracle.OGPG.OG).
+	OptionGroupName *string `type:"string"`
 }
 
 // String returns the string representation
@@ -22846,6 +22943,12 @@ func (s *ModifyDBSnapshotInput) SetDBSnapshotIdentifier(v string) *ModifyDBSnaps
 // SetEngineVersion sets the EngineVersion field's value.
 func (s *ModifyDBSnapshotInput) SetEngineVersion(v string) *ModifyDBSnapshotInput {
 	s.EngineVersion = &v
+	return s
+}
+
+// SetOptionGroupName sets the OptionGroupName field's value.
+func (s *ModifyDBSnapshotInput) SetOptionGroupName(v string) *ModifyDBSnapshotInput {
+	s.OptionGroupName = &v
 	return s
 }
 
@@ -23930,6 +24033,8 @@ type OrderableDBInstanceOption struct {
 	// Indicates whether this orderable DB instance supports provisioned IOPS.
 	SupportsIops *bool `type:"boolean"`
 
+	SupportsPerformanceInsights *bool `type:"boolean"`
+
 	// Indicates whether this orderable DB instance supports encrypted storage.
 	SupportsStorageEncryption *bool `type:"boolean"`
 
@@ -24010,6 +24115,12 @@ func (s *OrderableDBInstanceOption) SetSupportsIAMDatabaseAuthentication(v bool)
 // SetSupportsIops sets the SupportsIops field's value.
 func (s *OrderableDBInstanceOption) SetSupportsIops(v bool) *OrderableDBInstanceOption {
 	s.SupportsIops = &v
+	return s
+}
+
+// SetSupportsPerformanceInsights sets the SupportsPerformanceInsights field's value.
+func (s *OrderableDBInstanceOption) SetSupportsPerformanceInsights(v bool) *OrderableDBInstanceOption {
+	s.SupportsPerformanceInsights = &v
 	return s
 }
 
@@ -25914,8 +26025,8 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// DB cluster can be created in.
 	AvailabilityZones []*string `locationNameList:"AvailabilityZone" type:"list"`
 
-	// The name of the DB cluster to create from the DB cluster snapshot. This parameter
-	// isn't case-sensitive.
+	// The name of the DB cluster to create from the DB snapshot or DB cluster snapshot.
+	// This parameter isn't case-sensitive.
 	//
 	// Constraints:
 	//
@@ -25960,7 +26071,7 @@ type RestoreDBClusterFromSnapshotInput struct {
 	EngineVersion *string `type:"string"`
 
 	// The KMS key identifier to use when restoring an encrypted DB cluster from
-	// a DB cluster snapshot.
+	// a DB snapshot or DB cluster snapshot.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
 	// key. If you are restoring a DB cluster with the same AWS account that owns
@@ -25970,12 +26081,12 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// If you do not specify a value for the KmsKeyId parameter, then the following
 	// will occur:
 	//
-	//    * If the DB cluster snapshot is encrypted, then the restored DB cluster
-	//    is encrypted using the KMS key that was used to encrypt the DB cluster
-	//    snapshot.
+	//    * If the DB snapshot or DB cluster snapshot in SnapshotIdentifier is encrypted,
+	//    then the restored DB cluster is encrypted using the KMS key that was used
+	//    to encrypt the DB snapshot or DB cluster snapshot.
 	//
-	//    * If the DB cluster snapshot is not encrypted, then the restored DB cluster
-	//    is encrypted using the specified encryption key.
+	//    * If the DB snapshot or DB cluster snapshot in SnapshotIdentifier is not
+	//    encrypted, then the restored DB cluster is not encrypted.
 	KmsKeyId *string `type:"string"`
 
 	// The name of the option group to use for the restored DB cluster.
@@ -25988,7 +26099,11 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Default: The same port as the original DB cluster.
 	Port *int64 `type:"integer"`
 
-	// The identifier for the DB cluster snapshot to restore from.
+	// The identifier for the DB snapshot or DB cluster snapshot to restore from.
+	//
+	// You can use either the name or the Amazon Resource Name (ARN) to specify
+	// a DB cluster snapshot. However, you can use only the ARN to specify a DB
+	// snapshot.
 	//
 	// Constraints:
 	//

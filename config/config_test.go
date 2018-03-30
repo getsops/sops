@@ -47,9 +47,11 @@ creation_rules:
   - filename_regex: foobar*
     kms: "1"
     pgp: "2"
+    gcp_kms: "3"
   - filename_regex: ""
     kms: foo
     pgp: bar
+    gcp_kms: baz
 `)
 
 var sampleConfigWithGroups = []byte(`
@@ -63,10 +65,19 @@ creation_rules:
       - arn: foo
       pgp:
       - bar
+      gcp_kms:
+      - resource_id: foo
     - kms:
       - arn: baz
       pgp:
       - qux
+      gcp_kms:
+      - resource_id: bar
+      - resource_id: baz
+`)
+
+var sampleInvalidConfig = []byte(`
+creation_rules:
 `)
 
 func TestLoadConfigFile(t *testing.T) {
@@ -76,11 +87,13 @@ func TestLoadConfigFile(t *testing.T) {
 				FilenameRegex: "foobar*",
 				KMS:           "1",
 				PGP:           "2",
+				GCPKMS:        "3",
 			},
 			creationRule{
 				FilenameRegex: "",
 				KMS:           "foo",
 				PGP:           "bar",
+				GCPKMS:        "baz",
 			},
 		},
 	}
@@ -103,12 +116,17 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 				FilenameRegex: "",
 				KeyGroups: []keyGroup{
 					{
-						KMS: []kmsKey{{Arn: "foo"}},
-						PGP: []string{"bar"},
+						KMS:    []kmsKey{{Arn: "foo"}},
+						PGP:    []string{"bar"},
+						GCPKMS: []gcpKmsKey{{ResourceID: "foo"}},
 					},
 					{
 						KMS: []kmsKey{{Arn: "baz"}},
 						PGP: []string{"qux"},
+						GCPKMS: []gcpKmsKey{
+							{ResourceID: "bar"},
+							{ResourceID: "baz"},
+						},
 					},
 				},
 			},
@@ -119,6 +137,11 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 	err := conf.load(sampleConfigWithGroups)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expected, conf)
+}
+
+func TestLoadInvalidConfigFile(t *testing.T) {
+	_, err := loadForFileFromBytes(sampleInvalidConfig, "foobar2000", nil)
+	assert.NotNil(t, err)
 }
 
 func TestKeyGroupsForFile(t *testing.T) {

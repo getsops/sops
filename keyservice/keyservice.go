@@ -7,6 +7,7 @@ package keyservice
 import (
 	"fmt"
 
+	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
@@ -23,8 +24,16 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 				},
 			},
 		}
+	case *gcpkms.MasterKey:
+		return Key{
+			KeyType: &Key_GcpKmsKey{
+				GcpKmsKey: &GcpKmsKey{
+					ResourceId: mk.ResourceID,
+				},
+			},
+		}
 	case *kms.MasterKey:
-		var ctx map[string]string
+		ctx := make(map[string]string)
 		for k, v := range mk.EncryptionContext {
 			ctx[k] = *v
 		}

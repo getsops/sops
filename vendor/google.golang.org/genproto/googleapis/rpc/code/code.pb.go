@@ -68,9 +68,12 @@ const (
 	// HTTP Mapping: 504 Gateway Timeout
 	Code_DEADLINE_EXCEEDED Code = 4
 	// Some requested entity (e.g., file or directory) was not found.
-	// For privacy reasons, this code *may* be returned when the client
-	// does not have the access rights to the entity, though such usage is
-	// discouraged.
+	//
+	// Note to server developers: if a request is denied for an entire class
+	// of users, such as gradual feature rollout or undocumented whitelist,
+	// `NOT_FOUND` may be used. If a request is denied for some users within
+	// a class of users, such as user-based access control, `PERMISSION_DENIED`
+	// must be used.
 	//
 	// HTTP Mapping: 404 Not Found
 	Code_NOT_FOUND Code = 5
@@ -84,7 +87,9 @@ const (
 	// caused by exhausting some resource (use `RESOURCE_EXHAUSTED`
 	// instead for those errors). `PERMISSION_DENIED` must not be
 	// used if the caller can not be identified (use `UNAUTHENTICATED`
-	// instead for those errors).
+	// instead for those errors). This error code does not imply the
+	// request is valid or the requested entity exists or satisfies
+	// other pre-conditions.
 	//
 	// HTTP Mapping: 403 Forbidden
 	Code_PERMISSION_DENIED Code = 7
@@ -107,7 +112,8 @@ const (
 	// between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`:
 	//  (a) Use `UNAVAILABLE` if the client can retry just the failing call.
 	//  (b) Use `ABORTED` if the client should retry at a higher level
-	//      (e.g., restarting a read-modify-write sequence).
+	//      (e.g., when a client-specified test-and-set fails, indicating the
+	//      client should restart a read-modify-write sequence).
 	//  (c) Use `FAILED_PRECONDITION` if the client should not retry until
 	//      the system state has been explicitly fixed.  E.g., if an "rmdir"
 	//      fails because the directory is non-empty, `FAILED_PRECONDITION`

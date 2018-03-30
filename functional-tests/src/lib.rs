@@ -250,6 +250,55 @@ b: ba"#
     }
 
     #[test]
+    fn encrypt_comments() {
+        let file_path = "res/comments.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
+    }
+
+    #[test]
+    fn encrypt_comments_list() {
+        let file_path = "res/comments_list.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
+    }
+
+    #[test]
+    fn decrypt_comments() {
+        let file_path = "res/comments.enc.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
+    }
+
+    #[test]
+    fn decrypt_comments_unencrypted_comments() {
+        let file_path = "res/comments_unencrypted_comments.yaml";
+        let output = Command::new(SOPS_BINARY_PATH)
+                    .arg("-d")
+                    .arg(file_path.clone())
+                    .output()
+                    .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
+    }
+
+    #[test]
     fn roundtrip_shamir() {
         // The .sops.yaml file ensures this file is encrypted with two key groups, each with one GPG key
         let file_path = prepare_temp_file("test_roundtrip_keygroups.yaml", "a: secret".as_bytes());
@@ -309,4 +358,31 @@ b: ba"#
                     .success(),
                 "SOPS failed to decrypt a file that uses multiple keys");
     }
+
+
+    #[test]
+    fn extract_string() {
+        let file_path = prepare_temp_file("test_extract_string.yaml",
+                                          "multiline: |\n  multi\n  line".as_bytes());
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "SOPS failed to encrypt a file");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("--extract")
+            .arg("[\"multiline\"]")
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to extract");
+
+        assert_eq!(output.stdout, b"multi\nline");
+    }
+
 }

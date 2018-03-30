@@ -1,9 +1,10 @@
 package json
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"go.mozilla.org/sops"
-	"testing"
 )
 
 func TestDecodeJSON(t *testing.T) {
@@ -125,6 +126,12 @@ func TestDecodeSimpleJSONObject(t *testing.T) {
 	assert.Equal(t, expected, branch)
 }
 
+func TestDecodeNumber(t *testing.T) {
+	in := `42`
+	_, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.NotNil(t, err)
+}
+
 func TestDecodeNestedJSONObject(t *testing.T) {
 	in := `{"foo": {"foo": "bar"}}`
 	expected := sops.TreeBranch{
@@ -243,4 +250,10 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 	out, err := Store{}.Marshal(branch)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(out))
+}
+
+func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
+	data := []byte(`{"hello": 2}`)
+	_, err := Store{}.UnmarshalMetadata(data)
+	assert.Equal(t, sops.MetadataNotFound, err)
 }

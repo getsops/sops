@@ -1343,7 +1343,12 @@
         "AWS::Redshift::ClusterSubnetGroup",
         "AWS::Redshift::EventSubscription",
         "AWS::CloudWatch::Alarm",
-        "AWS::CloudFormation::Stack"
+        "AWS::CloudFormation::Stack",
+        "AWS::DynamoDB::Table",
+        "AWS::AutoScaling::AutoScalingGroup",
+        "AWS::AutoScaling::LaunchConfiguration",
+        "AWS::AutoScaling::ScalingPolicy",
+        "AWS::AutoScaling::ScheduledAction"
       ]
     },
     "ResourceTypeList":{
