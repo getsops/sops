@@ -120,12 +120,19 @@ type InappPurchase struct {
 	// PurchaseState: The purchase state of the order. Possible values are:
 	//
 	// - Purchased
-	// - Cancelled
+	// - Canceled
 	PurchaseState int64 `json:"purchaseState,omitempty"`
 
 	// PurchaseTime: The time the product was purchased, in milliseconds
 	// since the epoch (Jan 1, 1970).
 	PurchaseTime int64 `json:"purchaseTime,omitempty,string"`
+
+	// PurchaseType: The type of purchase of the inapp product. This field
+	// is only set if this purchase was not made using the standard in-app
+	// billing flow. Possible values are:
+	// - Test (i.e. purchased from a license testing account)
+	// - Promo (i.e. purchased using a promo code)
+	PurchaseType int64 `json:"purchaseType,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -150,8 +157,8 @@ type InappPurchase struct {
 }
 
 func (s *InappPurchase) MarshalJSON() ([]byte, error) {
-	type noMethod InappPurchase
-	raw := noMethod(*s)
+	type NoMethod InappPurchase
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -196,8 +203,8 @@ type SubscriptionPurchase struct {
 }
 
 func (s *SubscriptionPurchase) MarshalJSON() ([]byte, error) {
-	type noMethod SubscriptionPurchase
-	raw := noMethod(*s)
+	type NoMethod SubscriptionPurchase
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -314,7 +321,7 @@ func (c *InapppurchasesGetCall) Do(opts ...googleapi.CallOption) (*InappPurchase
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -588,7 +595,7 @@ func (c *PurchasesGetCall) Do(opts ...googleapi.CallOption) (*SubscriptionPurcha
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil

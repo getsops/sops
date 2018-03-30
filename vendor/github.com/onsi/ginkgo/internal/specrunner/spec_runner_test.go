@@ -18,7 +18,6 @@ import (
 )
 
 var noneFlag = types.FlagTypeNone
-var focusedFlag = types.FlagTypeFocused
 var pendingFlag = types.FlagTypePending
 
 var _ = Describe("Spec Runner", func() {
@@ -235,6 +234,13 @@ var _ = Describe("Spec Runner", func() {
 				Ω(reporter1.EndSummary.NumberOfSkippedSpecs).Should(Equal(1))
 				Ω(reporter1.EndSummary.NumberOfPassedSpecs).Should(Equal(0))
 				Ω(reporter1.EndSummary.NumberOfFailedSpecs).Should(Equal(0))
+			})
+
+			It("should not report a slow test", func() {
+				summaries := reporter1.SpecSummaries
+				for _, s := range summaries {
+					Expect(s.RunTime).To(BeZero())
+				}
 			})
 		})
 	})

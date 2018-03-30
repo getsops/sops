@@ -9,5 +9,5 @@ import "golang.org/x/sys/unix"
 func RlimitStack() (cur uint64, err error) {
 	var r unix.Rlimit
 	err = unix.Getrlimit(unix.RLIMIT_STACK, &r)
-	return r.Cur, err
+	return uint64(r.Cur), err // Type conversion because Cur is one of uint64, int64 depending on unix flavor.
 }

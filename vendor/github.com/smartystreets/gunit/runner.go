@@ -2,7 +2,10 @@ package gunit
 
 import (
 	"reflect"
+	"runtime"
 	"testing"
+
+	"github.com/smartystreets/gunit/scan"
 )
 
 // Run receives an instance of a struct that embeds *Fixture.
@@ -22,7 +25,11 @@ func RunSequential(fixture interface{}, t *testing.T) {
 
 func run(fixture interface{}, t *testing.T, parallel bool) {
 	ensureEmbeddedFixture(fixture, t)
-	runner := newFixtureRunner(fixture, t, parallel)
+
+	_, filename, _, _ := runtime.Caller(2)
+	positions := scan.LocateTestCases(filename)
+
+	runner := newFixtureRunner(fixture, t, parallel, positions)
 	runner.ScanFixtureForTestCases()
 	runner.RunTestCases()
 }

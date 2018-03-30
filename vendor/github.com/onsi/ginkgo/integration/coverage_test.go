@@ -5,6 +5,7 @@ import (
 	"os/exec"
 
 	"fmt"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
@@ -135,13 +136,13 @@ var _ = Describe("Coverage Specs", func() {
 			coverFile := fmt.Sprintf("./_fixtures/combined_coverage_fixture/%s.coverprofile", p)
 
 			// Cleanup
-			defer func (f string) {
+			defer func(f string) {
 				os.RemoveAll(f)
-			} (coverFile)
+			}(coverFile)
 
-			defer func (f string) {
+			defer func(f string) {
 				os.RemoveAll(fmt.Sprintf("./_fixtures/combined_coverage_fixture/%s/coverage.txt", f))
-			} (p)
+			}(p)
 
 			_, err := os.Stat(coverFile)
 

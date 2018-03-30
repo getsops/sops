@@ -232,9 +232,14 @@ type Deployment struct {
 	// Value for an individual label must be <= 512 bytes, the total
 	// size of all label names and values must be <= 1024 bytes.
 	//
-	// Either "zone" or "region" label must be present describing the deployment
-	// location. An example of a zone is "us-central1-a", an example of a region
-	// is "us-central1" or "us-central".
+	// Label named "language" can be used to record the programming language of
+	// the profiled deployment. The standard choices for the value include "java",
+	// "go", "python", "ruby", "nodejs", "php", "dotnet".
+	//
+	// For deployments running on Google Cloud Platform, "zone" or "region" label
+	// should be present describing the deployment location. An example of a zone
+	// is "us-central1-a", an example of a region is "us-central1" or
+	// "us-central".
 	Labels map[string]string `protobuf:"bytes,3,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 }
 

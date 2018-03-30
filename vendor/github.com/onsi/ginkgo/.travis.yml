@@ -1,9 +1,9 @@
 language: go
 go:
-  - 1.5.x
   - 1.6.x
   - 1.7.x
   - 1.8.x
+  - 1.9.x
 
 install:
   - go get -v -t ./...
@@ -12,4 +12,4 @@ install:
   - go install github.com/onsi/ginkgo/ginkgo
   - export PATH=$PATH:$HOME/gopath/bin
 
-script: $HOME/gopath/bin/ginkgo -r --randomizeAllSpecs --randomizeSuites --race --trace
+script: $HOME/gopath/bin/ginkgo -r --randomizeAllSpecs --randomizeSuites --race --trace  && go vet

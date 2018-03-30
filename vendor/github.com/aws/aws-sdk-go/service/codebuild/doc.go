@@ -33,6 +33,8 @@
 //    begin automatically rebuilding the source code every time a code change
 //    is pushed to the repository.
 //
+//    * UpdateWebhook: Changes the settings of an existing webhook.
+//
 //    * DeleteProject: Deletes a build project.
 //
 //    * DeleteWebhook: For an existing AWS CodeBuild build project that has
@@ -67,7 +69,7 @@
 //
 // Using the Client
 //
-// To AWS CodeBuild with the SDK use the New function to create
+// To contact AWS CodeBuild with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.
 // These clients are safe to use concurrently.
 //

@@ -1480,6 +1480,12 @@ func ExampleS3_PutBucketLifecycleConfiguration_shared00() {
 		LifecycleConfiguration: &s3.BucketLifecycleConfiguration{
 			Rules: []*s3.LifecycleRule{
 				{
+					Expiration: &s3.LifecycleExpiration{
+						Days: aws.Int64(3650),
+					},
+					Filter: &s3.LifecycleRuleFilter{
+						Prefix: aws.String("documents/"),
+					},
 					ID:     aws.String("TestOnly"),
 					Status: aws.String("Enabled"),
 					Transitions: []*s3.Transition{
@@ -1525,6 +1531,10 @@ func ExampleS3_PutBucketLogging_shared00() {
 				TargetBucket: aws.String("targetbucket"),
 				TargetGrants: []*s3.TargetGrant{
 					{
+						Grantee: &s3.Grantee{
+							Type: aws.String("Group"),
+							URI:  aws.String("http://acs.amazonaws.com/groups/global/AllUsers"),
+						},
 						Permission: aws.String("READ"),
 					},
 				},
@@ -1628,6 +1638,10 @@ func ExampleS3_PutBucketReplication_shared00() {
 			Role: aws.String("arn:aws:iam::123456789012:role/examplerole"),
 			Rules: []*s3.ReplicationRule{
 				{
+					Destination: &s3.Destination{
+						Bucket:       aws.String("arn:aws:s3:::destinationbucket"),
+						StorageClass: aws.String("STANDARD"),
+					},
 					Prefix: aws.String(""),
 					Status: aws.String("Enabled"),
 				},
@@ -2198,7 +2212,7 @@ func ExampleS3_UploadPartCopy_shared01() {
 	svc := s3.New(session.New())
 	input := &s3.UploadPartCopyInput{
 		Bucket:     aws.String("examplebucket"),
-		CopySource: aws.String("bucketname/sourceobjectkey"),
+		CopySource: aws.String("/bucketname/sourceobjectkey"),
 		Key:        aws.String("examplelargeobject"),
 		PartNumber: aws.Int64(1),
 		UploadId:   aws.String("exampleuoh_10OhKhT7YukE9bjzTPRiuaCotmZM_pFngJFir9OZNrSr5cWa3cq3LZSUsfjI4FI7PkP91We7Nrw--"),

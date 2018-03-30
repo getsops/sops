@@ -98,3 +98,9 @@ func TestEndToEnd(t *testing.T) {
 		t.Errorf("nil map received")
 	}
 }
+
+func TestTypeRace(t *testing.T) {
+	// encoding/gob currently uses nosync. This test uses sync.WaitGroup and
+	// cannot succeed when nosync is used.
+	t.Skip("using nosync")
+}

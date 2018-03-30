@@ -66,7 +66,7 @@ func Syscall(trap, a1, a2, a3 uintptr) (r1, r2 uintptr, err Errno) {
 		printToConsole(slice)
 		return uintptr(array.Length()), 0, 0
 	}
-	if trap == SYS_EXIT {
+	if trap == exitTrap {
 		runtime.Goexit()
 	}
 	printWarning()

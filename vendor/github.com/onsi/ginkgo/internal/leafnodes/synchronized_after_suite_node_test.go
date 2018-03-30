@@ -1,18 +1,21 @@
 package leafnodes_test
 
 import (
+	"sync"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/internal/leafnodes"
 	"github.com/onsi/ginkgo/types"
 	. "github.com/onsi/gomega"
-	"sync"
+
+	"net/http"
 
 	"github.com/onsi/gomega/ghttp"
-	"net/http"
+
+	"time"
 
 	"github.com/onsi/ginkgo/internal/codelocation"
 	Failer "github.com/onsi/ginkgo/internal/failer"
-	"time"
 )
 
 var _ = Describe("SynchronizedAfterSuiteNode", func() {
@@ -132,19 +135,19 @@ var _ = Describe("SynchronizedAfterSuiteNode", func() {
 					func(writer http.ResponseWriter, request *http.Request) {
 						ranThing("Request1")
 					},
-					ghttp.RespondWithJSONEncoded(200, types.RemoteAfterSuiteData{false}),
+					ghttp.RespondWithJSONEncoded(200, types.RemoteAfterSuiteData{CanRun: false}),
 				), ghttp.CombineHandlers(
 					ghttp.VerifyRequest("GET", "/RemoteAfterSuiteData"),
 					func(writer http.ResponseWriter, request *http.Request) {
 						ranThing("Request2")
 					},
-					ghttp.RespondWithJSONEncoded(200, types.RemoteAfterSuiteData{false}),
+					ghttp.RespondWithJSONEncoded(200, types.RemoteAfterSuiteData{CanRun: false}),
 				), ghttp.CombineHandlers(
 					ghttp.VerifyRequest("GET", "/RemoteAfterSuiteData"),
 					func(writer http.ResponseWriter, request *http.Request) {
 						ranThing("Request3")
 					},
-					ghttp.RespondWithJSONEncoded(200, types.RemoteAfterSuiteData{true}),
+					ghttp.RespondWithJSONEncoded(200, types.RemoteAfterSuiteData{CanRun: true}),
 				))
 
 				node = newNode(func() {

@@ -14,12 +14,12 @@
 
 // Messages used for performance tests that may not reference grpc directly for
 // reasons of import cycles.
-syntax = "proto2";
+syntax = "proto3";
 
 package codec.perf;
 
 // Buffer is a message that contains a body of bytes that is used to exercise
 // encoding and decoding overheads.
 message Buffer {
-  optional bytes body = 1;
+  bytes body = 1;
 }

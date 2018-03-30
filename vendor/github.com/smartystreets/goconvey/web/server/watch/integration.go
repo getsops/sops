@@ -58,7 +58,7 @@ func (this *Watcher) Listen() {
 			if !this.paused {
 				this.scan()
 			}
-			time.Sleep(nap)
+			time.Sleep(this.nap)
 		}
 	}
 }
@@ -181,5 +181,3 @@ func (this *Watcher) protectedRead(protected func()) {
 	defer this.lock.RUnlock()
 	protected()
 }
-
-const nap = time.Millisecond * 250

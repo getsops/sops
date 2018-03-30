@@ -50,10 +50,15 @@ var _ = Describe("Emitting progress", func() {
 		})
 
 		It("should emit progress (by writing to the GinkgoWriter)", func() {
+			// First spec
+
 			Ω(session).Should(gbytes.Say(`\[BeforeEach\] ProgressFixture`))
 			Ω(session).Should(gbytes.Say(`>outer before<`))
 
 			Ω(session).Should(gbytes.Say(`\[BeforeEach\] Inner Context`))
+			Ω(session).Should(gbytes.Say(`>inner before<`))
+
+			Ω(session).Should(gbytes.Say(`\[BeforeEach\] when Inner When`))
 			Ω(session).Should(gbytes.Say(`>inner before<`))
 
 			Ω(session).Should(gbytes.Say(`\[JustBeforeEach\] ProgressFixture`))
@@ -67,6 +72,20 @@ var _ = Describe("Emitting progress", func() {
 
 			Ω(session).Should(gbytes.Say(`\[AfterEach\] Inner Context`))
 			Ω(session).Should(gbytes.Say(`>inner after<`))
+
+			Ω(session).Should(gbytes.Say(`\[AfterEach\] ProgressFixture`))
+			Ω(session).Should(gbytes.Say(`>outer after<`))
+
+			// Second spec
+
+			Ω(session).Should(gbytes.Say(`\[BeforeEach\] ProgressFixture`))
+			Ω(session).Should(gbytes.Say(`>outer before<`))
+
+			Ω(session).Should(gbytes.Say(`\[JustBeforeEach\] ProgressFixture`))
+			Ω(session).Should(gbytes.Say(`>outer just before<`))
+
+			Ω(session).Should(gbytes.Say(`\[It\] should emit progress as it goes`))
+			Ω(session).Should(gbytes.Say(`>specify<`))
 
 			Ω(session).Should(gbytes.Say(`\[AfterEach\] ProgressFixture`))
 			Ω(session).Should(gbytes.Say(`>outer after<`))

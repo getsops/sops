@@ -8,7 +8,7 @@ For this sample, we've already generated the server and client stubs from [hello
 PREREQUISITES
 -------------
 
-- This requires Go 1.7 or later
+- This requires Go 1.6 or later
 - Requires that [GOPATH is set](https://golang.org/doc/code.html#GOPATH)
 
 ```
@@ -30,31 +30,35 @@ TRY IT!
 
 - Run the server
 
-```
-$ greeter_server &
-```
+  ```
+  $ greeter_server &
+  ```
 
 - Run the client
 
-```
-$ greeter_client
-```
+  ```
+  $ greeter_client
+  ```
 
 OPTIONAL - Rebuilding the generated code
 ----------------------------------------
 
-1 First [install protoc](https://github.com/google/protobuf/blob/master/README.md)
-  - For now, this needs to be installed from source
-  - This is will change once proto3 is officially released
+1. Install [protobuf compiler](https://github.com/google/protobuf/blob/master/README.md#protocol-compiler-installation)
 
-2 Install the protoc Go plugin.
+1. Install the protoc Go plugin
 
-```
-$ go get -a github.com/golang/protobuf/protoc-gen-go
-```
+   ```
+   $ go get -u github.com/golang/protobuf/protoc-gen-go
+   ```
 
-3 Rebuild the generated Go code.
+1. Rebuild the generated Go code
 
-```
-$ go generate google.golang.org/grpc/examples/helloworld/...
-```
+   ```
+   $ go generate google.golang.org/grpc/examples/helloworld/...
+   ```
+   
+   Or run `protoc` command (with the grpc plugin)
+   
+   ```
+   $ protoc -I helloworld/ helloworld/helloworld.proto --go_out=plugins=grpc:helloworld
+   ```

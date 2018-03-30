@@ -5,13 +5,15 @@ import (
 	. "github.com/onsi/ginkgo/internal/leafnodes"
 	. "github.com/onsi/gomega"
 
-	"github.com/onsi/gomega/ghttp"
 	"net/http"
+
+	"github.com/onsi/gomega/ghttp"
+
+	"time"
 
 	"github.com/onsi/ginkgo/internal/codelocation"
 	Failer "github.com/onsi/ginkgo/internal/failer"
 	"github.com/onsi/ginkgo/types"
-	"time"
 )
 
 var _ = Describe("SynchronizedBeforeSuiteNode", func() {
@@ -176,7 +178,7 @@ var _ = Describe("SynchronizedBeforeSuiteNode", func() {
 
 			Context("when A succeeds", func() {
 				BeforeEach(func() {
-					expectedState = types.RemoteBeforeSuiteData{[]byte("my data"), types.RemoteBeforeSuiteStatePassed}
+					expectedState = types.RemoteBeforeSuiteData{Data: []byte("my data"), State: types.RemoteBeforeSuiteStatePassed}
 
 					node = newNode(func() []byte {
 						return []byte("my data")
@@ -200,11 +202,10 @@ var _ = Describe("SynchronizedBeforeSuiteNode", func() {
 
 			Context("when A fails", func() {
 				BeforeEach(func() {
-					expectedState = types.RemoteBeforeSuiteData{nil, types.RemoteBeforeSuiteStateFailed}
+					expectedState = types.RemoteBeforeSuiteData{Data: nil, State: types.RemoteBeforeSuiteStateFailed}
 
 					node = newNode(func() []byte {
 						panic("BAM")
-						return []byte("my data")
 					}, func([]byte) {
 						ranB = true
 					})
@@ -238,10 +239,10 @@ var _ = Describe("SynchronizedBeforeSuiteNode", func() {
 
 				server.AppendHandlers(ghttp.CombineHandlers(
 					ghttp.VerifyRequest("GET", "/BeforeSuiteState"),
-					ghttp.RespondWith(http.StatusOK, string((types.RemoteBeforeSuiteData{nil, types.RemoteBeforeSuiteStatePending}).ToJSON())),
+					ghttp.RespondWith(http.StatusOK, string((types.RemoteBeforeSuiteData{Data: nil, State: types.RemoteBeforeSuiteStatePending}).ToJSON())),
 				), ghttp.CombineHandlers(
 					ghttp.VerifyRequest("GET", "/BeforeSuiteState"),
-					ghttp.RespondWith(http.StatusOK, string((types.RemoteBeforeSuiteData{nil, types.RemoteBeforeSuiteStatePending}).ToJSON())),
+					ghttp.RespondWith(http.StatusOK, string((types.RemoteBeforeSuiteData{Data: nil, State: types.RemoteBeforeSuiteStatePending}).ToJSON())),
 				), ghttp.CombineHandlers(
 					ghttp.VerifyRequest("GET", "/BeforeSuiteState"),
 					ghttp.RespondWithJSONEncodedPtr(&statusCode, &response),
@@ -259,7 +260,7 @@ var _ = Describe("SynchronizedBeforeSuiteNode", func() {
 
 			Context("when A on node1 succeeds", func() {
 				BeforeEach(func() {
-					response = types.RemoteBeforeSuiteData{[]byte("my data"), types.RemoteBeforeSuiteStatePassed}
+					response = types.RemoteBeforeSuiteData{Data: []byte("my data"), State: types.RemoteBeforeSuiteStatePassed}
 					outcome = node.Run(parallelNode, parallelTotal, server.URL())
 				})
 
@@ -283,7 +284,7 @@ var _ = Describe("SynchronizedBeforeSuiteNode", func() {
 
 			Context("when A on node1 fails", func() {
 				BeforeEach(func() {
-					response = types.RemoteBeforeSuiteData{[]byte("my data"), types.RemoteBeforeSuiteStateFailed}
+					response = types.RemoteBeforeSuiteData{Data: []byte("my data"), State: types.RemoteBeforeSuiteStateFailed}
 					outcome = node.Run(parallelNode, parallelTotal, server.URL())
 				})
 
@@ -315,7 +316,7 @@ var _ = Describe("SynchronizedBeforeSuiteNode", func() {
 
 			Context("when node1 disappears", func() {
 				BeforeEach(func() {
-					response = types.RemoteBeforeSuiteData{[]byte("my data"), types.RemoteBeforeSuiteStateDisappeared}
+					response = types.RemoteBeforeSuiteData{Data: []byte("my data"), State: types.RemoteBeforeSuiteStateDisappeared}
 					outcome = node.Run(parallelNode, parallelTotal, server.URL())
 				})
 

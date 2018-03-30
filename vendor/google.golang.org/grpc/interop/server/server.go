@@ -25,6 +25,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/alts"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/interop"
 	testpb "google.golang.org/grpc/interop/grpc_testing"
@@ -33,6 +34,7 @@ import (
 
 var (
 	useTLS   = flag.Bool("use_tls", false, "Connection uses TLS if true, else plain TCP")
+	useALTS  = flag.Bool("use_alts", false, "Connection uses ALTS if true (this option can only be used on GCP)")
 	certFile = flag.String("tls_cert_file", "", "The TLS cert file")
 	keyFile  = flag.String("tls_key_file", "", "The TLS key file")
 	port     = flag.Int("port", 10000, "The server port")
@@ -40,6 +42,9 @@ var (
 
 func main() {
 	flag.Parse()
+	if *useTLS && *useALTS {
+		grpclog.Fatalf("use_tls and use_alts cannot be both set to true")
+	}
 	p := strconv.Itoa(*port)
 	lis, err := net.Listen("tcp", ":"+p)
 	if err != nil {
@@ -57,7 +62,10 @@ func main() {
 		if err != nil {
 			grpclog.Fatalf("Failed to generate credentials %v", err)
 		}
-		opts = []grpc.ServerOption{grpc.Creds(creds)}
+		opts = append(opts, grpc.Creds(creds))
+	} else if *useALTS {
+		altsTC := alts.NewServerCreds()
+		opts = append(opts, grpc.Creds(altsTC))
 	}
 	server := grpc.NewServer(opts...)
 	testpb.RegisterTestServiceServer(server, interop.NewTestServer())

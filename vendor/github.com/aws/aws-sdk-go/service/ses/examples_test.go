@@ -105,7 +105,12 @@ func ExampleSES_CreateReceiptRule_shared00() {
 		After: aws.String(""),
 		Rule: &ses.ReceiptRule{
 			Actions: []*ses.ReceiptAction{
-				{},
+				{
+					S3Action: &ses.S3Action{
+						BucketName:      aws.String("MyBucket"),
+						ObjectKeyPrefix: aws.String("email"),
+					},
+				},
 			},
 			Enabled:     aws.Bool(true),
 			Name:        aws.String("MyRule"),
@@ -421,6 +426,32 @@ func ExampleSES_DescribeReceiptRuleSet_shared00() {
 			switch aerr.Code() {
 			case ses.ErrCodeRuleSetDoesNotExistException:
 				fmt.Println(ses.ErrCodeRuleSetDoesNotExistException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// GetAccountSendingEnabled
+//
+// The following example returns if sending status for an account is enabled. (true
+// / false):
+func ExampleSES_GetAccountSendingEnabled_shared00() {
+	svc := ses.New(session.New())
+	input := &ses.GetAccountSendingEnabledInput{}
+
+	result, err := svc.GetAccountSendingEnabled(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -884,6 +915,10 @@ func ExampleSES_SendEmail_shared00() {
 				fmt.Println(ses.ErrCodeMailFromDomainNotVerifiedException, aerr.Error())
 			case ses.ErrCodeConfigurationSetDoesNotExistException:
 				fmt.Println(ses.ErrCodeConfigurationSetDoesNotExistException, aerr.Error())
+			case ses.ErrCodeConfigurationSetSendingPausedException:
+				fmt.Println(ses.ErrCodeConfigurationSetSendingPausedException, aerr.Error())
+			case ses.ErrCodeAccountSendingPausedException:
+				fmt.Println(ses.ErrCodeAccountSendingPausedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -923,6 +958,10 @@ func ExampleSES_SendRawEmail_shared00() {
 				fmt.Println(ses.ErrCodeMailFromDomainNotVerifiedException, aerr.Error())
 			case ses.ErrCodeConfigurationSetDoesNotExistException:
 				fmt.Println(ses.ErrCodeConfigurationSetDoesNotExistException, aerr.Error())
+			case ses.ErrCodeConfigurationSetSendingPausedException:
+				fmt.Println(ses.ErrCodeConfigurationSetSendingPausedException, aerr.Error())
+			case ses.ErrCodeAccountSendingPausedException:
+				fmt.Println(ses.ErrCodeAccountSendingPausedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1148,6 +1187,93 @@ func ExampleSES_SetReceiptRulePosition_shared00() {
 	fmt.Println(result)
 }
 
+// UpdateAccountSendingEnabled
+//
+// The following example updated the sending status for this account.
+func ExampleSES_UpdateAccountSendingEnabled_shared00() {
+	svc := ses.New(session.New())
+	input := &ses.UpdateAccountSendingEnabledInput{
+		Enabled: aws.Bool(true),
+	}
+
+	result, err := svc.UpdateAccountSendingEnabled(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// UpdateConfigurationSetReputationMetricsEnabled
+//
+// Set the reputationMetricsEnabled flag for a specific configuration set.
+func ExampleSES_UpdateConfigurationSetReputationMetricsEnabled_shared00() {
+	svc := ses.New(session.New())
+	input := &ses.UpdateConfigurationSetReputationMetricsEnabledInput{
+		ConfigurationSetName: aws.String("foo"),
+		Enabled:              aws.Bool(true),
+	}
+
+	result, err := svc.UpdateConfigurationSetReputationMetricsEnabled(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ses.ErrCodeConfigurationSetDoesNotExistException:
+				fmt.Println(ses.ErrCodeConfigurationSetDoesNotExistException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// UpdateConfigurationSetReputationMetricsEnabled
+//
+// Set the sending enabled flag for a specific configuration set.
+func ExampleSES_UpdateConfigurationSetSendingEnabled_shared00() {
+	svc := ses.New(session.New())
+	input := &ses.UpdateConfigurationSetSendingEnabledInput{
+		ConfigurationSetName: aws.String("foo"),
+		Enabled:              aws.Bool(true),
+	}
+
+	result, err := svc.UpdateConfigurationSetSendingEnabled(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ses.ErrCodeConfigurationSetDoesNotExistException:
+				fmt.Println(ses.ErrCodeConfigurationSetDoesNotExistException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // UpdateReceiptRule
 //
 // The following example updates a receipt rule to use an Amazon S3 action:
@@ -1156,7 +1282,12 @@ func ExampleSES_UpdateReceiptRule_shared00() {
 	input := &ses.UpdateReceiptRuleInput{
 		Rule: &ses.ReceiptRule{
 			Actions: []*ses.ReceiptAction{
-				{},
+				{
+					S3Action: &ses.S3Action{
+						BucketName:      aws.String("MyBucket"),
+						ObjectKeyPrefix: aws.String("email"),
+					},
+				},
 			},
 			Enabled:     aws.Bool(true),
 			Name:        aws.String("MyRule"),

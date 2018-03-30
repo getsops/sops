@@ -115,10 +115,8 @@ func main() {
 							s.Watcher.Add(name)
 						}
 					}
-					if err := s.BuildFiles(args, pkgObj, currentDirectory); err != nil {
-						return err
-					}
-					return nil
+					err := s.BuildFiles(args, pkgObj, currentDirectory)
+					return err
 				}
 
 				// Expand import path patterns.
@@ -309,6 +307,13 @@ func main() {
 			patternContext := gbuild.NewBuildContext("", options.BuildTags)
 			args = (&gotool.Context{BuildContext: *patternContext}).ImportPaths(args)
 
+			if *compileOnly && len(args) > 1 {
+				return errors.New("cannot use -c flag with multiple packages")
+			}
+			if *outputFilename != "" && len(args) > 1 {
+				return errors.New("cannot use -o flag with multiple packages")
+			}
+
 			pkgs := make([]*gbuild.PackageData, len(args))
 			for i, pkgPath := range args {
 				var err error
@@ -342,10 +347,7 @@ func main() {
 						}
 					}
 					_, err := s.BuildPackage(testPkg)
-					if err != nil {
-						return err
-					}
-					return nil
+					return err
 				}
 
 				if err := collectTests(&gbuild.PackageData{

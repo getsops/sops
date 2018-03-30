@@ -79,20 +79,11 @@ func stopTimer(t *runtimeTimer) bool {
 	return wasActive
 }
 
-func loadLocation(name string) (*Location, error) {
-	return loadZoneFile(runtime.GOROOT()+"/lib/time/zoneinfo.zip", name)
-}
-
 func forceZipFileForTesting(zipOnly bool) {
 }
 
-func initTestingZone() {
-	z, err := loadLocation("America/Los_Angeles")
-	if err != nil {
-		panic("cannot load America/Los_Angeles for testing: " + err.Error())
-	}
-	z.name = "Local"
-	localLoc = *z
+var zoneSources = []string{
+	runtime.GOROOT() + "/lib/time/zoneinfo.zip",
 }
 
 // indexByte is copied from strings package to avoid importing it (since the real time package doesn't).

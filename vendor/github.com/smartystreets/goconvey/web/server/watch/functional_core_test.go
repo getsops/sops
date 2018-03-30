@@ -404,7 +404,7 @@ func TestActiveFolders(t *testing.T) {
 }
 
 func TestSum(t *testing.T) {
-	Convey("Subject: file system items within specified directores should be counted and summed", t, func() {
+	Convey("Subject: file system items within specified directories should be counted and summed", t, func() {
 		folders := map[string]*messaging.Folder{
 			"/root/1": {Path: "/root/1", Root: "/root", Ignored: true},
 		}

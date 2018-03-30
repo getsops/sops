@@ -3,6 +3,7 @@ package matchers_test
 import (
 	"errors"
 	"fmt"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/matchers"
@@ -22,11 +23,11 @@ var _ = Describe("MatchErrorMatcher", func() {
 			fmtErr := fmt.Errorf("an error")
 			customErr := CustomError{}
 
-			Ω(err).Should(MatchError(errors.New("an error")))
-			Ω(err).ShouldNot(MatchError(errors.New("another error")))
+			Expect(err).Should(MatchError(errors.New("an error")))
+			Expect(err).ShouldNot(MatchError(errors.New("another error")))
 
-			Ω(fmtErr).Should(MatchError(errors.New("an error")))
-			Ω(customErr).Should(MatchError(CustomError{}))
+			Expect(fmtErr).Should(MatchError(errors.New("an error")))
+			Expect(customErr).Should(MatchError(CustomError{}))
 		})
 
 		It("should succeed when matching with a string", func() {
@@ -34,23 +35,23 @@ var _ = Describe("MatchErrorMatcher", func() {
 			fmtErr := fmt.Errorf("an error")
 			customErr := CustomError{}
 
-			Ω(err).Should(MatchError("an error"))
-			Ω(err).ShouldNot(MatchError("another error"))
+			Expect(err).Should(MatchError("an error"))
+			Expect(err).ShouldNot(MatchError("another error"))
 
-			Ω(fmtErr).Should(MatchError("an error"))
-			Ω(customErr).Should(MatchError("an error"))
+			Expect(fmtErr).Should(MatchError("an error"))
+			Expect(customErr).Should(MatchError("an error"))
 		})
 
 		Context("when passed a matcher", func() {
 			It("should pass if the matcher passes against the error string", func() {
 				err := errors.New("error 123 abc")
 
-				Ω(err).Should(MatchError(MatchRegexp(`\d{3}`)))
+				Expect(err).Should(MatchError(MatchRegexp(`\d{3}`)))
 			})
 
 			It("should fail if the matcher fails against the error string", func() {
 				err := errors.New("no digits")
-				Ω(err).ShouldNot(MatchError(MatchRegexp(`\d`)))
+				Expect(err).ShouldNot(MatchError(MatchRegexp(`\d`)))
 			})
 		})
 
@@ -59,12 +60,12 @@ var _ = Describe("MatchErrorMatcher", func() {
 			_, err := (&MatchErrorMatcher{
 				Expected: []byte("an error"),
 			}).Match(actualErr)
-			Ω(err).Should(HaveOccurred())
+			Expect(err).Should(HaveOccurred())
 
 			_, err = (&MatchErrorMatcher{
 				Expected: 3,
 			}).Match(actualErr)
-			Ω(err).Should(HaveOccurred())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 
@@ -73,7 +74,7 @@ var _ = Describe("MatchErrorMatcher", func() {
 			_, err := (&MatchErrorMatcher{
 				Expected: "an error",
 			}).Match(nil)
-			Ω(err).Should(HaveOccurred())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 
@@ -82,12 +83,25 @@ var _ = Describe("MatchErrorMatcher", func() {
 			_, err := (&MatchErrorMatcher{
 				Expected: "an error",
 			}).Match("an error")
-			Ω(err).Should(HaveOccurred())
+			Expect(err).Should(HaveOccurred())
 
 			_, err = (&MatchErrorMatcher{
 				Expected: "an error",
 			}).Match(3)
-			Ω(err).Should(HaveOccurred())
+			Expect(err).Should(HaveOccurred())
+		})
+	})
+
+	Context("when passed an error that is also a string", func() {
+		It("should use it as an error", func() {
+			var e mockErr = "mockErr"
+
+			// this fails if the matcher casts e to a string before comparison
+			Expect(e).Should(MatchError(e))
 		})
 	})
 })
+
+type mockErr string
+
+func (m mockErr) Error() string { return string(m) }

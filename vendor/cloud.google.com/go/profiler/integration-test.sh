@@ -7,19 +7,6 @@ set -eo pipefail
 set -x
 
 cd git/gocloud
-
-# Run test only if profiler directory is touched.
-profiler_test=false
-for f in $(git diff-tree --no-commit-id --name-only -r HEAD); do
-  if [[ "$(dirname $f)" == "profiler" ]]; then
-    profiler_test=true
-  fi
-done
-
-if [[ "$profiler_test" = false ]]; then
-  exit 0
-fi
-
 COMMIT=$(git rev-parse HEAD)
 
 # Set $GOPATH
@@ -29,10 +16,7 @@ mkdir -p $GOCLOUD_HOME
 
 # Move code into $GOPATH and get dependencies
 cp -R ./* $GOCLOUD_HOME
-cd $GOCLOUD_HOME
-go get -v ./...
-
-cd internal/kokoro
+cd $GOCLOUD_HOME/internal/kokoro
 # Don't print out encryption keys, etc
 set +x
 key=$(cat "$KOKORO_ARTIFACTS_DIR/keystore/72523_encrypted_ba2d6f7723ed_key")

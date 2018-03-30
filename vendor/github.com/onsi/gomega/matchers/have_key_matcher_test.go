@@ -26,48 +26,48 @@ var _ = Describe("HaveKey", func() {
 
 	Context("when passed a map", func() {
 		It("should do the right thing", func() {
-			Ω(stringKeys).Should(HaveKey("foo"))
-			Ω(stringKeys).ShouldNot(HaveKey("baz"))
+			Expect(stringKeys).Should(HaveKey("foo"))
+			Expect(stringKeys).ShouldNot(HaveKey("baz"))
 
-			Ω(intKeys).Should(HaveKey(2))
-			Ω(intKeys).ShouldNot(HaveKey(4))
+			Expect(intKeys).Should(HaveKey(2))
+			Expect(intKeys).ShouldNot(HaveKey(4))
 
-			Ω(objKeys).Should(HaveKey(customA))
-			Ω(objKeys).Should(HaveKey(&myCustomType{s: "b", n: 4, f: 3.1, arr: []string{"cake"}}))
-			Ω(objKeys).ShouldNot(HaveKey(&myCustomType{s: "b", n: 4, f: 3.1, arr: []string{"apple", "pie"}}))
+			Expect(objKeys).Should(HaveKey(customA))
+			Expect(objKeys).Should(HaveKey(&myCustomType{s: "b", n: 4, f: 3.1, arr: []string{"cake"}}))
+			Expect(objKeys).ShouldNot(HaveKey(&myCustomType{s: "b", n: 4, f: 3.1, arr: []string{"apple", "pie"}}))
 		})
 	})
 
 	Context("when passed a correctly typed nil", func() {
 		It("should operate succesfully on the passed in value", func() {
 			var nilMap map[int]string
-			Ω(nilMap).ShouldNot(HaveKey("foo"))
+			Expect(nilMap).ShouldNot(HaveKey("foo"))
 		})
 	})
 
 	Context("when the passed in key is actually a matcher", func() {
 		It("should pass each element through the matcher", func() {
-			Ω(stringKeys).Should(HaveKey(ContainSubstring("oo")))
-			Ω(stringKeys).ShouldNot(HaveKey(ContainSubstring("foobar")))
+			Expect(stringKeys).Should(HaveKey(ContainSubstring("oo")))
+			Expect(stringKeys).ShouldNot(HaveKey(ContainSubstring("foobar")))
 		})
 
 		It("should fail if the matcher ever fails", func() {
 			actual := map[int]string{1: "a", 3: "b", 2: "c"}
 			success, err := (&HaveKeyMatcher{Key: ContainSubstring("ar")}).Match(actual)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 
 	Context("when passed something that is not a map", func() {
 		It("should error", func() {
 			success, err := (&HaveKeyMatcher{Key: "foo"}).Match([]string{"foo"})
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 			success, err = (&HaveKeyMatcher{Key: "foo"}).Match(nil)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 })

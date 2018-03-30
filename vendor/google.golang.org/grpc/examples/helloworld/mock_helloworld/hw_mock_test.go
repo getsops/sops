@@ -21,6 +21,7 @@ package mock_helloworld_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/golang/mock/gomock"
 	"github.com/golang/protobuf/proto"
@@ -59,7 +60,9 @@ func TestSayHello(t *testing.T) {
 }
 
 func testSayHello(t *testing.T, client helloworld.GreeterClient) {
-	r, err := client.SayHello(context.Background(), &helloworld.HelloRequest{Name: "unit_test"})
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := client.SayHello(ctx, &helloworld.HelloRequest{Name: "unit_test"})
 	if err != nil || r.Message != "Mocked Interface" {
 		t.Errorf("mocking failed")
 	}

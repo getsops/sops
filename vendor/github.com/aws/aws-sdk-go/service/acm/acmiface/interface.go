@@ -102,6 +102,10 @@ type ACMAPI interface {
 	ResendValidationEmail(*acm.ResendValidationEmailInput) (*acm.ResendValidationEmailOutput, error)
 	ResendValidationEmailWithContext(aws.Context, *acm.ResendValidationEmailInput, ...request.Option) (*acm.ResendValidationEmailOutput, error)
 	ResendValidationEmailRequest(*acm.ResendValidationEmailInput) (*request.Request, *acm.ResendValidationEmailOutput)
+
+	UpdateCertificateOptions(*acm.UpdateCertificateOptionsInput) (*acm.UpdateCertificateOptionsOutput, error)
+	UpdateCertificateOptionsWithContext(aws.Context, *acm.UpdateCertificateOptionsInput, ...request.Option) (*acm.UpdateCertificateOptionsOutput, error)
+	UpdateCertificateOptionsRequest(*acm.UpdateCertificateOptionsInput) (*request.Request, *acm.UpdateCertificateOptionsOutput)
 }
 
 var _ ACMAPI = (*acm.ACM)(nil)

@@ -25,7 +25,7 @@ func TestHTTPServer(t *testing.T) {
 	Convey("Subject: HttpServer responds to requests appropriately", t, func() {
 		fixture := newServerFixture()
 
-		Convey("Before any update is recieved", func() {
+		Convey("Before any update is received", func() {
 			Convey("When the update is requested", func() {
 				update, _ := fixture.RequestLatest()
 
@@ -146,7 +146,7 @@ func TestHTTPServer(t *testing.T) {
 			})
 		})
 
-		SkipConvey("When a packge is ignored", func() {
+		SkipConvey("When a package is ignored", func() {
 
 			Convey("But the request has no path parameter", func() {
 				status, body := fixture.IgnoreMalformed()

@@ -38,6 +38,7 @@ import (
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/interop"
 	testpb "google.golang.org/grpc/interop/grpc_testing"
+	"google.golang.org/grpc/status"
 	metricspb "google.golang.org/grpc/stress/grpc_testing"
 	"google.golang.org/grpc/testdata"
 )
@@ -176,7 +177,7 @@ func (s *server) GetGauge(ctx context.Context, in *metricspb.GaugeRequest) (*met
 	if g, ok := s.gauges[in.Name]; ok {
 		return &metricspb.GaugeResponse{Name: in.Name, Value: &metricspb.GaugeResponse_LongValue{LongValue: g.get()}}, nil
 	}
-	return nil, grpc.Errorf(codes.InvalidArgument, "gauge with name %s not found", in.Name)
+	return nil, status.Errorf(codes.InvalidArgument, "gauge with name %s not found", in.Name)
 }
 
 // createGauge creates a gauge using the given name in metrics server.

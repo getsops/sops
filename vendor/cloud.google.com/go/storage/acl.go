@@ -15,10 +15,10 @@
 package storage
 
 import (
-	"fmt"
 	"net/http"
 	"reflect"
 
+	"cloud.google.com/go/internal/trace"
 	"golang.org/x/net/context"
 	"google.golang.org/api/googleapi"
 	raw "google.golang.org/api/storage/v1"
@@ -64,7 +64,10 @@ type ACLHandle struct {
 }
 
 // Delete permanently deletes the ACL entry for the given entity.
-func (a *ACLHandle) Delete(ctx context.Context, entity ACLEntity) error {
+func (a *ACLHandle) Delete(ctx context.Context, entity ACLEntity) (err error) {
+	ctx = trace.StartSpan(ctx, "cloud.google.com/go/storage.ACL.Delete")
+	defer func() { trace.EndSpan(ctx, err) }()
+
 	if a.object != "" {
 		return a.objectDelete(ctx, entity)
 	}
@@ -75,7 +78,10 @@ func (a *ACLHandle) Delete(ctx context.Context, entity ACLEntity) error {
 }
 
 // Set sets the permission level for the given entity.
-func (a *ACLHandle) Set(ctx context.Context, entity ACLEntity, role ACLRole) error {
+func (a *ACLHandle) Set(ctx context.Context, entity ACLEntity, role ACLRole) (err error) {
+	ctx = trace.StartSpan(ctx, "cloud.google.com/go/storage.ACL.Set")
+	defer func() { trace.EndSpan(ctx, err) }()
+
 	if a.object != "" {
 		return a.objectSet(ctx, entity, role, false)
 	}
@@ -86,7 +92,10 @@ func (a *ACLHandle) Set(ctx context.Context, entity ACLEntity, role ACLRole) err
 }
 
 // List retrieves ACL entries.
-func (a *ACLHandle) List(ctx context.Context) ([]ACLRule, error) {
+func (a *ACLHandle) List(ctx context.Context) (rules []ACLRule, err error) {
+	ctx = trace.StartSpan(ctx, "cloud.google.com/go/storage.ACL.List")
+	defer func() { trace.EndSpan(ctx, err) }()
+
 	if a.object != "" {
 		return a.objectList(ctx)
 	}
@@ -106,21 +115,17 @@ func (a *ACLHandle) bucketDefaultList(ctx context.Context) ([]ACLRule, error) {
 		return err
 	})
 	if err != nil {
-		return nil, fmt.Errorf("storage: error listing default object ACL for bucket %q: %v", a.bucket, err)
+		return nil, err
 	}
 	return toACLRules(acls.Items), nil
 }
 
 func (a *ACLHandle) bucketDefaultDelete(ctx context.Context, entity ACLEntity) error {
-	err := runWithRetry(ctx, func() error {
+	return runWithRetry(ctx, func() error {
 		req := a.c.raw.DefaultObjectAccessControls.Delete(a.bucket, string(entity))
 		a.configureCall(req, ctx)
 		return req.Do()
 	})
-	if err != nil {
-		return fmt.Errorf("storage: error deleting default ACL entry for bucket %q, entity %q: %v", a.bucket, entity, err)
-	}
-	return nil
 }
 
 func (a *ACLHandle) bucketList(ctx context.Context) ([]ACLRule, error) {
@@ -133,7 +138,7 @@ func (a *ACLHandle) bucketList(ctx context.Context) ([]ACLRule, error) {
 		return err
 	})
 	if err != nil {
-		return nil, fmt.Errorf("storage: error listing bucket ACL for bucket %q: %v", a.bucket, err)
+		return nil, err
 	}
 	r := make([]ACLRule, len(acls.Items))
 	for i, v := range acls.Items {
@@ -156,7 +161,7 @@ func (a *ACLHandle) bucketSet(ctx context.Context, entity ACLEntity, role ACLRol
 		return err
 	})
 	if err != nil {
-		return fmt.Errorf("storage: error updating bucket ACL entry for bucket %q, entity %q: %v", a.bucket, entity, err)
+		return err
 	}
 	return nil
 }
@@ -168,7 +173,7 @@ func (a *ACLHandle) bucketDelete(ctx context.Context, entity ACLEntity) error {
 		return req.Do()
 	})
 	if err != nil {
-		return fmt.Errorf("storage: error deleting bucket ACL entry for bucket %q, entity %q: %v", a.bucket, entity, err)
+		return err
 	}
 	return nil
 }
@@ -183,7 +188,7 @@ func (a *ACLHandle) objectList(ctx context.Context) ([]ACLRule, error) {
 		return err
 	})
 	if err != nil {
-		return nil, fmt.Errorf("storage: error listing object ACL for bucket %q, file %q: %v", a.bucket, a.object, err)
+		return nil, err
 	}
 	return toACLRules(acls.Items), nil
 }
@@ -206,30 +211,18 @@ func (a *ACLHandle) objectSet(ctx context.Context, entity ACLEntity, role ACLRol
 		req = a.c.raw.ObjectAccessControls.Update(a.bucket, a.object, string(entity), acl)
 	}
 	a.configureCall(req, ctx)
-	err := runWithRetry(ctx, func() error {
+	return runWithRetry(ctx, func() error {
 		_, err := req.Do()
 		return err
 	})
-	if err != nil {
-		if isBucketDefault {
-			return fmt.Errorf("storage: error updating default ACL entry for bucket %q, entity %q: %v", a.bucket, entity, err)
-		} else {
-			return fmt.Errorf("storage: error updating object ACL entry for bucket %q, object %q, entity %q: %v", a.bucket, a.object, entity, err)
-		}
-	}
-	return nil
 }
 
 func (a *ACLHandle) objectDelete(ctx context.Context, entity ACLEntity) error {
-	err := runWithRetry(ctx, func() error {
+	return runWithRetry(ctx, func() error {
 		req := a.c.raw.ObjectAccessControls.Delete(a.bucket, a.object, string(entity))
 		a.configureCall(req, ctx)
 		return req.Do()
 	})
-	if err != nil {
-		return fmt.Errorf("storage: error deleting object ACL entry for bucket %q, file %q, entity %q: %v", a.bucket, a.object, entity, err)
-	}
-	return nil
 }
 
 func (a *ACLHandle) configureCall(call interface {

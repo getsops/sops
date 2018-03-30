@@ -29,7 +29,7 @@
 //
 //    * Amazon SQS Product Page (http://aws.amazon.com/sqs/)
 //
-//    * Amazon SQS Developer Guide
+//    * Amazon Simple Queue Service Developer Guide
 //
 // Making API Requests (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/MakingRequestsArticle.html)
 //
@@ -48,7 +48,7 @@
 //
 // Using the Client
 //
-// To Amazon Simple Queue Service with the SDK use the New function to create
+// To contact Amazon Simple Queue Service with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.
 // These clients are safe to use concurrently.
 //

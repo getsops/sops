@@ -21,9 +21,11 @@ import (
 	"time"
 
 	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
+	tspb "github.com/golang/protobuf/ptypes/timestamp"
 )
 
 // A DocumentSnapshot contains document data and metadata.
@@ -43,26 +45,29 @@ type DocumentSnapshot struct {
 	// documents and the read time of a query.
 	UpdateTime time.Time
 
+	// Read-only. The time at which the document was read.
+	ReadTime time.Time
+
 	c     *Client
 	proto *pb.Document
 }
 
-func (d1 *DocumentSnapshot) equal(d2 *DocumentSnapshot) bool {
-	if d1 == nil || d2 == nil {
-		return d1 == d2
-	}
-	return d1.Ref.equal(d2.Ref) &&
-		d1.CreateTime.Equal(d2.CreateTime) &&
-		d1.UpdateTime.Equal(d2.UpdateTime) &&
-		d1.c == d2.c &&
-		proto.Equal(d1.proto, d2.proto)
+// Exists reports whether the DocumentSnapshot represents an existing document.
+// Even if Exists returns false, the Ref and ReadTime fields of the DocumentSnapshot
+// are valid.
+func (d *DocumentSnapshot) Exists() bool {
+	return d.proto != nil
 }
 
 // Data returns the DocumentSnapshot's fields as a map.
 // It is equivalent to
 //     var m map[string]interface{}
 //     d.DataTo(&m)
+// except that it returns nil if the document does not exist.
 func (d *DocumentSnapshot) Data() map[string]interface{} {
+	if !d.Exists() {
+		return nil
+	}
 	m, err := createMapFromValueMap(d.proto.Fields, d.c)
 	// Any error here is a bug in the client.
 	if err != nil {
@@ -99,19 +104,29 @@ func (d *DocumentSnapshot) Data() map[string]interface{} {
 //
 // Field names given by struct field tags are observed, as described in
 // DocumentRef.Create.
+//
+// If the document does not exist, DataTo returns a NotFound error.
 func (d *DocumentSnapshot) DataTo(p interface{}) error {
+	if !d.Exists() {
+		return status.Errorf(codes.NotFound, "document %s does not exist", d.Ref.Path)
+	}
 	return setFromProtoValue(p, &pb.Value{&pb.Value_MapValue{&pb.MapValue{d.proto.Fields}}}, d.c)
 }
 
-// DataAt returns the data value denoted by fieldPath.
+// DataAt returns the data value denoted by path.
 //
-// The fieldPath argument can be a single field or a dot-separated sequence of
+// The path argument can be a single field or a dot-separated sequence of
 // fields, and must not contain any of the runes "˜*/[]". Use DataAtPath instead for
 // such a path.
 //
 // See DocumentSnapshot.DataTo for how Firestore values are converted to Go values.
-func (d *DocumentSnapshot) DataAt(fieldPath string) (interface{}, error) {
-	fp, err := parseDotSeparatedString(fieldPath)
+//
+// If the document does not exist, DataAt returns a NotFound error.
+func (d *DocumentSnapshot) DataAt(path string) (interface{}, error) {
+	if !d.Exists() {
+		return nil, status.Errorf(codes.NotFound, "document %s does not exist", d.Ref.Path)
+	}
+	fp, err := parseDotSeparatedString(path)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +134,11 @@ func (d *DocumentSnapshot) DataAt(fieldPath string) (interface{}, error) {
 }
 
 // DataAtPath returns the data value denoted by the FieldPath fp.
+// If the document does not exist, DataAtPath returns a NotFound error.
 func (d *DocumentSnapshot) DataAtPath(fp FieldPath) (interface{}, error) {
+	if !d.Exists() {
+		return nil, status.Errorf(codes.NotFound, "document %s does not exist", d.Ref.Path)
+	}
 	v, err := valueAtPath(fp, d.proto.Fields)
 	if err != nil {
 		return nil, err
@@ -156,19 +175,26 @@ func toProtoDocument(x interface{}) (*pb.Document, []FieldPath, error) {
 		return nil, nil, errors.New("firestore: nil document contents")
 	}
 	v := reflect.ValueOf(x)
-	pv, err := toProtoValue(v)
+	pv, sawTransform, err := toProtoValue(v)
 	if err != nil {
 		return nil, nil, err
 	}
-	fieldPaths, err := extractTransformPaths(v, nil)
-	if err != nil {
-		return nil, nil, err
+	var fieldPaths []FieldPath
+	if sawTransform {
+		fieldPaths, err = extractTransformPaths(v, nil)
+		if err != nil {
+			return nil, nil, err
+		}
 	}
-	m := pv.GetMapValue()
-	if m == nil {
-		return nil, nil, fmt.Errorf("firestore: cannot covert value of type %T into a map", x)
+	var fields map[string]*pb.Value
+	if pv != nil {
+		m := pv.GetMapValue()
+		if m == nil {
+			return nil, nil, fmt.Errorf("firestore: cannot covert value of type %T into a map", x)
+		}
+		fields = m.Fields
 	}
-	return &pb.Document{Fields: m.Fields}, fieldPaths, nil
+	return &pb.Document{Fields: fields}, fieldPaths, nil
 }
 
 func extractTransformPaths(v reflect.Value, prefix FieldPath) ([]FieldPath, error) {
@@ -246,21 +272,30 @@ func extractTransformPathsFromStruct(v reflect.Value, prefix FieldPath) ([]Field
 	return paths, nil
 }
 
-func newDocumentSnapshot(ref *DocumentRef, proto *pb.Document, c *Client) (*DocumentSnapshot, error) {
+func newDocumentSnapshot(ref *DocumentRef, proto *pb.Document, c *Client, readTime *tspb.Timestamp) (*DocumentSnapshot, error) {
 	d := &DocumentSnapshot{
 		Ref:   ref,
 		c:     c,
 		proto: proto,
 	}
-	ts, err := ptypes.Timestamp(proto.CreateTime)
-	if err != nil {
-		return nil, err
+	if proto != nil {
+		ts, err := ptypes.Timestamp(proto.CreateTime)
+		if err != nil {
+			return nil, err
+		}
+		d.CreateTime = ts
+		ts, err = ptypes.Timestamp(proto.UpdateTime)
+		if err != nil {
+			return nil, err
+		}
+		d.UpdateTime = ts
 	}
-	d.CreateTime = ts
-	ts, err = ptypes.Timestamp(proto.UpdateTime)
-	if err != nil {
-		return nil, err
+	if readTime != nil {
+		ts, err := ptypes.Timestamp(readTime)
+		if err != nil {
+			return nil, err
+		}
+		d.ReadTime = ts
 	}
-	d.UpdateTime = ts
 	return d, nil
 }

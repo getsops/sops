@@ -49,6 +49,10 @@ func use(p unsafe.Pointer) {
 	// no-op
 }
 
+func Exit(code int) {
+	Syscall(exitTrap, uintptr(code), 0, 0)
+}
+
 // indexByte is copied from bytes package to avoid importing it (since the real syscall package doesn't).
 func indexByte(s []byte, c byte) int {
 	for i, b := range s {
