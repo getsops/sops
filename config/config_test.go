@@ -44,11 +44,27 @@ func TestFindConfigFileCurrentDir(t *testing.T) {
 
 var sampleConfig = []byte(`
 creation_rules:
-  - filename_regex: foobar*
+  - path_regex: foobar*
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
-  - filename_regex: ""
+  - path_regex: ""
+    kms: foo
+    pgp: bar
+    gcp_kms: baz
+`)
+
+var sampleConfigWithPath = []byte(`
+creation_rules:
+  - path_regex: foo/bar*
+    kms: "1"
+    pgp: "2"
+    gcp_kms: "3"
+  - filename_regex: "somefilename.yml"
+    kms: bilbo
+    pgp: baggins
+    gcp_kms: precious
+  - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
@@ -56,10 +72,10 @@ creation_rules:
 
 var sampleConfigWithGroups = []byte(`
 creation_rules:
-  - filename_regex: foobar*
+  - path_regex: foobar*
     kms: "1"
     pgp: "2"
-  - filename_regex: ""
+  - path_regex: ""
     key_groups:
     - kms:
       - arn: foo
@@ -84,16 +100,16 @@ func TestLoadConfigFile(t *testing.T) {
 	expected := configFile{
 		CreationRules: []creationRule{
 			creationRule{
-				FilenameRegex: "foobar*",
-				KMS:           "1",
-				PGP:           "2",
-				GCPKMS:        "3",
+				PathRegex: "foobar*",
+				KMS:       "1",
+				PGP:       "2",
+				GCPKMS:    "3",
 			},
 			creationRule{
-				FilenameRegex: "",
-				KMS:           "foo",
-				PGP:           "bar",
-				GCPKMS:        "baz",
+				PathRegex: "",
+				KMS:       "foo",
+				PGP:       "bar",
+				GCPKMS:    "baz",
 			},
 		},
 	}
@@ -108,12 +124,12 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 	expected := configFile{
 		CreationRules: []creationRule{
 			{
-				FilenameRegex: "foobar*",
-				KMS:           "1",
-				PGP:           "2",
+				PathRegex: "foobar*",
+				KMS:       "1",
+				PGP:       "2",
 			},
 			{
-				FilenameRegex: "",
+				PathRegex: "",
 				KeyGroups: []keyGroup{
 					{
 						KMS:    []kmsKey{{Arn: "foo"}},
@@ -149,6 +165,21 @@ func TestKeyGroupsForFile(t *testing.T) {
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
+	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
+}
+
+func TestKeyGroupsForFileWithPath(t *testing.T) {
+	conf, err := loadForFileFromBytes(sampleConfigWithPath, "foo/bar2000", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
+	conf, err = loadForFileFromBytes(sampleConfigWithPath, "somefilename.yml", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "baggins", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "bilbo", conf.KeyGroups[0][1].ToString())
 	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
