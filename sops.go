@@ -46,6 +46,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/logging"
@@ -179,6 +180,8 @@ func (branch TreeBranch) Set(path []interface{}, value interface{}) (TreeBranch)
 type Tree struct {
 	Branch   TreeBranch
 	Metadata Metadata
+	// FilePath is the path of the file this struct represents
+	FilePath string
 }
 
 // Truncate truncates the tree to the path specified
@@ -363,6 +366,9 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("Error walking tree: %s", err)
 	}
+	audit.SubmitEvent(audit.DecryptEvent{
+		File: tree.FilePath,
+	})
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
