@@ -5,8 +5,6 @@ CREATE TABLE decrypt_event (
   file TEXT
 );
 
-CREATE RULE decrypt_event_delete_protection AS ON DELETE TO decrypt_event DO INSTEAD NOTHING;
-
 CREATE TABLE encrypt_event (
   id SERIAL PRIMARY KEY,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -14,16 +12,12 @@ CREATE TABLE encrypt_event (
   file TEXT
 );
 
-CREATE RULE encrypt_event_delete_protection AS ON DELETE TO encrypt_event DO INSTEAD NOTHING;
-
 CREATE TABLE rotate_event (
   id SERIAL PRIMARY KEY,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   username TEXT,
   file TEXT
 );
-
-CREATE RULE rotate_event_delete_protection AS ON DELETE TO rotate_event DO INSTEAD NOTHING;
 
 CREATE ROLE sops WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN PASSWORD 'sops';
 
