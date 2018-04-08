@@ -329,6 +329,10 @@ func main() {
 			Value: sops.DefaultUnencryptedSuffix,
 		},
 		cli.StringFlag{
+			Name:  "encrypted-suffix",
+			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
+		},
+		cli.StringFlag{
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
 		},
@@ -392,6 +396,7 @@ func main() {
 				InputPath:         fileName,
 				Cipher:            aes.NewCipher(),
 				UnencryptedSuffix: c.String("unencrypted-suffix"),
+				EncryptedSuffix:   c.String("encrypted-suffix"),
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -498,6 +503,7 @@ func main() {
 				output, err = editExample(editExampleOpts{
 					editOpts:          opts,
 					UnencryptedSuffix: c.String("unencrypted-suffix"),
+					EncryptedSuffix:   c.String("encrypted-suffix"),
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})

@@ -42,6 +42,7 @@ type Metadata struct {
 	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
 	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
 	UnencryptedSuffix         string      `yaml:"unencrypted_suffix" json:"unencrypted_suffix"`
+	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
 	Version                   string      `yaml:"version" json:"version"`
 }
 
@@ -76,6 +77,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	var m Metadata
 	m.LastModified = sopsMetadata.LastModified.Format(time.RFC3339)
 	m.UnencryptedSuffix = sopsMetadata.UnencryptedSuffix
+	m.EncryptedSuffix = sopsMetadata.EncryptedSuffix
 	m.MessageAuthenticationCode = sopsMetadata.MessageAuthenticationCode
 	m.Version = sopsMetadata.Version
 	m.ShamirThreshold = sopsMetadata.ShamirThreshold
@@ -159,6 +161,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 		Version:                   m.Version,
 		MessageAuthenticationCode: m.MessageAuthenticationCode,
 		UnencryptedSuffix:         m.UnencryptedSuffix,
+		EncryptedSuffix:           m.EncryptedSuffix,
 		LastModified:              lastModified,
 	}, nil
 }
