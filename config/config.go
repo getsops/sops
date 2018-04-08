@@ -143,7 +143,7 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 	}
 
 	if rule.UnencryptedSuffix != "" && rule.EncryptedSuffix != "" {
-		return nil, fmt.Errorf("error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same path_regex")
+		return nil, fmt.Errorf("error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same rule")
 	}
 
 	var groups []sops.KeyGroup

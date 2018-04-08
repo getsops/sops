@@ -92,7 +92,7 @@ creation_rules:
       - resource_id: baz
 `)
 
-var sampleConfigWithUnencryptedSuffix = []byte(`
+var sampleConfigWithSuffixParameters = []byte(`
 creation_rules:
   - path_regex: foobar*
     kms: "1"
@@ -223,18 +223,18 @@ func TestKeyGroupsForFileWithGroups(t *testing.T) {
 }
 
 func TestLoadConfigFileWithUnencryptedSuffix(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithUnencryptedSuffix, "foobar", nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "foobar", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "_unencrypted", conf.UnencryptedSuffix)
 }
 
 func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithUnencryptedSuffix, "barfoo", nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "barfoo", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "_enc", conf.EncryptedSuffix)
 }
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
 	_, err := loadForFileFromBytes(sampleConfigWithInvalidParameters, "foobar", nil)
-	assert.EqualError(t, err, "error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same path_regex")
+	assert.NotNil(t, err)
 }
