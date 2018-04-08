@@ -107,7 +107,7 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 				leaf,
 			}
 		} else {
-			return []interface{} {
+			return []interface{}{
 				valueFromPathAndLeaf(path[1:], leaf),
 			}
 		}
@@ -115,14 +115,14 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 		if len(path) == 1 {
 			return TreeBranch{
 				TreeItem{
-					Key: component,
+					Key:   component,
 					Value: leaf,
 				},
 			}
 		} else {
 			return TreeBranch{
 				TreeItem{
-					Key: component,
+					Key:   component,
 					Value: valueFromPathAndLeaf(path[1:], leaf),
 				},
 			}
@@ -171,7 +171,7 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 	}
 }
 
-func (branch TreeBranch) Set(path []interface{}, value interface{}) (TreeBranch) {
+func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 	return set(branch, path, value).(TreeBranch)
 }
 
@@ -281,7 +281,8 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 	return in, nil
 }
 
-// Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If encryption is successful, it returns the MAC for the encrypted tree.
+// Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct, or those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not).
+// If encryption is successful, it returns the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
@@ -294,9 +295,21 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 			hash.Write(bytes)
 		}
 		encrypted := true
-		for _, v := range path {
-			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
-				encrypted = false
+		if tree.Metadata.UnencryptedSuffix != "" {
+			for _, v := range path {
+				if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
+					encrypted = false
+					break
+				}
+			}
+		}
+		if tree.Metadata.EncryptedSuffix != "" {
+			encrypted = false
+			for _, v := range path {
+				if strings.HasSuffix(v, tree.Metadata.EncryptedSuffix) {
+					encrypted = true
+					break
+				}
 			}
 		}
 		if encrypted {
@@ -315,15 +328,28 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
-// Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct. If decryption is successful, it returns the MAC for the decrypted tree.
+// Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct or those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not).
+// If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		encrypted := true
-		for _, p := range path {
-			if strings.HasSuffix(p, tree.Metadata.UnencryptedSuffix) {
-				encrypted = false
+		if tree.Metadata.UnencryptedSuffix != "" {
+			for _, p := range path {
+				if strings.HasSuffix(p, tree.Metadata.UnencryptedSuffix) {
+					encrypted = false
+					break
+				}
+			}
+		}
+		if tree.Metadata.EncryptedSuffix != "" {
+			encrypted = false
+			for _, p := range path {
+				if strings.HasSuffix(p, tree.Metadata.EncryptedSuffix) {
+					encrypted = true
+					break
+				}
 			}
 		}
 		var v interface{}
@@ -390,6 +416,7 @@ func (tree *Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceCli
 type Metadata struct {
 	LastModified              time.Time
 	UnencryptedSuffix         string
+	EncryptedSuffix           string
 	MessageAuthenticationCode string
 	Version                   string
 	KeyGroups                 []KeyGroup

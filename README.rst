@@ -894,6 +894,11 @@ breaking the file integrity check.
 The unencrypted suffix can be set to a different value using the
 `--unencrypted-suffix` option.
 
+Conversely, you can opt in to only encrypt some values in a YAML or JSON file,
+by adding a chosen suffix to those keys and passing it to the `--encrypted-suffix` option.
+
+These two options `--unencrypted-suffix` and `--encrypted-suffix` cannot both be used in the same file.
+
 Encryption Protocol
 -------------------
 

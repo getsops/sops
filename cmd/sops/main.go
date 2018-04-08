@@ -326,7 +326,10 @@ func main() {
 		cli.StringFlag{
 			Name:  "unencrypted-suffix",
 			Usage: "override the unencrypted key suffix.",
-			Value: sops.DefaultUnencryptedSuffix,
+		},
+		cli.StringFlag{
+			Name:  "encrypted-suffix",
+			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
 		},
 		cli.StringFlag{
 			Name:  "config",
@@ -362,11 +365,21 @@ func main() {
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" {
-				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", 49)
+				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
 				return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
 			}
+		}
+
+		unencryptedSuffix := c.String("unencrypted-suffix")
+		encryptedSuffix := c.String("encrypted-suffix")
+		if unencryptedSuffix != "" && encryptedSuffix != "" {
+			return common.NewExitError("Error: cannot use both encrypted_suffix and unencrypted_suffix in the same file", codes.ErrorConflictingParameters)
+		}
+		// only supply the default UnencryptedSuffix when EncryptedSuffix is not provided
+		if unencryptedSuffix == "" && encryptedSuffix == "" {
+			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
 		inputStore := inputStore(c, fileName)
@@ -391,7 +404,8 @@ func main() {
 				InputStore:        inputStore,
 				InputPath:         fileName,
 				Cipher:            aes.NewCipher(),
-				UnencryptedSuffix: c.String("unencrypted-suffix"),
+				UnencryptedSuffix: unencryptedSuffix,
+				EncryptedSuffix:   encryptedSuffix,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -497,7 +511,8 @@ func main() {
 				}
 				output, err = editExample(editExampleOpts{
 					editOpts:          opts,
-					UnencryptedSuffix: c.String("unencrypted-suffix"),
+					UnencryptedSuffix: unencryptedSuffix,
+					EncryptedSuffix:   encryptedSuffix,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})
