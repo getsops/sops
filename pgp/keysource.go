@@ -90,7 +90,7 @@ func getKeyFromKeyServer(keyserver string, fingerprint string) (openpgp.Entity, 
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
-		return openpgp.Entity{}, fmt.Errorf("keyserver returned non-200 status code %d", resp.Status)
+		return openpgp.Entity{}, fmt.Errorf("keyserver returned non-200 status code %s", resp.Status)
 	}
 	ents, err := openpgp.ReadArmoredKeyRing(resp.Body)
 	if err != nil {
