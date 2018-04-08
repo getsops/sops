@@ -304,17 +304,13 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 			}
 		}
 		if tree.Metadata.EncryptedSuffix != "" {
-			encryptedSuffixFound := false
+			encrypted = false
 			for _, v := range path {
 				if strings.HasSuffix(v, tree.Metadata.EncryptedSuffix) {
-					encryptedSuffixFound = true
-					if !encrypted {
-						return nil, fmt.Errorf("Cannot use both encrypted_suffix and unencrypted_suffix in the same file")
-					}
+					encrypted = true
 					break
 				}
 			}
-			encrypted = encryptedSuffixFound
 		}
 		if encrypted {
 			var err error
@@ -348,17 +344,13 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 			}
 		}
 		if tree.Metadata.EncryptedSuffix != "" {
-			encryptedSuffixFound := false
+			encrypted = false
 			for _, p := range path {
 				if strings.HasSuffix(p, tree.Metadata.EncryptedSuffix) {
-					encryptedSuffixFound = true
-					if !encrypted {
-						return nil, fmt.Errorf("Cannot use both encrypted_suffix and unencrypted_suffix in the same file")
-					}
+					encrypted = true
 					break
 				}
 			}
-			encrypted = encryptedSuffixFound
 		}
 		var v interface{}
 		if encrypted {

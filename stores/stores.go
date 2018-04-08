@@ -41,7 +41,7 @@ type Metadata struct {
 	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
 	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
 	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
-	UnencryptedSuffix         string      `yaml:"unencrypted_suffix" json:"unencrypted_suffix"`
+	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
 	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
 	Version                   string      `yaml:"version" json:"version"`
 }
@@ -152,7 +152,10 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	if err != nil {
 		return sops.Metadata{}, err
 	}
-	if m.UnencryptedSuffix == "" {
+	if m.UnencryptedSuffix != "" && m.EncryptedSuffix != "" {
+		return sops.Metadata{}, fmt.Errorf("Cannot use both encrypted_suffix and unencrypted_suffix in the same file")
+	}
+	if m.UnencryptedSuffix == "" && m.EncryptedSuffix == "" {
 		m.UnencryptedSuffix = sops.DefaultUnencryptedSuffix
 	}
 	return sops.Metadata{
