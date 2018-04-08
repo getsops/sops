@@ -36,6 +36,7 @@ type editOpts struct {
 type editExampleOpts struct {
 	editOpts
 	UnencryptedSuffix string
+	EncryptedSuffix   string
 	KeyGroups         []sops.KeyGroup
 	GroupThreshold    int
 }
@@ -96,6 +97,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	tree.Metadata = sops.Metadata{
 		KeyGroups:         opts.KeyGroups,
 		UnencryptedSuffix: opts.UnencryptedSuffix,
+		EncryptedSuffix:   opts.EncryptedSuffix,
 		Version:           version,
 		ShamirThreshold:   opts.GroupThreshold,
 	}

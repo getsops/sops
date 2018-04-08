@@ -83,6 +83,56 @@ func TestUnencryptedSuffix(t *testing.T) {
 	}
 }
 
+func TestEncryptedSuffix(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key:   "foo_encrypted",
+			Value: "bar",
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	tree := Tree{Branch: branch, Metadata: Metadata{EncryptedSuffix: "_encrypted"}}
+	expected := TreeBranch{
+		TreeItem{
+			Key:   "foo_encrypted",
+			Value: "rab",
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	if !reflect.DeepEqual(tree.Branch, expected) {
+		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branch, expected)
+	}
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Decrypting the tree failed: %s", err)
+	}
+	expected[0].Value = "bar"
+	if !reflect.DeepEqual(tree.Branch, expected) {
+		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branch, expected)
+	}
+}
+
 type MockCipher struct{}
 
 func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
@@ -248,7 +298,6 @@ func TestTruncateTree(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
-
 func TestEncryptComments(t *testing.T) {
 	tree := Tree{
 		Branch: TreeBranch{
@@ -327,7 +376,7 @@ func TestSetNewKey(t *testing.T) {
 					Key: "bar",
 					Value: TreeBranch{
 						TreeItem{
-							Key: "baz",
+							Key:   "baz",
 							Value: "foobar",
 						},
 					},
@@ -356,14 +405,13 @@ func TestSetArrayDeepNew(t *testing.T) {
 func TestSetNewKeyDeep(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: "bar",
 		},
 	}
 	set := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
 }
-
 
 func TestSetNewKeyOnEmptyBranch(t *testing.T) {
 	branch := TreeBranch{}
@@ -386,7 +434,6 @@ func TestSetArray(t *testing.T) {
 	assert.Equal(t, "uno", set[0].Value.([]interface{})[0])
 }
 
-
 func TestSetArrayNew(t *testing.T) {
 	branch := TreeBranch{}
 	set := branch.Set([]interface{}{"foo", 0, 0}, "uno")
@@ -396,7 +443,7 @@ func TestSetArrayNew(t *testing.T) {
 func TestSetExisting(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: "foobar",
 		},
 	}
@@ -407,7 +454,7 @@ func TestSetExisting(t *testing.T) {
 func TestSetArrayLeafNewItem(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
-			Key: "array",
+			Key:   "array",
 			Value: []interface{}{},
 		},
 	}
@@ -438,7 +485,7 @@ func TestSetArrayNonLeaf(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "hello",
+						Key:   "hello",
 						Value: "hello",
 					},
 				},
