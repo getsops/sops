@@ -696,7 +696,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 }
 
 // loadConfig will look for an existing config file, either provided through the command line, or using config.FindConfigFile.
-// Since a config file is not required, a return value of nil, nil is possible
+// Since a config file is not required, this function does not error when one is not found, and instead returns a nil config pointer
 func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*string) (*config.Config, error) {
 	var err error
 	var configPath string
