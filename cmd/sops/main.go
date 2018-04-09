@@ -704,8 +704,8 @@ func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*st
 		configPath = c.String("config")
 	} else {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
-		configPath, _ = config.FindConfigFile(".")
-		if configPath == "" {
+		configPath, err = config.FindConfigFile(".")
+		if err != nil {
 			// If we can't find a config file, but we were not explicitly requested to, assume it does not exist
 			return nil, nil
 		}
