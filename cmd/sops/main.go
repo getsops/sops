@@ -384,7 +384,7 @@ func main() {
 				unencryptedSuffix = conf.UnencryptedSuffix
 			}
 			if encryptedSuffix == "" {
-				encryptedSuffix = conf.UnencryptedSuffix
+				encryptedSuffix = conf.EncryptedSuffix
 			}
 		}
 		if unencryptedSuffix != "" && encryptedSuffix != "" {
@@ -695,15 +695,18 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	return []sops.KeyGroup{group}, nil
 }
 
+// loadConfig will look for an existing config file, either provided through the command line, or using config.FindConfigFile.
+// Since a config file is not required, a return value of nil, nil is possible
 func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*string) (*config.Config, error) {
 	var err error
 	var configPath string
 	if c.String("config") != "" {
 		configPath = c.String("config")
 	} else {
-		configPath, err = config.FindConfigFile(".")
-		if err != nil {
-			// If we can't find a config file, but we were not request it, assume it does not exist
+		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
+		configPath, _ = config.FindConfigFile(".")
+		if configPath == "" {
+			// If we can't find a config file, but we were not explicitly requested to, assume it does not exist
 			return nil, nil
 		}
 	}
@@ -720,8 +723,9 @@ func shamirThreshold(c *cli.Context, file string) (int, error) {
 	}
 	conf, err := loadConfig(c, file, nil)
 	if conf == nil {
-		// If shamir flag isn't set and we can't find a config file,
-		// assume we don't want Shamir
+		// This takes care of the following two case:
+		// 1. No config was provided. Err will be nil and ShamirThreshold will be the default value of 0.
+		// 2. We did find a config file, but failed to load it. In that case the calling function will print the error and exit.
 		return 0, err
 	}
 	return conf.ShamirThreshold, nil
