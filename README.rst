@@ -411,7 +411,7 @@ can manage the three sets of configurations for the three types of files:
 
 		# Finally, if the rules above have not matched, this one is a
 		# catchall that will encrypt the file using KMS set C
-		# The absence of a filename_regex means it will match everything
+		# The absence of a path_regex means it will match everything
 		- kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
 		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
 
@@ -897,7 +897,10 @@ The unencrypted suffix can be set to a different value using the
 Conversely, you can opt in to only encrypt some values in a YAML or JSON file,
 by adding a chosen suffix to those keys and passing it to the `--encrypted-suffix` option.
 
-These two options `--unencrypted-suffix` and `--encrypted-suffix` cannot both be used in the same file.
+You can also specify these options in the `.sops.yaml` config file.
+
+Note: these two options `--unencrypted-suffix` and `--encrypted-suffix` are mutually exclusive and
+cannot both be used in the same file.
 
 Encryption Protocol
 -------------------
