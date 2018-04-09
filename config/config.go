@@ -79,13 +79,15 @@ type kmsKey struct {
 }
 
 type creationRule struct {
-	FilenameRegex   string `yaml:"filename_regex"`
-	PathRegex       string `yaml:"path_regex"`
-	KMS             string
-	PGP             string
-	GCPKMS          string     `yaml:"gcp_kms"`
-	KeyGroups       []keyGroup `yaml:"key_groups"`
-	ShamirThreshold int        `yaml:"shamir_threshold"`
+	FilenameRegex     string `yaml:"filename_regex"`
+	PathRegex         string `yaml:"path_regex"`
+	KMS               string
+	PGP               string
+	GCPKMS            string     `yaml:"gcp_kms"`
+	KeyGroups         []keyGroup `yaml:"key_groups"`
+	ShamirThreshold   int        `yaml:"shamir_threshold"`
+	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
+	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -99,8 +101,10 @@ func (f *configFile) load(bytes []byte) error {
 
 // Config is the configuration for a given SOPS file
 type Config struct {
-	KeyGroups       []sops.KeyGroup
-	ShamirThreshold int
+	KeyGroups         []sops.KeyGroup
+	ShamirThreshold   int
+	UnencryptedSuffix string
+	EncryptedSuffix   string
 }
 
 func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
@@ -138,6 +142,10 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		return nil, fmt.Errorf("error loading config: no matching creation rules found")
 	}
 
+	if rule.UnencryptedSuffix != "" && rule.EncryptedSuffix != "" {
+		return nil, fmt.Errorf("error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same rule")
+	}
+
 	var groups []sops.KeyGroup
 	if len(rule.KeyGroups) > 0 {
 		for _, group := range rule.KeyGroups {
@@ -167,8 +175,10 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		groups = append(groups, keyGroup)
 	}
 	return &Config{
-		KeyGroups:       groups,
-		ShamirThreshold: rule.ShamirThreshold,
+		KeyGroups:         groups,
+		ShamirThreshold:   rule.ShamirThreshold,
+		UnencryptedSuffix: rule.UnencryptedSuffix,
+		EncryptedSuffix:   rule.EncryptedSuffix,
 	}, nil
 }
 

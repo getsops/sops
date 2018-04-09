@@ -92,6 +92,33 @@ creation_rules:
       - resource_id: baz
 `)
 
+var sampleConfigWithSuffixParameters = []byte(`
+creation_rules:
+  - path_regex: foobar*
+    kms: "1"
+    pgp: "2"
+    unencrypted_suffix: _unencrypted
+  - path_regex: bar?foo$
+    encrypted_suffix: _enc
+    key_groups:
+      - kms:
+          - arn: baz
+        pgp:
+          - qux
+        gcp_kms:
+          - resource_id: bar
+          - resource_id: baz
+    `)
+
+var sampleConfigWithInvalidParameters = []byte(`
+creation_rules:
+  - path_regex: foobar*
+    kms: "1"
+    pgp: "2"
+    unencrypted_suffix: _unencrypted
+    encrypted_suffix: _enc
+    `)
+
 var sampleInvalidConfig = []byte(`
 creation_rules:
 `)
@@ -193,4 +220,21 @@ func TestKeyGroupsForFileWithGroups(t *testing.T) {
 	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
 	assert.Equal(t, "qux", conf.KeyGroups[1][0].ToString())
 	assert.Equal(t, "baz", conf.KeyGroups[1][1].ToString())
+}
+
+func TestLoadConfigFileWithUnencryptedSuffix(t *testing.T) {
+	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "foobar", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "_unencrypted", conf.UnencryptedSuffix)
+}
+
+func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
+	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "barfoo", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "_enc", conf.EncryptedSuffix)
+}
+
+func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
+	_, err := loadForFileFromBytes(sampleConfigWithInvalidParameters, "foobar", nil)
+	assert.NotNil(t, err)
 }
