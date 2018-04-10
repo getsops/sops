@@ -140,7 +140,7 @@ func keyToString(key Key) string {
 	case *Key_GcpKmsKey:
 		return fmt.Sprintf("GCP KMS key with resource ID %s", k.GcpKmsKey.ResourceId)
 	default:
-		return fmt.Sprintf("Unknown key")
+		return fmt.Sprintf("Unknown key type")
 	}
 }
 
