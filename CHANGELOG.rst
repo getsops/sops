@@ -17,6 +17,20 @@ Changelog
 
 * Allow forcing binary input and output types from command line flags
 
+* Deprecate filename_regex in favor of path_regex. filename_regex had
+  a bug and matched on the whole file path, when it should have only
+  matched on the file name. path_regex on the other hand is documented
+  to match on the whole file path.
+
+* Add an encrypted-suffix option, the exact opposite of
+  unencrypted-suffix
+
+* Allow specifying unencrypted_suffix and encrypted_suffix rules in
+  the .sops.yaml configuration file
+
+* Introduce key service flag optionally prompting users on
+  encryption/decryption
+
 3.0.1
 -----
 
