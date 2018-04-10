@@ -326,7 +326,10 @@ func main() {
 		cli.StringFlag{
 			Name:  "unencrypted-suffix",
 			Usage: "override the unencrypted key suffix.",
-			Value: sops.DefaultUnencryptedSuffix,
+		},
+		cli.StringFlag{
+			Name:  "encrypted-suffix",
+			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
 		},
 		cli.StringFlag{
 			Name:  "config",
@@ -362,11 +365,34 @@ func main() {
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" {
-				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", 49)
+				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
 				return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
 			}
+		}
+
+		unencryptedSuffix := c.String("unencrypted-suffix")
+		encryptedSuffix := c.String("encrypted-suffix")
+		conf, err := loadConfig(c, fileName, nil)
+		if err != nil {
+			return toExitError(err)
+		}
+		if conf != nil {
+			// command line options have precedence
+			if unencryptedSuffix == "" {
+				unencryptedSuffix = conf.UnencryptedSuffix
+			}
+			if encryptedSuffix == "" {
+				encryptedSuffix = conf.EncryptedSuffix
+			}
+		}
+		if unencryptedSuffix != "" && encryptedSuffix != "" {
+			return common.NewExitError("Error: cannot use both encrypted_suffix and unencrypted_suffix in the same file", codes.ErrorConflictingParameters)
+		}
+		// only supply the default UnencryptedSuffix when EncryptedSuffix is not provided
+		if unencryptedSuffix == "" && encryptedSuffix == "" {
+			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
 		inputStore := inputStore(c, fileName)
@@ -374,7 +400,6 @@ func main() {
 		svcs := keyservices(c)
 
 		var output []byte
-		var err error
 		if c.Bool("encrypt") {
 			var groups []sops.KeyGroup
 			groups, err = keyGroups(c, fileName)
@@ -391,7 +416,8 @@ func main() {
 				InputStore:        inputStore,
 				InputPath:         fileName,
 				Cipher:            aes.NewCipher(),
-				UnencryptedSuffix: c.String("unencrypted-suffix"),
+				UnencryptedSuffix: unencryptedSuffix,
+				EncryptedSuffix:   encryptedSuffix,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -497,7 +523,8 @@ func main() {
 				}
 				output, err = editExample(editExampleOpts{
 					editOpts:          opts,
-					UnencryptedSuffix: c.String("unencrypted-suffix"),
+					UnencryptedSuffix: unencryptedSuffix,
+					EncryptedSuffix:   encryptedSuffix,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})
@@ -585,6 +612,7 @@ func inputStore(context *cli.Context, path string) sops.Store {
 		return common.DefaultStoreForPath(path)
 	}
 }
+
 func outputStore(context *cli.Context, path string) sops.Store {
 	switch context.String("output-type") {
 	case "yaml":
@@ -649,19 +677,14 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" {
-		var err error
-		var configPath string
-		if c.String("config") != "" {
-			configPath = c.String("config")
-		} else {
-			configPath, err = config.FindConfigFile(".")
+		conf, err := loadConfig(c, file, kmsEncryptionContext)
+		// config file might just not be supplied, without any error
+		if conf == nil {
+			errMsg := "config file not found and no keys provided through command line options"
 			if err != nil {
-				return nil, fmt.Errorf("config file not found and no keys provided through command line options")
+				errMsg = fmt.Sprintf("%s: %s", errMsg, err)
 			}
-		}
-		conf, err := config.LoadForFile(configPath, file, kmsEncryptionContext)
-		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf(errMsg)
 		}
 		return conf.KeyGroups, err
 	}
@@ -672,27 +695,40 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	return []sops.KeyGroup{group}, nil
 }
 
-func shamirThreshold(c *cli.Context, file string) (int, error) {
-	if c.Int("shamir-secret-sharing-threshold") != 0 {
-		return c.Int("shamir-secret-sharing-threshold"), nil
-	}
+// loadConfig will look for an existing config file, either provided through the command line, or using config.FindConfigFile.
+// Since a config file is not required, this function does not error when one is not found, and instead returns a nil config pointer
+func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*string) (*config.Config, error) {
 	var err error
 	var configPath string
 	if c.String("config") != "" {
 		configPath = c.String("config")
 	} else {
+		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
 		configPath, err = config.FindConfigFile(".")
 		if err != nil {
-			// If shamir flag isn't set and we can't find a config file,
-			// assume we don't want Shamir
-			return 0, nil
+			// If we can't find a config file, but we were not explicitly requested to, assume it does not exist
+			return nil, nil
 		}
 	}
-	conf, err := config.LoadForFile(configPath, file, nil)
+	conf, err := config.LoadForFile(configPath, file, kmsEncryptionContext)
 	if err != nil {
+		return nil, err
+	}
+	return conf, nil
+}
+
+func shamirThreshold(c *cli.Context, file string) (int, error) {
+	if c.Int("shamir-secret-sharing-threshold") != 0 {
+		return c.Int("shamir-secret-sharing-threshold"), nil
+	}
+	conf, err := loadConfig(c, file, nil)
+	if conf == nil {
+		// This takes care of the following two case:
+		// 1. No config was provided. Err will be nil and ShamirThreshold will be the default value of 0.
+		// 2. We did find a config file, but failed to load it. In that case the calling function will print the error and exit.
 		return 0, err
 	}
-	return conf.ShamirThreshold, err
+	return conf.ShamirThreshold, nil
 }
 
 func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
