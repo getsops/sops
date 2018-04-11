@@ -110,11 +110,23 @@ func main() {
 					Usage: "address to listen on, e.g. '127.0.0.1:5000' or '/tmp/sops.sock'",
 					Value: "127.0.0.1:5000",
 				},
+				cli.BoolFlag{
+					Name:  "prompt",
+					Usage: "Prompt user to confirm every incoming request",
+				},
+				cli.BoolFlag{
+					Name:  "verbose",
+					Usage: "Enable verbose logging output",
+				},
 			},
 			Action: func(c *cli.Context) error {
+				if c.Bool("verbose") {
+					logging.SetLevel(logrus.DebugLevel)
+				}
 				return keyservicecmd.Run(keyservicecmd.Opts{
 					Network: c.String("network"),
 					Address: c.String("address"),
+					Prompt:  c.Bool("prompt"),
 				})
 			},
 		},
@@ -356,8 +368,6 @@ func main() {
 	app.Action = func(c *cli.Context) error {
 		if c.Bool("verbose") {
 			logging.SetLevel(logrus.DebugLevel)
-		} else {
-			logging.SetLevel(logrus.WarnLevel)
 		}
 		if c.NArg() < 1 {
 			return common.NewExitError("Error: no file specified", codes.NoFileSpecified)

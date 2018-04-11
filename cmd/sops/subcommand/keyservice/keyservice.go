@@ -23,6 +23,7 @@ func init() {
 type Opts struct {
 	Network string
 	Address string
+	Prompt  bool
 }
 
 // Run runs a SOPS key service server
@@ -33,7 +34,9 @@ func Run(opts Opts) error {
 	}
 	defer lis.Close()
 	grpcServer := grpc.NewServer()
-	keyservice.RegisterKeyServiceServer(grpcServer, keyservice.Server{})
+	keyservice.RegisterKeyServiceServer(grpcServer, keyservice.Server{
+		Prompt: opts.Prompt,
+	})
 	log.Infof("Listening on %s://%s", opts.Network, opts.Address)
 
 	// Close socket if we get killed
