@@ -1,6 +1,8 @@
 package keyservice
 
 import (
+	"fmt"
+
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
@@ -11,7 +13,10 @@ import (
 )
 
 // Server is a key service server that uses SOPS MasterKeys to fulfill requests
-type Server struct{}
+type Server struct {
+	// Prompt indicates whether the server should prompt before decrypting or encrypting data
+	Prompt bool
+}
 
 func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
@@ -86,36 +91,73 @@ func (ks *Server) decryptWithGcpKms(key *GcpKmsKey, ciphertext []byte) ([]byte, 
 func (ks Server) Encrypt(ctx context.Context,
 	req *EncryptRequest) (*EncryptResponse, error) {
 	key := *req.Key
+	var response *EncryptResponse
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:
 		ciphertext, err := ks.encryptWithPgp(k.PgpKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
-		return &EncryptResponse{
+		response = &EncryptResponse{
 			Ciphertext: ciphertext,
-		}, nil
+		}
 	case *Key_KmsKey:
 		ciphertext, err := ks.encryptWithKms(k.KmsKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
-		return &EncryptResponse{
+		response = &EncryptResponse{
 			Ciphertext: ciphertext,
-		}, nil
+		}
 	case *Key_GcpKmsKey:
 		ciphertext, err := ks.encryptWithGcpKms(k.GcpKmsKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
-		return &EncryptResponse{
+		response = &EncryptResponse{
 			Ciphertext: ciphertext,
-		}, nil
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
 		return nil, status.Errorf(codes.NotFound, "Unknown key type")
 	}
+	if ks.Prompt {
+		err := ks.prompt(key, "encrypt")
+		if err != nil {
+			return nil, err
+		}
+	}
+	return response, nil
+}
+
+func keyToString(key Key) string {
+	switch k := key.KeyType.(type) {
+	case *Key_PgpKey:
+		return fmt.Sprintf("PGP key with fingerprint %s", k.PgpKey.Fingerprint)
+	case *Key_KmsKey:
+		return fmt.Sprintf("AWS KMS key with ARN %s", k.KmsKey.Arn)
+	case *Key_GcpKmsKey:
+		return fmt.Sprintf("GCP KMS key with resource ID %s", k.GcpKmsKey.ResourceId)
+	default:
+		return fmt.Sprintf("Unknown key type")
+	}
+}
+
+func (ks Server) prompt(key Key, requestType string) error {
+	keyString := keyToString(key)
+	var response string
+	for response != "y" && response != "n" {
+		fmt.Printf("\nReceived %s request using %s. Respond to request? (y/n): ", requestType, keyString)
+		_, err := fmt.Scanln(&response)
+		if err != nil {
+			return err
+		}
+	}
+	if response == "n" {
+		return grpc.Errorf(codes.PermissionDenied, "Request rejected by user")
+	}
+	return nil
 }
 
 // Decrypt takes a decrypt request and decrypts the provided ciphertext with the provided key, returning the decrypted
@@ -123,34 +165,42 @@ func (ks Server) Encrypt(ctx context.Context,
 func (ks Server) Decrypt(ctx context.Context,
 	req *DecryptRequest) (*DecryptResponse, error) {
 	key := *req.Key
+	var response *DecryptResponse
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:
 		plaintext, err := ks.decryptWithPgp(k.PgpKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
-		return &DecryptResponse{
+		response = &DecryptResponse{
 			Plaintext: plaintext,
-		}, nil
+		}
 	case *Key_KmsKey:
 		plaintext, err := ks.decryptWithKms(k.KmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
-		return &DecryptResponse{
+		response = &DecryptResponse{
 			Plaintext: plaintext,
-		}, nil
+		}
 	case *Key_GcpKmsKey:
 		plaintext, err := ks.decryptWithGcpKms(k.GcpKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
-		return &DecryptResponse{
+		response = &DecryptResponse{
 			Plaintext: plaintext,
-		}, nil
+		}
 	case nil:
 		return nil, grpc.Errorf(codes.NotFound, "Must provide a key")
 	default:
 		return nil, grpc.Errorf(codes.NotFound, "Unknown key type")
 	}
+	if ks.Prompt {
+		err := ks.prompt(key, "decrypt")
+		if err != nil {
+			return nil, err
+		}
+	}
+	return response, nil
 }
