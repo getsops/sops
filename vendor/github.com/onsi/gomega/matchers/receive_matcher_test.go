@@ -26,11 +26,11 @@ var _ = Describe("ReceiveMatcher", func() {
 			It("should succeed", func() {
 				channel := make(chan bool, 1)
 
-				Ω(channel).ShouldNot(Receive())
+				Expect(channel).ShouldNot(Receive())
 
 				channel <- true
 
-				Ω(channel).Should(Receive())
+				Expect(channel).Should(Receive())
 			})
 		})
 
@@ -38,7 +38,7 @@ var _ = Describe("ReceiveMatcher", func() {
 			It("should succeed (eventually)", func() {
 				channel := make(chan bool)
 
-				Ω(channel).ShouldNot(Receive())
+				Expect(channel).ShouldNot(Receive())
 
 				go func() {
 					time.Sleep(10 * time.Millisecond)
@@ -57,13 +57,13 @@ var _ = Describe("ReceiveMatcher", func() {
 
 				var value int
 
-				Ω(channel).ShouldNot(Receive(&value))
-				Ω(value).Should(BeZero())
+				Expect(channel).ShouldNot(Receive(&value))
+				Expect(value).Should(BeZero())
 
 				channel <- 17
 
-				Ω(channel).Should(Receive(&value))
-				Ω(value).Should(Equal(17))
+				Expect(channel).Should(Receive(&value))
+				Expect(value).Should(Equal(17))
 			})
 		})
 
@@ -74,16 +74,16 @@ var _ = Describe("ReceiveMatcher", func() {
 				stringChan <- "foo"
 
 				var s string
-				Ω(stringChan).Should(Receive(&s))
-				Ω(s).Should(Equal("foo"))
+				Expect(stringChan).Should(Receive(&s))
+				Expect(s).Should(Equal("foo"))
 
 				//channels of slices
 				sliceChan := make(chan []bool, 1)
 				sliceChan <- []bool{true, true, false}
 
 				var sl []bool
-				Ω(sliceChan).Should(Receive(&sl))
-				Ω(sl).Should(Equal([]bool{true, true, false}))
+				Expect(sliceChan).Should(Receive(&sl))
+				Expect(sl).Should(Equal([]bool{true, true, false}))
 
 				//channels of channels
 				chanChan := make(chan chan bool, 1)
@@ -91,8 +91,8 @@ var _ = Describe("ReceiveMatcher", func() {
 				chanChan <- c
 
 				var receivedC chan bool
-				Ω(chanChan).Should(Receive(&receivedC))
-				Ω(receivedC).Should(Equal(c))
+				Expect(chanChan).Should(Receive(&receivedC))
+				Expect(receivedC).Should(Equal(c))
 
 				//channels of interfaces
 				jackieChan := make(chan kungFuActor, 1)
@@ -100,8 +100,8 @@ var _ = Describe("ReceiveMatcher", func() {
 				jackieChan <- aJackie
 
 				var theJackie kungFuActor
-				Ω(jackieChan).Should(Receive(&theJackie))
-				Ω(theJackie).Should(Equal(aJackie))
+				Expect(jackieChan).Should(Receive(&theJackie))
+				Expect(theJackie).Should(Equal(aJackie))
 			})
 		})
 
@@ -111,13 +111,13 @@ var _ = Describe("ReceiveMatcher", func() {
 				var incorrectType bool
 
 				success, err := (&ReceiveMatcher{Arg: &incorrectType}).Match(channel)
-				Ω(success).Should(BeFalse())
-				Ω(err).Should(HaveOccurred())
+				Expect(success).Should(BeFalse())
+				Expect(err).Should(HaveOccurred())
 
 				var notAPointer int
 				success, err = (&ReceiveMatcher{Arg: notAPointer}).Match(channel)
-				Ω(success).Should(BeFalse())
-				Ω(err).Should(HaveOccurred())
+				Expect(success).Should(BeFalse())
+				Expect(err).Should(HaveOccurred())
 			})
 		})
 	})
@@ -126,17 +126,17 @@ var _ = Describe("ReceiveMatcher", func() {
 		It("should defer to the underlying matcher", func() {
 			intChannel := make(chan int, 1)
 			intChannel <- 3
-			Ω(intChannel).Should(Receive(Equal(3)))
+			Expect(intChannel).Should(Receive(Equal(3)))
 
 			intChannel <- 2
-			Ω(intChannel).ShouldNot(Receive(Equal(3)))
+			Expect(intChannel).ShouldNot(Receive(Equal(3)))
 
 			stringChannel := make(chan []string, 1)
 			stringChannel <- []string{"foo", "bar", "baz"}
-			Ω(stringChannel).Should(Receive(ContainElement(ContainSubstring("fo"))))
+			Expect(stringChannel).Should(Receive(ContainElement(ContainSubstring("fo"))))
 
 			stringChannel <- []string{"foo", "bar", "baz"}
-			Ω(stringChannel).ShouldNot(Receive(ContainElement(ContainSubstring("archipelago"))))
+			Expect(stringChannel).ShouldNot(Receive(ContainElement(ContainSubstring("archipelago"))))
 		})
 
 		It("should defer to the underlying matcher for the message", func() {
@@ -144,11 +144,11 @@ var _ = Describe("ReceiveMatcher", func() {
 			channel := make(chan int, 1)
 			channel <- 2
 			matcher.Match(channel)
-			Ω(matcher.FailureMessage(channel)).Should(MatchRegexp(`Expected\s+<int>: 2\s+to equal\s+<int>: 3`))
+			Expect(matcher.FailureMessage(channel)).Should(MatchRegexp(`Expected\s+<int>: 2\s+to equal\s+<int>: 3`))
 
 			channel <- 3
 			matcher.Match(channel)
-			Ω(matcher.NegatedFailureMessage(channel)).Should(MatchRegexp(`Expected\s+<int>: 3\s+not to equal\s+<int>: 3`))
+			Expect(matcher.NegatedFailureMessage(channel)).Should(MatchRegexp(`Expected\s+<int>: 3\s+not to equal\s+<int>: 3`))
 		})
 
 		It("should work just fine with Eventually", func() {
@@ -169,8 +169,8 @@ var _ = Describe("ReceiveMatcher", func() {
 				channel := make(chan int, 1)
 				channel <- 3
 				success, err := (&ReceiveMatcher{Arg: ContainSubstring("three")}).Match(channel)
-				Ω(success).Should(BeFalse())
-				Ω(err).Should(HaveOccurred())
+				Expect(success).Should(BeFalse())
+				Expect(err).Should(HaveOccurred())
 			})
 		})
 
@@ -178,8 +178,8 @@ var _ = Describe("ReceiveMatcher", func() {
 			It("should fail", func() {
 				channel := make(chan int, 1)
 				success, err := (&ReceiveMatcher{Arg: Equal(1)}).Match(channel)
-				Ω(success).Should(BeFalse())
-				Ω(err).ShouldNot(HaveOccurred())
+				Expect(success).Should(BeFalse())
+				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
 	})
@@ -192,8 +192,8 @@ var _ = Describe("ReceiveMatcher", func() {
 
 				close(channel)
 
-				Ω(channel).Should(Receive())
-				Ω(channel).ShouldNot(Receive())
+				Expect(channel).Should(Receive())
+				Expect(channel).ShouldNot(Receive())
 			})
 		})
 
@@ -202,7 +202,7 @@ var _ = Describe("ReceiveMatcher", func() {
 				channel := make(chan bool)
 				close(channel)
 
-				Ω(channel).ShouldNot(Receive())
+				Expect(channel).ShouldNot(Receive())
 			})
 		})
 	})
@@ -215,8 +215,8 @@ var _ = Describe("ReceiveMatcher", func() {
 			writerChannel = channel
 
 			success, err := (&ReceiveMatcher{}).Match(writerChannel)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 
@@ -225,16 +225,16 @@ var _ = Describe("ReceiveMatcher", func() {
 			var nilChannel chan bool
 
 			success, err := (&ReceiveMatcher{}).Match(nilChannel)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 			success, err = (&ReceiveMatcher{}).Match(nil)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 			success, err = (&ReceiveMatcher{}).Match(3)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 
@@ -244,14 +244,14 @@ var _ = Describe("ReceiveMatcher", func() {
 				c := make(chan string, 0)
 				Eventually(c, 0.01).Should(Receive(Equal("hello")))
 			})
-			Ω(failures[0]).Should(ContainSubstring("When passed a matcher, ReceiveMatcher's channel *must* receive something."))
+			Expect(failures[0]).Should(ContainSubstring("When passed a matcher, ReceiveMatcher's channel *must* receive something."))
 
 			failures = InterceptGomegaFailures(func() {
 				c := make(chan string, 1)
 				c <- "hi"
 				Eventually(c, 0.01).Should(Receive(Equal("hello")))
 			})
-			Ω(failures[0]).Should(ContainSubstring("<string>: hello"))
+			Expect(failures[0]).Should(ContainSubstring("<string>: hello"))
 		})
 	})
 
@@ -264,8 +264,8 @@ var _ = Describe("ReceiveMatcher", func() {
 			failures := InterceptGomegaFailures(func() {
 				Eventually(c).Should(Receive())
 			})
-			Ω(time.Since(t)).Should(BeNumerically("<", 500*time.Millisecond))
-			Ω(failures).Should(HaveLen(1))
+			Expect(time.Since(t)).Should(BeNumerically("<", 500*time.Millisecond))
+			Expect(failures).Should(HaveLen(1))
 		})
 
 		It("should bail early when passed a non-channel", func() {
@@ -273,8 +273,8 @@ var _ = Describe("ReceiveMatcher", func() {
 			failures := InterceptGomegaFailures(func() {
 				Eventually(3).Should(Receive())
 			})
-			Ω(time.Since(t)).Should(BeNumerically("<", 500*time.Millisecond))
-			Ω(failures).Should(HaveLen(1))
+			Expect(time.Since(t)).Should(BeNumerically("<", 500*time.Millisecond))
+			Expect(failures).Should(HaveLen(1))
 		})
 	})
 })

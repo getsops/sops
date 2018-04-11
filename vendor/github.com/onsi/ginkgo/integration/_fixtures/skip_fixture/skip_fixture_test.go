@@ -48,7 +48,6 @@ var _ = Describe("Excercising different skip modes", func() {
 	}, 1)
 })
 
-
 var _ = Describe("SKIP in a BeforeEach", func() {
 	BeforeEach(func() {
 		Skip("a BeforeEach SKIP")

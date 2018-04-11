@@ -254,6 +254,59 @@
         "shape" : "BadRequestException"
       } ]
     },
+    "CreateResourceDefinition" : {
+      "name" : "CreateResourceDefinition",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/greengrass/definition/resources",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "CreateResourceDefinitionRequest"
+      },
+      "output" : {
+        "shape" : "CreateResourceDefinitionResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      } ]
+    },
+    "CreateResourceDefinitionVersion" : {
+      "name" : "CreateResourceDefinitionVersion",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/greengrass/definition/resources/{ResourceDefinitionId}/versions",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "CreateResourceDefinitionVersionRequest"
+      },
+      "output" : {
+        "shape" : "CreateResourceDefinitionVersionResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      } ]
+    },
+    "CreateSoftwareUpdateJob" : {
+      "name" : "CreateSoftwareUpdateJob",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/greengrass/updates",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "CreateSoftwareUpdateJobRequest"
+      },
+      "output" : {
+        "shape" : "CreateSoftwareUpdateJobResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      } ]
+    },
     "CreateSubscriptionDefinition" : {
       "name" : "CreateSubscriptionDefinition",
       "http" : {
@@ -368,6 +421,23 @@
       },
       "output" : {
         "shape" : "DeleteLoggerDefinitionResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      } ]
+    },
+    "DeleteResourceDefinition" : {
+      "name" : "DeleteResourceDefinition",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/greengrass/definition/resources/{ResourceDefinitionId}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DeleteResourceDefinitionRequest"
+      },
+      "output" : {
+        "shape" : "DeleteResourceDefinitionResponse"
       },
       "errors" : [ {
         "shape" : "BadRequestException"
@@ -689,6 +759,40 @@
         "shape" : "BadRequestException"
       } ]
     },
+    "GetResourceDefinition" : {
+      "name" : "GetResourceDefinition",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/greengrass/definition/resources/{ResourceDefinitionId}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetResourceDefinitionRequest"
+      },
+      "output" : {
+        "shape" : "GetResourceDefinitionResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      } ]
+    },
+    "GetResourceDefinitionVersion" : {
+      "name" : "GetResourceDefinitionVersion",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/greengrass/definition/resources/{ResourceDefinitionId}/versions/{ResourceDefinitionVersionId}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetResourceDefinitionVersionRequest"
+      },
+      "output" : {
+        "shape" : "GetResourceDefinitionVersionResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      } ]
+    },
     "GetServiceRoleForAccount" : {
       "name" : "GetServiceRoleForAccount",
       "http" : {
@@ -936,6 +1040,38 @@
       },
       "errors" : [ ]
     },
+    "ListResourceDefinitionVersions" : {
+      "name" : "ListResourceDefinitionVersions",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/greengrass/definition/resources/{ResourceDefinitionId}/versions",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "ListResourceDefinitionVersionsRequest"
+      },
+      "output" : {
+        "shape" : "ListResourceDefinitionVersionsResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      } ]
+    },
+    "ListResourceDefinitions" : {
+      "name" : "ListResourceDefinitions",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/greengrass/definition/resources",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "ListResourceDefinitionsRequest"
+      },
+      "output" : {
+        "shape" : "ListResourceDefinitionsResponse"
+      },
+      "errors" : [ ]
+    },
     "ListSubscriptionDefinitionVersions" : {
       "name" : "ListSubscriptionDefinitionVersions",
       "http" : {
@@ -1108,6 +1244,23 @@
         "shape" : "BadRequestException"
       } ]
     },
+    "UpdateResourceDefinition" : {
+      "name" : "UpdateResourceDefinition",
+      "http" : {
+        "method" : "PUT",
+        "requestUri" : "/greengrass/definition/resources/{ResourceDefinitionId}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "UpdateResourceDefinitionRequest"
+      },
+      "output" : {
+        "shape" : "UpdateResourceDefinitionResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      } ]
+    },
     "UpdateSubscriptionDefinition" : {
       "name" : "UpdateSubscriptionDefinition",
       "http" : {
@@ -1212,13 +1365,14 @@
         "ThingArn" : {
           "shape" : "__string"
         }
-      }
+      },
+      "required" : [ ]
     },
     "CoreDefinitionVersion" : {
       "type" : "structure",
       "members" : {
         "Cores" : {
-          "shape" : "ListOfCore"
+          "shape" : "__listOfCore"
         }
       }
     },
@@ -1278,7 +1432,7 @@
           "locationName" : "CoreDefinitionId"
         },
         "Cores" : {
-          "shape" : "ListOfCore"
+          "shape" : "__listOfCore"
         }
       },
       "required" : [ "CoreDefinitionId" ]
@@ -1392,7 +1546,7 @@
           "locationName" : "DeviceDefinitionId"
         },
         "Devices" : {
-          "shape" : "ListOfDevice"
+          "shape" : "__listOfDevice"
         }
       },
       "required" : [ "DeviceDefinitionId" ]
@@ -1470,7 +1624,7 @@
           "locationName" : "FunctionDefinitionId"
         },
         "Functions" : {
-          "shape" : "ListOfFunction"
+          "shape" : "__listOfFunction"
         }
       },
       "required" : [ "FunctionDefinitionId" ]
@@ -1583,6 +1737,9 @@
         "LoggerDefinitionVersionArn" : {
           "shape" : "__string"
         },
+        "ResourceDefinitionVersionArn" : {
+          "shape" : "__string"
+        },
         "SubscriptionDefinitionVersionArn" : {
           "shape" : "__string"
         }
@@ -1662,7 +1819,7 @@
           "locationName" : "LoggerDefinitionId"
         },
         "Loggers" : {
-          "shape" : "ListOfLogger"
+          "shape" : "__listOfLogger"
         }
       },
       "required" : [ "LoggerDefinitionId" ]
@@ -1680,6 +1837,123 @@
           "shape" : "__string"
         },
         "Version" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "CreateResourceDefinitionRequest" : {
+      "type" : "structure",
+      "members" : {
+        "AmznClientToken" : {
+          "shape" : "__string",
+          "location" : "header",
+          "locationName" : "X-Amzn-Client-Token"
+        },
+        "InitialVersion" : {
+          "shape" : "ResourceDefinitionVersion"
+        },
+        "Name" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "CreateResourceDefinitionResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Arn" : {
+          "shape" : "__string"
+        },
+        "CreationTimestamp" : {
+          "shape" : "__string"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "LastUpdatedTimestamp" : {
+          "shape" : "__string"
+        },
+        "LatestVersion" : {
+          "shape" : "__string"
+        },
+        "LatestVersionArn" : {
+          "shape" : "__string"
+        },
+        "Name" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "CreateResourceDefinitionVersionRequest" : {
+      "type" : "structure",
+      "members" : {
+        "AmznClientToken" : {
+          "shape" : "__string",
+          "location" : "header",
+          "locationName" : "X-Amzn-Client-Token"
+        },
+        "ResourceDefinitionId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "ResourceDefinitionId"
+        },
+        "Resources" : {
+          "shape" : "__listOfResource"
+        }
+      },
+      "required" : [ "ResourceDefinitionId" ]
+    },
+    "CreateResourceDefinitionVersionResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Arn" : {
+          "shape" : "__string"
+        },
+        "CreationTimestamp" : {
+          "shape" : "__string"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "Version" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "CreateSoftwareUpdateJobRequest" : {
+      "type" : "structure",
+      "members" : {
+        "AmznClientToken" : {
+          "shape" : "__string",
+          "location" : "header",
+          "locationName" : "X-Amzn-Client-Token"
+        },
+        "S3UrlSignerRole" : {
+          "shape" : "S3UrlSignerRole"
+        },
+        "SoftwareToUpdate" : {
+          "shape" : "SoftwareToUpdate"
+        },
+        "UpdateAgentLogLevel" : {
+          "shape" : "UpdateAgentLogLevel"
+        },
+        "UpdateTargets" : {
+          "shape" : "UpdateTargets"
+        },
+        "UpdateTargetsArchitecture" : {
+          "shape" : "UpdateTargetsArchitecture"
+        },
+        "UpdateTargetsOperatingSystem" : {
+          "shape" : "UpdateTargetsOperatingSystem"
+        }
+      }
+    },
+    "CreateSoftwareUpdateJobResponse" : {
+      "type" : "structure",
+      "members" : {
+        "IotJobArn" : {
+          "shape" : "__string"
+        },
+        "IotJobId" : {
           "shape" : "__string"
         }
       }
@@ -1740,7 +2014,7 @@
           "locationName" : "SubscriptionDefinitionId"
         },
         "Subscriptions" : {
-          "shape" : "ListOfSubscription"
+          "shape" : "__listOfSubscription"
         }
       },
       "required" : [ "SubscriptionDefinitionId" ]
@@ -1863,6 +2137,21 @@
       "type" : "structure",
       "members" : { }
     },
+    "DeleteResourceDefinitionRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceDefinitionId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "ResourceDefinitionId"
+        }
+      },
+      "required" : [ "ResourceDefinitionId" ]
+    },
+    "DeleteResourceDefinitionResponse" : {
+      "type" : "structure",
+      "members" : { }
+    },
     "DeleteSubscriptionDefinitionRequest" : {
       "type" : "structure",
       "members" : {
@@ -1923,13 +2212,14 @@
         "ThingArn" : {
           "shape" : "__string"
         }
-      }
+      },
+      "required" : [ ]
     },
     "DeviceDefinitionVersion" : {
       "type" : "structure",
       "members" : {
         "Devices" : {
-          "shape" : "ListOfDevice"
+          "shape" : "__listOfDevice"
         }
       }
     },
@@ -1968,6 +2258,10 @@
       "type" : "structure",
       "members" : { }
     },
+    "EncodingType" : {
+      "type" : "string",
+      "enum" : [ "binary", "json" ]
+    },
     "ErrorDetail" : {
       "type" : "structure",
       "members" : {
@@ -1997,11 +2291,15 @@
         "Id" : {
           "shape" : "__string"
         }
-      }
+      },
+      "required" : [ ]
     },
     "FunctionConfiguration" : {
       "type" : "structure",
       "members" : {
+        "EncodingType" : {
+          "shape" : "EncodingType"
+        },
         "Environment" : {
           "shape" : "FunctionConfigurationEnvironment"
         },
@@ -2025,8 +2323,14 @@
     "FunctionConfigurationEnvironment" : {
       "type" : "structure",
       "members" : {
+        "AccessSysfs" : {
+          "shape" : "__boolean"
+        },
+        "ResourceAccessPolicies" : {
+          "shape" : "__listOfResourceAccessPolicy"
+        },
         "Variables" : {
-          "shape" : "MapOf__string"
+          "shape" : "__mapOf__string"
         }
       }
     },
@@ -2034,7 +2338,7 @@
       "type" : "structure",
       "members" : {
         "Functions" : {
-          "shape" : "ListOfFunction"
+          "shape" : "__listOfFunction"
         }
       }
     },
@@ -2086,7 +2390,7 @@
       "type" : "structure",
       "members" : {
         "ConnectivityInfo" : {
-          "shape" : "ListOfConnectivityInfo"
+          "shape" : "__listOfConnectivityInfo"
         },
         "Message" : {
           "shape" : "__string",
@@ -2550,6 +2854,79 @@
         }
       }
     },
+    "GetResourceDefinitionRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceDefinitionId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "ResourceDefinitionId"
+        }
+      },
+      "required" : [ "ResourceDefinitionId" ]
+    },
+    "GetResourceDefinitionResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Arn" : {
+          "shape" : "__string"
+        },
+        "CreationTimestamp" : {
+          "shape" : "__string"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "LastUpdatedTimestamp" : {
+          "shape" : "__string"
+        },
+        "LatestVersion" : {
+          "shape" : "__string"
+        },
+        "LatestVersionArn" : {
+          "shape" : "__string"
+        },
+        "Name" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "GetResourceDefinitionVersionRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceDefinitionId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "ResourceDefinitionId"
+        },
+        "ResourceDefinitionVersionId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "ResourceDefinitionVersionId"
+        }
+      },
+      "required" : [ "ResourceDefinitionVersionId", "ResourceDefinitionId" ]
+    },
+    "GetResourceDefinitionVersionResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Arn" : {
+          "shape" : "__string"
+        },
+        "CreationTimestamp" : {
+          "shape" : "__string"
+        },
+        "Definition" : {
+          "shape" : "ResourceDefinitionVersion"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "Version" : {
+          "shape" : "__string"
+        }
+      }
+    },
     "GetServiceRoleForAccountRequest" : {
       "type" : "structure",
       "members" : { }
@@ -2689,6 +3066,17 @@
         }
       }
     },
+    "GroupOwnerSetting" : {
+      "type" : "structure",
+      "members" : {
+        "AutoAddGroupOwner" : {
+          "shape" : "__boolean"
+        },
+        "GroupOwner" : {
+          "shape" : "__string"
+        }
+      }
+    },
     "GroupVersion" : {
       "type" : "structure",
       "members" : {
@@ -2702,6 +3090,9 @@
           "shape" : "__string"
         },
         "LoggerDefinitionVersionArn" : {
+          "shape" : "__string"
+        },
+        "ResourceDefinitionVersionArn" : {
           "shape" : "__string"
         },
         "SubscriptionDefinitionVersionArn" : {
@@ -2752,7 +3143,7 @@
           "shape" : "__string"
         },
         "Versions" : {
-          "shape" : "ListOfVersionInformation"
+          "shape" : "__listOfVersionInformation"
         }
       }
     },
@@ -2775,7 +3166,7 @@
       "type" : "structure",
       "members" : {
         "Definitions" : {
-          "shape" : "ListOfDefinitionInformation"
+          "shape" : "__listOfDefinitionInformation"
         },
         "NextToken" : {
           "shape" : "__string"
@@ -2786,7 +3177,7 @@
       "type" : "structure",
       "members" : {
         "Definitions" : {
-          "shape" : "ListOfDefinitionInformation"
+          "shape" : "__listOfDefinitionInformation"
         },
         "NextToken" : {
           "shape" : "__string"
@@ -2853,7 +3244,7 @@
           "shape" : "__string"
         },
         "Versions" : {
-          "shape" : "ListOfVersionInformation"
+          "shape" : "__listOfVersionInformation"
         }
       }
     },
@@ -2876,7 +3267,7 @@
       "type" : "structure",
       "members" : {
         "Definitions" : {
-          "shape" : "ListOfDefinitionInformation"
+          "shape" : "__listOfDefinitionInformation"
         },
         "NextToken" : {
           "shape" : "__string"
@@ -2911,7 +3302,7 @@
           "shape" : "__string"
         },
         "Versions" : {
-          "shape" : "ListOfVersionInformation"
+          "shape" : "__listOfVersionInformation"
         }
       }
     },
@@ -2934,7 +3325,7 @@
       "type" : "structure",
       "members" : {
         "Definitions" : {
-          "shape" : "ListOfDefinitionInformation"
+          "shape" : "__listOfDefinitionInformation"
         },
         "NextToken" : {
           "shape" : "__string"
@@ -2956,7 +3347,7 @@
       "type" : "structure",
       "members" : {
         "GroupCertificateAuthorities" : {
-          "shape" : "ListOfGroupCertificateAuthorityProperties"
+          "shape" : "__listOfGroupCertificateAuthorityProperties"
         }
       }
     },
@@ -2988,7 +3379,7 @@
           "shape" : "__string"
         },
         "Versions" : {
-          "shape" : "ListOfVersionInformation"
+          "shape" : "__listOfVersionInformation"
         }
       }
     },
@@ -3011,7 +3402,7 @@
       "type" : "structure",
       "members" : {
         "Groups" : {
-          "shape" : "ListOfGroupInformation"
+          "shape" : "__listOfGroupInformation"
         },
         "NextToken" : {
           "shape" : "__string"
@@ -3046,7 +3437,7 @@
           "shape" : "__string"
         },
         "Versions" : {
-          "shape" : "ListOfVersionInformation"
+          "shape" : "__listOfVersionInformation"
         }
       }
     },
@@ -3069,71 +3460,69 @@
       "type" : "structure",
       "members" : {
         "Definitions" : {
-          "shape" : "ListOfDefinitionInformation"
+          "shape" : "__listOfDefinitionInformation"
         },
         "NextToken" : {
           "shape" : "__string"
         }
       }
     },
-    "ListOfConnectivityInfo" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "ConnectivityInfo"
+    "ListResourceDefinitionVersionsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "MaxResults" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "MaxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "NextToken"
+        },
+        "ResourceDefinitionId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "ResourceDefinitionId"
+        }
+      },
+      "required" : [ "ResourceDefinitionId" ]
+    },
+    "ListResourceDefinitionVersionsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "NextToken" : {
+          "shape" : "__string"
+        },
+        "Versions" : {
+          "shape" : "__listOfVersionInformation"
+        }
       }
     },
-    "ListOfCore" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "Core"
+    "ListResourceDefinitionsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "MaxResults" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "MaxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "NextToken"
+        }
       }
     },
-    "ListOfDefinitionInformation" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "DefinitionInformation"
-      }
-    },
-    "ListOfDevice" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "Device"
-      }
-    },
-    "ListOfFunction" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "Function"
-      }
-    },
-    "ListOfGroupCertificateAuthorityProperties" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "GroupCertificateAuthorityProperties"
-      }
-    },
-    "ListOfGroupInformation" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "GroupInformation"
-      }
-    },
-    "ListOfLogger" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "Logger"
-      }
-    },
-    "ListOfSubscription" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "Subscription"
-      }
-    },
-    "ListOfVersionInformation" : {
-      "type" : "list",
-      "member" : {
-        "shape" : "VersionInformation"
+    "ListResourceDefinitionsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Definitions" : {
+          "shape" : "__listOfDefinitionInformation"
+        },
+        "NextToken" : {
+          "shape" : "__string"
+        }
       }
     },
     "ListSubscriptionDefinitionVersionsRequest" : {
@@ -3164,7 +3553,7 @@
           "shape" : "__string"
         },
         "Versions" : {
-          "shape" : "ListOfVersionInformation"
+          "shape" : "__listOfVersionInformation"
         }
       }
     },
@@ -3187,7 +3576,7 @@
       "type" : "structure",
       "members" : {
         "Definitions" : {
-          "shape" : "ListOfDefinitionInformation"
+          "shape" : "__listOfDefinitionInformation"
         },
         "NextToken" : {
           "shape" : "__string"
@@ -3201,7 +3590,32 @@
           "shape" : "__string"
         },
         "Versions" : {
-          "shape" : "ListOfVersionInformation"
+          "shape" : "__listOfVersionInformation"
+        }
+      }
+    },
+    "LocalDeviceResourceData" : {
+      "type" : "structure",
+      "members" : {
+        "GroupOwnerSetting" : {
+          "shape" : "GroupOwnerSetting"
+        },
+        "SourcePath" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "LocalVolumeResourceData" : {
+      "type" : "structure",
+      "members" : {
+        "DestinationPath" : {
+          "shape" : "__string"
+        },
+        "GroupOwnerSetting" : {
+          "shape" : "GroupOwnerSetting"
+        },
+        "SourcePath" : {
+          "shape" : "__string"
         }
       }
     },
@@ -3223,7 +3637,8 @@
         "Type" : {
           "shape" : "LoggerType"
         }
-      }
+      },
+      "required" : [ ]
     },
     "LoggerComponent" : {
       "type" : "string",
@@ -3233,7 +3648,7 @@
       "type" : "structure",
       "members" : {
         "Loggers" : {
-          "shape" : "ListOfLogger"
+          "shape" : "__listOfLogger"
         }
       }
     },
@@ -3245,14 +3660,9 @@
       "type" : "string",
       "enum" : [ "FileSystem", "AWSCloudWatch" ]
     },
-    "MapOf__string" : {
-      "type" : "map",
-      "key" : {
-        "shape" : "__string"
-      },
-      "value" : {
-        "shape" : "__string"
-      }
+    "Permission" : {
+      "type" : "string",
+      "enum" : [ "ro", "rw" ]
     },
     "ResetDeploymentsRequest" : {
       "type" : "structure",
@@ -3284,6 +3694,87 @@
         }
       }
     },
+    "Resource" : {
+      "type" : "structure",
+      "members" : {
+        "Id" : {
+          "shape" : "__string"
+        },
+        "Name" : {
+          "shape" : "__string"
+        },
+        "ResourceDataContainer" : {
+          "shape" : "ResourceDataContainer"
+        }
+      },
+      "required" : [ ]
+    },
+    "ResourceAccessPolicy" : {
+      "type" : "structure",
+      "members" : {
+        "Permission" : {
+          "shape" : "Permission"
+        },
+        "ResourceId" : {
+          "shape" : "__string"
+        }
+      },
+      "required" : [ ]
+    },
+    "ResourceDataContainer" : {
+      "type" : "structure",
+      "members" : {
+        "LocalDeviceResourceData" : {
+          "shape" : "LocalDeviceResourceData"
+        },
+        "LocalVolumeResourceData" : {
+          "shape" : "LocalVolumeResourceData"
+        },
+        "S3MachineLearningModelResourceData" : {
+          "shape" : "S3MachineLearningModelResourceData"
+        },
+        "SageMakerMachineLearningModelResourceData" : {
+          "shape" : "SageMakerMachineLearningModelResourceData"
+        }
+      }
+    },
+    "ResourceDefinitionVersion" : {
+      "type" : "structure",
+      "members" : {
+        "Resources" : {
+          "shape" : "__listOfResource"
+        }
+      }
+    },
+    "S3MachineLearningModelResourceData" : {
+      "type" : "structure",
+      "members" : {
+        "DestinationPath" : {
+          "shape" : "__string"
+        },
+        "S3Uri" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "S3UrlSignerRole" : {
+      "type" : "string"
+    },
+    "SageMakerMachineLearningModelResourceData" : {
+      "type" : "structure",
+      "members" : {
+        "DestinationPath" : {
+          "shape" : "__string"
+        },
+        "SageMakerJobArn" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "SoftwareToUpdate" : {
+      "type" : "string",
+      "enum" : [ "core", "ota_agent" ]
+    },
     "Subscription" : {
       "type" : "structure",
       "members" : {
@@ -3299,21 +3790,26 @@
         "Target" : {
           "shape" : "__string"
         }
-      }
+      },
+      "required" : [ ]
     },
     "SubscriptionDefinitionVersion" : {
       "type" : "structure",
       "members" : {
         "Subscriptions" : {
-          "shape" : "ListOfSubscription"
+          "shape" : "__listOfSubscription"
         }
       }
+    },
+    "UpdateAgentLogLevel" : {
+      "type" : "string",
+      "enum" : [ "NONE", "TRACE", "DEBUG", "VERBOSE", "INFO", "WARN", "ERROR", "FATAL" ]
     },
     "UpdateConnectivityInfoRequest" : {
       "type" : "structure",
       "members" : {
         "ConnectivityInfo" : {
-          "shape" : "ListOfConnectivityInfo"
+          "shape" : "__listOfConnectivityInfo"
         },
         "ThingName" : {
           "shape" : "__string",
@@ -3453,6 +3949,24 @@
       "type" : "structure",
       "members" : { }
     },
+    "UpdateResourceDefinitionRequest" : {
+      "type" : "structure",
+      "members" : {
+        "Name" : {
+          "shape" : "__string"
+        },
+        "ResourceDefinitionId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "ResourceDefinitionId"
+        }
+      },
+      "required" : [ "ResourceDefinitionId" ]
+    },
+    "UpdateResourceDefinitionResponse" : {
+      "type" : "structure",
+      "members" : { }
+    },
     "UpdateSubscriptionDefinitionRequest" : {
       "type" : "structure",
       "members" : {
@@ -3470,6 +3984,20 @@
     "UpdateSubscriptionDefinitionResponse" : {
       "type" : "structure",
       "members" : { }
+    },
+    "UpdateTargets" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "__string"
+      }
+    },
+    "UpdateTargetsArchitecture" : {
+      "type" : "string",
+      "enum" : [ "armv7l", "x86_64", "aarch64" ]
+    },
+    "UpdateTargetsOperatingSystem" : {
+      "type" : "string",
+      "enum" : [ "ubuntu", "raspbian", "amazon_linux" ]
     },
     "VersionInformation" : {
       "type" : "structure",
@@ -3496,6 +4024,90 @@
     },
     "__integer" : {
       "type" : "integer"
+    },
+    "__listOfConnectivityInfo" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "ConnectivityInfo"
+      }
+    },
+    "__listOfCore" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Core"
+      }
+    },
+    "__listOfDefinitionInformation" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "DefinitionInformation"
+      }
+    },
+    "__listOfDevice" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Device"
+      }
+    },
+    "__listOfFunction" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Function"
+      }
+    },
+    "__listOfGroupCertificateAuthorityProperties" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "GroupCertificateAuthorityProperties"
+      }
+    },
+    "__listOfGroupInformation" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "GroupInformation"
+      }
+    },
+    "__listOfLogger" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Logger"
+      }
+    },
+    "__listOfResource" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Resource"
+      }
+    },
+    "__listOfResourceAccessPolicy" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "ResourceAccessPolicy"
+      }
+    },
+    "__listOfSubscription" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Subscription"
+      }
+    },
+    "__listOfVersionInformation" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "VersionInformation"
+      }
+    },
+    "__long" : {
+      "type" : "long"
+    },
+    "__mapOf__string" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "__string"
+      }
     },
     "__string" : {
       "type" : "string"

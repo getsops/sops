@@ -2,6 +2,7 @@
   "version": "2.0",
   "service": "<fullname>AWS Config</fullname> <p>AWS Config provides a way to keep track of the configurations of all the AWS resources associated with your AWS account. You can use AWS Config to get the current and historical configurations of each AWS resource and also to get information about the relationship between the resources. An AWS resource can be an Amazon Compute Cloud (Amazon EC2) instance, an Elastic Block Store (EBS) volume, an Elastic network Interface (ENI), or a security group. For a complete list of resources currently supported by AWS Config, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources\">Supported AWS Resources</a>.</p> <p>You can access and manage AWS Config through the AWS Management Console, the AWS Command Line Interface (AWS CLI), the AWS Config API, or the AWS SDKs for AWS Config</p> <p>This reference guide contains documentation for the AWS Config API and the AWS CLI commands that you can use to manage AWS Config.</p> <p>The AWS Config API uses the Signature Version 4 protocol for signing requests. For more information about how to sign a request with this protocol, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4 Signing Process</a>.</p> <p>For detailed information about AWS Config features and their associated actions or commands, as well as how to work with AWS Management Console, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html\">What Is AWS Config?</a> in the <i>AWS Config Developer Guide</i>.</p>",
   "operations": {
+    "BatchGetResourceConfig": "<p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note>",
     "DeleteConfigRule": "<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>",
     "DeleteConfigurationRecorder": "<p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>",
     "DeleteDeliveryChannel": "<p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>",
@@ -34,12 +35,14 @@
     "ARN": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$arn": "<p>The Amazon Resource Name (ARN) of the resource.</p>",
         "ConfigurationItem$arn": "<p>The Amazon Resource Name (ARN) of the resource.</p>"
       }
     },
     "AccountId": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$accountId": "<p>The 12 digit AWS account ID associated with the resource.</p>",
         "ConfigurationItem$accountId": "<p>The 12 digit AWS account ID associated with the resource.</p>"
       }
     },
@@ -52,13 +55,27 @@
     "AvailabilityZone": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$availabilityZone": "<p>The Availability Zone associated with the resource.</p>",
         "ConfigurationItem$availabilityZone": "<p>The Availability Zone associated with the resource.</p>"
       }
     },
     "AwsRegion": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$awsRegion": "<p>The region where the resource resides.</p>",
         "ConfigurationItem$awsRegion": "<p>The region where the resource resides.</p>"
+      }
+    },
+    "BaseConfigurationItem": {
+      "base": "<p>The detailed configuration of a specified resource.</p>",
+      "refs": {
+        "BaseConfigurationItems$member": null
+      }
+    },
+    "BaseConfigurationItems": {
+      "base": null,
+      "refs": {
+        "BatchGetResourceConfigResponse$baseConfigurationItems": "<p>A list that contains the current configuration of one or more resources.</p>"
       }
     },
     "BaseResourceId": {
@@ -70,6 +87,16 @@
         "EvaluationResultQualifier$ResourceId": "<p>The ID of the evaluated AWS resource.</p>",
         "GetComplianceDetailsByResourceRequest$ResourceId": "<p>The ID of the AWS resource for which you want compliance information.</p>",
         "Scope$ComplianceResourceId": "<p>The IDs of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>"
+      }
+    },
+    "BatchGetResourceConfigRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "BatchGetResourceConfigResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "Boolean": {
@@ -174,7 +201,7 @@
       "base": null,
       "refs": {
         "DescribeComplianceByConfigRuleRequest$ComplianceTypes": "<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>",
-        "DescribeComplianceByResourceRequest$ComplianceTypes": "<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>",
+        "DescribeComplianceByResourceRequest$ComplianceTypes": "<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>",
         "GetComplianceDetailsByConfigRuleRequest$ComplianceTypes": "<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>",
         "GetComplianceDetailsByResourceRequest$ComplianceTypes": "<p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>"
       }
@@ -240,6 +267,7 @@
     "Configuration": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$configuration": "<p>The description of the resource configuration.</p>",
         "ConfigurationItem$configuration": "<p>The description of the resource configuration.</p>"
       }
     },
@@ -252,6 +280,7 @@
     "ConfigurationItemCaptureTime": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$configurationItemCaptureTime": "<p>The time when the configuration recording was initiated.</p>",
         "ConfigurationItem$configurationItemCaptureTime": "<p>The time when the configuration recording was initiated.</p>"
       }
     },
@@ -270,6 +299,7 @@
     "ConfigurationItemStatus": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$configurationItemStatus": "<p>The configuration item status.</p>",
         "ConfigurationItem$configurationItemStatus": "<p>The configuration item status.</p>"
       }
     },
@@ -308,6 +338,7 @@
     "ConfigurationStateId": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$configurationStateId": "<p>An identifier that indicates the ordering of the configuration items of a resource.</p>",
         "ConfigurationItem$configurationStateId": "<p>An identifier that indicates the ordering of the configuration items of a resource.</p>"
       }
     },
@@ -737,13 +768,13 @@
       "refs": {
         "ConfigRule$MaximumExecutionFrequency": "<p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </li> </ul> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>",
         "ConfigSnapshotDeliveryProperties$deliveryFrequency": "<p>The frequency with which AWS Config delivers configuration snapshots.</p>",
-        "SourceDetail$MaximumExecutionFrequency": "<p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note>"
+        "SourceDetail$MaximumExecutionFrequency": "<p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> <p>Based on the valid value you choose, AWS Config runs evaluations once for each valid value. For example, if you choose <code>Three_Hours</code>, AWS Config runs evaluations once every three hours. In this case, <code>Three_Hours</code> is the frequency of this rule. </p> </note>"
       }
     },
     "MessageType": {
       "base": null,
       "refs": {
-        "SourceDetail$MessageType": "<p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify both <code>ConfigurationItemChangeNotification</code> and <code>OversizedConfigurationItemChangeNotification</code>. </p>"
+        "SourceDetail$MessageType": "<p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify two SourceDetail objects, one for <code>ConfigurationItemChangeNotification</code> and one for <code>OversizedConfigurationItemChangeNotification</code>.</p>"
       }
     },
     "Name": {
@@ -912,6 +943,7 @@
     "ResourceCreationTime": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$resourceCreationTime": "<p>The time stamp when the resource was created.</p>",
         "ConfigurationItem$resourceCreationTime": "<p>The time stamp when the resource was created.</p>"
       }
     },
@@ -924,11 +956,13 @@
     "ResourceId": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$resourceId": "<p>The ID of the resource (for example., sg-xxxxxx).</p>",
         "ConfigurationItem$resourceId": "<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>",
         "GetResourceConfigHistoryRequest$resourceId": "<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>",
         "Relationship$resourceId": "<p>The ID of the related resource (for example, <code>sg-xxxxxx</code>).</p>",
         "ResourceIdList$member": null,
-        "ResourceIdentifier$resourceId": "<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>"
+        "ResourceIdentifier$resourceId": "<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>",
+        "ResourceKey$resourceId": "<p>The ID of the resource (for example., sg-xxxxxx). </p>"
       }
     },
     "ResourceIdList": {
@@ -954,9 +988,23 @@
       "refs": {
       }
     },
+    "ResourceKey": {
+      "base": "<p>The details that identify a resource within AWS Config, including the resource type and resource ID.</p>",
+      "refs": {
+        "ResourceKeys$member": null
+      }
+    },
+    "ResourceKeys": {
+      "base": null,
+      "refs": {
+        "BatchGetResourceConfigRequest$resourceKeys": "<p>A list of resource keys to be processed with the current request. Each element in the list consists of the resource type and resource ID.</p>",
+        "BatchGetResourceConfigResponse$unprocessedResourceKeys": "<p>A list of resource keys that were not processed with the current response. The unprocessesResourceKeys value is in the same form as ResourceKeys, so the value can be directly provided to a subsequent BatchGetResourceConfig operation. If there are no unprocessed resource keys, the response contains an empty unprocessedResourceKeys list. </p>"
+      }
+    },
     "ResourceName": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$resourceName": "<p>The custom name of the resource, if available.</p>",
         "ConfigurationItem$resourceName": "<p>The custom name of the resource, if available.</p>",
         "ListDiscoveredResourcesRequest$resourceName": "<p>The custom name of only those resources that you want AWS Config to list in the response. If you do not specify this parameter, AWS Config lists all resources of the specified type that it has discovered.</p>",
         "Relationship$resourceName": "<p>The custom name of the related resource, if available.</p>",
@@ -971,12 +1019,14 @@
     "ResourceType": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$resourceType": "<p>The type of AWS resource.</p>",
         "ConfigurationItem$resourceType": "<p>The type of AWS resource.</p>",
         "GetResourceConfigHistoryRequest$resourceType": "<p>The resource type.</p>",
         "ListDiscoveredResourcesRequest$resourceType": "<p>The type of resources that you want AWS Config to list in the response.</p>",
         "Relationship$resourceType": "<p>The resource type of the related resource.</p>",
         "ResourceCount$resourceType": "<p>The resource type, for example <code>\"AWS::EC2::Instance\"</code>.</p>",
         "ResourceIdentifier$resourceType": "<p>The type of resource.</p>",
+        "ResourceKey$resourceType": "<p>The resource type.</p>",
         "ResourceTypeList$member": null
       }
     },
@@ -1123,6 +1173,7 @@
     "SupplementaryConfiguration": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$supplementaryConfiguration": "<p>Configuration attributes that AWS Config returns for certain resource types to supplement the information returned for the configuration parameter.</p>",
         "ConfigurationItem$supplementaryConfiguration": "<p>Configuration attributes that AWS Config returns for certain resource types to supplement the information returned for the <code>configuration</code> parameter.</p>"
       }
     },
@@ -1158,6 +1209,7 @@
     "Version": {
       "base": null,
       "refs": {
+        "BaseConfigurationItem$version": "<p>The version number of the resource configuration.</p>",
         "ConfigurationItem$version": "<p>The version number of the resource configuration.</p>"
       }
     }

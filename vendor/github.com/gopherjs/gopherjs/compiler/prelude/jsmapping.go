@@ -158,13 +158,7 @@ var $externalizeFunction = function(v, t, passThis) {
         }
         args.push($internalize(arguments[i], t.params[i]));
       }
-      var canBlock = $curGoroutine.canBlock;
-      $curGoroutine.canBlock = false;
-      try {
-        var result = v.apply(passThis ? this : undefined, args);
-      } finally {
-        $curGoroutine.canBlock = canBlock;
-      }
+      var result = v.apply(passThis ? this : undefined, args);
       switch (t.results.length) {
       case 0:
         return;

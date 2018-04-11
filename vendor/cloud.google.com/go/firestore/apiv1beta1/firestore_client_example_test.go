@@ -1,10 +1,10 @@
-// Copyright 2017, Google Inc. All rights reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,11 +19,10 @@ package firestore_test
 import (
 	"io"
 
-	firestore "cloud.google.com/go/firestore/apiv1beta1"
-	firestorepb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
+	"cloud.google.com/go/firestore/apiv1beta1"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
+	firestorepb "google.golang.org/genproto/googleapis/firestore/v1beta1"
 )
 
 func ExampleNewClient() {
@@ -44,7 +43,7 @@ func ExampleClient_GetDocument() {
 	}
 
 	req := &firestorepb.GetDocumentRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.GetDocument(ctx, req)
 	if err != nil {
@@ -62,7 +61,7 @@ func ExampleClient_ListDocuments() {
 	}
 
 	req := &firestorepb.ListDocumentsRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	it := c.ListDocuments(ctx, req)
 	for {
@@ -86,7 +85,7 @@ func ExampleClient_CreateDocument() {
 	}
 
 	req := &firestorepb.CreateDocumentRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.CreateDocument(ctx, req)
 	if err != nil {
@@ -104,7 +103,7 @@ func ExampleClient_UpdateDocument() {
 	}
 
 	req := &firestorepb.UpdateDocumentRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.UpdateDocument(ctx, req)
 	if err != nil {
@@ -122,7 +121,7 @@ func ExampleClient_DeleteDocument() {
 	}
 
 	req := &firestorepb.DeleteDocumentRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	err = c.DeleteDocument(ctx, req)
 	if err != nil {
@@ -138,7 +137,7 @@ func ExampleClient_BatchGetDocuments() {
 	}
 
 	req := &firestorepb.BatchGetDocumentsRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	stream, err := c.BatchGetDocuments(ctx, req)
 	if err != nil {
@@ -165,7 +164,7 @@ func ExampleClient_BeginTransaction() {
 	}
 
 	req := &firestorepb.BeginTransactionRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.BeginTransaction(ctx, req)
 	if err != nil {
@@ -183,7 +182,7 @@ func ExampleClient_Commit() {
 	}
 
 	req := &firestorepb.CommitRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.Commit(ctx, req)
 	if err != nil {
@@ -201,7 +200,7 @@ func ExampleClient_Rollback() {
 	}
 
 	req := &firestorepb.RollbackRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	err = c.Rollback(ctx, req)
 	if err != nil {
@@ -217,7 +216,7 @@ func ExampleClient_RunQuery() {
 	}
 
 	req := &firestorepb.RunQueryRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	stream, err := c.RunQuery(ctx, req)
 	if err != nil {
@@ -248,7 +247,7 @@ func ExampleClient_Write() {
 	}
 	go func() {
 		reqs := []*firestorepb.WriteRequest{
-		// TODO: Create requests.
+			// TODO: Create requests.
 		}
 		for _, req := range reqs {
 			if err := stream.Send(req); err != nil {
@@ -282,7 +281,7 @@ func ExampleClient_Listen() {
 	}
 	go func() {
 		reqs := []*firestorepb.ListenRequest{
-		// TODO: Create requests.
+			// TODO: Create requests.
 		}
 		for _, req := range reqs {
 			if err := stream.Send(req); err != nil {
@@ -312,7 +311,7 @@ func ExampleClient_ListCollectionIds() {
 	}
 
 	req := &firestorepb.ListCollectionIdsRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	it := c.ListCollectionIds(ctx, req)
 	for {

@@ -15,7 +15,7 @@
 syntax = "proto3";
 
 package grpc.lb.v1;
-option go_package = "service";
+option go_package = "google.golang.org/grpc/grpclb/grpc_lb_v1/service";
 
 import "grpc_lb_v1/messages/messages.proto";
 

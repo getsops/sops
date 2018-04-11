@@ -21,6 +21,7 @@ package mock_routeguide_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/golang/mock/gomock"
 	"github.com/golang/protobuf/proto"
@@ -29,12 +30,10 @@ import (
 	rgpb "google.golang.org/grpc/examples/route_guide/routeguide"
 )
 
-var (
-	msg = &rgpb.RouteNote{
-		Location: &rgpb.Point{Latitude: 17, Longitude: 29},
-		Message:  "Taxi-cab",
-	}
-)
+var msg = &rgpb.RouteNote{
+	Location: &rgpb.Point{Latitude: 17, Longitude: 29},
+	Message:  "Taxi-cab",
+}
 
 func TestRouteChat(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -61,7 +60,9 @@ func TestRouteChat(t *testing.T) {
 }
 
 func testRouteChat(client rgpb.RouteGuideClient) error {
-	stream, err := client.RouteChat(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	stream, err := client.RouteChat(ctx)
 	if err != nil {
 		return err
 	}

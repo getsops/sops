@@ -50,7 +50,7 @@ type Distribution struct {
 	// Defines the buckets in the histogram. `bucket_option` and `bucket_counts`
 	// must be both set, or both unset.
 	//
-	// Buckets are numbered the the range of [0, N], with a total of N+1 buckets.
+	// Buckets are numbered in the range of [0, N], with a total of N+1 buckets.
 	// There must be at least two buckets (a single-bucket histogram gives
 	// no information that isn't already provided by `count`).
 	//

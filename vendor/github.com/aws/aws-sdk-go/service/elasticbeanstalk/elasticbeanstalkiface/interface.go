@@ -120,6 +120,10 @@ type ElasticBeanstalkAPI interface {
 	DeletePlatformVersionWithContext(aws.Context, *elasticbeanstalk.DeletePlatformVersionInput, ...request.Option) (*elasticbeanstalk.DeletePlatformVersionOutput, error)
 	DeletePlatformVersionRequest(*elasticbeanstalk.DeletePlatformVersionInput) (*request.Request, *elasticbeanstalk.DeletePlatformVersionOutput)
 
+	DescribeAccountAttributes(*elasticbeanstalk.DescribeAccountAttributesInput) (*elasticbeanstalk.DescribeAccountAttributesOutput, error)
+	DescribeAccountAttributesWithContext(aws.Context, *elasticbeanstalk.DescribeAccountAttributesInput, ...request.Option) (*elasticbeanstalk.DescribeAccountAttributesOutput, error)
+	DescribeAccountAttributesRequest(*elasticbeanstalk.DescribeAccountAttributesInput) (*request.Request, *elasticbeanstalk.DescribeAccountAttributesOutput)
+
 	DescribeApplicationVersions(*elasticbeanstalk.DescribeApplicationVersionsInput) (*elasticbeanstalk.DescribeApplicationVersionsOutput, error)
 	DescribeApplicationVersionsWithContext(aws.Context, *elasticbeanstalk.DescribeApplicationVersionsInput, ...request.Option) (*elasticbeanstalk.DescribeApplicationVersionsOutput, error)
 	DescribeApplicationVersionsRequest(*elasticbeanstalk.DescribeApplicationVersionsInput) (*request.Request, *elasticbeanstalk.DescribeApplicationVersionsOutput)
@@ -179,6 +183,10 @@ type ElasticBeanstalkAPI interface {
 	ListPlatformVersionsWithContext(aws.Context, *elasticbeanstalk.ListPlatformVersionsInput, ...request.Option) (*elasticbeanstalk.ListPlatformVersionsOutput, error)
 	ListPlatformVersionsRequest(*elasticbeanstalk.ListPlatformVersionsInput) (*request.Request, *elasticbeanstalk.ListPlatformVersionsOutput)
 
+	ListTagsForResource(*elasticbeanstalk.ListTagsForResourceInput) (*elasticbeanstalk.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *elasticbeanstalk.ListTagsForResourceInput, ...request.Option) (*elasticbeanstalk.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*elasticbeanstalk.ListTagsForResourceInput) (*request.Request, *elasticbeanstalk.ListTagsForResourceOutput)
+
 	RebuildEnvironment(*elasticbeanstalk.RebuildEnvironmentInput) (*elasticbeanstalk.RebuildEnvironmentOutput, error)
 	RebuildEnvironmentWithContext(aws.Context, *elasticbeanstalk.RebuildEnvironmentInput, ...request.Option) (*elasticbeanstalk.RebuildEnvironmentOutput, error)
 	RebuildEnvironmentRequest(*elasticbeanstalk.RebuildEnvironmentInput) (*request.Request, *elasticbeanstalk.RebuildEnvironmentOutput)
@@ -222,6 +230,10 @@ type ElasticBeanstalkAPI interface {
 	UpdateEnvironment(*elasticbeanstalk.UpdateEnvironmentInput) (*elasticbeanstalk.EnvironmentDescription, error)
 	UpdateEnvironmentWithContext(aws.Context, *elasticbeanstalk.UpdateEnvironmentInput, ...request.Option) (*elasticbeanstalk.EnvironmentDescription, error)
 	UpdateEnvironmentRequest(*elasticbeanstalk.UpdateEnvironmentInput) (*request.Request, *elasticbeanstalk.EnvironmentDescription)
+
+	UpdateTagsForResource(*elasticbeanstalk.UpdateTagsForResourceInput) (*elasticbeanstalk.UpdateTagsForResourceOutput, error)
+	UpdateTagsForResourceWithContext(aws.Context, *elasticbeanstalk.UpdateTagsForResourceInput, ...request.Option) (*elasticbeanstalk.UpdateTagsForResourceOutput, error)
+	UpdateTagsForResourceRequest(*elasticbeanstalk.UpdateTagsForResourceInput) (*request.Request, *elasticbeanstalk.UpdateTagsForResourceOutput)
 
 	ValidateConfigurationSettings(*elasticbeanstalk.ValidateConfigurationSettingsInput) (*elasticbeanstalk.ValidateConfigurationSettingsOutput, error)
 	ValidateConfigurationSettingsWithContext(aws.Context, *elasticbeanstalk.ValidateConfigurationSettingsInput, ...request.Option) (*elasticbeanstalk.ValidateConfigurationSettingsOutput, error)

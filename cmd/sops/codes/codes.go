@@ -10,6 +10,7 @@ const (
 	ErrorReadingConfig                     int = 5
 	ErrorInvalidKMSEncryptionContextFormat int = 6
 	ErrorInvalidSetFormat                  int = 7
+	ErrorConflictingParameters             int = 8
 	ErrorEncryptingMac                     int = 21
 	ErrorEncryptingTree                    int = 23
 	ErrorDecryptingMac                     int = 24

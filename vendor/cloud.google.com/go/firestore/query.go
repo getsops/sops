@@ -20,11 +20,13 @@ import (
 	"io"
 	"math"
 	"reflect"
+	"time"
 
 	"golang.org/x/net/context"
 
 	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
 
+	"cloud.google.com/go/internal/btree"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/api/iterator"
 )
@@ -43,19 +45,26 @@ type Query struct {
 	offset                 int32
 	limit                  *wrappers.Int32Value
 	startVals, endVals     []interface{}
+	startDoc, endDoc       *DocumentSnapshot
 	startBefore, endBefore bool
 	err                    error
+}
+
+func (q *Query) collectionPath() string {
+	return q.parentPath + "/documents/" + q.collectionID
 }
 
 // DocumentID is the special field name representing the ID of a document
 // in queries.
 const DocumentID = "__name__"
 
-// Select returns a new Query that specifies the field paths
+// Select returns a new Query that specifies the paths
 // to return from the result documents.
-func (q Query) Select(fieldPaths ...string) Query {
+// Each path argument can be a single field or a dot-separated sequence of
+// fields, and must not contain any of the runes "˜*/[]".
+func (q Query) Select(paths ...string) Query {
 	var fps []FieldPath
-	for _, s := range fieldPaths {
+	for _, s := range paths {
 		fp, err := parseDotSeparatedString(s)
 		if err != nil {
 			q.err = err
@@ -63,25 +72,27 @@ func (q Query) Select(fieldPaths ...string) Query {
 		}
 		fps = append(fps, fp)
 	}
-	if fps == nil {
-		q.selection = []FieldPath{{DocumentID}}
-	} else {
-		q.selection = fps
-	}
-	return q
+	return q.SelectPaths(fps...)
 }
 
 // SelectPaths returns a new Query that specifies the field paths
 // to return from the result documents.
 func (q Query) SelectPaths(fieldPaths ...FieldPath) Query {
-	q.selection = fieldPaths
+	if len(fieldPaths) == 0 {
+		q.selection = []FieldPath{{DocumentID}}
+	} else {
+		q.selection = fieldPaths
+	}
 	return q
 }
 
 // Where returns a new Query that filters the set of results.
 // A Query can have multiple filters.
-func (q Query) Where(fieldPath, op string, value interface{}) Query {
-	fp, err := parseDotSeparatedString(fieldPath)
+// The path argument can be a single field or a dot-separated sequence of
+// fields, and must not contain any of the runes "˜*/[]".
+// The op argument must be one of "==", "<", "<=", ">" or ">=".
+func (q Query) Where(path, op string, value interface{}) Query {
+	fp, err := parseDotSeparatedString(path)
 	if err != nil {
 		q.err = err
 		return q
@@ -92,6 +103,7 @@ func (q Query) Where(fieldPath, op string, value interface{}) Query {
 
 // WherePath returns a new Query that filters the set of results.
 // A Query can have multiple filters.
+// The op argument must be one of "==", "<", "<=", ">" or ">=".
 func (q Query) WherePath(fp FieldPath, op string, value interface{}) Query {
 	q.filters = append(append([]filter(nil), q.filters...), filter{fp, op, value})
 	return q
@@ -112,14 +124,17 @@ const (
 // returned. A Query can have multiple OrderBy/OrderByPath specifications. OrderBy
 // appends the specification to the list of existing ones.
 //
+// The path argument can be a single field or a dot-separated sequence of
+// fields, and must not contain any of the runes "˜*/[]".
+//
 // To order by document name, use the special field path DocumentID.
-func (q Query) OrderBy(fieldPath string, dir Direction) Query {
-	fp, err := parseDotSeparatedString(fieldPath)
+func (q Query) OrderBy(path string, dir Direction) Query {
+	fp, err := parseDotSeparatedString(path)
 	if err != nil {
 		q.err = err
 		return q
 	}
-	q.orders = append(append([]order(nil), q.orders...), order{fp, dir})
+	q.orders = append(q.copyOrders(), order{fp, dir})
 	return q
 }
 
@@ -127,8 +142,12 @@ func (q Query) OrderBy(fieldPath string, dir Direction) Query {
 // returned. A Query can have multiple OrderBy/OrderByPath specifications.
 // OrderByPath appends the specification to the list of existing ones.
 func (q Query) OrderByPath(fp FieldPath, dir Direction) Query {
-	q.orders = append(append([]order(nil), q.orders...), order{fp, dir})
+	q.orders = append(q.copyOrders(), order{fp, dir})
 	return q
+}
+
+func (q *Query) copyOrders() []order {
+	return append([]order(nil), q.orders...)
 }
 
 // Offset returns a new Query that specifies the number of initial results to skip.
@@ -146,8 +165,13 @@ func (q Query) Limit(n int) Query {
 }
 
 // StartAt returns a new Query that specifies that results should start at
-// the document with the given field values. The field path corresponding to
-// each value is taken from the corresponding OrderBy call. For example, in
+// the document with the given field values.
+//
+// If StartAt is called with a single DocumentSnapshot, its field values are used.
+// The DocumentSnapshot must have all the fields mentioned in the OrderBy clauses.
+//
+// Otherwise, StartAt should be called with one field value for each OrderBy clause,
+// in the order that they appear. For example, in
 //   q.OrderBy("X", Asc).OrderBy("Y", Desc).StartAt(1, 2)
 // results will begin at the first document where X = 1 and Y = 2.
 //
@@ -158,8 +182,9 @@ func (q Query) Limit(n int) Query {
 //   client.Collection("States").OrderBy(DocumentID, firestore.Asc).StartAt("NewYork")
 //
 // Calling StartAt overrides a previous call to StartAt or StartAfter.
-func (q Query) StartAt(fieldValues ...interface{}) Query {
-	q.startVals, q.startBefore = fieldValues, true
+func (q Query) StartAt(docSnapshotOrFieldValues ...interface{}) Query {
+	q.startBefore = true
+	q.startVals, q.startDoc, q.err = q.processCursorArg("StartAt", docSnapshotOrFieldValues)
 	return q
 }
 
@@ -167,8 +192,9 @@ func (q Query) StartAt(fieldValues ...interface{}) Query {
 // the document with the given field values. See Query.StartAt for more information.
 //
 // Calling StartAfter overrides a previous call to StartAt or StartAfter.
-func (q Query) StartAfter(fieldValues ...interface{}) Query {
-	q.startVals, q.startBefore = fieldValues, false
+func (q Query) StartAfter(docSnapshotOrFieldValues ...interface{}) Query {
+	q.startBefore = false
+	q.startVals, q.startDoc, q.err = q.processCursorArg("StartAfter", docSnapshotOrFieldValues)
 	return q
 }
 
@@ -176,8 +202,9 @@ func (q Query) StartAfter(fieldValues ...interface{}) Query {
 // document with the given field values. See Query.StartAt for more information.
 //
 // Calling EndAt overrides a previous call to EndAt or EndBefore.
-func (q Query) EndAt(fieldValues ...interface{}) Query {
-	q.endVals, q.endBefore = fieldValues, false
+func (q Query) EndAt(docSnapshotOrFieldValues ...interface{}) Query {
+	q.endBefore = false
+	q.endVals, q.endDoc, q.err = q.processCursorArg("EndAt", docSnapshotOrFieldValues)
 	return q
 }
 
@@ -185,9 +212,22 @@ func (q Query) EndAt(fieldValues ...interface{}) Query {
 // the document with the given field values. See Query.StartAt for more information.
 //
 // Calling EndBefore overrides a previous call to EndAt or EndBefore.
-func (q Query) EndBefore(fieldValues ...interface{}) Query {
-	q.endVals, q.endBefore = fieldValues, true
+func (q Query) EndBefore(docSnapshotOrFieldValues ...interface{}) Query {
+	q.endBefore = true
+	q.endVals, q.endDoc, q.err = q.processCursorArg("EndBefore", docSnapshotOrFieldValues)
 	return q
+}
+
+func (q *Query) processCursorArg(name string, docSnapshotOrFieldValues []interface{}) ([]interface{}, *DocumentSnapshot, error) {
+	for _, e := range docSnapshotOrFieldValues {
+		if ds, ok := e.(*DocumentSnapshot); ok {
+			if len(docSnapshotOrFieldValues) == 1 {
+				return nil, ds, nil
+			}
+			return nil, nil, fmt.Errorf("firestore: a document snapshot must be the only argument to %s", name)
+		}
+	}
+	return docSnapshotOrFieldValues, nil, nil
 }
 
 func (q Query) query() *Query { return &q }
@@ -236,33 +276,79 @@ func (q Query) toProto() (*pb.StructuredQuery, error) {
 			cf.Filters = append(cf.Filters, pf)
 		}
 	}
-	for _, ord := range q.orders {
+	orders := q.orders
+	if q.startDoc != nil || q.endDoc != nil {
+		orders = q.adjustOrders()
+	}
+	for _, ord := range orders {
 		po, err := ord.toProto()
 		if err != nil {
 			return nil, err
 		}
 		p.OrderBy = append(p.OrderBy, po)
 	}
-	// StartAt and EndAt must have values that correspond exactly to the explicit order-by fields.
-	if len(q.startVals) != 0 {
-		vals, err := q.toPositionValues(q.startVals)
-		if err != nil {
-			return nil, err
-		}
-		p.StartAt = &pb.Cursor{Values: vals, Before: q.startBefore}
+
+	cursor, err := q.toCursor(q.startVals, q.startDoc, q.startBefore, orders)
+	if err != nil {
+		return nil, err
 	}
-	if len(q.endVals) != 0 {
-		vals, err := q.toPositionValues(q.endVals)
-		if err != nil {
-			return nil, err
-		}
-		p.EndAt = &pb.Cursor{Values: vals, Before: q.endBefore}
+	p.StartAt = cursor
+	cursor, err = q.toCursor(q.endVals, q.endDoc, q.endBefore, orders)
+	if err != nil {
+		return nil, err
 	}
+	p.EndAt = cursor
 	return p, nil
 }
 
+// If there is a start/end that uses a Document Snapshot, we may need to adjust the OrderBy
+// clauses that the user provided: we add OrderBy(__name__) if it isn't already present, and
+// we make sure we don't invalidate the original query by adding an OrderBy for inequality filters.
+func (q *Query) adjustOrders() []order {
+	// If the user is already ordering by document ID, don't change anything.
+	for _, ord := range q.orders {
+		if ord.isDocumentID() {
+			return q.orders
+		}
+	}
+	// If there are OrderBy clauses, append an OrderBy(DocumentID), using the direction of the last OrderBy clause.
+	if len(q.orders) > 0 {
+		return append(q.copyOrders(), order{
+			fieldPath: FieldPath{DocumentID},
+			dir:       q.orders[len(q.orders)-1].dir,
+		})
+	}
+	// If there are no OrderBy clauses but there is an inequality, add an OrderBy clause
+	// for the field of the first inequality.
+	var orders []order
+	for _, f := range q.filters {
+		if f.op != "==" {
+			orders = []order{{fieldPath: f.fieldPath, dir: Asc}}
+			break
+		}
+	}
+	// Add an ascending OrderBy(DocumentID).
+	return append(orders, order{fieldPath: FieldPath{DocumentID}, dir: Asc})
+}
+
+func (q *Query) toCursor(fieldValues []interface{}, ds *DocumentSnapshot, before bool, orders []order) (*pb.Cursor, error) {
+	var vals []*pb.Value
+	var err error
+	if ds != nil {
+		vals, err = q.docSnapshotToCursorValues(ds, orders)
+	} else if len(fieldValues) != 0 {
+		vals, err = q.fieldValuesToCursorValues(fieldValues)
+	} else {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &pb.Cursor{Values: vals, Before: before}, nil
+}
+
 // toPositionValues converts the field values to protos.
-func (q *Query) toPositionValues(fieldValues []interface{}) ([]*pb.Value, error) {
+func (q *Query) fieldValuesToCursorValues(fieldValues []interface{}) ([]*pb.Value, error) {
 	if len(fieldValues) != len(q.orders) {
 		return nil, errors.New("firestore: number of field values in StartAt/StartAfter/EndAt/EndBefore does not match number of OrderBy fields")
 	}
@@ -270,20 +356,82 @@ func (q *Query) toPositionValues(fieldValues []interface{}) ([]*pb.Value, error)
 	var err error
 	for i, ord := range q.orders {
 		fval := fieldValues[i]
-		if len(ord.fieldPath) == 1 && ord.fieldPath[0] == DocumentID {
+		if ord.isDocumentID() {
+			// TODO(jba): support DocumentRefs as well as strings.
+			// TODO(jba): error if document ref does not belong to the right collection.
 			docID, ok := fval.(string)
 			if !ok {
 				return nil, fmt.Errorf("firestore: expected doc ID for DocumentID field, got %T", fval)
 			}
-			vals[i] = &pb.Value{&pb.Value_ReferenceValue{q.parentPath + "/documents/" + q.collectionID + "/" + docID}}
+			vals[i] = &pb.Value{&pb.Value_ReferenceValue{q.collectionPath() + "/" + docID}}
 		} else {
-			vals[i], err = toProtoValue(reflect.ValueOf(fval))
+			var sawTransform bool
+			vals[i], sawTransform, err = toProtoValue(reflect.ValueOf(fval))
 			if err != nil {
 				return nil, err
+			}
+			if sawTransform {
+				return nil, errors.New("firestore: ServerTimestamp disallowed in query value")
 			}
 		}
 	}
 	return vals, nil
+}
+
+func (q *Query) docSnapshotToCursorValues(ds *DocumentSnapshot, orders []order) ([]*pb.Value, error) {
+	// TODO(jba): error if doc snap does not belong to the right collection.
+	vals := make([]*pb.Value, len(orders))
+	for i, ord := range orders {
+		if ord.isDocumentID() {
+			dp, qp := ds.Ref.Parent.Path, q.collectionPath()
+			if dp != qp {
+				return nil, fmt.Errorf("firestore: document snapshot for %s passed to query on %s", dp, qp)
+			}
+			vals[i] = &pb.Value{&pb.Value_ReferenceValue{ds.Ref.Path}}
+		} else {
+			val, err := valueAtPath(ord.fieldPath, ds.proto.Fields)
+			if err != nil {
+				return nil, err
+			}
+			vals[i] = val
+		}
+	}
+	return vals, nil
+}
+
+// Returns a function that compares DocumentSnapshots according to q's ordering.
+func (q Query) compareFunc() func(d1, d2 *DocumentSnapshot) (int, error) {
+	// Add implicit sorting by name, using the last specified direction.
+	lastDir := Asc
+	if len(q.orders) > 0 {
+		lastDir = q.orders[len(q.orders)-1].dir
+	}
+	orders := append(q.copyOrders(), order{[]string{DocumentID}, lastDir})
+	return func(d1, d2 *DocumentSnapshot) (int, error) {
+		for _, ord := range orders {
+			var cmp int
+			if len(ord.fieldPath) == 1 && ord.fieldPath[0] == DocumentID {
+				cmp = compareReferences(d1.Ref.Path, d2.Ref.Path)
+			} else {
+				v1, err := valueAtPath(ord.fieldPath, d1.proto.Fields)
+				if err != nil {
+					return 0, err
+				}
+				v2, err := valueAtPath(ord.fieldPath, d2.proto.Fields)
+				if err != nil {
+					return 0, err
+				}
+				cmp = compareValues(v1, v2)
+			}
+			if cmp != 0 {
+				if ord.dir == Desc {
+					cmp = -cmp
+				}
+				return cmp, nil
+			}
+		}
+		return 0, nil
+	}
 }
 
 type filter struct {
@@ -295,6 +443,21 @@ type filter struct {
 func (f filter) toProto() (*pb.StructuredQuery_Filter, error) {
 	if err := f.fieldPath.validate(); err != nil {
 		return nil, err
+	}
+	if uop, ok := unaryOpFor(f.value); ok {
+		if f.op != "==" {
+			return nil, fmt.Errorf("firestore: must use '==' when comparing %v", f.value)
+		}
+		return &pb.StructuredQuery_Filter{
+			FilterType: &pb.StructuredQuery_Filter_UnaryFilter{
+				UnaryFilter: &pb.StructuredQuery_UnaryFilter{
+					OperandType: &pb.StructuredQuery_UnaryFilter_Field{
+						Field: fref(f.fieldPath),
+					},
+					Op: uop,
+				},
+			},
+		}, nil
 	}
 	var op pb.StructuredQuery_FieldFilter_Operator
 	switch f.op {
@@ -311,13 +474,16 @@ func (f filter) toProto() (*pb.StructuredQuery_Filter, error) {
 	default:
 		return nil, fmt.Errorf("firestore: invalid operator %q", f.op)
 	}
-	val, err := toProtoValue(reflect.ValueOf(f.value))
+	val, sawTransform, err := toProtoValue(reflect.ValueOf(f.value))
 	if err != nil {
 		return nil, err
 	}
+	if sawTransform {
+		return nil, errors.New("firestore: ServerTimestamp disallowed in query value")
+	}
 	return &pb.StructuredQuery_Filter{
 		FilterType: &pb.StructuredQuery_Filter_FieldFilter{
-			&pb.StructuredQuery_FieldFilter{
+			FieldFilter: &pb.StructuredQuery_FieldFilter{
 				Field: fref(f.fieldPath),
 				Op:    op,
 				Value: val,
@@ -326,9 +492,35 @@ func (f filter) toProto() (*pb.StructuredQuery_Filter, error) {
 	}, nil
 }
 
+func unaryOpFor(value interface{}) (pb.StructuredQuery_UnaryFilter_Operator, bool) {
+	switch {
+	case value == nil:
+		return pb.StructuredQuery_UnaryFilter_IS_NULL, true
+	case isNaN(value):
+		return pb.StructuredQuery_UnaryFilter_IS_NAN, true
+	default:
+		return pb.StructuredQuery_UnaryFilter_OPERATOR_UNSPECIFIED, false
+	}
+}
+
+func isNaN(x interface{}) bool {
+	switch x := x.(type) {
+	case float32:
+		return math.IsNaN(float64(x))
+	case float64:
+		return math.IsNaN(x)
+	default:
+		return false
+	}
+}
+
 type order struct {
 	fieldPath FieldPath
 	dir       Direction
+}
+
+func (r order) isDocumentID() bool {
+	return len(r.fieldPath) == 1 && r.fieldPath[0] == DocumentID
 }
 
 func (r order) toProto() (*pb.StructuredQuery_Order, error) {
@@ -355,19 +547,25 @@ func trunc32(i int) int32 {
 // Documents returns an iterator over the query's resulting documents.
 func (q Query) Documents(ctx context.Context) *DocumentIterator {
 	return &DocumentIterator{
-		ctx: withResourceHeader(ctx, q.c.path()),
-		q:   &q,
-		err: checkTransaction(ctx),
+		iter: newQueryDocumentIterator(withResourceHeader(ctx, q.c.path()), &q, nil),
+		err:  checkTransaction(ctx),
 	}
 }
 
 // DocumentIterator is an iterator over documents returned by a query.
 type DocumentIterator struct {
-	ctx          context.Context
-	q            *Query
-	tid          []byte // transaction ID, if any
-	streamClient pb.Firestore_RunQueryClient
-	err          error
+	iter docIterator
+	err  error
+}
+
+// Unexported interface so we can have two different kinds of DocumentIterator: one
+// for straight queries, and one for query snapshots. We do it this way instead of
+// making DocumentIterator an interface because in the client libraries, iterators are
+// always concrete types, and the fact that this one has two different implementations
+// is an internal detail.
+type docIterator interface {
+	next() (*DocumentSnapshot, error)
+	stop()
 }
 
 // Next returns the next result. Its second return value is iterator.Done if there
@@ -377,56 +575,29 @@ func (it *DocumentIterator) Next() (*DocumentSnapshot, error) {
 	if it.err != nil {
 		return nil, it.err
 	}
-	client := it.q.c
-	if it.streamClient == nil {
-		sq, err := it.q.toProto()
-		if err != nil {
-			it.err = err
-			return nil, err
-		}
-		req := &pb.RunQueryRequest{
-			Parent:    it.q.parentPath,
-			QueryType: &pb.RunQueryRequest_StructuredQuery{sq},
-		}
-		if it.tid != nil {
-			req.ConsistencySelector = &pb.RunQueryRequest_Transaction{it.tid}
-		}
-		it.streamClient, it.err = client.c.RunQuery(it.ctx, req)
-		if it.err != nil {
-			return nil, it.err
-		}
-	}
-	var res *pb.RunQueryResponse
-	var err error
-	for {
-		res, err = it.streamClient.Recv()
-		if err == io.EOF {
-			err = iterator.Done
-		}
-		if err != nil {
-			it.err = err
-			return nil, it.err
-		}
-		if res.Document != nil {
-			break
-		}
-		// No document => partial progress; keep receiving.
-	}
-	docRef, err := pathToDoc(res.Document.Name, client)
+	ds, err := it.iter.next()
 	if err != nil {
 		it.err = err
-		return nil, err
 	}
-	doc, err := newDocumentSnapshot(docRef, res.Document, client)
-	if err != nil {
-		it.err = err
-		return nil, err
+	return ds, err
+}
+
+// Stop stops the iterator, freeing its resources.
+// Always call Stop when you are done with an iterator.
+// It is not safe to call Stop concurrently with Next.
+func (it *DocumentIterator) Stop() {
+	if it.iter != nil { // possible in error cases
+		it.iter.stop()
 	}
-	return doc, nil
+	if it.err == nil {
+		it.err = iterator.Done
+	}
 }
 
 // GetAll returns all the documents remaining from the iterator.
+// It is not necessary to call Stop on the iterator after calling GetAll.
 func (it *DocumentIterator) GetAll() ([]*DocumentSnapshot, error) {
+	defer it.Stop()
 	var docs []*DocumentSnapshot
 	for {
 		doc, err := it.Next()
@@ -441,7 +612,146 @@ func (it *DocumentIterator) GetAll() ([]*DocumentSnapshot, error) {
 	return docs, nil
 }
 
-// TODO(jba): Does the iterator need a Stop or Close method? I don't think so--
-// I don't think the client can terminate a streaming receive except perhaps
-// by cancelling the context, and the user can do that themselves if they wish.
-// Find out for sure.
+type queryDocumentIterator struct {
+	ctx          context.Context
+	cancel       func()
+	q            *Query
+	tid          []byte // transaction ID, if any
+	streamClient pb.Firestore_RunQueryClient
+}
+
+func newQueryDocumentIterator(ctx context.Context, q *Query, tid []byte) *queryDocumentIterator {
+	ctx, cancel := context.WithCancel(ctx)
+	return &queryDocumentIterator{
+		ctx:    ctx,
+		cancel: cancel,
+		q:      q,
+		tid:    tid,
+	}
+}
+
+func (it *queryDocumentIterator) next() (*DocumentSnapshot, error) {
+	client := it.q.c
+	if it.streamClient == nil {
+		sq, err := it.q.toProto()
+		if err != nil {
+			return nil, err
+		}
+		req := &pb.RunQueryRequest{
+			Parent:    it.q.parentPath,
+			QueryType: &pb.RunQueryRequest_StructuredQuery{sq},
+		}
+		if it.tid != nil {
+			req.ConsistencySelector = &pb.RunQueryRequest_Transaction{it.tid}
+		}
+		it.streamClient, err = client.c.RunQuery(it.ctx, req)
+		if err != nil {
+			return nil, err
+		}
+	}
+	var res *pb.RunQueryResponse
+	var err error
+	for {
+		res, err = it.streamClient.Recv()
+		if err == io.EOF {
+			return nil, iterator.Done
+		}
+		if err != nil {
+			return nil, err
+		}
+		if res.Document != nil {
+			break
+		}
+		// No document => partial progress; keep receiving.
+	}
+	docRef, err := pathToDoc(res.Document.Name, client)
+	if err != nil {
+		return nil, err
+	}
+	doc, err := newDocumentSnapshot(docRef, res.Document, client, res.ReadTime)
+	if err != nil {
+		return nil, err
+	}
+	return doc, nil
+}
+
+func (it *queryDocumentIterator) stop() {
+	it.cancel()
+}
+
+// Snapshots returns an iterator over snapshots of the query. Each time the query
+// results change, a new snapshot will be generated.
+func (q Query) Snapshots(ctx context.Context) *QuerySnapshotIterator {
+	ws, err := newWatchStreamForQuery(ctx, q)
+	if err != nil {
+		return &QuerySnapshotIterator{err: err}
+	}
+	return &QuerySnapshotIterator{
+		Query: q,
+		ws:    ws,
+	}
+}
+
+// QuerySnapshotIterator is an iterator over snapshots of a query.
+// Call Next on the iterator to get a snapshot of the query's results each time they change.
+// Call Stop on the iterator when done.
+//
+// For an example, see Query.Snapshots.
+type QuerySnapshotIterator struct {
+	// The Query used to construct this iterator.
+	Query Query
+
+	// The time at which the most recent snapshot was obtained from Firestore.
+	ReadTime time.Time
+
+	// The number of results in the most recent snapshot.
+	Size int
+
+	// The changes since the previous snapshot.
+	Changes []DocumentChange
+
+	ws  *watchStream
+	err error
+}
+
+// Next blocks until the query's results change, then returns a DocumentIterator for
+// the current results.
+//
+// Next never returns iterator.Done unless it is called after Stop.
+func (it *QuerySnapshotIterator) Next() (*DocumentIterator, error) {
+	if it.err != nil {
+		return nil, it.err
+	}
+	btree, changes, readTime, err := it.ws.nextSnapshot()
+	if err != nil {
+		if err == io.EOF {
+			err = iterator.Done
+		}
+		it.err = err
+		return nil, it.err
+	}
+	it.Changes = changes
+	it.ReadTime = readTime
+	it.Size = btree.Len()
+	return &DocumentIterator{
+		iter: (*btreeDocumentIterator)(btree.BeforeIndex(0)),
+	}, nil
+}
+
+// Stop stops receiving snapshots.
+// You should always call Stop when you are done with an iterator, to free up resources.
+// It is not safe to call Stop concurrently with Next.
+func (it *QuerySnapshotIterator) Stop() {
+	it.ws.stop()
+}
+
+type btreeDocumentIterator btree.Iterator
+
+func (it *btreeDocumentIterator) next() (*DocumentSnapshot, error) {
+	if !(*btree.Iterator)(it).Next() {
+		return nil, iterator.Done
+	}
+	return it.Key.(*DocumentSnapshot), nil
+}
+
+func (*btreeDocumentIterator) stop() {}

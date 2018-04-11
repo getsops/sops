@@ -136,9 +136,6 @@ func (s *byteBufServer) StreamingCall(stream testpb.BenchmarkService_StreamingCa
 
 // ServerInfo contains the information to create a gRPC benchmark server.
 type ServerInfo struct {
-	// Addr is the address of the server.
-	Addr string
-
 	// Type is the type of the server.
 	// It should be "protobuf" or "bytebuf".
 	Type string
@@ -148,21 +145,13 @@ type ServerInfo struct {
 	// For "bytebuf", it should be an int representing response size.
 	Metadata interface{}
 
-	// Network can simulate latency
-	Network *latency.Network
+	// Listener is the network listener for the server to use
+	Listener net.Listener
 }
 
 // StartServer starts a gRPC server serving a benchmark service according to info.
-// It returns its listen address and a function to stop the server.
-func StartServer(info ServerInfo, opts ...grpc.ServerOption) (string, func()) {
-	lis, err := net.Listen("tcp", info.Addr)
-	if err != nil {
-		grpclog.Fatalf("Failed to listen: %v", err)
-	}
-	nw := info.Network
-	if nw != nil {
-		lis = nw.Listener(lis)
-	}
+// It returns a function to stop the server.
+func StartServer(info ServerInfo, opts ...grpc.ServerOption) func() {
 	opts = append(opts, grpc.WriteBufferSize(128*1024))
 	opts = append(opts, grpc.ReadBufferSize(128*1024))
 	s := grpc.NewServer(opts...)
@@ -178,8 +167,8 @@ func StartServer(info ServerInfo, opts ...grpc.ServerOption) (string, func()) {
 	default:
 		grpclog.Fatalf("failed to StartServer, unknown Type: %v", info.Type)
 	}
-	go s.Serve(lis)
-	return lis.Addr().String(), func() {
+	go s.Serve(info.Listener)
+	return func() {
 		s.Stop()
 	}
 }
@@ -250,7 +239,13 @@ func NewClientConn(addr string, opts ...grpc.DialOption) *grpc.ClientConn {
 func runUnary(b *testing.B, benchFeatures stats.Features) {
 	s := stats.AddStats(b, 38)
 	nw := &latency.Network{Kbps: benchFeatures.Kbps, Latency: benchFeatures.Latency, MTU: benchFeatures.Mtu}
-	target, stopper := StartServer(ServerInfo{Addr: "localhost:0", Type: "protobuf", Network: nw}, grpc.MaxConcurrentStreams(uint32(benchFeatures.MaxConcurrentCalls+1)))
+	lis, err := net.Listen("tcp", "localhost:0")
+	if err != nil {
+		grpclog.Fatalf("Failed to listen: %v", err)
+	}
+	target := lis.Addr().String()
+	lis = nw.Listener(lis)
+	stopper := StartServer(ServerInfo{Type: "protobuf", Listener: lis}, grpc.MaxConcurrentStreams(uint32(benchFeatures.MaxConcurrentCalls+1)))
 	defer stopper()
 	conn := NewClientConn(
 		target, grpc.WithInsecure(),
@@ -298,7 +293,13 @@ func runUnary(b *testing.B, benchFeatures stats.Features) {
 func runStream(b *testing.B, benchFeatures stats.Features) {
 	s := stats.AddStats(b, 38)
 	nw := &latency.Network{Kbps: benchFeatures.Kbps, Latency: benchFeatures.Latency, MTU: benchFeatures.Mtu}
-	target, stopper := StartServer(ServerInfo{Addr: "localhost:0", Type: "protobuf", Network: nw}, grpc.MaxConcurrentStreams(uint32(benchFeatures.MaxConcurrentCalls+1)))
+	lis, err := net.Listen("tcp", "localhost:0")
+	if err != nil {
+		grpclog.Fatalf("Failed to listen: %v", err)
+	}
+	target := lis.Addr().String()
+	lis = nw.Listener(lis)
+	stopper := StartServer(ServerInfo{Type: "protobuf", Listener: lis}, grpc.MaxConcurrentStreams(uint32(benchFeatures.MaxConcurrentCalls+1)))
 	defer stopper()
 	conn := NewClientConn(
 		target, grpc.WithInsecure(),

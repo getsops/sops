@@ -1,10 +1,11 @@
 package matchers_test
 
 import (
+	"time"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/matchers"
-	"time"
 )
 
 var _ = Describe("BeTemporally", func() {
@@ -19,34 +20,34 @@ var _ = Describe("BeTemporally", func() {
 	Context("When comparing times", func() {
 
 		It("should support ==", func() {
-			Ω(t0).Should(BeTemporally("==", t0))
-			Ω(t1).ShouldNot(BeTemporally("==", t0))
-			Ω(t0).ShouldNot(BeTemporally("==", t1))
-			Ω(t0).ShouldNot(BeTemporally("==", time.Time{}))
+			Expect(t0).Should(BeTemporally("==", t0))
+			Expect(t1).ShouldNot(BeTemporally("==", t0))
+			Expect(t0).ShouldNot(BeTemporally("==", t1))
+			Expect(t0).ShouldNot(BeTemporally("==", time.Time{}))
 		})
 
 		It("should support >", func() {
-			Ω(t0).Should(BeTemporally(">", t2))
-			Ω(t0).ShouldNot(BeTemporally(">", t0))
-			Ω(t2).ShouldNot(BeTemporally(">", t0))
+			Expect(t0).Should(BeTemporally(">", t2))
+			Expect(t0).ShouldNot(BeTemporally(">", t0))
+			Expect(t2).ShouldNot(BeTemporally(">", t0))
 		})
 
 		It("should support <", func() {
-			Ω(t0).Should(BeTemporally("<", t1))
-			Ω(t0).ShouldNot(BeTemporally("<", t0))
-			Ω(t1).ShouldNot(BeTemporally("<", t0))
+			Expect(t0).Should(BeTemporally("<", t1))
+			Expect(t0).ShouldNot(BeTemporally("<", t0))
+			Expect(t1).ShouldNot(BeTemporally("<", t0))
 		})
 
 		It("should support >=", func() {
-			Ω(t0).Should(BeTemporally(">=", t2))
-			Ω(t0).Should(BeTemporally(">=", t0))
-			Ω(t0).ShouldNot(BeTemporally(">=", t1))
+			Expect(t0).Should(BeTemporally(">=", t2))
+			Expect(t0).Should(BeTemporally(">=", t0))
+			Expect(t0).ShouldNot(BeTemporally(">=", t1))
 		})
 
 		It("should support <=", func() {
-			Ω(t0).Should(BeTemporally("<=", t1))
-			Ω(t0).Should(BeTemporally("<=", t0))
-			Ω(t0).ShouldNot(BeTemporally("<=", t2))
+			Expect(t0).Should(BeTemporally("<=", t1))
+			Expect(t0).Should(BeTemporally("<=", t0))
+			Expect(t0).ShouldNot(BeTemporally("<=", t2))
 		})
 
 		Context("when passed ~", func() {
@@ -56,9 +57,9 @@ var _ = Describe("BeTemporally", func() {
 					t2 = t0.Add(-2 * time.Millisecond)
 				})
 				It("should approximate", func() {
-					Ω(t0).Should(BeTemporally("~", t0))
-					Ω(t0).Should(BeTemporally("~", t1))
-					Ω(t0).ShouldNot(BeTemporally("~", t2))
+					Expect(t0).Should(BeTemporally("~", t0))
+					Expect(t0).Should(BeTemporally("~", t1))
+					Expect(t0).ShouldNot(BeTemporally("~", t2))
 				})
 			})
 
@@ -68,9 +69,9 @@ var _ = Describe("BeTemporally", func() {
 				})
 				It("should use precision paramter", func() {
 					d := 2 * time.Second
-					Ω(t0).Should(BeTemporally("~", t0, d))
-					Ω(t0).Should(BeTemporally("~", t1, d))
-					Ω(t0).ShouldNot(BeTemporally("~", t2, d))
+					Expect(t0).Should(BeTemporally("~", t0, d))
+					Expect(t0).Should(BeTemporally("~", t1, d))
+					Expect(t0).ShouldNot(BeTemporally("~", t2, d))
 				})
 			})
 		})
@@ -79,20 +80,20 @@ var _ = Describe("BeTemporally", func() {
 	Context("when passed a non-time", func() {
 		It("should error", func() {
 			success, err := (&BeTemporallyMatcher{Comparator: "==", CompareTo: t0}).Match("foo")
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 			success, err = (&BeTemporallyMatcher{Comparator: "=="}).Match(nil)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 
 	Context("when passed an unsupported comparator", func() {
 		It("should error", func() {
 			success, err := (&BeTemporallyMatcher{Comparator: "!=", CompareTo: t0}).Match(t2)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 })

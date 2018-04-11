@@ -68,6 +68,18 @@ func TestParsePackage_OldSchoolWithSuccessOutput_ReturnsCompletePackageResult(t 
 	assertEqual(t, expectedOldSchool_Passes, *actual)
 }
 
+func TestParsePackage_GoConveyWithDiffOutput_ReturnsPackageResult(t *testing.T) {
+	actual := &contract.PackageResult{PackageName: expectedOldSchoolWithDiff_Fails.PackageName}
+	ParsePackageResults(actual, inputOldSchoolWithDiff_Fails)
+	assertEqual(t, expectedOldSchoolWithDiff_Fails, *actual)
+}
+
+func TestParsePackage_GoConveyWithDiff2Output_ReturnsPackageResult(t *testing.T) {
+	actual := &contract.PackageResult{PackageName: expectedOldSchoolWithDiff2_Fails.PackageName}
+	ParsePackageResults(actual, inputOldSchoolWithDiff2_Fails)
+	assertEqual(t, expectedOldSchoolWithDiff2_Fails, *actual)
+}
+
 func TestParsePackage_OldSchoolWithPanicOutput_ReturnsCompletePackageResult(t *testing.T) {
 	actual := &contract.PackageResult{PackageName: expectedOldSchool_Panics.PackageName}
 	ParsePackageResults(actual, inputOldSchool_Panics)
@@ -324,6 +336,186 @@ var expectedOldSchool_Fails = contract.PackageResult{
 			File:     "",
 			Line:     0,
 			Message:  "",
+			Stories:  []reporting.ScopeResult{},
+		},
+		contract.TestResult{
+			TestName: "TestOldSchool_FailureWithReason",
+			Elapsed:  0.11,
+			Passed:   false,
+			File:     "old_school_test.go",
+			Line:     18,
+			Message:  "old_school_test.go:18: I am a failing test.",
+			Stories:  []reporting.ScopeResult{},
+		},
+		contract.TestResult{
+			TestName: "TestOldSchool_Passes",
+			Elapsed:  0.01,
+			Passed:   true,
+			File:     "",
+			Line:     0,
+			Message:  "",
+			Stories:  []reporting.ScopeResult{},
+		},
+		contract.TestResult{
+			TestName: "TestOldSchool_PassesWithMessage",
+			Elapsed:  0.03,
+			Passed:   true,
+			File:     "old_school_test.go",
+			Line:     10,
+			Message:  "old_school_test.go:10: I am a passing test.\nWith a newline.",
+			Stories:  []reporting.ScopeResult{},
+		},
+	},
+}
+
+const inputOldSchoolWithDiff2_Fails = `
+/home/apryl/gopath/src/gitlab.qarea.org/tgms/collabms/tracker/testdata/staging.setup: 11: /home/apryl/gopath/src/gitlab.qarea.org/tgms/collabms/tracker/testdata/staging.setup: [[: not found
+=== RUN   TestExterlanLoginURL
+--- PASS: TestExterlanLoginURL (0.00s)
+=== RUN   TestToProject
+--- FAIL: TestToProject (0.00s)
+        Error Trace:    converters_test.go:29
+        Error:          Not equal: entities.Project{ID:"1", Title:"Todolist1", Link:"host.com/123/projects/1", Description:"", IssueTypes:[]entities.TypeID{entities.TypeID{ID:5, Name:"NEW"}, entities.TypeID{ID:6, Name:"CONFIRMED"}, entities.TypeID{ID:7, Name:"WORKS FOR ME"}}, ActivityTypes:[]entities.TypeID{entities.TypeID{ID:1, Name:"General"}, entities.TypeID{ID:2, Name:"i don't know"}, entities.TypeID{ID:3, Name:"maaaan"}}} (expected)
+                                != entities.Project{ID:"1", Title:"Todolist", Link:"host.com/123/projects/1", Description:"", IssueTypes:[]entities.TypeID{entities.TypeID{ID:5, Name:"NEW"}, entities.TypeID{ID:6, Name:"CONFIRMED"}, entities.TypeID{ID:7, Name:"WORKS FOR ME"}}, ActivityTypes:[]entities.TypeID{entities.TypeID{ID:1, Name:"General"}, entities.TypeID{ID:2, Name:"i don't know"}, entities.TypeID{ID:3, Name:"maaaan"}}} (actual)
+
+                        Diff:
+                        --- Expected
+                        +++ Actual
+                        @@ -2,6 +2,6 @@
+                          ID: (entities.ProjectID) (len=1) "1",
+                        - Title: (string) (len=9) "Todolist1",
+                        + Title: (string) (len=8) "Todolist",
+                          Link: (string) (len=23) "host.com/123/projects/1",
+                          Description: (string) "",
+                        - IssueTypes: ([]entities.TypeID) (len=3 cap=3) {
+                        + IssueTypes: ([]entities.TypeID) (len=3 cap=4) {
+                           (entities.TypeID) {
+                        @@ -19,3 +19,3 @@
+                          },
+                        - ActivityTypes: ([]entities.TypeID) (len=3 cap=3) {
+                        + ActivityTypes: ([]entities.TypeID) (len=3 cap=4) {
+                           (entities.TypeID) {
+
+=== RUN   TestIssue
+--- FAIL: TestIssue (0.00s)
+        Error Trace:    converters_test.go:49
+        Error:          Not equal: entities.Issue{ID:"1", ProjectID:"1", Type:entities.TypeID{ID:8, Name:"DUPLICATE"}, Title:"ser1", Description:"", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:"host.com/123/projects/1/tasks/1"} (expected)
+                                != entities.Issue{ID:"1", ProjectID:"1", Type:entities.TypeID{ID:8, Name:"DUPLICATE"}, Title:"ser", Description:"", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:"host.com/123/projects/1/tasks/1"} (actual)
+
+                        Diff:
+                        --- Expected
+                        +++ Actual
+                        @@ -7,3 +7,3 @@
+                          },
+                        - Title: (string) (len=4) "ser1",
+                        + Title: (string) (len=3) "ser",
+                          Description: (string) "",
+        Messages:       Message
+
+=== RUN   TestIssues
+--- PASS: TestIssues (2.00s)
+FAIL
+coverage: 51.7% of statements
+exit status 1
+FAIL	github.com/smartystreets/goconvey/webserver/examples	0.414s
+`
+
+var expectedOldSchoolWithDiff2_Fails = contract.PackageResult{
+	PackageName: "github.com/smartystreets/goconvey/webserver/examples",
+	Outcome:     contract.Failed,
+	Elapsed:     0.414,
+	Coverage:    51.7,
+	TestResults: []contract.TestResult{
+		contract.TestResult{
+			TestName: "TestExterlanLoginURL",
+			Elapsed:  0.00,
+			Passed:   true,
+			Message:  "",
+			Stories:  []reporting.ScopeResult{},
+		},
+		contract.TestResult{
+			TestName: "TestIssue",
+			Elapsed:  0.00,
+			Passed:   false,
+			File:     "converters_test.go",
+			Line:     49,
+			Message:  "Error Trace:    converters_test.go:49\nError:          Not equal: entities.Issue{ID:\"1\", ProjectID:\"1\", Type:entities.TypeID{ID:8, Name:\"DUPLICATE\"}, Title:\"ser1\", Description:\"\", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:\"host.com/123/projects/1/tasks/1\"} (expected)\n!= entities.Issue{ID:\"1\", ProjectID:\"1\", Type:entities.TypeID{ID:8, Name:\"DUPLICATE\"}, Title:\"ser\", Description:\"\", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:\"host.com/123/projects/1/tasks/1\"} (actual)\n\nDiff:\n--- Expected\n+++ Actual\n@@ -7,3 +7,3 @@\n},\n- Title: (string) (len=4) \"ser1\",\n+ Title: (string) (len=3) \"ser\",\nDescription: (string) \"\",\nMessages:       Message\n",
+			Stories:  []reporting.ScopeResult{},
+		},
+		contract.TestResult{
+			TestName: "TestIssues",
+			Elapsed:  2.00,
+			Passed:   true,
+			Message:  "",
+			Stories:  []reporting.ScopeResult{},
+		},
+		contract.TestResult{
+			TestName: "TestToProject",
+			Elapsed:  0.00,
+			Passed:   false,
+			File:     "converters_test.go",
+			Line:     29,
+			Message:  "Error Trace:    converters_test.go:29\nError:          Not equal: entities.Project{ID:\"1\", Title:\"Todolist1\", Link:\"host.com/123/projects/1\", Description:\"\", IssueTypes:[]entities.TypeID{entities.TypeID{ID:5, Name:\"NEW\"}, entities.TypeID{ID:6, Name:\"CONFIRMED\"}, entities.TypeID{ID:7, Name:\"WORKS FOR ME\"}}, ActivityTypes:[]entities.TypeID{entities.TypeID{ID:1, Name:\"General\"}, entities.TypeID{ID:2, Name:\"i don't know\"}, entities.TypeID{ID:3, Name:\"maaaan\"}}} (expected)\n!= entities.Project{ID:\"1\", Title:\"Todolist\", Link:\"host.com/123/projects/1\", Description:\"\", IssueTypes:[]entities.TypeID{entities.TypeID{ID:5, Name:\"NEW\"}, entities.TypeID{ID:6, Name:\"CONFIRMED\"}, entities.TypeID{ID:7, Name:\"WORKS FOR ME\"}}, ActivityTypes:[]entities.TypeID{entities.TypeID{ID:1, Name:\"General\"}, entities.TypeID{ID:2, Name:\"i don't know\"}, entities.TypeID{ID:3, Name:\"maaaan\"}}} (actual)\n\nDiff:\n--- Expected\n+++ Actual\n@@ -2,6 +2,6 @@\nID: (entities.ProjectID) (len=1) \"1\",\n- Title: (string) (len=9) \"Todolist1\",\n+ Title: (string) (len=8) \"Todolist\",\nLink: (string) (len=23) \"host.com/123/projects/1\",\nDescription: (string) \"\",\n- IssueTypes: ([]entities.TypeID) (len=3 cap=3) {\n+ IssueTypes: ([]entities.TypeID) (len=3 cap=4) {\n(entities.TypeID) {\n@@ -19,3 +19,3 @@\n},\n- ActivityTypes: ([]entities.TypeID) (len=3 cap=3) {\n+ ActivityTypes: ([]entities.TypeID) (len=3 cap=4) {\n(entities.TypeID) {\n",
+			Stories:  []reporting.ScopeResult{},
+		},
+	},
+}
+
+const inputOldSchoolWithDiff_Fails = `
+/home/apryl/gopath/src/gitlab.qarea.org/tgms/collabms/tracker/testdata/staging.setup: 11: /home/apryl/gopath/src/gitlab.qarea.org/tgms/collabms/tracker/testdata/staging.setup: [[: not found
+=== RUN TestOldSchool_Passes
+--- PASS: TestOldSchool_Passes (0.01 seconds)
+=== RUN TestOldSchool_PassesWithMessage
+--- PASS: TestOldSchool_PassesWithMessage (0.03 seconds)
+	old_school_test.go:10: I am a passing test.
+		With a newline.
+=== RUN TestOldSchool_Failure
+--- FAIL: TestOldSchool_Failure (0.06 seconds)
+=== RUN TestOldSchool_FailureWithReason
+--- FAIL: TestOldSchool_FailureWithReason (0.11 seconds)
+	old_school_test.go:18: I am a failing test.
+=== RUN TestOldSchool_FailureWithDiff
+--- FAIL: TestOldSchool_FailureWithDiff (0.17 seconds)
+        Error Trace:    converters_test.go:49
+        Error:          Not equal: entities.Issue{ID:"1", ProjectID:"1", Type:entities.TypeID{ID:8, Name:"DUPLICATE"}, Title:"ser1", Description:"", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:"host.com/123/projects/1/tasks/1"} (expected)
+                                != entities.Issue{ID:"1", ProjectID:"1", Type:entities.TypeID{ID:8, Name:"DUPLICATE"}, Title:"ser", Description:"", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:"host.com/123/projects/1/tasks/1"} (actual)
+
+                        Diff:
+                        --- Expected
+                        +++ Actual
+                        @@ -7,3 +7,3 @@
+                          },
+                        - Title: (string) (len=4) "ser1",
+                        + Title: (string) (len=3) "ser",
+                          Description: (string) "",
+        Messages:       Message
+
+FAIL
+exit status 1
+FAIL	github.com/smartystreets/goconvey/webserver/examples	0.017s
+`
+
+var expectedOldSchoolWithDiff_Fails = contract.PackageResult{
+	PackageName: "github.com/smartystreets/goconvey/webserver/examples",
+	Outcome:     contract.Failed,
+	Elapsed:     0.017,
+	TestResults: []contract.TestResult{
+		contract.TestResult{
+			TestName: "TestOldSchool_Failure",
+			Elapsed:  0.06,
+			Passed:   false,
+			File:     "",
+			Line:     0,
+			Message:  "",
+			Stories:  []reporting.ScopeResult{},
+		},
+		contract.TestResult{
+			TestName: "TestOldSchool_FailureWithDiff",
+			Elapsed:  0.17,
+			Passed:   false,
+			File:     "converters_test.go",
+			Line:     49,
+			Message:  "Error Trace:    converters_test.go:49\nError:          Not equal: entities.Issue{ID:\"1\", ProjectID:\"1\", Type:entities.TypeID{ID:8, Name:\"DUPLICATE\"}, Title:\"ser1\", Description:\"\", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:\"host.com/123/projects/1/tasks/1\"} (expected)\n!= entities.Issue{ID:\"1\", ProjectID:\"1\", Type:entities.TypeID{ID:8, Name:\"DUPLICATE\"}, Title:\"ser\", Description:\"\", Estimate:19800, DueDate:1479859200, Done:0, Spent:23400, URL:\"host.com/123/projects/1/tasks/1\"} (actual)\n\nDiff:\n--- Expected\n+++ Actual\n@@ -7,3 +7,3 @@\n},\n- Title: (string) (len=4) \"ser1\",\n+ Title: (string) (len=3) \"ser\",\nDescription: (string) \"\",\nMessages:       Message\n",
 			Stories:  []reporting.ScopeResult{},
 		},
 		contract.TestResult{

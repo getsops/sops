@@ -41,7 +41,7 @@ var _ = Describe("Watch", func() {
 
 	startGinkgoWithGopath := func(args ...string) *gexec.Session {
 		cmd := ginkgoCommand(rootPath, args...)
-		cmd.Env = append([]string{"GOPATH=" + rootPath + ":" + os.Getenv("GOPATH")}, os.Environ()...)
+		os.Setenv("GOPATH", rootPath+":"+os.Getenv("GOPATH"))
 		session, err := gexec.Start(cmd, GinkgoWriter, GinkgoWriter)
 		Ω(err).ShouldNot(HaveOccurred())
 		return session

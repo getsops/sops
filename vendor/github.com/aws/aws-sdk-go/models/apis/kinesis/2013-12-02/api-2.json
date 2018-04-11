@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"Kinesis",
     "serviceFullName":"Amazon Kinesis",
+    "serviceId":"Kinesis",
     "signatureVersion":"v4",
     "targetPrefix":"Kinesis_20131202",
     "uid":"kinesis-2013-12-02"
@@ -49,6 +50,7 @@
       "errors":[
         {"shape":"ResourceInUseException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"},
         {"shape":"InvalidArgumentException"}
       ]
     },
@@ -84,6 +86,19 @@
       },
       "input":{"shape":"DescribeStreamInput"},
       "output":{"shape":"DescribeStreamOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"}
+      ]
+    },
+    "DescribeStreamSummary":{
+      "name":"DescribeStreamSummary",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeStreamSummaryInput"},
+      "output":{"shape":"DescribeStreamSummaryOutput"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"LimitExceededException"}
@@ -164,7 +179,24 @@
       "errors":[
         {"shape":"ResourceInUseException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"},
         {"shape":"InvalidArgumentException"}
+      ]
+    },
+    "ListShards":{
+      "name":"ListShards",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListShardsInput"},
+      "output":{"shape":"ListShardsOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ExpiredNextTokenException"},
+        {"shape":"ResourceInUseException"}
       ]
     },
     "ListStreams":{
@@ -362,7 +394,7 @@
       ],
       "members":{
         "StreamName":{"shape":"StreamName"},
-        "RetentionPeriodHours":{"shape":"PositiveIntegerObject"}
+        "RetentionPeriodHours":{"shape":"RetentionPeriodHours"}
       }
     },
     "DeleteStreamInput":{
@@ -407,6 +439,20 @@
       "required":["StreamDescription"],
       "members":{
         "StreamDescription":{"shape":"StreamDescription"}
+      }
+    },
+    "DescribeStreamSummaryInput":{
+      "type":"structure",
+      "required":["StreamName"],
+      "members":{
+        "StreamName":{"shape":"StreamName"}
+      }
+    },
+    "DescribeStreamSummaryOutput":{
+      "type":"structure",
+      "required":["StreamDescriptionSummary"],
+      "members":{
+        "StreamDescriptionSummary":{"shape":"StreamDescriptionSummary"}
       }
     },
     "DisableEnhancedMonitoringInput":{
@@ -459,6 +505,13 @@
     "ErrorCode":{"type":"string"},
     "ErrorMessage":{"type":"string"},
     "ExpiredIteratorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "ExpiredNextTokenException":{
       "type":"structure",
       "members":{
         "message":{"shape":"ErrorMessage"}
@@ -531,7 +584,7 @@
       ],
       "members":{
         "StreamName":{"shape":"StreamName"},
-        "RetentionPeriodHours":{"shape":"PositiveIntegerObject"}
+        "RetentionPeriodHours":{"shape":"RetentionPeriodHours"}
       }
     },
     "InvalidArgumentException":{
@@ -594,6 +647,28 @@
         "message":{"shape":"ErrorMessage"}
       },
       "exception":true
+    },
+    "ListShardsInput":{
+      "type":"structure",
+      "members":{
+        "StreamName":{"shape":"StreamName"},
+        "NextToken":{"shape":"NextToken"},
+        "ExclusiveStartShardId":{"shape":"ShardId"},
+        "MaxResults":{"shape":"ListShardsInputLimit"},
+        "StreamCreationTimestamp":{"shape":"Timestamp"}
+      }
+    },
+    "ListShardsInputLimit":{
+      "type":"integer",
+      "max":10000,
+      "min":1
+    },
+    "ListShardsOutput":{
+      "type":"structure",
+      "members":{
+        "Shards":{"shape":"ShardList"},
+        "NextToken":{"shape":"NextToken"}
+      }
     },
     "ListStreamsInput":{
       "type":"structure",
@@ -678,6 +753,11 @@
     "MillisBehindLatest":{
       "type":"long",
       "min":0
+    },
+    "NextToken":{
+      "type":"string",
+      "max":1048576,
+      "min":1
     },
     "PartitionKey":{
       "type":"string",
@@ -820,6 +900,11 @@
       },
       "exception":true
     },
+    "RetentionPeriodHours":{
+      "type":"integer",
+      "max":168,
+      "min":1
+    },
     "ScalingType":{
       "type":"string",
       "enum":["UNIFORM_SCALING"]
@@ -939,11 +1024,34 @@
         "StreamStatus":{"shape":"StreamStatus"},
         "Shards":{"shape":"ShardList"},
         "HasMoreShards":{"shape":"BooleanObject"},
-        "RetentionPeriodHours":{"shape":"PositiveIntegerObject"},
+        "RetentionPeriodHours":{"shape":"RetentionPeriodHours"},
         "StreamCreationTimestamp":{"shape":"Timestamp"},
         "EnhancedMonitoring":{"shape":"EnhancedMonitoringList"},
         "EncryptionType":{"shape":"EncryptionType"},
         "KeyId":{"shape":"KeyId"}
+      }
+    },
+    "StreamDescriptionSummary":{
+      "type":"structure",
+      "required":[
+        "StreamName",
+        "StreamARN",
+        "StreamStatus",
+        "RetentionPeriodHours",
+        "StreamCreationTimestamp",
+        "EnhancedMonitoring",
+        "OpenShardCount"
+      ],
+      "members":{
+        "StreamName":{"shape":"StreamName"},
+        "StreamARN":{"shape":"StreamARN"},
+        "StreamStatus":{"shape":"StreamStatus"},
+        "RetentionPeriodHours":{"shape":"PositiveIntegerObject"},
+        "StreamCreationTimestamp":{"shape":"Timestamp"},
+        "EnhancedMonitoring":{"shape":"EnhancedMonitoringList"},
+        "EncryptionType":{"shape":"EncryptionType"},
+        "KeyId":{"shape":"KeyId"},
+        "OpenShardCount":{"shape":"ShardCountObject"}
       }
     },
     "StreamName":{

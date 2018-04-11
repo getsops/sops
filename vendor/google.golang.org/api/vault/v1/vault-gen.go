@@ -148,8 +148,8 @@ type AddMatterPermissionsRequest struct {
 }
 
 func (s *AddMatterPermissionsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddMatterPermissionsRequest
-	raw := noMethod(*s)
+	type NoMethod AddMatterPermissionsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -184,8 +184,8 @@ type CloseMatterResponse struct {
 }
 
 func (s *CloseMatterResponse) MarshalJSON() ([]byte, error) {
-	type noMethod CloseMatterResponse
-	raw := noMethod(*s)
+	type NoMethod CloseMatterResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -198,6 +198,11 @@ type CorpusQuery struct {
 	// GroupsQuery: Details pertaining to Groups holds. If set, corpus must
 	// be Groups.
 	GroupsQuery *HeldGroupsQuery `json:"groupsQuery,omitempty"`
+
+	// HangoutsChatQuery: Details pertaining to Hangouts Chat holds. If set,
+	// corpus must be
+	// Hangouts Chat.
+	HangoutsChatQuery *HeldHangoutsChatQuery `json:"hangoutsChatQuery,omitempty"`
 
 	// MailQuery: Details pertaining to mail holds. If set, corpus must be
 	// mail.
@@ -221,8 +226,8 @@ type CorpusQuery struct {
 }
 
 func (s *CorpusQuery) MarshalJSON() ([]byte, error) {
-	type noMethod CorpusQuery
-	raw := noMethod(*s)
+	type NoMethod CorpusQuery
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -278,12 +283,12 @@ type HeldAccount struct {
 }
 
 func (s *HeldAccount) MarshalJSON() ([]byte, error) {
-	type noMethod HeldAccount
-	raw := noMethod(*s)
+	type NoMethod HeldAccount
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// HeldDriveQuery: Query options for drive holds.
+// HeldDriveQuery: Query options for Drive holds.
 type HeldDriveQuery struct {
 	// IncludeTeamDriveFiles: If true, include files in Team Drives in the
 	// hold.
@@ -309,19 +314,19 @@ type HeldDriveQuery struct {
 }
 
 func (s *HeldDriveQuery) MarshalJSON() ([]byte, error) {
-	type noMethod HeldDriveQuery
-	raw := noMethod(*s)
+	type NoMethod HeldDriveQuery
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // HeldGroupsQuery: Query options for group holds.
 type HeldGroupsQuery struct {
-	// EndTime: The end date range for the search query. These timestamps
+	// EndTime: The end time range for the search query. These timestamps
 	// are in GMT and
 	// rounded down to the start of the given date.
 	EndTime string `json:"endTime,omitempty"`
 
-	// StartTime: The start date range for the search query. These
+	// StartTime: The start time range for the search query. These
 	// timestamps are in GMT and
 	// rounded down to the start of the given date.
 	StartTime string `json:"startTime,omitempty"`
@@ -347,19 +352,47 @@ type HeldGroupsQuery struct {
 }
 
 func (s *HeldGroupsQuery) MarshalJSON() ([]byte, error) {
-	type noMethod HeldGroupsQuery
-	raw := noMethod(*s)
+	type NoMethod HeldGroupsQuery
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// HeldHangoutsChatQuery: Query options for hangouts chat holds.
+type HeldHangoutsChatQuery struct {
+	// IncludeRooms: If true, include rooms the user has participated in.
+	IncludeRooms bool `json:"includeRooms,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IncludeRooms") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "IncludeRooms") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *HeldHangoutsChatQuery) MarshalJSON() ([]byte, error) {
+	type NoMethod HeldHangoutsChatQuery
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // HeldMailQuery: Query options for mail holds.
 type HeldMailQuery struct {
-	// EndTime: The end date range for the search query. These timestamps
+	// EndTime: The end time range for the search query. These timestamps
 	// are in GMT and
 	// rounded down to the start of the given date.
 	EndTime string `json:"endTime,omitempty"`
 
-	// StartTime: The start date range for the search query. These
+	// StartTime: The start time range for the search query. These
 	// timestamps are in GMT and
 	// rounded down to the start of the given date.
 	StartTime string `json:"startTime,omitempty"`
@@ -385,8 +418,8 @@ type HeldMailQuery struct {
 }
 
 func (s *HeldMailQuery) MarshalJSON() ([]byte, error) {
-	type noMethod HeldMailQuery
-	raw := noMethod(*s)
+	type NoMethod HeldMailQuery
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -398,7 +431,7 @@ type HeldOrgUnit struct {
 	// immutable.
 	HoldTime string `json:"holdTime,omitempty"`
 
-	// OrgUnitId: The org unit's immutable ID as provided by the admin SDK.
+	// OrgUnitId: The org unit's immutable ID as provided by the Admin SDK.
 	OrgUnitId string `json:"orgUnitId,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "HoldTime") to
@@ -419,8 +452,8 @@ type HeldOrgUnit struct {
 }
 
 func (s *HeldOrgUnit) MarshalJSON() ([]byte, error) {
-	type noMethod HeldOrgUnit
-	raw := noMethod(*s)
+	type NoMethod HeldOrgUnit
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -445,6 +478,7 @@ type Hold struct {
 	//   "DRIVE" - Drive.
 	//   "MAIL" - Mail.
 	//   "GROUPS" - Groups.
+	//   "HANGOUTS_CHAT" - Hangouts Chat.
 	Corpus string `json:"corpus,omitempty"`
 
 	// HoldId: The unique immutable ID of the hold. Assigned during
@@ -491,8 +525,8 @@ type Hold struct {
 }
 
 func (s *Hold) MarshalJSON() ([]byte, error) {
-	type noMethod Hold
-	raw := noMethod(*s)
+	type NoMethod Hold
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -523,8 +557,8 @@ type ListHeldAccountsResponse struct {
 }
 
 func (s *ListHeldAccountsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListHeldAccountsResponse
-	raw := noMethod(*s)
+	type NoMethod ListHeldAccountsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -560,8 +594,8 @@ type ListHoldsResponse struct {
 }
 
 func (s *ListHoldsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListHoldsResponse
-	raw := noMethod(*s)
+	type NoMethod ListHoldsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -596,8 +630,8 @@ type ListMattersResponse struct {
 }
 
 func (s *ListMattersResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListMattersResponse
-	raw := noMethod(*s)
+	type NoMethod ListMattersResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -649,8 +683,8 @@ type Matter struct {
 }
 
 func (s *Matter) MarshalJSON() ([]byte, error) {
-	type noMethod Matter
-	raw := noMethod(*s)
+	type NoMethod Matter
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -694,8 +728,8 @@ type MatterPermission struct {
 }
 
 func (s *MatterPermission) MarshalJSON() ([]byte, error) {
-	type noMethod MatterPermission
-	raw := noMethod(*s)
+	type NoMethod MatterPermission
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -723,8 +757,8 @@ type RemoveMatterPermissionsRequest struct {
 }
 
 func (s *RemoveMatterPermissionsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RemoveMatterPermissionsRequest
-	raw := noMethod(*s)
+	type NoMethod RemoveMatterPermissionsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -759,8 +793,8 @@ type ReopenMatterResponse struct {
 }
 
 func (s *ReopenMatterResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ReopenMatterResponse
-	raw := noMethod(*s)
+	type NoMethod ReopenMatterResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -868,7 +902,7 @@ func (c *MattersAddPermissionsCall) Do(opts ...googleapi.CallOption) (*MatterPer
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1003,7 +1037,7 @@ func (c *MattersCloseCall) Do(opts ...googleapi.CallOption) (*CloseMatterRespons
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1136,7 +1170,7 @@ func (c *MattersCreateCall) Do(opts ...googleapi.CallOption) (*Matter, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1255,7 +1289,7 @@ func (c *MattersDeleteCall) Do(opts ...googleapi.CallOption) (*Matter, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1405,7 +1439,7 @@ func (c *MattersGetCall) Do(opts ...googleapi.CallOption) (*Matter, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1590,7 +1624,7 @@ func (c *MattersListCall) Do(opts ...googleapi.CallOption) (*ListMattersResponse
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1767,7 +1801,7 @@ func (c *MattersRemovePermissionsCall) Do(opts ...googleapi.CallOption) (*Empty,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1902,7 +1936,7 @@ func (c *MattersReopenCall) Do(opts ...googleapi.CallOption) (*ReopenMatterRespo
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2037,7 +2071,7 @@ func (c *MattersUndeleteCall) Do(opts ...googleapi.CallOption) (*Matter, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2175,7 +2209,7 @@ func (c *MattersUpdateCall) Do(opts ...googleapi.CallOption) (*Matter, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2309,7 +2343,7 @@ func (c *MattersHoldsCreateCall) Do(opts ...googleapi.CallOption) (*Hold, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2440,7 +2474,7 @@ func (c *MattersHoldsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2495,6 +2529,18 @@ func (r *MattersHoldsService) Get(matterId string, holdId string) *MattersHoldsG
 	c := &MattersHoldsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.matterId = matterId
 	c.holdId = holdId
+	return c
+}
+
+// View sets the optional parameter "view": Specifies which parts of the
+// Hold to return.
+//
+// Possible values:
+//   "HOLD_VIEW_UNSPECIFIED"
+//   "BASIC_HOLD"
+//   "FULL_HOLD"
+func (c *MattersHoldsGetCall) View(view string) *MattersHoldsGetCall {
+	c.urlParams_.Set("view", view)
 	return c
 }
 
@@ -2588,7 +2634,7 @@ func (c *MattersHoldsGetCall) Do(opts ...googleapi.CallOption) (*Hold, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2612,6 +2658,16 @@ func (c *MattersHoldsGetCall) Do(opts ...googleapi.CallOption) (*Hold, error) {
 	//       "description": "The matter ID.",
 	//       "location": "path",
 	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "view": {
+	//       "description": "Specifies which parts of the Hold to return.",
+	//       "enum": [
+	//         "HOLD_VIEW_UNSPECIFIED",
+	//         "BASIC_HOLD",
+	//         "FULL_HOLD"
+	//       ],
+	//       "location": "query",
 	//       "type": "string"
 	//     }
 	//   },
@@ -2660,6 +2716,18 @@ func (c *MattersHoldsListCall) PageSize(pageSize int64) *MattersHoldsListCall {
 // An empty token means start from the beginning.
 func (c *MattersHoldsListCall) PageToken(pageToken string) *MattersHoldsListCall {
 	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// View sets the optional parameter "view": Specifies which parts of the
+// Hold to return.
+//
+// Possible values:
+//   "HOLD_VIEW_UNSPECIFIED"
+//   "BASIC_HOLD"
+//   "FULL_HOLD"
+func (c *MattersHoldsListCall) View(view string) *MattersHoldsListCall {
+	c.urlParams_.Set("view", view)
 	return c
 }
 
@@ -2752,7 +2820,7 @@ func (c *MattersHoldsListCall) Do(opts ...googleapi.CallOption) (*ListHoldsRespo
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2779,6 +2847,16 @@ func (c *MattersHoldsListCall) Do(opts ...googleapi.CallOption) (*ListHoldsRespo
 	//     },
 	//     "pageToken": {
 	//       "description": "The pagination token as returned in the response.\nAn empty token means start from the beginning.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "view": {
+	//       "description": "Specifies which parts of the Hold to return.",
+	//       "enum": [
+	//         "HOLD_VIEW_UNSPECIFIED",
+	//         "BASIC_HOLD",
+	//         "FULL_HOLD"
+	//       ],
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -2923,7 +3001,7 @@ func (c *MattersHoldsUpdateCall) Do(opts ...googleapi.CallOption) (*Hold, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -3071,7 +3149,7 @@ func (c *MattersHoldsAccountsCreateCall) Do(opts ...googleapi.CallOption) (*Held
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -3213,7 +3291,7 @@ func (c *MattersHoldsAccountsDeleteCall) Do(opts ...googleapi.CallOption) (*Empt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -3372,7 +3450,7 @@ func (c *MattersHoldsAccountsListCall) Do(opts ...googleapi.CallOption) (*ListHe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil

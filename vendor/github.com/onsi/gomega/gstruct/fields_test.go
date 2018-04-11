@@ -17,22 +17,22 @@ var _ = Describe("Struct", func() {
 			"B": Equal("b"),
 			"A": Equal("a"),
 		})
-		Ω(allFields).Should(m, "should match all fields")
-		Ω(missingFields).ShouldNot(m, "should fail with missing fields")
-		Ω(extraFields).ShouldNot(m, "should fail with extra fields")
-		Ω(emptyFields).ShouldNot(m, "should fail with empty fields")
+		Expect(allFields).Should(m, "should match all fields")
+		Expect(missingFields).ShouldNot(m, "should fail with missing fields")
+		Expect(extraFields).ShouldNot(m, "should fail with extra fields")
+		Expect(emptyFields).ShouldNot(m, "should fail with empty fields")
 
 		m = MatchAllFields(Fields{
 			"A": Equal("a"),
 			"B": Equal("fail"),
 		})
-		Ω(allFields).ShouldNot(m, "should run nested matchers")
+		Expect(allFields).ShouldNot(m, "should run nested matchers")
 	})
 
 	It("should handle empty structs", func() {
 		m := MatchAllFields(Fields{})
-		Ω(struct{}{}).Should(m, "should handle empty structs")
-		Ω(allFields).ShouldNot(m, "should fail with extra fields")
+		Expect(struct{}{}).Should(m, "should handle empty structs")
+		Expect(allFields).ShouldNot(m, "should fail with extra fields")
 	})
 
 	It("should ignore missing fields", func() {
@@ -40,10 +40,10 @@ var _ = Describe("Struct", func() {
 			"B": Equal("b"),
 			"A": Equal("a"),
 		})
-		Ω(allFields).Should(m, "should match all fields")
-		Ω(missingFields).Should(m, "should ignore missing fields")
-		Ω(extraFields).ShouldNot(m, "should fail with extra fields")
-		Ω(emptyFields).ShouldNot(m, "should fail with empty fields")
+		Expect(allFields).Should(m, "should match all fields")
+		Expect(missingFields).Should(m, "should ignore missing fields")
+		Expect(extraFields).ShouldNot(m, "should fail with extra fields")
+		Expect(emptyFields).ShouldNot(m, "should fail with empty fields")
 	})
 
 	It("should ignore extra fields", func() {
@@ -51,10 +51,10 @@ var _ = Describe("Struct", func() {
 			"B": Equal("b"),
 			"A": Equal("a"),
 		})
-		Ω(allFields).Should(m, "should match all fields")
-		Ω(missingFields).ShouldNot(m, "should fail with missing fields")
-		Ω(extraFields).Should(m, "should ignore extra fields")
-		Ω(emptyFields).ShouldNot(m, "should fail with empty fields")
+		Expect(allFields).Should(m, "should match all fields")
+		Expect(missingFields).ShouldNot(m, "should fail with missing fields")
+		Expect(extraFields).Should(m, "should ignore extra fields")
+		Expect(emptyFields).ShouldNot(m, "should fail with empty fields")
 	})
 
 	It("should ignore missing and extra fields", func() {
@@ -62,15 +62,15 @@ var _ = Describe("Struct", func() {
 			"B": Equal("b"),
 			"A": Equal("a"),
 		})
-		Ω(allFields).Should(m, "should match all fields")
-		Ω(missingFields).Should(m, "should ignore missing fields")
-		Ω(extraFields).Should(m, "should ignore extra fields")
-		Ω(emptyFields).ShouldNot(m, "should fail with empty fields")
+		Expect(allFields).Should(m, "should match all fields")
+		Expect(missingFields).Should(m, "should ignore missing fields")
+		Expect(extraFields).Should(m, "should ignore extra fields")
+		Expect(emptyFields).ShouldNot(m, "should fail with empty fields")
 
 		m = MatchFields(IgnoreMissing|IgnoreExtras, Fields{
 			"A": Equal("a"),
 			"B": Equal("fail"),
 		})
-		Ω(allFields).ShouldNot(m, "should run nested matchers")
+		Expect(allFields).ShouldNot(m, "should run nested matchers")
 	})
 })

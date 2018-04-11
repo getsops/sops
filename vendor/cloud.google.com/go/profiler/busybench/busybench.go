@@ -21,24 +21,30 @@ import (
 	"flag"
 	"log"
 	"math/rand"
+	"sync"
 	"time"
 )
 
-var service = flag.String("service", "", "service name")
-
-const duration = time.Minute * 10
+var (
+	service        = flag.String("service", "", "service name")
+	mutexProfiling = flag.Bool("mutex_profiling", false, "enable mutex profiling")
+	duration       = flag.Int("duration", 600, "duration of the benchmark in seconds")
+	apiAddr        = flag.String("api_address", "", "API address of the profiler (e.g. 'cloudprofiler.googleapis.com:443')")
+)
 
 // busywork continuously generates 1MiB of random data and compresses it
 // throwing away the result.
-func busywork() {
-	ticker := time.NewTicker(duration)
+func busywork(mu *sync.Mutex) {
+	ticker := time.NewTicker(time.Duration(*duration) * time.Second)
 	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
 			return
 		default:
+			mu.Lock()
 			busyworkOnce()
+			mu.Unlock()
 		}
 	}
 }
@@ -68,12 +74,28 @@ func main() {
 
 	if *service == "" {
 		log.Print("Service name must be configured using --service flag.")
-	} else if err := profiler.Start(profiler.Config{Service: *service, DebugLogging: true}); err != nil {
+	} else if err := profiler.Start(
+		profiler.Config{
+			Service:        *service,
+			MutexProfiling: *mutexProfiling,
+			DebugLogging:   true,
+			APIAddr:        *apiAddr,
+		}); err != nil {
 		log.Printf("Failed to start the profiler: %v", err)
 	} else {
-		busywork()
+		mu := new(sync.Mutex)
+		var wg sync.WaitGroup
+		wg.Add(5)
+		for i := 0; i < 5; i++ {
+			go func() {
+				defer wg.Done()
+				busywork(mu)
+			}()
+		}
+		wg.Wait()
 	}
 
 	log.Printf("busybench finished profiling.")
+	// Do not exit, since the pod in the GKE test is set to always restart.
 	select {}
 }

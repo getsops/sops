@@ -1,6 +1,36 @@
 Changelog
 =========
 
+3.0.3
+----
+
+* --set now works with nested data structures and not just simple
+  values
+
+* Changed default log level to warn instead of info
+
+* Avoid creating empty files when using the editor mode to create new
+  files and not making any changes to the example files
+
+* Output unformatted strings when using --extract instead of encoding
+  them to yaml
+
+* Allow forcing binary input and output types from command line flags
+
+* Deprecate filename_regex in favor of path_regex. filename_regex had
+  a bug and matched on the whole file path, when it should have only
+  matched on the file name. path_regex on the other hand is documented
+  to match on the whole file path.
+
+* Add an encrypted-suffix option, the exact opposite of
+  unencrypted-suffix
+
+* Allow specifying unencrypted_suffix and encrypted_suffix rules in
+  the .sops.yaml configuration file
+
+* Introduce key service flag optionally prompting users on
+  encryption/decryption
+
 3.0.1
 -----
 

@@ -56,7 +56,7 @@ func assertEqual(t *testing.T, expected, actual int) {
 func assertNil(t *testing.T, err error) {
 	if err != nil {
 		_, _, line, _ := runtime.Caller(1)
-		t.Errorf("Error should have been <nil> (but wasn't). See line %d", err, line)
+		t.Errorf("Error should have been <nil> (but wasn't). See line %d. %v", err, line)
 	}
 }
 

@@ -175,13 +175,13 @@ func TestSplitORParts(t *testing.T) {
 		o [][]string
 	}{
 		{[]string{">1.2.3", "||", "<1.2.3", "||", "=1.2.3"}, [][]string{
-			[]string{">1.2.3"},
-			[]string{"<1.2.3"},
-			[]string{"=1.2.3"},
+			{">1.2.3"},
+			{"<1.2.3"},
+			{"=1.2.3"},
 		}},
 		{[]string{">1.2.3", "<1.2.3", "||", "=1.2.3"}, [][]string{
-			[]string{">1.2.3", "<1.2.3"},
-			[]string{"=1.2.3"},
+			{">1.2.3", "<1.2.3"},
+			{"=1.2.3"},
 		}},
 		{[]string{">1.2.3", "||"}, nil},
 		{[]string{"||", ">1.2.3"}, nil},
@@ -271,19 +271,19 @@ func TestExpandWildcardVersion(t *testing.T) {
 		i [][]string
 		o [][]string
 	}{
-		{[][]string{[]string{"foox"}}, nil},
-		{[][]string{[]string{">=1.2.x"}}, [][]string{[]string{">=1.2.0"}}},
-		{[][]string{[]string{"<=1.2.x"}}, [][]string{[]string{"<1.3.0"}}},
-		{[][]string{[]string{">1.2.x"}}, [][]string{[]string{">=1.3.0"}}},
-		{[][]string{[]string{"<1.2.x"}}, [][]string{[]string{"<1.2.0"}}},
-		{[][]string{[]string{"!=1.2.x"}}, [][]string{[]string{"<1.2.0", ">=1.3.0"}}},
-		{[][]string{[]string{">=1.x"}}, [][]string{[]string{">=1.0.0"}}},
-		{[][]string{[]string{"<=1.x"}}, [][]string{[]string{"<2.0.0"}}},
-		{[][]string{[]string{">1.x"}}, [][]string{[]string{">=2.0.0"}}},
-		{[][]string{[]string{"<1.x"}}, [][]string{[]string{"<1.0.0"}}},
-		{[][]string{[]string{"!=1.x"}}, [][]string{[]string{"<1.0.0", ">=2.0.0"}}},
-		{[][]string{[]string{"1.2.x"}}, [][]string{[]string{">=1.2.0", "<1.3.0"}}},
-		{[][]string{[]string{"1.x"}}, [][]string{[]string{">=1.0.0", "<2.0.0"}}},
+		{[][]string{{"foox"}}, nil},
+		{[][]string{{">=1.2.x"}}, [][]string{{">=1.2.0"}}},
+		{[][]string{{"<=1.2.x"}}, [][]string{{"<1.3.0"}}},
+		{[][]string{{">1.2.x"}}, [][]string{{">=1.3.0"}}},
+		{[][]string{{"<1.2.x"}}, [][]string{{"<1.2.0"}}},
+		{[][]string{{"!=1.2.x"}}, [][]string{{"<1.2.0", ">=1.3.0"}}},
+		{[][]string{{">=1.x"}}, [][]string{{">=1.0.0"}}},
+		{[][]string{{"<=1.x"}}, [][]string{{"<2.0.0"}}},
+		{[][]string{{">1.x"}}, [][]string{{">=2.0.0"}}},
+		{[][]string{{"<1.x"}}, [][]string{{"<1.0.0"}}},
+		{[][]string{{"!=1.x"}}, [][]string{{"<1.0.0", ">=2.0.0"}}},
+		{[][]string{{"1.2.x"}}, [][]string{{">=1.2.0", "<1.3.0"}}},
+		{[][]string{{"1.x"}}, [][]string{{">=1.0.0", "<2.0.0"}}},
 	}
 
 	for _, tc := range tests {

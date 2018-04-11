@@ -10,20 +10,20 @@ var _ = Describe("BeClosedMatcher", func() {
 	Context("when passed a channel", func() {
 		It("should do the right thing", func() {
 			openChannel := make(chan bool)
-			Ω(openChannel).ShouldNot(BeClosed())
+			Expect(openChannel).ShouldNot(BeClosed())
 
 			var openReaderChannel <-chan bool
 			openReaderChannel = openChannel
-			Ω(openReaderChannel).ShouldNot(BeClosed())
+			Expect(openReaderChannel).ShouldNot(BeClosed())
 
 			closedChannel := make(chan bool)
 			close(closedChannel)
 
-			Ω(closedChannel).Should(BeClosed())
+			Expect(closedChannel).Should(BeClosed())
 
 			var closedReaderChannel <-chan bool
 			closedReaderChannel = closedChannel
-			Ω(closedReaderChannel).Should(BeClosed())
+			Expect(closedReaderChannel).Should(BeClosed())
 		})
 	})
 
@@ -34,8 +34,8 @@ var _ = Describe("BeClosedMatcher", func() {
 			openWriterChannel = openChannel
 
 			success, err := (&BeClosedMatcher{}).Match(openWriterChannel)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 			closedChannel := make(chan bool)
 			close(closedChannel)
@@ -44,8 +44,8 @@ var _ = Describe("BeClosedMatcher", func() {
 			closedWriterChannel = closedChannel
 
 			success, err = (&BeClosedMatcher{}).Match(closedWriterChannel)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 		})
 	})
@@ -55,16 +55,16 @@ var _ = Describe("BeClosedMatcher", func() {
 			var nilChannel chan bool
 
 			success, err := (&BeClosedMatcher{}).Match(nilChannel)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 			success, err = (&BeClosedMatcher{}).Match(nil)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 
 			success, err = (&BeClosedMatcher{}).Match(7)
-			Ω(success).Should(BeFalse())
-			Ω(err).Should(HaveOccurred())
+			Expect(success).Should(BeFalse())
+			Expect(err).Should(HaveOccurred())
 		})
 	})
 })

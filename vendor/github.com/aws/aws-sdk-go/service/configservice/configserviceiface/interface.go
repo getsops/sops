@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Config.
 //    func myFunc(svc configserviceiface.ConfigServiceAPI) bool {
-//        // Make svc.DeleteConfigRule request
+//        // Make svc.BatchGetResourceConfig request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockConfigServiceClient struct {
 //        configserviceiface.ConfigServiceAPI
 //    }
-//    func (m *mockConfigServiceClient) DeleteConfigRule(input *configservice.DeleteConfigRuleInput) (*configservice.DeleteConfigRuleOutput, error) {
+//    func (m *mockConfigServiceClient) BatchGetResourceConfig(input *configservice.BatchGetResourceConfigInput) (*configservice.BatchGetResourceConfigOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type ConfigServiceAPI interface {
+	BatchGetResourceConfig(*configservice.BatchGetResourceConfigInput) (*configservice.BatchGetResourceConfigOutput, error)
+	BatchGetResourceConfigWithContext(aws.Context, *configservice.BatchGetResourceConfigInput, ...request.Option) (*configservice.BatchGetResourceConfigOutput, error)
+	BatchGetResourceConfigRequest(*configservice.BatchGetResourceConfigInput) (*request.Request, *configservice.BatchGetResourceConfigOutput)
+
 	DeleteConfigRule(*configservice.DeleteConfigRuleInput) (*configservice.DeleteConfigRuleOutput, error)
 	DeleteConfigRuleWithContext(aws.Context, *configservice.DeleteConfigRuleInput, ...request.Option) (*configservice.DeleteConfigRuleOutput, error)
 	DeleteConfigRuleRequest(*configservice.DeleteConfigRuleInput) (*request.Request, *configservice.DeleteConfigRuleOutput)

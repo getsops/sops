@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"Kinesis Analytics",
     "serviceFullName":"Amazon Kinesis Analytics",
+    "serviceId":"Kinesis Analytics",
     "signatureVersion":"v4",
     "targetPrefix":"KinesisAnalytics_20150814",
     "timestampFormat":"unixTimestamp",
@@ -958,6 +959,31 @@
         "RoleARNUpdate":{"shape":"RoleARN"}
       }
     },
+    "LambdaOutput":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "RoleARN"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"ResourceARN"},
+        "RoleARN":{"shape":"RoleARN"}
+      }
+    },
+    "LambdaOutputDescription":{
+      "type":"structure",
+      "members":{
+        "ResourceARN":{"shape":"ResourceARN"},
+        "RoleARN":{"shape":"RoleARN"}
+      }
+    },
+    "LambdaOutputUpdate":{
+      "type":"structure",
+      "members":{
+        "ResourceARNUpdate":{"shape":"ResourceARN"},
+        "RoleARNUpdate":{"shape":"RoleARN"}
+      }
+    },
     "LimitExceededException":{
       "type":"structure",
       "members":{
@@ -1011,6 +1037,7 @@
         "Name":{"shape":"InAppStreamName"},
         "KinesisStreamsOutput":{"shape":"KinesisStreamsOutput"},
         "KinesisFirehoseOutput":{"shape":"KinesisFirehoseOutput"},
+        "LambdaOutput":{"shape":"LambdaOutput"},
         "DestinationSchema":{"shape":"DestinationSchema"}
       }
     },
@@ -1021,6 +1048,7 @@
         "Name":{"shape":"InAppStreamName"},
         "KinesisStreamsOutputDescription":{"shape":"KinesisStreamsOutputDescription"},
         "KinesisFirehoseOutputDescription":{"shape":"KinesisFirehoseOutputDescription"},
+        "LambdaOutputDescription":{"shape":"LambdaOutputDescription"},
         "DestinationSchema":{"shape":"DestinationSchema"}
       }
     },
@@ -1036,6 +1064,7 @@
         "NameUpdate":{"shape":"InAppStreamName"},
         "KinesisStreamsOutputUpdate":{"shape":"KinesisStreamsOutputUpdate"},
         "KinesisFirehoseOutputUpdate":{"shape":"KinesisFirehoseOutputUpdate"},
+        "LambdaOutputUpdate":{"shape":"LambdaOutputUpdate"},
         "DestinationSchemaUpdate":{"shape":"DestinationSchema"}
       }
     },

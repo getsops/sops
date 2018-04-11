@@ -6,6 +6,7 @@
     "protocol":"query",
     "serviceAbbreviation":"Amazon RDS",
     "serviceFullName":"Amazon Relational Database Service",
+    "serviceId":"RDS",
     "signatureVersion":"v4",
     "uid":"rds-2014-10-31",
     "xmlNamespace":"http://rds.amazonaws.com/doc/2014-10-31/"
@@ -952,6 +953,22 @@
         "resultWrapper":"DescribeSourceRegionsResult"
       }
     },
+    "DescribeValidDBInstanceModifications":{
+      "name":"DescribeValidDBInstanceModifications",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeValidDBInstanceModificationsMessage"},
+      "output":{
+        "shape":"DescribeValidDBInstanceModificationsResult",
+        "resultWrapper":"DescribeValidDBInstanceModificationsResult"
+      },
+      "errors":[
+        {"shape":"DBInstanceNotFoundFault"},
+        {"shape":"InvalidDBInstanceStateFault"}
+      ]
+    },
     "DownloadDBLogFilePortion":{
       "name":"DownloadDBLogFilePortion",
       "http":{
@@ -1452,6 +1469,36 @@
         {"shape":"DomainNotFoundFault"}
       ]
     },
+    "RestoreDBInstanceFromS3":{
+      "name":"RestoreDBInstanceFromS3",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RestoreDBInstanceFromS3Message"},
+      "output":{
+        "shape":"RestoreDBInstanceFromS3Result",
+        "resultWrapper":"RestoreDBInstanceFromS3Result"
+      },
+      "errors":[
+        {"shape":"DBInstanceAlreadyExistsFault"},
+        {"shape":"InsufficientDBInstanceCapacityFault"},
+        {"shape":"DBParameterGroupNotFoundFault"},
+        {"shape":"DBSecurityGroupNotFoundFault"},
+        {"shape":"InstanceQuotaExceededFault"},
+        {"shape":"StorageQuotaExceededFault"},
+        {"shape":"DBSubnetGroupNotFoundFault"},
+        {"shape":"DBSubnetGroupDoesNotCoverEnoughAZs"},
+        {"shape":"InvalidSubnet"},
+        {"shape":"InvalidVPCNetworkStateFault"},
+        {"shape":"InvalidS3BucketFault"},
+        {"shape":"ProvisionedIopsNotAvailableInAZFault"},
+        {"shape":"OptionGroupNotFoundFault"},
+        {"shape":"StorageTypeNotSupportedFault"},
+        {"shape":"AuthorizationNotFoundFault"},
+        {"shape":"KMSKeyNotAccessibleFault"}
+      ]
+    },
     "RestoreDBInstanceToPointInTime":{
       "name":"RestoreDBInstanceToPointInTime",
       "http":{
@@ -1759,6 +1806,13 @@
         "CharacterSetDescription":{"shape":"String"}
       }
     },
+    "CloudwatchLogsExportConfiguration":{
+      "type":"structure",
+      "members":{
+        "EnableLogTypes":{"shape":"LogTypeList"},
+        "DisableLogTypes":{"shape":"LogTypeList"}
+      }
+    },
     "CopyDBClusterParameterGroupMessage":{
       "type":"structure",
       "required":[
@@ -1985,7 +2039,8 @@
         "Timezone":{"shape":"String"},
         "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
         "EnablePerformanceInsights":{"shape":"BooleanOptional"},
-        "PerformanceInsightsKMSKeyId":{"shape":"String"}
+        "PerformanceInsightsKMSKeyId":{"shape":"String"},
+        "EnableCloudwatchLogsExports":{"shape":"LogTypeList"}
       }
     },
     "CreateDBInstanceReadReplicaMessage":{
@@ -2000,6 +2055,7 @@
         "DBInstanceClass":{"shape":"String"},
         "AvailabilityZone":{"shape":"String"},
         "Port":{"shape":"IntegerOptional"},
+        "MultiAZ":{"shape":"BooleanOptional"},
         "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
         "Iops":{"shape":"IntegerOptional"},
         "OptionGroupName":{"shape":"String"},
@@ -2014,7 +2070,8 @@
         "PreSignedUrl":{"shape":"String"},
         "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
         "EnablePerformanceInsights":{"shape":"BooleanOptional"},
-        "PerformanceInsightsKMSKeyId":{"shape":"String"}
+        "PerformanceInsightsKMSKeyId":{"shape":"String"},
+        "EnableCloudwatchLogsExports":{"shape":"LogTypeList"}
       }
     },
     "CreateDBInstanceReadReplicaResult":{
@@ -2458,7 +2515,10 @@
         "DefaultCharacterSet":{"shape":"CharacterSet"},
         "SupportedCharacterSets":{"shape":"SupportedCharacterSetsList"},
         "ValidUpgradeTarget":{"shape":"ValidUpgradeTargetList"},
-        "SupportedTimezones":{"shape":"SupportedTimezonesList"}
+        "SupportedTimezones":{"shape":"SupportedTimezonesList"},
+        "ExportableLogTypes":{"shape":"LogTypeList"},
+        "SupportsLogExportsToCloudwatchLogs":{"shape":"Boolean"},
+        "SupportsReadReplica":{"shape":"Boolean"}
       }
     },
     "DBEngineVersionList":{
@@ -2528,7 +2588,8 @@
         "Timezone":{"shape":"String"},
         "IAMDatabaseAuthenticationEnabled":{"shape":"Boolean"},
         "PerformanceInsightsEnabled":{"shape":"BooleanOptional"},
-        "PerformanceInsightsKMSKeyId":{"shape":"String"}
+        "PerformanceInsightsKMSKeyId":{"shape":"String"},
+        "EnabledCloudwatchLogsExports":{"shape":"LogTypeList"}
       },
       "wrapper":true
     },
@@ -3405,6 +3466,19 @@
         "Filters":{"shape":"FilterList"}
       }
     },
+    "DescribeValidDBInstanceModificationsMessage":{
+      "type":"structure",
+      "required":["DBInstanceIdentifier"],
+      "members":{
+        "DBInstanceIdentifier":{"shape":"String"}
+      }
+    },
+    "DescribeValidDBInstanceModificationsResult":{
+      "type":"structure",
+      "members":{
+        "ValidDBInstanceModificationsMessage":{"shape":"ValidDBInstanceModificationsMessage"}
+      }
+    },
     "DomainMembership":{
       "type":"structure",
       "members":{
@@ -3433,6 +3507,21 @@
       "exception":true
     },
     "Double":{"type":"double"},
+    "DoubleOptional":{"type":"double"},
+    "DoubleRange":{
+      "type":"structure",
+      "members":{
+        "From":{"shape":"Double"},
+        "To":{"shape":"Double"}
+      }
+    },
+    "DoubleRangeList":{
+      "type":"list",
+      "member":{
+        "shape":"DoubleRange",
+        "locationName":"DoubleRange"
+      }
+    },
     "DownloadDBLogFilePortionDetails":{
       "type":"structure",
       "members":{
@@ -3867,6 +3956,10 @@
         "Filters":{"shape":"FilterList"}
       }
     },
+    "LogTypeList":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
     "Long":{"type":"long"},
     "ModifyDBClusterMessage":{
       "type":"structure",
@@ -3960,7 +4053,8 @@
         "PromotionTier":{"shape":"IntegerOptional"},
         "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
         "EnablePerformanceInsights":{"shape":"BooleanOptional"},
-        "PerformanceInsightsKMSKeyId":{"shape":"String"}
+        "PerformanceInsightsKMSKeyId":{"shape":"String"},
+        "CloudwatchLogsExportConfiguration":{"shape":"CloudwatchLogsExportConfiguration"}
       }
     },
     "ModifyDBInstanceResult":{
@@ -4309,7 +4403,13 @@
         "SupportsIops":{"shape":"Boolean"},
         "SupportsEnhancedMonitoring":{"shape":"Boolean"},
         "SupportsIAMDatabaseAuthentication":{"shape":"Boolean"},
-        "SupportsPerformanceInsights":{"shape":"Boolean"}
+        "SupportsPerformanceInsights":{"shape":"Boolean"},
+        "MinStorageSize":{"shape":"IntegerOptional"},
+        "MaxStorageSize":{"shape":"IntegerOptional"},
+        "MinIopsPerDbInstance":{"shape":"IntegerOptional"},
+        "MaxIopsPerDbInstance":{"shape":"IntegerOptional"},
+        "MinIopsPerGib":{"shape":"DoubleOptional"},
+        "MaxIopsPerGib":{"shape":"DoubleOptional"}
       },
       "wrapper":true
     },
@@ -4347,6 +4447,13 @@
       "member":{
         "shape":"Parameter",
         "locationName":"Parameter"
+      }
+    },
+    "PendingCloudwatchLogsExports":{
+      "type":"structure",
+      "members":{
+        "LogTypesToEnable":{"shape":"LogTypeList"},
+        "LogTypesToDisable":{"shape":"LogTypeList"}
       }
     },
     "PendingMaintenanceAction":{
@@ -4396,7 +4503,8 @@
         "DBInstanceIdentifier":{"shape":"String"},
         "StorageType":{"shape":"String"},
         "CACertificateIdentifier":{"shape":"String"},
-        "DBSubnetGroupName":{"shape":"String"}
+        "DBSubnetGroupName":{"shape":"String"},
+        "PendingCloudwatchLogsExports":{"shape":"PendingCloudwatchLogsExports"}
       }
     },
     "PointInTimeRestoreNotEnabledFault":{
@@ -4463,6 +4571,21 @@
       "type":"structure",
       "members":{
         "ReservedDBInstance":{"shape":"ReservedDBInstance"}
+      }
+    },
+    "Range":{
+      "type":"structure",
+      "members":{
+        "From":{"shape":"Integer"},
+        "To":{"shape":"Integer"},
+        "Step":{"shape":"IntegerOptional"}
+      }
+    },
+    "RangeList":{
+      "type":"list",
+      "member":{
+        "shape":"Range",
+        "locationName":"Range"
       }
     },
     "ReadReplicaDBClusterIdentifierList":{
@@ -4830,10 +4953,70 @@
         "Domain":{"shape":"String"},
         "CopyTagsToSnapshot":{"shape":"BooleanOptional"},
         "DomainIAMRoleName":{"shape":"String"},
-        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"}
+        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
+        "EnableCloudwatchLogsExports":{"shape":"LogTypeList"}
       }
     },
     "RestoreDBInstanceFromDBSnapshotResult":{
+      "type":"structure",
+      "members":{
+        "DBInstance":{"shape":"DBInstance"}
+      }
+    },
+    "RestoreDBInstanceFromS3Message":{
+      "type":"structure",
+      "required":[
+        "DBInstanceIdentifier",
+        "DBInstanceClass",
+        "Engine",
+        "SourceEngine",
+        "SourceEngineVersion",
+        "S3BucketName",
+        "S3IngestionRoleArn"
+      ],
+      "members":{
+        "DBName":{"shape":"String"},
+        "DBInstanceIdentifier":{"shape":"String"},
+        "AllocatedStorage":{"shape":"IntegerOptional"},
+        "DBInstanceClass":{"shape":"String"},
+        "Engine":{"shape":"String"},
+        "MasterUsername":{"shape":"String"},
+        "MasterUserPassword":{"shape":"String"},
+        "DBSecurityGroups":{"shape":"DBSecurityGroupNameList"},
+        "VpcSecurityGroupIds":{"shape":"VpcSecurityGroupIdList"},
+        "AvailabilityZone":{"shape":"String"},
+        "DBSubnetGroupName":{"shape":"String"},
+        "PreferredMaintenanceWindow":{"shape":"String"},
+        "DBParameterGroupName":{"shape":"String"},
+        "BackupRetentionPeriod":{"shape":"IntegerOptional"},
+        "PreferredBackupWindow":{"shape":"String"},
+        "Port":{"shape":"IntegerOptional"},
+        "MultiAZ":{"shape":"BooleanOptional"},
+        "EngineVersion":{"shape":"String"},
+        "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
+        "LicenseModel":{"shape":"String"},
+        "Iops":{"shape":"IntegerOptional"},
+        "OptionGroupName":{"shape":"String"},
+        "PubliclyAccessible":{"shape":"BooleanOptional"},
+        "Tags":{"shape":"TagList"},
+        "StorageType":{"shape":"String"},
+        "StorageEncrypted":{"shape":"BooleanOptional"},
+        "KmsKeyId":{"shape":"String"},
+        "CopyTagsToSnapshot":{"shape":"BooleanOptional"},
+        "MonitoringInterval":{"shape":"IntegerOptional"},
+        "MonitoringRoleArn":{"shape":"String"},
+        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
+        "SourceEngine":{"shape":"String"},
+        "SourceEngineVersion":{"shape":"String"},
+        "S3BucketName":{"shape":"String"},
+        "S3Prefix":{"shape":"String"},
+        "S3IngestionRoleArn":{"shape":"String"},
+        "EnablePerformanceInsights":{"shape":"BooleanOptional"},
+        "PerformanceInsightsKMSKeyId":{"shape":"String"},
+        "EnableCloudwatchLogsExports":{"shape":"LogTypeList"}
+      }
+    },
+    "RestoreDBInstanceFromS3Result":{
       "type":"structure",
       "members":{
         "DBInstance":{"shape":"DBInstance"}
@@ -4869,7 +5052,8 @@
         "TdeCredentialPassword":{"shape":"String"},
         "Domain":{"shape":"String"},
         "DomainIAMRoleName":{"shape":"String"},
-        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"}
+        "EnableIAMDatabaseAuthentication":{"shape":"BooleanOptional"},
+        "EnableCloudwatchLogsExports":{"shape":"LogTypeList"}
       }
     },
     "RestoreDBInstanceToPointInTimeResult":{
@@ -5166,6 +5350,29 @@
         "Description":{"shape":"String"},
         "AutoUpgrade":{"shape":"Boolean"},
         "IsMajorVersionUpgrade":{"shape":"Boolean"}
+      }
+    },
+    "ValidDBInstanceModificationsMessage":{
+      "type":"structure",
+      "members":{
+        "Storage":{"shape":"ValidStorageOptionsList"}
+      },
+      "wrapper":true
+    },
+    "ValidStorageOptions":{
+      "type":"structure",
+      "members":{
+        "StorageType":{"shape":"String"},
+        "StorageSize":{"shape":"RangeList"},
+        "ProvisionedIops":{"shape":"RangeList"},
+        "IopsToStorageRatio":{"shape":"DoubleRangeList"}
+      }
+    },
+    "ValidStorageOptionsList":{
+      "type":"list",
+      "member":{
+        "shape":"ValidStorageOptions",
+        "locationName":"ValidStorageOptions"
       }
     },
     "ValidUpgradeTargetList":{

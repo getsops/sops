@@ -159,8 +159,8 @@ type AddBandingRequest struct {
 }
 
 func (s *AddBandingRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddBandingRequest
-	raw := noMethod(*s)
+	type NoMethod AddBandingRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -187,8 +187,8 @@ type AddBandingResponse struct {
 }
 
 func (s *AddBandingResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddBandingResponse
-	raw := noMethod(*s)
+	type NoMethod AddBandingResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -220,8 +220,8 @@ type AddChartRequest struct {
 }
 
 func (s *AddChartRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddChartRequest
-	raw := noMethod(*s)
+	type NoMethod AddChartRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -248,8 +248,8 @@ type AddChartResponse struct {
 }
 
 func (s *AddChartResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddChartResponse
-	raw := noMethod(*s)
+	type NoMethod AddChartResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -281,8 +281,8 @@ type AddConditionalFormatRuleRequest struct {
 }
 
 func (s *AddConditionalFormatRuleRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddConditionalFormatRuleRequest
-	raw := noMethod(*s)
+	type NoMethod AddConditionalFormatRuleRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -312,8 +312,8 @@ type AddFilterViewRequest struct {
 }
 
 func (s *AddFilterViewRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddFilterViewRequest
-	raw := noMethod(*s)
+	type NoMethod AddFilterViewRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -340,8 +340,8 @@ type AddFilterViewResponse struct {
 }
 
 func (s *AddFilterViewResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddFilterViewResponse
-	raw := noMethod(*s)
+	type NoMethod AddFilterViewResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -371,8 +371,8 @@ type AddNamedRangeRequest struct {
 }
 
 func (s *AddNamedRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddNamedRangeRequest
-	raw := noMethod(*s)
+	type NoMethod AddNamedRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -399,8 +399,8 @@ type AddNamedRangeResponse struct {
 }
 
 func (s *AddNamedRangeResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddNamedRangeResponse
-	raw := noMethod(*s)
+	type NoMethod AddNamedRangeResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -432,8 +432,8 @@ type AddProtectedRangeRequest struct {
 }
 
 func (s *AddProtectedRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddProtectedRangeRequest
-	raw := noMethod(*s)
+	type NoMethod AddProtectedRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -462,8 +462,8 @@ type AddProtectedRangeResponse struct {
 }
 
 func (s *AddProtectedRangeResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddProtectedRangeResponse
-	raw := noMethod(*s)
+	type NoMethod AddProtectedRangeResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -501,8 +501,8 @@ type AddSheetRequest struct {
 }
 
 func (s *AddSheetRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddSheetRequest
-	raw := noMethod(*s)
+	type NoMethod AddSheetRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -529,8 +529,8 @@ type AddSheetResponse struct {
 }
 
 func (s *AddSheetResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddSheetResponse
-	raw := noMethod(*s)
+	type NoMethod AddSheetResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -568,8 +568,8 @@ type AppendCellsRequest struct {
 }
 
 func (s *AppendCellsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AppendCellsRequest
-	raw := noMethod(*s)
+	type NoMethod AppendCellsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -608,8 +608,8 @@ type AppendDimensionRequest struct {
 }
 
 func (s *AppendDimensionRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AppendDimensionRequest
-	raw := noMethod(*s)
+	type NoMethod AppendDimensionRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -650,8 +650,8 @@ type AppendValuesResponse struct {
 }
 
 func (s *AppendValuesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AppendValuesResponse
-	raw := noMethod(*s)
+	type NoMethod AppendValuesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -692,8 +692,8 @@ type AutoFillRequest struct {
 }
 
 func (s *AutoFillRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AutoFillRequest
-	raw := noMethod(*s)
+	type NoMethod AutoFillRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -722,8 +722,8 @@ type AutoResizeDimensionsRequest struct {
 }
 
 func (s *AutoResizeDimensionsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AutoResizeDimensionsRequest
-	raw := noMethod(*s)
+	type NoMethod AutoResizeDimensionsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -767,8 +767,8 @@ type BandedRange struct {
 }
 
 func (s *BandedRange) MarshalJSON() ([]byte, error) {
-	type noMethod BandedRange
-	raw := noMethod(*s)
+	type NoMethod BandedRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -839,8 +839,8 @@ type BandingProperties struct {
 }
 
 func (s *BandingProperties) MarshalJSON() ([]byte, error) {
-	type noMethod BandingProperties
-	raw := noMethod(*s)
+	type NoMethod BandingProperties
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -894,8 +894,8 @@ type BasicChartAxis struct {
 }
 
 func (s *BasicChartAxis) MarshalJSON() ([]byte, error) {
-	type noMethod BasicChartAxis
-	raw := noMethod(*s)
+	type NoMethod BasicChartAxis
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -930,8 +930,8 @@ type BasicChartDomain struct {
 }
 
 func (s *BasicChartDomain) MarshalJSON() ([]byte, error) {
-	type noMethod BasicChartDomain
-	raw := noMethod(*s)
+	type NoMethod BasicChartDomain
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -941,6 +941,14 @@ func (s *BasicChartDomain) MarshalJSON() ([]byte, error) {
 // one for the "Open Price", "High Price", "Low Price" and "Close
 // Price".
 type BasicChartSeries struct {
+	// LineStyle: The line style of this series. Valid only if the
+	// chartType is AREA,
+	// LINE, or SCATTER.
+	// COMBO charts are also supported if the
+	// series chart type is
+	// AREA or LINE.
+	LineStyle *LineStyle `json:"lineStyle,omitempty"`
+
 	// Series: The data being visualized in this chart series.
 	Series *ChartData `json:"series,omitempty"`
 
@@ -996,7 +1004,7 @@ type BasicChartSeries struct {
 	// chart</a>.
 	Type string `json:"type,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Series") to
+	// ForceSendFields is a list of field names (e.g. "LineStyle") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -1004,8 +1012,8 @@ type BasicChartSeries struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "Series") to include in API
-	// requests with the JSON null value. By default, fields with empty
+	// NullFields is a list of field names (e.g. "LineStyle") to include in
+	// API requests with the JSON null value. By default, fields with empty
 	// values are omitted from API requests. However, any field with an
 	// empty value appearing in NullFields will be sent to the server as
 	// null. It is an error if a field in this list has a non-empty value.
@@ -1014,8 +1022,8 @@ type BasicChartSeries struct {
 }
 
 func (s *BasicChartSeries) MarshalJSON() ([]byte, error) {
-	type noMethod BasicChartSeries
-	raw := noMethod(*s)
+	type NoMethod BasicChartSeries
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1106,7 +1114,7 @@ type BasicChartSpec struct {
 
 	// StackedType: The stacked type for charts that support vertical
 	// stacking.
-	// Applies to Area, Bar, Column, and Stepped Area charts.
+	// Applies to Area, Bar, Column, Combo, and Stepped Area charts.
 	//
 	// Possible values:
 	//   "BASIC_CHART_STACKED_TYPE_UNSPECIFIED" - Default value, do not use.
@@ -1141,8 +1149,8 @@ type BasicChartSpec struct {
 }
 
 func (s *BasicChartSpec) MarshalJSON() ([]byte, error) {
-	type noMethod BasicChartSpec
-	raw := noMethod(*s)
+	type NoMethod BasicChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1180,8 +1188,8 @@ type BasicFilter struct {
 }
 
 func (s *BasicFilter) MarshalJSON() ([]byte, error) {
-	type noMethod BasicFilter
-	raw := noMethod(*s)
+	type NoMethod BasicFilter
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1210,8 +1218,8 @@ type BatchClearValuesByDataFilterRequest struct {
 }
 
 func (s *BatchClearValuesByDataFilterRequest) MarshalJSON() ([]byte, error) {
-	type noMethod BatchClearValuesByDataFilterRequest
-	raw := noMethod(*s)
+	type NoMethod BatchClearValuesByDataFilterRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1250,8 +1258,8 @@ type BatchClearValuesByDataFilterResponse struct {
 }
 
 func (s *BatchClearValuesByDataFilterResponse) MarshalJSON() ([]byte, error) {
-	type noMethod BatchClearValuesByDataFilterResponse
-	raw := noMethod(*s)
+	type NoMethod BatchClearValuesByDataFilterResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1279,8 +1287,8 @@ type BatchClearValuesRequest struct {
 }
 
 func (s *BatchClearValuesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod BatchClearValuesRequest
-	raw := noMethod(*s)
+	type NoMethod BatchClearValuesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1318,8 +1326,8 @@ type BatchClearValuesResponse struct {
 }
 
 func (s *BatchClearValuesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod BatchClearValuesResponse
-	raw := noMethod(*s)
+	type NoMethod BatchClearValuesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1424,8 +1432,8 @@ type BatchGetValuesByDataFilterRequest struct {
 }
 
 func (s *BatchGetValuesByDataFilterRequest) MarshalJSON() ([]byte, error) {
-	type noMethod BatchGetValuesByDataFilterRequest
-	raw := noMethod(*s)
+	type NoMethod BatchGetValuesByDataFilterRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1462,8 +1470,8 @@ type BatchGetValuesByDataFilterResponse struct {
 }
 
 func (s *BatchGetValuesByDataFilterResponse) MarshalJSON() ([]byte, error) {
-	type noMethod BatchGetValuesByDataFilterResponse
-	raw := noMethod(*s)
+	type NoMethod BatchGetValuesByDataFilterResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1500,8 +1508,8 @@ type BatchGetValuesResponse struct {
 }
 
 func (s *BatchGetValuesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod BatchGetValuesResponse
-	raw := noMethod(*s)
+	type NoMethod BatchGetValuesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1520,7 +1528,7 @@ type BatchUpdateSpreadsheetRequest struct {
 
 	// ResponseIncludeGridData: True if grid data should be returned.
 	// Meaningful only if
-	// if include_spreadsheet_response is 'true'.
+	// if include_spreadsheet_in_response is 'true'.
 	// This parameter is ignored if a field mask was set in the request.
 	ResponseIncludeGridData bool `json:"responseIncludeGridData,omitempty"`
 
@@ -1549,8 +1557,8 @@ type BatchUpdateSpreadsheetRequest struct {
 }
 
 func (s *BatchUpdateSpreadsheetRequest) MarshalJSON() ([]byte, error) {
-	type noMethod BatchUpdateSpreadsheetRequest
-	raw := noMethod(*s)
+	type NoMethod BatchUpdateSpreadsheetRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1594,8 +1602,8 @@ type BatchUpdateSpreadsheetResponse struct {
 }
 
 func (s *BatchUpdateSpreadsheetResponse) MarshalJSON() ([]byte, error) {
-	type noMethod BatchUpdateSpreadsheetResponse
-	raw := noMethod(*s)
+	type NoMethod BatchUpdateSpreadsheetResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1715,8 +1723,8 @@ type BatchUpdateValuesByDataFilterRequest struct {
 }
 
 func (s *BatchUpdateValuesByDataFilterRequest) MarshalJSON() ([]byte, error) {
-	type noMethod BatchUpdateValuesByDataFilterRequest
-	raw := noMethod(*s)
+	type NoMethod BatchUpdateValuesByDataFilterRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1768,8 +1776,8 @@ type BatchUpdateValuesByDataFilterResponse struct {
 }
 
 func (s *BatchUpdateValuesByDataFilterResponse) MarshalJSON() ([]byte, error) {
-	type noMethod BatchUpdateValuesByDataFilterResponse
-	raw := noMethod(*s)
+	type NoMethod BatchUpdateValuesByDataFilterResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1885,8 +1893,8 @@ type BatchUpdateValuesRequest struct {
 }
 
 func (s *BatchUpdateValuesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod BatchUpdateValuesRequest
-	raw := noMethod(*s)
+	type NoMethod BatchUpdateValuesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1940,8 +1948,8 @@ type BatchUpdateValuesResponse struct {
 }
 
 func (s *BatchUpdateValuesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod BatchUpdateValuesResponse
-	raw := noMethod(*s)
+	type NoMethod BatchUpdateValuesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2111,8 +2119,8 @@ type BooleanCondition struct {
 }
 
 func (s *BooleanCondition) MarshalJSON() ([]byte, error) {
-	type noMethod BooleanCondition
-	raw := noMethod(*s)
+	type NoMethod BooleanCondition
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2150,8 +2158,8 @@ type BooleanRule struct {
 }
 
 func (s *BooleanRule) MarshalJSON() ([]byte, error) {
-	type noMethod BooleanRule
-	raw := noMethod(*s)
+	type NoMethod BooleanRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2196,8 +2204,8 @@ type Border struct {
 }
 
 func (s *Border) MarshalJSON() ([]byte, error) {
-	type noMethod Border
-	raw := noMethod(*s)
+	type NoMethod Border
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2233,8 +2241,8 @@ type Borders struct {
 }
 
 func (s *Borders) MarshalJSON() ([]byte, error) {
-	type noMethod Borders
-	raw := noMethod(*s)
+	type NoMethod Borders
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2325,18 +2333,18 @@ type BubbleChartSpec struct {
 }
 
 func (s *BubbleChartSpec) MarshalJSON() ([]byte, error) {
-	type noMethod BubbleChartSpec
-	raw := noMethod(*s)
+	type NoMethod BubbleChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *BubbleChartSpec) UnmarshalJSON(data []byte) error {
-	type noMethod BubbleChartSpec
+	type NoMethod BubbleChartSpec
 	var s1 struct {
 		BubbleOpacity gensupport.JSONFloat64 `json:"bubbleOpacity"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -2377,8 +2385,8 @@ type CandlestickChartSpec struct {
 }
 
 func (s *CandlestickChartSpec) MarshalJSON() ([]byte, error) {
-	type noMethod CandlestickChartSpec
-	raw := noMethod(*s)
+	type NoMethod CandlestickChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2429,8 +2437,8 @@ type CandlestickData struct {
 }
 
 func (s *CandlestickData) MarshalJSON() ([]byte, error) {
-	type noMethod CandlestickData
-	raw := noMethod(*s)
+	type NoMethod CandlestickData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2461,8 +2469,8 @@ type CandlestickDomain struct {
 }
 
 func (s *CandlestickDomain) MarshalJSON() ([]byte, error) {
-	type noMethod CandlestickDomain
-	raw := noMethod(*s)
+	type NoMethod CandlestickDomain
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2489,8 +2497,8 @@ type CandlestickSeries struct {
 }
 
 func (s *CandlestickSeries) MarshalJSON() ([]byte, error) {
-	type noMethod CandlestickSeries
-	raw := noMethod(*s)
+	type NoMethod CandlestickSeries
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2589,8 +2597,8 @@ type CellData struct {
 }
 
 func (s *CellData) MarshalJSON() ([]byte, error) {
-	type noMethod CellData
-	raw := noMethod(*s)
+	type NoMethod CellData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2728,8 +2736,8 @@ type CellFormat struct {
 }
 
 func (s *CellFormat) MarshalJSON() ([]byte, error) {
-	type noMethod CellFormat
-	raw := noMethod(*s)
+	type NoMethod CellFormat
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2756,8 +2764,8 @@ type ChartData struct {
 }
 
 func (s *ChartData) MarshalJSON() ([]byte, error) {
-	type noMethod ChartData
-	raw := noMethod(*s)
+	type NoMethod ChartData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2802,8 +2810,8 @@ type ChartSourceRange struct {
 }
 
 func (s *ChartSourceRange) MarshalJSON() ([]byte, error) {
-	type noMethod ChartSourceRange
-	raw := noMethod(*s)
+	type NoMethod ChartSourceRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2887,6 +2895,12 @@ type ChartSpec struct {
 	// This field is optional.
 	TitleTextPosition *TextPosition `json:"titleTextPosition,omitempty"`
 
+	// TreemapChart: A treemap chart specification.
+	TreemapChart *TreemapChartSpec `json:"treemapChart,omitempty"`
+
+	// WaterfallChart: A waterfall chart specification.
+	WaterfallChart *WaterfallChartSpec `json:"waterfallChart,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "AltText") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -2905,8 +2919,8 @@ type ChartSpec struct {
 }
 
 func (s *ChartSpec) MarshalJSON() ([]byte, error) {
-	type noMethod ChartSpec
-	raw := noMethod(*s)
+	type NoMethod ChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2934,8 +2948,8 @@ type ClearBasicFilterRequest struct {
 }
 
 func (s *ClearBasicFilterRequest) MarshalJSON() ([]byte, error) {
-	type noMethod ClearBasicFilterRequest
-	raw := noMethod(*s)
+	type NoMethod ClearBasicFilterRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2978,8 +2992,8 @@ type ClearValuesResponse struct {
 }
 
 func (s *ClearValuesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ClearValuesResponse
-	raw := noMethod(*s)
+	type NoMethod ClearValuesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3157,21 +3171,21 @@ type Color struct {
 }
 
 func (s *Color) MarshalJSON() ([]byte, error) {
-	type noMethod Color
-	raw := noMethod(*s)
+	type NoMethod Color
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *Color) UnmarshalJSON(data []byte) error {
-	type noMethod Color
+	type NoMethod Color
 	var s1 struct {
 		Alpha gensupport.JSONFloat64 `json:"alpha"`
 		Blue  gensupport.JSONFloat64 `json:"blue"`
 		Green gensupport.JSONFloat64 `json:"green"`
 		Red   gensupport.JSONFloat64 `json:"red"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -3228,8 +3242,8 @@ type ConditionValue struct {
 }
 
 func (s *ConditionValue) MarshalJSON() ([]byte, error) {
-	type noMethod ConditionValue
-	raw := noMethod(*s)
+	type NoMethod ConditionValue
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3266,8 +3280,8 @@ type ConditionalFormatRule struct {
 }
 
 func (s *ConditionalFormatRule) MarshalJSON() ([]byte, error) {
-	type noMethod ConditionalFormatRule
-	raw := noMethod(*s)
+	type NoMethod ConditionalFormatRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3325,8 +3339,8 @@ type CopyPasteRequest struct {
 }
 
 func (s *CopyPasteRequest) MarshalJSON() ([]byte, error) {
-	type noMethod CopyPasteRequest
-	raw := noMethod(*s)
+	type NoMethod CopyPasteRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3357,8 +3371,8 @@ type CopySheetToAnotherSpreadsheetRequest struct {
 }
 
 func (s *CopySheetToAnotherSpreadsheetRequest) MarshalJSON() ([]byte, error) {
-	type noMethod CopySheetToAnotherSpreadsheetRequest
-	raw := noMethod(*s)
+	type NoMethod CopySheetToAnotherSpreadsheetRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3387,8 +3401,8 @@ type CreateDeveloperMetadataRequest struct {
 }
 
 func (s *CreateDeveloperMetadataRequest) MarshalJSON() ([]byte, error) {
-	type noMethod CreateDeveloperMetadataRequest
-	raw := noMethod(*s)
+	type NoMethod CreateDeveloperMetadataRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3417,8 +3431,8 @@ type CreateDeveloperMetadataResponse struct {
 }
 
 func (s *CreateDeveloperMetadataResponse) MarshalJSON() ([]byte, error) {
-	type noMethod CreateDeveloperMetadataResponse
-	raw := noMethod(*s)
+	type NoMethod CreateDeveloperMetadataResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3464,8 +3478,8 @@ type CutPasteRequest struct {
 }
 
 func (s *CutPasteRequest) MarshalJSON() ([]byte, error) {
-	type noMethod CutPasteRequest
-	raw := noMethod(*s)
+	type NoMethod CutPasteRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3503,8 +3517,8 @@ type DataFilter struct {
 }
 
 func (s *DataFilter) MarshalJSON() ([]byte, error) {
-	type noMethod DataFilter
-	raw := noMethod(*s)
+	type NoMethod DataFilter
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3551,8 +3565,8 @@ type DataFilterValueRange struct {
 }
 
 func (s *DataFilterValueRange) MarshalJSON() ([]byte, error) {
-	type noMethod DataFilterValueRange
-	raw := noMethod(*s)
+	type NoMethod DataFilterValueRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3591,8 +3605,8 @@ type DataValidationRule struct {
 }
 
 func (s *DataValidationRule) MarshalJSON() ([]byte, error) {
-	type noMethod DataValidationRule
-	raw := noMethod(*s)
+	type NoMethod DataValidationRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3620,8 +3634,8 @@ type DeleteBandingRequest struct {
 }
 
 func (s *DeleteBandingRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteBandingRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteBandingRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3653,8 +3667,8 @@ type DeleteConditionalFormatRuleRequest struct {
 }
 
 func (s *DeleteConditionalFormatRuleRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteConditionalFormatRuleRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteConditionalFormatRuleRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3682,8 +3696,8 @@ type DeleteConditionalFormatRuleResponse struct {
 }
 
 func (s *DeleteConditionalFormatRuleResponse) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteConditionalFormatRuleResponse
-	raw := noMethod(*s)
+	type NoMethod DeleteConditionalFormatRuleResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3713,8 +3727,8 @@ type DeleteDeveloperMetadataRequest struct {
 }
 
 func (s *DeleteDeveloperMetadataRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteDeveloperMetadataRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteDeveloperMetadataRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3744,8 +3758,8 @@ type DeleteDeveloperMetadataResponse struct {
 }
 
 func (s *DeleteDeveloperMetadataResponse) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteDeveloperMetadataResponse
-	raw := noMethod(*s)
+	type NoMethod DeleteDeveloperMetadataResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3772,8 +3786,8 @@ type DeleteDimensionRequest struct {
 }
 
 func (s *DeleteDimensionRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteDimensionRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteDimensionRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3801,8 +3815,8 @@ type DeleteEmbeddedObjectRequest struct {
 }
 
 func (s *DeleteEmbeddedObjectRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteEmbeddedObjectRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteEmbeddedObjectRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3829,8 +3843,8 @@ type DeleteFilterViewRequest struct {
 }
 
 func (s *DeleteFilterViewRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteFilterViewRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteFilterViewRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3858,8 +3872,8 @@ type DeleteNamedRangeRequest struct {
 }
 
 func (s *DeleteNamedRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteNamedRangeRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteNamedRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3888,8 +3902,8 @@ type DeleteProtectedRangeRequest struct {
 }
 
 func (s *DeleteProtectedRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteProtectedRangeRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteProtectedRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3929,8 +3943,8 @@ type DeleteRangeRequest struct {
 }
 
 func (s *DeleteRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteRangeRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3957,8 +3971,8 @@ type DeleteSheetRequest struct {
 }
 
 func (s *DeleteSheetRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteSheetRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteSheetRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4032,8 +4046,8 @@ type DeveloperMetadata struct {
 }
 
 func (s *DeveloperMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod DeveloperMetadata
-	raw := noMethod(*s)
+	type NoMethod DeveloperMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4087,8 +4101,8 @@ type DeveloperMetadataLocation struct {
 }
 
 func (s *DeveloperMetadataLocation) MarshalJSON() ([]byte, error) {
-	type noMethod DeveloperMetadataLocation
-	raw := noMethod(*s)
+	type NoMethod DeveloperMetadataLocation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4239,8 +4253,8 @@ type DeveloperMetadataLookup struct {
 }
 
 func (s *DeveloperMetadataLookup) MarshalJSON() ([]byte, error) {
-	type noMethod DeveloperMetadataLookup
-	raw := noMethod(*s)
+	type NoMethod DeveloperMetadataLookup
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4280,8 +4294,8 @@ type DimensionProperties struct {
 }
 
 func (s *DimensionProperties) MarshalJSON() ([]byte, error) {
-	type noMethod DimensionProperties
-	raw := noMethod(*s)
+	type NoMethod DimensionProperties
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4327,8 +4341,8 @@ type DimensionRange struct {
 }
 
 func (s *DimensionRange) MarshalJSON() ([]byte, error) {
-	type noMethod DimensionRange
-	raw := noMethod(*s)
+	type NoMethod DimensionRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4355,8 +4369,8 @@ type DuplicateFilterViewRequest struct {
 }
 
 func (s *DuplicateFilterViewRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DuplicateFilterViewRequest
-	raw := noMethod(*s)
+	type NoMethod DuplicateFilterViewRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4384,8 +4398,8 @@ type DuplicateFilterViewResponse struct {
 }
 
 func (s *DuplicateFilterViewResponse) MarshalJSON() ([]byte, error) {
-	type noMethod DuplicateFilterViewResponse
-	raw := noMethod(*s)
+	type NoMethod DuplicateFilterViewResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4428,8 +4442,8 @@ type DuplicateSheetRequest struct {
 }
 
 func (s *DuplicateSheetRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DuplicateSheetRequest
-	raw := noMethod(*s)
+	type NoMethod DuplicateSheetRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4456,8 +4470,8 @@ type DuplicateSheetResponse struct {
 }
 
 func (s *DuplicateSheetResponse) MarshalJSON() ([]byte, error) {
-	type noMethod DuplicateSheetResponse
-	raw := noMethod(*s)
+	type NoMethod DuplicateSheetResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4496,8 +4510,8 @@ type Editors struct {
 }
 
 func (s *Editors) MarshalJSON() ([]byte, error) {
-	type noMethod Editors
-	raw := noMethod(*s)
+	type NoMethod Editors
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4530,8 +4544,8 @@ type EmbeddedChart struct {
 }
 
 func (s *EmbeddedChart) MarshalJSON() ([]byte, error) {
-	type noMethod EmbeddedChart
-	raw := noMethod(*s)
+	type NoMethod EmbeddedChart
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4569,8 +4583,8 @@ type EmbeddedObjectPosition struct {
 }
 
 func (s *EmbeddedObjectPosition) MarshalJSON() ([]byte, error) {
-	type noMethod EmbeddedObjectPosition
-	raw := noMethod(*s)
+	type NoMethod EmbeddedObjectPosition
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4613,8 +4627,8 @@ type ErrorValue struct {
 }
 
 func (s *ErrorValue) MarshalJSON() ([]byte, error) {
-	type noMethod ErrorValue
-	raw := noMethod(*s)
+	type NoMethod ErrorValue
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4663,18 +4677,18 @@ type ExtendedValue struct {
 }
 
 func (s *ExtendedValue) MarshalJSON() ([]byte, error) {
-	type noMethod ExtendedValue
-	raw := noMethod(*s)
+	type NoMethod ExtendedValue
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *ExtendedValue) UnmarshalJSON(data []byte) error {
-	type noMethod ExtendedValue
+	type NoMethod ExtendedValue
 	var s1 struct {
 		NumberValue gensupport.JSONFloat64 `json:"numberValue"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -4712,8 +4726,8 @@ type FilterCriteria struct {
 }
 
 func (s *FilterCriteria) MarshalJSON() ([]byte, error) {
-	type noMethod FilterCriteria
-	raw := noMethod(*s)
+	type NoMethod FilterCriteria
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4767,8 +4781,8 @@ type FilterView struct {
 }
 
 func (s *FilterView) MarshalJSON() ([]byte, error) {
-	type noMethod FilterView
-	raw := noMethod(*s)
+	type NoMethod FilterView
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4833,8 +4847,8 @@ type FindReplaceRequest struct {
 }
 
 func (s *FindReplaceRequest) MarshalJSON() ([]byte, error) {
-	type noMethod FindReplaceRequest
-	raw := noMethod(*s)
+	type NoMethod FindReplaceRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4878,8 +4892,8 @@ type FindReplaceResponse struct {
 }
 
 func (s *FindReplaceResponse) MarshalJSON() ([]byte, error) {
-	type noMethod FindReplaceResponse
-	raw := noMethod(*s)
+	type NoMethod FindReplaceResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4913,8 +4927,8 @@ type GetSpreadsheetByDataFilterRequest struct {
 }
 
 func (s *GetSpreadsheetByDataFilterRequest) MarshalJSON() ([]byte, error) {
-	type noMethod GetSpreadsheetByDataFilterRequest
-	raw := noMethod(*s)
+	type NoMethod GetSpreadsheetByDataFilterRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4952,8 +4966,8 @@ type GradientRule struct {
 }
 
 func (s *GradientRule) MarshalJSON() ([]byte, error) {
-	type noMethod GradientRule
-	raw := noMethod(*s)
+	type NoMethod GradientRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -4987,8 +5001,8 @@ type GridCoordinate struct {
 }
 
 func (s *GridCoordinate) MarshalJSON() ([]byte, error) {
-	type noMethod GridCoordinate
-	raw := noMethod(*s)
+	type NoMethod GridCoordinate
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5035,8 +5049,8 @@ type GridData struct {
 }
 
 func (s *GridData) MarshalJSON() ([]byte, error) {
-	type noMethod GridData
-	raw := noMethod(*s)
+	type NoMethod GridData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5075,8 +5089,8 @@ type GridProperties struct {
 }
 
 func (s *GridProperties) MarshalJSON() ([]byte, error) {
-	type noMethod GridProperties
-	raw := noMethod(*s)
+	type NoMethod GridProperties
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5151,8 +5165,8 @@ type GridRange struct {
 }
 
 func (s *GridRange) MarshalJSON() ([]byte, error) {
-	type noMethod GridRange
-	raw := noMethod(*s)
+	type NoMethod GridRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5235,24 +5249,124 @@ type HistogramChartSpec struct {
 }
 
 func (s *HistogramChartSpec) MarshalJSON() ([]byte, error) {
-	type noMethod HistogramChartSpec
-	raw := noMethod(*s)
+	type NoMethod HistogramChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *HistogramChartSpec) UnmarshalJSON(data []byte) error {
-	type noMethod HistogramChartSpec
+	type NoMethod HistogramChartSpec
 	var s1 struct {
 		BucketSize        gensupport.JSONFloat64 `json:"bucketSize"`
 		OutlierPercentile gensupport.JSONFloat64 `json:"outlierPercentile"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
 	s.BucketSize = float64(s1.BucketSize)
 	s.OutlierPercentile = float64(s1.OutlierPercentile)
+	return nil
+}
+
+// HistogramRule: Allows you to organize the numeric values in a source
+// data column into
+// buckets of a constant size. All values from HistogramRule.start
+// to
+// HistogramRule.end will be placed into groups of
+// size
+// HistogramRule.interval. In addition, all values
+// below
+// HistogramRule.start will be placed in one group, and all values
+// above
+// HistogramRule.end will be placed in another.
+// Only
+// HistogramRule.interval is required, though if HistogramRule.start
+// and HistogramRule.end are both provided, HistogramRule.start must
+// be less than HistogramRule.end. For example, a pivot table
+// showing
+// average purchase amount by age that has 50+ rows:
+//
+//     +-----+-------------------+
+//     | Age | AVERAGE of Amount |
+//     +-----+-------------------+
+//     | 16  |            $27.13 |
+//     | 17  |             $5.24 |
+//     | 18  |            $20.15 |
+//     ...
+//     +-----+-------------------+
+// could be turned into a pivot table that looks like the one below
+// by
+// applying a histogram group rule with a HistogramRule.start of 25,
+// an HistogramRule.interval of 20, and an HistogramRule.end
+// of 65.
+//
+//     +-------------+-------------------+
+//     | Grouped Age | AVERAGE of Amount |
+//     +-------------+-------------------+
+//     | < 25        |            $19.34 |
+//     | 25-45       |            $31.43 |
+//     | 45-65       |            $35.87 |
+//     | > 65        |            $27.55 |
+//     +-------------+-------------------+
+//     | Grand Total |            $29.12 |
+//     +-------------+-------------------+
+type HistogramRule struct {
+	// End: Optional. The maximum value at which items will be placed into
+	// buckets
+	// of constant size. Values above end will be lumped into a single
+	// bucket.
+	End float64 `json:"end,omitempty"`
+
+	// Interval: Required. The size of the buckets that will be created.
+	// Must be positive.
+	Interval float64 `json:"interval,omitempty"`
+
+	// Start: Optional. The minimum value at which items will be placed into
+	// buckets
+	// of constant size. Values below start will be lumped into a single
+	// bucket.
+	Start float64 `json:"start,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "End") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "End") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *HistogramRule) MarshalJSON() ([]byte, error) {
+	type NoMethod HistogramRule
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+func (s *HistogramRule) UnmarshalJSON(data []byte) error {
+	type NoMethod HistogramRule
+	var s1 struct {
+		End      gensupport.JSONFloat64 `json:"end"`
+		Interval gensupport.JSONFloat64 `json:"interval"`
+		Start    gensupport.JSONFloat64 `json:"start"`
+		*NoMethod
+	}
+	s1.NoMethod = (*NoMethod)(s)
+	if err := json.Unmarshal(data, &s1); err != nil {
+		return err
+	}
+	s.End = float64(s1.End)
+	s.Interval = float64(s1.Interval)
+	s.Start = float64(s1.Start)
 	return nil
 }
 
@@ -5285,8 +5399,8 @@ type HistogramSeries struct {
 }
 
 func (s *HistogramSeries) MarshalJSON() ([]byte, error) {
-	type noMethod HistogramSeries
-	raw := noMethod(*s)
+	type NoMethod HistogramSeries
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5337,8 +5451,8 @@ type InsertDimensionRequest struct {
 }
 
 func (s *InsertDimensionRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InsertDimensionRequest
-	raw := noMethod(*s)
+	type NoMethod InsertDimensionRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5377,8 +5491,8 @@ type InsertRangeRequest struct {
 }
 
 func (s *InsertRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod InsertRangeRequest
-	raw := noMethod(*s)
+	type NoMethod InsertRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5444,8 +5558,8 @@ type InterpolationPoint struct {
 }
 
 func (s *InterpolationPoint) MarshalJSON() ([]byte, error) {
-	type noMethod InterpolationPoint
-	raw := noMethod(*s)
+	type NoMethod InterpolationPoint
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5483,23 +5597,171 @@ type IterativeCalculationSettings struct {
 }
 
 func (s *IterativeCalculationSettings) MarshalJSON() ([]byte, error) {
-	type noMethod IterativeCalculationSettings
-	raw := noMethod(*s)
+	type NoMethod IterativeCalculationSettings
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *IterativeCalculationSettings) UnmarshalJSON(data []byte) error {
-	type noMethod IterativeCalculationSettings
+	type NoMethod IterativeCalculationSettings
 	var s1 struct {
 		ConvergenceThreshold gensupport.JSONFloat64 `json:"convergenceThreshold"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
 	s.ConvergenceThreshold = float64(s1.ConvergenceThreshold)
 	return nil
+}
+
+// LineStyle: Properties that describe the style of a line.
+type LineStyle struct {
+	// Type: The dash type of the line.
+	//
+	// Possible values:
+	//   "LINE_DASH_TYPE_UNSPECIFIED" - Default value, do not use.
+	//   "INVISIBLE" - No dash type, which is equivalent to a non-visible
+	// line.
+	//   "CUSTOM" - A custom dash for a line. Modifying the exact custom
+	// dash style is
+	// currently unsupported.
+	//   "SOLID" - A solid line.
+	//   "DOTTED" - A dotted line.
+	//   "MEDIUM_DASHED" - A dashed line where the dashes have "medium"
+	// length.
+	//   "MEDIUM_DASHED_DOTTED" - A line that alternates between a "medium"
+	// dash and a dot.
+	//   "LONG_DASHED" - A dashed line where the dashes have "long" length.
+	//   "LONG_DASHED_DOTTED" - A line that alternates between a "long" dash
+	// and a dot.
+	Type string `json:"type,omitempty"`
+
+	// Width: The thickness of the line, in px.
+	Width int64 `json:"width,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Type") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Type") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LineStyle) MarshalJSON() ([]byte, error) {
+	type NoMethod LineStyle
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ManualRule: Allows you to manually organize the values in a source
+// data column into
+// buckets with names of your choosing. For example, a pivot table
+// that
+// aggregates population by state:
+//
+//     +-------+-------------------+
+//     | State | SUM of Population |
+//     +-------+-------------------+
+//     | AK    |               0.7 |
+//     | AL    |               4.8 |
+//     | AR    |               2.9 |
+//     ...
+//     +-------+-------------------+
+// could be turned into a pivot table that aggregates population by time
+// zone
+// by providing a list of groups (e.g. groupName = 'Central',
+// items = ['AL', 'AR', 'IA', ...]) to a manual group rule.
+// Note that a similar effect could be achieved by adding a time zone
+// column
+// to the source data and adjusting the pivot table.
+//
+//     +-----------+-------------------+
+//     | Time Zone | SUM of Population |
+//     +-----------+-------------------+
+//     | Central   |             106.3 |
+//     | Eastern   |             151.9 |
+//     | Mountain  |              17.4 |
+//     ...
+//     +-----------+-------------------+
+type ManualRule struct {
+	// Groups: The list of group names and the corresponding items from the
+	// source data
+	// that map to each group name.
+	Groups []*ManualRuleGroup `json:"groups,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Groups") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Groups") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ManualRule) MarshalJSON() ([]byte, error) {
+	type NoMethod ManualRule
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ManualRuleGroup: A group name and a list of items from the source
+// data that should be placed
+// in the group with this name.
+type ManualRuleGroup struct {
+	// GroupName: The group name, which must be a string. Each group in a
+	// given
+	// ManualRule must have a unique group name.
+	GroupName *ExtendedValue `json:"groupName,omitempty"`
+
+	// Items: The items in the source data that should be placed into this
+	// group. Each
+	// item may be a string, number, or boolean. Items may appear in at most
+	// one
+	// group within a given ManualRule. Items that do not appear in
+	// any
+	// group will appear on their own.
+	Items []*ExtendedValue `json:"items,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "GroupName") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "GroupName") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ManualRuleGroup) MarshalJSON() ([]byte, error) {
+	type NoMethod ManualRuleGroup
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // MatchedDeveloperMetadata: A developer metadata entry and the data
@@ -5531,8 +5793,8 @@ type MatchedDeveloperMetadata struct {
 }
 
 func (s *MatchedDeveloperMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod MatchedDeveloperMetadata
-	raw := noMethod(*s)
+	type NoMethod MatchedDeveloperMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5565,8 +5827,8 @@ type MatchedValueRange struct {
 }
 
 func (s *MatchedValueRange) MarshalJSON() ([]byte, error) {
-	type noMethod MatchedValueRange
-	raw := noMethod(*s)
+	type NoMethod MatchedValueRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5601,8 +5863,8 @@ type MergeCellsRequest struct {
 }
 
 func (s *MergeCellsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod MergeCellsRequest
-	raw := noMethod(*s)
+	type NoMethod MergeCellsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5648,8 +5910,8 @@ type MoveDimensionRequest struct {
 }
 
 func (s *MoveDimensionRequest) MarshalJSON() ([]byte, error) {
-	type noMethod MoveDimensionRequest
-	raw := noMethod(*s)
+	type NoMethod MoveDimensionRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5682,8 +5944,8 @@ type NamedRange struct {
 }
 
 func (s *NamedRange) MarshalJSON() ([]byte, error) {
-	type noMethod NamedRange
-	raw := noMethod(*s)
+	type NoMethod NamedRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5733,8 +5995,8 @@ type NumberFormat struct {
 }
 
 func (s *NumberFormat) MarshalJSON() ([]byte, error) {
-	type noMethod NumberFormat
-	raw := noMethod(*s)
+	type NoMethod NumberFormat
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5808,8 +6070,8 @@ type OrgChartSpec struct {
 }
 
 func (s *OrgChartSpec) MarshalJSON() ([]byte, error) {
-	type noMethod OrgChartSpec
-	raw := noMethod(*s)
+	type NoMethod OrgChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5852,8 +6114,8 @@ type OverlayPosition struct {
 }
 
 func (s *OverlayPosition) MarshalJSON() ([]byte, error) {
-	type noMethod OverlayPosition
-	raw := noMethod(*s)
+	type NoMethod OverlayPosition
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5890,8 +6152,8 @@ type Padding struct {
 }
 
 func (s *Padding) MarshalJSON() ([]byte, error) {
-	type noMethod Padding
-	raw := noMethod(*s)
+	type NoMethod Padding
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5943,8 +6205,8 @@ type PasteDataRequest struct {
 }
 
 func (s *PasteDataRequest) MarshalJSON() ([]byte, error) {
-	type noMethod PasteDataRequest
-	raw := noMethod(*s)
+	type NoMethod PasteDataRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -5996,18 +6258,18 @@ type PieChartSpec struct {
 }
 
 func (s *PieChartSpec) MarshalJSON() ([]byte, error) {
-	type noMethod PieChartSpec
-	raw := noMethod(*s)
+	type NoMethod PieChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *PieChartSpec) UnmarshalJSON(data []byte) error {
-	type noMethod PieChartSpec
+	type NoMethod PieChartSpec
 	var s1 struct {
 		PieHole gensupport.JSONFloat64 `json:"pieHole"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -6040,14 +6302,66 @@ type PivotFilterCriteria struct {
 }
 
 func (s *PivotFilterCriteria) MarshalJSON() ([]byte, error) {
-	type noMethod PivotFilterCriteria
-	raw := noMethod(*s)
+	type NoMethod PivotFilterCriteria
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // PivotGroup: A single grouping (either row or column) in a pivot
 // table.
 type PivotGroup struct {
+	// GroupRule: The group rule to apply to this row/column group.
+	GroupRule *PivotGroupRule `json:"groupRule,omitempty"`
+
+	// Label: The labels to use for the row/column groups which can be
+	// customized. For
+	// example, in the following pivot table, the row label is `Region`
+	// (which
+	// could be renamed to `State`) and the column label is `Product`
+	// (which
+	// could be renamed `Item`). Pivot tables created before December 2017
+	// do
+	// not have header labels. If you'd like to add header labels to an
+	// existing
+	// pivot table, please delete the existing pivot table and then create a
+	// new
+	// pivot table with same parameters.
+	//
+	//     +--------------+---------+-------+
+	//     | SUM of Units | Product |       |
+	//     | Region       | Pen     | Paper |
+	//     +--------------+---------+-------+
+	//     | New York     |     345 |    98 |
+	//     | Oregon       |     234 |   123 |
+	//     | Tennessee    |     531 |   415 |
+	//     +--------------+---------+-------+
+	//     | Grand Total  |    1110 |   636 |
+	//     +--------------+---------+-------+
+	Label string `json:"label,omitempty"`
+
+	// RepeatHeadings: True if the headings in this pivot group should be
+	// repeated.
+	// This is only valid for row groupings and will be ignored by
+	// columns.
+	//
+	// By default, we minimize repitition of headings by not showing
+	// higher
+	// level headings where they are the same. For example, even though
+	// the
+	// third row below corresponds to "Q1 Mar", "Q1" is not shown because
+	// it is redundant with previous rows. Setting repeat_headings to
+	// true
+	// would cause "Q1" to be repeated for "Feb" and "Mar".
+	//
+	//     +--------------+
+	//     | Q1     | Jan |
+	//     |        | Feb |
+	//     |        | Mar |
+	//     +--------+-----+
+	//     | Q1 Total     |
+	//     +--------------+
+	RepeatHeadings bool `json:"repeatHeadings,omitempty"`
+
 	// ShowTotals: True if the pivot table should include the totals for
 	// this grouping.
 	ShowTotals bool `json:"showTotals,omitempty"`
@@ -6077,7 +6391,7 @@ type PivotGroup struct {
 	// ValueMetadata: Metadata about values in the grouping.
 	ValueMetadata []*PivotGroupValueMetadata `json:"valueMetadata,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "ShowTotals") to
+	// ForceSendFields is a list of field names (e.g. "GroupRule") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -6085,7 +6399,7 @@ type PivotGroup struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "ShowTotals") to include in
+	// NullFields is a list of field names (e.g. "GroupRule") to include in
 	// API requests with the JSON null value. By default, fields with empty
 	// values are omitted from API requests. However, any field with an
 	// empty value appearing in NullFields will be sent to the server as
@@ -6095,8 +6409,47 @@ type PivotGroup struct {
 }
 
 func (s *PivotGroup) MarshalJSON() ([]byte, error) {
-	type noMethod PivotGroup
-	raw := noMethod(*s)
+	type NoMethod PivotGroup
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// PivotGroupRule: An optional setting on a PivotGroup that defines
+// buckets for the values
+// in the source data column rather than breaking out each individual
+// value.
+// Only one PivotGroup with a group rule may be added for each column
+// in
+// the source data, though on any given column you may add both
+// a
+// PivotGroup that has a rule and a PivotGroup that does not.
+type PivotGroupRule struct {
+	// HistogramRule: A HistogramRule.
+	HistogramRule *HistogramRule `json:"histogramRule,omitempty"`
+
+	// ManualRule: A ManualRule.
+	ManualRule *ManualRule `json:"manualRule,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "HistogramRule") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "HistogramRule") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *PivotGroupRule) MarshalJSON() ([]byte, error) {
+	type NoMethod PivotGroupRule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6143,8 +6496,8 @@ type PivotGroupSortValueBucket struct {
 }
 
 func (s *PivotGroupSortValueBucket) MarshalJSON() ([]byte, error) {
-	type noMethod PivotGroupSortValueBucket
-	raw := noMethod(*s)
+	type NoMethod PivotGroupSortValueBucket
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6176,8 +6529,8 @@ type PivotGroupValueMetadata struct {
 }
 
 func (s *PivotGroupValueMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod PivotGroupValueMetadata
-	raw := noMethod(*s)
+	type NoMethod PivotGroupValueMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6236,22 +6589,43 @@ type PivotTable struct {
 }
 
 func (s *PivotTable) MarshalJSON() ([]byte, error) {
-	type noMethod PivotTable
-	raw := noMethod(*s)
+	type NoMethod PivotTable
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // PivotValue: The definition of how a value in a pivot table should be
 // calculated.
 type PivotValue struct {
+	// CalculatedDisplayType: If specified, indicates that pivot values
+	// should be displayed as
+	// the result of a calculation with another pivot value. For example,
+	// if
+	// calculated_display_type is specified as PERCENT_OF_GRAND_TOTAL, all
+	// the
+	// pivot values will be displayed as the percentage of the grand total.
+	// In
+	// the Sheets UI, this is referred to as "Show As" in the value section
+	// of a
+	// pivot table.
+	//
+	// Possible values:
+	//   "PIVOT_VALUE_CALCULATED_DISPLAY_TYPE_UNSPECIFIED" - Default value,
+	// do not use.
+	//   "PERCENT_OF_ROW_TOTAL" - Shows the pivot values as percentage of
+	// the row total values.
+	//   "PERCENT_OF_COLUMN_TOTAL" - Shows the pivot values as percentage of
+	// the column total values.
+	//   "PERCENT_OF_GRAND_TOTAL" - Shows the pivot values as percentage of
+	// the grand total values.
+	CalculatedDisplayType string `json:"calculatedDisplayType,omitempty"`
+
 	// Formula: A custom formula to calculate the value.  The formula must
 	// start
 	// with an `=` character.
 	Formula string `json:"formula,omitempty"`
 
-	// Name: A name to use for the value. This is only used if formula was
-	// set.
-	// Otherwise, the column name is used.
+	// Name: A name to use for the value.
 	Name string `json:"name,omitempty"`
 
 	// SourceColumnOffset: The column offset of the source range that this
@@ -6291,26 +6665,28 @@ type PivotValue struct {
 	// Only valid if PivotValue.formula was set.
 	SummarizeFunction string `json:"summarizeFunction,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Formula") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
+	// ForceSendFields is a list of field names (e.g.
+	// "CalculatedDisplayType") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "Formula") to include in
-	// API requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
-	// null. It is an error if a field in this list has a non-empty value.
-	// This may be used to include null fields in Patch requests.
+	// NullFields is a list of field names (e.g. "CalculatedDisplayType") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
 	NullFields []string `json:"-"`
 }
 
 func (s *PivotValue) MarshalJSON() ([]byte, error) {
-	type noMethod PivotValue
-	raw := noMethod(*s)
+	type NoMethod PivotValue
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6391,8 +6767,8 @@ type ProtectedRange struct {
 }
 
 func (s *ProtectedRange) MarshalJSON() ([]byte, error) {
-	type noMethod ProtectedRange
-	raw := noMethod(*s)
+	type NoMethod ProtectedRange
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6419,8 +6795,8 @@ type RandomizeRangeRequest struct {
 }
 
 func (s *RandomizeRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RandomizeRangeRequest
-	raw := noMethod(*s)
+	type NoMethod RandomizeRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6473,8 +6849,8 @@ type RepeatCellRequest struct {
 }
 
 func (s *RepeatCellRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RepeatCellRequest
-	raw := noMethod(*s)
+	type NoMethod RepeatCellRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6666,8 +7042,8 @@ type Request struct {
 }
 
 func (s *Request) MarshalJSON() ([]byte, error) {
-	type noMethod Request
-	raw := noMethod(*s)
+	type NoMethod Request
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6742,8 +7118,8 @@ type Response struct {
 }
 
 func (s *Response) MarshalJSON() ([]byte, error) {
-	type noMethod Response
-	raw := noMethod(*s)
+	type NoMethod Response
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6770,8 +7146,8 @@ type RowData struct {
 }
 
 func (s *RowData) MarshalJSON() ([]byte, error) {
-	type noMethod RowData
-	raw := noMethod(*s)
+	type NoMethod RowData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6804,8 +7180,8 @@ type SearchDeveloperMetadataRequest struct {
 }
 
 func (s *SearchDeveloperMetadataRequest) MarshalJSON() ([]byte, error) {
-	type noMethod SearchDeveloperMetadataRequest
-	raw := noMethod(*s)
+	type NoMethod SearchDeveloperMetadataRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6840,8 +7216,8 @@ type SearchDeveloperMetadataResponse struct {
 }
 
 func (s *SearchDeveloperMetadataResponse) MarshalJSON() ([]byte, error) {
-	type noMethod SearchDeveloperMetadataResponse
-	raw := noMethod(*s)
+	type NoMethod SearchDeveloperMetadataResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6868,8 +7244,8 @@ type SetBasicFilterRequest struct {
 }
 
 func (s *SetBasicFilterRequest) MarshalJSON() ([]byte, error) {
-	type noMethod SetBasicFilterRequest
-	raw := noMethod(*s)
+	type NoMethod SetBasicFilterRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6902,8 +7278,8 @@ type SetDataValidationRequest struct {
 }
 
 func (s *SetDataValidationRequest) MarshalJSON() ([]byte, error) {
-	type noMethod SetDataValidationRequest
-	raw := noMethod(*s)
+	type NoMethod SetDataValidationRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -6969,8 +7345,8 @@ type Sheet struct {
 }
 
 func (s *Sheet) MarshalJSON() ([]byte, error) {
-	type noMethod Sheet
-	raw := noMethod(*s)
+	type NoMethod Sheet
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7049,8 +7425,8 @@ type SheetProperties struct {
 }
 
 func (s *SheetProperties) MarshalJSON() ([]byte, error) {
-	type noMethod SheetProperties
-	raw := noMethod(*s)
+	type NoMethod SheetProperties
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7083,8 +7459,8 @@ type SortRangeRequest struct {
 }
 
 func (s *SortRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod SortRangeRequest
-	raw := noMethod(*s)
+	type NoMethod SortRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7120,8 +7496,8 @@ type SortSpec struct {
 }
 
 func (s *SortSpec) MarshalJSON() ([]byte, error) {
-	type noMethod SortSpec
-	raw := noMethod(*s)
+	type NoMethod SortSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7165,8 +7541,8 @@ type SourceAndDestination struct {
 }
 
 func (s *SourceAndDestination) MarshalJSON() ([]byte, error) {
-	type noMethod SourceAndDestination
-	raw := noMethod(*s)
+	type NoMethod SourceAndDestination
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7216,8 +7592,8 @@ type Spreadsheet struct {
 }
 
 func (s *Spreadsheet) MarshalJSON() ([]byte, error) {
-	type noMethod Spreadsheet
-	raw := noMethod(*s)
+	type NoMethod Spreadsheet
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7237,9 +7613,9 @@ type SpreadsheetProperties struct {
 
 	// DefaultFormat: The default format of all cells in the
 	// spreadsheet.
-	// CellData.effectiveFormat will not be set if the
-	// cell's format is equal to this default format.
-	// This field is read-only.
+	// CellData.effectiveFormat will not be set if
+	// the cell's format is equal to this default format. This field is
+	// read-only.
 	DefaultFormat *CellFormat `json:"defaultFormat,omitempty"`
 
 	// IterativeCalculationSettings: Determines whether and how circular
@@ -7291,8 +7667,8 @@ type SpreadsheetProperties struct {
 }
 
 func (s *SpreadsheetProperties) MarshalJSON() ([]byte, error) {
-	type noMethod SpreadsheetProperties
-	raw := noMethod(*s)
+	type NoMethod SpreadsheetProperties
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7338,8 +7714,8 @@ type TextFormat struct {
 }
 
 func (s *TextFormat) MarshalJSON() ([]byte, error) {
-	type noMethod TextFormat
-	raw := noMethod(*s)
+	type NoMethod TextFormat
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7373,8 +7749,8 @@ type TextFormatRun struct {
 }
 
 func (s *TextFormatRun) MarshalJSON() ([]byte, error) {
-	type noMethod TextFormatRun
-	raw := noMethod(*s)
+	type NoMethod TextFormatRun
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7411,8 +7787,8 @@ type TextPosition struct {
 }
 
 func (s *TextPosition) MarshalJSON() ([]byte, error) {
-	type noMethod TextPosition
-	raw := noMethod(*s)
+	type NoMethod TextPosition
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7462,8 +7838,8 @@ type TextRotation struct {
 }
 
 func (s *TextRotation) MarshalJSON() ([]byte, error) {
-	type noMethod TextRotation
-	raw := noMethod(*s)
+	type NoMethod TextRotation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7486,6 +7862,7 @@ type TextToColumnsRequest struct {
 	//   "PERIOD" - "."
 	//   "SPACE" - " "
 	//   "CUSTOM" - A custom value as defined in delimiter.
+	//   "AUTODETECT" - Automatically detect columns.
 	DelimiterType string `json:"delimiterType,omitempty"`
 
 	// Source: The source data range.  This must span exactly one column.
@@ -7509,9 +7886,189 @@ type TextToColumnsRequest struct {
 }
 
 func (s *TextToColumnsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod TextToColumnsRequest
-	raw := noMethod(*s)
+	type NoMethod TextToColumnsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// TreemapChartColorScale: A color scale for a treemap chart.
+type TreemapChartColorScale struct {
+	// MaxValueColor: The background color for cells with a color value
+	// greater than or equal
+	// to maxValue. Defaults to #109618 if not
+	// specified.
+	MaxValueColor *Color `json:"maxValueColor,omitempty"`
+
+	// MidValueColor: The background color for cells with a color value at
+	// the midpoint between
+	// minValue and
+	// maxValue. Defaults to #efe6dc if not
+	// specified.
+	MidValueColor *Color `json:"midValueColor,omitempty"`
+
+	// MinValueColor: The background color for cells with a color value less
+	// than or equal to
+	// minValue. Defaults to #dc3912 if not
+	// specified.
+	MinValueColor *Color `json:"minValueColor,omitempty"`
+
+	// NoDataColor: The background color for cells that have no color data
+	// associated with
+	// them. Defaults to #000000 if not specified.
+	NoDataColor *Color `json:"noDataColor,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "MaxValueColor") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "MaxValueColor") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *TreemapChartColorScale) MarshalJSON() ([]byte, error) {
+	type NoMethod TreemapChartColorScale
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// TreemapChartSpec: A <a
+// href="/chart/interactive/docs/gallery/treemap">Treemap chart</a>.
+type TreemapChartSpec struct {
+	// ColorData: The data that determines the background color of each
+	// treemap data cell.
+	// This field is optional. If not specified, size_data will be used
+	// to
+	// determine background colors. If specified, the data is expected to
+	// be
+	// numeric. color_scale will determine how the values in this data map
+	// to
+	// data cell background colors.
+	ColorData *ChartData `json:"colorData,omitempty"`
+
+	// ColorScale: The color scale for data cells in the treemap chart. Data
+	// cells are
+	// assigned colors based on their color values. These color values come
+	// from
+	// color_data, or from size_data if color_data is not specified.
+	// Cells with color values less than or equal to min_value will
+	// have minValueColor as their
+	// background color. Cells with color values greater than or equal
+	// to
+	// max_value will have
+	// maxValueColor as their background
+	// color. Cells with color values between min_value and max_value
+	// will
+	// have background colors on a gradient between
+	// minValueColor and
+	// maxValueColor, the midpoint of
+	// the gradient being midValueColor.
+	// Cells with missing or non-numeric color values will have
+	// noDataColor as their background
+	// color.
+	ColorScale *TreemapChartColorScale `json:"colorScale,omitempty"`
+
+	// HeaderColor: The background color for header cells.
+	HeaderColor *Color `json:"headerColor,omitempty"`
+
+	// HideTooltips: True to hide tooltips.
+	HideTooltips bool `json:"hideTooltips,omitempty"`
+
+	// HintedLevels: The number of additional data levels beyond the labeled
+	// levels to be shown
+	// on the treemap chart. These levels are not interactive and are
+	// shown
+	// without their labels. Defaults to 0 if not specified.
+	HintedLevels int64 `json:"hintedLevels,omitempty"`
+
+	// Labels: The data that contains the treemap cell labels.
+	Labels *ChartData `json:"labels,omitempty"`
+
+	// Levels: The number of data levels to show on the treemap chart. These
+	// levels are
+	// interactive and are shown with their labels. Defaults to 2 if
+	// not
+	// specified.
+	Levels int64 `json:"levels,omitempty"`
+
+	// MaxValue: The maximum possible data value. Cells with values greater
+	// than this will
+	// have the same color as cells with this value. If not specified,
+	// defaults
+	// to the actual maximum value from color_data, or the maximum value
+	// from
+	// size_data if color_data is not specified.
+	MaxValue float64 `json:"maxValue,omitempty"`
+
+	// MinValue: The minimum possible data value. Cells with values less
+	// than this will
+	// have the same color as cells with this value. If not specified,
+	// defaults
+	// to the actual minimum value from color_data, or the minimum value
+	// from
+	// size_data if color_data is not specified.
+	MinValue float64 `json:"minValue,omitempty"`
+
+	// ParentLabels: The data the contains the treemap cells' parent labels.
+	ParentLabels *ChartData `json:"parentLabels,omitempty"`
+
+	// SizeData: The data that determines the size of each treemap data
+	// cell. This data is
+	// expected to be numeric. The cells corresponding to non-numeric or
+	// missing
+	// data will not be rendered. If color_data is not specified, this
+	// data
+	// will be used to determine data cell background colors as well.
+	SizeData *ChartData `json:"sizeData,omitempty"`
+
+	// TextFormat: The text format for all labels on the chart.
+	TextFormat *TextFormat `json:"textFormat,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ColorData") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ColorData") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *TreemapChartSpec) MarshalJSON() ([]byte, error) {
+	type NoMethod TreemapChartSpec
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+func (s *TreemapChartSpec) UnmarshalJSON(data []byte) error {
+	type NoMethod TreemapChartSpec
+	var s1 struct {
+		MaxValue gensupport.JSONFloat64 `json:"maxValue"`
+		MinValue gensupport.JSONFloat64 `json:"minValue"`
+		*NoMethod
+	}
+	s1.NoMethod = (*NoMethod)(s)
+	if err := json.Unmarshal(data, &s1); err != nil {
+		return err
+	}
+	s.MaxValue = float64(s1.MaxValue)
+	s.MinValue = float64(s1.MinValue)
+	return nil
 }
 
 // UnmergeCellsRequest: Unmerges cells in the given range.
@@ -7539,8 +8096,8 @@ type UnmergeCellsRequest struct {
 }
 
 func (s *UnmergeCellsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UnmergeCellsRequest
-	raw := noMethod(*s)
+	type NoMethod UnmergeCellsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7574,8 +8131,8 @@ type UpdateBandingRequest struct {
 }
 
 func (s *UpdateBandingRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateBandingRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateBandingRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7631,8 +8188,8 @@ type UpdateBordersRequest struct {
 }
 
 func (s *UpdateBordersRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateBordersRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateBordersRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7677,8 +8234,8 @@ type UpdateCellsRequest struct {
 }
 
 func (s *UpdateCellsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateCellsRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateCellsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7711,8 +8268,8 @@ type UpdateChartSpecRequest struct {
 }
 
 func (s *UpdateChartSpecRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateChartSpecRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateChartSpecRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7753,8 +8310,8 @@ type UpdateConditionalFormatRuleRequest struct {
 }
 
 func (s *UpdateConditionalFormatRuleRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateConditionalFormatRuleRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateConditionalFormatRuleRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7795,8 +8352,8 @@ type UpdateConditionalFormatRuleResponse struct {
 }
 
 func (s *UpdateConditionalFormatRuleResponse) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateConditionalFormatRuleResponse
-	raw := noMethod(*s)
+	type NoMethod UpdateConditionalFormatRuleResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7845,8 +8402,8 @@ type UpdateDeveloperMetadataRequest struct {
 }
 
 func (s *UpdateDeveloperMetadataRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateDeveloperMetadataRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateDeveloperMetadataRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7875,8 +8432,8 @@ type UpdateDeveloperMetadataResponse struct {
 }
 
 func (s *UpdateDeveloperMetadataResponse) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateDeveloperMetadataResponse
-	raw := noMethod(*s)
+	type NoMethod UpdateDeveloperMetadataResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7913,8 +8470,8 @@ type UpdateDimensionPropertiesRequest struct {
 }
 
 func (s *UpdateDimensionPropertiesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateDimensionPropertiesRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateDimensionPropertiesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7961,8 +8518,8 @@ type UpdateEmbeddedObjectPositionRequest struct {
 }
 
 func (s *UpdateEmbeddedObjectPositionRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateEmbeddedObjectPositionRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateEmbeddedObjectPositionRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -7990,8 +8547,8 @@ type UpdateEmbeddedObjectPositionResponse struct {
 }
 
 func (s *UpdateEmbeddedObjectPositionResponse) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateEmbeddedObjectPositionResponse
-	raw := noMethod(*s)
+	type NoMethod UpdateEmbeddedObjectPositionResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8024,8 +8581,8 @@ type UpdateFilterViewRequest struct {
 }
 
 func (s *UpdateFilterViewRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateFilterViewRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateFilterViewRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8060,8 +8617,8 @@ type UpdateNamedRangeRequest struct {
 }
 
 func (s *UpdateNamedRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateNamedRangeRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateNamedRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8097,8 +8654,8 @@ type UpdateProtectedRangeRequest struct {
 }
 
 func (s *UpdateProtectedRangeRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateProtectedRangeRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateProtectedRangeRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8133,8 +8690,8 @@ type UpdateSheetPropertiesRequest struct {
 }
 
 func (s *UpdateSheetPropertiesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateSheetPropertiesRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateSheetPropertiesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8168,8 +8725,8 @@ type UpdateSpreadsheetPropertiesRequest struct {
 }
 
 func (s *UpdateSpreadsheetPropertiesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateSpreadsheetPropertiesRequest
-	raw := noMethod(*s)
+	type NoMethod UpdateSpreadsheetPropertiesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8220,8 +8777,8 @@ type UpdateValuesByDataFilterResponse struct {
 }
 
 func (s *UpdateValuesByDataFilterResponse) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateValuesByDataFilterResponse
-	raw := noMethod(*s)
+	type NoMethod UpdateValuesByDataFilterResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8274,8 +8831,8 @@ type UpdateValuesResponse struct {
 }
 
 func (s *UpdateValuesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod UpdateValuesResponse
-	raw := noMethod(*s)
+	type NoMethod UpdateValuesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8353,8 +8910,228 @@ type ValueRange struct {
 }
 
 func (s *ValueRange) MarshalJSON() ([]byte, error) {
-	type noMethod ValueRange
-	raw := noMethod(*s)
+	type NoMethod ValueRange
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// WaterfallChartColumnStyle: Styles for a waterfall chart column.
+type WaterfallChartColumnStyle struct {
+	// Color: The color of the column.
+	Color *Color `json:"color,omitempty"`
+
+	// Label: The label of the column's legend.
+	Label string `json:"label,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Color") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Color") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *WaterfallChartColumnStyle) MarshalJSON() ([]byte, error) {
+	type NoMethod WaterfallChartColumnStyle
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// WaterfallChartCustomSubtotal: A custom subtotal column for a
+// waterfall chart series.
+type WaterfallChartCustomSubtotal struct {
+	// DataIsSubtotal: True if the data point at subtotal_index is the
+	// subtotal. If false,
+	// the subtotal will be computed and appear after the data point.
+	DataIsSubtotal bool `json:"dataIsSubtotal,omitempty"`
+
+	// Label: A label for the subtotal column.
+	Label string `json:"label,omitempty"`
+
+	// SubtotalIndex: The 0-based index of a data point within the series.
+	// If
+	// data_is_subtotal is true, the data point at this index is
+	// the
+	// subtotal. Otherwise, the subtotal appears after the data point
+	// with
+	// this index. A series can have multiple subtotals at arbitrary
+	// indices,
+	// but subtotals do not affect the indices of the data points.
+	// For
+	// example, if a series has 3 data points, their indices will always be
+	// 0,
+	// 1, and 2, regardless of how many subtotals exist on the series or
+	// what
+	// data points they are associated with.
+	SubtotalIndex int64 `json:"subtotalIndex,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DataIsSubtotal") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DataIsSubtotal") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *WaterfallChartCustomSubtotal) MarshalJSON() ([]byte, error) {
+	type NoMethod WaterfallChartCustomSubtotal
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// WaterfallChartDomain: The domain of a waterfall chart.
+type WaterfallChartDomain struct {
+	// Data: The data of the WaterfallChartDomain.
+	Data *ChartData `json:"data,omitempty"`
+
+	// Reversed: True to reverse the order of the domain values (horizontal
+	// axis).
+	Reversed bool `json:"reversed,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Data") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Data") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *WaterfallChartDomain) MarshalJSON() ([]byte, error) {
+	type NoMethod WaterfallChartDomain
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// WaterfallChartSeries: A single series of data for a waterfall chart.
+type WaterfallChartSeries struct {
+	// CustomSubtotals: Custom subtotal columns appearing in this series.
+	// The order in which
+	// subtotals are defined is not significant. Only one subtotal may
+	// be
+	// defined for each data point.
+	CustomSubtotals []*WaterfallChartCustomSubtotal `json:"customSubtotals,omitempty"`
+
+	// Data: The data being visualized in this series.
+	Data *ChartData `json:"data,omitempty"`
+
+	// HideTrailingSubtotal: True to hide the subtotal column from the end
+	// of the series. By default,
+	// a subtotal column will appear at the end of each series. Setting
+	// this
+	// field to true will hide that subtotal column for this series.
+	HideTrailingSubtotal bool `json:"hideTrailingSubtotal,omitempty"`
+
+	// NegativeColumnsStyle: Styles for all columns in this series with
+	// negative values.
+	NegativeColumnsStyle *WaterfallChartColumnStyle `json:"negativeColumnsStyle,omitempty"`
+
+	// PositiveColumnsStyle: Styles for all columns in this series with
+	// positive values.
+	PositiveColumnsStyle *WaterfallChartColumnStyle `json:"positiveColumnsStyle,omitempty"`
+
+	// SubtotalColumnsStyle: Styles for all subtotal columns in this series.
+	SubtotalColumnsStyle *WaterfallChartColumnStyle `json:"subtotalColumnsStyle,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "CustomSubtotals") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "CustomSubtotals") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *WaterfallChartSeries) MarshalJSON() ([]byte, error) {
+	type NoMethod WaterfallChartSeries
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// WaterfallChartSpec: A waterfall chart.
+type WaterfallChartSpec struct {
+	// ConnectorLineStyle: The line style for the connector lines.
+	ConnectorLineStyle *LineStyle `json:"connectorLineStyle,omitempty"`
+
+	// Domain: The domain data (horizontal axis) for the waterfall chart.
+	Domain *WaterfallChartDomain `json:"domain,omitempty"`
+
+	// FirstValueIsTotal: True to interpret the first value as a total.
+	FirstValueIsTotal bool `json:"firstValueIsTotal,omitempty"`
+
+	// HideConnectorLines: True to hide connector lines between columns.
+	HideConnectorLines bool `json:"hideConnectorLines,omitempty"`
+
+	// Series: The data this waterfall chart is visualizing.
+	Series []*WaterfallChartSeries `json:"series,omitempty"`
+
+	// StackedType: The stacked type.
+	//
+	// Possible values:
+	//   "WATERFALL_STACKED_TYPE_UNSPECIFIED" - Default value, do not use.
+	//   "STACKED" - Values corresponding to the same domain (horizontal
+	// axis) value will be
+	// stacked vertically.
+	//   "SEQUENTIAL" - Series will spread out along the horizontal axis.
+	StackedType string `json:"stackedType,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ConnectorLineStyle")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ConnectorLineStyle") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *WaterfallChartSpec) MarshalJSON() ([]byte, error) {
+	type NoMethod WaterfallChartSpec
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -8485,7 +9262,7 @@ func (c *SpreadsheetsBatchUpdateCall) Do(opts ...googleapi.CallOption) (*BatchUp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8617,7 +9394,7 @@ func (c *SpreadsheetsCreateCall) Do(opts ...googleapi.CallOption) (*Spreadsheet,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8790,7 +9567,7 @@ func (c *SpreadsheetsGetCall) Do(opts ...googleapi.CallOption) (*Spreadsheet, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8963,7 +9740,7 @@ func (c *SpreadsheetsGetByDataFilterCall) Do(opts ...googleapi.CallOption) (*Spr
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -9112,7 +9889,7 @@ func (c *SpreadsheetsDeveloperMetadataGetCall) Do(opts ...googleapi.CallOption) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -9262,7 +10039,7 @@ func (c *SpreadsheetsDeveloperMetadataSearchCall) Do(opts ...googleapi.CallOptio
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -9403,7 +10180,7 @@ func (c *SpreadsheetsSheetsCopyToCall) Do(opts ...googleapi.CallOption) (*SheetP
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -9634,7 +10411,7 @@ func (c *SpreadsheetsValuesAppendCall) Do(opts ...googleapi.CallOption) (*Append
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -9826,7 +10603,7 @@ func (c *SpreadsheetsValuesBatchClearCall) Do(opts ...googleapi.CallOption) (*Ba
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -9970,7 +10747,7 @@ func (c *SpreadsheetsValuesBatchClearByDataFilterCall) Do(opts ...googleapi.Call
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -10171,7 +10948,7 @@ func (c *SpreadsheetsValuesBatchGetCall) Do(opts ...googleapi.CallOption) (*Batc
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -10347,7 +11124,7 @@ func (c *SpreadsheetsValuesBatchGetByDataFilterCall) Do(opts ...googleapi.CallOp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -10486,7 +11263,7 @@ func (c *SpreadsheetsValuesBatchUpdateCall) Do(opts ...googleapi.CallOption) (*B
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -10627,7 +11404,7 @@ func (c *SpreadsheetsValuesBatchUpdateByDataFilterCall) Do(opts ...googleapi.Cal
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -10770,7 +11547,7 @@ func (c *SpreadsheetsValuesClearCall) Do(opts ...googleapi.CallOption) (*ClearVa
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -10973,7 +11750,7 @@ func (c *SpreadsheetsValuesGetCall) Do(opts ...googleapi.CallOption) (*ValueRang
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -11207,7 +11984,7 @@ func (c *SpreadsheetsValuesUpdateCall) Do(opts ...googleapi.CallOption) (*Update
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil

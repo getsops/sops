@@ -569,6 +569,13 @@ var _ = Describe("Spec", func() {
 			Ω(summary.RunTime).Should(BeNumerically(">=", 10*time.Millisecond))
 		})
 
+		It("should have a runtime which remains consistent after spec run", func() {
+			totalRunTime := summary.RunTime
+			Ω(totalRunTime).Should(BeNumerically(">=", 10*time.Millisecond))
+
+			Consistently(func() time.Duration { return spec.Summary("suite id").RunTime }).Should(Equal(totalRunTime))
+		})
+
 		It("should not be a measurement, or have a measurement summary", func() {
 			Ω(summary.IsMeasurement).Should(BeFalse())
 			Ω(summary.Measurements).Should(BeEmpty())

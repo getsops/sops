@@ -66,6 +66,7 @@ import (
 	"google.golang.org/grpc/benchmark/latency"
 	"google.golang.org/grpc/benchmark/stats"
 	"google.golang.org/grpc/grpclog"
+	"google.golang.org/grpc/test/bufconn"
 )
 
 const (
@@ -137,13 +138,31 @@ func makeFuncUnary(benchFeatures stats.Features) (func(int), func()) {
 		)
 	}
 	sopts = append(sopts, grpc.MaxConcurrentStreams(uint32(benchFeatures.MaxConcurrentCalls+1)))
-	opts = append(opts, grpc.WithDialer(func(address string, timeout time.Duration) (net.Conn, error) {
-		return nw.TimeoutDialer(net.DialTimeout)("tcp", address, timeout)
-	}))
 	opts = append(opts, grpc.WithInsecure())
 
-	target, stopper := bm.StartServer(bm.ServerInfo{Addr: "localhost:0", Type: "protobuf", Network: nw}, sopts...)
-	conn := bm.NewClientConn(target, opts...)
+	var lis net.Listener
+	if *useBufconn {
+		bcLis := bufconn.Listen(256 * 1024)
+		lis = bcLis
+		opts = append(opts, grpc.WithDialer(func(string, time.Duration) (net.Conn, error) {
+			return nw.TimeoutDialer(
+				func(string, string, time.Duration) (net.Conn, error) {
+					return bcLis.Dial()
+				})("", "", 0)
+		}))
+	} else {
+		var err error
+		lis, err = net.Listen("tcp", "localhost:0")
+		if err != nil {
+			grpclog.Fatalf("Failed to listen: %v", err)
+		}
+		opts = append(opts, grpc.WithDialer(func(_ string, timeout time.Duration) (net.Conn, error) {
+			return nw.TimeoutDialer(net.DialTimeout)("tcp", lis.Addr().String(), timeout)
+		}))
+	}
+	lis = nw.Listener(lis)
+	stopper := bm.StartServer(bm.ServerInfo{Type: "protobuf", Listener: lis}, sopts...)
+	conn := bm.NewClientConn("" /* target not used */, opts...)
 	tc := testpb.NewBenchmarkServiceClient(conn)
 	return func(int) {
 			unaryCaller(tc, benchFeatures.ReqSizeBytes, benchFeatures.RespSizeBytes)
@@ -154,6 +173,7 @@ func makeFuncUnary(benchFeatures stats.Features) (func(int), func()) {
 }
 
 func makeFuncStream(benchFeatures stats.Features) (func(int), func()) {
+	// TODO: Refactor to remove duplication with makeFuncUnary.
 	nw := &latency.Network{Kbps: benchFeatures.Kbps, Latency: benchFeatures.Latency, MTU: benchFeatures.Mtu}
 	opts := []grpc.DialOption{}
 	sopts := []grpc.ServerOption{}
@@ -168,13 +188,31 @@ func makeFuncStream(benchFeatures stats.Features) (func(int), func()) {
 		)
 	}
 	sopts = append(sopts, grpc.MaxConcurrentStreams(uint32(benchFeatures.MaxConcurrentCalls+1)))
-	opts = append(opts, grpc.WithDialer(func(address string, timeout time.Duration) (net.Conn, error) {
-		return nw.TimeoutDialer(net.DialTimeout)("tcp", address, timeout)
-	}))
 	opts = append(opts, grpc.WithInsecure())
 
-	target, stopper := bm.StartServer(bm.ServerInfo{Addr: "localhost:0", Type: "protobuf", Network: nw}, sopts...)
-	conn := bm.NewClientConn(target, opts...)
+	var lis net.Listener
+	if *useBufconn {
+		bcLis := bufconn.Listen(256 * 1024)
+		lis = bcLis
+		opts = append(opts, grpc.WithDialer(func(string, time.Duration) (net.Conn, error) {
+			return nw.TimeoutDialer(
+				func(string, string, time.Duration) (net.Conn, error) {
+					return bcLis.Dial()
+				})("", "", 0)
+		}))
+	} else {
+		var err error
+		lis, err = net.Listen("tcp", "localhost:0")
+		if err != nil {
+			grpclog.Fatalf("Failed to listen: %v", err)
+		}
+		opts = append(opts, grpc.WithDialer(func(_ string, timeout time.Duration) (net.Conn, error) {
+			return nw.TimeoutDialer(net.DialTimeout)("tcp", lis.Addr().String(), timeout)
+		}))
+	}
+	lis = nw.Listener(lis)
+	stopper := bm.StartServer(bm.ServerInfo{Type: "protobuf", Listener: lis}, sopts...)
+	conn := bm.NewClientConn("" /* target not used */, opts...)
 	tc := testpb.NewBenchmarkServiceClient(conn)
 	streams := make([]testpb.BenchmarkService_StreamingCallClient, benchFeatures.MaxConcurrentCalls)
 	for i := 0; i < benchFeatures.MaxConcurrentCalls; i++ {
@@ -239,6 +277,8 @@ func runBenchmark(caller func(int), startTimer func(), stopTimer func(int32), be
 	wg.Wait()
 	stopTimer(count)
 }
+
+var useBufconn = flag.Bool("bufconn", false, "Use in-memory connection instead of system network I/O")
 
 // Initiate main function to get settings of features.
 func init() {

@@ -32,8 +32,18 @@ var _ = Describe("ProgressFixture", func() {
 			fmt.Fprintln(GinkgoWriter, ">inner after<")
 		})
 
-		It("should emit progress as it goes", func() {
-			fmt.Fprintln(GinkgoWriter, ">it<")
+		When("Inner When", func() {
+			BeforeEach(func() {
+				fmt.Fprintln(GinkgoWriter, ">inner before<")
+			})
+
+			It("should emit progress as it goes", func() {
+				fmt.Fprintln(GinkgoWriter, ">it<")
+			})
 		})
+	})
+
+	Specify("should emit progress as it goes", func() {
+		fmt.Fprintln(GinkgoWriter, ">specify<")
 	})
 })

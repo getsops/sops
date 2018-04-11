@@ -64,6 +64,24 @@ func TestNonColorableNil(t *testing.T) {
 	}
 }
 
+func TestNonColorableESC(t *testing.T) {
+	var b bytes.Buffer
+	c := NewNonColorable(&b)
+	c.Write([]byte{0x1b})
+	if b.Len() > 0 {
+		t.Fatalf("0 bytes expected, got %d", b.Len())
+	}
+}
+
+func TestNonColorableBadESC(t *testing.T) {
+	var b bytes.Buffer
+	c := NewNonColorable(&b)
+	c.Write([]byte{0x1b, 0x1b})
+	if b.Len() > 0 {
+		t.Fatalf("0 bytes expected, got %d", b.Len())
+	}
+}
+
 func TestColorable(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skipf("skip this test on windows")

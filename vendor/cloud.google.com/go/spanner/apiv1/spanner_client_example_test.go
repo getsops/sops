@@ -1,10 +1,10 @@
-// Copyright 2017, Google Inc. All rights reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +21,7 @@ import (
 
 	"cloud.google.com/go/spanner/apiv1"
 	"golang.org/x/net/context"
+	"google.golang.org/api/iterator"
 	spannerpb "google.golang.org/genproto/googleapis/spanner/v1"
 )
 
@@ -42,7 +43,7 @@ func ExampleClient_CreateSession() {
 	}
 
 	req := &spannerpb.CreateSessionRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.CreateSession(ctx, req)
 	if err != nil {
@@ -60,7 +61,7 @@ func ExampleClient_GetSession() {
 	}
 
 	req := &spannerpb.GetSessionRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.GetSession(ctx, req)
 	if err != nil {
@@ -68,6 +69,30 @@ func ExampleClient_GetSession() {
 	}
 	// TODO: Use resp.
 	_ = resp
+}
+
+func ExampleClient_ListSessions() {
+	ctx := context.Background()
+	c, err := spanner.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &spannerpb.ListSessionsRequest{
+		// TODO: Fill request struct fields.
+	}
+	it := c.ListSessions(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		// TODO: Use resp.
+		_ = resp
+	}
 }
 
 func ExampleClient_DeleteSession() {
@@ -78,7 +103,7 @@ func ExampleClient_DeleteSession() {
 	}
 
 	req := &spannerpb.DeleteSessionRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	err = c.DeleteSession(ctx, req)
 	if err != nil {
@@ -94,7 +119,7 @@ func ExampleClient_ExecuteSql() {
 	}
 
 	req := &spannerpb.ExecuteSqlRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.ExecuteSql(ctx, req)
 	if err != nil {
@@ -112,7 +137,7 @@ func ExampleClient_ExecuteStreamingSql() {
 	}
 
 	req := &spannerpb.ExecuteSqlRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	stream, err := c.ExecuteStreamingSql(ctx, req)
 	if err != nil {
@@ -139,7 +164,7 @@ func ExampleClient_Read() {
 	}
 
 	req := &spannerpb.ReadRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.Read(ctx, req)
 	if err != nil {
@@ -157,7 +182,7 @@ func ExampleClient_StreamingRead() {
 	}
 
 	req := &spannerpb.ReadRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	stream, err := c.StreamingRead(ctx, req)
 	if err != nil {
@@ -184,7 +209,7 @@ func ExampleClient_BeginTransaction() {
 	}
 
 	req := &spannerpb.BeginTransactionRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.BeginTransaction(ctx, req)
 	if err != nil {
@@ -202,7 +227,7 @@ func ExampleClient_Commit() {
 	}
 
 	req := &spannerpb.CommitRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	resp, err := c.Commit(ctx, req)
 	if err != nil {
@@ -220,10 +245,46 @@ func ExampleClient_Rollback() {
 	}
 
 	req := &spannerpb.RollbackRequest{
-	// TODO: Fill request struct fields.
+		// TODO: Fill request struct fields.
 	}
 	err = c.Rollback(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}
+}
+
+func ExampleClient_PartitionQuery() {
+	ctx := context.Background()
+	c, err := spanner.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &spannerpb.PartitionQueryRequest{
+		// TODO: Fill request struct fields.
+	}
+	resp, err := c.PartitionQuery(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleClient_PartitionRead() {
+	ctx := context.Background()
+	c, err := spanner.NewClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &spannerpb.PartitionReadRequest{
+		// TODO: Fill request struct fields.
+	}
+	resp, err := c.PartitionRead(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
 }

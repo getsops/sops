@@ -31,18 +31,18 @@ func CombineHandlers(handlers ...http.HandlerFunc) http.HandlerFunc {
 //Alternatively you can pass in a matcher (ContainSubstring("/foo") and MatchRegexp("/foo/[a-f0-9]+") for example)
 func VerifyRequest(method string, path interface{}, rawQuery ...string) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		Ω(req.Method).Should(Equal(method), "Method mismatch")
+		Expect(req.Method).Should(Equal(method), "Method mismatch")
 		switch p := path.(type) {
 		case types.GomegaMatcher:
-			Ω(req.URL.Path).Should(p, "Path mismatch")
+			Expect(req.URL.Path).Should(p, "Path mismatch")
 		default:
-			Ω(req.URL.Path).Should(Equal(path), "Path mismatch")
+			Expect(req.URL.Path).Should(Equal(path), "Path mismatch")
 		}
 		if len(rawQuery) > 0 {
 			values, err := url.ParseQuery(rawQuery[0])
-			Ω(err).ShouldNot(HaveOccurred(), "Expected RawQuery is malformed")
+			Expect(err).ShouldNot(HaveOccurred(), "Expected RawQuery is malformed")
 
-			Ω(req.URL.Query()).Should(Equal(values), "RawQuery mismatch")
+			Expect(req.URL.Query()).Should(Equal(values), "RawQuery mismatch")
 		}
 	}
 }
@@ -51,7 +51,7 @@ func VerifyRequest(method string, path interface{}, rawQuery ...string) http.Han
 //specified value
 func VerifyContentType(contentType string) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		Ω(req.Header.Get("Content-Type")).Should(Equal(contentType))
+		Expect(req.Header.Get("Content-Type")).Should(Equal(contentType))
 	}
 }
 
@@ -60,12 +60,12 @@ func VerifyContentType(contentType string) http.HandlerFunc {
 func VerifyBasicAuth(username string, password string) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		auth := req.Header.Get("Authorization")
-		Ω(auth).ShouldNot(Equal(""), "Authorization header must be specified")
+		Expect(auth).ShouldNot(Equal(""), "Authorization header must be specified")
 
 		decoded, err := base64.StdEncoding.DecodeString(auth[6:])
-		Ω(err).ShouldNot(HaveOccurred())
+		Expect(err).ShouldNot(HaveOccurred())
 
-		Ω(string(decoded)).Should(Equal(fmt.Sprintf("%s:%s", username, password)), "Authorization mismatch")
+		Expect(string(decoded)).Should(Equal(fmt.Sprintf("%s:%s", username, password)), "Authorization mismatch")
 	}
 }
 
@@ -78,7 +78,7 @@ func VerifyHeader(header http.Header) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		for key, values := range header {
 			key = http.CanonicalHeaderKey(key)
-			Ω(req.Header[key]).Should(Equal(values), "Header mismatch for key: %s", key)
+			Expect(req.Header[key]).Should(Equal(values), "Header mismatch for key: %s", key)
 		}
 	}
 }
@@ -97,8 +97,8 @@ func VerifyBody(expectedBody []byte) http.HandlerFunc {
 		func(w http.ResponseWriter, req *http.Request) {
 			body, err := ioutil.ReadAll(req.Body)
 			req.Body.Close()
-			Ω(err).ShouldNot(HaveOccurred())
-			Ω(body).Should(Equal(expectedBody), "Body Mismatch")
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(body).Should(Equal(expectedBody), "Body Mismatch")
 		},
 	)
 }
@@ -113,8 +113,8 @@ func VerifyJSON(expectedJSON string) http.HandlerFunc {
 		func(w http.ResponseWriter, req *http.Request) {
 			body, err := ioutil.ReadAll(req.Body)
 			req.Body.Close()
-			Ω(err).ShouldNot(HaveOccurred())
-			Ω(body).Should(MatchJSON(expectedJSON), "JSON Mismatch")
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(body).Should(MatchJSON(expectedJSON), "JSON Mismatch")
 		},
 	)
 }
@@ -124,7 +124,7 @@ func VerifyJSON(expectedJSON string) http.HandlerFunc {
 //that matches the object
 func VerifyJSONRepresenting(object interface{}) http.HandlerFunc {
 	data, err := json.Marshal(object)
-	Ω(err).ShouldNot(HaveOccurred())
+	Expect(err).ShouldNot(HaveOccurred())
 	return CombineHandlers(
 		VerifyContentType("application/json"),
 		VerifyJSON(string(data)),
@@ -138,9 +138,9 @@ func VerifyJSONRepresenting(object interface{}) http.HandlerFunc {
 func VerifyForm(values url.Values) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
-		Ω(err).ShouldNot(HaveOccurred())
+		Expect(err).ShouldNot(HaveOccurred())
 		for key, vals := range values {
-			Ω(r.Form[key]).Should(Equal(vals), "Form mismatch for key: %s", key)
+			Expect(r.Form[key]).Should(Equal(vals), "Form mismatch for key: %s", key)
 		}
 	}
 }
@@ -161,19 +161,19 @@ func VerifyProtoRepresenting(expected proto.Message) http.HandlerFunc {
 		VerifyContentType("application/x-protobuf"),
 		func(w http.ResponseWriter, req *http.Request) {
 			body, err := ioutil.ReadAll(req.Body)
-			Ω(err).ShouldNot(HaveOccurred())
+			Expect(err).ShouldNot(HaveOccurred())
 			req.Body.Close()
 
 			expectedType := reflect.TypeOf(expected)
 			actualValuePtr := reflect.New(expectedType.Elem())
 
 			actual, ok := actualValuePtr.Interface().(proto.Message)
-			Ω(ok).Should(BeTrue(), "Message value is not a proto.Message")
+			Expect(ok).Should(BeTrue(), "Message value is not a proto.Message")
 
 			err = proto.Unmarshal(body, actual)
-			Ω(err).ShouldNot(HaveOccurred(), "Failed to unmarshal protobuf")
+			Expect(err).ShouldNot(HaveOccurred(), "Failed to unmarshal protobuf")
 
-			Ω(actual).Should(Equal(expected), "ProtoBuf Mismatch")
+			Expect(actual).Should(Equal(expected), "ProtoBuf Mismatch")
 		},
 	)
 }
@@ -203,7 +203,7 @@ func RespondWith(statusCode int, body interface{}, optionalHeader ...http.Header
 		case []byte:
 			w.Write(x)
 		default:
-			Ω(body).Should(BeNil(), "Invalid type for body.  Should be string or []byte.")
+			Expect(body).Should(BeNil(), "Invalid type for body.  Should be string or []byte.")
 		}
 	}
 }
@@ -230,7 +230,7 @@ func RespondWithPtr(statusCode *int, body interface{}, optionalHeader ...http.He
 			case *[]byte:
 				w.Write(*x)
 			default:
-				Ω(body).Should(BeNil(), "Invalid type for body.  Should be string or []byte.")
+				Expect(body).Should(BeNil(), "Invalid type for body.  Should be string or []byte.")
 			}
 		}
 	}
@@ -244,7 +244,7 @@ Also, RespondWithJSONEncoded can be given an optional http.Header.  The headers 
 */
 func RespondWithJSONEncoded(statusCode int, object interface{}, optionalHeader ...http.Header) http.HandlerFunc {
 	data, err := json.Marshal(object)
-	Ω(err).ShouldNot(HaveOccurred())
+	Expect(err).ShouldNot(HaveOccurred())
 
 	var headers http.Header
 	if len(optionalHeader) == 1 {
@@ -271,7 +271,7 @@ Since the http.Header can be mutated after the fact you don't need to pass in a 
 func RespondWithJSONEncodedPtr(statusCode *int, object interface{}, optionalHeader ...http.Header) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		data, err := json.Marshal(object)
-		Ω(err).ShouldNot(HaveOccurred())
+		Expect(err).ShouldNot(HaveOccurred())
 		var headers http.Header
 		if len(optionalHeader) == 1 {
 			headers = optionalHeader[0]
@@ -294,7 +294,7 @@ func RespondWithJSONEncodedPtr(statusCode *int, object interface{}, optionalHead
 func RespondWithProto(statusCode int, message proto.Message, optionalHeader ...http.Header) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		data, err := proto.Marshal(message)
-		Ω(err).ShouldNot(HaveOccurred())
+		Expect(err).ShouldNot(HaveOccurred())
 
 		var headers http.Header
 		if len(optionalHeader) == 1 {

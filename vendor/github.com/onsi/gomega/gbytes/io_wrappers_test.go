@@ -68,7 +68,7 @@ var _ = Describe("Io Wrappers", func() {
 			})
 
 			It("returns with no error", func() {
-				Ω(timeoutCloser.Close()).Should(Succeed())
+				Expect(timeoutCloser.Close()).Should(Succeed())
 			})
 		})
 
@@ -78,7 +78,7 @@ var _ = Describe("Io Wrappers", func() {
 			})
 
 			It("returns the error", func() {
-				Ω(timeoutCloser.Close()).Should(MatchError("boom"))
+				Expect(timeoutCloser.Close()).Should(MatchError("boom"))
 			})
 		})
 
@@ -91,7 +91,7 @@ var _ = Describe("Io Wrappers", func() {
 			})
 
 			It("returns ErrTimeout", func() {
-				Ω(timeoutCloser.Close()).Should(MatchError(ErrTimeout))
+				Expect(timeoutCloser.Close()).Should(MatchError(ErrTimeout))
 			})
 		})
 	})
@@ -112,9 +112,9 @@ var _ = Describe("Io Wrappers", func() {
 			It("returns with no error", func() {
 				p := make([]byte, 5)
 				n, err := timeoutReader.Read(p)
-				Ω(n).Should(Equal(5))
-				Ω(err).ShouldNot(HaveOccurred())
-				Ω(p).Should(Equal([]byte("aaaaa")))
+				Expect(n).Should(Equal(5))
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(p).Should(Equal([]byte("aaaaa")))
 			})
 		})
 
@@ -126,7 +126,7 @@ var _ = Describe("Io Wrappers", func() {
 			It("returns the error", func() {
 				p := make([]byte, 5)
 				_, err := timeoutReader.Read(p)
-				Ω(err).Should(MatchError("boom"))
+				Expect(err).Should(MatchError("boom"))
 			})
 		})
 
@@ -138,7 +138,7 @@ var _ = Describe("Io Wrappers", func() {
 			It("returns ErrTimeout", func() {
 				p := make([]byte, 5)
 				_, err := timeoutReader.Read(p)
-				Ω(err).Should(MatchError(ErrTimeout))
+				Expect(err).Should(MatchError(ErrTimeout))
 			})
 		})
 	})
@@ -158,8 +158,8 @@ var _ = Describe("Io Wrappers", func() {
 
 			It("returns with no error", func() {
 				n, err := timeoutWriter.Write([]byte("aaaaa"))
-				Ω(n).Should(Equal(5))
-				Ω(err).ShouldNot(HaveOccurred())
+				Expect(n).Should(Equal(5))
+				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
 
@@ -170,7 +170,7 @@ var _ = Describe("Io Wrappers", func() {
 
 			It("returns the error", func() {
 				_, err := timeoutWriter.Write([]byte("aaaaa"))
-				Ω(err).Should(MatchError("boom"))
+				Expect(err).Should(MatchError("boom"))
 			})
 		})
 
@@ -181,7 +181,7 @@ var _ = Describe("Io Wrappers", func() {
 
 			It("returns ErrTimeout", func() {
 				_, err := timeoutWriter.Write([]byte("aaaaa"))
-				Ω(err).Should(MatchError(ErrTimeout))
+				Expect(err).Should(MatchError(ErrTimeout))
 			})
 		})
 	})

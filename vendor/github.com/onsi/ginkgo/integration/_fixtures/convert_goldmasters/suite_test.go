@@ -1,10 +1,10 @@
 package tmp_test
 
 import (
+	"testing"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
-	"testing"
 )
 
 func TestConvertFixtures(t *testing.T) {

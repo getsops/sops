@@ -60,7 +60,7 @@ func loadFileDesc(filename string) (*dpb.FileDescriptorProto, []byte) {
 	if enc == nil {
 		panic(fmt.Sprintf("failed to find fd for file: %v", filename))
 	}
-	fd, err := s.decodeFileDesc(enc)
+	fd, err := decodeFileDesc(enc)
 	if err != nil {
 		panic(fmt.Sprintf("failed to decode enc: %v", err))
 	}
@@ -101,7 +101,7 @@ func TestTypeForName(t *testing.T) {
 	}{
 		{"grpc.testing.SearchResponse", reflect.TypeOf(pb.SearchResponse{})},
 	} {
-		r, err := s.typeForName(test.name)
+		r, err := typeForName(test.name)
 		if err != nil || r != test.want {
 			t.Errorf("typeForName(%q) = %q, %v, want %q, <nil>", test.name, r, err, test.want)
 		}
@@ -112,7 +112,7 @@ func TestTypeForNameNotFound(t *testing.T) {
 	for _, test := range []string{
 		"grpc.testing.not_exiting",
 	} {
-		_, err := s.typeForName(test)
+		_, err := typeForName(test)
 		if err == nil {
 			t.Errorf("typeForName(%q) = _, %v, want _, <non-nil>", test, err)
 		}
@@ -131,7 +131,7 @@ func TestFileDescContainingExtension(t *testing.T) {
 		{reflect.TypeOf(pb.ToBeExtended{}), 23, fdProto2Ext2},
 		{reflect.TypeOf(pb.ToBeExtended{}), 29, fdProto2Ext2},
 	} {
-		fd, err := s.fileDescContainingExtension(test.st, test.extNum)
+		fd, err := fileDescContainingExtension(test.st, test.extNum)
 		if err != nil || !proto.Equal(fd, test.want) {
 			t.Errorf("fileDescContainingExtension(%q) = %q, %v, want %q, <nil>", test.st, fd, err, test.want)
 		}
@@ -296,6 +296,12 @@ func testFileContainingSymbol(t *testing.T, stream rpb.ServerReflection_ServerRe
 		{"grpc.testingv3.SearchServiceV3.Search", fdTestv3Byte},
 		{"grpc.testingv3.SearchServiceV3.StreamingSearch", fdTestv3Byte},
 		{"grpc.testingv3.SearchResponseV3", fdTestv3Byte},
+		// search for field, oneof, enum, and enum value symbols, too
+		{"grpc.testingv3.SearchResponseV3.Result.snippets", fdTestv3Byte},
+		{"grpc.testingv3.SearchResponseV3.Result.Value.val", fdTestv3Byte},
+		{"grpc.testingv3.SearchResponseV3.Result.Value.str", fdTestv3Byte},
+		{"grpc.testingv3.SearchResponseV3.State", fdTestv3Byte},
+		{"grpc.testingv3.SearchResponseV3.State.FRESH", fdTestv3Byte},
 	} {
 		if err := stream.Send(&rpb.ServerReflectionRequest{
 			MessageRequest: &rpb.ServerReflectionRequest_FileContainingSymbol{

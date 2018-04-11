@@ -218,6 +218,14 @@ type PubprofilesService struct {
 
 // Account: Configuration data for an Ad Exchange buyer account.
 type Account struct {
+	// ApplyPretargetingToNonGuaranteedDeals: When this is false, bid
+	// requests that include a deal ID for a private auction or preferred
+	// deal are always sent to your bidder. When true, all active
+	// pretargeting configs will be applied to private auctions and
+	// preferred deals. Programmatic Guaranteed deals (when enabled) are
+	// always sent to your bidder.
+	ApplyPretargetingToNonGuaranteedDeals bool `json:"applyPretargetingToNonGuaranteedDeals,omitempty"`
+
 	// BidderLocation: Your bidder locations that have distinct URLs.
 	BidderLocation []*AccountBidderLocation `json:"bidderLocation,omitempty"`
 
@@ -254,27 +262,28 @@ type Account struct {
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "BidderLocation") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
+	// ForceSendFields is a list of field names (e.g.
+	// "ApplyPretargetingToNonGuaranteedDeals") to unconditionally include
+	// in API requests. By default, fields with empty values are omitted
+	// from API requests. However, any non-pointer, non-interface field
+	// appearing in ForceSendFields will be sent to the server regardless of
+	// whether the field is empty or not. This may be used to include empty
+	// fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "BidderLocation") to
-	// include in API requests with the JSON null value. By default, fields
-	// with empty values are omitted from API requests. However, any field
-	// with an empty value appearing in NullFields will be sent to the
-	// server as null. It is an error if a field in this list has a
-	// non-empty value. This may be used to include null fields in Patch
-	// requests.
+	// NullFields is a list of field names (e.g.
+	// "ApplyPretargetingToNonGuaranteedDeals") to include in API requests
+	// with the JSON null value. By default, fields with empty values are
+	// omitted from API requests. However, any field with an empty value
+	// appearing in NullFields will be sent to the server as null. It is an
+	// error if a field in this list has a non-empty value. This may be used
+	// to include null fields in Patch requests.
 	NullFields []string `json:"-"`
 }
 
 func (s *Account) MarshalJSON() ([]byte, error) {
-	type noMethod Account
-	raw := noMethod(*s)
+	type NoMethod Account
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -325,8 +334,8 @@ type AccountBidderLocation struct {
 }
 
 func (s *AccountBidderLocation) MarshalJSON() ([]byte, error) {
-	type noMethod AccountBidderLocation
-	raw := noMethod(*s)
+	type NoMethod AccountBidderLocation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -362,8 +371,8 @@ type AccountsList struct {
 }
 
 func (s *AccountsList) MarshalJSON() ([]byte, error) {
-	type noMethod AccountsList
-	raw := noMethod(*s)
+	type NoMethod AccountsList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -395,8 +404,8 @@ type AddOrderDealsRequest struct {
 }
 
 func (s *AddOrderDealsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddOrderDealsRequest
-	raw := noMethod(*s)
+	type NoMethod AddOrderDealsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -430,8 +439,8 @@ type AddOrderDealsResponse struct {
 }
 
 func (s *AddOrderDealsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddOrderDealsResponse
-	raw := noMethod(*s)
+	type NoMethod AddOrderDealsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -457,8 +466,8 @@ type AddOrderNotesRequest struct {
 }
 
 func (s *AddOrderNotesRequest) MarshalJSON() ([]byte, error) {
-	type noMethod AddOrderNotesRequest
-	raw := noMethod(*s)
+	type NoMethod AddOrderNotesRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -487,8 +496,8 @@ type AddOrderNotesResponse struct {
 }
 
 func (s *AddOrderNotesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod AddOrderNotesResponse
-	raw := noMethod(*s)
+	type NoMethod AddOrderNotesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -530,8 +539,8 @@ type BillingInfo struct {
 }
 
 func (s *BillingInfo) MarshalJSON() ([]byte, error) {
-	type noMethod BillingInfo
-	raw := noMethod(*s)
+	type NoMethod BillingInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -567,8 +576,8 @@ type BillingInfoList struct {
 }
 
 func (s *BillingInfoList) MarshalJSON() ([]byte, error) {
-	type noMethod BillingInfoList
-	raw := noMethod(*s)
+	type NoMethod BillingInfoList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -619,8 +628,8 @@ type Budget struct {
 }
 
 func (s *Budget) MarshalJSON() ([]byte, error) {
-	type noMethod Budget
-	raw := noMethod(*s)
+	type NoMethod Budget
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -646,8 +655,8 @@ type Buyer struct {
 }
 
 func (s *Buyer) MarshalJSON() ([]byte, error) {
-	type noMethod Buyer
-	raw := noMethod(*s)
+	type NoMethod Buyer
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -676,8 +685,8 @@ type ContactInformation struct {
 }
 
 func (s *ContactInformation) MarshalJSON() ([]byte, error) {
-	type noMethod ContactInformation
-	raw := noMethod(*s)
+	type NoMethod ContactInformation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -706,8 +715,8 @@ type CreateOrdersRequest struct {
 }
 
 func (s *CreateOrdersRequest) MarshalJSON() ([]byte, error) {
-	type noMethod CreateOrdersRequest
-	raw := noMethod(*s)
+	type NoMethod CreateOrdersRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -737,15 +746,16 @@ type CreateOrdersResponse struct {
 }
 
 func (s *CreateOrdersResponse) MarshalJSON() ([]byte, error) {
-	type noMethod CreateOrdersResponse
-	raw := noMethod(*s)
+	type NoMethod CreateOrdersResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // Creative: A creative and its classification data.
 type Creative struct {
 	// HTMLSnippet: The HTML snippet that displays the ad when inserted in
-	// the web page. If set, videoURL should not be set.
+	// the web page. If set, videoURL, videoVastXML, and nativeAd should not
+	// be set.
 	HTMLSnippet string `json:"HTMLSnippet,omitempty"`
 
 	// AccountId: Account id.
@@ -818,9 +828,9 @@ type Creative struct {
 	// field should not be set in requests.
 	Languages []string `json:"languages,omitempty"`
 
-	// NativeAd: If nativeAd is set, HTMLSnippet and the videoURL outside of
-	// nativeAd should not be set. (The videoURL inside nativeAd can be
-	// set.)
+	// NativeAd: If nativeAd is set, HTMLSnippet, videoVastXML, and the
+	// videoURL outside of nativeAd should not be set. (The videoURL inside
+	// nativeAd can be set.)
 	NativeAd *CreativeNativeAd `json:"nativeAd,omitempty"`
 
 	// OpenAuctionStatus: Top-level open auction status. Read-only. This
@@ -865,10 +875,15 @@ type Creative struct {
 	// not be set in requests.
 	Version int64 `json:"version,omitempty"`
 
-	// VideoURL: The URL to fetch a video ad. If set, HTMLSnippet and the
-	// nativeAd should not be set. Note, this is different from
-	// resource.native_ad.video_url above.
+	// VideoURL: The URL to fetch a video ad. If set, HTMLSnippet,
+	// videoVastXML, and nativeAd should not be set. Note, this is different
+	// from resource.native_ad.video_url above.
 	VideoURL string `json:"videoURL,omitempty"`
+
+	// VideoVastXML: The contents of a VAST document for a video ad. This
+	// document should conform to the VAST 2.0 or 3.0 standard. If set,
+	// HTMLSnippet, videoURL, and nativeAd and should not be set.
+	VideoVastXML string `json:"videoVastXML,omitempty"`
 
 	// Width: Ad width.
 	Width int64 `json:"width,omitempty"`
@@ -895,8 +910,8 @@ type Creative struct {
 }
 
 func (s *Creative) MarshalJSON() ([]byte, error) {
-	type noMethod Creative
-	raw := noMethod(*s)
+	type NoMethod Creative
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -929,8 +944,8 @@ type CreativeCorrections struct {
 }
 
 func (s *CreativeCorrections) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeCorrections
-	raw := noMethod(*s)
+	type NoMethod CreativeCorrections
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -969,8 +984,8 @@ type CreativeCorrectionsContexts struct {
 }
 
 func (s *CreativeCorrectionsContexts) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeCorrectionsContexts
-	raw := noMethod(*s)
+	type NoMethod CreativeCorrectionsContexts
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1002,8 +1017,8 @@ type CreativeFilteringReasons struct {
 }
 
 func (s *CreativeFilteringReasons) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeFilteringReasons
-	raw := noMethod(*s)
+	type NoMethod CreativeFilteringReasons
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1036,14 +1051,14 @@ type CreativeFilteringReasonsReasons struct {
 }
 
 func (s *CreativeFilteringReasonsReasons) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeFilteringReasonsReasons
-	raw := noMethod(*s)
+	type NoMethod CreativeFilteringReasonsReasons
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// CreativeNativeAd: If nativeAd is set, HTMLSnippet and the videoURL
-// outside of nativeAd should not be set. (The videoURL inside nativeAd
-// can be set.)
+// CreativeNativeAd: If nativeAd is set, HTMLSnippet, videoVastXML, and
+// the videoURL outside of nativeAd should not be set. (The videoURL
+// inside nativeAd can be set.)
 type CreativeNativeAd struct {
 	Advertiser string `json:"advertiser,omitempty"`
 
@@ -1110,18 +1125,18 @@ type CreativeNativeAd struct {
 }
 
 func (s *CreativeNativeAd) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeNativeAd
-	raw := noMethod(*s)
+	type NoMethod CreativeNativeAd
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *CreativeNativeAd) UnmarshalJSON(data []byte) error {
-	type noMethod CreativeNativeAd
+	type NoMethod CreativeNativeAd
 	var s1 struct {
 		StarRating gensupport.JSONFloat64 `json:"starRating"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -1155,8 +1170,8 @@ type CreativeNativeAdAppIcon struct {
 }
 
 func (s *CreativeNativeAdAppIcon) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeNativeAdAppIcon
-	raw := noMethod(*s)
+	type NoMethod CreativeNativeAdAppIcon
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1186,8 +1201,8 @@ type CreativeNativeAdImage struct {
 }
 
 func (s *CreativeNativeAdImage) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeNativeAdImage
-	raw := noMethod(*s)
+	type NoMethod CreativeNativeAdImage
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1217,8 +1232,8 @@ type CreativeNativeAdLogo struct {
 }
 
 func (s *CreativeNativeAdLogo) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeNativeAdLogo
-	raw := noMethod(*s)
+	type NoMethod CreativeNativeAdLogo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1256,8 +1271,8 @@ type CreativeServingRestrictions struct {
 }
 
 func (s *CreativeServingRestrictions) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeServingRestrictions
-	raw := noMethod(*s)
+	type NoMethod CreativeServingRestrictions
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1298,8 +1313,8 @@ type CreativeServingRestrictionsContexts struct {
 }
 
 func (s *CreativeServingRestrictionsContexts) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeServingRestrictionsContexts
-	raw := noMethod(*s)
+	type NoMethod CreativeServingRestrictionsContexts
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1328,8 +1343,8 @@ type CreativeServingRestrictionsDisapprovalReasons struct {
 }
 
 func (s *CreativeServingRestrictionsDisapprovalReasons) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeServingRestrictionsDisapprovalReasons
-	raw := noMethod(*s)
+	type NoMethod CreativeServingRestrictionsDisapprovalReasons
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1363,8 +1378,8 @@ type CreativeDealIds struct {
 }
 
 func (s *CreativeDealIds) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeDealIds
-	raw := noMethod(*s)
+	type NoMethod CreativeDealIds
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1396,8 +1411,8 @@ type CreativeDealIdsDealStatuses struct {
 }
 
 func (s *CreativeDealIdsDealStatuses) MarshalJSON() ([]byte, error) {
-	type noMethod CreativeDealIdsDealStatuses
-	raw := noMethod(*s)
+	type NoMethod CreativeDealIdsDealStatuses
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1438,8 +1453,8 @@ type CreativesList struct {
 }
 
 func (s *CreativesList) MarshalJSON() ([]byte, error) {
-	type noMethod CreativesList
-	raw := noMethod(*s)
+	type NoMethod CreativesList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1472,8 +1487,8 @@ type DealServingMetadata struct {
 }
 
 func (s *DealServingMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod DealServingMetadata
-	raw := noMethod(*s)
+	type NoMethod DealServingMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1513,8 +1528,8 @@ type DealServingMetadataDealPauseStatus struct {
 }
 
 func (s *DealServingMetadataDealPauseStatus) MarshalJSON() ([]byte, error) {
-	type noMethod DealServingMetadataDealPauseStatus
-	raw := noMethod(*s)
+	type NoMethod DealServingMetadataDealPauseStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1577,8 +1592,8 @@ type DealTerms struct {
 }
 
 func (s *DealTerms) MarshalJSON() ([]byte, error) {
-	type noMethod DealTerms
-	raw := noMethod(*s)
+	type NoMethod DealTerms
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1624,8 +1639,8 @@ type DealTermsGuaranteedFixedPriceTerms struct {
 }
 
 func (s *DealTermsGuaranteedFixedPriceTerms) MarshalJSON() ([]byte, error) {
-	type noMethod DealTermsGuaranteedFixedPriceTerms
-	raw := noMethod(*s)
+	type NoMethod DealTermsGuaranteedFixedPriceTerms
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1672,8 +1687,8 @@ type DealTermsGuaranteedFixedPriceTermsBillingInfo struct {
 }
 
 func (s *DealTermsGuaranteedFixedPriceTermsBillingInfo) MarshalJSON() ([]byte, error) {
-	type noMethod DealTermsGuaranteedFixedPriceTermsBillingInfo
-	raw := noMethod(*s)
+	type NoMethod DealTermsGuaranteedFixedPriceTermsBillingInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1706,8 +1721,8 @@ type DealTermsNonGuaranteedAuctionTerms struct {
 }
 
 func (s *DealTermsNonGuaranteedAuctionTerms) MarshalJSON() ([]byte, error) {
-	type noMethod DealTermsNonGuaranteedAuctionTerms
-	raw := noMethod(*s)
+	type NoMethod DealTermsNonGuaranteedAuctionTerms
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1733,8 +1748,8 @@ type DealTermsNonGuaranteedFixedPriceTerms struct {
 }
 
 func (s *DealTermsNonGuaranteedFixedPriceTerms) MarshalJSON() ([]byte, error) {
-	type noMethod DealTermsNonGuaranteedFixedPriceTerms
-	raw := noMethod(*s)
+	type NoMethod DealTermsNonGuaranteedFixedPriceTerms
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1765,8 +1780,8 @@ type DealTermsRubiconNonGuaranteedTerms struct {
 }
 
 func (s *DealTermsRubiconNonGuaranteedTerms) MarshalJSON() ([]byte, error) {
-	type noMethod DealTermsRubiconNonGuaranteedTerms
-	raw := noMethod(*s)
+	type NoMethod DealTermsRubiconNonGuaranteedTerms
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1798,8 +1813,8 @@ type DeleteOrderDealsRequest struct {
 }
 
 func (s *DeleteOrderDealsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteOrderDealsRequest
-	raw := noMethod(*s)
+	type NoMethod DeleteOrderDealsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1833,8 +1848,8 @@ type DeleteOrderDealsResponse struct {
 }
 
 func (s *DeleteOrderDealsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod DeleteOrderDealsResponse
-	raw := noMethod(*s)
+	type NoMethod DeleteOrderDealsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1865,8 +1880,8 @@ type DeliveryControl struct {
 }
 
 func (s *DeliveryControl) MarshalJSON() ([]byte, error) {
-	type noMethod DeliveryControl
-	raw := noMethod(*s)
+	type NoMethod DeliveryControl
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1896,8 +1911,8 @@ type DeliveryControlFrequencyCap struct {
 }
 
 func (s *DeliveryControlFrequencyCap) MarshalJSON() ([]byte, error) {
-	type noMethod DeliveryControlFrequencyCap
-	raw := noMethod(*s)
+	type NoMethod DeliveryControlFrequencyCap
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1927,8 +1942,8 @@ type Dimension struct {
 }
 
 func (s *Dimension) MarshalJSON() ([]byte, error) {
-	type noMethod Dimension
-	raw := noMethod(*s)
+	type NoMethod Dimension
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1966,8 +1981,8 @@ type DimensionDimensionValue struct {
 }
 
 func (s *DimensionDimensionValue) MarshalJSON() ([]byte, error) {
-	type noMethod DimensionDimensionValue
-	raw := noMethod(*s)
+	type NoMethod DimensionDimensionValue
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2016,8 +2031,8 @@ type EditAllOrderDealsRequest struct {
 }
 
 func (s *EditAllOrderDealsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod EditAllOrderDealsRequest
-	raw := noMethod(*s)
+	type NoMethod EditAllOrderDealsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2051,8 +2066,8 @@ type EditAllOrderDealsResponse struct {
 }
 
 func (s *EditAllOrderDealsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod EditAllOrderDealsResponse
-	raw := noMethod(*s)
+	type NoMethod EditAllOrderDealsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2082,8 +2097,8 @@ type GetOffersResponse struct {
 }
 
 func (s *GetOffersResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetOffersResponse
-	raw := noMethod(*s)
+	type NoMethod GetOffersResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2113,8 +2128,8 @@ type GetOrderDealsResponse struct {
 }
 
 func (s *GetOrderDealsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetOrderDealsResponse
-	raw := noMethod(*s)
+	type NoMethod GetOrderDealsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2147,8 +2162,8 @@ type GetOrderNotesResponse struct {
 }
 
 func (s *GetOrderNotesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetOrderNotesResponse
-	raw := noMethod(*s)
+	type NoMethod GetOrderNotesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2178,8 +2193,8 @@ type GetOrdersResponse struct {
 }
 
 func (s *GetOrdersResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetOrdersResponse
-	raw := noMethod(*s)
+	type NoMethod GetOrdersResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2209,8 +2224,8 @@ type GetPublisherProfilesByAccountIdResponse struct {
 }
 
 func (s *GetPublisherProfilesByAccountIdResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetPublisherProfilesByAccountIdResponse
-	raw := noMethod(*s)
+	type NoMethod GetPublisherProfilesByAccountIdResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2336,8 +2351,8 @@ type MarketplaceDeal struct {
 }
 
 func (s *MarketplaceDeal) MarshalJSON() ([]byte, error) {
-	type noMethod MarketplaceDeal
-	raw := noMethod(*s)
+	type NoMethod MarketplaceDeal
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2368,8 +2383,8 @@ type MarketplaceDealParty struct {
 }
 
 func (s *MarketplaceDealParty) MarshalJSON() ([]byte, error) {
-	type noMethod MarketplaceDealParty
-	raw := noMethod(*s)
+	type NoMethod MarketplaceDealParty
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2405,8 +2420,8 @@ type MarketplaceLabel struct {
 }
 
 func (s *MarketplaceLabel) MarshalJSON() ([]byte, error) {
-	type noMethod MarketplaceLabel
-	raw := noMethod(*s)
+	type NoMethod MarketplaceLabel
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2460,8 +2475,8 @@ type MarketplaceNote struct {
 }
 
 func (s *MarketplaceNote) MarshalJSON() ([]byte, error) {
-	type noMethod MarketplaceNote
-	raw := noMethod(*s)
+	type NoMethod MarketplaceNote
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2569,13 +2584,13 @@ type PerformanceReport struct {
 }
 
 func (s *PerformanceReport) MarshalJSON() ([]byte, error) {
-	type noMethod PerformanceReport
-	raw := noMethod(*s)
+	type NoMethod PerformanceReport
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *PerformanceReport) UnmarshalJSON(data []byte) error {
-	type noMethod PerformanceReport
+	type NoMethod PerformanceReport
 	var s1 struct {
 		BidRate                 gensupport.JSONFloat64 `json:"bidRate"`
 		BidRequestRate          gensupport.JSONFloat64 `json:"bidRequestRate"`
@@ -2592,9 +2607,9 @@ func (s *PerformanceReport) UnmarshalJSON(data []byte) error {
 		QuotaThrottledLimit     gensupport.JSONFloat64 `json:"quotaThrottledLimit"`
 		SuccessfulRequestRate   gensupport.JSONFloat64 `json:"successfulRequestRate"`
 		UnsuccessfulRequestRate gensupport.JSONFloat64 `json:"unsuccessfulRequestRate"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -2648,8 +2663,8 @@ type PerformanceReportList struct {
 }
 
 func (s *PerformanceReportList) MarshalJSON() ([]byte, error) {
-	type noMethod PerformanceReportList
-	raw := noMethod(*s)
+	type NoMethod PerformanceReportList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2791,8 +2806,8 @@ type PretargetingConfig struct {
 }
 
 func (s *PretargetingConfig) MarshalJSON() ([]byte, error) {
-	type noMethod PretargetingConfig
-	raw := noMethod(*s)
+	type NoMethod PretargetingConfig
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2821,8 +2836,8 @@ type PretargetingConfigDimensions struct {
 }
 
 func (s *PretargetingConfigDimensions) MarshalJSON() ([]byte, error) {
-	type noMethod PretargetingConfigDimensions
-	raw := noMethod(*s)
+	type NoMethod PretargetingConfigDimensions
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2853,8 +2868,8 @@ type PretargetingConfigExcludedPlacements struct {
 }
 
 func (s *PretargetingConfigExcludedPlacements) MarshalJSON() ([]byte, error) {
-	type noMethod PretargetingConfigExcludedPlacements
-	raw := noMethod(*s)
+	type NoMethod PretargetingConfigExcludedPlacements
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2885,8 +2900,8 @@ type PretargetingConfigPlacements struct {
 }
 
 func (s *PretargetingConfigPlacements) MarshalJSON() ([]byte, error) {
-	type noMethod PretargetingConfigPlacements
-	raw := noMethod(*s)
+	type NoMethod PretargetingConfigPlacements
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2921,8 +2936,8 @@ type PretargetingConfigVideoPlayerSizes struct {
 }
 
 func (s *PretargetingConfigVideoPlayerSizes) MarshalJSON() ([]byte, error) {
-	type noMethod PretargetingConfigVideoPlayerSizes
-	raw := noMethod(*s)
+	type NoMethod PretargetingConfigVideoPlayerSizes
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2955,8 +2970,8 @@ type PretargetingConfigList struct {
 }
 
 func (s *PretargetingConfigList) MarshalJSON() ([]byte, error) {
-	type noMethod PretargetingConfigList
-	raw := noMethod(*s)
+	type NoMethod PretargetingConfigList
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2991,19 +3006,19 @@ type Price struct {
 }
 
 func (s *Price) MarshalJSON() ([]byte, error) {
-	type noMethod Price
-	raw := noMethod(*s)
+	type NoMethod Price
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *Price) UnmarshalJSON(data []byte) error {
-	type noMethod Price
+	type NoMethod Price
 	var s1 struct {
 		AmountMicros      gensupport.JSONFloat64 `json:"amountMicros"`
 		ExpectedCpmMicros gensupport.JSONFloat64 `json:"expectedCpmMicros"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -3050,8 +3065,8 @@ type PricePerBuyer struct {
 }
 
 func (s *PricePerBuyer) MarshalJSON() ([]byte, error) {
-	type noMethod PricePerBuyer
-	raw := noMethod(*s)
+	type NoMethod PricePerBuyer
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3078,8 +3093,8 @@ type PrivateData struct {
 }
 
 func (s *PrivateData) MarshalJSON() ([]byte, error) {
-	type noMethod PrivateData
-	raw := noMethod(*s)
+	type NoMethod PrivateData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3228,8 +3243,8 @@ type Product struct {
 }
 
 func (s *Product) MarshalJSON() ([]byte, error) {
-	type noMethod Product
-	raw := noMethod(*s)
+	type NoMethod Product
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3355,8 +3370,8 @@ type Proposal struct {
 }
 
 func (s *Proposal) MarshalJSON() ([]byte, error) {
-	type noMethod Proposal
-	raw := noMethod(*s)
+	type NoMethod Proposal
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3455,8 +3470,8 @@ type PublisherProfileApiProto struct {
 }
 
 func (s *PublisherProfileApiProto) MarshalJSON() ([]byte, error) {
-	type noMethod PublisherProfileApiProto
-	raw := noMethod(*s)
+	type NoMethod PublisherProfileApiProto
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3490,8 +3505,8 @@ type PublisherProvidedForecast struct {
 }
 
 func (s *PublisherProvidedForecast) MarshalJSON() ([]byte, error) {
-	type noMethod PublisherProvidedForecast
-	raw := noMethod(*s)
+	type NoMethod PublisherProvidedForecast
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3522,8 +3537,8 @@ type Seller struct {
 }
 
 func (s *Seller) MarshalJSON() ([]byte, error) {
-	type noMethod Seller
-	raw := noMethod(*s)
+	type NoMethod Seller
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3557,8 +3572,8 @@ type SharedTargeting struct {
 }
 
 func (s *SharedTargeting) MarshalJSON() ([]byte, error) {
-	type noMethod SharedTargeting
-	raw := noMethod(*s)
+	type NoMethod SharedTargeting
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3569,6 +3584,10 @@ type TargetingValue struct {
 	// DayPartTargetingValue: The daypart targeting to include / exclude.
 	// Filled in when the key is GOOG_DAYPART_TARGETING.
 	DayPartTargetingValue *TargetingValueDayPartTargeting `json:"dayPartTargetingValue,omitempty"`
+
+	DemogAgeCriteriaValue *TargetingValueDemogAgeCriteria `json:"demogAgeCriteriaValue,omitempty"`
+
+	DemogGenderCriteriaValue *TargetingValueDemogGenderCriteria `json:"demogGenderCriteriaValue,omitempty"`
 
 	// LongValue: The long value to exclude/include.
 	LongValue int64 `json:"longValue,omitempty,string"`
@@ -3595,12 +3614,16 @@ type TargetingValue struct {
 }
 
 func (s *TargetingValue) MarshalJSON() ([]byte, error) {
-	type noMethod TargetingValue
-	raw := noMethod(*s)
+	type NoMethod TargetingValue
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// TargetingValueCreativeSize: Next Id: 7
 type TargetingValueCreativeSize struct {
+	// AllowedFormats: The formats allowed by the publisher.
+	AllowedFormats []string `json:"allowedFormats,omitempty"`
+
 	// CompanionSizes: For video size type, the list of companion sizes.
 	CompanionSizes []*TargetingValueSize `json:"companionSizes,omitempty"`
 
@@ -3617,7 +3640,7 @@ type TargetingValueCreativeSize struct {
 	// SkippableAdType: The skippable ad type for video size.
 	SkippableAdType string `json:"skippableAdType,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "CompanionSizes") to
+	// ForceSendFields is a list of field names (e.g. "AllowedFormats") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -3625,7 +3648,7 @@ type TargetingValueCreativeSize struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "CompanionSizes") to
+	// NullFields is a list of field names (e.g. "AllowedFormats") to
 	// include in API requests with the JSON null value. By default, fields
 	// with empty values are omitted from API requests. However, any field
 	// with an empty value appearing in NullFields will be sent to the
@@ -3636,8 +3659,8 @@ type TargetingValueCreativeSize struct {
 }
 
 func (s *TargetingValueCreativeSize) MarshalJSON() ([]byte, error) {
-	type noMethod TargetingValueCreativeSize
-	raw := noMethod(*s)
+	type NoMethod TargetingValueCreativeSize
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3664,8 +3687,8 @@ type TargetingValueDayPartTargeting struct {
 }
 
 func (s *TargetingValueDayPartTargeting) MarshalJSON() ([]byte, error) {
-	type noMethod TargetingValueDayPartTargeting
-	raw := noMethod(*s)
+	type NoMethod TargetingValueDayPartTargeting
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3698,8 +3721,63 @@ type TargetingValueDayPartTargetingDayPart struct {
 }
 
 func (s *TargetingValueDayPartTargetingDayPart) MarshalJSON() ([]byte, error) {
-	type noMethod TargetingValueDayPartTargetingDayPart
-	raw := noMethod(*s)
+	type NoMethod TargetingValueDayPartTargetingDayPart
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type TargetingValueDemogAgeCriteria struct {
+	DemogAgeCriteriaIds []string `json:"demogAgeCriteriaIds,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DemogAgeCriteriaIds")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DemogAgeCriteriaIds") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *TargetingValueDemogAgeCriteria) MarshalJSON() ([]byte, error) {
+	type NoMethod TargetingValueDemogAgeCriteria
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type TargetingValueDemogGenderCriteria struct {
+	DemogGenderCriteriaIds []string `json:"demogGenderCriteriaIds,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "DemogGenderCriteriaIds") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DemogGenderCriteriaIds")
+	// to include in API requests with the JSON null value. By default,
+	// fields with empty values are omitted from API requests. However, any
+	// field with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *TargetingValueDemogGenderCriteria) MarshalJSON() ([]byte, error) {
+	type NoMethod TargetingValueDemogGenderCriteria
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3728,8 +3806,8 @@ type TargetingValueSize struct {
 }
 
 func (s *TargetingValueSize) MarshalJSON() ([]byte, error) {
-	type noMethod TargetingValueSize
-	raw := noMethod(*s)
+	type NoMethod TargetingValueSize
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3766,8 +3844,8 @@ type UpdatePrivateAuctionProposalRequest struct {
 }
 
 func (s *UpdatePrivateAuctionProposalRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UpdatePrivateAuctionProposalRequest
-	raw := noMethod(*s)
+	type NoMethod UpdatePrivateAuctionProposalRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3878,7 +3956,7 @@ func (c *AccountsGetCall) Do(opts ...googleapi.CallOption) (*Account, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4011,7 +4089,7 @@ func (c *AccountsListCall) Do(opts ...googleapi.CallOption) (*AccountsList, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4139,7 +4217,7 @@ func (c *AccountsPatchCall) Do(opts ...googleapi.CallOption) (*Account, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4286,7 +4364,7 @@ func (c *AccountsUpdateCall) Do(opts ...googleapi.CallOption) (*Account, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4433,7 +4511,7 @@ func (c *BillingInfoGetCall) Do(opts ...googleapi.CallOption) (*BillingInfo, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4567,7 +4645,7 @@ func (c *BillingInfoListCall) Do(opts ...googleapi.CallOption) (*BillingInfoList
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4697,7 +4775,7 @@ func (c *BudgetGetCall) Do(opts ...googleapi.CallOption) (*Budget, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4841,7 +4919,7 @@ func (c *BudgetPatchCall) Do(opts ...googleapi.CallOption) (*Budget, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4988,7 +5066,7 @@ func (c *BudgetUpdateCall) Do(opts ...googleapi.CallOption) (*Budget, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5258,7 +5336,7 @@ func (c *CreativesGetCall) Do(opts ...googleapi.CallOption) (*Creative, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5391,7 +5469,7 @@ func (c *CreativesInsertCall) Do(opts ...googleapi.CallOption) (*Creative, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5587,7 +5665,7 @@ func (c *CreativesListCall) Do(opts ...googleapi.CallOption) (*CreativesList, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5799,7 +5877,7 @@ func (c *CreativesListDealsCall) Do(opts ...googleapi.CallOption) (*CreativeDeal
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6054,7 +6132,7 @@ func (c *MarketplacedealsDeleteCall) Do(opts ...googleapi.CallOption) (*DeleteOr
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6187,7 +6265,7 @@ func (c *MarketplacedealsInsertCall) Do(opts ...googleapi.CallOption) (*AddOrder
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6334,7 +6412,7 @@ func (c *MarketplacedealsListCall) Do(opts ...googleapi.CallOption) (*GetOrderDe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6470,7 +6548,7 @@ func (c *MarketplacedealsUpdateCall) Do(opts ...googleapi.CallOption) (*EditAllO
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6603,7 +6681,7 @@ func (c *MarketplacenotesInsertCall) Do(opts ...googleapi.CallOption) (*AddOrder
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6752,7 +6830,7 @@ func (c *MarketplacenotesListCall) Do(opts ...googleapi.CallOption) (*GetOrderNo
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7014,7 +7092,7 @@ func (c *PerformanceReportListCall) Do(opts ...googleapi.CallOption) (*Performan
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7289,7 +7367,7 @@ func (c *PretargetingConfigGetCall) Do(opts ...googleapi.CallOption) (*Pretarget
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7428,7 +7506,7 @@ func (c *PretargetingConfigInsertCall) Do(opts ...googleapi.CallOption) (*Pretar
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7570,7 +7648,7 @@ func (c *PretargetingConfigListCall) Do(opts ...googleapi.CallOption) (*Pretarge
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7705,7 +7783,7 @@ func (c *PretargetingConfigPatchCall) Do(opts ...googleapi.CallOption) (*Pretarg
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7850,7 +7928,7 @@ func (c *PretargetingConfigUpdateCall) Do(opts ...googleapi.CallOption) (*Pretar
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7999,7 +8077,7 @@ func (c *ProductsGetCall) Do(opts ...googleapi.CallOption) (*Product, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8138,7 +8216,7 @@ func (c *ProductsSearchCall) Do(opts ...googleapi.CallOption) (*GetOffersRespons
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8271,7 +8349,7 @@ func (c *ProposalsGetCall) Do(opts ...googleapi.CallOption) (*Proposal, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8396,7 +8474,7 @@ func (c *ProposalsInsertCall) Do(opts ...googleapi.CallOption) (*CreateOrdersRes
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8525,7 +8603,7 @@ func (c *ProposalsPatchCall) Do(opts ...googleapi.CallOption) (*Proposal, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8698,7 +8776,7 @@ func (c *ProposalsSearchCall) Do(opts ...googleapi.CallOption) (*GetOrdersRespon
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -8926,7 +9004,7 @@ func (c *ProposalsUpdateCall) Do(opts ...googleapi.CallOption) (*Proposal, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -9098,7 +9176,7 @@ func (c *PubprofilesListCall) Do(opts ...googleapi.CallOption) (*GetPublisherPro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil

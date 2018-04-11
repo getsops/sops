@@ -3,6 +3,7 @@
 package xray
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -35,12 +36,18 @@ const opBatchGetTraces = "BatchGetTraces"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/BatchGetTraces
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/BatchGetTraces
 func (c *XRay) BatchGetTracesRequest(input *BatchGetTracesInput) (req *request.Request, output *BatchGetTracesOutput) {
 	op := &request.Operation{
 		Name:       opBatchGetTraces,
 		HTTPMethod: "POST",
 		HTTPPath:   "/Traces",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -72,7 +79,7 @@ func (c *XRay) BatchGetTracesRequest(input *BatchGetTracesInput) (req *request.R
 //   * ErrCodeThrottledException "ThrottledException"
 //   The request exceeds the maximum number of requests per second.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/BatchGetTraces
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/BatchGetTraces
 func (c *XRay) BatchGetTraces(input *BatchGetTracesInput) (*BatchGetTracesOutput, error) {
 	req, out := c.BatchGetTracesRequest(input)
 	return out, req.Send()
@@ -92,6 +99,56 @@ func (c *XRay) BatchGetTracesWithContext(ctx aws.Context, input *BatchGetTracesI
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// BatchGetTracesPages iterates over the pages of a BatchGetTraces operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See BatchGetTraces method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a BatchGetTraces operation.
+//    pageNum := 0
+//    err := client.BatchGetTracesPages(params,
+//        func(page *BatchGetTracesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *XRay) BatchGetTracesPages(input *BatchGetTracesInput, fn func(*BatchGetTracesOutput, bool) bool) error {
+	return c.BatchGetTracesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// BatchGetTracesPagesWithContext same as BatchGetTracesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) BatchGetTracesPagesWithContext(ctx aws.Context, input *BatchGetTracesInput, fn func(*BatchGetTracesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *BatchGetTracesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.BatchGetTracesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*BatchGetTracesOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opGetServiceGraph = "GetServiceGraph"
@@ -119,12 +176,18 @@ const opGetServiceGraph = "GetServiceGraph"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetServiceGraph
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetServiceGraph
 func (c *XRay) GetServiceGraphRequest(input *GetServiceGraphInput) (req *request.Request, output *GetServiceGraphOutput) {
 	op := &request.Operation{
 		Name:       opGetServiceGraph,
 		HTTPMethod: "POST",
 		HTTPPath:   "/ServiceGraph",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -158,7 +221,7 @@ func (c *XRay) GetServiceGraphRequest(input *GetServiceGraphInput) (req *request
 //   * ErrCodeThrottledException "ThrottledException"
 //   The request exceeds the maximum number of requests per second.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetServiceGraph
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetServiceGraph
 func (c *XRay) GetServiceGraph(input *GetServiceGraphInput) (*GetServiceGraphOutput, error) {
 	req, out := c.GetServiceGraphRequest(input)
 	return out, req.Send()
@@ -178,6 +241,56 @@ func (c *XRay) GetServiceGraphWithContext(ctx aws.Context, input *GetServiceGrap
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// GetServiceGraphPages iterates over the pages of a GetServiceGraph operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetServiceGraph method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetServiceGraph operation.
+//    pageNum := 0
+//    err := client.GetServiceGraphPages(params,
+//        func(page *GetServiceGraphOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *XRay) GetServiceGraphPages(input *GetServiceGraphInput, fn func(*GetServiceGraphOutput, bool) bool) error {
+	return c.GetServiceGraphPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetServiceGraphPagesWithContext same as GetServiceGraphPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) GetServiceGraphPagesWithContext(ctx aws.Context, input *GetServiceGraphInput, fn func(*GetServiceGraphOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetServiceGraphInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetServiceGraphRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetServiceGraphOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opGetTraceGraph = "GetTraceGraph"
@@ -205,12 +318,18 @@ const opGetTraceGraph = "GetTraceGraph"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceGraph
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceGraph
 func (c *XRay) GetTraceGraphRequest(input *GetTraceGraphInput) (req *request.Request, output *GetTraceGraphOutput) {
 	op := &request.Operation{
 		Name:       opGetTraceGraph,
 		HTTPMethod: "POST",
 		HTTPPath:   "/TraceGraph",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -240,7 +359,7 @@ func (c *XRay) GetTraceGraphRequest(input *GetTraceGraphInput) (req *request.Req
 //   * ErrCodeThrottledException "ThrottledException"
 //   The request exceeds the maximum number of requests per second.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceGraph
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceGraph
 func (c *XRay) GetTraceGraph(input *GetTraceGraphInput) (*GetTraceGraphOutput, error) {
 	req, out := c.GetTraceGraphRequest(input)
 	return out, req.Send()
@@ -260,6 +379,56 @@ func (c *XRay) GetTraceGraphWithContext(ctx aws.Context, input *GetTraceGraphInp
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// GetTraceGraphPages iterates over the pages of a GetTraceGraph operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetTraceGraph method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetTraceGraph operation.
+//    pageNum := 0
+//    err := client.GetTraceGraphPages(params,
+//        func(page *GetTraceGraphOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *XRay) GetTraceGraphPages(input *GetTraceGraphInput, fn func(*GetTraceGraphOutput, bool) bool) error {
+	return c.GetTraceGraphPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetTraceGraphPagesWithContext same as GetTraceGraphPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) GetTraceGraphPagesWithContext(ctx aws.Context, input *GetTraceGraphInput, fn func(*GetTraceGraphOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetTraceGraphInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetTraceGraphRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetTraceGraphOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opGetTraceSummaries = "GetTraceSummaries"
@@ -287,12 +456,18 @@ const opGetTraceSummaries = "GetTraceSummaries"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceSummaries
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceSummaries
 func (c *XRay) GetTraceSummariesRequest(input *GetTraceSummariesInput) (req *request.Request, output *GetTraceSummariesOutput) {
 	op := &request.Operation{
 		Name:       opGetTraceSummaries,
 		HTTPMethod: "POST",
 		HTTPPath:   "/TraceSummaries",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -338,7 +513,7 @@ func (c *XRay) GetTraceSummariesRequest(input *GetTraceSummariesInput) (req *req
 //   * ErrCodeThrottledException "ThrottledException"
 //   The request exceeds the maximum number of requests per second.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceSummaries
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceSummaries
 func (c *XRay) GetTraceSummaries(input *GetTraceSummariesInput) (*GetTraceSummariesOutput, error) {
 	req, out := c.GetTraceSummariesRequest(input)
 	return out, req.Send()
@@ -358,6 +533,56 @@ func (c *XRay) GetTraceSummariesWithContext(ctx aws.Context, input *GetTraceSumm
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// GetTraceSummariesPages iterates over the pages of a GetTraceSummaries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetTraceSummaries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetTraceSummaries operation.
+//    pageNum := 0
+//    err := client.GetTraceSummariesPages(params,
+//        func(page *GetTraceSummariesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *XRay) GetTraceSummariesPages(input *GetTraceSummariesInput, fn func(*GetTraceSummariesOutput, bool) bool) error {
+	return c.GetTraceSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetTraceSummariesPagesWithContext same as GetTraceSummariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) GetTraceSummariesPagesWithContext(ctx aws.Context, input *GetTraceSummariesInput, fn func(*GetTraceSummariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetTraceSummariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetTraceSummariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetTraceSummariesOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opPutTelemetryRecords = "PutTelemetryRecords"
@@ -385,7 +610,7 @@ const opPutTelemetryRecords = "PutTelemetryRecords"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTelemetryRecords
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTelemetryRecords
 func (c *XRay) PutTelemetryRecordsRequest(input *PutTelemetryRecordsInput) (req *request.Request, output *PutTelemetryRecordsOutput) {
 	op := &request.Operation{
 		Name:       opPutTelemetryRecords,
@@ -420,7 +645,7 @@ func (c *XRay) PutTelemetryRecordsRequest(input *PutTelemetryRecordsInput) (req 
 //   * ErrCodeThrottledException "ThrottledException"
 //   The request exceeds the maximum number of requests per second.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTelemetryRecords
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTelemetryRecords
 func (c *XRay) PutTelemetryRecords(input *PutTelemetryRecordsInput) (*PutTelemetryRecordsOutput, error) {
 	req, out := c.PutTelemetryRecordsRequest(input)
 	return out, req.Send()
@@ -467,7 +692,7 @@ const opPutTraceSegments = "PutTraceSegments"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTraceSegments
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTraceSegments
 func (c *XRay) PutTraceSegmentsRequest(input *PutTraceSegmentsInput) (req *request.Request, output *PutTraceSegmentsOutput) {
 	op := &request.Operation{
 		Name:       opPutTraceSegments,
@@ -547,7 +772,7 @@ func (c *XRay) PutTraceSegmentsRequest(input *PutTraceSegmentsInput) (req *reque
 //   * ErrCodeThrottledException "ThrottledException"
 //   The request exceeds the maximum number of requests per second.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTraceSegments
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTraceSegments
 func (c *XRay) PutTraceSegments(input *PutTraceSegmentsInput) (*PutTraceSegmentsOutput, error) {
 	req, out := c.PutTraceSegmentsRequest(input)
 	return out, req.Send()
@@ -570,7 +795,6 @@ func (c *XRay) PutTraceSegmentsWithContext(ctx aws.Context, input *PutTraceSegme
 }
 
 // An alias for an edge.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/Alias
 type Alias struct {
 	_ struct{} `type:"structure"`
 
@@ -614,7 +838,6 @@ func (s *Alias) SetType(v string) *Alias {
 
 // Value of a segment annotation. Has one of three value types: Number, Boolean
 // or String.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/AnnotationValue
 type AnnotationValue struct {
 	_ struct{} `type:"structure"`
 
@@ -656,7 +879,6 @@ func (s *AnnotationValue) SetStringValue(v string) *AnnotationValue {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/BackendConnectionErrors
 type BackendConnectionErrors struct {
 	_ struct{} `type:"structure"`
 
@@ -719,7 +941,6 @@ func (s *BackendConnectionErrors) SetUnknownHostCount(v int64) *BackendConnectio
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/BatchGetTracesRequest
 type BatchGetTracesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -767,7 +988,6 @@ func (s *BatchGetTracesInput) SetTraceIds(v []*string) *BatchGetTracesInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/BatchGetTracesResult
 type BatchGetTracesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -810,7 +1030,6 @@ func (s *BatchGetTracesOutput) SetUnprocessedTraceIds(v []*string) *BatchGetTrac
 }
 
 // Information about a connection between two services.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/Edge
 type Edge struct {
 	_ struct{} `type:"structure"`
 
@@ -880,7 +1099,6 @@ func (s *Edge) SetSummaryStatistics(v *EdgeStatistics) *Edge {
 }
 
 // Response statistics for an edge.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/EdgeStatistics
 type EdgeStatistics struct {
 	_ struct{} `type:"structure"`
 
@@ -941,7 +1159,6 @@ func (s *EdgeStatistics) SetTotalResponseTime(v float64) *EdgeStatistics {
 }
 
 // Information about requests that failed with a 4xx Client Error status code.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/ErrorStatistics
 type ErrorStatistics struct {
 	_ struct{} `type:"structure"`
 
@@ -985,7 +1202,6 @@ func (s *ErrorStatistics) SetTotalCount(v int64) *ErrorStatistics {
 }
 
 // Information about requests that failed with a 5xx Server Error status code.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/FaultStatistics
 type FaultStatistics struct {
 	_ struct{} `type:"structure"`
 
@@ -1019,7 +1235,6 @@ func (s *FaultStatistics) SetTotalCount(v int64) *FaultStatistics {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetServiceGraphRequest
 type GetServiceGraphInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1081,7 +1296,6 @@ func (s *GetServiceGraphInput) SetStartTime(v time.Time) *GetServiceGraphInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetServiceGraphResult
 type GetServiceGraphOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1133,7 +1347,6 @@ func (s *GetServiceGraphOutput) SetStartTime(v time.Time) *GetServiceGraphOutput
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceGraphRequest
 type GetTraceGraphInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1181,7 +1394,6 @@ func (s *GetTraceGraphInput) SetTraceIds(v []*string) *GetTraceGraphInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceGraphResult
 type GetTraceGraphOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1214,7 +1426,6 @@ func (s *GetTraceGraphOutput) SetServices(v []*Service) *GetTraceGraphOutput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceSummariesRequest
 type GetTraceSummariesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1225,7 +1436,7 @@ type GetTraceSummariesInput struct {
 
 	// Specify a filter expression to retrieve trace summaries for services or requests
 	// that meet certain requirements.
-	FilterExpression *string `type:"string"`
+	FilterExpression *string `min:"1" type:"string"`
 
 	// Specify the pagination token returned by a previous request to retrieve the
 	// next page of results.
@@ -1255,6 +1466,9 @@ func (s *GetTraceSummariesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetTraceSummariesInput"}
 	if s.EndTime == nil {
 		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.FilterExpression != nil && len(*s.FilterExpression) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FilterExpression", 1))
 	}
 	if s.StartTime == nil {
 		invalidParams.Add(request.NewErrParamRequired("StartTime"))
@@ -1296,7 +1510,6 @@ func (s *GetTraceSummariesInput) SetStartTime(v time.Time) *GetTraceSummariesInp
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetTraceSummariesResult
 type GetTraceSummariesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1351,7 +1564,6 @@ func (s *GetTraceSummariesOutput) SetTracesProcessedCount(v int64) *GetTraceSumm
 
 // An entry in a histogram for a statistic. A histogram maps the range of observed
 // values on the X axis, and the prevalence of each value on the Y axis.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/HistogramEntry
 type HistogramEntry struct {
 	_ struct{} `type:"structure"`
 
@@ -1385,7 +1597,6 @@ func (s *HistogramEntry) SetValue(v float64) *HistogramEntry {
 }
 
 // Information about an HTTP request.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/Http
 type Http struct {
 	_ struct{} `type:"structure"`
 
@@ -1445,7 +1656,6 @@ func (s *Http) SetUserAgent(v string) *Http {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTelemetryRecordsRequest
 type PutTelemetryRecordsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1474,6 +1684,16 @@ func (s *PutTelemetryRecordsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PutTelemetryRecordsInput"}
 	if s.TelemetryRecords == nil {
 		invalidParams.Add(request.NewErrParamRequired("TelemetryRecords"))
+	}
+	if s.TelemetryRecords != nil {
+		for i, v := range s.TelemetryRecords {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "TelemetryRecords", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1506,7 +1726,6 @@ func (s *PutTelemetryRecordsInput) SetTelemetryRecords(v []*TelemetryRecord) *Pu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTelemetryRecordsResult
 type PutTelemetryRecordsOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -1521,7 +1740,6 @@ func (s PutTelemetryRecordsOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTraceSegmentsRequest
 type PutTraceSegmentsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1560,7 +1778,6 @@ func (s *PutTraceSegmentsInput) SetTraceSegmentDocuments(v []*string) *PutTraceS
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/PutTraceSegmentsResult
 type PutTraceSegmentsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1588,7 +1805,6 @@ func (s *PutTraceSegmentsOutput) SetUnprocessedTraceSegments(v []*UnprocessedTra
 // can be compiled from documents uploaded with PutTraceSegments, or an inferred
 // segment for a downstream service, generated from a subsegment sent by the
 // service that called it.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/Segment
 type Segment struct {
 	_ struct{} `type:"structure"`
 
@@ -1596,7 +1812,7 @@ type Segment struct {
 	Document *string `min:"1" type:"string"`
 
 	// The segment's ID.
-	Id *string `min:"16" type:"string"`
+	Id *string `type:"string"`
 }
 
 // String returns the string representation
@@ -1624,7 +1840,6 @@ func (s *Segment) SetId(v string) *Segment {
 // Information about an application that processed requests, users that made
 // requests, or downstream services, resources and applications that an application
 // used.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/Service
 type Service struct {
 	_ struct{} `type:"structure"`
 
@@ -1768,7 +1983,6 @@ func (s *Service) SetType(v string) *Service {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/ServiceId
 type ServiceId struct {
 	_ struct{} `type:"structure"`
 
@@ -1816,7 +2030,6 @@ func (s *ServiceId) SetType(v string) *ServiceId {
 }
 
 // Response statistics for a service.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/ServiceStatistics
 type ServiceStatistics struct {
 	_ struct{} `type:"structure"`
 
@@ -1876,7 +2089,6 @@ func (s *ServiceStatistics) SetTotalResponseTime(v float64) *ServiceStatistics {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/TelemetryRecord
 type TelemetryRecord struct {
 	_ struct{} `type:"structure"`
 
@@ -1890,7 +2102,8 @@ type TelemetryRecord struct {
 
 	SegmentsSpilloverCount *int64 `type:"integer"`
 
-	Timestamp *time.Time `type:"timestamp" timestampFormat:"unix"`
+	// Timestamp is a required field
+	Timestamp *time.Time `type:"timestamp" timestampFormat:"unix" required:"true"`
 }
 
 // String returns the string representation
@@ -1901,6 +2114,19 @@ func (s TelemetryRecord) String() string {
 // GoString returns the string representation
 func (s TelemetryRecord) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TelemetryRecord) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TelemetryRecord"}
+	if s.Timestamp == nil {
+		invalidParams.Add(request.NewErrParamRequired("Timestamp"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetBackendConnectionErrors sets the BackendConnectionErrors field's value.
@@ -1940,7 +2166,6 @@ func (s *TelemetryRecord) SetTimestamp(v time.Time) *TelemetryRecord {
 }
 
 // A collection of segment documents with matching trace IDs.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/Trace
 type Trace struct {
 	_ struct{} `type:"structure"`
 
@@ -1950,7 +2175,7 @@ type Trace struct {
 
 	// The unique identifier for the request that generated the trace's segments
 	// and subsegments.
-	Id *string `min:"35" type:"string"`
+	Id *string `min:"1" type:"string"`
 
 	// Segment documents for the segments and subsegments that comprise the trace.
 	Segments []*Segment `type:"list"`
@@ -1985,7 +2210,6 @@ func (s *Trace) SetSegments(v []*Segment) *Trace {
 }
 
 // Metadata generated from the segment documents in a trace.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/TraceSummary
 type TraceSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -2010,7 +2234,7 @@ type TraceSummary struct {
 
 	// The unique identifier for the request that generated the trace's segments
 	// and subsegments.
-	Id *string `min:"35" type:"string"`
+	Id *string `min:"1" type:"string"`
 
 	// One or more of the segment documents is in progress.
 	IsPartial *bool `type:"boolean"`
@@ -2105,7 +2329,6 @@ func (s *TraceSummary) SetUsers(v []*TraceUser) *TraceSummary {
 }
 
 // Information about a user recorded in segment documents.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/TraceUser
 type TraceUser struct {
 	_ struct{} `type:"structure"`
 
@@ -2139,7 +2362,6 @@ func (s *TraceUser) SetUserName(v string) *TraceUser {
 }
 
 // Information about a segment that failed processing.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/UnprocessedTraceSegment
 type UnprocessedTraceSegment struct {
 	_ struct{} `type:"structure"`
 
@@ -2182,7 +2404,6 @@ func (s *UnprocessedTraceSegment) SetMessage(v string) *UnprocessedTraceSegment 
 }
 
 // Information about a segment annotation.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/ValueWithServiceIds
 type ValueWithServiceIds struct {
 	_ struct{} `type:"structure"`
 

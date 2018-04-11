@@ -19,22 +19,22 @@ var _ = Describe("Slice", func() {
 			"b": Equal("b"),
 			"a": Equal("a"),
 		})
-		Ω(allElements).Should(m, "should match all elements")
-		Ω(missingElements).ShouldNot(m, "should fail with missing elements")
-		Ω(extraElements).ShouldNot(m, "should fail with extra elements")
-		Ω(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
-		Ω(nils).ShouldNot(m, "should fail with an uninitialized slice")
+		Expect(allElements).Should(m, "should match all elements")
+		Expect(missingElements).ShouldNot(m, "should fail with missing elements")
+		Expect(extraElements).ShouldNot(m, "should fail with extra elements")
+		Expect(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
+		Expect(nils).ShouldNot(m, "should fail with an uninitialized slice")
 
 		m = MatchAllElements(id, Elements{
 			"a": Equal("a"),
 			"b": Equal("fail"),
 		})
-		Ω(allElements).ShouldNot(m, "should run nested matchers")
+		Expect(allElements).ShouldNot(m, "should run nested matchers")
 
 		m = MatchAllElements(id, Elements{})
-		Ω(empty).Should(m, "should handle empty slices")
-		Ω(allElements).ShouldNot(m, "should handle only empty slices")
-		Ω(nils).Should(m, "should handle nil slices")
+		Expect(empty).Should(m, "should handle empty slices")
+		Expect(allElements).ShouldNot(m, "should handle only empty slices")
+		Expect(nils).Should(m, "should handle nil slices")
 	})
 
 	It("should ignore extra elements", func() {
@@ -42,11 +42,11 @@ var _ = Describe("Slice", func() {
 			"b": Equal("b"),
 			"a": Equal("a"),
 		})
-		Ω(allElements).Should(m, "should match all elements")
-		Ω(missingElements).ShouldNot(m, "should fail with missing elements")
-		Ω(extraElements).Should(m, "should ignore extra elements")
-		Ω(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
-		Ω(nils).ShouldNot(m, "should fail with an uninitialized slice")
+		Expect(allElements).Should(m, "should match all elements")
+		Expect(missingElements).ShouldNot(m, "should fail with missing elements")
+		Expect(extraElements).Should(m, "should ignore extra elements")
+		Expect(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
+		Expect(nils).ShouldNot(m, "should fail with an uninitialized slice")
 	})
 
 	It("should ignore missing elements", func() {
@@ -54,11 +54,11 @@ var _ = Describe("Slice", func() {
 			"a": Equal("a"),
 			"b": Equal("b"),
 		})
-		Ω(allElements).Should(m, "should match all elements")
-		Ω(missingElements).Should(m, "should ignore missing elements")
-		Ω(extraElements).ShouldNot(m, "should fail with extra elements")
-		Ω(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
-		Ω(nils).Should(m, "should ignore an uninitialized slice")
+		Expect(allElements).Should(m, "should match all elements")
+		Expect(missingElements).Should(m, "should ignore missing elements")
+		Expect(extraElements).ShouldNot(m, "should fail with extra elements")
+		Expect(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
+		Expect(nils).Should(m, "should ignore an uninitialized slice")
 	})
 
 	It("should ignore missing and extra elements", func() {
@@ -66,17 +66,17 @@ var _ = Describe("Slice", func() {
 			"a": Equal("a"),
 			"b": Equal("b"),
 		})
-		Ω(allElements).Should(m, "should match all elements")
-		Ω(missingElements).Should(m, "should ignore missing elements")
-		Ω(extraElements).Should(m, "should ignore extra elements")
-		Ω(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
-		Ω(nils).Should(m, "should ignore an uninitialized slice")
+		Expect(allElements).Should(m, "should match all elements")
+		Expect(missingElements).Should(m, "should ignore missing elements")
+		Expect(extraElements).Should(m, "should ignore extra elements")
+		Expect(duplicateElements).ShouldNot(m, "should fail with duplicate elements")
+		Expect(nils).Should(m, "should ignore an uninitialized slice")
 
 		m = MatchElements(id, IgnoreExtras|IgnoreMissing, Elements{
 			"a": Equal("a"),
 			"b": Equal("fail"),
 		})
-		Ω(allElements).ShouldNot(m, "should run nested matchers")
+		Expect(allElements).ShouldNot(m, "should run nested matchers")
 	})
 
 	Context("with elements that share a key", func() {
@@ -94,11 +94,11 @@ var _ = Describe("Slice", func() {
 				"a": ContainSubstring("1"),
 				"b": ContainSubstring("1"),
 			})
-			Ω(allElements).Should(m, "should match all elements")
-			Ω(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
-			Ω(extraElements).ShouldNot(m, "should reject with extra keys")
-			Ω(missingElements).ShouldNot(m, "should reject with missing keys")
-			Ω(nils).ShouldNot(m, "should fail with an uninitialized slice")
+			Expect(allElements).Should(m, "should match all elements")
+			Expect(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
+			Expect(extraElements).ShouldNot(m, "should reject with extra keys")
+			Expect(missingElements).ShouldNot(m, "should reject with missing keys")
+			Expect(nils).ShouldNot(m, "should fail with an uninitialized slice")
 		})
 
 		It("should ignore missing", func() {
@@ -106,11 +106,11 @@ var _ = Describe("Slice", func() {
 				"a": ContainSubstring("1"),
 				"b": ContainSubstring("1"),
 			})
-			Ω(allElements).Should(m, "should match all elements")
-			Ω(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
-			Ω(extraElements).ShouldNot(m, "should reject with extra keys")
-			Ω(missingElements).Should(m, "should allow missing keys")
-			Ω(nils).Should(m, "should allow an uninitialized slice")
+			Expect(allElements).Should(m, "should match all elements")
+			Expect(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
+			Expect(extraElements).ShouldNot(m, "should reject with extra keys")
+			Expect(missingElements).Should(m, "should allow missing keys")
+			Expect(nils).Should(m, "should allow an uninitialized slice")
 		})
 
 		It("should ignore extras", func() {
@@ -118,11 +118,11 @@ var _ = Describe("Slice", func() {
 				"a": ContainSubstring("1"),
 				"b": ContainSubstring("1"),
 			})
-			Ω(allElements).Should(m, "should match all elements")
-			Ω(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
-			Ω(extraElements).Should(m, "should allow extra keys")
-			Ω(missingElements).ShouldNot(m, "should reject missing keys")
-			Ω(nils).ShouldNot(m, "should reject an uninitialized slice")
+			Expect(allElements).Should(m, "should match all elements")
+			Expect(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
+			Expect(extraElements).Should(m, "should allow extra keys")
+			Expect(missingElements).ShouldNot(m, "should reject missing keys")
+			Expect(nils).ShouldNot(m, "should reject an uninitialized slice")
 		})
 
 		It("should ignore missing and extras", func() {
@@ -130,11 +130,11 @@ var _ = Describe("Slice", func() {
 				"a": ContainSubstring("1"),
 				"b": ContainSubstring("1"),
 			})
-			Ω(allElements).Should(m, "should match all elements")
-			Ω(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
-			Ω(extraElements).Should(m, "should allow extra keys")
-			Ω(missingElements).Should(m, "should allow missing keys")
-			Ω(nils).Should(m, "should allow an uninitialized slice")
+			Expect(allElements).Should(m, "should match all elements")
+			Expect(includingBadElements).ShouldNot(m, "should reject if a member fails the matcher")
+			Expect(extraElements).Should(m, "should allow extra keys")
+			Expect(missingElements).Should(m, "should allow missing keys")
+			Expect(nils).Should(m, "should allow an uninitialized slice")
 		})
 	})
 })

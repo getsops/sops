@@ -10,32 +10,32 @@ package number
 import (
 	"unicode/utf8"
 
-	"golang.org/x/text/internal"
+	"golang.org/x/text/internal/language/compact"
 	"golang.org/x/text/language"
 )
 
 // Info holds number formatting configuration data.
 type Info struct {
 	system   systemData // numbering system information
-	symIndex byte       // index to symbols
+	symIndex symOffset  // index to symbols
 }
 
 // InfoFromLangID returns a Info for the given compact language identifier and
 // numbering system identifier. If system is the empty string, the default
 // numbering system will be taken for that language.
-func InfoFromLangID(compactIndex int, numberSystem string) Info {
+func InfoFromLangID(compactIndex compact.ID, numberSystem string) Info {
 	p := langToDefaults[compactIndex]
 	// Lookup the entry for the language.
-	pSymIndex := byte(0) // Default: Latin, default symbols
+	pSymIndex := symOffset(0) // Default: Latin, default symbols
 	system, ok := systemMap[numberSystem]
 	if !ok {
 		// Take the value for the default numbering system. This is by far the
 		// most common case as an alternative numbering system is hardly used.
-		if p&0x80 == 0 {
+		if p&hasNonLatnMask == 0 { // Latn digits.
 			pSymIndex = p
-		} else {
+		} else { // Non-Latn or multiple numbering systems.
 			// Take the first entry from the alternatives list.
-			data := langToAlt[p&^0x80]
+			data := langToAlt[p&^hasNonLatnMask]
 			pSymIndex = data.symIndex
 			system = data.system
 		}
@@ -43,39 +43,41 @@ func InfoFromLangID(compactIndex int, numberSystem string) Info {
 		langIndex := compactIndex
 		ns := system
 	outerLoop:
-		for {
-			if p&0x80 == 0 {
+		for ; ; p = langToDefaults[langIndex] {
+			if p&hasNonLatnMask == 0 {
 				if ns == 0 {
 					// The index directly points to the symbol data.
 					pSymIndex = p
 					break
 				}
 				// Move to the parent and retry.
-				langIndex = int(internal.Parent[langIndex])
-			}
-			// The index points to a list of symbol data indexes.
-			for _, e := range langToAlt[p&^0x80:] {
-				if int(e.compactTag) != langIndex {
-					if langIndex == 0 {
-						// The CLDR root defines full symbol information for all
-						// numbering systems (even though mostly by means of
-						// aliases). This means that we will never fall back to
-						// the default of the language. Also, the loop is
-						// guaranteed to terminate as a consequence.
-						ns = numLatn
-						// Fall back to Latin and start from the original
-						// language. See
-						// http://unicode.org/reports/tr35/#Locale_Inheritance.
-						langIndex = compactIndex
-					} else {
+				langIndex = langIndex.Parent()
+			} else {
+				// The index points to a list of symbol data indexes.
+				for _, e := range langToAlt[p&^hasNonLatnMask:] {
+					if e.compactTag != langIndex {
+						if langIndex == 0 {
+							// The CLDR root defines full symbol information for
+							// all numbering systems (even though mostly by
+							// means of aliases). Fall back to the default entry
+							// for Latn if there is no data for the numbering
+							// system of this language.
+							if ns == 0 {
+								break
+							}
+							// Fall back to Latin and start from the original
+							// language. See
+							// http://unicode.org/reports/tr35/#Locale_Inheritance.
+							ns = numLatn
+							langIndex = compactIndex
+							continue outerLoop
+						}
 						// Fall back to parent.
-						langIndex = int(internal.Parent[langIndex])
+						langIndex = langIndex.Parent()
+					} else if e.system == ns {
+						pSymIndex = e.symIndex
+						break outerLoop
 					}
-					break
-				}
-				if e.system == ns {
-					pSymIndex = e.symIndex
-					break outerLoop
 				}
 			}
 		}
@@ -98,12 +100,7 @@ func InfoFromLangID(compactIndex int, numberSystem string) Info {
 
 // InfoFromTag returns a Info for the given language tag.
 func InfoFromTag(t language.Tag) Info {
-	for {
-		if index, ok := language.CompactIndex(t); ok {
-			return InfoFromLangID(index, t.TypeForKey("nu"))
-		}
-		t = t.Parent()
-	}
+	return InfoFromLangID(tagToID(t), t.TypeForKey("nu"))
 }
 
 // IsDecimal reports if the numbering system can convert decimal to native
@@ -146,9 +143,10 @@ func (n Info) Symbol(t SymbolType) string {
 }
 
 func formatForLang(t language.Tag, index []byte) *Pattern {
-	for ; ; t = t.Parent() {
-		if x, ok := language.CompactIndex(t); ok {
-			return &formats[index[x]]
-		}
-	}
+	return &formats[index[tagToID(t)]]
+}
+
+func tagToID(t language.Tag) compact.ID {
+	id, _ := compact.RegionalID(compact.Tag(t))
+	return id
 }
