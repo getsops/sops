@@ -53,7 +53,6 @@ func New(client *http.Client) (*Service, error) {
 	s.Analytics = NewAnalyticsService(s)
 	s.ClientMessages = NewClientMessagesService(s)
 	s.Companies = NewCompaniesService(s)
-	s.Exams = NewExamsService(s)
 	s.Leads = NewLeadsService(s)
 	s.Offers = NewOffersService(s)
 	s.UserEvents = NewUserEventsService(s)
@@ -73,8 +72,6 @@ type Service struct {
 	ClientMessages *ClientMessagesService
 
 	Companies *CompaniesService
-
-	Exams *ExamsService
 
 	Leads *LeadsService
 
@@ -132,15 +129,6 @@ func NewCompaniesLeadsService(s *Service) *CompaniesLeadsService {
 }
 
 type CompaniesLeadsService struct {
-	s *Service
-}
-
-func NewExamsService(s *Service) *ExamsService {
-	rs := &ExamsService{s: s}
-	return rs
-}
-
-type ExamsService struct {
 	s *Service
 }
 
@@ -238,8 +226,8 @@ type AdWordsManagerAccountInfo struct {
 }
 
 func (s *AdWordsManagerAccountInfo) MarshalJSON() ([]byte, error) {
-	type noMethod AdWordsManagerAccountInfo
-	raw := noMethod(*s)
+	type NoMethod AdWordsManagerAccountInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -279,8 +267,8 @@ type Analytics struct {
 }
 
 func (s *Analytics) MarshalJSON() ([]byte, error) {
-	type noMethod Analytics
-	raw := noMethod(*s)
+	type NoMethod Analytics
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -312,8 +300,8 @@ type AnalyticsDataPoint struct {
 }
 
 func (s *AnalyticsDataPoint) MarshalJSON() ([]byte, error) {
-	type noMethod AnalyticsDataPoint
-	raw := noMethod(*s)
+	type NoMethod AnalyticsDataPoint
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -352,8 +340,8 @@ type AnalyticsSummary struct {
 }
 
 func (s *AnalyticsSummary) MarshalJSON() ([]byte, error) {
-	type noMethod AnalyticsSummary
-	raw := noMethod(*s)
+	type NoMethod AnalyticsSummary
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -438,8 +426,8 @@ type AvailableOffer struct {
 }
 
 func (s *AvailableOffer) MarshalJSON() ([]byte, error) {
-	type noMethod AvailableOffer
-	raw := noMethod(*s)
+	type NoMethod AvailableOffer
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -492,8 +480,8 @@ type Certification struct {
 }
 
 func (s *Certification) MarshalJSON() ([]byte, error) {
-	type noMethod Certification
-	raw := noMethod(*s)
+	type NoMethod Certification
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -539,8 +527,8 @@ type CertificationExamStatus struct {
 }
 
 func (s *CertificationExamStatus) MarshalJSON() ([]byte, error) {
-	type noMethod CertificationExamStatus
-	raw := noMethod(*s)
+	type NoMethod CertificationExamStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -590,8 +578,8 @@ type CertificationStatus struct {
 }
 
 func (s *CertificationStatus) MarshalJSON() ([]byte, error) {
-	type noMethod CertificationStatus
-	raw := noMethod(*s)
+	type NoMethod CertificationStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -766,8 +754,8 @@ type Company struct {
 }
 
 func (s *Company) MarshalJSON() ([]byte, error) {
-	type noMethod Company
-	raw := noMethod(*s)
+	type NoMethod Company
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -889,8 +877,8 @@ type CompanyRelation struct {
 }
 
 func (s *CompanyRelation) MarshalJSON() ([]byte, error) {
-	type noMethod CompanyRelation
-	raw := noMethod(*s)
+	type NoMethod CompanyRelation
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -933,8 +921,8 @@ type CountryOfferInfo struct {
 }
 
 func (s *CountryOfferInfo) MarshalJSON() ([]byte, error) {
-	type noMethod CountryOfferInfo
-	raw := noMethod(*s)
+	type NoMethod CountryOfferInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -971,8 +959,8 @@ type CreateLeadRequest struct {
 }
 
 func (s *CreateLeadRequest) MarshalJSON() ([]byte, error) {
-	type noMethod CreateLeadRequest
-	raw := noMethod(*s)
+	type NoMethod CreateLeadRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1018,8 +1006,8 @@ type CreateLeadResponse struct {
 }
 
 func (s *CreateLeadResponse) MarshalJSON() ([]byte, error) {
-	type noMethod CreateLeadResponse
-	raw := noMethod(*s)
+	type NoMethod CreateLeadResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1068,8 +1056,8 @@ type Date struct {
 }
 
 func (s *Date) MarshalJSON() ([]byte, error) {
-	type noMethod Date
-	raw := noMethod(*s)
+	type NoMethod Date
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1102,8 +1090,8 @@ type DebugInfo struct {
 }
 
 func (s *DebugInfo) MarshalJSON() ([]byte, error) {
-	type noMethod DebugInfo
-	raw := noMethod(*s)
+	type NoMethod DebugInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1191,8 +1179,8 @@ type EventData struct {
 }
 
 func (s *EventData) MarshalJSON() ([]byte, error) {
-	type noMethod EventData
-	raw := noMethod(*s)
+	type NoMethod EventData
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1247,59 +1235,8 @@ type ExamStatus struct {
 }
 
 func (s *ExamStatus) MarshalJSON() ([]byte, error) {
-	type noMethod ExamStatus
-	raw := noMethod(*s)
-	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
-}
-
-// ExamToken: A token that allows a user to take an exam.
-type ExamToken struct {
-	// ExamId: The id of the exam the token is for.
-	ExamId int64 `json:"examId,omitempty,string"`
-
-	// ExamType: The type of the exam the token belongs to.
-	//
-	// Possible values:
-	//   "CERTIFICATION_EXAM_TYPE_UNSPECIFIED" - Unchosen.
-	//   "CET_ADWORDS_FUNDAMENTALS" - Adwords Fundamentals exam.
-	//   "CET_ADWORDS_ADVANCED_SEARCH" - AdWords advanced search exam.
-	//   "CET_ADWORDS_ADVANCED_DISPLAY" - AdWords advanced display exam.
-	//   "CET_VIDEO_ADS" - VideoAds exam.
-	//   "CET_DOUBLECLICK" - DoubleClick exam.
-	//   "CET_ANALYTICS" - Analytics exam.
-	//   "CET_SHOPPING" - Shopping exam.
-	//   "CET_MOBILE" - Mobile exam.
-	//   "CET_DIGITAL_SALES" - Digital Sales exam.
-	//   "CET_MOBILE_SITES" - Mobile Sites exam.
-	ExamType string `json:"examType,omitempty"`
-
-	// Token: The token, only present if the user has access to the exam.
-	Token string `json:"token,omitempty"`
-
-	// ServerResponse contains the HTTP response code and headers from the
-	// server.
-	googleapi.ServerResponse `json:"-"`
-
-	// ForceSendFields is a list of field names (e.g. "ExamId") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
-	ForceSendFields []string `json:"-"`
-
-	// NullFields is a list of field names (e.g. "ExamId") to include in API
-	// requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
-	// null. It is an error if a field in this list has a non-empty value.
-	// This may be used to include null fields in Patch requests.
-	NullFields []string `json:"-"`
-}
-
-func (s *ExamToken) MarshalJSON() ([]byte, error) {
-	type noMethod ExamToken
-	raw := noMethod(*s)
+	type NoMethod ExamStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1333,8 +1270,8 @@ type GetCompanyResponse struct {
 }
 
 func (s *GetCompanyResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetCompanyResponse
-	raw := noMethod(*s)
+	type NoMethod GetCompanyResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1367,8 +1304,8 @@ type GetPartnersStatusResponse struct {
 }
 
 func (s *GetPartnersStatusResponse) MarshalJSON() ([]byte, error) {
-	type noMethod GetPartnersStatusResponse
-	raw := noMethod(*s)
+	type NoMethod GetPartnersStatusResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1443,8 +1380,8 @@ type HistoricalOffer struct {
 }
 
 func (s *HistoricalOffer) MarshalJSON() ([]byte, error) {
-	type noMethod HistoricalOffer
-	raw := noMethod(*s)
+	type NoMethod HistoricalOffer
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1457,40 +1394,6 @@ func (s *HistoricalOffer) MarshalJSON() ([]byte, error) {
 // href="http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf">WGS84
 // st
 // andard</a>. Values must be within normalized ranges.
-//
-// Example of normalization code in Python:
-//
-//     def NormalizeLongitude(longitude):
-//       """Wraps decimal degrees longitude to [-180.0, 180.0]."""
-//       q, r = divmod(longitude, 360.0)
-//       if r > 180.0 or (r == 180.0 and q <= -1.0):
-//         return r - 360.0
-//       return r
-//
-//     def NormalizeLatLng(latitude, longitude):
-//       """Wraps decimal degrees latitude and longitude to
-//       [-90.0, 90.0] and [-180.0, 180.0], respectively."""
-//       r = latitude % 360.0
-//       if r <= 90.0:
-//         return r, NormalizeLongitude(longitude)
-//       elif r >= 270.0:
-//         return r - 360, NormalizeLongitude(longitude)
-//       else:
-//         return 180 - r, NormalizeLongitude(longitude + 180.0)
-//
-//     assert 180.0 == NormalizeLongitude(180.0)
-//     assert -180.0 == NormalizeLongitude(-180.0)
-//     assert -179.0 == NormalizeLongitude(181.0)
-//     assert (0.0, 0.0) == NormalizeLatLng(360.0, 0.0)
-//     assert (0.0, 0.0) == NormalizeLatLng(-360.0, 0.0)
-//     assert (85.0, 180.0) == NormalizeLatLng(95.0, 0.0)
-//     assert (-85.0, -170.0) == NormalizeLatLng(-95.0, 10.0)
-//     assert (90.0, 10.0) == NormalizeLatLng(90.0, 10.0)
-//     assert (-90.0, -10.0) == NormalizeLatLng(-90.0, -10.0)
-//     assert (0.0, -170.0) == NormalizeLatLng(-180.0, 10.0)
-//     assert (0.0, -170.0) == NormalizeLatLng(180.0, 10.0)
-//     assert (-90.0, 10.0) == NormalizeLatLng(270.0, 10.0)
-//     assert (90.0, 10.0) == NormalizeLatLng(-270.0, 10.0)
 type LatLng struct {
 	// Latitude: The latitude in degrees. It must be in the range [-90.0,
 	// +90.0].
@@ -1518,19 +1421,19 @@ type LatLng struct {
 }
 
 func (s *LatLng) MarshalJSON() ([]byte, error) {
-	type noMethod LatLng
-	raw := noMethod(*s)
+	type NoMethod LatLng
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *LatLng) UnmarshalJSON(data []byte) error {
-	type noMethod LatLng
+	type NoMethod LatLng
 	var s1 struct {
 		Latitude  gensupport.JSONFloat64 `json:"latitude"`
 		Longitude gensupport.JSONFloat64 `json:"longitude"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -1637,8 +1540,8 @@ type Lead struct {
 }
 
 func (s *Lead) MarshalJSON() ([]byte, error) {
-	type noMethod Lead
-	raw := noMethod(*s)
+	type NoMethod Lead
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1688,8 +1591,8 @@ type ListAnalyticsResponse struct {
 }
 
 func (s *ListAnalyticsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListAnalyticsResponse
-	raw := noMethod(*s)
+	type NoMethod ListAnalyticsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1732,8 +1635,8 @@ type ListCompaniesResponse struct {
 }
 
 func (s *ListCompaniesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListCompaniesResponse
-	raw := noMethod(*s)
+	type NoMethod ListCompaniesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1778,8 +1681,8 @@ type ListLeadsResponse struct {
 }
 
 func (s *ListLeadsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListLeadsResponse
-	raw := noMethod(*s)
+	type NoMethod ListLeadsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1830,8 +1733,8 @@ type ListOffersHistoryResponse struct {
 }
 
 func (s *ListOffersHistoryResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListOffersHistoryResponse
-	raw := noMethod(*s)
+	type NoMethod ListOffersHistoryResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1875,8 +1778,8 @@ type ListOffersResponse struct {
 }
 
 func (s *ListOffersResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListOffersResponse
-	raw := noMethod(*s)
+	type NoMethod ListOffersResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1918,8 +1821,8 @@ type ListUserStatesResponse struct {
 }
 
 func (s *ListUserStatesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListUserStatesResponse
-	raw := noMethod(*s)
+	type NoMethod ListUserStatesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1959,8 +1862,8 @@ type LocalizedCompanyInfo struct {
 }
 
 func (s *LocalizedCompanyInfo) MarshalJSON() ([]byte, error) {
-	type noMethod LocalizedCompanyInfo
-	raw := noMethod(*s)
+	type NoMethod LocalizedCompanyInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2024,8 +1927,8 @@ type Location struct {
 }
 
 func (s *Location) MarshalJSON() ([]byte, error) {
-	type noMethod Location
-	raw := noMethod(*s)
+	type NoMethod Location
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2070,8 +1973,8 @@ type LogMessageRequest struct {
 }
 
 func (s *LogMessageRequest) MarshalJSON() ([]byte, error) {
-	type noMethod LogMessageRequest
-	raw := noMethod(*s)
+	type NoMethod LogMessageRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2104,8 +2007,8 @@ type LogMessageResponse struct {
 }
 
 func (s *LogMessageResponse) MarshalJSON() ([]byte, error) {
-	type noMethod LogMessageResponse
-	raw := noMethod(*s)
+	type NoMethod LogMessageResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2419,6 +2322,10 @@ type LogUserEventRequest struct {
 	// Terms Of Service` button.
 	//   "SMB_ENTERED_WEBSITE_IN_CONTACT_PARTNER_FORM" - Advertiser entered
 	// website in contact form.
+	//   "AGENCY_SELECTED_OPT_IN_AFA_MIGRATION" - Agency opted in for
+	// migrating their exams to Academy for Ads.
+	//   "AGENCY_SELECTED_OPT_OUT_AFA_MIGRATION" - Agency opted out for
+	// migrating their exams to Academy for Ads.
 	EventAction string `json:"eventAction,omitempty"`
 
 	// EventCategory: The category the action belongs to.
@@ -2490,8 +2397,8 @@ type LogUserEventRequest struct {
 }
 
 func (s *LogUserEventRequest) MarshalJSON() ([]byte, error) {
-	type noMethod LogUserEventRequest
-	raw := noMethod(*s)
+	type NoMethod LogUserEventRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2524,8 +2431,8 @@ type LogUserEventResponse struct {
 }
 
 func (s *LogUserEventResponse) MarshalJSON() ([]byte, error) {
-	type noMethod LogUserEventResponse
-	raw := noMethod(*s)
+	type NoMethod LogUserEventResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2566,8 +2473,8 @@ type Money struct {
 }
 
 func (s *Money) MarshalJSON() ([]byte, error) {
-	type noMethod Money
-	raw := noMethod(*s)
+	type NoMethod Money
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2624,8 +2531,8 @@ type OfferCustomer struct {
 }
 
 func (s *OfferCustomer) MarshalJSON() ([]byte, error) {
-	type noMethod OfferCustomer
-	raw := noMethod(*s)
+	type NoMethod OfferCustomer
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2672,8 +2579,8 @@ type OptIns struct {
 }
 
 func (s *OptIns) MarshalJSON() ([]byte, error) {
-	type noMethod OptIns
-	raw := noMethod(*s)
+	type NoMethod OptIns
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2716,8 +2623,8 @@ type PublicProfile struct {
 }
 
 func (s *PublicProfile) MarshalJSON() ([]byte, error) {
-	type noMethod PublicProfile
-	raw := noMethod(*s)
+	type NoMethod PublicProfile
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2751,18 +2658,18 @@ type Rank struct {
 }
 
 func (s *Rank) MarshalJSON() ([]byte, error) {
-	type noMethod Rank
-	raw := noMethod(*s)
+	type NoMethod Rank
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *Rank) UnmarshalJSON(data []byte) error {
-	type noMethod Rank
+	type NoMethod Rank
 	var s1 struct {
 		Value gensupport.JSONFloat64 `json:"value"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -2798,8 +2705,8 @@ type RecaptchaChallenge struct {
 }
 
 func (s *RecaptchaChallenge) MarshalJSON() ([]byte, error) {
-	type noMethod RecaptchaChallenge
-	raw := noMethod(*s)
+	type NoMethod RecaptchaChallenge
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2840,8 +2747,8 @@ type RequestMetadata struct {
 }
 
 func (s *RequestMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod RequestMetadata
-	raw := noMethod(*s)
+	type NoMethod RequestMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2868,8 +2775,8 @@ type ResponseMetadata struct {
 }
 
 func (s *ResponseMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod ResponseMetadata
-	raw := noMethod(*s)
+	type NoMethod ResponseMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2918,8 +2825,8 @@ type SpecializationStatus struct {
 }
 
 func (s *SpecializationStatus) MarshalJSON() ([]byte, error) {
-	type noMethod SpecializationStatus
-	raw := noMethod(*s)
+	type NoMethod SpecializationStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -2958,8 +2865,8 @@ type TrafficSource struct {
 }
 
 func (s *TrafficSource) MarshalJSON() ([]byte, error) {
-	type noMethod TrafficSource
-	raw := noMethod(*s)
+	type NoMethod TrafficSource
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3045,8 +2952,8 @@ type User struct {
 }
 
 func (s *User) MarshalJSON() ([]byte, error) {
-	type noMethod User
-	raw := noMethod(*s)
+	type NoMethod User
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3079,8 +2986,8 @@ type UserOverrides struct {
 }
 
 func (s *UserOverrides) MarshalJSON() ([]byte, error) {
-	type noMethod UserOverrides
-	raw := noMethod(*s)
+	type NoMethod UserOverrides
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3129,6 +3036,10 @@ type UserProfile struct {
 	// interested in.
 	Markets []string `json:"markets,omitempty"`
 
+	// MigrateToAfa: Whether or not to migrate the user's exam data to
+	// Academy for Ads.
+	MigrateToAfa bool `json:"migrateToAfa,omitempty"`
+
 	// PhoneNumber: The user's phone number.
 	PhoneNumber string `json:"phoneNumber,omitempty"`
 
@@ -3162,8 +3073,8 @@ type UserProfile struct {
 }
 
 func (s *UserProfile) MarshalJSON() ([]byte, error) {
-	type noMethod UserProfile
-	raw := noMethod(*s)
+	type NoMethod UserProfile
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -3361,7 +3272,7 @@ func (c *AnalyticsListCall) Do(opts ...googleapi.CallOption) (*ListAnalyticsResp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -3546,7 +3457,7 @@ func (c *ClientMessagesLogCall) Do(opts ...googleapi.CallOption) (*LogMessageRes
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -3777,7 +3688,7 @@ func (c *CompaniesGetCall) Do(opts ...googleapi.CallOption) (*GetCompanyResponse
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4237,7 +4148,7 @@ func (c *CompaniesListCall) Do(opts ...googleapi.CallOption) (*ListCompaniesResp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4554,7 +4465,7 @@ func (c *CompaniesLeadsCreateCall) Do(opts ...googleapi.CallOption) (*CreateLead
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -4580,251 +4491,6 @@ func (c *CompaniesLeadsCreateCall) Do(opts ...googleapi.CallOption) (*CreateLead
 	//   },
 	//   "response": {
 	//     "$ref": "CreateLeadResponse"
-	//   }
-	// }
-
-}
-
-// method id "partners.exams.getToken":
-
-type ExamsGetTokenCall struct {
-	s            *Service
-	examType     string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-	header_      http.Header
-}
-
-// GetToken: Gets an Exam Token for a Partner's user to take an exam in
-// the Exams System
-func (r *ExamsService) GetToken(examType string) *ExamsGetTokenCall {
-	c := &ExamsGetTokenCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.examType = examType
-	return c
-}
-
-// RequestMetadataExperimentIds sets the optional parameter
-// "requestMetadata.experimentIds": Experiment IDs the current request
-// belongs to.
-func (c *ExamsGetTokenCall) RequestMetadataExperimentIds(requestMetadataExperimentIds ...string) *ExamsGetTokenCall {
-	c.urlParams_.SetMulti("requestMetadata.experimentIds", append([]string{}, requestMetadataExperimentIds...))
-	return c
-}
-
-// RequestMetadataLocale sets the optional parameter
-// "requestMetadata.locale": Locale to use for the current request.
-func (c *ExamsGetTokenCall) RequestMetadataLocale(requestMetadataLocale string) *ExamsGetTokenCall {
-	c.urlParams_.Set("requestMetadata.locale", requestMetadataLocale)
-	return c
-}
-
-// RequestMetadataPartnersSessionId sets the optional parameter
-// "requestMetadata.partnersSessionId": Google Partners session ID.
-func (c *ExamsGetTokenCall) RequestMetadataPartnersSessionId(requestMetadataPartnersSessionId string) *ExamsGetTokenCall {
-	c.urlParams_.Set("requestMetadata.partnersSessionId", requestMetadataPartnersSessionId)
-	return c
-}
-
-// RequestMetadataTrafficSourceTrafficSourceId sets the optional
-// parameter "requestMetadata.trafficSource.trafficSourceId": Identifier
-// to indicate where the traffic comes from.
-// An identifier has multiple letters created by a team which redirected
-// the
-// traffic to us.
-func (c *ExamsGetTokenCall) RequestMetadataTrafficSourceTrafficSourceId(requestMetadataTrafficSourceTrafficSourceId string) *ExamsGetTokenCall {
-	c.urlParams_.Set("requestMetadata.trafficSource.trafficSourceId", requestMetadataTrafficSourceTrafficSourceId)
-	return c
-}
-
-// RequestMetadataTrafficSourceTrafficSubId sets the optional parameter
-// "requestMetadata.trafficSource.trafficSubId": Second level identifier
-// to indicate where the traffic comes from.
-// An identifier has multiple letters created by a team which redirected
-// the
-// traffic to us.
-func (c *ExamsGetTokenCall) RequestMetadataTrafficSourceTrafficSubId(requestMetadataTrafficSourceTrafficSubId string) *ExamsGetTokenCall {
-	c.urlParams_.Set("requestMetadata.trafficSource.trafficSubId", requestMetadataTrafficSourceTrafficSubId)
-	return c
-}
-
-// RequestMetadataUserOverridesIpAddress sets the optional parameter
-// "requestMetadata.userOverrides.ipAddress": IP address to use instead
-// of the user's geo-located IP address.
-func (c *ExamsGetTokenCall) RequestMetadataUserOverridesIpAddress(requestMetadataUserOverridesIpAddress string) *ExamsGetTokenCall {
-	c.urlParams_.Set("requestMetadata.userOverrides.ipAddress", requestMetadataUserOverridesIpAddress)
-	return c
-}
-
-// RequestMetadataUserOverridesUserId sets the optional parameter
-// "requestMetadata.userOverrides.userId": Logged-in user ID to
-// impersonate instead of the user's ID.
-func (c *ExamsGetTokenCall) RequestMetadataUserOverridesUserId(requestMetadataUserOverridesUserId string) *ExamsGetTokenCall {
-	c.urlParams_.Set("requestMetadata.userOverrides.userId", requestMetadataUserOverridesUserId)
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ExamsGetTokenCall) Fields(s ...googleapi.Field) *ExamsGetTokenCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *ExamsGetTokenCall) IfNoneMatch(entityTag string) *ExamsGetTokenCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ExamsGetTokenCall) Context(ctx context.Context) *ExamsGetTokenCall {
-	c.ctx_ = ctx
-	return c
-}
-
-// Header returns an http.Header that can be modified by the caller to
-// add HTTP headers to the request.
-func (c *ExamsGetTokenCall) Header() http.Header {
-	if c.header_ == nil {
-		c.header_ = make(http.Header)
-	}
-	return c.header_
-}
-
-func (c *ExamsGetTokenCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	for k, v := range c.header_ {
-		reqHeaders[k] = v
-	}
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/exams/{examType}/token")
-	urls += "?" + c.urlParams_.Encode()
-	req, _ := http.NewRequest("GET", urls, body)
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"examType": c.examType,
-	})
-	return gensupport.SendRequest(c.ctx_, c.s.client, req)
-}
-
-// Do executes the "partners.exams.getToken" call.
-// Exactly one of *ExamToken or error will be non-nil. Any non-2xx
-// status code is an error. Response headers are in either
-// *ExamToken.ServerResponse.Header or (if a response was returned at
-// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
-// to check whether the returned error was because
-// http.StatusNotModified was returned.
-func (c *ExamsGetTokenCall) Do(opts ...googleapi.CallOption) (*ExamToken, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &ExamToken{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Gets an Exam Token for a Partner's user to take an exam in the Exams System",
-	//   "flatPath": "v2/exams/{examType}/token",
-	//   "httpMethod": "GET",
-	//   "id": "partners.exams.getToken",
-	//   "parameterOrder": [
-	//     "examType"
-	//   ],
-	//   "parameters": {
-	//     "examType": {
-	//       "description": "The exam type we are requesting a token for.",
-	//       "enum": [
-	//         "CERTIFICATION_EXAM_TYPE_UNSPECIFIED",
-	//         "CET_ADWORDS_FUNDAMENTALS",
-	//         "CET_ADWORDS_ADVANCED_SEARCH",
-	//         "CET_ADWORDS_ADVANCED_DISPLAY",
-	//         "CET_VIDEO_ADS",
-	//         "CET_DOUBLECLICK",
-	//         "CET_ANALYTICS",
-	//         "CET_SHOPPING",
-	//         "CET_MOBILE",
-	//         "CET_DIGITAL_SALES",
-	//         "CET_MOBILE_SITES"
-	//       ],
-	//       "location": "path",
-	//       "required": true,
-	//       "type": "string"
-	//     },
-	//     "requestMetadata.experimentIds": {
-	//       "description": "Experiment IDs the current request belongs to.",
-	//       "location": "query",
-	//       "repeated": true,
-	//       "type": "string"
-	//     },
-	//     "requestMetadata.locale": {
-	//       "description": "Locale to use for the current request.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "requestMetadata.partnersSessionId": {
-	//       "description": "Google Partners session ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "requestMetadata.trafficSource.trafficSourceId": {
-	//       "description": "Identifier to indicate where the traffic comes from.\nAn identifier has multiple letters created by a team which redirected the\ntraffic to us.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "requestMetadata.trafficSource.trafficSubId": {
-	//       "description": "Second level identifier to indicate where the traffic comes from.\nAn identifier has multiple letters created by a team which redirected the\ntraffic to us.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "requestMetadata.userOverrides.ipAddress": {
-	//       "description": "IP address to use instead of the user's geo-located IP address.",
-	//       "location": "query",
-	//       "type": "string"
-	//     },
-	//     "requestMetadata.userOverrides.userId": {
-	//       "description": "Logged-in user ID to impersonate instead of the user's ID.",
-	//       "location": "query",
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v2/exams/{examType}/token",
-	//   "response": {
-	//     "$ref": "ExamToken"
 	//   }
 	// }
 
@@ -5021,7 +4687,7 @@ func (c *LeadsListCall) Do(opts ...googleapi.CallOption) (*ListLeadsResponse, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5276,7 +4942,7 @@ func (c *OffersListCall) Do(opts ...googleapi.CallOption) (*ListOffersResponse, 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5528,7 +5194,7 @@ func (c *OffersHistoryListCall) Do(opts ...googleapi.CallOption) (*ListOffersHis
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5721,7 +5387,7 @@ func (c *UserEventsLogCall) Do(opts ...googleapi.CallOption) (*LogUserEventRespo
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -5905,7 +5571,7 @@ func (c *UserStatesListCall) Do(opts ...googleapi.CallOption) (*ListUserStatesRe
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6122,7 +5788,7 @@ func (c *UsersCreateCompanyRelationCall) Do(opts ...googleapi.CallOption) (*Comp
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6343,7 +6009,7 @@ func (c *UsersDeleteCompanyRelationCall) Do(opts ...googleapi.CallOption) (*Empt
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6586,7 +6252,7 @@ func (c *UsersGetCall) Do(opts ...googleapi.CallOption) (*User, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -6817,7 +6483,7 @@ func (c *UsersUpdateProfileCall) Do(opts ...googleapi.CallOption) (*UserProfile,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7041,7 +6707,7 @@ func (c *V2GetPartnersstatusCall) Do(opts ...googleapi.CallOption) (*GetPartners
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7262,7 +6928,7 @@ func (c *V2UpdateCompaniesCall) Do(opts ...googleapi.CallOption) (*Company, erro
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -7491,7 +7157,7 @@ func (c *V2UpdateLeadsCall) Do(opts ...googleapi.CallOption) (*Lead, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil

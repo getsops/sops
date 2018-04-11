@@ -7,10 +7,10 @@ import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
 import _ "google.golang.org/genproto/googleapis/api/annotations"
-import _ "google.golang.org/genproto/googleapis/longrunning"
-import _ "github.com/golang/protobuf/ptypes/duration"
+import google_longrunning "google.golang.org/genproto/googleapis/longrunning"
+import google_protobuf5 "github.com/golang/protobuf/ptypes/duration"
 import google_protobuf3 "github.com/golang/protobuf/ptypes/empty"
-import _ "github.com/golang/protobuf/ptypes/timestamp"
+import google_protobuf1 "github.com/golang/protobuf/ptypes/timestamp"
 
 import (
 	context "golang.org/x/net/context"
@@ -103,6 +103,53 @@ func (m *CreateTableRequest_Split) GetKey() []byte {
 	return nil
 }
 
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.CreateTableFromSnapshot][google.bigtable.admin.v2.BigtableTableAdmin.CreateTableFromSnapshot]
+type CreateTableFromSnapshotRequest struct {
+	// The unique name of the instance in which to create the table.
+	// Values are of the form `projects/<project>/instances/<instance>`.
+	Parent string `protobuf:"bytes,1,opt,name=parent" json:"parent,omitempty"`
+	// The name by which the new table should be referred to within the parent
+	// instance, e.g., `foobar` rather than `<parent>/tables/foobar`.
+	TableId string `protobuf:"bytes,2,opt,name=table_id,json=tableId" json:"table_id,omitempty"`
+	// The unique name of the snapshot from which to restore the table. The
+	// snapshot and the table must be in the same instance.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/clusters/<cluster>/snapshots/<snapshot>`.
+	SourceSnapshot string `protobuf:"bytes,3,opt,name=source_snapshot,json=sourceSnapshot" json:"source_snapshot,omitempty"`
+}
+
+func (m *CreateTableFromSnapshotRequest) Reset()                    { *m = CreateTableFromSnapshotRequest{} }
+func (m *CreateTableFromSnapshotRequest) String() string            { return proto.CompactTextString(m) }
+func (*CreateTableFromSnapshotRequest) ProtoMessage()               {}
+func (*CreateTableFromSnapshotRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+
+func (m *CreateTableFromSnapshotRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+func (m *CreateTableFromSnapshotRequest) GetTableId() string {
+	if m != nil {
+		return m.TableId
+	}
+	return ""
+}
+
+func (m *CreateTableFromSnapshotRequest) GetSourceSnapshot() string {
+	if m != nil {
+		return m.SourceSnapshot
+	}
+	return ""
+}
+
 // Request message for
 // [google.bigtable.admin.v2.BigtableTableAdmin.DropRowRange][google.bigtable.admin.v2.BigtableTableAdmin.DropRowRange]
 type DropRowRangeRequest struct {
@@ -121,7 +168,7 @@ type DropRowRangeRequest struct {
 func (m *DropRowRangeRequest) Reset()                    { *m = DropRowRangeRequest{} }
 func (m *DropRowRangeRequest) String() string            { return proto.CompactTextString(m) }
 func (*DropRowRangeRequest) ProtoMessage()               {}
-func (*DropRowRangeRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+func (*DropRowRangeRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
 
 type isDropRowRangeRequest_Target interface {
 	isDropRowRangeRequest_Target()
@@ -250,7 +297,7 @@ type ListTablesRequest struct {
 func (m *ListTablesRequest) Reset()                    { *m = ListTablesRequest{} }
 func (m *ListTablesRequest) String() string            { return proto.CompactTextString(m) }
 func (*ListTablesRequest) ProtoMessage()               {}
-func (*ListTablesRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
+func (*ListTablesRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{3} }
 
 func (m *ListTablesRequest) GetParent() string {
 	if m != nil {
@@ -287,7 +334,7 @@ type ListTablesResponse struct {
 func (m *ListTablesResponse) Reset()                    { *m = ListTablesResponse{} }
 func (m *ListTablesResponse) String() string            { return proto.CompactTextString(m) }
 func (*ListTablesResponse) ProtoMessage()               {}
-func (*ListTablesResponse) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{3} }
+func (*ListTablesResponse) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{4} }
 
 func (m *ListTablesResponse) GetTables() []*Table {
 	if m != nil {
@@ -318,7 +365,7 @@ type GetTableRequest struct {
 func (m *GetTableRequest) Reset()                    { *m = GetTableRequest{} }
 func (m *GetTableRequest) String() string            { return proto.CompactTextString(m) }
 func (*GetTableRequest) ProtoMessage()               {}
-func (*GetTableRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{4} }
+func (*GetTableRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{5} }
 
 func (m *GetTableRequest) GetName() string {
 	if m != nil {
@@ -346,7 +393,7 @@ type DeleteTableRequest struct {
 func (m *DeleteTableRequest) Reset()                    { *m = DeleteTableRequest{} }
 func (m *DeleteTableRequest) String() string            { return proto.CompactTextString(m) }
 func (*DeleteTableRequest) ProtoMessage()               {}
-func (*DeleteTableRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{5} }
+func (*DeleteTableRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{6} }
 
 func (m *DeleteTableRequest) GetName() string {
 	if m != nil {
@@ -372,7 +419,7 @@ type ModifyColumnFamiliesRequest struct {
 func (m *ModifyColumnFamiliesRequest) Reset()                    { *m = ModifyColumnFamiliesRequest{} }
 func (m *ModifyColumnFamiliesRequest) String() string            { return proto.CompactTextString(m) }
 func (*ModifyColumnFamiliesRequest) ProtoMessage()               {}
-func (*ModifyColumnFamiliesRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{6} }
+func (*ModifyColumnFamiliesRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{7} }
 
 func (m *ModifyColumnFamiliesRequest) GetName() string {
 	if m != nil {
@@ -407,7 +454,7 @@ func (m *ModifyColumnFamiliesRequest_Modification) Reset() {
 func (m *ModifyColumnFamiliesRequest_Modification) String() string { return proto.CompactTextString(m) }
 func (*ModifyColumnFamiliesRequest_Modification) ProtoMessage()    {}
 func (*ModifyColumnFamiliesRequest_Modification) Descriptor() ([]byte, []int) {
-	return fileDescriptor1, []int{6, 0}
+	return fileDescriptor1, []int{7, 0}
 }
 
 type isModifyColumnFamiliesRequest_Modification_Mod interface {
@@ -558,9 +605,410 @@ func _ModifyColumnFamiliesRequest_Modification_OneofSizer(msg proto.Message) (n 
 	return n
 }
 
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.GenerateConsistencyToken][google.bigtable.admin.v2.BigtableTableAdmin.GenerateConsistencyToken]
+type GenerateConsistencyTokenRequest struct {
+	// The unique name of the Table for which to create a consistency token.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/tables/<table>`.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+}
+
+func (m *GenerateConsistencyTokenRequest) Reset()                    { *m = GenerateConsistencyTokenRequest{} }
+func (m *GenerateConsistencyTokenRequest) String() string            { return proto.CompactTextString(m) }
+func (*GenerateConsistencyTokenRequest) ProtoMessage()               {}
+func (*GenerateConsistencyTokenRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{8} }
+
+func (m *GenerateConsistencyTokenRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Response message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.GenerateConsistencyToken][google.bigtable.admin.v2.BigtableTableAdmin.GenerateConsistencyToken]
+type GenerateConsistencyTokenResponse struct {
+	// The generated consistency token.
+	ConsistencyToken string `protobuf:"bytes,1,opt,name=consistency_token,json=consistencyToken" json:"consistency_token,omitempty"`
+}
+
+func (m *GenerateConsistencyTokenResponse) Reset()         { *m = GenerateConsistencyTokenResponse{} }
+func (m *GenerateConsistencyTokenResponse) String() string { return proto.CompactTextString(m) }
+func (*GenerateConsistencyTokenResponse) ProtoMessage()    {}
+func (*GenerateConsistencyTokenResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor1, []int{9}
+}
+
+func (m *GenerateConsistencyTokenResponse) GetConsistencyToken() string {
+	if m != nil {
+		return m.ConsistencyToken
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.CheckConsistency][google.bigtable.admin.v2.BigtableTableAdmin.CheckConsistency]
+type CheckConsistencyRequest struct {
+	// The unique name of the Table for which to check replication consistency.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/tables/<table>`.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	// The token created using GenerateConsistencyToken for the Table.
+	ConsistencyToken string `protobuf:"bytes,2,opt,name=consistency_token,json=consistencyToken" json:"consistency_token,omitempty"`
+}
+
+func (m *CheckConsistencyRequest) Reset()                    { *m = CheckConsistencyRequest{} }
+func (m *CheckConsistencyRequest) String() string            { return proto.CompactTextString(m) }
+func (*CheckConsistencyRequest) ProtoMessage()               {}
+func (*CheckConsistencyRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{10} }
+
+func (m *CheckConsistencyRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *CheckConsistencyRequest) GetConsistencyToken() string {
+	if m != nil {
+		return m.ConsistencyToken
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Response message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.CheckConsistency][google.bigtable.admin.v2.BigtableTableAdmin.CheckConsistency]
+type CheckConsistencyResponse struct {
+	// True only if the token is consistent. A token is consistent if replication
+	// has caught up with the restrictions specified in the request.
+	Consistent bool `protobuf:"varint,1,opt,name=consistent" json:"consistent,omitempty"`
+}
+
+func (m *CheckConsistencyResponse) Reset()                    { *m = CheckConsistencyResponse{} }
+func (m *CheckConsistencyResponse) String() string            { return proto.CompactTextString(m) }
+func (*CheckConsistencyResponse) ProtoMessage()               {}
+func (*CheckConsistencyResponse) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{11} }
+
+func (m *CheckConsistencyResponse) GetConsistent() bool {
+	if m != nil {
+		return m.Consistent
+	}
+	return false
+}
+
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.SnapshotTable][google.bigtable.admin.v2.BigtableTableAdmin.SnapshotTable]
+type SnapshotTableRequest struct {
+	// The unique name of the table to have the snapshot taken.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/tables/<table>`.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	// The name of the cluster where the snapshot will be created in.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/clusters/<cluster>`.
+	Cluster string `protobuf:"bytes,2,opt,name=cluster" json:"cluster,omitempty"`
+	// The ID by which the new snapshot should be referred to within the parent
+	// cluster, e.g., `mysnapshot` of the form: `[_a-zA-Z0-9][-_.a-zA-Z0-9]*`
+	// rather than
+	// `projects/<project>/instances/<instance>/clusters/<cluster>/snapshots/mysnapshot`.
+	SnapshotId string `protobuf:"bytes,3,opt,name=snapshot_id,json=snapshotId" json:"snapshot_id,omitempty"`
+	// The amount of time that the new snapshot can stay active after it is
+	// created. Once 'ttl' expires, the snapshot will get deleted. The maximum
+	// amount of time a snapshot can stay active is 7 days. If 'ttl' is not
+	// specified, the default value of 24 hours will be used.
+	Ttl *google_protobuf5.Duration `protobuf:"bytes,4,opt,name=ttl" json:"ttl,omitempty"`
+	// Description of the snapshot.
+	Description string `protobuf:"bytes,5,opt,name=description" json:"description,omitempty"`
+}
+
+func (m *SnapshotTableRequest) Reset()                    { *m = SnapshotTableRequest{} }
+func (m *SnapshotTableRequest) String() string            { return proto.CompactTextString(m) }
+func (*SnapshotTableRequest) ProtoMessage()               {}
+func (*SnapshotTableRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{12} }
+
+func (m *SnapshotTableRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *SnapshotTableRequest) GetCluster() string {
+	if m != nil {
+		return m.Cluster
+	}
+	return ""
+}
+
+func (m *SnapshotTableRequest) GetSnapshotId() string {
+	if m != nil {
+		return m.SnapshotId
+	}
+	return ""
+}
+
+func (m *SnapshotTableRequest) GetTtl() *google_protobuf5.Duration {
+	if m != nil {
+		return m.Ttl
+	}
+	return nil
+}
+
+func (m *SnapshotTableRequest) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.GetSnapshot][google.bigtable.admin.v2.BigtableTableAdmin.GetSnapshot]
+type GetSnapshotRequest struct {
+	// The unique name of the requested snapshot.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/clusters/<cluster>/snapshots/<snapshot>`.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+}
+
+func (m *GetSnapshotRequest) Reset()                    { *m = GetSnapshotRequest{} }
+func (m *GetSnapshotRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetSnapshotRequest) ProtoMessage()               {}
+func (*GetSnapshotRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{13} }
+
+func (m *GetSnapshotRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.ListSnapshots][google.bigtable.admin.v2.BigtableTableAdmin.ListSnapshots]
+type ListSnapshotsRequest struct {
+	// The unique name of the cluster for which snapshots should be listed.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/clusters/<cluster>`.
+	// Use `<cluster> = '-'` to list snapshots for all clusters in an instance,
+	// e.g., `projects/<project>/instances/<instance>/clusters/-`.
+	Parent string `protobuf:"bytes,1,opt,name=parent" json:"parent,omitempty"`
+	// The maximum number of snapshots to return.
+	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize" json:"page_size,omitempty"`
+	// The value of `next_page_token` returned by a previous call.
+	PageToken string `protobuf:"bytes,3,opt,name=page_token,json=pageToken" json:"page_token,omitempty"`
+}
+
+func (m *ListSnapshotsRequest) Reset()                    { *m = ListSnapshotsRequest{} }
+func (m *ListSnapshotsRequest) String() string            { return proto.CompactTextString(m) }
+func (*ListSnapshotsRequest) ProtoMessage()               {}
+func (*ListSnapshotsRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{14} }
+
+func (m *ListSnapshotsRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+func (m *ListSnapshotsRequest) GetPageSize() int32 {
+	if m != nil {
+		return m.PageSize
+	}
+	return 0
+}
+
+func (m *ListSnapshotsRequest) GetPageToken() string {
+	if m != nil {
+		return m.PageToken
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Response message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.ListSnapshots][google.bigtable.admin.v2.BigtableTableAdmin.ListSnapshots]
+type ListSnapshotsResponse struct {
+	// The snapshots present in the requested cluster.
+	Snapshots []*Snapshot `protobuf:"bytes,1,rep,name=snapshots" json:"snapshots,omitempty"`
+	// Set if not all snapshots could be returned in a single response.
+	// Pass this value to `page_token` in another request to get the next
+	// page of results.
+	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken" json:"next_page_token,omitempty"`
+}
+
+func (m *ListSnapshotsResponse) Reset()                    { *m = ListSnapshotsResponse{} }
+func (m *ListSnapshotsResponse) String() string            { return proto.CompactTextString(m) }
+func (*ListSnapshotsResponse) ProtoMessage()               {}
+func (*ListSnapshotsResponse) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{15} }
+
+func (m *ListSnapshotsResponse) GetSnapshots() []*Snapshot {
+	if m != nil {
+		return m.Snapshots
+	}
+	return nil
+}
+
+func (m *ListSnapshotsResponse) GetNextPageToken() string {
+	if m != nil {
+		return m.NextPageToken
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for
+// [google.bigtable.admin.v2.BigtableTableAdmin.DeleteSnapshot][google.bigtable.admin.v2.BigtableTableAdmin.DeleteSnapshot]
+type DeleteSnapshotRequest struct {
+	// The unique name of the snapshot to be deleted.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>/clusters/<cluster>/snapshots/<snapshot>`.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+}
+
+func (m *DeleteSnapshotRequest) Reset()                    { *m = DeleteSnapshotRequest{} }
+func (m *DeleteSnapshotRequest) String() string            { return proto.CompactTextString(m) }
+func (*DeleteSnapshotRequest) ProtoMessage()               {}
+func (*DeleteSnapshotRequest) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{16} }
+
+func (m *DeleteSnapshotRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// The metadata for the Operation returned by SnapshotTable.
+type SnapshotTableMetadata struct {
+	// The request that prompted the initiation of this SnapshotTable operation.
+	OriginalRequest *SnapshotTableRequest `protobuf:"bytes,1,opt,name=original_request,json=originalRequest" json:"original_request,omitempty"`
+	// The time at which the original request was received.
+	RequestTime *google_protobuf1.Timestamp `protobuf:"bytes,2,opt,name=request_time,json=requestTime" json:"request_time,omitempty"`
+	// The time at which the operation failed or was completed successfully.
+	FinishTime *google_protobuf1.Timestamp `protobuf:"bytes,3,opt,name=finish_time,json=finishTime" json:"finish_time,omitempty"`
+}
+
+func (m *SnapshotTableMetadata) Reset()                    { *m = SnapshotTableMetadata{} }
+func (m *SnapshotTableMetadata) String() string            { return proto.CompactTextString(m) }
+func (*SnapshotTableMetadata) ProtoMessage()               {}
+func (*SnapshotTableMetadata) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{17} }
+
+func (m *SnapshotTableMetadata) GetOriginalRequest() *SnapshotTableRequest {
+	if m != nil {
+		return m.OriginalRequest
+	}
+	return nil
+}
+
+func (m *SnapshotTableMetadata) GetRequestTime() *google_protobuf1.Timestamp {
+	if m != nil {
+		return m.RequestTime
+	}
+	return nil
+}
+
+func (m *SnapshotTableMetadata) GetFinishTime() *google_protobuf1.Timestamp {
+	if m != nil {
+		return m.FinishTime
+	}
+	return nil
+}
+
+// This is a private alpha release of Cloud Bigtable snapshots. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// The metadata for the Operation returned by CreateTableFromSnapshot.
+type CreateTableFromSnapshotMetadata struct {
+	// The request that prompted the initiation of this CreateTableFromSnapshot
+	// operation.
+	OriginalRequest *CreateTableFromSnapshotRequest `protobuf:"bytes,1,opt,name=original_request,json=originalRequest" json:"original_request,omitempty"`
+	// The time at which the original request was received.
+	RequestTime *google_protobuf1.Timestamp `protobuf:"bytes,2,opt,name=request_time,json=requestTime" json:"request_time,omitempty"`
+	// The time at which the operation failed or was completed successfully.
+	FinishTime *google_protobuf1.Timestamp `protobuf:"bytes,3,opt,name=finish_time,json=finishTime" json:"finish_time,omitempty"`
+}
+
+func (m *CreateTableFromSnapshotMetadata) Reset()         { *m = CreateTableFromSnapshotMetadata{} }
+func (m *CreateTableFromSnapshotMetadata) String() string { return proto.CompactTextString(m) }
+func (*CreateTableFromSnapshotMetadata) ProtoMessage()    {}
+func (*CreateTableFromSnapshotMetadata) Descriptor() ([]byte, []int) {
+	return fileDescriptor1, []int{18}
+}
+
+func (m *CreateTableFromSnapshotMetadata) GetOriginalRequest() *CreateTableFromSnapshotRequest {
+	if m != nil {
+		return m.OriginalRequest
+	}
+	return nil
+}
+
+func (m *CreateTableFromSnapshotMetadata) GetRequestTime() *google_protobuf1.Timestamp {
+	if m != nil {
+		return m.RequestTime
+	}
+	return nil
+}
+
+func (m *CreateTableFromSnapshotMetadata) GetFinishTime() *google_protobuf1.Timestamp {
+	if m != nil {
+		return m.FinishTime
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*CreateTableRequest)(nil), "google.bigtable.admin.v2.CreateTableRequest")
 	proto.RegisterType((*CreateTableRequest_Split)(nil), "google.bigtable.admin.v2.CreateTableRequest.Split")
+	proto.RegisterType((*CreateTableFromSnapshotRequest)(nil), "google.bigtable.admin.v2.CreateTableFromSnapshotRequest")
 	proto.RegisterType((*DropRowRangeRequest)(nil), "google.bigtable.admin.v2.DropRowRangeRequest")
 	proto.RegisterType((*ListTablesRequest)(nil), "google.bigtable.admin.v2.ListTablesRequest")
 	proto.RegisterType((*ListTablesResponse)(nil), "google.bigtable.admin.v2.ListTablesResponse")
@@ -568,6 +1016,17 @@ func init() {
 	proto.RegisterType((*DeleteTableRequest)(nil), "google.bigtable.admin.v2.DeleteTableRequest")
 	proto.RegisterType((*ModifyColumnFamiliesRequest)(nil), "google.bigtable.admin.v2.ModifyColumnFamiliesRequest")
 	proto.RegisterType((*ModifyColumnFamiliesRequest_Modification)(nil), "google.bigtable.admin.v2.ModifyColumnFamiliesRequest.Modification")
+	proto.RegisterType((*GenerateConsistencyTokenRequest)(nil), "google.bigtable.admin.v2.GenerateConsistencyTokenRequest")
+	proto.RegisterType((*GenerateConsistencyTokenResponse)(nil), "google.bigtable.admin.v2.GenerateConsistencyTokenResponse")
+	proto.RegisterType((*CheckConsistencyRequest)(nil), "google.bigtable.admin.v2.CheckConsistencyRequest")
+	proto.RegisterType((*CheckConsistencyResponse)(nil), "google.bigtable.admin.v2.CheckConsistencyResponse")
+	proto.RegisterType((*SnapshotTableRequest)(nil), "google.bigtable.admin.v2.SnapshotTableRequest")
+	proto.RegisterType((*GetSnapshotRequest)(nil), "google.bigtable.admin.v2.GetSnapshotRequest")
+	proto.RegisterType((*ListSnapshotsRequest)(nil), "google.bigtable.admin.v2.ListSnapshotsRequest")
+	proto.RegisterType((*ListSnapshotsResponse)(nil), "google.bigtable.admin.v2.ListSnapshotsResponse")
+	proto.RegisterType((*DeleteSnapshotRequest)(nil), "google.bigtable.admin.v2.DeleteSnapshotRequest")
+	proto.RegisterType((*SnapshotTableMetadata)(nil), "google.bigtable.admin.v2.SnapshotTableMetadata")
+	proto.RegisterType((*CreateTableFromSnapshotMetadata)(nil), "google.bigtable.admin.v2.CreateTableFromSnapshotMetadata")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -585,6 +1044,14 @@ type BigtableTableAdminClient interface {
 	// The table can be created with a full set of initial column families,
 	// specified in the request.
 	CreateTable(ctx context.Context, in *CreateTableRequest, opts ...grpc.CallOption) (*Table, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Creates a new table from the specified snapshot. The target table must
+	// not exist. The snapshot and the table must be in the same instance.
+	CreateTableFromSnapshot(ctx context.Context, in *CreateTableFromSnapshotRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error)
 	// Lists all tables served from a specified instance.
 	ListTables(ctx context.Context, in *ListTablesRequest, opts ...grpc.CallOption) (*ListTablesResponse, error)
 	// Gets metadata information about the specified table.
@@ -600,6 +1067,54 @@ type BigtableTableAdminClient interface {
 	// specify whether to delete all rows in a table, or only those that match a
 	// particular prefix.
 	DropRowRange(ctx context.Context, in *DropRowRangeRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Generates a consistency token for a Table, which can be used in
+	// CheckConsistency to check whether mutations to the table that finished
+	// before this call started have been replicated. The tokens will be available
+	// for 90 days.
+	GenerateConsistencyToken(ctx context.Context, in *GenerateConsistencyTokenRequest, opts ...grpc.CallOption) (*GenerateConsistencyTokenResponse, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Checks replication consistency based on a consistency token, that is, if
+	// replication has caught up based on the conditions specified in the token
+	// and the check request.
+	CheckConsistency(ctx context.Context, in *CheckConsistencyRequest, opts ...grpc.CallOption) (*CheckConsistencyResponse, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Creates a new snapshot in the specified cluster from the specified
+	// source table. The cluster and the table must be in the same instance.
+	SnapshotTable(ctx context.Context, in *SnapshotTableRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Gets metadata information about the specified snapshot.
+	GetSnapshot(ctx context.Context, in *GetSnapshotRequest, opts ...grpc.CallOption) (*Snapshot, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Lists all snapshots associated with the specified cluster.
+	ListSnapshots(ctx context.Context, in *ListSnapshotsRequest, opts ...grpc.CallOption) (*ListSnapshotsResponse, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Permanently deletes the specified snapshot.
+	DeleteSnapshot(ctx context.Context, in *DeleteSnapshotRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
 
 type bigtableTableAdminClient struct {
@@ -613,6 +1128,15 @@ func NewBigtableTableAdminClient(cc *grpc.ClientConn) BigtableTableAdminClient {
 func (c *bigtableTableAdminClient) CreateTable(ctx context.Context, in *CreateTableRequest, opts ...grpc.CallOption) (*Table, error) {
 	out := new(Table)
 	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/CreateTable", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableTableAdminClient) CreateTableFromSnapshot(ctx context.Context, in *CreateTableFromSnapshotRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error) {
+	out := new(google_longrunning.Operation)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/CreateTableFromSnapshot", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -664,6 +1188,60 @@ func (c *bigtableTableAdminClient) DropRowRange(ctx context.Context, in *DropRow
 	return out, nil
 }
 
+func (c *bigtableTableAdminClient) GenerateConsistencyToken(ctx context.Context, in *GenerateConsistencyTokenRequest, opts ...grpc.CallOption) (*GenerateConsistencyTokenResponse, error) {
+	out := new(GenerateConsistencyTokenResponse)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/GenerateConsistencyToken", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableTableAdminClient) CheckConsistency(ctx context.Context, in *CheckConsistencyRequest, opts ...grpc.CallOption) (*CheckConsistencyResponse, error) {
+	out := new(CheckConsistencyResponse)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/CheckConsistency", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableTableAdminClient) SnapshotTable(ctx context.Context, in *SnapshotTableRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error) {
+	out := new(google_longrunning.Operation)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/SnapshotTable", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableTableAdminClient) GetSnapshot(ctx context.Context, in *GetSnapshotRequest, opts ...grpc.CallOption) (*Snapshot, error) {
+	out := new(Snapshot)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/GetSnapshot", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableTableAdminClient) ListSnapshots(ctx context.Context, in *ListSnapshotsRequest, opts ...grpc.CallOption) (*ListSnapshotsResponse, error) {
+	out := new(ListSnapshotsResponse)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/ListSnapshots", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableTableAdminClient) DeleteSnapshot(ctx context.Context, in *DeleteSnapshotRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error) {
+	out := new(google_protobuf3.Empty)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableTableAdmin/DeleteSnapshot", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for BigtableTableAdmin service
 
 type BigtableTableAdminServer interface {
@@ -671,6 +1249,14 @@ type BigtableTableAdminServer interface {
 	// The table can be created with a full set of initial column families,
 	// specified in the request.
 	CreateTable(context.Context, *CreateTableRequest) (*Table, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Creates a new table from the specified snapshot. The target table must
+	// not exist. The snapshot and the table must be in the same instance.
+	CreateTableFromSnapshot(context.Context, *CreateTableFromSnapshotRequest) (*google_longrunning.Operation, error)
 	// Lists all tables served from a specified instance.
 	ListTables(context.Context, *ListTablesRequest) (*ListTablesResponse, error)
 	// Gets metadata information about the specified table.
@@ -686,6 +1272,54 @@ type BigtableTableAdminServer interface {
 	// specify whether to delete all rows in a table, or only those that match a
 	// particular prefix.
 	DropRowRange(context.Context, *DropRowRangeRequest) (*google_protobuf3.Empty, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Generates a consistency token for a Table, which can be used in
+	// CheckConsistency to check whether mutations to the table that finished
+	// before this call started have been replicated. The tokens will be available
+	// for 90 days.
+	GenerateConsistencyToken(context.Context, *GenerateConsistencyTokenRequest) (*GenerateConsistencyTokenResponse, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Checks replication consistency based on a consistency token, that is, if
+	// replication has caught up based on the conditions specified in the token
+	// and the check request.
+	CheckConsistency(context.Context, *CheckConsistencyRequest) (*CheckConsistencyResponse, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Creates a new snapshot in the specified cluster from the specified
+	// source table. The cluster and the table must be in the same instance.
+	SnapshotTable(context.Context, *SnapshotTableRequest) (*google_longrunning.Operation, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Gets metadata information about the specified snapshot.
+	GetSnapshot(context.Context, *GetSnapshotRequest) (*Snapshot, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Lists all snapshots associated with the specified cluster.
+	ListSnapshots(context.Context, *ListSnapshotsRequest) (*ListSnapshotsResponse, error)
+	// This is a private alpha release of Cloud Bigtable snapshots. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Permanently deletes the specified snapshot.
+	DeleteSnapshot(context.Context, *DeleteSnapshotRequest) (*google_protobuf3.Empty, error)
 }
 
 func RegisterBigtableTableAdminServer(s *grpc.Server, srv BigtableTableAdminServer) {
@@ -706,6 +1340,24 @@ func _BigtableTableAdmin_CreateTable_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BigtableTableAdminServer).CreateTable(ctx, req.(*CreateTableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableTableAdmin_CreateTableFromSnapshot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTableFromSnapshotRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableTableAdminServer).CreateTableFromSnapshot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableTableAdmin/CreateTableFromSnapshot",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableTableAdminServer).CreateTableFromSnapshot(ctx, req.(*CreateTableFromSnapshotRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -800,6 +1452,114 @@ func _BigtableTableAdmin_DropRowRange_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BigtableTableAdmin_GenerateConsistencyToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateConsistencyTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableTableAdminServer).GenerateConsistencyToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableTableAdmin/GenerateConsistencyToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableTableAdminServer).GenerateConsistencyToken(ctx, req.(*GenerateConsistencyTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableTableAdmin_CheckConsistency_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckConsistencyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableTableAdminServer).CheckConsistency(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableTableAdmin/CheckConsistency",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableTableAdminServer).CheckConsistency(ctx, req.(*CheckConsistencyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableTableAdmin_SnapshotTable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SnapshotTableRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableTableAdminServer).SnapshotTable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableTableAdmin/SnapshotTable",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableTableAdminServer).SnapshotTable(ctx, req.(*SnapshotTableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableTableAdmin_GetSnapshot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSnapshotRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableTableAdminServer).GetSnapshot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableTableAdmin/GetSnapshot",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableTableAdminServer).GetSnapshot(ctx, req.(*GetSnapshotRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableTableAdmin_ListSnapshots_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSnapshotsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableTableAdminServer).ListSnapshots(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableTableAdmin/ListSnapshots",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableTableAdminServer).ListSnapshots(ctx, req.(*ListSnapshotsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableTableAdmin_DeleteSnapshot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSnapshotRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableTableAdminServer).DeleteSnapshot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableTableAdmin/DeleteSnapshot",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableTableAdminServer).DeleteSnapshot(ctx, req.(*DeleteSnapshotRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _BigtableTableAdmin_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "google.bigtable.admin.v2.BigtableTableAdmin",
 	HandlerType: (*BigtableTableAdminServer)(nil),
@@ -807,6 +1567,10 @@ var _BigtableTableAdmin_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTable",
 			Handler:    _BigtableTableAdmin_CreateTable_Handler,
+		},
+		{
+			MethodName: "CreateTableFromSnapshot",
+			Handler:    _BigtableTableAdmin_CreateTableFromSnapshot_Handler,
 		},
 		{
 			MethodName: "ListTables",
@@ -828,6 +1592,30 @@ var _BigtableTableAdmin_serviceDesc = grpc.ServiceDesc{
 			MethodName: "DropRowRange",
 			Handler:    _BigtableTableAdmin_DropRowRange_Handler,
 		},
+		{
+			MethodName: "GenerateConsistencyToken",
+			Handler:    _BigtableTableAdmin_GenerateConsistencyToken_Handler,
+		},
+		{
+			MethodName: "CheckConsistency",
+			Handler:    _BigtableTableAdmin_CheckConsistency_Handler,
+		},
+		{
+			MethodName: "SnapshotTable",
+			Handler:    _BigtableTableAdmin_SnapshotTable_Handler,
+		},
+		{
+			MethodName: "GetSnapshot",
+			Handler:    _BigtableTableAdmin_GetSnapshot_Handler,
+		},
+		{
+			MethodName: "ListSnapshots",
+			Handler:    _BigtableTableAdmin_ListSnapshots_Handler,
+		},
+		{
+			MethodName: "DeleteSnapshot",
+			Handler:    _BigtableTableAdmin_DeleteSnapshot_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "google/bigtable/admin/v2/bigtable_table_admin.proto",
@@ -838,63 +1626,100 @@ func init() {
 }
 
 var fileDescriptor1 = []byte{
-	// 922 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0xdd, 0x6e, 0x1b, 0x45,
-	0x14, 0xce, 0xd8, 0x4e, 0x9a, 0x1c, 0x3b, 0x29, 0x0c, 0x55, 0x70, 0xdd, 0xd2, 0x46, 0x4b, 0x15,
-	0x05, 0x13, 0x76, 0xa5, 0xad, 0xa2, 0xa2, 0xd0, 0x0a, 0xea, 0x84, 0x36, 0xfc, 0x49, 0xd1, 0x52,
-	0x55, 0x82, 0x9b, 0xd5, 0xc4, 0x3b, 0x59, 0x86, 0xec, 0xce, 0x2c, 0xbb, 0xe3, 0xb8, 0x16, 0xea,
-	0x0d, 0x42, 0x42, 0xe2, 0xb6, 0x57, 0x11, 0x6f, 0xc0, 0x13, 0x20, 0x6e, 0x78, 0x08, 0xae, 0xb9,
-	0xe3, 0x11, 0x78, 0x00, 0x34, 0x3f, 0x4e, 0x9c, 0x38, 0x6b, 0xd7, 0xb9, 0xb1, 0x66, 0xce, 0xcf,
-	0x77, 0xbe, 0x39, 0x67, 0xbe, 0x1d, 0xc3, 0xfd, 0x58, 0x88, 0x38, 0xa1, 0xde, 0x01, 0x8b, 0x25,
-	0x39, 0x48, 0xa8, 0x47, 0xa2, 0x94, 0x71, 0xef, 0xd8, 0x3f, 0xb5, 0x84, 0xe6, 0x57, 0xdb, 0xdd,
-	0x2c, 0x17, 0x52, 0xe0, 0xa6, 0x49, 0x72, 0x87, 0x21, 0xae, 0x71, 0x1e, 0xfb, 0xad, 0xdb, 0x16,
-	0x8e, 0x64, 0xcc, 0x23, 0x9c, 0x0b, 0x49, 0x24, 0x13, 0xbc, 0x30, 0x79, 0xad, 0x7b, 0xa5, 0xc5,
-	0x0c, 0x8c, 0x89, 0x7a, 0xd7, 0x46, 0x25, 0x82, 0xc7, 0x79, 0x8f, 0x73, 0xc6, 0x63, 0x4f, 0x64,
-	0x34, 0x3f, 0x07, 0x75, 0xc7, 0x06, 0xe9, 0xdd, 0x41, 0xef, 0xd0, 0x8b, 0x7a, 0x26, 0xc0, 0xfa,
-	0x6f, 0x5d, 0xf4, 0xd3, 0x34, 0x93, 0x03, 0xeb, 0xbc, 0x7b, 0xd1, 0x29, 0x59, 0x4a, 0x0b, 0x49,
-	0xd2, 0xcc, 0x04, 0x38, 0xff, 0x21, 0xc0, 0x3b, 0x39, 0x25, 0x92, 0x3e, 0x53, 0xc4, 0x02, 0xfa,
-	0x43, 0x8f, 0x16, 0x12, 0xaf, 0xc2, 0x42, 0x46, 0x72, 0xca, 0x65, 0x13, 0xad, 0xa1, 0x8d, 0xa5,
-	0xc0, 0xee, 0xf0, 0x4d, 0x58, 0x34, 0x4d, 0x62, 0x51, 0xb3, 0xa2, 0x3d, 0xd7, 0xf4, 0xfe, 0xb3,
-	0x08, 0x6f, 0xc1, 0xbc, 0x5e, 0x36, 0xab, 0x6b, 0x68, 0xa3, 0xee, 0xdf, 0x75, 0xcb, 0x5a, 0xe7,
-	0x9a, 0x4a, 0x26, 0x1a, 0x7f, 0x03, 0x2b, 0x8c, 0x33, 0xc9, 0x48, 0x12, 0x16, 0x59, 0xc2, 0x64,
-	0xd1, 0xac, 0xad, 0x55, 0x37, 0xea, 0xbe, 0x5f, 0x9e, 0x3f, 0xce, 0xd7, 0xfd, 0x5a, 0xa5, 0x06,
-	0xcb, 0x16, 0x49, 0xef, 0x8a, 0xd6, 0x4d, 0x98, 0xd7, 0x2b, 0xfc, 0x06, 0x54, 0x8f, 0xe8, 0x40,
-	0x1f, 0xa5, 0x11, 0xa8, 0xa5, 0x73, 0x82, 0xe0, 0xad, 0xdd, 0x5c, 0x64, 0x81, 0xe8, 0x07, 0x84,
-	0xc7, 0xa7, 0xe7, 0xc6, 0x50, 0xe3, 0x24, 0xa5, 0xf6, 0xd4, 0x7a, 0x8d, 0xd7, 0x61, 0x25, 0x17,
-	0xfd, 0xf0, 0x88, 0x0e, 0xc2, 0x2c, 0xa7, 0x87, 0xec, 0x85, 0x3e, 0x79, 0x63, 0x6f, 0x2e, 0x68,
-	0xe4, 0xa2, 0xff, 0x05, 0x1d, 0xec, 0x6b, 0x2b, 0x7e, 0x08, 0xad, 0x88, 0x26, 0x54, 0xd2, 0x90,
-	0x24, 0x49, 0x18, 0x11, 0x49, 0xc2, 0xc3, 0x5c, 0xa4, 0xe1, 0x59, 0x57, 0x16, 0xf7, 0xe6, 0x82,
-	0x55, 0x13, 0xf3, 0x38, 0x49, 0x76, 0x89, 0x24, 0x4f, 0x72, 0x91, 0xea, 0x83, 0x74, 0x16, 0x61,
-	0x41, 0x92, 0x3c, 0xa6, 0xd2, 0xf9, 0x19, 0xc1, 0x9b, 0x5f, 0xb2, 0x42, 0x6a, 0x7b, 0x31, 0x6d,
-	0x22, 0x1f, 0x42, 0xed, 0x98, 0xd1, 0xbe, 0xe6, 0xb4, 0xe2, 0xdf, 0x9b, 0xd2, 0x75, 0xf7, 0x39,
-	0xa3, 0xfd, 0x40, 0x67, 0xe0, 0x77, 0x00, 0x32, 0x12, 0xd3, 0x50, 0x8a, 0x23, 0xca, 0x35, 0xbf,
-	0xa5, 0x60, 0x49, 0x59, 0x9e, 0x29, 0x83, 0xd3, 0x03, 0x3c, 0xca, 0xa2, 0xc8, 0x04, 0x2f, 0x28,
-	0x7e, 0xa0, 0x68, 0x2a, 0x4b, 0x13, 0xe9, 0x31, 0x4d, 0x1d, 0xb3, 0x0d, 0xc7, 0xeb, 0x70, 0x9d,
-	0xd3, 0x17, 0x32, 0x1c, 0x29, 0x69, 0x2e, 0xd0, 0xb2, 0x32, 0xef, 0x9f, 0x96, 0x0d, 0xe1, 0xfa,
-	0x53, 0x2a, 0xcf, 0x5d, 0xc6, 0xcb, 0x86, 0x72, 0xe5, 0x63, 0x3b, 0x1b, 0x80, 0x77, 0xf5, 0x08,
-	0xa6, 0xd5, 0x70, 0xfe, 0xa9, 0xc0, 0xad, 0xaf, 0x44, 0xc4, 0x0e, 0x07, 0x3b, 0x22, 0xe9, 0xa5,
-	0xfc, 0x09, 0x49, 0x59, 0xc2, 0xce, 0x46, 0x72, 0x19, 0xaf, 0xef, 0x60, 0x39, 0x55, 0x29, 0xac,
-	0x6b, 0x44, 0xdc, 0xac, 0xe8, 0x36, 0x75, 0xca, 0x09, 0x4e, 0xa8, 0x60, 0x7c, 0x16, 0x2a, 0x38,
-	0x0f, 0xdc, 0xfa, 0x0b, 0x41, 0x63, 0xd4, 0x8f, 0x57, 0xa0, 0xc2, 0x22, 0x4b, 0xa6, 0xc2, 0x22,
-	0xfc, 0x09, 0x2c, 0x74, 0xb5, 0x52, 0x74, 0x93, 0xea, 0xfe, 0xfa, 0x04, 0x45, 0x9d, 0x55, 0x1f,
-	0xec, 0xcd, 0x05, 0x36, 0x4f, 0x21, 0xf4, 0xb2, 0x48, 0x21, 0x54, 0x67, 0x45, 0x30, 0x79, 0xf8,
-	0x06, 0xd4, 0xa2, 0x5c, 0x64, 0xcd, 0x9a, 0xbd, 0xfd, 0x7a, 0xd7, 0x99, 0x87, 0x6a, 0x2a, 0x22,
-	0xff, 0x8f, 0x6b, 0x80, 0x3b, 0x16, 0x49, 0x0f, 0xe3, 0xb1, 0x42, 0xc3, 0xaf, 0x10, 0xd4, 0x47,
-	0x24, 0x8e, 0x37, 0x67, 0xf9, 0x12, 0xb4, 0xa6, 0x5d, 0x48, 0x67, 0xeb, 0xa7, 0xbf, 0xff, 0x7d,
-	0x55, 0xf1, 0x9c, 0xb6, 0xfa, 0x1a, 0xff, 0x68, 0x54, 0xf4, 0x28, 0xcb, 0xc5, 0xf7, 0xb4, 0x2b,
-	0x0b, 0xaf, 0xed, 0x31, 0x5e, 0x48, 0xc2, 0xbb, 0xb4, 0xf0, 0xda, 0x2f, 0xcd, 0xd7, 0xba, 0xd8,
-	0x46, 0x6d, 0xfc, 0x1b, 0x02, 0x38, 0xd3, 0x03, 0x7e, 0xbf, 0xbc, 0xcc, 0x98, 0x76, 0x5b, 0x9b,
-	0xaf, 0x17, 0x6c, 0x24, 0xe6, 0xf8, 0x9a, 0xe0, 0x26, 0x9e, 0x81, 0x20, 0xfe, 0x15, 0xc1, 0xe2,
-	0x50, 0x36, 0xf8, 0xbd, 0xf2, 0x72, 0x17, 0xa4, 0x35, 0xbd, 0x5b, 0xe7, 0xc9, 0xa8, 0x2b, 0x5e,
-	0x42, 0xc5, 0x32, 0xf1, 0xda, 0x2f, 0xf1, 0x2f, 0x08, 0xea, 0x23, 0x12, 0x9b, 0x34, 0xc0, 0x71,
-	0x25, 0xb6, 0x56, 0x87, 0xd1, 0xc3, 0x37, 0xcb, 0xfd, 0x54, 0x3d, 0x68, 0x43, 0x26, 0xed, 0x59,
-	0x98, 0xfc, 0x89, 0xe0, 0xc6, 0x65, 0xfa, 0xc2, 0x5b, 0x57, 0xd2, 0xe3, 0xf4, 0x76, 0x7d, 0xae,
-	0x49, 0xee, 0x3a, 0x1f, 0xbf, 0x3e, 0xc9, 0xed, 0xf4, 0x92, 0x82, 0xea, 0xc6, 0x9d, 0x20, 0x68,
-	0x8c, 0xbe, 0x51, 0xf8, 0x83, 0x09, 0x7d, 0x1c, 0x7f, 0xcb, 0x4a, 0x1b, 0xd9, 0xd1, 0x1c, 0x1f,
-	0x3a, 0x0f, 0x66, 0xe0, 0x18, 0x8d, 0xe0, 0x6f, 0xa3, 0x76, 0xe7, 0x04, 0xc1, 0xed, 0xae, 0x48,
-	0x4b, 0x09, 0x75, 0xde, 0x1e, 0x17, 0xf6, 0xbe, 0xa2, 0xb1, 0x8f, 0xbe, 0x7d, 0x64, 0x93, 0x62,
-	0x91, 0x10, 0x1e, 0xbb, 0x22, 0x8f, 0xbd, 0x98, 0x72, 0x4d, 0xd2, 0x33, 0x2e, 0x92, 0xb1, 0x62,
-	0xfc, 0xaf, 0xd3, 0x47, 0x7a, 0xf1, 0x7b, 0xe5, 0xce, 0x53, 0x93, 0xbf, 0x93, 0x88, 0x5e, 0xe4,
-	0x0e, 0xeb, 0xb8, 0xba, 0x86, 0xfb, 0xdc, 0x3f, 0x58, 0xd0, 0x50, 0xf7, 0xff, 0x0f, 0x00, 0x00,
-	0xff, 0xff, 0x47, 0xff, 0x6e, 0x8f, 0xf1, 0x09, 0x00, 0x00,
+	// 1514 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x58, 0xcb, 0x6f, 0xdc, 0x54,
+	0x17, 0xaf, 0x27, 0x8f, 0x26, 0x67, 0xf2, 0xea, 0xfd, 0xd2, 0x76, 0x3a, 0x6d, 0x93, 0xc8, 0x5f,
+	0x55, 0x42, 0x52, 0xc6, 0x62, 0xaa, 0xa8, 0x21, 0x6d, 0x20, 0x9d, 0x84, 0x26, 0x05, 0x4a, 0x23,
+	0xb7, 0xaa, 0xd4, 0x2a, 0x92, 0xe5, 0x8c, 0x6f, 0x9c, 0xdb, 0x78, 0x7c, 0x8d, 0x7d, 0xa7, 0x69,
+	0x0a, 0x5d, 0x50, 0x21, 0x21, 0xb1, 0xed, 0xaa, 0x42, 0x42, 0x62, 0xcb, 0x12, 0x21, 0x21, 0x55,
+	0x48, 0x88, 0x2d, 0x5b, 0xd6, 0x2c, 0x90, 0x58, 0xb3, 0xe2, 0x0f, 0x40, 0xf7, 0xe1, 0xc4, 0xf3,
+	0xf0, 0x78, 0x26, 0x6c, 0xd8, 0x44, 0xbe, 0xe7, 0x9e, 0xc7, 0xef, 0x9c, 0x73, 0xef, 0xb9, 0xbf,
+	0x09, 0x5c, 0x75, 0x29, 0x75, 0x3d, 0x6c, 0x6c, 0x13, 0x97, 0xd9, 0xdb, 0x1e, 0x36, 0x6c, 0xa7,
+	0x46, 0x7c, 0xe3, 0x49, 0xf9, 0x50, 0x62, 0xc9, 0xbf, 0x42, 0x5e, 0x0a, 0x42, 0xca, 0x28, 0x2a,
+	0x48, 0xa3, 0x52, 0xac, 0x52, 0x92, 0x9b, 0x4f, 0xca, 0xc5, 0x0b, 0xca, 0x9d, 0x1d, 0x10, 0xc3,
+	0xf6, 0x7d, 0xca, 0x6c, 0x46, 0xa8, 0x1f, 0x49, 0xbb, 0xe2, 0xa5, 0xd4, 0x60, 0xd2, 0x8d, 0xd4,
+	0xfa, 0xbf, 0xd2, 0xf2, 0xa8, 0xef, 0x86, 0x75, 0xdf, 0x27, 0xbe, 0x6b, 0xd0, 0x00, 0x87, 0x0d,
+	0xae, 0xa6, 0x94, 0x92, 0x58, 0x6d, 0xd7, 0x77, 0x0c, 0xa7, 0x2e, 0x15, 0xd4, 0xfe, 0xf9, 0xe6,
+	0x7d, 0x5c, 0x0b, 0xd8, 0x81, 0xda, 0x9c, 0x6e, 0xde, 0x64, 0xa4, 0x86, 0x23, 0x66, 0xd7, 0x02,
+	0xa9, 0xa0, 0xff, 0xad, 0x01, 0x5a, 0x0d, 0xb1, 0xcd, 0xf0, 0x7d, 0x0e, 0xcc, 0xc4, 0x9f, 0xd4,
+	0x71, 0xc4, 0xd0, 0x19, 0x18, 0x0c, 0xec, 0x10, 0xfb, 0xac, 0xa0, 0xcd, 0x68, 0xb3, 0xc3, 0xa6,
+	0x5a, 0xa1, 0x73, 0x30, 0x24, 0x8b, 0x44, 0x9c, 0x42, 0x4e, 0xec, 0x9c, 0x14, 0xeb, 0xdb, 0x0e,
+	0x5a, 0x80, 0x01, 0xf1, 0x59, 0xe8, 0x9b, 0xd1, 0x66, 0xf3, 0xe5, 0xe9, 0x52, 0x5a, 0xe9, 0x4a,
+	0x32, 0x92, 0xd4, 0x46, 0x0f, 0x61, 0x8c, 0xf8, 0x84, 0x11, 0xdb, 0xb3, 0xa2, 0xc0, 0x23, 0x2c,
+	0x2a, 0xf4, 0xcf, 0xf4, 0xcd, 0xe6, 0xcb, 0xe5, 0x74, 0xfb, 0x56, 0xbc, 0xa5, 0x7b, 0xdc, 0xd4,
+	0x1c, 0x55, 0x9e, 0xc4, 0x2a, 0x2a, 0x9e, 0x83, 0x01, 0xf1, 0x85, 0x26, 0xa0, 0x6f, 0x0f, 0x1f,
+	0x88, 0x54, 0x46, 0x4c, 0xfe, 0xa9, 0x7f, 0x06, 0x53, 0x09, 0x2f, 0xb7, 0x42, 0x5a, 0xbb, 0xe7,
+	0xdb, 0x41, 0xb4, 0x4b, 0xd9, 0xbf, 0xa8, 0xc0, 0x1b, 0x30, 0x1e, 0xd1, 0x7a, 0x58, 0xc5, 0x56,
+	0xa4, 0x9c, 0x89, 0x5a, 0x0c, 0x9b, 0x63, 0x52, 0x1c, 0x87, 0xd0, 0x5f, 0x69, 0xf0, 0xbf, 0xb5,
+	0x90, 0x06, 0x26, 0xdd, 0x37, 0x6d, 0xdf, 0x3d, 0xac, 0x3a, 0x82, 0x7e, 0xdf, 0xae, 0x61, 0x15,
+	0x51, 0x7c, 0xa3, 0xcb, 0x30, 0x16, 0xd2, 0x7d, 0x6b, 0x0f, 0x1f, 0x58, 0x41, 0x88, 0x77, 0xc8,
+	0x53, 0x11, 0x75, 0x64, 0xe3, 0x84, 0x39, 0x12, 0xd2, 0xfd, 0x0f, 0xf1, 0xc1, 0xa6, 0x90, 0xa2,
+	0x1b, 0x50, 0x74, 0xb0, 0x87, 0x19, 0xb6, 0x6c, 0xcf, 0xb3, 0x1c, 0x9b, 0xd9, 0xd6, 0x4e, 0x48,
+	0x6b, 0xd6, 0x51, 0x4f, 0x86, 0x36, 0x4e, 0x98, 0x67, 0xa4, 0xce, 0x4d, 0xcf, 0x5b, 0xb3, 0x99,
+	0xcd, 0xf3, 0x16, 0x05, 0xa8, 0x0c, 0xc1, 0x20, 0xb3, 0x43, 0x17, 0x33, 0xfd, 0x0b, 0x0d, 0x4e,
+	0x7d, 0x44, 0x22, 0x26, 0xe4, 0x51, 0x56, 0x35, 0x16, 0xa1, 0xff, 0x09, 0xc1, 0xfb, 0x02, 0xd3,
+	0x58, 0xf9, 0x52, 0x46, 0xcf, 0x4b, 0x0f, 0x08, 0xde, 0x37, 0x85, 0x05, 0xba, 0x08, 0x10, 0xd8,
+	0x2e, 0xb6, 0x18, 0xdd, 0xc3, 0xbe, 0xaa, 0xd3, 0x30, 0x97, 0xdc, 0xe7, 0x02, 0xbd, 0x0e, 0x28,
+	0x89, 0x22, 0x0a, 0xa8, 0x1f, 0x61, 0x74, 0x8d, 0xc3, 0xe4, 0x92, 0x82, 0x26, 0x0e, 0x49, 0xe6,
+	0x21, 0x53, 0xea, 0xe8, 0x32, 0x8c, 0xfb, 0xf8, 0x29, 0xb3, 0x12, 0x21, 0x65, 0xf3, 0x46, 0xb9,
+	0x78, 0xf3, 0x30, 0xac, 0x05, 0xe3, 0xeb, 0x98, 0x35, 0x5c, 0x85, 0x76, 0x4d, 0x39, 0x76, 0xda,
+	0xfa, 0x2c, 0xa0, 0x35, 0xd1, 0x82, 0xac, 0x18, 0xfa, 0xef, 0x39, 0x38, 0x7f, 0x87, 0x3a, 0x64,
+	0xe7, 0x60, 0x95, 0x7a, 0xf5, 0x9a, 0x7f, 0xcb, 0xae, 0x11, 0x8f, 0x1c, 0xb5, 0xa4, 0x1d, 0xae,
+	0x5d, 0x18, 0xad, 0x71, 0x13, 0x52, 0x95, 0x23, 0xa4, 0x90, 0x13, 0x65, 0xaa, 0xa4, 0x03, 0xec,
+	0x10, 0x41, 0xee, 0x29, 0x57, 0x66, 0xa3, 0xe3, 0xe2, 0xcf, 0x1a, 0x8c, 0x24, 0xf7, 0xd1, 0x18,
+	0xe4, 0x88, 0xa3, 0xc0, 0xe4, 0x88, 0x83, 0x56, 0x60, 0xb0, 0x2a, 0x6e, 0x98, 0x28, 0x52, 0xbe,
+	0x7c, 0xb9, 0xc3, 0x7d, 0x3e, 0x8a, 0x7e, 0xb0, 0x71, 0xc2, 0x54, 0x76, 0xdc, 0x43, 0x3d, 0x70,
+	0xb8, 0x87, 0xbe, 0x5e, 0x3d, 0x48, 0x3b, 0x34, 0x09, 0xfd, 0x4e, 0x48, 0x83, 0x42, 0xbf, 0x3a,
+	0xfd, 0x62, 0x55, 0x19, 0x80, 0xbe, 0x1a, 0x75, 0xf4, 0x05, 0x98, 0x5e, 0xc7, 0x3e, 0x1f, 0xb6,
+	0x78, 0x95, 0xfa, 0x11, 0x89, 0x18, 0xf6, 0xab, 0x07, 0xe2, 0x18, 0x74, 0x6a, 0xcb, 0x5d, 0x98,
+	0x49, 0x37, 0x53, 0xc7, 0x74, 0x1e, 0x4e, 0x55, 0x8f, 0xf6, 0xd4, 0x79, 0x93, 0x4e, 0x26, 0xaa,
+	0x4d, 0x46, 0xfa, 0x23, 0x38, 0xbb, 0xba, 0x8b, 0xab, 0x7b, 0x09, 0x6f, 0x9d, 0x5a, 0xdc, 0xd6,
+	0x77, 0x2e, 0xc5, 0xf7, 0x12, 0x14, 0x5a, 0x7d, 0x2b, 0x90, 0x53, 0x00, 0x87, 0xfa, 0xf2, 0x5a,
+	0x0f, 0x99, 0x09, 0x89, 0xfe, 0x83, 0x06, 0x93, 0xf1, 0xc4, 0xca, 0xbc, 0x10, 0x05, 0x38, 0x59,
+	0xf5, 0xea, 0x11, 0xc3, 0x61, 0x3c, 0x14, 0xd5, 0x12, 0x4d, 0x43, 0x3e, 0x9e, 0x86, 0x7c, 0x64,
+	0xca, 0x8b, 0x0e, 0xb1, 0xe8, 0xb6, 0x83, 0xe6, 0xa1, 0x8f, 0x31, 0x4f, 0xf4, 0x28, 0x5f, 0x3e,
+	0x17, 0xf7, 0x38, 0x7e, 0xb0, 0x4a, 0x6b, 0xea, 0xb5, 0x33, 0xb9, 0x16, 0x9a, 0x81, 0xbc, 0x83,
+	0xa3, 0x6a, 0x48, 0x02, 0x2e, 0x2b, 0x0c, 0x08, 0x6f, 0x49, 0x11, 0xbf, 0x60, 0xeb, 0x98, 0x35,
+	0x4f, 0xf3, 0x76, 0x9d, 0x7c, 0x0c, 0x93, 0x7c, 0xc4, 0xc4, 0xaa, 0x99, 0xb3, 0xee, 0x3c, 0x88,
+	0xf9, 0x64, 0x45, 0xe4, 0x99, 0x3c, 0xd4, 0x03, 0xe6, 0x10, 0x17, 0xdc, 0x23, 0xcf, 0x70, 0xd6,
+	0x38, 0xfb, 0x5c, 0x83, 0xd3, 0x4d, 0xc1, 0x54, 0x1b, 0x56, 0x60, 0x38, 0x2e, 0x46, 0x3c, 0xd5,
+	0xf4, 0xf4, 0x83, 0x7e, 0x98, 0xd7, 0x91, 0x51, 0xd7, 0xb3, 0x6d, 0x1e, 0x4e, 0xcb, 0xd1, 0xd3,
+	0x4d, 0x71, 0xfe, 0xd2, 0xe0, 0x74, 0x43, 0xf7, 0xef, 0x60, 0x66, 0xf3, 0x57, 0x05, 0x3d, 0x84,
+	0x09, 0x1a, 0x12, 0x97, 0xf8, 0xb6, 0x67, 0x85, 0xd2, 0x83, 0xb0, 0xcc, 0x97, 0x4b, 0xd9, 0xb8,
+	0x93, 0x07, 0xc9, 0x1c, 0x8f, 0xfd, 0xc4, 0x40, 0x96, 0x61, 0x44, 0x79, 0xb4, 0x38, 0x4f, 0x51,
+	0x93, 0xa3, 0xd8, 0x72, 0x26, 0xee, 0xc7, 0x24, 0xc6, 0xcc, 0x2b, 0x7d, 0x2e, 0x41, 0xd7, 0x21,
+	0xbf, 0x43, 0x7c, 0x12, 0xed, 0x4a, 0xeb, 0xbe, 0x4c, 0x6b, 0x90, 0xea, 0x5c, 0xa0, 0xbf, 0xc8,
+	0xc1, 0x74, 0x0a, 0x25, 0x38, 0x4c, 0xbd, 0x9a, 0x9a, 0xfa, 0x62, 0x57, 0x6c, 0xa5, 0x0d, 0xcf,
+	0xf8, 0x4f, 0x15, 0xa1, 0xfc, 0xe3, 0x29, 0x40, 0x15, 0x95, 0x81, 0x40, 0x7c, 0x93, 0x67, 0x81,
+	0x5e, 0x6a, 0x90, 0x4f, 0xa4, 0x81, 0xae, 0xf4, 0xc2, 0xcd, 0x8a, 0x59, 0x8f, 0xb4, 0xbe, 0xf0,
+	0xe2, 0xb7, 0x3f, 0x5f, 0xe6, 0x0c, 0x7d, 0x8e, 0xf3, 0xe3, 0x4f, 0xe5, 0x6d, 0x5b, 0x0e, 0x42,
+	0xfa, 0x18, 0x57, 0x59, 0x64, 0xcc, 0x19, 0xc4, 0x8f, 0x98, 0xed, 0x57, 0x71, 0x64, 0xcc, 0x3d,
+	0x97, 0xfc, 0x39, 0x5a, 0xd2, 0xe6, 0xd0, 0x4f, 0x1a, 0x9c, 0x4d, 0x29, 0x2e, 0x3a, 0x76, 0x3f,
+	0x8a, 0x17, 0x63, 0xcb, 0x04, 0x29, 0x2f, 0xdd, 0x8d, 0x49, 0xb9, 0xbe, 0x21, 0xb0, 0x56, 0xf4,
+	0xe5, 0x1e, 0xb0, 0xca, 0xf7, 0x2c, 0x19, 0x8c, 0xc3, 0xff, 0x5a, 0x03, 0x38, 0xa2, 0x38, 0x68,
+	0x3e, 0x1d, 0x71, 0x0b, 0x1d, 0x2b, 0x5e, 0xe9, 0x4e, 0x59, 0x8e, 0x18, 0xbd, 0x2c, 0x30, 0x5f,
+	0x41, 0x3d, 0xd4, 0x17, 0x7d, 0xa5, 0xc1, 0x50, 0xcc, 0x84, 0xd0, 0x9b, 0xe9, 0xe1, 0x9a, 0xd8,
+	0x52, 0x76, 0xb3, 0x1b, 0xc1, 0xf0, 0x59, 0x93, 0x02, 0x45, 0x21, 0x31, 0xe6, 0x9e, 0xa3, 0x2f,
+	0x35, 0xc8, 0x27, 0x58, 0x53, 0xa7, 0xf3, 0xd7, 0x4a, 0xae, 0x8a, 0x67, 0x5a, 0x0e, 0xff, 0xfb,
+	0xfc, 0x17, 0x52, 0x8c, 0x64, 0xae, 0x17, 0x24, 0xaf, 0x35, 0x98, 0x6c, 0x47, 0x99, 0xd0, 0xc2,
+	0xb1, 0x28, 0x56, 0x76, 0xb9, 0x3e, 0x10, 0x20, 0xd7, 0xf4, 0xf7, 0xba, 0x07, 0xb9, 0x54, 0x6b,
+	0x13, 0x90, 0x9f, 0xb8, 0x57, 0x1a, 0x8c, 0x24, 0x7f, 0x76, 0xa0, 0xb7, 0x3a, 0xd4, 0xb1, 0xf5,
+	0xe7, 0x49, 0x6a, 0x21, 0x2b, 0x02, 0xe3, 0x0d, 0xfd, 0x5a, 0x0f, 0x18, 0x9d, 0x84, 0x7f, 0x8e,
+	0xed, 0x0f, 0x0d, 0x0a, 0x69, 0xbc, 0x0a, 0xbd, 0xd3, 0xe9, 0xfc, 0x75, 0xa4, 0x70, 0xc5, 0xa5,
+	0xe3, 0x98, 0xaa, 0x7b, 0xf3, 0xb1, 0xc8, 0x6b, 0x43, 0x5f, 0xed, 0x21, 0x2f, 0x37, 0xc5, 0x29,
+	0xcf, 0xf1, 0x17, 0x0d, 0x26, 0x9a, 0xe9, 0x18, 0x7a, 0xbb, 0xc3, 0xa4, 0x6a, 0x4f, 0x0b, 0x8b,
+	0xe5, 0x5e, 0x4c, 0x54, 0x2e, 0xb7, 0x44, 0x2e, 0x2b, 0xfa, 0xf5, 0x1e, 0x72, 0xa9, 0x36, 0x39,
+	0xe3, 0x39, 0x7c, 0xa3, 0xc1, 0x68, 0xc3, 0x63, 0x8e, 0x7a, 0x7c, 0xf5, 0xb3, 0x06, 0xec, 0xbb,
+	0x02, 0xe8, 0xa2, 0x7e, 0xb5, 0x07, 0xa0, 0x51, 0x62, 0xac, 0x7e, 0xab, 0x41, 0x3e, 0x41, 0x00,
+	0x3b, 0xcd, 0x8a, 0x56, 0x9e, 0x58, 0xec, 0x82, 0x7a, 0xe9, 0x2b, 0x02, 0xe1, 0x12, 0x5a, 0xcc,
+	0x44, 0xa8, 0x38, 0x30, 0xff, 0x3c, 0xa4, 0x6b, 0x7c, 0x8a, 0x7c, 0xaf, 0xc1, 0x68, 0x03, 0x1b,
+	0xec, 0x54, 0xc4, 0x76, 0x1c, 0xb5, 0x68, 0x74, 0xad, 0xaf, 0xfa, 0xdf, 0x08, 0xba, 0xe3, 0x1b,
+	0x90, 0x80, 0xfd, 0xfc, 0x08, 0x37, 0x7f, 0xaf, 0xc6, 0x1a, 0xf9, 0x23, 0x32, 0xb2, 0xe6, 0x70,
+	0x73, 0x79, 0xd3, 0x26, 0x88, 0x42, 0x37, 0x77, 0xec, 0x92, 0x56, 0x5e, 0x6b, 0x70, 0xa1, 0x4a,
+	0x6b, 0xa9, 0x80, 0x2a, 0x67, 0x5b, 0x79, 0xcd, 0x26, 0x07, 0xb1, 0xa9, 0x3d, 0x5a, 0x56, 0x46,
+	0x2e, 0xf5, 0x6c, 0xdf, 0x2d, 0xd1, 0xd0, 0x35, 0x5c, 0xec, 0x0b, 0x88, 0x86, 0xdc, 0xb2, 0x03,
+	0x12, 0xb5, 0xfe, 0x2f, 0xef, 0xba, 0xf8, 0xf8, 0x2e, 0x37, 0xb5, 0x2e, 0xed, 0x57, 0x3d, 0x5a,
+	0x77, 0x4a, 0x71, 0x9c, 0x92, 0x88, 0x51, 0x7a, 0x50, 0xfe, 0x35, 0x56, 0xd8, 0x12, 0x0a, 0x5b,
+	0xb1, 0xc2, 0x96, 0x50, 0xd8, 0x7a, 0x50, 0xde, 0x1e, 0x14, 0xb1, 0xae, 0xfe, 0x13, 0x00, 0x00,
+	0xff, 0xff, 0xe3, 0x38, 0xa4, 0xfd, 0xa3, 0x14, 0x00, 0x00,
 }

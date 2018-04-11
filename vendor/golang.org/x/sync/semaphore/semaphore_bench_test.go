@@ -4,13 +4,14 @@
 
 // +build go1.7
 
-package semaphore
+package semaphore_test
 
 import (
 	"fmt"
 	"testing"
 
 	"golang.org/x/net/context"
+	"golang.org/x/sync/semaphore"
 )
 
 // weighted is an interface matching a subset of *Weighted.  It allows
@@ -85,7 +86,7 @@ func BenchmarkNewSeq(b *testing.B) {
 	for _, cap := range []int64{1, 128} {
 		b.Run(fmt.Sprintf("Weighted-%d", cap), func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				_ = NewWeighted(cap)
+				_ = semaphore.NewWeighted(cap)
 			}
 		})
 		b.Run(fmt.Sprintf("semChan-%d", cap), func(b *testing.B) {
@@ -116,7 +117,7 @@ func BenchmarkAcquireSeq(b *testing.B) {
 			name string
 			w    weighted
 		}{
-			{"Weighted", NewWeighted(c.cap)},
+			{"Weighted", semaphore.NewWeighted(c.cap)},
 			{"semChan", newSemChan(c.cap)},
 		} {
 			b.Run(fmt.Sprintf("%s-acquire-%d-%d-%d", w.name, c.cap, c.size, c.N), func(b *testing.B) {

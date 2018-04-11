@@ -16,7 +16,8 @@
  *
  */
 
-// Package manual contains a resolver for testing purpose only.
+// Package manual defines a resolver that can be used to manually send resolved
+// addresses to ClientConn.
 package manual
 
 import (
@@ -39,12 +40,22 @@ type Resolver struct {
 	scheme string
 
 	// Fields actually belong to the resolver.
-	cc resolver.ClientConn
+	cc             resolver.ClientConn
+	bootstrapAddrs []resolver.Address
+}
+
+// InitialAddrs adds resolved addresses to the resolver so that
+// NewAddress doesn't need to be explicitly called after Dial.
+func (r *Resolver) InitialAddrs(addrs []resolver.Address) {
+	r.bootstrapAddrs = addrs
 }
 
 // Build returns itself for Resolver, because it's both a builder and a resolver.
 func (r *Resolver) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOption) (resolver.Resolver, error) {
 	r.cc = cc
+	if r.bootstrapAddrs != nil {
+		r.NewAddress(r.bootstrapAddrs)
+	}
 	return r, nil
 }
 

@@ -13,7 +13,9 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -198,17 +200,25 @@ func activateServer(listener net.Listener) {
 
 func coverageEnabled(cover bool, reports string) bool {
 	return (cover &&
-		goVersion_1_2_orGreater() &&
+		goMinVersion(1, 2) &&
 		coverToolInstalled() &&
 		ensureReportDirectoryExists(reports))
 }
-func goVersion_1_2_orGreater() bool {
+func goMinVersion(wanted ...int) bool {
 	version := runtime.Version() // 'go1.2....'
-	major, minor := version[2], version[4]
-	version_1_2 := major >= byte('1') && minor >= byte('2')
-	if !version_1_2 {
-		log.Printf(pleaseUpgradeGoVersion, version)
+	s := regexp.MustCompile(`go([\d]+)\.([\d]+)\.?([\d]+)?`).FindAllStringSubmatch(version, 1)
+	if len(s) == 0 {
+		log.Printf("Cannot determine if newer than go1.2, disabling coverage.")
 		return false
+	}
+	for idx, str := range s[0][1:] {
+		if len(wanted) == idx {
+			break
+		}
+		if v, _ := strconv.Atoi(str); v < wanted[idx] {
+			log.Printf(pleaseUpgradeGoVersion, version)
+			return false
+		}
 	}
 	return true
 }

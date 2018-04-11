@@ -94,6 +94,56 @@ func TestConn(t *testing.T) {
 	}
 }
 
+func TestConnCloseWithData(t *testing.T) {
+	lis := Listen(7)
+	errChan := make(chan error)
+	var lisConn net.Conn
+	go func() {
+		var err error
+		if lisConn, err = lis.Accept(); err != nil {
+			errChan <- err
+		}
+		close(errChan)
+	}()
+	dialConn, err := lis.Dial()
+	if err != nil {
+		t.Fatalf("Dial error: %v", err)
+	}
+	if err := <-errChan; err != nil {
+		t.Fatalf("Listen error: %v", err)
+	}
+
+	// Write some data on both sides of the connection.
+	n, err := dialConn.Write([]byte("hello"))
+	if n != 5 || err != nil {
+		t.Fatalf("dialConn.Write([]byte{\"hello\"}) = %v, %v; want 5, <nil>", n, err)
+	}
+	n, err = lisConn.Write([]byte("hello"))
+	if n != 5 || err != nil {
+		t.Fatalf("lisConn.Write([]byte{\"hello\"}) = %v, %v; want 5, <nil>", n, err)
+	}
+
+	// Close dial-side; writes from either side should fail.
+	dialConn.Close()
+	if _, err := lisConn.Write([]byte("hello")); err != io.ErrClosedPipe {
+		t.Fatalf("lisConn.Write() = _, <nil>; want _, <non-nil>")
+	}
+	if _, err := dialConn.Write([]byte("hello")); err != io.ErrClosedPipe {
+		t.Fatalf("dialConn.Write() = _, <nil>; want _, <non-nil>")
+	}
+
+	// Read from both sides; reads on lisConn should work, but dialConn should
+	// fail.
+	buf := make([]byte, 6)
+	if _, err := dialConn.Read(buf); err != io.ErrClosedPipe {
+		t.Fatalf("dialConn.Read(buf) = %v, %v; want _, io.ErrClosedPipe", n, err)
+	}
+	n, err = lisConn.Read(buf)
+	if n != 5 || err != nil {
+		t.Fatalf("lisConn.Read(buf) = %v, %v; want 5, <nil>", n, err)
+	}
+}
+
 func TestListener(t *testing.T) {
 	l := Listen(7)
 	var s net.Conn

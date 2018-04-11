@@ -132,7 +132,7 @@ func main() {
 
 	for svcName := range excludeServices {
 		if strings.Contains(os.Getenv("SERVICES"), svcName) {
-			fmt.Printf("Service %s is not supported\n", svcName)
+			fmt.Fprintf(os.Stderr, "Service %s is not supported\n", svcName)
 			os.Exit(1)
 		}
 	}
@@ -141,6 +141,10 @@ func main() {
 
 	// Remove old API versions from list
 	m := map[string]bool{}
+	// caches paths to ensure we are not overriding previously generated
+	// code.
+	servicePaths := map[string]struct{}{}
+
 	for i := range files {
 		idx := len(files) - 1 - i
 		parts := strings.Split(files[idx], string(filepath.Separator))
@@ -168,6 +172,13 @@ func main() {
 			continue
 		}
 
+		if _, ok := servicePaths[genInfo.PackageDir]; ok {
+			fmt.Fprintf(os.Stderr, "Path %q has already been generated", genInfo.PackageDir)
+			os.Exit(1)
+		}
+
+		servicePaths[genInfo.PackageDir] = struct{}{}
+
 		wg.Add(1)
 		go func(g *generateInfo, filename string) {
 			defer wg.Done()
@@ -183,6 +194,7 @@ func writeServiceFiles(g *generateInfo, filename string) {
 		if r := recover(); r != nil {
 			fmt.Fprintf(os.Stderr, "Error generating %s\n%s\n%s\n",
 				filename, r, debug.Stack())
+			os.Exit(1)
 		}
 	}()
 

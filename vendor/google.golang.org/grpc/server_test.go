@@ -23,8 +23,11 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
+	"golang.org/x/net/context"
 	"google.golang.org/grpc/test/leakcheck"
+	"google.golang.org/grpc/transport"
 )
 
 type emptyServiceServer interface{}
@@ -48,8 +51,29 @@ func TestStopBeforeServe(t *testing.T) {
 	// server.Serve is responsible for closing the listener, even if the
 	// server was already stopped.
 	err = lis.Close()
-	if got, want := ErrorDesc(err), "use of closed"; !strings.Contains(got, want) {
+	if got, want := errorDesc(err), "use of closed"; !strings.Contains(got, want) {
 		t.Errorf("Close() error = %q, want %q", got, want)
+	}
+}
+
+func TestGracefulStop(t *testing.T) {
+	defer leakcheck.Check(t)
+
+	lis, err := net.Listen("tcp", "localhost:0")
+	if err != nil {
+		t.Fatalf("failed to create listener: %v", err)
+	}
+
+	server := NewServer()
+	go func() {
+		// make sure Serve() is called
+		time.Sleep(time.Millisecond * 500)
+		server.GracefulStop()
+	}()
+
+	err = server.Serve(lis)
+	if err != nil {
+		t.Fatalf("Serve() returned non-nil error on GracefulStop: %v", err)
 	}
 }
 
@@ -98,5 +122,15 @@ func TestGetServiceInfo(t *testing.T) {
 
 	if !reflect.DeepEqual(info, want) {
 		t.Errorf("GetServiceInfo() = %+v, want %+v", info, want)
+	}
+}
+
+func TestStreamContext(t *testing.T) {
+	expectedStream := &transport.Stream{}
+	ctx := NewContextWithServerTransportStream(context.Background(), expectedStream)
+	s := serverTransportStreamFromContext(ctx)
+	stream, ok := s.(*transport.Stream)
+	if !ok || expectedStream != stream {
+		t.Fatalf("GetStreamFromContext(%v) = %v, %t, want: %v, true", ctx, stream, ok, expectedStream)
 	}
 }

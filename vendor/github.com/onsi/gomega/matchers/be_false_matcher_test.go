@@ -8,13 +8,13 @@ import (
 
 var _ = Describe("BeFalse", func() {
 	It("should handle true and false correctly", func() {
-		Ω(true).ShouldNot(BeFalse())
-		Ω(false).Should(BeFalse())
+		Expect(true).ShouldNot(BeFalse())
+		Expect(false).Should(BeFalse())
 	})
 
 	It("should only support booleans", func() {
 		success, err := (&BeFalseMatcher{}).Match("foo")
-		Ω(success).Should(BeFalse())
-		Ω(err).Should(HaveOccurred())
+		Expect(success).Should(BeFalse())
+		Expect(err).Should(HaveOccurred())
 	})
 })

@@ -82,13 +82,16 @@ func (s *server) SomeRPC(ctx context.Context, in *pb.SomeRequest) (*pb.SomeRespo
 
 ### Sending metadata
 
-To send metadata to server, the client can wrap the metadata into a context using `NewOutgoingContext`, and make the RPC with this context:
+There are two ways to send metadata to the server. The recommended way is to append kv pairs to the context using
+`AppendToOutgoingContext`. This can be used with or without existing metadata on the context. When there is no prior
+metadata, metadata is added; when metadata already exists on the context, kv pairs are merged in.
 
 ```go
-md := metadata.Pairs("key", "val")
+// create a new context with some metadata
+ctx := metadata.AppendToOutgoingContext(ctx, "k1", "v1", "k1", "v2", "k2", "v3")
 
-// create a new context with this metadata
-ctx := metadata.NewOutgoingContext(context.Background(), md)
+// later, add some more metadata to the context (e.g. in an interceptor)
+ctx := metadata.AppendToOutgoingContext(ctx, "k3", "v4")
 
 // make unary RPC
 response, err := client.SomeRPC(ctx, someRequest)
@@ -97,7 +100,27 @@ response, err := client.SomeRPC(ctx, someRequest)
 stream, err := client.SomeStreamingRPC(ctx)
 ```
 
-To read this back from the context on the client (e.g. in an interceptor) before the RPC is sent, use `FromOutgoingContext`.
+Alternatively, metadata may be attached to the context using `NewOutgoingContext`. However, this
+replaces any existing metadata in the context, so care must be taken to preserve the existing
+metadata if desired. This is slower than using `AppendToOutgoingContext`. An example of this
+is below:
+
+```go
+// create a new context with some metadata
+md := metadata.Pairs("k1", "v1", "k1", "v2", "k2", "v3")
+ctx := metadata.NewOutgoingContext(context.Background(), md)
+
+// later, add some more metadata to the context (e.g. in an interceptor)
+md, _ := metadata.FromOutgoingContext(ctx)
+newMD := metadata.Pairs("k3", "v3")
+ctx = metadata.NewContext(ctx, metadata.Join(metadata.New(send), newMD))
+
+// make unary RPC
+response, err := client.SomeRPC(ctx, someRequest)
+
+// or make streaming RPC
+stream, err := client.SomeStreamingRPC(ctx)
+```
 
 ### Receiving metadata
 

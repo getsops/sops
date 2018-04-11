@@ -46,7 +46,9 @@ var (
 // printFeature gets the feature for the given point.
 func printFeature(client pb.RouteGuideClient, point *pb.Point) {
 	log.Printf("Getting feature for point (%d, %d)", point.Latitude, point.Longitude)
-	feature, err := client.GetFeature(context.Background(), point)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	feature, err := client.GetFeature(ctx, point)
 	if err != nil {
 		log.Fatalf("%v.GetFeatures(_) = _, %v: ", client, err)
 	}
@@ -56,7 +58,9 @@ func printFeature(client pb.RouteGuideClient, point *pb.Point) {
 // printFeatures lists all the features within the given bounding Rectangle.
 func printFeatures(client pb.RouteGuideClient, rect *pb.Rectangle) {
 	log.Printf("Looking for features within %v", rect)
-	stream, err := client.ListFeatures(context.Background(), rect)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	stream, err := client.ListFeatures(ctx, rect)
 	if err != nil {
 		log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
 	}
@@ -82,7 +86,9 @@ func runRecordRoute(client pb.RouteGuideClient) {
 		points = append(points, randomPoint(r))
 	}
 	log.Printf("Traversing %d points.", len(points))
-	stream, err := client.RecordRoute(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	stream, err := client.RecordRoute(ctx)
 	if err != nil {
 		log.Fatalf("%v.RecordRoute(_) = _, %v", client, err)
 	}
@@ -101,14 +107,16 @@ func runRecordRoute(client pb.RouteGuideClient) {
 // runRouteChat receives a sequence of route notes, while sending notes for various locations.
 func runRouteChat(client pb.RouteGuideClient) {
 	notes := []*pb.RouteNote{
-		{&pb.Point{Latitude: 0, Longitude: 1}, "First message"},
-		{&pb.Point{Latitude: 0, Longitude: 2}, "Second message"},
-		{&pb.Point{Latitude: 0, Longitude: 3}, "Third message"},
-		{&pb.Point{Latitude: 0, Longitude: 1}, "Fourth message"},
-		{&pb.Point{Latitude: 0, Longitude: 2}, "Fifth message"},
-		{&pb.Point{Latitude: 0, Longitude: 3}, "Sixth message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 1}, Message: "First message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 2}, Message: "Second message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 3}, Message: "Third message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 1}, Message: "Fourth message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 2}, Message: "Fifth message"},
+		{Location: &pb.Point{Latitude: 0, Longitude: 3}, Message: "Sixth message"},
 	}
-	stream, err := client.RouteChat(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	stream, err := client.RouteChat(ctx)
 	if err != nil {
 		log.Fatalf("%v.RouteChat(_) = _, %v", client, err)
 	}

@@ -16,7 +16,7 @@ func expectPanic(t *testing.T, f string) interface{} {
 			t.Errorf("Incorrect panic type. %s", reflect.TypeOf(r))
 		}
 	} else {
-		t.Error("Expected panic but none occured")
+		t.Error("Expected panic but none occurred")
 	}
 	return r
 }

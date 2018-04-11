@@ -7,6 +7,7 @@ Your contributions to Ginkgo are essential for its long-term maintenance and imp
     - If you're adding functionality to the Ginkgo library, make sure to add appropriate unit and/or integration tests (under the `integration` folder).
     - If you're adding functionality to the Ginkgo CLI note that there are very few unit tests.  Please add an integration test.
     - Please run all tests locally (`ginkgo -r -p`) and make sure they go green before submitting the PR
+    - Please run following linter locally `go vet ./...` and make sure output does not contain any warnings
 - Update the documentation.  In addition to standard `godoc` comments Ginkgo has extensive documentation on the `gh-pages` branch.  If relevant, please submit a docs PR to that branch alongside your code PR.
 
 Thanks for supporting Ginkgo!

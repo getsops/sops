@@ -97,3 +97,7 @@ var _ = Describe("Excercising different failure modes", func() {
 		println("NEVER SEE THIS")
 	}, 1)
 })
+
+var _ = Specify("a top level specify", func() {
+	Fail("fail the test")
+})

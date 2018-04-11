@@ -20,6 +20,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"net"
 	"runtime"
 	"strconv"
 	"strings"
@@ -33,6 +35,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
+	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/testdata"
 )
 
@@ -86,7 +89,7 @@ func startBenchmarkServer(config *testpb.ServerConfig, serverPort int) (*benchma
 	case testpb.ServerType_ASYNC_SERVER:
 	case testpb.ServerType_ASYNC_GENERIC_SERVER:
 	default:
-		return nil, grpc.Errorf(codes.InvalidArgument, "unknow server type: %v", config.ServerType)
+		return nil, status.Errorf(codes.InvalidArgument, "unknown server type: %v", config.ServerType)
 	}
 
 	// Set security options.
@@ -109,37 +112,38 @@ func startBenchmarkServer(config *testpb.ServerConfig, serverPort int) (*benchma
 	if port == 0 {
 		port = serverPort
 	}
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", port))
+	if err != nil {
+		grpclog.Fatalf("Failed to listen: %v", err)
+	}
+	addr := lis.Addr().String()
 
 	// Create different benchmark server according to config.
-	var (
-		addr      string
-		closeFunc func()
-		err       error
-	)
+	var closeFunc func()
 	if config.PayloadConfig != nil {
 		switch payload := config.PayloadConfig.Payload.(type) {
 		case *testpb.PayloadConfig_BytebufParams:
 			opts = append(opts, grpc.CustomCodec(byteBufCodec{}))
-			addr, closeFunc = benchmark.StartServer(benchmark.ServerInfo{
-				Addr:     ":" + strconv.Itoa(port),
+			closeFunc = benchmark.StartServer(benchmark.ServerInfo{
 				Type:     "bytebuf",
 				Metadata: payload.BytebufParams.RespSize,
+				Listener: lis,
 			}, opts...)
 		case *testpb.PayloadConfig_SimpleParams:
-			addr, closeFunc = benchmark.StartServer(benchmark.ServerInfo{
-				Addr: ":" + strconv.Itoa(port),
-				Type: "protobuf",
+			closeFunc = benchmark.StartServer(benchmark.ServerInfo{
+				Type:     "protobuf",
+				Listener: lis,
 			}, opts...)
 		case *testpb.PayloadConfig_ComplexParams:
-			return nil, grpc.Errorf(codes.Unimplemented, "unsupported payload config: %v", config.PayloadConfig)
+			return nil, status.Errorf(codes.Unimplemented, "unsupported payload config: %v", config.PayloadConfig)
 		default:
-			return nil, grpc.Errorf(codes.InvalidArgument, "unknow payload config: %v", config.PayloadConfig)
+			return nil, status.Errorf(codes.InvalidArgument, "unknown payload config: %v", config.PayloadConfig)
 		}
 	} else {
 		// Start protobuf server if payload config is nil.
-		addr, closeFunc = benchmark.StartServer(benchmark.ServerInfo{
-			Addr: ":" + strconv.Itoa(port),
-			Type: "protobuf",
+		closeFunc = benchmark.StartServer(benchmark.ServerInfo{
+			Type:     "protobuf",
+			Listener: lis,
 		}, opts...)
 	}
 

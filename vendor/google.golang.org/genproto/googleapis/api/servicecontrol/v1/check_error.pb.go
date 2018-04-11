@@ -10,6 +10,7 @@ It is generated from these files:
 	google/api/servicecontrol/v1/log_entry.proto
 	google/api/servicecontrol/v1/metric_value.proto
 	google/api/servicecontrol/v1/operation.proto
+	google/api/servicecontrol/v1/quota_controller.proto
 	google/api/servicecontrol/v1/service_controller.proto
 
 It has these top-level messages:
@@ -19,6 +20,10 @@ It has these top-level messages:
 	MetricValue
 	MetricValueSet
 	Operation
+	AllocateQuotaRequest
+	QuotaOperation
+	AllocateQuotaResponse
+	QuotaError
 	CheckRequest
 	CheckResponse
 	ReportRequest

@@ -19,13 +19,14 @@ package testutil
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"sync"
 	"testing"
 	"time"
 
 	"golang.org/x/net/context"
+	"google.golang.org/grpc/status"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/empty"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
 	pbt "github.com/golang/protobuf/ptypes/timestamp"
@@ -37,17 +38,14 @@ import (
 
 // Action is a mocked RPC activity that MockCloudSpannerClient will take.
 type Action struct {
-	method string
-	err    error
-}
-
-// NewAction creates Action objects.
-func NewAction(m string, e error) Action {
-	return Action{m, e}
+	Method string
+	Err    error
 }
 
 // MockCloudSpannerClient is a mock implementation of sppb.SpannerClient.
 type MockCloudSpannerClient struct {
+	sppb.SpannerClient
+
 	mu sync.Mutex
 	t  *testing.T
 	// Live sessions on the client.
@@ -88,8 +86,8 @@ func (m *MockCloudSpannerClient) MakeStrict() {
 	m.nice = false
 }
 
-// InjectError injects a global error that will be returned by all APIs regardless of
-// the actions array.
+// InjectError injects a global error that will be returned by all calls to method
+// regardless of the actions array.
 func (m *MockCloudSpannerClient) InjectError(method string, err error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -100,7 +98,7 @@ func (m *MockCloudSpannerClient) InjectError(method string, err error) {
 func (m *MockCloudSpannerClient) SetActions(acts ...Action) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	m.actions = []Action{}
+	m.actions = nil
 	for _, act := range acts {
 		m.actions = append(m.actions, act)
 	}
@@ -135,7 +133,7 @@ func (m *MockCloudSpannerClient) CreateSession(c context.Context, r *sppb.Create
 	s := &sppb.Session{}
 	if r.Database != "mockdb" {
 		// Reject other databases
-		return s, grpc.Errorf(codes.NotFound, fmt.Sprintf("database not found: %v", r.Database))
+		return s, status.Errorf(codes.NotFound, fmt.Sprintf("database not found: %v", r.Database))
 	}
 	// Generate & record session name.
 	s.Name = fmt.Sprintf("mockdb-%v", time.Now().UnixNano())
@@ -153,7 +151,7 @@ func (m *MockCloudSpannerClient) GetSession(c context.Context, r *sppb.GetSessio
 	}
 	m.pings = append(m.pings, r.Name)
 	if _, ok := m.sessions[r.Name]; !ok {
-		return nil, grpc.Errorf(codes.NotFound, fmt.Sprintf("Session not found: %v", r.Name))
+		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Session not found: %v", r.Name))
 	}
 	return &sppb.Session{Name: r.Name}, nil
 }
@@ -168,17 +166,11 @@ func (m *MockCloudSpannerClient) DeleteSession(c context.Context, r *sppb.Delete
 	}
 	if _, ok := m.sessions[r.Name]; !ok {
 		// Session not found.
-		return &empty.Empty{}, grpc.Errorf(codes.NotFound, fmt.Sprintf("Session not found: %v", r.Name))
+		return &empty.Empty{}, status.Errorf(codes.NotFound, fmt.Sprintf("Session not found: %v", r.Name))
 	}
 	// Delete session from in-memory table.
 	delete(m.sessions, r.Name)
 	return &empty.Empty{}, nil
-}
-
-// ExecuteSql is a placeholder for SpannerClient.ExecuteSql.
-func (m *MockCloudSpannerClient) ExecuteSql(c context.Context, r *sppb.ExecuteSqlRequest, opts ...grpc.CallOption) (*sppb.ResultSet, error) {
-	m.ready()
-	return nil, errors.New("Unimplemented")
 }
 
 // ExecuteStreamingSql is a mock implementation of SpannerClient.ExecuteStreamingSql.
@@ -186,16 +178,9 @@ func (m *MockCloudSpannerClient) ExecuteStreamingSql(c context.Context, r *sppb.
 	m.ready()
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if err := m.injErr["ExecuteStreamingSql"]; err != nil {
+	act, err := m.expectAction("ExecuteStreamingSql")
+	if err != nil {
 		return nil, err
-	}
-	if len(m.actions) == 0 {
-		m.t.Fatalf("unexpected ExecuteStreamingSql executed")
-	}
-	act := m.actions[0]
-	m.actions = m.actions[1:]
-	if act.method != "ExecuteStreamingSql" {
-		m.t.Fatalf("unexpected ExecuteStreamingSql call, want action: %v", act)
 	}
 	wantReq := &sppb.ExecuteSqlRequest{
 		Session: "mocksession",
@@ -219,20 +204,13 @@ func (m *MockCloudSpannerClient) ExecuteStreamingSql(c context.Context, r *sppb.
 		},
 		ParamTypes: map[string]*sppb.Type{"var1": &sppb.Type{Code: sppb.TypeCode_STRING}},
 	}
-	if !reflect.DeepEqual(r, wantReq) {
+	if !proto.Equal(r, wantReq) {
 		return nil, fmt.Errorf("got query request: %v, want: %v", r, wantReq)
 	}
-	if act.err != nil {
-		return nil, act.err
+	if act.Err != nil {
+		return nil, act.Err
 	}
 	return nil, errors.New("query never succeeds on mock client")
-}
-
-// Read is a placeholder for SpannerClient.Read.
-func (m *MockCloudSpannerClient) Read(c context.Context, r *sppb.ReadRequest, opts ...grpc.CallOption) (*sppb.ResultSet, error) {
-	m.ready()
-	m.t.Fatalf("Read is unimplemented")
-	return nil, errors.New("Unimplemented")
 }
 
 // StreamingRead is a placeholder for SpannerClient.StreamingRead.
@@ -240,16 +218,9 @@ func (m *MockCloudSpannerClient) StreamingRead(c context.Context, r *sppb.ReadRe
 	m.ready()
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if err := m.injErr["StreamingRead"]; err != nil {
+	act, err := m.expectAction("StreamingRead", "StreamingReadIndex")
+	if err != nil {
 		return nil, err
-	}
-	if len(m.actions) == 0 {
-		m.t.Fatalf("unexpected StreamingRead executed")
-	}
-	act := m.actions[0]
-	m.actions = m.actions[1:]
-	if act.method != "StreamingRead" && act.method != "StreamingIndexRead" {
-		m.t.Fatalf("unexpected read call, want action: %v", act)
 	}
 	wantReq := &sppb.ReadRequest{
 		Session: "mocksession",
@@ -281,14 +252,14 @@ func (m *MockCloudSpannerClient) StreamingRead(c context.Context, r *sppb.ReadRe
 			All:    false,
 		},
 	}
-	if act.method == "StreamingIndexRead" {
+	if act.Method == "StreamingIndexRead" {
 		wantReq.Index = "idx1"
 	}
-	if !reflect.DeepEqual(r, wantReq) {
+	if !proto.Equal(r, wantReq) {
 		return nil, fmt.Errorf("got query request: %v, want: %v", r, wantReq)
 	}
-	if act.err != nil {
-		return nil, act.err
+	if act.Err != nil {
+		return nil, act.Err
 	}
 	return nil, errors.New("read never succeeds on mock client")
 }
@@ -299,19 +270,12 @@ func (m *MockCloudSpannerClient) BeginTransaction(c context.Context, r *sppb.Beg
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if !m.nice {
-		if err := m.injErr["BeginTransaction"]; err != nil {
+		act, err := m.expectAction("BeginTransaction")
+		if err != nil {
 			return nil, err
 		}
-		if len(m.actions) == 0 {
-			m.t.Fatalf("unexpected Begin executed")
-		}
-		act := m.actions[0]
-		m.actions = m.actions[1:]
-		if act.method != "Begin" {
-			m.t.Fatalf("unexpected Begin call, want action: %v", act)
-		}
-		if act.err != nil {
-			return nil, act.err
+		if act.Err != nil {
+			return nil, act.Err
 		}
 	}
 	resp := &sppb.Transaction{Id: []byte("transaction-1")}
@@ -327,19 +291,12 @@ func (m *MockCloudSpannerClient) Commit(c context.Context, r *sppb.CommitRequest
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if !m.nice {
-		if err := m.injErr["Commit"]; err != nil {
+		act, err := m.expectAction("Commit")
+		if err != nil {
 			return nil, err
 		}
-		if len(m.actions) == 0 {
-			m.t.Fatalf("unexpected Commit executed")
-		}
-		act := m.actions[0]
-		m.actions = m.actions[1:]
-		if act.method != "Commit" {
-			m.t.Fatalf("unexpected Commit call, want action: %v", act)
-		}
-		if act.err != nil {
-			return nil, act.err
+		if act.Err != nil {
+			return nil, act.Err
 		}
 	}
 	return &sppb.CommitResponse{CommitTimestamp: &pbt.Timestamp{Seconds: 1, Nanos: 2}}, nil
@@ -351,37 +308,76 @@ func (m *MockCloudSpannerClient) Rollback(c context.Context, r *sppb.RollbackReq
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if !m.nice {
-		if err := m.injErr["Rollback"]; err != nil {
+		act, err := m.expectAction("Rollback")
+		if err != nil {
 			return nil, err
 		}
-		if len(m.actions) == 0 {
-			m.t.Fatalf("unexpected Rollback executed")
-		}
-		act := m.actions[0]
-		m.actions = m.actions[1:]
-		if act.method != "Rollback" {
-			m.t.Fatalf("unexpected Rollback call, want action: %v", act)
-		}
-		if act.err != nil {
-			return nil, act.err
+		if act.Err != nil {
+			return nil, act.Err
 		}
 	}
 	return nil, nil
 }
 
+// PartitionQuery is a placeholder for SpannerServer.PartitionQuery.
+func (m *MockCloudSpannerClient) PartitionQuery(ctx context.Context, r *sppb.PartitionQueryRequest, opts ...grpc.CallOption) (*sppb.PartitionResponse, error) {
+	m.ready()
+	return nil, errors.New("Unimplemented")
+}
+
+// PartitionRead is a placeholder for SpannerServer.PartitionRead.
+func (m *MockCloudSpannerClient) PartitionRead(ctx context.Context, r *sppb.PartitionReadRequest, opts ...grpc.CallOption) (*sppb.PartitionResponse, error) {
+	m.ready()
+	return nil, errors.New("Unimplemented")
+}
+
+func (m *MockCloudSpannerClient) expectAction(methods ...string) (Action, error) {
+	for _, me := range methods {
+		if err := m.injErr[me]; err != nil {
+			return Action{}, err
+		}
+	}
+	if len(m.actions) == 0 {
+		m.t.Fatalf("unexpected %v executed", methods)
+	}
+	act := m.actions[0]
+	m.actions = m.actions[1:]
+	for _, me := range methods {
+		if me == act.Method {
+			return act, nil
+		}
+	}
+	m.t.Fatalf("unexpected call of one of %v, want method %s", methods, act.Method)
+	return Action{}, nil
+}
+
 // Freeze stalls all requests.
 func (m *MockCloudSpannerClient) Freeze() {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	m.freezed = make(chan struct{})
 }
 
 // Unfreeze restores processing requests.
 func (m *MockCloudSpannerClient) Unfreeze() {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	close(m.freezed)
 }
 
+// CheckActionsConsumed checks that all actions have been consumed.
+func (m *MockCloudSpannerClient) CheckActionsConsumed() {
+	if len(m.actions) != 0 {
+		m.t.Fatalf("unconsumed mock client actions: %v", m.actions)
+	}
+}
+
 // ready checks conditions before executing requests
-// TODO: also check injected errors, actions
+// TODO: add checks for injected errors, actions
 func (m *MockCloudSpannerClient) ready() {
+	m.mu.Lock()
+	freezed := m.freezed
+	m.mu.Unlock()
 	// check if client should be freezed
-	<-m.freezed
+	<-freezed
 }

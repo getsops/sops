@@ -26,6 +26,8 @@ func unfocusSpecs([]string, []string) {
 	unfocus("Measure")
 	unfocus("DescribeTable")
 	unfocus("Entry")
+	unfocus("Specify")
+	unfocus("When")
 }
 
 func unfocus(component string) {

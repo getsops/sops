@@ -1,8 +1,9 @@
 package containernode_test
 
 import (
-	"github.com/onsi/ginkgo/internal/leafnodes"
 	"math/rand"
+
+	"github.com/onsi/ginkgo/internal/leafnodes"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

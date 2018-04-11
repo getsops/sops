@@ -64,10 +64,10 @@ var _ = Describe("ParallelSpecIterator", func() {
 		Describe("when the server returns well-formed responses", func() {
 			BeforeEach(func() {
 				server.AppendHandlers(
-					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{0}),
-					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{1}),
-					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{3}),
-					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{4}),
+					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{Index: 0}),
+					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{Index: 1}),
+					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{Index: 3}),
+					ghttp.RespondWithJSONEncoded(http.StatusOK, Counter{Index: 4}),
 				)
 			})
 

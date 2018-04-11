@@ -3,6 +3,8 @@ package gunit
 import (
 	"reflect"
 	"testing"
+
+	"github.com/smartystreets/gunit/scan"
 )
 
 type testCase struct {
@@ -17,15 +19,17 @@ type testCase struct {
 	innerFixture     *Fixture
 	outerFixtureType reflect.Type
 	outerFixture     reflect.Value
+	positions        scan.TestCasePositions
 }
 
-func newTestCase(methodIndex int, method fixtureMethodInfo, parallel bool) *testCase {
+func newTestCase(methodIndex int, method fixtureMethodInfo, parallel bool, positions scan.TestCasePositions) *testCase {
 	return &testCase{
 		parallel:    parallel,
 		methodIndex: methodIndex,
 		description: method.name,
 		skipped:     method.isSkippedTest,
 		long:        method.isLongTest,
+		positions:   positions,
 	}
 }
 
@@ -37,17 +41,20 @@ func (this *testCase) Prepare(setup, teardown int, outerFixtureType reflect.Type
 
 func (this *testCase) Run(t *testing.T) {
 	if this.skipped {
-		t.Run(this.description, skip)
+		t.Run(this.description, this.skip)
 	} else if this.long && testing.Short() {
-		t.Run(this.description, skipLong)
+		t.Run(this.description, this.skipLong)
 	} else {
 		t.Run(this.description, this.run)
 	}
 }
 
-func skip(innerT *testing.T)     { innerT.Skip("Skipped test") }
-func skipLong(innerT *testing.T) { innerT.Skip("Skipped long-running test") }
-
+func (this *testCase) skip(innerT *testing.T) {
+	innerT.Skip("\n" + this.positions[innerT.Name()])
+}
+func (this *testCase) skipLong(innerT *testing.T) {
+	innerT.Skipf("Skipped long-running test:\n" + this.positions[innerT.Name()])
+}
 func (this *testCase) run(innerT *testing.T) {
 	if this.parallel {
 		innerT.Parallel()
@@ -57,6 +64,7 @@ func (this *testCase) run(innerT *testing.T) {
 	this.runWithSetupAndTeardown()
 }
 func (this *testCase) initializeFixture(innerT *testing.T) {
+	innerT.Log("Test definition:\n" + this.positions[innerT.Name()])
 	this.innerFixture = newFixture(innerT, testing.Verbose())
 	this.outerFixture = reflect.New(this.outerFixtureType.Elem())
 	this.outerFixture.Elem().FieldByName("Fixture").Set(reflect.ValueOf(this.innerFixture))
@@ -69,11 +77,9 @@ func (this *testCase) runWithSetupAndTeardown() {
 }
 
 func (this *testCase) runSetup() {
-	if this.setup < 0 {
-		return
+	if this.setup >= 0 {
+		this.outerFixture.Method(this.setup).Call(nil)
 	}
-
-	this.outerFixture.Method(this.setup).Call(nil)
 }
 
 func (this *testCase) runTest() {
@@ -81,9 +87,7 @@ func (this *testCase) runTest() {
 }
 
 func (this *testCase) runTeardown() {
-	if this.teardown < 0 {
-		return
+	if this.teardown >= 0 {
+		this.outerFixture.Method(this.teardown).Call(nil)
 	}
-
-	this.outerFixture.Method(this.teardown).Call(nil)
 }

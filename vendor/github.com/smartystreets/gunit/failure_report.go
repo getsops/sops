@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+
+	"github.com/smartystreets/gunit/scan"
 )
 
 type failureReport struct {
-	Stack   []string
-	Method  string
-	Fixture string
-	Package string
-	Failure string
+	Stack    []string
+	Method   string
+	Fixture  string
+	Package  string
+	Failure  string
 }
 
 func newFailureReport(failure string) string {
@@ -22,17 +24,19 @@ func newFailureReport(failure string) string {
 }
 
 func (this *failureReport) ScanStack() {
-	for x := maxStackDepth; x >= 0; x-- {
-		pc, file, line, ok := runtime.Caller(x)
-		if !ok { // stack frame still too high
+	stack := make([]uintptr, maxStackDepth)
+	runtime.Callers(0, stack)
+	frames := runtime.CallersFrames(stack)
+	for {
+		frame, more := frames.Next()
+		if !more {
+			break
+		}
+		if !strings.HasSuffix(frame.File, "_test.go") {
 			continue
 		}
-		if !strings.HasSuffix(file, "_test.go") {
-			continue
-		}
-		name := runtime.FuncForPC(pc).Name() // example: bitbucket.org/smartystreets/project/package.(*SomeFixture).TestSomething
-		this.ParseTestName(name)
-		this.Stack = append(this.Stack, fmt.Sprintf("%s:%d", file, line))
+		this.ParseTestName(frame.Function)
+		this.Stack = append(this.Stack, fmt.Sprintf("%s:%d", frame.File, frame.Line))
 	}
 }
 
@@ -46,17 +50,16 @@ func (this *failureReport) ParseTestName(name string) {
 	if partCount < 3 {
 		return
 	}
-	if !strings.HasPrefix(parts[last], "Test") {
-		return
+
+	if method := parts[last]; scan.IsTestCase(method) {
+		this.Method = method
+		this.Fixture = parts[last-1]
+		this.Package = strings.Join(parts[0:last-1], ".")
 	}
-	this.Method = parts[last]
-	this.Fixture = parts[last-1]
-	this.Package = strings.Join(parts[0:last-1], ".")
 }
 
 func (this failureReport) String() string {
 	buffer := new(bytes.Buffer)
-	fmt.Fprintf(buffer, "Test:     %s.%s()\n", this.Fixture, this.Method)
 	for i, stack := range this.Stack {
 		fmt.Fprintf(buffer, "(%d):      %s\n", len(this.Stack)-i-1, stack)
 	}
@@ -64,4 +67,4 @@ func (this failureReport) String() string {
 	return buffer.String() + "\n\n"
 }
 
-const maxStackDepth = 24
+const maxStackDepth = 32

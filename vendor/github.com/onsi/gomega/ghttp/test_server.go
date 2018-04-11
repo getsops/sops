@@ -47,7 +47,7 @@ A more comprehensive example is available at https://onsi.github.io/gomega/#_tes
 					})
 
 					It("should return the returned sprockets", func() {
-						Ω(client.Sprockets()).Should(Equal(sprockets))
+						Expect(client.Sprockets()).Should(Equal(sprockets))
 					})
 				})
 
@@ -57,7 +57,7 @@ A more comprehensive example is available at https://onsi.github.io/gomega/#_tes
 					})
 
 					It("should return an empty list of sprockets", func() {
-						Ω(client.Sprockets()).Should(BeEmpty())
+						Expect(client.Sprockets()).Should(BeEmpty())
 					})
 				})
 
@@ -68,8 +68,8 @@ A more comprehensive example is available at https://onsi.github.io/gomega/#_tes
 
 					It("should return an AuthenticationError error", func() {
 						sprockets, err := client.Sprockets()
-						Ω(sprockets).Should(BeEmpty())
-						Ω(err).Should(MatchError(AuthenticationError))
+						Expect(sprockets).Should(BeEmpty())
+						Expect(err).Should(MatchError(AuthenticationError))
 					})
 				})
 
@@ -80,8 +80,8 @@ A more comprehensive example is available at https://onsi.github.io/gomega/#_tes
 
 					It("should return an InternalError error", func() {
 						sprockets, err := client.Sprockets()
-						Ω(sprockets).Should(BeEmpty())
-						Ω(err).Should(MatchError(InternalError))
+						Expect(sprockets).Should(BeEmpty())
+						Expect(err).Should(MatchError(InternalError))
 					})
 				})
 			})
@@ -97,7 +97,7 @@ A more comprehensive example is available at https://onsi.github.io/gomega/#_tes
 				})
 
 				It("should make the request with a filter", func() {
-					Ω(client.Sprockets("food")).Should(Equal(sprockets))
+					Expect(client.Sprockets("food")).Should(Equal(sprockets))
 				})
 			})
 		})
@@ -160,11 +160,13 @@ type Server struct {
 	HTTPTestServer *httptest.Server
 
 	//Defaults to false.  If set to true, the Server will allow more requests than there are registered handlers.
+	//Direct use of this property is deprecated and is likely to be removed, use GetAllowUnhandledRequests and SetAllowUnhandledRequests instead.
 	AllowUnhandledRequests bool
 
 	//The status code returned when receiving an unhandled request.
 	//Defaults to http.StatusInternalServerError.
 	//Only applies if AllowUnhandledRequests is true
+	//Direct use of this property is deprecated and is likely to be removed, use GetUnhandledRequestStatusCode and SetUnhandledRequestStatusCode instead.
 	UnhandledRequestStatusCode int
 
 	//If provided, ghttp will log about each request received to the provided io.Writer
@@ -213,7 +215,7 @@ func (s *Server) Close() {
 //1. If the request matches a handler registered with RouteToHandler, that handler is called.
 //2. Otherwise, if there are handlers registered via AppendHandlers, those handlers are called in order.
 //3. If all registered handlers have been called then:
-//   a) If AllowUnhandledRequests is true, the request will be handled with response code of UnhandledRequestStatusCode
+//   a) If AllowUnhandledRequests is set to true, the request will be handled with response code of UnhandledRequestStatusCode
 //   b) If AllowUnhandledRequests is false, the request will not be handled and the current test will be marked as failed.
 func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	s.writeLock.Lock()
@@ -240,7 +242,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		defer func() {
 			recover()
 		}()
-		Ω(e).Should(BeNil(), "Handler Panicked")
+		Expect(e).Should(BeNil(), "Handler Panicked")
 	}()
 
 	if s.Writer != nil {
@@ -258,12 +260,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		h(w, req)
 	} else {
 		s.writeLock.Unlock()
-		if s.AllowUnhandledRequests {
+		if s.GetAllowUnhandledRequests() {
 			ioutil.ReadAll(req.Body)
 			req.Body.Close()
-			w.WriteHeader(s.UnhandledRequestStatusCode)
+			w.WriteHeader(s.GetUnhandledRequestStatusCode())
 		} else {
-			Ω(req).Should(BeNil(), "Received Unhandled Request")
+			Expect(req).Should(BeNil(), "Received Unhandled Request")
 		}
 	}
 }
@@ -378,4 +380,36 @@ func (s *Server) CloseClientConnections() {
 	defer s.writeLock.Unlock()
 
 	s.HTTPTestServer.CloseClientConnections()
+}
+
+//SetAllowUnhandledRequests enables the server to accept unhandled requests.
+func (s *Server) SetAllowUnhandledRequests(allowUnhandledRequests bool) {
+	s.writeLock.Lock()
+	defer s.writeLock.Unlock()
+
+	s.AllowUnhandledRequests = allowUnhandledRequests
+}
+
+//GetAllowUnhandledRequests returns true if the server accepts unhandled requests.
+func (s *Server) GetAllowUnhandledRequests() bool {
+	s.writeLock.Lock()
+	defer s.writeLock.Unlock()
+
+	return s.AllowUnhandledRequests
+}
+
+//SetUnhandledRequestStatusCode status code to be returned when the server receives unhandled requests
+func (s *Server) SetUnhandledRequestStatusCode(statusCode int) {
+	s.writeLock.Lock()
+	defer s.writeLock.Unlock()
+
+	s.UnhandledRequestStatusCode = statusCode
+}
+
+//GetUnhandledRequestStatusCode returns the current status code being returned for unhandled requests
+func (s *Server) GetUnhandledRequestStatusCode() int {
+	s.writeLock.Lock()
+	defer s.writeLock.Unlock()
+
+	return s.UnhandledRequestStatusCode
 }

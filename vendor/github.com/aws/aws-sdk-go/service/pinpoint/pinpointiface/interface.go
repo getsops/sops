@@ -68,6 +68,10 @@ type PinpointAPI interface {
 	CreateCampaignWithContext(aws.Context, *pinpoint.CreateCampaignInput, ...request.Option) (*pinpoint.CreateCampaignOutput, error)
 	CreateCampaignRequest(*pinpoint.CreateCampaignInput) (*request.Request, *pinpoint.CreateCampaignOutput)
 
+	CreateExportJob(*pinpoint.CreateExportJobInput) (*pinpoint.CreateExportJobOutput, error)
+	CreateExportJobWithContext(aws.Context, *pinpoint.CreateExportJobInput, ...request.Option) (*pinpoint.CreateExportJobOutput, error)
+	CreateExportJobRequest(*pinpoint.CreateExportJobInput) (*request.Request, *pinpoint.CreateExportJobOutput)
+
 	CreateImportJob(*pinpoint.CreateImportJobInput) (*pinpoint.CreateImportJobOutput, error)
 	CreateImportJobWithContext(aws.Context, *pinpoint.CreateImportJobInput, ...request.Option) (*pinpoint.CreateImportJobOutput, error)
 	CreateImportJobRequest(*pinpoint.CreateImportJobInput) (*request.Request, *pinpoint.CreateImportJobOutput)
@@ -88,6 +92,14 @@ type PinpointAPI interface {
 	DeleteApnsSandboxChannelWithContext(aws.Context, *pinpoint.DeleteApnsSandboxChannelInput, ...request.Option) (*pinpoint.DeleteApnsSandboxChannelOutput, error)
 	DeleteApnsSandboxChannelRequest(*pinpoint.DeleteApnsSandboxChannelInput) (*request.Request, *pinpoint.DeleteApnsSandboxChannelOutput)
 
+	DeleteApnsVoipChannel(*pinpoint.DeleteApnsVoipChannelInput) (*pinpoint.DeleteApnsVoipChannelOutput, error)
+	DeleteApnsVoipChannelWithContext(aws.Context, *pinpoint.DeleteApnsVoipChannelInput, ...request.Option) (*pinpoint.DeleteApnsVoipChannelOutput, error)
+	DeleteApnsVoipChannelRequest(*pinpoint.DeleteApnsVoipChannelInput) (*request.Request, *pinpoint.DeleteApnsVoipChannelOutput)
+
+	DeleteApnsVoipSandboxChannel(*pinpoint.DeleteApnsVoipSandboxChannelInput) (*pinpoint.DeleteApnsVoipSandboxChannelOutput, error)
+	DeleteApnsVoipSandboxChannelWithContext(aws.Context, *pinpoint.DeleteApnsVoipSandboxChannelInput, ...request.Option) (*pinpoint.DeleteApnsVoipSandboxChannelOutput, error)
+	DeleteApnsVoipSandboxChannelRequest(*pinpoint.DeleteApnsVoipSandboxChannelInput) (*request.Request, *pinpoint.DeleteApnsVoipSandboxChannelOutput)
+
 	DeleteApp(*pinpoint.DeleteAppInput) (*pinpoint.DeleteAppOutput, error)
 	DeleteAppWithContext(aws.Context, *pinpoint.DeleteAppInput, ...request.Option) (*pinpoint.DeleteAppOutput, error)
 	DeleteAppRequest(*pinpoint.DeleteAppInput) (*request.Request, *pinpoint.DeleteAppOutput)
@@ -103,6 +115,10 @@ type PinpointAPI interface {
 	DeleteEmailChannel(*pinpoint.DeleteEmailChannelInput) (*pinpoint.DeleteEmailChannelOutput, error)
 	DeleteEmailChannelWithContext(aws.Context, *pinpoint.DeleteEmailChannelInput, ...request.Option) (*pinpoint.DeleteEmailChannelOutput, error)
 	DeleteEmailChannelRequest(*pinpoint.DeleteEmailChannelInput) (*request.Request, *pinpoint.DeleteEmailChannelOutput)
+
+	DeleteEndpoint(*pinpoint.DeleteEndpointInput) (*pinpoint.DeleteEndpointOutput, error)
+	DeleteEndpointWithContext(aws.Context, *pinpoint.DeleteEndpointInput, ...request.Option) (*pinpoint.DeleteEndpointOutput, error)
+	DeleteEndpointRequest(*pinpoint.DeleteEndpointInput) (*request.Request, *pinpoint.DeleteEndpointOutput)
 
 	DeleteEventStream(*pinpoint.DeleteEventStreamInput) (*pinpoint.DeleteEventStreamOutput, error)
 	DeleteEventStreamWithContext(aws.Context, *pinpoint.DeleteEventStreamInput, ...request.Option) (*pinpoint.DeleteEventStreamOutput, error)
@@ -131,6 +147,14 @@ type PinpointAPI interface {
 	GetApnsSandboxChannel(*pinpoint.GetApnsSandboxChannelInput) (*pinpoint.GetApnsSandboxChannelOutput, error)
 	GetApnsSandboxChannelWithContext(aws.Context, *pinpoint.GetApnsSandboxChannelInput, ...request.Option) (*pinpoint.GetApnsSandboxChannelOutput, error)
 	GetApnsSandboxChannelRequest(*pinpoint.GetApnsSandboxChannelInput) (*request.Request, *pinpoint.GetApnsSandboxChannelOutput)
+
+	GetApnsVoipChannel(*pinpoint.GetApnsVoipChannelInput) (*pinpoint.GetApnsVoipChannelOutput, error)
+	GetApnsVoipChannelWithContext(aws.Context, *pinpoint.GetApnsVoipChannelInput, ...request.Option) (*pinpoint.GetApnsVoipChannelOutput, error)
+	GetApnsVoipChannelRequest(*pinpoint.GetApnsVoipChannelInput) (*request.Request, *pinpoint.GetApnsVoipChannelOutput)
+
+	GetApnsVoipSandboxChannel(*pinpoint.GetApnsVoipSandboxChannelInput) (*pinpoint.GetApnsVoipSandboxChannelOutput, error)
+	GetApnsVoipSandboxChannelWithContext(aws.Context, *pinpoint.GetApnsVoipSandboxChannelInput, ...request.Option) (*pinpoint.GetApnsVoipSandboxChannelOutput, error)
+	GetApnsVoipSandboxChannelRequest(*pinpoint.GetApnsVoipSandboxChannelInput) (*request.Request, *pinpoint.GetApnsVoipSandboxChannelOutput)
 
 	GetApp(*pinpoint.GetAppInput) (*pinpoint.GetAppOutput, error)
 	GetAppWithContext(aws.Context, *pinpoint.GetAppInput, ...request.Option) (*pinpoint.GetAppOutput, error)
@@ -180,6 +204,14 @@ type PinpointAPI interface {
 	GetEventStreamWithContext(aws.Context, *pinpoint.GetEventStreamInput, ...request.Option) (*pinpoint.GetEventStreamOutput, error)
 	GetEventStreamRequest(*pinpoint.GetEventStreamInput) (*request.Request, *pinpoint.GetEventStreamOutput)
 
+	GetExportJob(*pinpoint.GetExportJobInput) (*pinpoint.GetExportJobOutput, error)
+	GetExportJobWithContext(aws.Context, *pinpoint.GetExportJobInput, ...request.Option) (*pinpoint.GetExportJobOutput, error)
+	GetExportJobRequest(*pinpoint.GetExportJobInput) (*request.Request, *pinpoint.GetExportJobOutput)
+
+	GetExportJobs(*pinpoint.GetExportJobsInput) (*pinpoint.GetExportJobsOutput, error)
+	GetExportJobsWithContext(aws.Context, *pinpoint.GetExportJobsInput, ...request.Option) (*pinpoint.GetExportJobsOutput, error)
+	GetExportJobsRequest(*pinpoint.GetExportJobsInput) (*request.Request, *pinpoint.GetExportJobsOutput)
+
 	GetGcmChannel(*pinpoint.GetGcmChannelInput) (*pinpoint.GetGcmChannelOutput, error)
 	GetGcmChannelWithContext(aws.Context, *pinpoint.GetGcmChannelInput, ...request.Option) (*pinpoint.GetGcmChannelOutput, error)
 	GetGcmChannelRequest(*pinpoint.GetGcmChannelInput) (*request.Request, *pinpoint.GetGcmChannelOutput)
@@ -195,6 +227,10 @@ type PinpointAPI interface {
 	GetSegment(*pinpoint.GetSegmentInput) (*pinpoint.GetSegmentOutput, error)
 	GetSegmentWithContext(aws.Context, *pinpoint.GetSegmentInput, ...request.Option) (*pinpoint.GetSegmentOutput, error)
 	GetSegmentRequest(*pinpoint.GetSegmentInput) (*request.Request, *pinpoint.GetSegmentOutput)
+
+	GetSegmentExportJobs(*pinpoint.GetSegmentExportJobsInput) (*pinpoint.GetSegmentExportJobsOutput, error)
+	GetSegmentExportJobsWithContext(aws.Context, *pinpoint.GetSegmentExportJobsInput, ...request.Option) (*pinpoint.GetSegmentExportJobsOutput, error)
+	GetSegmentExportJobsRequest(*pinpoint.GetSegmentExportJobsInput) (*request.Request, *pinpoint.GetSegmentExportJobsOutput)
 
 	GetSegmentImportJobs(*pinpoint.GetSegmentImportJobsInput) (*pinpoint.GetSegmentImportJobsOutput, error)
 	GetSegmentImportJobsWithContext(aws.Context, *pinpoint.GetSegmentImportJobsInput, ...request.Option) (*pinpoint.GetSegmentImportJobsOutput, error)
@@ -239,6 +275,14 @@ type PinpointAPI interface {
 	UpdateApnsSandboxChannel(*pinpoint.UpdateApnsSandboxChannelInput) (*pinpoint.UpdateApnsSandboxChannelOutput, error)
 	UpdateApnsSandboxChannelWithContext(aws.Context, *pinpoint.UpdateApnsSandboxChannelInput, ...request.Option) (*pinpoint.UpdateApnsSandboxChannelOutput, error)
 	UpdateApnsSandboxChannelRequest(*pinpoint.UpdateApnsSandboxChannelInput) (*request.Request, *pinpoint.UpdateApnsSandboxChannelOutput)
+
+	UpdateApnsVoipChannel(*pinpoint.UpdateApnsVoipChannelInput) (*pinpoint.UpdateApnsVoipChannelOutput, error)
+	UpdateApnsVoipChannelWithContext(aws.Context, *pinpoint.UpdateApnsVoipChannelInput, ...request.Option) (*pinpoint.UpdateApnsVoipChannelOutput, error)
+	UpdateApnsVoipChannelRequest(*pinpoint.UpdateApnsVoipChannelInput) (*request.Request, *pinpoint.UpdateApnsVoipChannelOutput)
+
+	UpdateApnsVoipSandboxChannel(*pinpoint.UpdateApnsVoipSandboxChannelInput) (*pinpoint.UpdateApnsVoipSandboxChannelOutput, error)
+	UpdateApnsVoipSandboxChannelWithContext(aws.Context, *pinpoint.UpdateApnsVoipSandboxChannelInput, ...request.Option) (*pinpoint.UpdateApnsVoipSandboxChannelOutput, error)
+	UpdateApnsVoipSandboxChannelRequest(*pinpoint.UpdateApnsVoipSandboxChannelInput) (*request.Request, *pinpoint.UpdateApnsVoipSandboxChannelOutput)
 
 	UpdateApplicationSettings(*pinpoint.UpdateApplicationSettingsInput) (*pinpoint.UpdateApplicationSettingsOutput, error)
 	UpdateApplicationSettingsWithContext(aws.Context, *pinpoint.UpdateApplicationSettingsInput, ...request.Option) (*pinpoint.UpdateApplicationSettingsOutput, error)

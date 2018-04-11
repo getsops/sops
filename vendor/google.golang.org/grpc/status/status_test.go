@@ -24,6 +24,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/golang/protobuf/ptypes/any"
+
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	apb "github.com/golang/protobuf/ptypes/any"
@@ -116,6 +118,74 @@ func TestFromErrorOK(t *testing.T) {
 	s, ok := FromError(nil)
 	if !ok || s.Code() != code || s.Message() != message || s.Err() != nil {
 		t.Fatalf("FromError(nil) = %v, %v; want <Code()=%s, Message()=%q, Err=nil>, true", s, ok, code, message)
+	}
+}
+
+type customError struct {
+	Code    codes.Code
+	Message string
+	Details []*any.Any
+}
+
+func (c customError) Error() string {
+	return fmt.Sprintf("rpc error: code = %s desc = %s", c.Code, c.Message)
+}
+
+func (c customError) GRPCStatus() *Status {
+	return &Status{
+		s: &spb.Status{
+			Code:    int32(c.Code),
+			Message: c.Message,
+			Details: c.Details,
+		},
+	}
+}
+
+func TestFromErrorImplementsInterface(t *testing.T) {
+	code, message := codes.Internal, "test description"
+	details := []*any.Any{{
+		TypeUrl: "testUrl",
+		Value:   []byte("testValue"),
+	}}
+	err := customError{
+		Code:    code,
+		Message: message,
+		Details: details,
+	}
+	s, ok := FromError(err)
+	if !ok || s.Code() != code || s.Message() != message || s.Err() == nil {
+		t.Fatalf("FromError(%v) = %v, %v; want <Code()=%s, Message()=%q, Err()!=nil>, true", err, s, ok, code, message)
+	}
+	pd := s.Proto().GetDetails()
+	if len(pd) != 1 || !reflect.DeepEqual(pd[0], details[0]) {
+		t.Fatalf("s.Proto.GetDetails() = %v; want <Details()=%s>", pd, details)
+	}
+}
+
+func TestFromErrorUnknownError(t *testing.T) {
+	code, message := codes.Unknown, "unknown error"
+	err := errors.New("unknown error")
+	s, ok := FromError(err)
+	if ok || s.Code() != code || s.Message() != message {
+		t.Fatalf("FromError(%v) = %v, %v; want <Code()=%s, Message()=%q>, false", err, s, ok, code, message)
+	}
+}
+
+func TestConvertKnownError(t *testing.T) {
+	code, message := codes.Internal, "test description"
+	err := Error(code, message)
+	s := Convert(err)
+	if s.Code() != code || s.Message() != message {
+		t.Fatalf("Convert(%v) = %v; want <Code()=%s, Message()=%q>", err, s, code, message)
+	}
+}
+
+func TestConvertUnknownError(t *testing.T) {
+	code, message := codes.Unknown, "unknown error"
+	err := errors.New("unknown error")
+	s := Convert(err)
+	if s.Code() != code || s.Message() != message {
+		t.Fatalf("Convert(%v) = %v; want <Code()=%s, Message()=%q>", err, s, code, message)
 	}
 }
 

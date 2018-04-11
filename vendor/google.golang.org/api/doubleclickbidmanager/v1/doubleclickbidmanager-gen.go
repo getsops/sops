@@ -166,8 +166,8 @@ type DownloadLineItemsRequest struct {
 }
 
 func (s *DownloadLineItemsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DownloadLineItemsRequest
-	raw := noMethod(*s)
+	type NoMethod DownloadLineItemsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -199,8 +199,8 @@ type DownloadLineItemsResponse struct {
 }
 
 func (s *DownloadLineItemsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod DownloadLineItemsResponse
-	raw := noMethod(*s)
+	type NoMethod DownloadLineItemsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -212,6 +212,7 @@ type DownloadRequest struct {
 	// Possible values:
 	//   "AD"
 	//   "AD_GROUP"
+	//   "CAMPAIGN"
 	//   "INSERTION_ORDER"
 	//   "LINE_ITEM"
 	FileTypes []string `json:"fileTypes,omitempty"`
@@ -227,6 +228,7 @@ type DownloadRequest struct {
 	//
 	// Possible values:
 	//   "ADVERTISER_ID"
+	//   "CAMPAIGN_ID"
 	//   "INSERTION_ORDER_ID"
 	//   "LINE_ITEM_ID"
 	FilterType string `json:"filterType,omitempty"`
@@ -253,8 +255,8 @@ type DownloadRequest struct {
 }
 
 func (s *DownloadRequest) MarshalJSON() ([]byte, error) {
-	type noMethod DownloadRequest
-	raw := noMethod(*s)
+	type NoMethod DownloadRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -265,6 +267,9 @@ type DownloadResponse struct {
 
 	// Ads: Retrieved ads in SDF format.
 	Ads string `json:"ads,omitempty"`
+
+	// Campaigns: Retrieved campaigns in SDF format.
+	Campaigns string `json:"campaigns,omitempty"`
 
 	// InsertionOrders: Retrieved insertion orders in SDF format.
 	InsertionOrders string `json:"insertionOrders,omitempty"`
@@ -294,8 +299,8 @@ type DownloadResponse struct {
 }
 
 func (s *DownloadResponse) MarshalJSON() ([]byte, error) {
-	type noMethod DownloadResponse
-	raw := noMethod(*s)
+	type NoMethod DownloadResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -445,8 +450,8 @@ type FilterPair struct {
 }
 
 func (s *FilterPair) MarshalJSON() ([]byte, error) {
-	type noMethod FilterPair
-	raw := noMethod(*s)
+	type NoMethod FilterPair
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -481,8 +486,8 @@ type ListQueriesResponse struct {
 }
 
 func (s *ListQueriesResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListQueriesResponse
-	raw := noMethod(*s)
+	type NoMethod ListQueriesResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -517,8 +522,8 @@ type ListReportsResponse struct {
 }
 
 func (s *ListReportsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListReportsResponse
-	raw := noMethod(*s)
+	type NoMethod ListReportsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -695,6 +700,8 @@ type Parameters struct {
 	//   "METRIC_COMSCORE_VCE_POPULATION"
 	//   "METRIC_COMSCORE_VCE_UNIQUE_AUDIENCE"
 	//   "METRIC_CONVERSIONS_PER_MILLE"
+	//   "METRIC_COOKIE_REACH_AVERAGE_IMPRESSION_FREQUENCY"
+	//   "METRIC_COOKIE_REACH_IMPRESSION_REACH"
 	//   "METRIC_CPM_FEE1_ADVERTISER"
 	//   "METRIC_CPM_FEE1_PARTNER"
 	//   "METRIC_CPM_FEE1_USD"
@@ -960,6 +967,7 @@ type Parameters struct {
 	//   "METRIC_VIDEO_COMPANION_CLICKS"
 	//   "METRIC_VIDEO_COMPANION_IMPRESSIONS"
 	//   "METRIC_VIDEO_COMPLETION_RATE"
+	//   "METRIC_VIEWABLE_BID_REQUESTS"
 	Metrics []string `json:"metrics,omitempty"`
 
 	// Type: Report type.
@@ -978,6 +986,7 @@ type Parameters struct {
 	//   "TYPE_GENERAL"
 	//   "TYPE_INVENTORY_AVAILABILITY"
 	//   "TYPE_KEYWORD"
+	//   "TYPE_LINEAR_TV_SEARCH_LIFT"
 	//   "TYPE_NIELSEN_AUDIENCE_PROFILE"
 	//   "TYPE_NIELSEN_DAILY_REACH_BUILD"
 	//   "TYPE_NIELSEN_ONLINE_GLOBAL_MARKET"
@@ -1016,8 +1025,8 @@ type Parameters struct {
 }
 
 func (s *Parameters) MarshalJSON() ([]byte, error) {
-	type noMethod Parameters
-	raw := noMethod(*s)
+	type NoMethod Parameters
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1075,8 +1084,8 @@ type Query struct {
 }
 
 func (s *Query) MarshalJSON() ([]byte, error) {
-	type noMethod Query
-	raw := noMethod(*s)
+	type NoMethod Query
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1173,8 +1182,8 @@ type QueryMetadata struct {
 }
 
 func (s *QueryMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod QueryMetadata
-	raw := noMethod(*s)
+	type NoMethod QueryMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1221,8 +1230,8 @@ type QuerySchedule struct {
 }
 
 func (s *QuerySchedule) MarshalJSON() ([]byte, error) {
-	type noMethod QuerySchedule
-	raw := noMethod(*s)
+	type NoMethod QuerySchedule
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1255,8 +1264,8 @@ type Report struct {
 }
 
 func (s *Report) MarshalJSON() ([]byte, error) {
-	type noMethod Report
-	raw := noMethod(*s)
+	type NoMethod Report
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1303,8 +1312,8 @@ type ReportFailure struct {
 }
 
 func (s *ReportFailure) MarshalJSON() ([]byte, error) {
-	type noMethod ReportFailure
-	raw := noMethod(*s)
+	type NoMethod ReportFailure
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1334,8 +1343,8 @@ type ReportKey struct {
 }
 
 func (s *ReportKey) MarshalJSON() ([]byte, error) {
-	type noMethod ReportKey
-	raw := noMethod(*s)
+	type NoMethod ReportKey
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1376,8 +1385,8 @@ type ReportMetadata struct {
 }
 
 func (s *ReportMetadata) MarshalJSON() ([]byte, error) {
-	type noMethod ReportMetadata
-	raw := noMethod(*s)
+	type NoMethod ReportMetadata
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1424,8 +1433,8 @@ type ReportStatus struct {
 }
 
 func (s *ReportStatus) MarshalJSON() ([]byte, error) {
-	type noMethod ReportStatus
-	raw := noMethod(*s)
+	type NoMethod ReportStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1467,8 +1476,8 @@ type RowStatus struct {
 }
 
 func (s *RowStatus) MarshalJSON() ([]byte, error) {
-	type noMethod RowStatus
-	raw := noMethod(*s)
+	type NoMethod RowStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1530,8 +1539,8 @@ type RunQueryRequest struct {
 }
 
 func (s *RunQueryRequest) MarshalJSON() ([]byte, error) {
-	type noMethod RunQueryRequest
-	raw := noMethod(*s)
+	type NoMethod RunQueryRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1569,8 +1578,8 @@ type UploadLineItemsRequest struct {
 }
 
 func (s *UploadLineItemsRequest) MarshalJSON() ([]byte, error) {
-	type noMethod UploadLineItemsRequest
-	raw := noMethod(*s)
+	type NoMethod UploadLineItemsRequest
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1601,8 +1610,8 @@ type UploadLineItemsResponse struct {
 }
 
 func (s *UploadLineItemsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod UploadLineItemsResponse
-	raw := noMethod(*s)
+	type NoMethod UploadLineItemsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1632,8 +1641,8 @@ type UploadStatus struct {
 }
 
 func (s *UploadStatus) MarshalJSON() ([]byte, error) {
-	type noMethod UploadStatus
-	raw := noMethod(*s)
+	type NoMethod UploadStatus
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -1647,7 +1656,8 @@ type LineitemsDownloadlineitemsCall struct {
 	header_                  http.Header
 }
 
-// Downloadlineitems: Retrieves line items in CSV format.
+// Downloadlineitems: Retrieves line items in CSV format. TrueView line
+// items are not supported.
 func (r *LineitemsService) Downloadlineitems(downloadlineitemsrequest *DownloadLineItemsRequest) *LineitemsDownloadlineitemsCall {
 	c := &LineitemsDownloadlineitemsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.downloadlineitemsrequest = downloadlineitemsrequest
@@ -1732,12 +1742,12 @@ func (c *LineitemsDownloadlineitemsCall) Do(opts ...googleapi.CallOption) (*Down
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
 	// {
-	//   "description": "Retrieves line items in CSV format.",
+	//   "description": "Retrieves line items in CSV format. TrueView line items are not supported.",
 	//   "httpMethod": "POST",
 	//   "id": "doubleclickbidmanager.lineitems.downloadlineitems",
 	//   "path": "lineitems/downloadlineitems",
@@ -1764,7 +1774,8 @@ type LineitemsUploadlineitemsCall struct {
 	header_                http.Header
 }
 
-// Uploadlineitems: Uploads line items in CSV format.
+// Uploadlineitems: Uploads line items in CSV format. TrueView line
+// items are not supported.
 func (r *LineitemsService) Uploadlineitems(uploadlineitemsrequest *UploadLineItemsRequest) *LineitemsUploadlineitemsCall {
 	c := &LineitemsUploadlineitemsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.uploadlineitemsrequest = uploadlineitemsrequest
@@ -1849,12 +1860,12 @@ func (c *LineitemsUploadlineitemsCall) Do(opts ...googleapi.CallOption) (*Upload
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
 	// {
-	//   "description": "Uploads line items in CSV format.",
+	//   "description": "Uploads line items in CSV format. TrueView line items are not supported.",
 	//   "httpMethod": "POST",
 	//   "id": "doubleclickbidmanager.lineitems.uploadlineitems",
 	//   "path": "lineitems/uploadlineitems",
@@ -1966,7 +1977,7 @@ func (c *QueriesCreatequeryCall) Do(opts ...googleapi.CallOption) (*Query, error
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2192,7 +2203,7 @@ func (c *QueriesGetqueryCall) Do(opts ...googleapi.CallOption) (*Query, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2325,7 +2336,7 @@ func (c *QueriesListqueriesCall) Do(opts ...googleapi.CallOption) (*ListQueriesR
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2557,7 +2568,7 @@ func (c *ReportsListreportsCall) Do(opts ...googleapi.CallOption) (*ListReportsR
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -2683,7 +2694,7 @@ func (c *SdfDownloadCall) Do(opts ...googleapi.CallOption) (*DownloadResponse, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil

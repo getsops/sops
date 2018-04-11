@@ -38,11 +38,9 @@ func newFixture(t testingT, verbose bool) *Fixture {
 // from the many assertion functions found in github.com/smartystreets/assertions/should.
 // Example: this.So(actual, should.Equal, expected)
 func (this *Fixture) So(actual interface{}, assert assertion, expected ...interface{}) bool {
-
 	failure := assert(actual, expected...)
 	failed := len(failure) > 0
 	if failed {
-		this.t.Fail()
 		this.fail(failure)
 	}
 	return !failed
@@ -80,7 +78,10 @@ func (this *Fixture) Print(a ...interface{})                 { fmt.Fprint(this.l
 func (this *Fixture) Printf(format string, a ...interface{}) { fmt.Fprintf(this.log, format, a...) }
 func (this *Fixture) Println(a ...interface{})               { fmt.Fprintln(this.log, a...) }
 
-func (this *Fixture) Failed() bool { return this.t.Failed() }
+// Write implements io.Writer. There are rare times when this is convenient (debugging via `log.SetOutput(fixture)`).
+func (this *Fixture) Write(p []byte) (int, error) { return this.log.Write(p) }
+func (this *Fixture) Failed() bool                { return this.t.Failed() }
+func (this *Fixture) Name() string                { return this.t.Name() }
 
 func (this *Fixture) fail(failure string) {
 	this.t.Fail()
@@ -101,7 +102,6 @@ func (this *Fixture) recoverPanic(r interface{}) {
 	buffer := make([]byte, 1024*16)
 	runtime.Stack(buffer, false)
 	this.Println(strings.TrimSpace(string(buffer)))
-	this.Println("* (Additional tests may have been skipped as a result of the panic shown above.)")
 	this.t.Fail()
 }
 

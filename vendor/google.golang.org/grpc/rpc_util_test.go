@@ -20,6 +20,7 @@ package grpc
 
 import (
 	"bytes"
+	"compress/gzip"
 	"io"
 	"math"
 	"reflect"
@@ -27,6 +28,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/encoding"
+	protoenc "google.golang.org/grpc/encoding/proto"
 	"google.golang.org/grpc/status"
 	perfpb "google.golang.org/grpc/test/codec_perf"
 	"google.golang.org/grpc/transport"
@@ -110,7 +113,7 @@ func TestEncode(t *testing.T) {
 	}{
 		{nil, nil, []byte{0, 0, 0, 0, 0}, []byte{}, nil},
 	} {
-		hdr, data, err := encode(protoCodec{}, test.msg, nil, nil, nil)
+		hdr, data, err := encode(encoding.GetCodec(protoenc.Name), test.msg, nil, nil, nil)
 		if err != test.err || !bytes.Equal(hdr, test.hdr) || !bytes.Equal(data, test.data) {
 			t.Fatalf("encode(_, _, %v, _) = %v, %v, %v\nwant %v, %v, %v", test.cp, hdr, data, err, test.hdr, test.data, test.err)
 		}
@@ -118,6 +121,26 @@ func TestEncode(t *testing.T) {
 }
 
 func TestCompress(t *testing.T) {
+
+	bestCompressor, err := NewGZIPCompressorWithLevel(gzip.BestCompression)
+	if err != nil {
+		t.Fatalf("Could not initialize gzip compressor with best compression.")
+	}
+	bestSpeedCompressor, err := NewGZIPCompressorWithLevel(gzip.BestSpeed)
+	if err != nil {
+		t.Fatalf("Could not initialize gzip compressor with best speed compression.")
+	}
+
+	defaultCompressor, err := NewGZIPCompressorWithLevel(gzip.BestSpeed)
+	if err != nil {
+		t.Fatalf("Could not initialize gzip compressor with default compression.")
+	}
+
+	level5, err := NewGZIPCompressorWithLevel(5)
+	if err != nil {
+		t.Fatalf("Could not initialize gzip compressor with level 5 compression.")
+	}
+
 	for _, test := range []struct {
 		// input
 		data []byte
@@ -127,6 +150,10 @@ func TestCompress(t *testing.T) {
 		err error
 	}{
 		{make([]byte, 1024), NewGZIPCompressor(), NewGZIPDecompressor(), nil},
+		{make([]byte, 1024), bestCompressor, NewGZIPDecompressor(), nil},
+		{make([]byte, 1024), bestSpeedCompressor, NewGZIPDecompressor(), nil},
+		{make([]byte, 1024), defaultCompressor, NewGZIPDecompressor(), nil},
+		{make([]byte, 1024), level5, NewGZIPDecompressor(), nil},
 	} {
 		b := new(bytes.Buffer)
 		if err := test.cp.Do(b, test.data); err != test.err {
@@ -164,13 +191,14 @@ func TestToRPCErr(t *testing.T) {
 // bmEncode benchmarks encoding a Protocol Buffer message containing mSize
 // bytes.
 func bmEncode(b *testing.B, mSize int) {
+	cdc := encoding.GetCodec(protoenc.Name)
 	msg := &perfpb.Buffer{Body: make([]byte, mSize)}
-	encodeHdr, encodeData, _ := encode(protoCodec{}, msg, nil, nil, nil)
+	encodeHdr, encodeData, _ := encode(cdc, msg, nil, nil, nil)
 	encodedSz := int64(len(encodeHdr) + len(encodeData))
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		encode(protoCodec{}, msg, nil, nil, nil)
+		encode(cdc, msg, nil, nil, nil)
 	}
 	b.SetBytes(encodedSz)
 }

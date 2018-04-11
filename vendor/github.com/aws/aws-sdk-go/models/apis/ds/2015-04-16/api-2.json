@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"Directory Service",
     "serviceFullName":"AWS Directory Service",
+    "serviceId":"Directory Service",
     "signatureVersion":"v4",
     "targetPrefix":"DirectoryService_20150416",
     "uid":"ds-2015-04-16"
@@ -910,7 +911,8 @@
         "ShortName":{"shape":"DirectoryShortName"},
         "Password":{"shape":"Password"},
         "Description":{"shape":"Description"},
-        "VpcSettings":{"shape":"DirectoryVpcSettings"}
+        "VpcSettings":{"shape":"DirectoryVpcSettings"},
+        "Edition":{"shape":"DirectoryEdition"}
       }
     },
     "CreateMicrosoftADResult":{
@@ -1165,6 +1167,7 @@
         "Name":{"shape":"DirectoryName"},
         "ShortName":{"shape":"DirectoryShortName"},
         "Size":{"shape":"DirectorySize"},
+        "Edition":{"shape":"DirectoryEdition"},
         "Alias":{"shape":"AliasName"},
         "AccessUrl":{"shape":"AccessUrl"},
         "Description":{"shape":"Description"},
@@ -1185,6 +1188,13 @@
     "DirectoryDescriptions":{
       "type":"list",
       "member":{"shape":"DirectoryDescription"}
+    },
+    "DirectoryEdition":{
+      "type":"string",
+      "enum":[
+        "Enterprise",
+        "Standard"
+      ]
     },
     "DirectoryId":{
       "type":"string",
@@ -1775,7 +1785,7 @@
     },
     "SecurityGroupId":{
       "type":"string",
-      "pattern":"^(sg-[0-9a-f]{8})$"
+      "pattern":"^(sg-[0-9a-f]{8}|sg-[0-9a-f]{17})$"
     },
     "Server":{
       "type":"string",
@@ -1883,7 +1893,7 @@
     "StateLastUpdatedDateTime":{"type":"timestamp"},
     "SubnetId":{
       "type":"string",
-      "pattern":"^(subnet-[0-9a-f]{8})$"
+      "pattern":"^(subnet-[0-9a-f]{8}|subnet-[0-9a-f]{17})$"
     },
     "SubnetIds":{
       "type":"list",
@@ -2087,7 +2097,7 @@
     },
     "VpcId":{
       "type":"string",
-      "pattern":"^(vpc-[0-9a-f]{8})$"
+      "pattern":"^(vpc-[0-9a-f]{8}|vpc-[0-9a-f]{17})$"
     }
   }
 }

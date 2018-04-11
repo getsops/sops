@@ -597,6 +597,18 @@ func TestSliceOfString(t *testing.T) {
 	print(str[0:10])
 }
 
+func TestSliceOutOfRange(t *testing.T) {
+	defer func() {
+		if err := recover(); err == nil || !strings.Contains(err.(error).Error(), "slice bounds out of range") {
+			t.Fail()
+		}
+	}()
+
+	a := make([]byte, 4)
+	b := a[8:]
+	_ = b
+}
+
 type R struct{ v int }
 
 func (r R) Val() int {

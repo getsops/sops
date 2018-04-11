@@ -29,9 +29,12 @@ import (
 	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
 
 	"github.com/golang/protobuf/ptypes"
+	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 )
 
 // resourcePrefixHeader is the name of the metadata header used to indicate
@@ -123,65 +126,73 @@ func (c *Client) idsToRef(IDs []string, dbPath string) (*CollectionRef, *Documen
 // GetAll retrieves multiple documents with a single call. The DocumentSnapshots are
 // returned in the order of the given DocumentRefs.
 //
-// If a document is not present, the corresponding DocumentSnapshot will be nil.
+// If a document is not present, the corresponding DocumentSnapshot's Exists method will return false.
 func (c *Client) GetAll(ctx context.Context, docRefs []*DocumentRef) ([]*DocumentSnapshot, error) {
 	if err := checkTransaction(ctx); err != nil {
 		return nil, err
 	}
+	return c.getAll(ctx, docRefs, nil)
+}
+
+func (c *Client) getAll(ctx context.Context, docRefs []*DocumentRef, tid []byte) ([]*DocumentSnapshot, error) {
 	var docNames []string
-	for _, dr := range docRefs {
+	docIndex := map[string]int{} // doc name to position in docRefs
+	for i, dr := range docRefs {
 		if dr == nil {
 			return nil, errNilDocRef
 		}
 		docNames = append(docNames, dr.Path)
+		docIndex[dr.Path] = i
 	}
 	req := &pb.BatchGetDocumentsRequest{
 		Database:  c.path(),
 		Documents: docNames,
+	}
+	if tid != nil {
+		req.ConsistencySelector = &pb.BatchGetDocumentsRequest_Transaction{tid}
 	}
 	streamClient, err := c.c.BatchGetDocuments(withResourceHeader(ctx, req.Database), req)
 	if err != nil {
 		return nil, err
 	}
 
-	// Read results from the stream and add them to a map.
-	docMap := map[string]*pb.Document{}
+	// Read and remember all results from the stream.
+	var resps []*pb.BatchGetDocumentsResponse
 	for {
-		res, err := streamClient.Recv()
+		resp, err := streamClient.Recv()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
 			return nil, err
 		}
-		switch x := res.Result.(type) {
-		case *pb.BatchGetDocumentsResponse_Found:
-			docMap[x.Found.Name] = x.Found
+		resps = append(resps, resp)
+	}
 
+	// Results may arrive out of order. Put each at the right index.
+	docs := make([]*DocumentSnapshot, len(docNames))
+	for _, resp := range resps {
+		var (
+			i   int
+			doc *pb.Document
+			err error
+		)
+		switch r := resp.Result.(type) {
+		case *pb.BatchGetDocumentsResponse_Found:
+			i = docIndex[r.Found.Name]
+			doc = r.Found
 		case *pb.BatchGetDocumentsResponse_Missing:
-			if docMap[x.Missing] != nil {
-				return nil, fmt.Errorf("firestore: %q both missing and present", x.Missing)
-			}
-			docMap[x.Missing] = nil
+			i = docIndex[r.Missing]
+			doc = nil
 		default:
 			return nil, errors.New("firestore: unknown BatchGetDocumentsResponse result type")
 		}
-	}
-
-	// Put the documents we've gathered in the same order as the requesting slice of
-	// DocumentRefs.
-	docs := make([]*DocumentSnapshot, len(docNames))
-	for i, name := range docNames {
-		pbDoc, ok := docMap[name]
-		if !ok {
-			return nil, fmt.Errorf("firestore: passed %q to BatchGetDocuments but never saw response", name)
+		if docs[i] != nil {
+			return nil, fmt.Errorf("firestore: %q seen twice", docRefs[i].Path)
 		}
-		if pbDoc != nil {
-			doc, err := newDocumentSnapshot(docRefs[i], pbDoc, c)
-			if err != nil {
-				return nil, err
-			}
-			docs[i] = doc
+		docs[i], err = newDocumentSnapshot(docRefs[i], doc, c, resp.ReadTime)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return docs, nil
@@ -209,7 +220,7 @@ func (c *Client) Batch() *WriteBatch {
 }
 
 // commit calls the Commit RPC outside of a transaction.
-func (c *Client) commit(ctx context.Context, ws []*pb.Write) (*WriteResult, error) {
+func (c *Client) commit(ctx context.Context, ws []*pb.Write) ([]*WriteResult, error) {
 	if err := checkTransaction(ctx); err != nil {
 		return nil, err
 	}
@@ -224,7 +235,23 @@ func (c *Client) commit(ctx context.Context, ws []*pb.Write) (*WriteResult, erro
 	if len(res.WriteResults) == 0 {
 		return nil, errors.New("firestore: missing WriteResult")
 	}
-	return writeResultFromProto(res.WriteResults[0])
+	var wrs []*WriteResult
+	for _, pwr := range res.WriteResults {
+		wr, err := writeResultFromProto(pwr)
+		if err != nil {
+			return nil, err
+		}
+		wrs = append(wrs, wr)
+	}
+	return wrs, nil
+}
+
+func (c *Client) commit1(ctx context.Context, ws []*pb.Write) (*WriteResult, error) {
+	wrs, err := c.commit(ctx, ws)
+	if err != nil {
+		return nil, err
+	}
+	return wrs[0], nil
 }
 
 // A WriteResult is returned by methods that write documents.
@@ -242,4 +269,15 @@ func writeResultFromProto(wr *pb.WriteResult) (*WriteResult, error) {
 		// TODO(jba): Follow up if Delete is supposed to return a nil timestamp.
 	}
 	return &WriteResult{UpdateTime: t}, nil
+}
+
+func sleep(ctx context.Context, dur time.Duration) error {
+	switch err := gax.Sleep(ctx, dur); err {
+	case context.Canceled:
+		return status.Error(codes.Canceled, "context canceled")
+	case context.DeadlineExceeded:
+		return status.Error(codes.DeadlineExceeded, "context deadline exceeded")
+	default:
+		return err
+	}
 }

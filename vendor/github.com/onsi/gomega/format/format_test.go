@@ -119,13 +119,13 @@ var _ = Describe("Format", func() {
 	Describe("Message", func() {
 		Context("with only an actual value", func() {
 			It("should print out an indented formatted representation of the value and the message", func() {
-				Ω(Message(3, "to be three.")).Should(Equal("Expected\n    <int>: 3\nto be three."))
+				Expect(Message(3, "to be three.")).Should(Equal("Expected\n    <int>: 3\nto be three."))
 			})
 		})
 
 		Context("with an actual and an expected value", func() {
 			It("should print out an indented formatted representatino of both values, and the message", func() {
-				Ω(Message(3, "to equal", 4)).Should(Equal("Expected\n    <int>: 3\nto equal\n    <int>: 4"))
+				Expect(Message(3, "to equal", 4)).Should(Equal("Expected\n    <int>: 3\nto equal\n    <int>: 4"))
 			})
 		})
 	})
@@ -135,63 +135,87 @@ var _ = Describe("Format", func() {
 			stringWithB := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 			stringWithZ := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-			Ω(MessageWithDiff(stringWithB, "to equal", stringWithZ)).Should(Equal(expectedLongStringFailureMessage))
+			Expect(MessageWithDiff(stringWithB, "to equal", stringWithZ)).Should(Equal(expectedLongStringFailureMessage))
 		})
 
 		It("truncates the start of long strings that differ only at their end", func() {
 			stringWithB := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab"
 			stringWithZ := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaz"
 
-			Ω(MessageWithDiff(stringWithB, "to equal", stringWithZ)).Should(Equal(expectedTruncatedStartStringFailureMessage))
+			Expect(MessageWithDiff(stringWithB, "to equal", stringWithZ)).Should(Equal(expectedTruncatedStartStringFailureMessage))
 		})
 
 		It("truncates the start of long strings that differ only in length", func() {
 			smallString := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 			largeString := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-			Ω(MessageWithDiff(largeString, "to equal", smallString)).Should(Equal(expectedTruncatedStartSizeFailureMessage))
-			Ω(MessageWithDiff(smallString, "to equal", largeString)).Should(Equal(expectedTruncatedStartSizeSwappedFailureMessage))
+			Expect(MessageWithDiff(largeString, "to equal", smallString)).Should(Equal(expectedTruncatedStartSizeFailureMessage))
+			Expect(MessageWithDiff(smallString, "to equal", largeString)).Should(Equal(expectedTruncatedStartSizeSwappedFailureMessage))
 		})
 
 		It("truncates the end of long strings that differ only at their start", func() {
 			stringWithB := "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 			stringWithZ := "zaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-			Ω(MessageWithDiff(stringWithB, "to equal", stringWithZ)).Should(Equal(expectedTruncatedEndStringFailureMessage))
+			Expect(MessageWithDiff(stringWithB, "to equal", stringWithZ)).Should(Equal(expectedTruncatedEndStringFailureMessage))
+		})
+
+		It("handles multi-byte sequences correctly", func() {
+			stringA := "• abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz1"
+			stringB := "• abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+
+			Expect(MessageWithDiff(stringA, "to equal", stringB)).Should(Equal(expectedTruncatedMultiByteFailureMessage))
+		})
+
+		Context("With truncated diff disabled", func() {
+			BeforeEach(func() {
+				TruncatedDiff = false
+			})
+
+			AfterEach(func() {
+				TruncatedDiff = true
+			})
+
+			It("should show the full diff", func() {
+				stringWithB := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+				stringWithZ := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+				Expect(MessageWithDiff(stringWithB, "to equal", stringWithZ)).Should(Equal(expectedFullFailureDiff))
+			})
 		})
 	})
 
 	Describe("IndentString", func() {
 		It("should indent the string", func() {
-			Ω(IndentString("foo\n  bar\nbaz", 2)).Should(Equal("        foo\n          bar\n        baz"))
+			Expect(IndentString("foo\n  bar\nbaz", 2)).Should(Equal("        foo\n          bar\n        baz"))
 		})
 	})
 
 	Describe("Object", func() {
 		Describe("formatting boolean values", func() {
 			It("should give the type and format values correctly", func() {
-				Ω(Object(true, 1)).Should(match("bool", "true"))
-				Ω(Object(false, 1)).Should(match("bool", "false"))
+				Expect(Object(true, 1)).Should(match("bool", "true"))
+				Expect(Object(false, 1)).Should(match("bool", "false"))
 			})
 		})
 
 		Describe("formatting numbers", func() {
 			It("should give the type and format values correctly", func() {
-				Ω(Object(int(3), 1)).Should(match("int", "3"))
-				Ω(Object(int8(3), 1)).Should(match("int8", "3"))
-				Ω(Object(int16(3), 1)).Should(match("int16", "3"))
-				Ω(Object(int32(3), 1)).Should(match("int32", "3"))
-				Ω(Object(int64(3), 1)).Should(match("int64", "3"))
+				Expect(Object(int(3), 1)).Should(match("int", "3"))
+				Expect(Object(int8(3), 1)).Should(match("int8", "3"))
+				Expect(Object(int16(3), 1)).Should(match("int16", "3"))
+				Expect(Object(int32(3), 1)).Should(match("int32", "3"))
+				Expect(Object(int64(3), 1)).Should(match("int64", "3"))
 
-				Ω(Object(uint(3), 1)).Should(match("uint", "3"))
-				Ω(Object(uint8(3), 1)).Should(match("uint8", "3"))
-				Ω(Object(uint16(3), 1)).Should(match("uint16", "3"))
-				Ω(Object(uint32(3), 1)).Should(match("uint32", "3"))
-				Ω(Object(uint64(3), 1)).Should(match("uint64", "3"))
+				Expect(Object(uint(3), 1)).Should(match("uint", "3"))
+				Expect(Object(uint8(3), 1)).Should(match("uint8", "3"))
+				Expect(Object(uint16(3), 1)).Should(match("uint16", "3"))
+				Expect(Object(uint32(3), 1)).Should(match("uint32", "3"))
+				Expect(Object(uint64(3), 1)).Should(match("uint64", "3"))
 			})
 
 			It("should handle uintptr differently", func() {
-				Ω(Object(uintptr(3), 1)).Should(match("uintptr", "0x3"))
+				Expect(Object(uintptr(3), 1)).Should(match("uintptr", "0x3"))
 			})
 		})
 
@@ -200,14 +224,14 @@ var _ = Describe("Format", func() {
 				c := make(chan<- bool, 3)
 				c <- true
 				c <- false
-				Ω(Object(c, 1)).Should(match("chan<- bool | len:2, cap:3", "%v", c))
+				Expect(Object(c, 1)).Should(match("chan<- bool | len:2, cap:3", "%v", c))
 			})
 		})
 
 		Describe("formatting strings", func() {
 			It("should give the type and format values correctly", func() {
 				s := "a\nb\nc"
-				Ω(Object(s, 1)).Should(match("string", `a
+				Expect(Object(s, 1)).Should(match("string", `a
     b
     c`))
 			})
@@ -217,13 +241,13 @@ var _ = Describe("Format", func() {
 			Context("when the slice is made of printable bytes", func() {
 				It("should present it as string", func() {
 					b := []byte("a b c")
-					Ω(Object(b, 1)).Should(matchRegexp(`\[\]uint8 \| len:5, cap:\d+`, `a b c`))
+					Expect(Object(b, 1)).Should(matchRegexp(`\[\]uint8 \| len:5, cap:\d+`, `a b c`))
 				})
 			})
 			Context("when the slice contains non-printable bytes", func() {
 				It("should present it as slice", func() {
 					b := []byte("a b c\n\x01\x02\x03\xff\x1bH")
-					Ω(Object(b, 1)).Should(matchRegexp(`\[\]uint8 \| len:12, cap:\d+`, `\[97, 32, 98, 32, 99, 10, 1, 2, 3, 255, 27, 72\]`))
+					Expect(Object(b, 1)).Should(matchRegexp(`\[\]uint8 \| len:12, cap:\d+`, `\[97, 32, 98, 32, 99, 10, 1, 2, 3, 255, 27, 72\]`))
 				})
 			})
 		})
@@ -233,14 +257,14 @@ var _ = Describe("Format", func() {
 				f := func(a string, b []int) ([]byte, error) {
 					return []byte("abc"), nil
 				}
-				Ω(Object(f, 1)).Should(match("func(string, []int) ([]uint8, error)", "%v", f))
+				Expect(Object(f, 1)).Should(match("func(string, []int) ([]uint8, error)", "%v", f))
 			})
 		})
 
 		Describe("formatting pointers", func() {
 			It("should give the type and dereference the value to format it correctly", func() {
 				a := 3
-				Ω(Object(&a, 1)).Should(match(fmt.Sprintf("*int | %p", &a), "3"))
+				Expect(Object(&a, 1)).Should(match(fmt.Sprintf("*int | %p", &a), "3"))
 			})
 
 			Context("when there are pointers to pointers...", func() {
@@ -253,14 +277,14 @@ var _ = Describe("Format", func() {
 					c = &b
 					d = &c
 
-					Ω(Object(d, 1)).Should(match(fmt.Sprintf("***int | %p", d), "3"))
+					Expect(Object(d, 1)).Should(match(fmt.Sprintf("***int | %p", d), "3"))
 				})
 			})
 
 			Context("when the pointer points to nil", func() {
 				It("should say nil and not explode", func() {
 					var a *AStruct
-					Ω(Object(a, 1)).Should(match("*format_test.AStruct | 0x0", "nil"))
+					Expect(Object(a, 1)).Should(match("*format_test.AStruct | 0x0", "nil"))
 				})
 			})
 		})
@@ -268,13 +292,13 @@ var _ = Describe("Format", func() {
 		Describe("formatting arrays", func() {
 			It("should give the type and format values correctly", func() {
 				w := [3]string{"Jed Bartlet", "Toby Ziegler", "CJ Cregg"}
-				Ω(Object(w, 1)).Should(match("[3]string", `["Jed Bartlet", "Toby Ziegler", "CJ Cregg"]`))
+				Expect(Object(w, 1)).Should(match("[3]string", `["Jed Bartlet", "Toby Ziegler", "CJ Cregg"]`))
 			})
 
 			Context("with byte arrays", func() {
 				It("should give the type and format values correctly", func() {
 					w := [3]byte{17, 28, 19}
-					Ω(Object(w, 1)).Should(match("[3]uint8", `[17, 28, 19]`))
+					Expect(Object(w, 1)).Should(match("[3]uint8", `[17, 28, 19]`))
 				})
 			})
 		})
@@ -282,7 +306,7 @@ var _ = Describe("Format", func() {
 		Describe("formatting slices", func() {
 			It("should include the length and capacity in the type information", func() {
 				s := make([]bool, 3, 4)
-				Ω(Object(s, 1)).Should(match("[]bool | len:3, cap:4", "[false, false, false]"))
+				Expect(Object(s, 1)).Should(match("[]bool | len:3, cap:4", "[false, false, false]"))
 			})
 
 			Context("when the slice contains long entries", func() {
@@ -293,7 +317,7 @@ var _ = Describe("Format", func() {
         "Toby Ziegler",
         "CJ Cregg",
     ]`
-					Ω(Object(w, 1)).Should(match("[]string | len:3, cap:3", expected))
+					Expect(Object(w, 1)).Should(match("[]string | len:3, cap:3", expected))
 				})
 			})
 		})
@@ -303,7 +327,7 @@ var _ = Describe("Format", func() {
 				m := make(map[int]bool, 5)
 				m[3] = true
 				m[4] = false
-				Ω(Object(m, 1)).Should(matchRegexp(`map\[int\]bool \| len:2`, hashMatchingRegexp("3: true", "4: false")))
+				Expect(Object(m, 1)).Should(matchRegexp(`map\[int\]bool \| len:2`, hashMatchingRegexp("3: true", "4: false")))
 			})
 
 			Context("when the slice contains long entries", func() {
@@ -317,7 +341,7 @@ var _ = Describe("Format", func() {
         ("Josiah Edward Bartlet": "Martin Sheen"|"Toby Ziegler": "Richard Schiff"|"CJ Cregg": "Allison Janney"),
         ("Josiah Edward Bartlet": "Martin Sheen"|"Toby Ziegler": "Richard Schiff"|"CJ Cregg": "Allison Janney"),
     }`
-					Ω(Object(m, 1)).Should(matchRegexp(`map\[string\]\[\]uint8 \| len:3`, expected))
+					Expect(Object(m, 1)).Should(matchRegexp(`map\[string\]\[\]uint8 \| len:3`, expected))
 				})
 			})
 		})
@@ -332,7 +356,7 @@ var _ = Describe("Format", func() {
 					secret:      1983,
 				}
 
-				Ω(Object(s, 1)).Should(match("format_test.SimpleStruct", `{Name: "Oswald", Enumeration: 17, Veritas: true, Data: "datum", secret: 1983}`))
+				Expect(Object(s, 1)).Should(match("format_test.SimpleStruct", `{Name: "Oswald", Enumeration: 17, Veritas: true, Data: "datum", secret: 1983}`))
 			})
 
 			Context("when the struct contains long entries", func() {
@@ -345,7 +369,7 @@ var _ = Describe("Format", func() {
 						secret:      3,
 					}
 
-					Ω(Object(s, 1)).Should(match(fmt.Sprintf("*format_test.SimpleStruct | %p", s), `{
+					Expect(Object(s, 1)).Should(match(fmt.Sprintf("*format_test.SimpleStruct | %p", s), `{
         Name: "Mithrandir Gandalf Greyhame",
         Enumeration: 2021,
         Veritas: true,
@@ -358,23 +382,23 @@ var _ = Describe("Format", func() {
 
 		Describe("formatting nil values", func() {
 			It("should print out nil", func() {
-				Ω(Object(nil, 1)).Should(match("nil", "nil"))
+				Expect(Object(nil, 1)).Should(match("nil", "nil"))
 				var typedNil *AStruct
-				Ω(Object(typedNil, 1)).Should(match("*format_test.AStruct | 0x0", "nil"))
+				Expect(Object(typedNil, 1)).Should(match("*format_test.AStruct | 0x0", "nil"))
 				var c chan<- bool
-				Ω(Object(c, 1)).Should(match("chan<- bool | len:0, cap:0", "nil"))
+				Expect(Object(c, 1)).Should(match("chan<- bool | len:0, cap:0", "nil"))
 				var s []string
-				Ω(Object(s, 1)).Should(match("[]string | len:0, cap:0", "nil"))
+				Expect(Object(s, 1)).Should(match("[]string | len:0, cap:0", "nil"))
 				var m map[string]bool
-				Ω(Object(m, 1)).Should(match("map[string]bool | len:0", "nil"))
+				Expect(Object(m, 1)).Should(match("map[string]bool | len:0", "nil"))
 			})
 		})
 
 		Describe("formatting aliased types", func() {
 			It("should print out the correct alias type", func() {
-				Ω(Object(StringAlias("alias"), 1)).Should(match("format_test.StringAlias", `alias`))
-				Ω(Object(ByteAlias("alias"), 1)).Should(matchRegexp(`format_test\.ByteAlias \| len:5, cap:\d+`, `alias`))
-				Ω(Object(IntAlias(3), 1)).Should(match("format_test.IntAlias", "3"))
+				Expect(Object(StringAlias("alias"), 1)).Should(match("format_test.StringAlias", `alias`))
+				Expect(Object(ByteAlias("alias"), 1)).Should(matchRegexp(`format_test\.ByteAlias \| len:5, cap:\d+`, `alias`))
+				Expect(Object(IntAlias(3), 1)).Should(match("format_test.IntAlias", "3"))
 			})
 		})
 
@@ -408,14 +432,14 @@ var _ = Describe("Format", func() {
             (17: "some substantially longer chunks of data"|1138: "that should make things wrap"),
         },
     }`
-				Ω(Object(s, 1)).Should(matchRegexp(`format_test\.ComplexStruct`, expected))
+				Expect(Object(s, 1)).Should(matchRegexp(`format_test\.ComplexStruct`, expected))
 			})
 		})
 
 		Describe("formatting times", func() {
 			It("should format time as RFC3339", func() {
 				t := time.Date(2016, 10, 31, 9, 57, 23, 12345, time.UTC)
-				Ω(Object(t, 1)).Should(match("time.Time", `2016-10-31T09:57:23.000012345Z`))
+				Expect(Object(t, 1)).Should(match("time.Time", `2016-10-31T09:57:23.000012345Z`))
 			})
 		})
 	})
@@ -463,7 +487,7 @@ var _ = Describe("Format", func() {
         interfaceValue: {"a key": 17},
     }`, s.chanValue, s.funcValue, hashMatchingRegexp(`"a key": 20`, `"b key": 30`))
 
-			Ω(Object(s, 1)).Should(matchRegexp(`format_test\.SecretiveStruct`, expected))
+			Expect(Object(s, 1)).Should(matchRegexp(`format_test\.SecretiveStruct`, expected))
 		})
 	})
 
@@ -477,7 +501,7 @@ var _ = Describe("Format", func() {
 			outerHash["map"] = innerHash
 
 			expected := hashMatchingRegexp(`"integer": 2`, `"map": {"inner": 3}`)
-			Ω(Object(outerHash, 1)).Should(matchRegexp(`map\[string\]interface {} \| len:2`, expected))
+			Expect(Object(outerHash, 1)).Should(matchRegexp(`map\[string\]interface {} \| len:2`, expected))
 		})
 	})
 
@@ -486,7 +510,7 @@ var _ = Describe("Format", func() {
 			m := map[string]interface{}{}
 			m["integer"] = 2
 			m["map"] = m
-			Ω(Object(m, 1)).Should(ContainSubstring("..."))
+			Expect(Object(m, 1)).Should(ContainSubstring("..."))
 		})
 
 		It("really should not go crazy...", func() {
@@ -498,7 +522,7 @@ var _ = Describe("Format", func() {
 			complexObject.Value = make(map[interface{}]int)
 
 			complexObject.Value[&complexObject] = 2
-			Ω(Object(complexObject, 1)).Should(ContainSubstring("..."))
+			Expect(Object(complexObject, 1)).Should(ContainSubstring("..."))
 		})
 	})
 
@@ -513,13 +537,13 @@ var _ = Describe("Format", func() {
 
 		Context("when passed a GoStringer", func() {
 			It("should use what GoString() returns", func() {
-				Ω(Object(GoStringer{}, 1)).Should(ContainSubstring("<format_test.GoStringer>: go-string"))
+				Expect(Object(GoStringer{}, 1)).Should(ContainSubstring("<format_test.GoStringer>: go-string"))
 			})
 		})
 
 		Context("when passed a stringer", func() {
 			It("should use what String() returns", func() {
-				Ω(Object(Stringer{}, 1)).Should(ContainSubstring("<format_test.Stringer>: string"))
+				Expect(Object(Stringer{}, 1)).Should(ContainSubstring("<format_test.Stringer>: string"))
 			})
 		})
 	})
@@ -535,11 +559,11 @@ var _ = Describe("Format", func() {
 		objWithContext := structWithContext{Value: "some-value", Context: &context}
 
 		It("Suppresses the content by default", func() {
-			Ω(Object(objWithContext, 1)).Should(ContainSubstring("<suppressed context>"))
+			Expect(Object(objWithContext, 1)).Should(ContainSubstring("<suppressed context>"))
 		})
 
 		It("Doesn't supress the context if it's the object being printed", func() {
-			Ω(Object(context, 1)).ShouldNot(MatchRegexp("^.*<suppressed context>$"))
+			Expect(Object(context, 1)).ShouldNot(MatchRegexp("^.*<suppressed context>$"))
 		})
 
 		Context("PrintContextObjects is set", func() {
@@ -552,7 +576,7 @@ var _ = Describe("Format", func() {
 			})
 
 			It("Prints the context", func() {
-				Ω(Object(objWithContext, 1)).ShouldNot(ContainSubstring("<suppressed context>"))
+				Expect(Object(objWithContext, 1)).ShouldNot(ContainSubstring("<suppressed context>"))
 			})
 		})
 	})
@@ -587,4 +611,17 @@ Expected
     <string>: "...aaaa"
 to equal              |
     <string>: "...aaaaa"
+`)
+var expectedTruncatedMultiByteFailureMessage = strings.TrimSpace(`
+Expected
+    <string>: "...tuvwxyz1"
+to equal                 |
+    <string>: "...tuvwxyz"
+`)
+
+var expectedFullFailureDiff = strings.TrimSpace(`
+Expected
+    <string>: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+to equal
+    <string>: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 `)

@@ -255,7 +255,7 @@ func (stats *Stats) maybeUpdate() {
 	stats.dirty = false
 
 	if stats.durations.Len() != 0 {
-		var percentToObserve = []int{50, 90}
+		var percentToObserve = []int{50, 90, 99}
 		// First data record min unit from the latency result.
 		stats.result.Latency = append(stats.result.Latency, percentLatency{Percent: -1, Value: stats.unit})
 		for _, position := range percentToObserve {
