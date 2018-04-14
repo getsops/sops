@@ -1,0 +1,13 @@
+first_name: John
+last_name: Doe
+age: 45
+phone_numbers:
+  - type: work
+    number: '1234567890'
+  - type: personal
+    number: '0987654321'
+address:
+  city: New York
+  state: New York
+  post_code: '12345'
+  street_address: 1234 5th Ave

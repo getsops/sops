@@ -34,8 +34,10 @@ generate:
 	$(GO) generate
 
 functional-tests:
-	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
-	cd functional-tests && cargo test
+	cd functional-tests; \
+	./make-binaries; \
+	./test-compatibility; \
+	cargo test
 
 deb-pkg: install
 	rm -rf tmppkg

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+git tag | grep "2.*" | xargs -I {} bash -c "/tmp/sops{} -e resources/file.yaml > /tmp/file{}.yaml"
+git tag | grep "2.*" | xargs -I {} ./sops -d /tmp/file{}.yaml
+./sops -e resources/file.yaml > /tmp/file.yaml
+git tag | grep "2.*" | xargs -I {} bash -c "/tmp/sops{} -d /tmp/file.yaml"

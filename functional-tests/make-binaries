@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+go build -o ./sops go.mozilla.org/sops/cmd/sops
+BRANCH=`git rev-parse --abbrev-ref HEAD`
+git tag | grep "2.*" | xargs -I {} bash -c "git checkout {} && go build -o /tmp/sops{} go.mozilla.org/sops/cmd/sops"
+git checkout $BRANCH
