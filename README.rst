@@ -1,6 +1,12 @@
 SOPS: Secrets OPerationS
 ========================
 
+.. image:: http://unmaintained.tech/badge.svg
+   :target: http://unmaintained.tech/
+   :alt: No Maintenance Intended
+
+This is the Python version of SOPS that is no longer maintained. We fix the occasional bug, but all improvements happen in the Go version of SOPS, over in the Master branch. You have been warned!
+
 **sop** is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP (via GnuPG). Watch `the demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_.
 
 .. image:: http://i.imgur.com/IL6dlhm.gif
