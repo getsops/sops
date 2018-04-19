@@ -20,9 +20,10 @@ setup(
     zip_safe=True,
     long_description=README,
     install_requires=[
-        'ruamel.yaml==0.11.7',
+        'ruamel.yaml>=0.11.7,<0.12.0 ; python_version=="2.6"',
+        'ruamel.yaml>=0.11.7 ; python_version>"2.6"',
         'boto3>=1.1.3',
-        'cryptography==1.4',
+        'cryptography>=1.4',
         'setuptools>=18.8.1',
         'ordereddict>=1.1',
         'simplejson>=3.8'],
