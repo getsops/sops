@@ -61,7 +61,6 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err := ensureNoMetadata(opts, fileBytes); err != nil {
 		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
 	}
-	var tree sops.Tree
 	branch, err := opts.InputStore.Unmarshal(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
