@@ -21,6 +21,8 @@ go get -u github.com/gopherjs/gopherjs
 
 Now you can use `gopherjs build [package]`, `gopherjs build [files]` or `gopherjs install [package]` which behave similar to the `go` tool. For `main` packages, these commands create a `.js` file and `.js.map` source map in the current directory or in `$GOPATH/bin`. The generated JavaScript file can be used as usual in a website. Use `gopherjs help [command]` to get a list of possible command line flags, e.g. for minification and automatically watching for changes.
 
+`gopherjs` uses your platform's default `GOOS` value when generating code. Supported `GOOS` values are: `linux`, `darwin`. If you're on a different platform (e.g., Windows or FreeBSD), you'll need to set the `GOOS` environment variable to a supported value. For example, `GOOS=linux gopherjs build [package]`.
+
 *Note: GopherJS will try to write compiled object files of the core packages to your $GOROOT/pkg directory. If that fails, it will fall back to $GOPATH/pkg.*
 
 #### gopherjs run, gopherjs test
@@ -31,17 +33,17 @@ If you want to use `gopherjs run` or `gopherjs test` to run the generated code l
 npm install --global source-map-support
 ```
 
-For system calls (file system access, etc.), see [this page](https://github.com/gopherjs/gopherjs/blob/master/doc/syscalls.md).
+On supported `GOOS` platforms, it's possible to make system calls (file system access, etc.) available. See [doc/syscalls.md](https://github.com/gopherjs/gopherjs/blob/master/doc/syscalls.md) for instructions on how to do so.
 
 #### gopherjs serve
 
-`gopherjs serve` is a useful command you can use during development. It will start an HTTP server serving on ":8080" by default, and dynamically compile Go packages with GopherJS and serve them.
+`gopherjs serve` is a useful command you can use during development. It will start an HTTP server serving on ":8080" by default, then dynamically compile your Go packages with GopherJS and serve them.
 
-For example, navigating to `http://localhost:8080/example.com/user/project/` should compile and run the Go package `example.com/user/project`. The generated JavaScript output will be served at `http://localhost:8080/example.com/user/project/project.js`. If the directory contains `index.html` it will be served, otherwise a minimal `index.html` that includes `<script src="{{base}}.js"></script>` will be provided, causing the JavaScript to be executed. All other static files will be served too.
+For example, navigating to `http://localhost:8080/example.com/user/project/` should compile and run the Go package `example.com/user/project`. The generated JavaScript output will be served at `http://localhost:8080/example.com/user/project/project.js` (the .js file name will be equal to the base directory name). If the directory contains `index.html` it will be served, otherwise a minimal `index.html` that includes `<script src="project.js"></script>` will be provided, causing the JavaScript to be executed. All other static files will be served too.
 
 Refreshing in the browser will rebuild the served files if needed. Compilation errors will be displayed in terminal, and in browser console. Additionally, it will serve $GOROOT and $GOPATH for sourcemaps.
 
-If you include an argument, it will be the root from which everything is served. For example, if you run gopherjs serve github.com/user/project then the generated JavaScript for the package github.com/user/project/mypkg will be served at http://localhost:8080/mypkg/mypkg.js.
+If you include an argument, it will be the root from which everything is served. For example, if you run `gopherjs serve github.com/user/project` then the generated JavaScript for the package github.com/user/project/mypkg will be served at http://localhost:8080/mypkg/mypkg.js.
 
 ### Performance Tips
 

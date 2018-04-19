@@ -57,6 +57,8 @@ func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 			return nil, common.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 		}
 		return decrypted, err
+	} else if str, ok := v.(string); ok {
+		return []byte(str), nil
 	}
 	bytes, err := outputStore.MarshalValue(v)
 	if err != nil {

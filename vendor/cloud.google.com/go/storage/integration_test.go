@@ -20,6 +20,7 @@ import (
 	"crypto/md5"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"hash/crc32"
@@ -35,6 +36,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"golang.org/x/net/context"
 
 	"cloud.google.com/go/iam"
@@ -45,12 +47,12 @@ import (
 	"google.golang.org/api/option"
 )
 
-const testPrefix = "-go-test"
+const testPrefix = "go-integration-test"
 
-// suffix is a timestamp-based suffix which is added to all buckets created by
-// tests. This reduces flakiness when the tests are run in parallel and allows
-// automatic cleaning up of artifacts left when tests fail.
-var suffix = fmt.Sprintf("%s-%d", testPrefix, time.Now().UnixNano())
+var (
+	uidSpace   = testutil.NewUIDSpace(testPrefix)
+	bucketName = uidSpace.New()
+)
 
 func TestMain(m *testing.M) {
 	integrationTest := initIntegrationTest()
@@ -72,36 +74,36 @@ func initIntegrationTest() bool {
 	if testing.Short() {
 		return false
 	}
-	client, bucket := config(ctx)
+	client := config(ctx)
 	if client == nil {
 		return false
 	}
 	defer client.Close()
-	if err := client.Bucket(bucket).Create(ctx, testutil.ProjID(), nil); err != nil {
-		log.Fatalf("creating bucket %q: %v", bucket, err)
+	if err := client.Bucket(bucketName).Create(ctx, testutil.ProjID(), nil); err != nil {
+		log.Fatalf("creating bucket %q: %v", bucketName, err)
 	}
 	return true
 }
 
-// testConfig returns the Client used to access GCS and the default bucket
-// name to use. testConfig skips the current test if credentials are not
-// available or when being run in Short mode.
-func testConfig(ctx context.Context, t *testing.T) (*Client, string) {
+// testConfig returns the Client used to access GCS. testConfig skips
+// the current test if credentials are not available or when being run
+// in Short mode.
+func testConfig(ctx context.Context, t *testing.T) *Client {
 	if testing.Short() {
 		t.Skip("Integration tests skipped in short mode")
 	}
-	client, bucket := config(ctx)
+	client := config(ctx)
 	if client == nil {
 		t.Skip("Integration tests skipped. See CONTRIBUTING.md for details")
 	}
-	return client, bucket
+	return client
 }
 
 // config is like testConfig, but it doesn't need a *testing.T.
-func config(ctx context.Context) (*Client, string) {
+func config(ctx context.Context) *Client {
 	ts := testutil.TokenSource(ctx, ScopeFullControl)
 	if ts == nil {
-		return nil, ""
+		return nil
 	}
 	p := testutil.ProjID()
 	if p == "" {
@@ -111,20 +113,20 @@ func config(ctx context.Context) (*Client, string) {
 	if err != nil {
 		log.Fatalf("NewClient: %v", err)
 	}
-	return client, p + suffix
+	return client
 }
 
-func TestBucketMethods(t *testing.T) {
+func TestIntegration_BucketMethods(t *testing.T) {
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
 	projectID := testutil.ProjID()
-	newBucket := bucket + "-new"
-	b := client.Bucket(newBucket)
+	newBucketName := uidSpace.New()
+	b := client.Bucket(newBucketName)
 	// Test Create and Delete.
 	if err := b.Create(ctx, projectID, nil); err != nil {
-		t.Fatalf("Bucket(%v).Create(%v, %v) failed: %v", newBucket, projectID, nil, err)
+		t.Fatalf("Bucket(%v).Create(%v, %v) failed: %v", newBucketName, projectID, nil, err)
 	}
 	attrs, err := b.Attrs(ctx)
 	if err != nil {
@@ -140,8 +142,8 @@ func TestBucketMethods(t *testing.T) {
 			t.Error("got versioning enabled, wanted it disabled")
 		}
 	}
-	if err := client.Bucket(newBucket).Delete(ctx); err != nil {
-		t.Errorf("Bucket(%v).Delete failed: %v", newBucket, err)
+	if err := client.Bucket(newBucketName).Delete(ctx); err != nil {
+		t.Errorf("Bucket(%v).Delete failed: %v", newBucketName, err)
 	}
 
 	// Test Create and Delete with attributes.
@@ -180,8 +182,8 @@ func TestBucketMethods(t *testing.T) {
 			}},
 		},
 	}
-	if err := client.Bucket(newBucket).Create(ctx, projectID, attrs); err != nil {
-		t.Fatalf("Bucket(%v).Create(%v, %+v) failed: %v", newBucket, projectID, attrs, err)
+	if err := client.Bucket(newBucketName).Create(ctx, projectID, attrs); err != nil {
+		t.Fatalf("Bucket(%v).Create(%v, %+v) failed: %v", newBucketName, projectID, attrs, err)
 	}
 	attrs, err = b.Attrs(ctx)
 	if err != nil {
@@ -200,17 +202,17 @@ func TestBucketMethods(t *testing.T) {
 			t.Errorf("labels: got %v, want %v", got, want)
 		}
 	}
-	if err := client.Bucket(newBucket).Delete(ctx); err != nil {
-		t.Errorf("Bucket(%v).Delete failed: %v", newBucket, err)
+	if err := client.Bucket(newBucketName).Delete(ctx); err != nil {
+		t.Errorf("Bucket(%v).Delete failed: %v", newBucketName, err)
 	}
 }
 
 func TestIntegration_BucketUpdate(t *testing.T) {
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	b := client.Bucket(bucket)
+	b := client.Bucket(bucketName)
 	attrs, err := b.Attrs(ctx)
 	if err != nil {
 		t.Fatal(err)
@@ -277,10 +279,10 @@ func TestIntegration_BucketUpdate(t *testing.T) {
 
 func TestIntegration_ConditionalDelete(t *testing.T) {
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	o := client.Bucket(bucket).Object("conddel")
+	o := client.Bucket(bucketName).Object("conddel")
 
 	wc := o.NewWriter(ctx)
 	wc.ContentType = "text/plain"
@@ -308,17 +310,13 @@ func TestIntegration_ConditionalDelete(t *testing.T) {
 	}
 }
 
-func TestObjects(t *testing.T) {
-	// TODO(djd): there are a lot of closely-related tests here which share
-	// a common setup. Once we can depend on Go 1.7 features, we should refactor
-	// this test to use the sub-test feature. This will increase the readability
-	// of this test, and should also reduce the time it takes to execute.
-	// https://golang.org/pkg/testing/#hdr-Subtests_and_Sub_benchmarks
+func TestIntegration_Objects(t *testing.T) {
+	// TODO(jba): Use subtests (Go 1.7).
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	bkt := client.Bucket(bucket)
+	bkt := client.Bucket(bucketName)
 
 	const defaultType = "text/plain"
 
@@ -385,33 +383,6 @@ func TestObjects(t *testing.T) {
 		if err := rc.Close(); err != nil {
 			t.Errorf("%v Close: %v", obj, err)
 		}
-
-		// Test SignedURL
-		opts := &SignedURLOptions{
-			GoogleAccessID: "xxx@clientid",
-			PrivateKey:     dummyKey("rsa"),
-			Method:         "GET",
-			MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
-			Expires:        time.Date(2020, time.October, 2, 10, 0, 0, 0, time.UTC),
-			ContentType:    "application/json",
-			Headers:        []string{"x-header1", "x-header2"},
-		}
-		u, err := SignedURL(bucket, obj, opts)
-		if err != nil {
-			t.Fatalf("SignedURL(%q, %q) errored with %v", bucket, obj, err)
-		}
-		res, err := client.hc.Get(u)
-		if err != nil {
-			t.Fatalf("Can't get URL %q: %v", u, err)
-		}
-		slurp, err = ioutil.ReadAll(res.Body)
-		if err != nil {
-			t.Fatalf("Can't ReadAll signed object %v, errored with %v", obj, err)
-		}
-		if got, want := slurp, contents[obj]; !bytes.Equal(got, want) {
-			t.Errorf("Contents (%v) = %q; want %q", obj, got, want)
-		}
-		res.Body.Close()
 	}
 
 	obj := objects[0]
@@ -532,9 +503,9 @@ func TestObjects(t *testing.T) {
 	copyObj, err := bkt.Object(copyName).CopierFrom(bkt.Object(objName)).Run(ctx)
 	if err != nil {
 		t.Errorf("Copier.Run failed with %v", err)
-	} else if !namesEqual(copyObj, bucket, copyName) {
+	} else if !namesEqual(copyObj, bucketName, copyName) {
 		t.Errorf("Copy object bucket, name: got %q.%q, want %q.%q",
-			copyObj.Bucket, copyObj.Name, bucket, copyName)
+			copyObj.Bucket, copyObj.Name, bucketName, copyName)
 	}
 
 	// Copying with attributes.
@@ -545,9 +516,9 @@ func TestObjects(t *testing.T) {
 	if err != nil {
 		t.Errorf("Copier.Run failed with %v", err)
 	} else {
-		if !namesEqual(copyObj, bucket, copyName) {
+		if !namesEqual(copyObj, bucketName, copyName) {
 			t.Errorf("Copy object bucket, name: got %q.%q, want %q.%q",
-				copyObj.Bucket, copyObj.Name, bucket, copyName)
+				copyObj.Bucket, copyObj.Name, bucketName, copyName)
 		}
 		if copyObj.ContentEncoding != contentEncoding {
 			t.Errorf("Copy ContentEncoding: got %q, want %q", copyObj.ContentEncoding, contentEncoding)
@@ -662,7 +633,7 @@ func TestObjects(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	slurp, err := readObject(ctx, publicClient.Bucket(bucket).Object(publicObj))
+	slurp, err := readObject(ctx, publicClient.Bucket(bucketName).Object(publicObj))
 	if err != nil {
 		t.Errorf("readObject failed with %v", err)
 	} else if !bytes.Equal(slurp, contents[publicObj]) {
@@ -670,7 +641,7 @@ func TestObjects(t *testing.T) {
 	}
 
 	// Test writer error handling.
-	wc := publicClient.Bucket(bucket).Object(publicObj).NewWriter(ctx)
+	wc := publicClient.Bucket(bucketName).Object(publicObj).NewWriter(ctx)
 	if _, err := wc.Write([]byte("hello")); err != nil {
 		t.Errorf("Write unexpectedly failed with %v", err)
 	}
@@ -762,12 +733,121 @@ func testObjectIterator(t *testing.T, bkt *BucketHandle, objects []string) {
 	// TODO(jba): test query.Delimiter != ""
 }
 
-func TestACL(t *testing.T) {
+func TestIntegration_SignedURL(t *testing.T) {
+	// To test SignedURL, we need a real user email and private key. Extract them
+	// from the JSON key file.
+	jwtConf, err := testutil.JWTConfig()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if jwtConf == nil {
+		t.Skip("JSON key file is not present")
+	}
+
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	bkt := client.Bucket(bucket)
+	bkt := client.Bucket(bucketName)
+	obj := "signedURL"
+	contents := []byte("This is a test of SignedURL.\n")
+	md5 := "Jyxvgwm9n2MsrGTMPbMeYA==" // base64-encoded MD5 of contents
+	if err := writeObject(ctx, bkt.Object(obj), "text/plain", contents); err != nil {
+		t.Fatalf("writing: %v", err)
+	}
+	for _, test := range []struct {
+		desc    string
+		opts    SignedURLOptions
+		headers map[string][]string
+		fail    bool
+	}{
+		{
+			desc: "basic",
+		},
+		{
+			desc:    "MD5 sent and matches",
+			opts:    SignedURLOptions{MD5: md5},
+			headers: map[string][]string{"Content-MD5": {md5}},
+		},
+		{
+			desc: "MD5 not sent",
+			opts: SignedURLOptions{MD5: md5},
+			fail: true,
+		},
+		{
+			desc:    "Content-Type sent and matches",
+			opts:    SignedURLOptions{ContentType: "text/plain"},
+			headers: map[string][]string{"Content-Type": {"text/plain"}},
+		},
+		{
+			desc:    "Content-Type sent but does not match",
+			opts:    SignedURLOptions{ContentType: "text/plain"},
+			headers: map[string][]string{"Content-Type": {"application/json"}},
+			fail:    true,
+		},
+		{
+			desc: "Canonical headers sent and match",
+			opts: SignedURLOptions{Headers: []string{
+				" X-Goog-Foo: Bar baz ",
+				"X-Goog-Novalue", // ignored: no value
+				"X-Google-Foo",   // ignored: wrong prefix
+			}},
+			headers: map[string][]string{"X-Goog-foo": {"Bar baz  "}},
+		},
+		{
+			desc:    "Canonical headers sent but don't match",
+			opts:    SignedURLOptions{Headers: []string{" X-Goog-Foo: Bar baz"}},
+			headers: map[string][]string{"X-Goog-Foo": {"bar baz"}},
+			fail:    true,
+		},
+	} {
+		opts := test.opts
+		opts.GoogleAccessID = jwtConf.Email
+		opts.PrivateKey = jwtConf.PrivateKey
+		opts.Method = "GET"
+		opts.Expires = time.Now().Add(time.Hour)
+		u, err := SignedURL(bucketName, obj, &opts)
+		if err != nil {
+			t.Errorf("%s: SignedURL: %v", test.desc, err)
+			continue
+		}
+		got, err := getURL(u, test.headers)
+		if err != nil && !test.fail {
+			t.Errorf("%s: getURL %q: %v", test.desc, u, err)
+		} else if err == nil && !bytes.Equal(got, contents) {
+			t.Errorf("%s: got %q, want %q", test.desc, got, contents)
+		}
+	}
+}
+
+// Make a GET request to a URL using an unauthenticated client, and return its contents.
+func getURL(url string, headers map[string][]string) ([]byte, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = headers
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	bytes, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	if res.StatusCode != 200 {
+		return nil, fmt.Errorf("code=%d, body=%s", res.StatusCode, string(bytes))
+	}
+	return bytes, nil
+}
+
+func TestIntegration_ACL(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	bkt := client.Bucket(bucketName)
 
 	entity := ACLEntity("domain-google.com")
 	rule := ACLRule{Entity: entity, Role: RoleReader}
@@ -776,7 +856,7 @@ func TestACL(t *testing.T) {
 	}
 	acl, err := bkt.DefaultObjectACL().List(ctx)
 	if err != nil {
-		t.Errorf("DefaultObjectACL.List for bucket %q: %v", bucket, err)
+		t.Errorf("DefaultObjectACL.List for bucket %q: %v", bucketName, err)
 	} else if !hasRule(acl, rule) {
 		t.Errorf("default ACL missing %#v", rule)
 	}
@@ -831,12 +911,12 @@ func hasRule(acl []ACLRule, rule ACLRule) bool {
 	return false
 }
 
-func TestValidObjectNames(t *testing.T) {
+func TestIntegration_ValidObjectNames(t *testing.T) {
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	bkt := client.Bucket(bucket)
+	bkt := client.Bucket(bucketName)
 
 	validNames := []string{
 		"gopher",
@@ -868,12 +948,12 @@ func TestValidObjectNames(t *testing.T) {
 	}
 }
 
-func TestWriterContentType(t *testing.T) {
+func TestIntegration_WriterContentType(t *testing.T) {
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	obj := client.Bucket(bucket).Object("content")
+	obj := client.Bucket(bucketName).Object("content")
 	testCases := []struct {
 		content           string
 		setType, wantType string
@@ -912,13 +992,13 @@ func TestWriterContentType(t *testing.T) {
 	}
 }
 
-func TestZeroSizedObject(t *testing.T) {
+func TestIntegration_ZeroSizedObject(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	obj := client.Bucket(bucket).Object("zero")
+	obj := client.Bucket(bucketName).Object("zero")
 
 	// Check writing it works as expected.
 	w := obj.NewWriter(ctx)
@@ -942,10 +1022,10 @@ func TestIntegration_Encryption(t *testing.T) {
 	// involving objects. Bucket and ACL operations aren't tested because they
 	// aren't affected by customer encryption. Neither is deletion.
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	obj := client.Bucket(bucket).Object("customer-encryption")
+	obj := client.Bucket(bucketName).Object("customer-encryption")
 	key := []byte("my-secret-AES-256-encryption-key")
 	keyHash := sha256.Sum256(key)
 	keyHashB64 := base64.StdEncoding.EncodeToString(keyHash[:])
@@ -1011,7 +1091,7 @@ func TestIntegration_Encryption(t *testing.T) {
 		}
 		gotContents := string(got)
 		if gotContents != wantContents {
-			t.Errorf("%s: got %q, want %q", gotContents, wantContents)
+			t.Errorf("%s: got %q, want %q", msg, gotContents, wantContents)
 		}
 	}
 
@@ -1033,7 +1113,7 @@ func TestIntegration_Encryption(t *testing.T) {
 
 	checkRead("first object", obj, key, contents)
 
-	obj2 := client.Bucket(bucket).Object("customer-encryption-2")
+	obj2 := client.Bucket(bucketName).Object("customer-encryption-2")
 	// Copying an object without the key should fail.
 	if _, err := obj2.CopierFrom(obj).Run(ctx); err == nil {
 		t.Fatal("want error, got nil")
@@ -1065,7 +1145,7 @@ func TestIntegration_Encryption(t *testing.T) {
 	if _, err := obj2.Key(key).CopierFrom(obj2.Key(key2)).Run(ctx); err != nil {
 		t.Fatal(err)
 	}
-	obj3 := client.Bucket(bucket).Object("customer-encryption-3")
+	obj3 := client.Bucket(bucketName).Object("customer-encryption-3")
 	// Composing without keys should fail.
 	if _, err := obj3.ComposerFrom(obj, obj2).Run(ctx); err == nil {
 		t.Fatal("want error, got nil")
@@ -1096,10 +1176,10 @@ func TestIntegration_Encryption(t *testing.T) {
 func TestIntegration_NonexistentBucket(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	bkt := client.Bucket(bucket + "-nonexistent")
+	bkt := client.Bucket(uidSpace.New())
 	if _, err := bkt.Attrs(ctx); err != ErrBucketNotExist {
 		t.Errorf("Attrs: got %v, want ErrBucketNotExist", err)
 	}
@@ -1115,10 +1195,10 @@ func TestIntegration_PerObjectStorageClass(t *testing.T) {
 		newStorageClass     = "MULTI_REGIONAL"
 	)
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	bkt := client.Bucket(bucket)
+	bkt := client.Bucket(bucketName)
 
 	// The bucket should have the default storage class.
 	battrs, err := bkt.Attrs(ctx)
@@ -1175,16 +1255,16 @@ func TestIntegration_BucketInCopyAttrs(t *testing.T) {
 	// call, but object name and content-type aren't, then we get an error. See
 	// the comment in Copier.Run.
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	bkt := client.Bucket(bucket)
+	bkt := client.Bucket(bucketName)
 	obj := bkt.Object("bucketInCopyAttrs")
 	if err := writeObject(ctx, obj, "", []byte("foo")); err != nil {
 		t.Fatal(err)
 	}
 	copier := obj.CopierFrom(obj)
-	rawObject := copier.ObjectAttrs.toRawObject(bucket)
+	rawObject := copier.ObjectAttrs.toRawObject(bucketName)
 	_, err := copier.callRewrite(ctx, rawObject)
 	if err == nil {
 		t.Errorf("got nil, want error")
@@ -1194,7 +1274,7 @@ func TestIntegration_BucketInCopyAttrs(t *testing.T) {
 func TestIntegration_NoUnicodeNormalization(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
-	client, _ := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 	bkt := client.Bucket("storage-library-test-bucket")
 
@@ -1224,12 +1304,12 @@ func TestIntegration_HashesOnUpload(t *testing.T) {
 		t.Skip("Integration tests skipped in short mode")
 	}
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	if client == nil {
 		t.Skip("Integration tests skipped. See CONTRIBUTING.md for details")
 	}
 	defer client.Close()
-	obj := client.Bucket(bucket).Object("hashesOnUpload-1")
+	obj := client.Bucket(bucketName).Object("hashesOnUpload-1")
 	data := []byte("I can't wait to be verified")
 
 	write := func(w *Writer) error {
@@ -1284,10 +1364,10 @@ func TestIntegration_HashesOnUpload(t *testing.T) {
 
 func TestIntegration_BucketIAM(t *testing.T) {
 	ctx := context.Background()
-	client, bucket := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
 
-	bkt := client.Bucket(bucket)
+	bkt := client.Bucket(bucketName)
 
 	// This bucket is unique to this test run. So we don't have
 	// to worry about other runs interfering with our IAM policy
@@ -1333,11 +1413,69 @@ func TestIntegration_BucketIAM(t *testing.T) {
 }
 
 func TestIntegration_RequesterPays(t *testing.T) {
+	// This test needs a second project and user (token source) to test
+	// all possibilities. Since we need these things for Firestore already,
+	// we use them here.
+	//
+	// There are up to three entities involved in a requester-pays call:
+	//
+	// 1. The user making the request. Here, we use
+	//    a. The account used to create the token source used for all our
+	//       integration tests (see testutil.TokenSource).
+	//    b. The account used for the Firestore tests.
+	// 2. The project that owns the requester-pays bucket. Here, that
+	//    is the test project ID (see testutil.ProjID).
+	// 3. The project provided as the userProject parameter of the request;
+	//    the project to be billed. This test uses:
+	//    a. The project that owns the requester-pays bucket (same as (2))
+	//    b. Another project (the Firestore project).
+	//
+	// The following must hold for this test to work:
+	// - (1a) must have resourcemanager.projects.createBillingAssignment permission
+	//       (Owner role) on (2) (the project, not the bucket).
+	// - (1b) must NOT have that permission on (2).
+	// - (1b) must have serviceusage.services.use permission (Editor role) on (3b).
+	// - (1b) must NOT have that permission on (3a).
+	// - (1a) must NOT have that permission on (3b).
+	const wantErrorCode = 400
+
 	ctx := context.Background()
-	client, bucketName := testConfig(ctx, t)
+	client := testConfig(ctx, t)
 	defer client.Close()
-	b := client.Bucket(bucketName + "-rp")
+	bucketName2 := uidSpace.New()
+	b := client.Bucket(bucketName2)
 	projID := testutil.ProjID()
+	// Use Firestore project as a project that does not contain the bucket.
+	otherProjID := os.Getenv(envFirestoreProjID)
+	if otherProjID == "" {
+		t.Fatalf("need a second project (env var %s)", envFirestoreProjID)
+	}
+	ts := testutil.TokenSourceEnv(ctx, envFirestorePrivateKey, ScopeFullControl)
+	if ts == nil {
+		t.Fatalf("need a second account (env var %s)", envFirestorePrivateKey)
+	}
+	otherClient, err := NewClient(ctx, option.WithTokenSource(ts))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer otherClient.Close()
+	ob := otherClient.Bucket(bucketName2)
+	user, err := keyFileEmail(os.Getenv("GCLOUD_TESTS_GOLANG_KEY"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	otherUser, err := keyFileEmail(os.Getenv(envFirestorePrivateKey))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a requester-pays bucket. The bucket is contained in the project projID.
+	if err := b.Create(ctx, projID, &BucketAttrs{RequesterPays: true}); err != nil {
+		t.Fatal(err)
+	}
+	if err := b.ACL().Set(ctx, ACLEntity("user-"+otherUser), RoleOwner); err != nil {
+		t.Fatal(err)
+	}
 
 	// Extract the error code from err if it's a googleapi.Error.
 	errCode := func(err error) int {
@@ -1350,42 +1488,80 @@ func TestIntegration_RequesterPays(t *testing.T) {
 		return -1
 	}
 
-	// Call f twice on b, first without and then with a user project.
-	call := func(msg string, f func(b *BucketHandle) error) {
-		if err := f(b); err == nil {
-			if got, want := errCode(err), 400; got != want {
-				t.Errorf("%s: got error code %d, want %d", msg, got, want)
-			}
+	// Call f under various conditions.
+	// Here b and ob refer to the same bucket, but b is bound to client,
+	// while ob is bound to otherClient. The clients differ in their credentials,
+	// i.e. the identity of the user making the RPC: b's user is an Owner on the
+	// bucket's containing project, ob's is not.
+	call := func(msg string, f func(*BucketHandle) error) {
+		// user: an Owner on the containing project
+		// userProject: absent
+		// result: success, by the rule permitting access by owners of the containing bucket.
+		if err := f(b); err != nil {
+			t.Errorf("%s: %v, want nil\n"+
+				"confirm that %s is an Owner on %s",
+				msg, err, user, projID)
 		}
+		// user: an Owner on the containing project
+		// userProject: containing project
+		// result: success, by the same rule as above; userProject is unnecessary but allowed.
 		if err := f(b.UserProject(projID)); err != nil {
 			t.Errorf("%s: got %v, want nil", msg, err)
 		}
+		// user: not an Owner on the containing project
+		// userProject: absent
+		// result: failure, by the standard requester-pays rule
+		err := f(ob)
+		if got, want := errCode(err), wantErrorCode; got != want {
+			t.Errorf("%s: got error %s, want code %d\n"+
+				"confirm that %s is NOT an Owner on %s",
+				msg, err, want, otherUser, projID)
+		}
+		// user: not an Owner on the containing project
+		// userProject: not the containing one, but user has Editor role on it
+		// result: success, by the standard requester-pays rule
+		if err := f(ob.UserProject(otherProjID)); err != nil {
+			t.Errorf("%s: got %v, want nil\n"+
+				"confirm that %s is an Editor on %s and that that project has billing enabled",
+				msg, err, otherUser, otherProjID)
+		}
+		// user: not an Owner on the containing project
+		// userProject: the containing one, on which the user does NOT have Editor permission.
+		// result: failure
+		err = f(ob.UserProject("veener-jba"))
+		if got, want := errCode(err), 403; got != want {
+			t.Errorf("%s: got error %s, want code %d\n"+
+				"confirm that %s is NOT an Editor on %s",
+				msg, err, want, otherUser, "veener-jba")
+		}
 	}
 
-	// Create a requester-pays bucket.
-	err := b.Create(ctx, projID, &BucketAttrs{RequesterPays: true})
-	if err != nil {
-		t.Fatal(err)
-	}
 	// Getting its attributes requires a user project.
 	var attrs *BucketAttrs
-	call("Bucket attrs", func(b *BucketHandle) (err error) {
-		attrs, err = b.Attrs(ctx)
+	call("Bucket attrs", func(b *BucketHandle) error {
+		a, err := b.Attrs(ctx)
+		if a != nil {
+			attrs = a
+		}
 		return err
 	})
-	if got, want := attrs.RequesterPays, true; got != want {
-		t.Fatalf("attr.RequesterPays = %b, want %b", got, want)
+	if attrs != nil {
+		if got, want := attrs.RequesterPays, true; got != want {
+			t.Fatalf("attr.RequesterPays = %t, want %t", got, want)
+		}
 	}
-
 	// Object operations.
 	call("write object", func(b *BucketHandle) error {
 		return writeObject(ctx, b.Object("foo"), "text/plain", []byte("hello"))
 	})
-	// // TODO(jba): add read test when XML API has requester-pays support.
-	// callObject("object attrs", o, func(o *ObjectHandle) error {
-	// 	_, err := o.Attrs(ctx)
-	// 	return err
-	// })
+	call("read object", func(b *BucketHandle) error {
+		_, err := readObject(ctx, b.Object("foo"))
+		return err
+	})
+	call("object attrs", func(b *BucketHandle) error {
+		_, err := b.Object("foo").Attrs(ctx)
+		return err
+	})
 	call("update object", func(b *BucketHandle) error {
 		_, err := b.Object("foo").Update(ctx, ObjectAttrsToUpdate{ContentLanguage: "en"})
 		return err
@@ -1401,7 +1577,13 @@ func TestIntegration_RequesterPays(t *testing.T) {
 		return err
 	})
 	call("bucket acl delete", func(b *BucketHandle) error {
-		return b.ACL().Delete(ctx, entity)
+		err := b.ACL().Delete(ctx, entity)
+		if errCode(err) == 404 {
+			// Since we call the function multiple times, it will
+			// fail with NotFound for all but the first.
+			return nil
+		}
+		return err
 	})
 	call("default object acl set", func(b *BucketHandle) error {
 		return b.DefaultObjectACL().Set(ctx, entity, RoleReader)
@@ -1411,7 +1593,11 @@ func TestIntegration_RequesterPays(t *testing.T) {
 		return err
 	})
 	call("default object acl delete", func(b *BucketHandle) error {
-		return b.DefaultObjectACL().Delete(ctx, entity)
+		err := b.DefaultObjectACL().Delete(ctx, entity)
+		if errCode(err) == 404 {
+			return nil
+		}
+		return err
 	})
 	call("object acl set", func(b *BucketHandle) error {
 		return b.Object("foo").ACL().Set(ctx, entity, RoleReader)
@@ -1421,7 +1607,11 @@ func TestIntegration_RequesterPays(t *testing.T) {
 		return err
 	})
 	call("object acl delete", func(b *BucketHandle) error {
-		return b.Object("foo").ACL().Delete(ctx, entity)
+		err := b.Object("foo").ACL().Delete(ctx, entity)
+		if errCode(err) == 404 {
+			return nil
+		}
+		return err
 	})
 
 	// Copy and compose.
@@ -1436,16 +1626,563 @@ func TestIntegration_RequesterPays(t *testing.T) {
 
 	// Deletion.
 	call("delete object", func(b *BucketHandle) error {
-		return b.Object("foo").Delete(ctx)
+		err := b.Object("foo").Delete(ctx)
+		if err == ErrObjectNotExist {
+			return nil
+		}
+		return err
 	})
 	for _, obj := range []string{"copy", "compose"} {
 		if err := b.UserProject(projID).Object(obj).Delete(ctx); err != nil {
 			t.Fatalf("could not delete %q: %v", obj, err)
 		}
 	}
-	call("delete bucket", func(b *BucketHandle) error {
-		return b.Delete(ctx)
-	})
+	if err := b.Delete(ctx); err != nil {
+		t.Fatalf("deleting bucket: %v", err)
+	}
+}
+
+// TODO(jba): move to testutil, factor out from firestore/integration_test.go.
+const (
+	envFirestoreProjID     = "GCLOUD_TESTS_GOLANG_FIRESTORE_PROJECT_ID"
+	envFirestorePrivateKey = "GCLOUD_TESTS_GOLANG_FIRESTORE_KEY"
+)
+
+func keyFileEmail(filename string) (string, error) {
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	var v struct {
+		ClientEmail string `json:"client_email"`
+	}
+	if err := json.Unmarshal(bytes, &v); err != nil {
+		return "", err
+	}
+	return v.ClientEmail, nil
+}
+
+func TestNotifications(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	bkt := client.Bucket(bucketName)
+
+	checkNotifications := func(msg string, want map[string]*Notification) {
+		got, err := bkt.Notifications(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if diff := testutil.Diff(got, want); diff != "" {
+			t.Errorf("%s: got=-, want=+:\n%s", msg, diff)
+		}
+	}
+	checkNotifications("initial", map[string]*Notification{})
+
+	nArg := &Notification{
+		TopicProjectID: testutil.ProjID(),
+		TopicID:        "go-storage-notification-test",
+		PayloadFormat:  NoPayload,
+	}
+	n, err := bkt.AddNotification(ctx, nArg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	nArg.ID = n.ID
+	if !testutil.Equal(n, nArg) {
+		t.Errorf("got %+v, want %+v", n, nArg)
+	}
+	checkNotifications("after add", map[string]*Notification{n.ID: n})
+
+	if err := bkt.DeleteNotification(ctx, n.ID); err != nil {
+		t.Fatal(err)
+	}
+	checkNotifications("after delete", map[string]*Notification{})
+}
+
+func TestIntegration_Public(t *testing.T) {
+	// Confirm that an unauthenticated client can access a public bucket.
+
+	// See https://cloud.google.com/storage/docs/public-datasets/landsat
+	const landsatBucket = "gcp-public-data-landsat"
+	const landsatPrefix = "LC08/PRE/044/034/LC80440342016259LGN00/"
+	const landsatObject = landsatPrefix + "LC80440342016259LGN00_MTL.txt"
+
+	// Create an unauthenticated client.
+	ctx := context.Background()
+	client, err := NewClient(ctx, option.WithoutAuthentication())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer client.Close()
+	bkt := client.Bucket(landsatBucket)
+	obj := bkt.Object(landsatObject)
+
+	// Read a public object.
+	bytes, err := readObject(ctx, obj)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(bytes), 7903; got != want {
+		t.Errorf("len(bytes) = %d, want %d", got, want)
+	}
+
+	// List objects in a public bucket.
+	iter := bkt.Objects(ctx, &Query{Prefix: landsatPrefix})
+	gotCount := 0
+	for {
+		_, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		gotCount++
+	}
+	if wantCount := 13; gotCount != wantCount {
+		t.Errorf("object count: got %d, want %d", gotCount, wantCount)
+	}
+
+	errCode := func(err error) int {
+		if err, ok := err.(*googleapi.Error); !ok {
+			return -1
+		} else {
+			return err.Code
+		}
+	}
+
+	// Reading from or writing to a non-public bucket fails.
+	c := testConfig(ctx, t)
+	defer c.Close()
+	nonPublicObj := client.Bucket(bucketName).Object("noauth")
+	// Oddly, reading returns 403 but writing returns 401.
+	_, err = readObject(ctx, nonPublicObj)
+	if got, want := errCode(err), 403; got != want {
+		t.Errorf("got code %d; want %d\nerror: %v", got, want, err)
+	}
+	err = writeObject(ctx, nonPublicObj, "text/plain", []byte("b"))
+	if got, want := errCode(err), 401; got != want {
+		t.Errorf("got code %d; want %d\nerror: %v", got, want, err)
+	}
+}
+
+func TestIntegration_ReadCRC(t *testing.T) {
+	// Test that the checksum is handled correctly when reading files.
+	// For gzipped files, see https://github.com/GoogleCloudPlatform/google-cloud-dotnet/issues/1641.
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+	const (
+		// This is an uncompressed file.
+		// See https://cloud.google.com/storage/docs/public-datasets/landsat
+		uncompressedBucket = "gcp-public-data-landsat"
+		uncompressedObject = "LC08/PRE/044/034/LC80440342016259LGN00/LC80440342016259LGN00_MTL.txt"
+
+		gzippedBucket   = "storage-library-test-bucket"
+		gzippedObject   = "gzipped-text.txt"
+		gzippedContents = "hello world" // uncompressed contents of the file
+	)
+	ctx := context.Background()
+	client, err := NewClient(ctx, option.WithoutAuthentication())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer client.Close()
+
+	for _, test := range []struct {
+		desc           string
+		obj            *ObjectHandle
+		offset, length int64
+		readCompressed bool // don't decompress a gzipped file
+
+		wantErr     bool
+		wantCheck   bool // Should Reader try to check the CRC?
+		wantChecked bool // Did Reader actually check the CRC?
+	}{
+		{
+			desc:           "uncompressed, entire file",
+			obj:            client.Bucket(uncompressedBucket).Object(uncompressedObject),
+			offset:         0,
+			length:         -1,
+			readCompressed: false,
+			wantCheck:      true,
+			wantChecked:    true,
+		},
+		{
+			desc:           "uncompressed, entire file, don't decompress",
+			obj:            client.Bucket(uncompressedBucket).Object(uncompressedObject),
+			offset:         0,
+			length:         -1,
+			readCompressed: true,
+			wantCheck:      true,
+			wantChecked:    true,
+		},
+		{
+			desc:           "uncompressed, suffix",
+			obj:            client.Bucket(uncompressedBucket).Object(uncompressedObject),
+			offset:         1,
+			length:         -1,
+			readCompressed: false,
+			wantCheck:      false,
+			wantChecked:    false,
+		},
+		{
+			desc:           "uncompressed, prefix",
+			obj:            client.Bucket(uncompressedBucket).Object(uncompressedObject),
+			offset:         0,
+			length:         18,
+			readCompressed: false,
+			wantCheck:      false,
+			wantChecked:    false,
+		},
+		{
+			// When a gzipped file is unzipped by GCS, we can't verify the checksum
+			// because it was computed against the zipped contents. There is no
+			// header that indicates that a gzipped file is being served unzipped.
+			// But our CRC check only happens if there is a Content-Length header,
+			// and that header is absent for this read.
+			desc:           "compressed, entire file, server unzips",
+			obj:            client.Bucket(gzippedBucket).Object(gzippedObject),
+			offset:         0,
+			length:         -1,
+			readCompressed: false,
+			wantCheck:      true,
+			wantChecked:    false,
+		},
+		{
+			// When we read a gzipped file uncompressed, it's like reading a regular file:
+			// the served content and the CRC match.
+			desc:           "compressed, entire file, read compressed",
+			obj:            client.Bucket(gzippedBucket).Object(gzippedObject),
+			offset:         0,
+			length:         -1,
+			readCompressed: true,
+			wantCheck:      true,
+			wantChecked:    true,
+		},
+		{
+			desc:           "compressed, partial, server unzips",
+			obj:            client.Bucket(gzippedBucket).Object(gzippedObject),
+			offset:         1,
+			length:         8,
+			readCompressed: false,
+			wantErr:        true, // GCS can't serve part of a gzipped object
+			wantCheck:      false,
+			wantChecked:    false,
+		},
+		{
+			desc:           "compressed, partial, read compressed",
+			obj:            client.Bucket(gzippedBucket).Object(gzippedObject),
+			offset:         1,
+			length:         8,
+			readCompressed: true,
+			wantCheck:      false,
+			wantChecked:    false,
+		},
+	} {
+		obj := test.obj.ReadCompressed(test.readCompressed)
+		r, err := obj.NewRangeReader(ctx, test.offset, test.length)
+		if err != nil {
+			if test.wantErr {
+				continue
+			}
+			t.Fatalf("%s: %v", test.desc, err)
+		}
+		if got, want := r.checkCRC, test.wantCheck; got != want {
+			t.Errorf("%s, checkCRC: got %t, want %t", test.desc, got, want)
+		}
+		_, err = ioutil.ReadAll(r)
+		_ = r.Close()
+		if err != nil {
+			t.Fatalf("%s: %v", test.desc, err)
+		}
+		if got, want := r.checkedCRC, test.wantChecked; got != want {
+			t.Errorf("%s, checkedCRC: got %t, want %t", test.desc, got, want)
+		}
+	}
+}
+
+func TestIntegration_CancelWrite(t *testing.T) {
+	// Verify that canceling the writer's context immediately stops uploading an object.
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	bkt := client.Bucket(bucketName)
+
+	cctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	obj := bkt.Object("cancel-write")
+	w := obj.NewWriter(cctx)
+	w.ChunkSize = googleapi.MinUploadChunkSize
+	buf := make([]byte, w.ChunkSize)
+	// Write the first chunk. This is read in its entirety before sending the request
+	// (see google.golang.org/api/gensupport.PrepareUpload), so we expect it to return
+	// without error.
+	_, err := w.Write(buf)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Now cancel the context.
+	cancel()
+	// The next Write should return context.Canceled.
+	_, err = w.Write(buf)
+	if err != context.Canceled {
+		t.Fatalf("got %v, wanted context.Canceled", err)
+	}
+	// The Close should too.
+	err = w.Close()
+	if err != context.Canceled {
+		t.Fatalf("got %v, wanted context.Canceled", err)
+	}
+}
+
+func TestIntegration_UpdateCORS(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	initialSettings := []CORS{
+		{
+			MaxAge:          time.Hour,
+			Methods:         []string{"POST"},
+			Origins:         []string{"some-origin.com"},
+			ResponseHeaders: []string{"foo-bar"},
+		},
+	}
+
+	for _, test := range []struct {
+		input []CORS
+		want  []CORS
+	}{
+		{
+			input: []CORS{
+				{
+					MaxAge:          time.Hour,
+					Methods:         []string{"GET"},
+					Origins:         []string{"*"},
+					ResponseHeaders: []string{"some-header"},
+				},
+			},
+			want: []CORS{
+				{
+					MaxAge:          time.Hour,
+					Methods:         []string{"GET"},
+					Origins:         []string{"*"},
+					ResponseHeaders: []string{"some-header"},
+				},
+			},
+		},
+		{
+			input: []CORS{},
+			want:  nil,
+		},
+		{
+			input: nil,
+			want: []CORS{
+				{
+					MaxAge:          time.Hour,
+					Methods:         []string{"POST"},
+					Origins:         []string{"some-origin.com"},
+					ResponseHeaders: []string{"foo-bar"},
+				},
+			},
+		},
+	} {
+		bkt := client.Bucket(uidSpace.New())
+		defer func(b *BucketHandle) {
+			err := b.Delete(ctx)
+			if err != nil {
+				t.Fatal(err)
+			}
+		}(bkt)
+		err := bkt.Create(ctx, testutil.ProjID(), &BucketAttrs{CORS: initialSettings})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		_, err = bkt.Update(ctx, BucketAttrsToUpdate{CORS: test.input})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		attrs, err := bkt.Attrs(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if diff := testutil.Diff(attrs.CORS, test.want); diff != "" {
+			t.Errorf("input: %v\ngot=-, want=+:\n%s", test.input, diff)
+		}
+	}
+}
+
+func TestIntegration_UpdateRetentionPolicy(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	initial := &RetentionPolicy{RetentionPeriod: time.Minute}
+
+	for _, test := range []struct {
+		input *RetentionPolicy
+		want  *RetentionPolicy
+	}{
+		{ // Update
+			input: &RetentionPolicy{RetentionPeriod: time.Hour},
+			want:  &RetentionPolicy{RetentionPeriod: time.Hour},
+		},
+		{ // Update even with timestamp (EffectiveTime should be ignored)
+			input: &RetentionPolicy{RetentionPeriod: time.Hour, EffectiveTime: time.Now()},
+			want:  &RetentionPolicy{RetentionPeriod: time.Hour},
+		},
+		{ // Remove
+			input: &RetentionPolicy{},
+			want:  nil,
+		},
+		{ // Remove even with timestamp (EffectiveTime should be ignored)
+			input: &RetentionPolicy{EffectiveTime: time.Now()},
+			want:  nil,
+		},
+		{ // Ignore
+			input: nil,
+			want:  initial,
+		},
+	} {
+		bkt := client.Bucket(uidSpace.New())
+		err := bkt.Create(ctx, testutil.ProjID(), &BucketAttrs{RetentionPolicy: initial})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		defer func() {
+			if err := bkt.Delete(ctx); err != nil {
+				t.Fatal(err)
+			}
+		}()
+
+		_, err = bkt.Update(ctx, BucketAttrsToUpdate{RetentionPolicy: test.input})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		attrs, err := bkt.Attrs(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if attrs.RetentionPolicy != nil && attrs.RetentionPolicy.EffectiveTime.Unix() == 0 {
+			// Should be set by the server and parsed by the client
+			t.Fatal("EffectiveTime should be set, but it was not")
+		}
+		if diff := testutil.Diff(attrs.RetentionPolicy, test.want, cmpopts.IgnoreTypes(time.Time{})); diff != "" {
+			t.Errorf("input: %v\ngot=-, want=+:\n%s", test.input, diff)
+		}
+	}
+}
+
+func TestIntegration_DeleteObjectInBucketWithRetentionPolicy(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	bkt := client.Bucket(uidSpace.New())
+	err := bkt.Create(ctx, testutil.ProjID(), &BucketAttrs{RetentionPolicy: &RetentionPolicy{RetentionPeriod: 25 * time.Hour}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	oh := bkt.Object("some-object")
+	if err = writeObject(ctx, oh, "text/plain", []byte("hello world")); err != nil {
+		t.Fatal(err)
+	}
+
+	err = oh.Delete(ctx)
+	if err == nil {
+		t.Fatal("expected to err deleting an object in a bucket with retention period, but got nil")
+	}
+
+	// Remove the retention period
+	_, err = bkt.Update(ctx, BucketAttrsToUpdate{RetentionPolicy: &RetentionPolicy{RetentionPeriod: 0}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = oh.Delete(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := bkt.Delete(ctx); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestIntegration_LockBucket(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	bkt := client.Bucket(uidSpace.New())
+	err := bkt.Create(ctx, testutil.ProjID(), &BucketAttrs{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour * 25}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	attrs, err := bkt.Attrs(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = bkt.If(BucketConditions{MetagenerationMatch: attrs.MetaGeneration}).LockRetentionPolicy(ctx)
+	if err != nil {
+		t.Fatal("could not lock", err)
+	}
+
+	_, err = bkt.Update(ctx, BucketAttrsToUpdate{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour}})
+	if err == nil {
+		t.Fatal("Expected error updating locked bucket, got nil")
+	}
+}
+
+func TestIntegration_LockBucket_MetagenerationRequired(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	bkt := client.Bucket(uidSpace.New())
+	err := bkt.Create(ctx, testutil.ProjID(), &BucketAttrs{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour * 25}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = bkt.LockRetentionPolicy(ctx)
+	if err == nil {
+		t.Fatal("expected error locking bucket without metageneration condition, got nil")
+	}
 }
 
 func writeObject(ctx context.Context, obj *ObjectHandle, contentType string, contents []byte) error {
@@ -1477,12 +2214,12 @@ func cleanup() error {
 		return nil // Don't clean up in short mode.
 	}
 	ctx := context.Background()
-	client, bucket := config(ctx)
+	client := config(ctx)
 	if client == nil {
 		return nil // Don't cleanup if we're not configured correctly.
 	}
 	defer client.Close()
-	if err := killBucket(ctx, client, bucket); err != nil {
+	if err := killBucket(ctx, client, bucketName); err != nil {
 		return err
 	}
 
@@ -1492,7 +2229,7 @@ func cleanup() error {
 	const expireAge = 24 * time.Hour
 	projectID := testutil.ProjID()
 	it := client.Buckets(ctx, projectID)
-	it.Prefix = projectID + testPrefix
+	it.Prefix = testPrefix
 	for {
 		bktAttrs, err := it.Next()
 		if err == iterator.Done {

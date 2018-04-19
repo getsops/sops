@@ -2,6 +2,7 @@ package matchers_test
 
 import (
 	"errors"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/matchers"
@@ -17,42 +18,42 @@ func (e *CustomErr) Error() string {
 
 var _ = Describe("HaveOccurred", func() {
 	It("should succeed if matching an error", func() {
-		Ω(errors.New("Foo")).Should(HaveOccurred())
+		Expect(errors.New("Foo")).Should(HaveOccurred())
 	})
 
 	It("should not succeed with nil", func() {
-		Ω(nil).ShouldNot(HaveOccurred())
+		Expect(nil).ShouldNot(HaveOccurred())
 	})
 
 	It("should only support errors and nil", func() {
 		success, err := (&HaveOccurredMatcher{}).Match("foo")
-		Ω(success).Should(BeFalse())
-		Ω(err).Should(HaveOccurred())
+		Expect(success).Should(BeFalse())
+		Expect(err).Should(HaveOccurred())
 
 		success, err = (&HaveOccurredMatcher{}).Match("")
-		Ω(success).Should(BeFalse())
-		Ω(err).Should(HaveOccurred())
+		Expect(success).Should(BeFalse())
+		Expect(err).Should(HaveOccurred())
 	})
 
 	It("doesn't support non-error type", func() {
 		success, err := (&HaveOccurredMatcher{}).Match(AnyType{})
-		Ω(success).Should(BeFalse())
-		Ω(err).Should(MatchError("Expected an error-type.  Got:\n    <matchers_test.AnyType>: {}"))
+		Expect(success).Should(BeFalse())
+		Expect(err).Should(MatchError("Expected an error-type.  Got:\n    <matchers_test.AnyType>: {}"))
 	})
 
 	It("doesn't support non-error pointer type", func() {
 		success, err := (&HaveOccurredMatcher{}).Match(&AnyType{})
-		Ω(success).Should(BeFalse())
-		Ω(err).Should(MatchError(MatchRegexp(`Expected an error-type.  Got:\n    <*matchers_test.AnyType | 0x[[:xdigit:]]+>: {}`)))
+		Expect(success).Should(BeFalse())
+		Expect(err).Should(MatchError(MatchRegexp(`Expected an error-type.  Got:\n    <*matchers_test.AnyType | 0x[[:xdigit:]]+>: {}`)))
 	})
 
 	It("should succeed with pointer types that conform to error interface", func() {
 		err := &CustomErr{"ohai"}
-		Ω(err).Should(HaveOccurred())
+		Expect(err).Should(HaveOccurred())
 	})
 
 	It("should not succeed with nil pointers to types that conform to error interface", func() {
 		var err *CustomErr = nil
-		Ω(err).ShouldNot(HaveOccurred())
+		Expect(err).ShouldNot(HaveOccurred())
 	})
 })

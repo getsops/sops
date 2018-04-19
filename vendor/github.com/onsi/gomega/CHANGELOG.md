@@ -1,5 +1,19 @@
 ## HEAD
 
+## 1.3.0
+
+Improvements:
+
+- The `Equal` matcher matches byte slices more performantly.
+- Improved how `MatchError` matches error strings.
+- `MatchXML` ignores the order of xml node attributes.
+- Improve support for XUnit style golang tests. ([#254](https://github.com/onsi/gomega/issues/254))
+
+Bug Fixes:
+
+- Diff generation now handles multi-byte sequences correctly.
+- Multiple goroutines can now call `gexec.Build` concurrently.
+
 ## 1.2.0
 
 Improvements:

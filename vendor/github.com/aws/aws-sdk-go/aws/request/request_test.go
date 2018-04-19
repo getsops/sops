@@ -8,9 +8,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"reflect"
 	"runtime"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -20,6 +22,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/client/metadata"
 	"github.com/aws/aws-sdk-go/aws/corehandlers"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/defaults"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/aws/aws-sdk-go/awstesting"
@@ -80,7 +83,7 @@ func TestRequestRecoverRetry5xx(t *testing.T) {
 	reqNum := 0
 	reqs := []http.Response{
 		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
-		{StatusCode: 501, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
+		{StatusCode: 502, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
 		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
 	}
 
@@ -112,7 +115,8 @@ func TestRequestRecoverRetry4xxRetryable(t *testing.T) {
 	reqNum := 0
 	reqs := []http.Response{
 		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
-		{StatusCode: 429, Body: body(`{"__type":"ProvisionedThroughputExceededException","message":"Rate exceeded."}`)},
+		{StatusCode: 400, Body: body(`{"__type":"ProvisionedThroughputExceededException","message":"Rate exceeded."}`)},
+		{StatusCode: 429, Body: body(`{"__type":"FooException","message":"Rate exceeded."}`)},
 		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
 	}
 
@@ -131,7 +135,7 @@ func TestRequestRecoverRetry4xxRetryable(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expect no error, but got %v", err)
 	}
-	if e, a := 2, int(r.RetryCount); e != a {
+	if e, a := 3, int(r.RetryCount); e != a {
 		t.Errorf("expect %d retry count, got %d", e, a)
 	}
 	if e, a := "valid", out.Data; e != a {
@@ -840,5 +844,278 @@ func TestRequest_TemporaryRetry(t *testing.T) {
 	terr := aerr.OrigErr().(temporary)
 	if !terr.Temporary() {
 		t.Errorf("expect temporary error, was not")
+	}
+}
+
+func TestRequest_Presign(t *testing.T) {
+	presign := func(r *request.Request, expire time.Duration) (string, http.Header, error) {
+		u, err := r.Presign(expire)
+		return u, nil, err
+	}
+	presignRequest := func(r *request.Request, expire time.Duration) (string, http.Header, error) {
+		return r.PresignRequest(expire)
+	}
+	mustParseURL := func(v string) *url.URL {
+		u, err := url.Parse(v)
+		if err != nil {
+			panic(err)
+		}
+		return u
+	}
+
+	cases := []struct {
+		Expire    time.Duration
+		PresignFn func(*request.Request, time.Duration) (string, http.Header, error)
+		SignerFn  func(*request.Request)
+		URL       string
+		Header    http.Header
+		Err       string
+	}{
+		{
+			PresignFn: presign,
+			Err:       request.ErrCodeInvalidPresignExpire,
+		},
+		{
+			PresignFn: presignRequest,
+			Err:       request.ErrCodeInvalidPresignExpire,
+		},
+		{
+			Expire:    -1,
+			PresignFn: presign,
+			Err:       request.ErrCodeInvalidPresignExpire,
+		},
+		{
+			// Presign clear NotHoist
+			Expire: 1 * time.Minute,
+			PresignFn: func(r *request.Request, dur time.Duration) (string, http.Header, error) {
+				r.NotHoist = true
+				return presign(r, dur)
+			},
+			SignerFn: func(r *request.Request) {
+				r.HTTPRequest.URL = mustParseURL("https://endpoint/presignedURL")
+				if r.NotHoist {
+					r.Error = fmt.Errorf("expect NotHoist to be cleared")
+				}
+			},
+			URL: "https://endpoint/presignedURL",
+		},
+		{
+			// PresignRequest does not clear NotHoist
+			Expire: 1 * time.Minute,
+			PresignFn: func(r *request.Request, dur time.Duration) (string, http.Header, error) {
+				r.NotHoist = true
+				return presignRequest(r, dur)
+			},
+			SignerFn: func(r *request.Request) {
+				r.HTTPRequest.URL = mustParseURL("https://endpoint/presignedURL")
+				if !r.NotHoist {
+					r.Error = fmt.Errorf("expect NotHoist not to be cleared")
+				}
+			},
+			URL: "https://endpoint/presignedURL",
+		},
+		{
+			// PresignRequest returns signed headers
+			Expire:    1 * time.Minute,
+			PresignFn: presignRequest,
+			SignerFn: func(r *request.Request) {
+				r.HTTPRequest.URL = mustParseURL("https://endpoint/presignedURL")
+				r.HTTPRequest.Header.Set("UnsigndHeader", "abc")
+				r.SignedHeaderVals = http.Header{
+					"X-Amzn-Header":  []string{"abc", "123"},
+					"X-Amzn-Header2": []string{"efg", "456"},
+				}
+			},
+			URL: "https://endpoint/presignedURL",
+			Header: http.Header{
+				"X-Amzn-Header":  []string{"abc", "123"},
+				"X-Amzn-Header2": []string{"efg", "456"},
+			},
+		},
+	}
+
+	svc := awstesting.NewClient()
+	svc.Handlers.Clear()
+	for i, c := range cases {
+		req := svc.NewRequest(&request.Operation{
+			Name: "name", HTTPMethod: "GET", HTTPPath: "/path",
+		}, &struct{}{}, &struct{}{})
+		req.Handlers.Sign.PushBack(c.SignerFn)
+
+		u, h, err := c.PresignFn(req, c.Expire)
+		if len(c.Err) != 0 {
+			if e, a := c.Err, err.Error(); !strings.Contains(a, e) {
+				t.Errorf("%d, expect %v to be in %v", i, e, a)
+			}
+			continue
+		} else if err != nil {
+			t.Errorf("%d, expect no error, got %v", i, err)
+			continue
+		}
+		if e, a := c.URL, u; e != a {
+			t.Errorf("%d, expect %v URL, got %v", i, e, a)
+		}
+		if e, a := c.Header, h; !reflect.DeepEqual(e, a) {
+			t.Errorf("%d, expect %v header got %v", i, e, a)
+		}
+	}
+}
+
+func TestNew_EndpointWithDefaultPort(t *testing.T) {
+	endpoint := "https://estest.us-east-1.es.amazonaws.com:443"
+	expectedRequestHost := "estest.us-east-1.es.amazonaws.com"
+
+	r := request.New(
+		aws.Config{},
+		metadata.ClientInfo{Endpoint: endpoint},
+		defaults.Handlers(),
+		client.DefaultRetryer{},
+		&request.Operation{},
+		nil,
+		nil,
+	)
+
+	if h := r.HTTPRequest.Host; h != expectedRequestHost {
+		t.Errorf("expect %v host, got %q", expectedRequestHost, h)
+	}
+}
+
+func TestSanitizeHostForHeader(t *testing.T) {
+	cases := []struct {
+		url                 string
+		expectedRequestHost string
+	}{
+		{"https://estest.us-east-1.es.amazonaws.com:443", "estest.us-east-1.es.amazonaws.com"},
+		{"https://estest.us-east-1.es.amazonaws.com", "estest.us-east-1.es.amazonaws.com"},
+		{"https://localhost:9200", "localhost:9200"},
+		{"http://localhost:80", "localhost"},
+		{"http://localhost:8080", "localhost:8080"},
+	}
+
+	for _, c := range cases {
+		r, _ := http.NewRequest("GET", c.url, nil)
+		request.SanitizeHostForHeader(r)
+
+		if h := r.Host; h != c.expectedRequestHost {
+			t.Errorf("expect %v host, got %q", c.expectedRequestHost, h)
+		}
+	}
+}
+
+func TestRequestWillRetry_ByBody(t *testing.T) {
+	svc := awstesting.NewClient()
+
+	cases := []struct {
+		WillRetry   bool
+		HTTPMethod  string
+		Body        io.ReadSeeker
+		IsReqNoBody bool
+	}{
+		{
+			WillRetry:   true,
+			HTTPMethod:  "GET",
+			Body:        bytes.NewReader([]byte{}),
+			IsReqNoBody: true,
+		},
+		{
+			WillRetry:   true,
+			HTTPMethod:  "GET",
+			Body:        bytes.NewReader(nil),
+			IsReqNoBody: true,
+		},
+		{
+			WillRetry:  true,
+			HTTPMethod: "POST",
+			Body:       bytes.NewReader([]byte("abc123")),
+		},
+		{
+			WillRetry:  true,
+			HTTPMethod: "POST",
+			Body:       aws.ReadSeekCloser(bytes.NewReader([]byte("abc123"))),
+		},
+		{
+			WillRetry:   true,
+			HTTPMethod:  "GET",
+			Body:        aws.ReadSeekCloser(bytes.NewBuffer(nil)),
+			IsReqNoBody: true,
+		},
+		{
+			WillRetry:   true,
+			HTTPMethod:  "POST",
+			Body:        aws.ReadSeekCloser(bytes.NewBuffer(nil)),
+			IsReqNoBody: true,
+		},
+		{
+			WillRetry:  false,
+			HTTPMethod: "POST",
+			Body:       aws.ReadSeekCloser(bytes.NewBuffer([]byte("abc123"))),
+		},
+	}
+
+	for i, c := range cases {
+		req := svc.NewRequest(&request.Operation{
+			Name:       "Operation",
+			HTTPMethod: c.HTTPMethod,
+			HTTPPath:   "/",
+		}, nil, nil)
+		req.SetReaderBody(c.Body)
+		req.Build()
+
+		req.Error = fmt.Errorf("some error")
+		req.Retryable = aws.Bool(true)
+		req.HTTPResponse = &http.Response{
+			StatusCode: 500,
+		}
+
+		if e, a := c.IsReqNoBody, request.NoBody == req.HTTPRequest.Body; e != a {
+			t.Errorf("%d, expect request to be no body, %t, got %t, %T", i, e, a, req.HTTPRequest.Body)
+		}
+
+		if e, a := c.WillRetry, req.WillRetry(); e != a {
+			t.Errorf("%d, expect %t willRetry, got %t", i, e, a)
+		}
+
+		if req.Error == nil {
+			t.Fatalf("%d, expect error, got none", i)
+		}
+		if e, a := "some error", req.Error.Error(); !strings.Contains(a, e) {
+			t.Errorf("%d, expect %q error in %q", i, e, a)
+		}
+		if e, a := 0, req.RetryCount; e != a {
+			t.Errorf("%d, expect retry count to be %d, got %d", i, e, a)
+		}
+	}
+}
+
+func Test501NotRetrying(t *testing.T) {
+	reqNum := 0
+	reqs := []http.Response{
+		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
+		{StatusCode: 501, Body: body(`{"__type":"NotImplemented","message":"An error occurred."}`)},
+		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
+	}
+
+	s := awstesting.NewClient(aws.NewConfig().WithMaxRetries(10))
+	s.Handlers.Validate.Clear()
+	s.Handlers.Unmarshal.PushBack(unmarshal)
+	s.Handlers.UnmarshalError.PushBack(unmarshalError)
+	s.Handlers.Send.Clear() // mock sending
+	s.Handlers.Send.PushBack(func(r *request.Request) {
+		r.HTTPResponse = &reqs[reqNum]
+		reqNum++
+	})
+	out := &testData{}
+	r := s.NewRequest(&request.Operation{Name: "Operation"}, nil, out)
+	err := r.Send()
+	if err == nil {
+		t.Fatal("expect error, but got none")
+	}
+
+	aerr := err.(awserr.Error)
+	if e, a := "NotImplemented", aerr.Code(); e != a {
+		t.Errorf("expected error code %q, but received %q", e, a)
+	}
+	if e, a := 1, int(r.RetryCount); e != a {
+		t.Errorf("expect %d retry count, got %d", e, a)
 	}
 }

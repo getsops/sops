@@ -24,7 +24,9 @@ type CheckRequest struct {
 	// The service name as specified in its service configuration. For example,
 	// `"pubsub.googleapis.com"`.
 	//
-	// See [google.api.Service][google.api.Service] for the definition of a service name.
+	// See
+	// [google.api.Service](https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service)
+	// for the definition of a service name.
 	ServiceName string `protobuf:"bytes,1,opt,name=service_name,json=serviceName" json:"service_name,omitempty"`
 	// The operation to be checked.
 	Operation *Operation `protobuf:"bytes,2,opt,name=operation" json:"operation,omitempty"`
@@ -39,7 +41,7 @@ type CheckRequest struct {
 func (m *CheckRequest) Reset()                    { *m = CheckRequest{} }
 func (m *CheckRequest) String() string            { return proto.CompactTextString(m) }
 func (*CheckRequest) ProtoMessage()               {}
-func (*CheckRequest) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
+func (*CheckRequest) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{0} }
 
 func (m *CheckRequest) GetServiceName() string {
 	if m != nil {
@@ -64,7 +66,7 @@ func (m *CheckRequest) GetServiceConfigId() string {
 
 // Response message for the Check method.
 type CheckResponse struct {
-	// The same operation_id value used in the CheckRequest.
+	// The same operation_id value used in the [CheckRequest][google.api.servicecontrol.v1.CheckRequest].
 	// Used for logging and diagnostics purposes.
 	OperationId string `protobuf:"bytes,1,opt,name=operation_id,json=operationId" json:"operation_id,omitempty"`
 	// Indicate the decision of the check.
@@ -82,7 +84,7 @@ type CheckResponse struct {
 func (m *CheckResponse) Reset()                    { *m = CheckResponse{} }
 func (m *CheckResponse) String() string            { return proto.CompactTextString(m) }
 func (*CheckResponse) ProtoMessage()               {}
-func (*CheckResponse) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1} }
+func (*CheckResponse) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{1} }
 
 func (m *CheckResponse) GetOperationId() string {
 	if m != nil {
@@ -120,7 +122,7 @@ type CheckResponse_CheckInfo struct {
 func (m *CheckResponse_CheckInfo) Reset()                    { *m = CheckResponse_CheckInfo{} }
 func (m *CheckResponse_CheckInfo) String() string            { return proto.CompactTextString(m) }
 func (*CheckResponse_CheckInfo) ProtoMessage()               {}
-func (*CheckResponse_CheckInfo) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1, 0} }
+func (*CheckResponse_CheckInfo) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{1, 0} }
 
 func (m *CheckResponse_CheckInfo) GetConsumerInfo() *CheckResponse_ConsumerInfo {
 	if m != nil {
@@ -139,7 +141,7 @@ type CheckResponse_ConsumerInfo struct {
 func (m *CheckResponse_ConsumerInfo) Reset()                    { *m = CheckResponse_ConsumerInfo{} }
 func (m *CheckResponse_ConsumerInfo) String() string            { return proto.CompactTextString(m) }
 func (*CheckResponse_ConsumerInfo) ProtoMessage()               {}
-func (*CheckResponse_ConsumerInfo) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1, 1} }
+func (*CheckResponse_ConsumerInfo) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{1, 1} }
 
 func (m *CheckResponse_ConsumerInfo) GetProjectNumber() int64 {
 	if m != nil {
@@ -153,7 +155,9 @@ type ReportRequest struct {
 	// The service name as specified in its service configuration. For example,
 	// `"pubsub.googleapis.com"`.
 	//
-	// See [google.api.Service][google.api.Service] for the definition of a service name.
+	// See
+	// [google.api.Service](https://cloud.google.com/service-management/reference/rpc/google.api#google.api.Service)
+	// for the definition of a service name.
 	ServiceName string `protobuf:"bytes,1,opt,name=service_name,json=serviceName" json:"service_name,omitempty"`
 	// Operations to be reported.
 	//
@@ -177,7 +181,7 @@ type ReportRequest struct {
 func (m *ReportRequest) Reset()                    { *m = ReportRequest{} }
 func (m *ReportRequest) String() string            { return proto.CompactTextString(m) }
 func (*ReportRequest) ProtoMessage()               {}
-func (*ReportRequest) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{2} }
+func (*ReportRequest) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{2} }
 
 func (m *ReportRequest) GetServiceName() string {
 	if m != nil {
@@ -224,7 +228,7 @@ type ReportResponse struct {
 func (m *ReportResponse) Reset()                    { *m = ReportResponse{} }
 func (m *ReportResponse) String() string            { return proto.CompactTextString(m) }
 func (*ReportResponse) ProtoMessage()               {}
-func (*ReportResponse) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{3} }
+func (*ReportResponse) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{3} }
 
 func (m *ReportResponse) GetReportErrors() []*ReportResponse_ReportError {
 	if m != nil {
@@ -240,18 +244,18 @@ func (m *ReportResponse) GetServiceConfigId() string {
 	return ""
 }
 
-// Represents the processing error of one `Operation` in the request.
+// Represents the processing error of one [Operation][google.api.servicecontrol.v1.Operation] in the request.
 type ReportResponse_ReportError struct {
 	// The [Operation.operation_id][google.api.servicecontrol.v1.Operation.operation_id] value from the request.
 	OperationId string `protobuf:"bytes,1,opt,name=operation_id,json=operationId" json:"operation_id,omitempty"`
-	// Details of the error when processing the `Operation`.
+	// Details of the error when processing the [Operation][google.api.servicecontrol.v1.Operation].
 	Status *google_rpc.Status `protobuf:"bytes,2,opt,name=status" json:"status,omitempty"`
 }
 
 func (m *ReportResponse_ReportError) Reset()                    { *m = ReportResponse_ReportError{} }
 func (m *ReportResponse_ReportError) String() string            { return proto.CompactTextString(m) }
 func (*ReportResponse_ReportError) ProtoMessage()               {}
-func (*ReportResponse_ReportError) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{3, 0} }
+func (*ReportResponse_ReportError) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{3, 0} }
 
 func (m *ReportResponse_ReportError) GetOperationId() string {
 	if m != nil {
@@ -296,7 +300,7 @@ type ServiceControllerClient interface {
 	// 60 seconds. In case of server errors, the client can rely on the cached
 	// results for longer time.
 	//
-	// NOTE: the `CheckRequest` has the size limit of 64KB.
+	// NOTE: the [CheckRequest][google.api.servicecontrol.v1.CheckRequest] has the size limit of 64KB.
 	//
 	// This method requires the `servicemanagement.services.check` permission
 	// on the specified service. For more information, see
@@ -311,7 +315,7 @@ type ServiceControllerClient interface {
 	// the aggregation time window to avoid data loss risk more than 0.01%
 	// for business and compliance reasons.
 	//
-	// NOTE: the `ReportRequest` has the size limit of 1MB.
+	// NOTE: the [ReportRequest][google.api.servicecontrol.v1.ReportRequest] has the size limit of 1MB.
 	//
 	// This method requires the `servicemanagement.services.report` permission
 	// on the specified service. For more information, see
@@ -356,7 +360,7 @@ type ServiceControllerServer interface {
 	// 60 seconds. In case of server errors, the client can rely on the cached
 	// results for longer time.
 	//
-	// NOTE: the `CheckRequest` has the size limit of 64KB.
+	// NOTE: the [CheckRequest][google.api.servicecontrol.v1.CheckRequest] has the size limit of 64KB.
 	//
 	// This method requires the `servicemanagement.services.check` permission
 	// on the specified service. For more information, see
@@ -371,7 +375,7 @@ type ServiceControllerServer interface {
 	// the aggregation time window to avoid data loss risk more than 0.01%
 	// for business and compliance reasons.
 	//
-	// NOTE: the `ReportRequest` has the size limit of 1MB.
+	// NOTE: the [ReportRequest][google.api.servicecontrol.v1.ReportRequest] has the size limit of 1MB.
 	//
 	// This method requires the `servicemanagement.services.report` permission
 	// on the specified service. For more information, see
@@ -437,10 +441,10 @@ var _ServiceController_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/api/servicecontrol/v1/service_controller.proto", fileDescriptor5)
+	proto.RegisterFile("google/api/servicecontrol/v1/service_controller.proto", fileDescriptor6)
 }
 
-var fileDescriptor5 = []byte{
+var fileDescriptor6 = []byte{
 	// 619 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0xc1, 0x6e, 0xd3, 0x4c,
 	0x10, 0xd6, 0x3a, 0x6d, 0xa4, 0x4c, 0x9c, 0xfe, 0xea, 0x1e, 0x7e, 0x22, 0xab, 0x87, 0xd4, 0x12,

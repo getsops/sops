@@ -95,8 +95,11 @@ func (self *outputParser) processTestOutput() {
 }
 
 func (self *outputParser) registerTestFunction() {
-	testName := testNamePattern.FindStringSubmatch(self.line)[1]
-	self.test = contract.NewTestResult(testName)
+	testNameReg := testNamePattern.FindStringSubmatch(self.line)
+	if len(testNameReg) < 2 { // Test-related lines that aren't about a new test
+		return
+	}
+	self.test = contract.NewTestResult(testNameReg[1])
 	self.tests = append(self.tests, self.test)
 	self.testMap[self.test.TestName] = self.test
 }

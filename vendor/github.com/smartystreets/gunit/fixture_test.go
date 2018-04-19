@@ -296,11 +296,8 @@ func TestPanicIsRecoveredAndPrintedByFinalize(t *testing.T) {
 	if !strings.Contains(output, "PANIC: GOPHERS!") {
 		t.Errorf("Expected string containing: 'PANIC: GOPHERS!' Got: '%s'", output)
 	}
-	if !strings.Contains(output, "github.com/smartystreets/gunit.(*Fixture).finalize") {
+	if !strings.Contains(output, "gunit.(*Fixture).finalize") {
 		t.Error("Expected string containing stack trace information...")
-	}
-	if !strings.Contains(output, "* (Additional tests may have been skipped as a result of the panic shown above.)") {
-		t.Error("Expected string containing warning about additional tests not being run.")
 	}
 }
 
@@ -342,6 +339,7 @@ type FakeTestingT struct {
 	failed bool
 }
 
+func (self *FakeTestingT) Name() string            { return "FakeTestingT" }
 func (self *FakeTestingT) Log(args ...interface{}) { fmt.Fprint(self.log, args...) }
 func (self *FakeTestingT) Fail()                   { self.failed = true }
 func (self *FakeTestingT) Failed() bool            { return self.failed }

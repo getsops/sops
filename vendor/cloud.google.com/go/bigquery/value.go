@@ -18,8 +18,10 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"math"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/civil"
@@ -63,6 +65,8 @@ func loadMap(m map[string]Value, vals []Value, s Schema) {
 		val := vals[i]
 		var v interface{}
 		switch {
+		case val == nil:
+			v = val
 		case f.Schema == nil:
 			v = val
 		case !f.Repeated:
@@ -79,6 +83,7 @@ func loadMap(m map[string]Value, vals []Value, s Schema) {
 			}
 			v = vs
 		}
+
 		m[f.Name] = v
 	}
 }
@@ -125,6 +130,18 @@ func setInt(v reflect.Value, x interface{}) error {
 	return nil
 }
 
+func setUint(v reflect.Value, x interface{}) error {
+	if x == nil {
+		return errNoNulls
+	}
+	xx := x.(int64)
+	if xx < 0 || v.OverflowUint(uint64(xx)) {
+		return fmt.Errorf("bigquery: value %v overflows struct field of type %v", xx, v.Type())
+	}
+	v.SetUint(uint64(xx))
+	return nil
+}
+
 func setFloat(v reflect.Value, x interface{}) error {
 	if x == nil {
 		return errNoNulls
@@ -155,9 +172,20 @@ func setString(v reflect.Value, x interface{}) error {
 
 func setBytes(v reflect.Value, x interface{}) error {
 	if x == nil {
-		return errNoNulls
+		v.SetBytes(nil)
+	} else {
+		v.SetBytes(x.([]byte))
 	}
-	v.SetBytes(x.([]byte))
+	return nil
+}
+
+func setNull(v reflect.Value, x interface{}, build func() interface{}) error {
+	if x == nil {
+		v.Set(reflect.Zero(v.Type()))
+	} else {
+		n := build()
+		v.Set(reflect.ValueOf(n))
+	}
 	return nil
 }
 
@@ -228,7 +256,7 @@ func compileToOps(structType reflect.Type, schema Schema) ([]structLoaderOp, err
 				return nil, err
 			}
 			op.setFunc = func(v reflect.Value, val interface{}) error {
-				return setNested(nested, v, val.([]Value))
+				return setNested(nested, v, val)
 			}
 		} else {
 			op.setFunc = determineSetFunc(t, schemaField.Type)
@@ -243,7 +271,7 @@ func compileToOps(structType reflect.Type, schema Schema) ([]structLoaderOp, err
 }
 
 // determineSetFunc chooses the best function for setting a field of type ftype
-// to a value whose schema field type is sftype. It returns nil if stype
+// to a value whose schema field type is stype. It returns nil if stype
 // is not assignable to ftype.
 // determineSetFunc considers only basic types. See compileToOps for
 // handling of repetition and nesting.
@@ -253,6 +281,13 @@ func determineSetFunc(ftype reflect.Type, stype FieldType) setFunc {
 		if ftype.Kind() == reflect.String {
 			return setString
 		}
+		if ftype == typeOfNullString {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullString{StringVal: x.(string), Valid: true}
+				})
+			}
+		}
 
 	case BytesFieldType:
 		if ftype == typeOfByteSlice {
@@ -260,8 +295,17 @@ func determineSetFunc(ftype reflect.Type, stype FieldType) setFunc {
 		}
 
 	case IntegerFieldType:
-		if isSupportedIntType(ftype) {
+		if isSupportedUintType(ftype) {
+			return setUint
+		} else if isSupportedIntType(ftype) {
 			return setInt
+		}
+		if ftype == typeOfNullInt64 {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullInt64{Int64: x.(int64), Valid: true}
+				})
+			}
 		}
 
 	case FloatFieldType:
@@ -269,30 +313,72 @@ func determineSetFunc(ftype reflect.Type, stype FieldType) setFunc {
 		case reflect.Float32, reflect.Float64:
 			return setFloat
 		}
+		if ftype == typeOfNullFloat64 {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullFloat64{Float64: x.(float64), Valid: true}
+				})
+			}
+		}
 
 	case BooleanFieldType:
 		if ftype.Kind() == reflect.Bool {
 			return setBool
+		}
+		if ftype == typeOfNullBool {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullBool{Bool: x.(bool), Valid: true}
+				})
+			}
 		}
 
 	case TimestampFieldType:
 		if ftype == typeOfGoTime {
 			return setAny
 		}
+		if ftype == typeOfNullTimestamp {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullTimestamp{Timestamp: x.(time.Time), Valid: true}
+				})
+			}
+		}
 
 	case DateFieldType:
 		if ftype == typeOfDate {
 			return setAny
+		}
+		if ftype == typeOfNullDate {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullDate{Date: x.(civil.Date), Valid: true}
+				})
+			}
 		}
 
 	case TimeFieldType:
 		if ftype == typeOfTime {
 			return setAny
 		}
+		if ftype == typeOfNullTime {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullTime{Time: x.(civil.Time), Valid: true}
+				})
+			}
+		}
 
 	case DateTimeFieldType:
 		if ftype == typeOfDateTime {
 			return setAny
+		}
+		if ftype == typeOfNullDateTime {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullDateTime{DateTime: x.(civil.DateTime), Valid: true}
+				})
+			}
 		}
 	}
 	return nil
@@ -323,16 +409,21 @@ func runOps(ops []structLoaderOp, vstruct reflect.Value, values []Value) error {
 	return nil
 }
 
-func setNested(ops []structLoaderOp, v reflect.Value, vals []Value) error {
+func setNested(ops []structLoaderOp, v reflect.Value, val interface{}) error {
 	// v is either a struct or a pointer to a struct.
 	if v.Kind() == reflect.Ptr {
+		// If the value is nil, set the pointer to nil.
+		if val == nil {
+			v.Set(reflect.Zero(v.Type()))
+			return nil
+		}
 		// If the pointer is nil, set it to a zero struct value.
 		if v.IsNil() {
 			v.Set(reflect.New(v.Type().Elem()))
 		}
 		v = v.Elem()
 	}
-	return runOps(ops, v, vals)
+	return runOps(ops, v, val.([]Value))
 }
 
 func setRepeated(field reflect.Value, vslice []Value, setElem setFunc) error {
@@ -404,8 +495,12 @@ func valuesToMap(vs []Value, schema Schema) (map[string]Value, error) {
 
 	m := make(map[string]Value)
 	for i, fieldSchema := range schema {
+		if vs[i] == nil {
+			m[fieldSchema.Name] = nil
+			continue
+		}
 		if fieldSchema.Type != RecordFieldType {
-			m[fieldSchema.Name] = vs[i]
+			m[fieldSchema.Name] = toUploadValue(vs[i], fieldSchema)
 			continue
 		}
 		// Nested record, possibly repeated.
@@ -446,6 +541,7 @@ func valuesToMap(vs []Value, schema Schema) (map[string]Value, error) {
 type StructSaver struct {
 	// Schema determines what fields of the struct are uploaded. It should
 	// match the table's schema.
+	// Schema is optional for StructSavers that are passed to Uploader.Put.
 	Schema Schema
 
 	// If non-empty, BigQuery will use InsertID to de-duplicate insertions
@@ -510,14 +606,9 @@ func structFieldToUploadValue(vfield reflect.Value, schemaField *FieldSchema) (i
 			schemaField.Name, vfield.Type())
 	}
 
-	// A non-nested field can be represented by its Go value.
+	// A non-nested field can be represented by its Go value, except for civil times.
 	if schemaField.Type != RecordFieldType {
-		if !schemaField.Repeated || vfield.Len() > 0 {
-			return vfield.Interface(), nil
-		}
-		// The service treats a null repeated field as an error. Return
-		// nil to omit the field entirely.
-		return nil, nil
+		return toUploadValueReflect(vfield, schemaField), nil
 	}
 	// A non-repeated nested field is converted into a map[string]Value.
 	if !schemaField.Repeated {
@@ -543,6 +634,89 @@ func structFieldToUploadValue(vfield reflect.Value, schemaField *FieldSchema) (i
 		vals = append(vals, m)
 	}
 	return vals, nil
+}
+
+func toUploadValue(val interface{}, fs *FieldSchema) interface{} {
+	if fs.Type == TimeFieldType || fs.Type == DateTimeFieldType {
+		return toUploadValueReflect(reflect.ValueOf(val), fs)
+	}
+	return val
+}
+
+func toUploadValueReflect(v reflect.Value, fs *FieldSchema) interface{} {
+	switch fs.Type {
+	case TimeFieldType:
+		if v.Type() == typeOfNullTime {
+			return v.Interface()
+		}
+		return civilToUploadValue(v, fs, func(v reflect.Value) string {
+			return CivilTimeString(v.Interface().(civil.Time))
+		})
+	case DateTimeFieldType:
+		if v.Type() == typeOfNullDateTime {
+			return v.Interface()
+		}
+		return civilToUploadValue(v, fs, func(v reflect.Value) string {
+			return CivilDateTimeString(v.Interface().(civil.DateTime))
+		})
+	default:
+		if !fs.Repeated || v.Len() > 0 {
+			return v.Interface()
+		}
+		// The service treats a null repeated field as an error. Return
+		// nil to omit the field entirely.
+		return nil
+	}
+}
+
+func civilToUploadValue(v reflect.Value, fs *FieldSchema, cvt func(reflect.Value) string) interface{} {
+	if !fs.Repeated {
+		return cvt(v)
+	}
+	if v.Len() == 0 {
+		return nil
+	}
+	s := make([]string, v.Len())
+	for i := 0; i < v.Len(); i++ {
+		s[i] = cvt(v.Index(i))
+	}
+	return s
+}
+
+// CivilTimeString returns a string representing a civil.Time in a format compatible
+// with BigQuery SQL. It rounds the time to the nearest microsecond and returns a
+// string with six digits of sub-second precision.
+//
+// Use CivilTimeString when using civil.Time in DML, for example in INSERT
+// statements.
+func CivilTimeString(t civil.Time) string {
+	if t.Nanosecond == 0 {
+		return t.String()
+	} else {
+		micro := (t.Nanosecond + 500) / 1000 // round to nearest microsecond
+		t.Nanosecond = 0
+		return t.String() + fmt.Sprintf(".%06d", micro)
+	}
+}
+
+// CivilDateTimeString returns a string representing a civil.DateTime in a format compatible
+// with BigQuery SQL. It separate the date and time with a space, and formats the time
+// with CivilTimeString.
+//
+// Use CivilDateTimeString when using civil.DateTime in DML, for example in INSERT
+// statements.
+func CivilDateTimeString(dt civil.DateTime) string {
+	return dt.Date.String() + " " + CivilTimeString(dt.Time)
+}
+
+// parseCivilDateTime parses a date-time represented in a BigQuery SQL
+// compatible format and returns a civil.DateTime.
+func parseCivilDateTime(s string) (civil.DateTime, error) {
+	parts := strings.Fields(s)
+	if len(parts) != 2 {
+		return civil.DateTime{}, fmt.Errorf("bigquery: bad DATETIME value %q", s)
+	}
+	return civil.ParseDateTime(parts[0] + "T" + parts[1])
 }
 
 // convertRows converts a series of TableRows into a series of Value slices.
@@ -618,7 +792,6 @@ func convertNestedRecord(val map[string]interface{}, schema Schema) (Value, erro
 	for i, cell := range record {
 		// each cell contains a single entry, keyed by "v"
 		val := cell.(map[string]interface{})["v"]
-
 		fs := schema[i]
 		v, err := convertValue(val, fs.Type, fs.Schema)
 		if err != nil {
@@ -644,7 +817,12 @@ func convertBasicType(val string, typ FieldType) (Value, error) {
 		return strconv.ParseBool(val)
 	case TimestampFieldType:
 		f, err := strconv.ParseFloat(val, 64)
-		return Value(time.Unix(0, int64(f*1e9)).UTC()), err
+		if err != nil {
+			return nil, err
+		}
+		secs := math.Trunc(f)
+		nanos := (f - secs) * 1e9
+		return Value(time.Unix(int64(secs), int64(nanos)).UTC()), nil
 	case DateFieldType:
 		return civil.ParseDate(val)
 	case TimeFieldType:

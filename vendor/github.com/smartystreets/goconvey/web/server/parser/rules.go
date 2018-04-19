@@ -23,7 +23,7 @@ func isNewTest(line string) bool {
 	return strings.HasPrefix(line, "=== ")
 }
 func isTestResult(line string) bool {
-	return strings.HasPrefix(line, "--- ")
+	return strings.HasPrefix(line, "--- FAIL:") || strings.HasPrefix(line, "--- PASS:") || strings.HasPrefix(line, "--- SKIP:")
 }
 func isPackageReport(line string) bool {
 	return (strings.HasPrefix(line, "FAIL") ||

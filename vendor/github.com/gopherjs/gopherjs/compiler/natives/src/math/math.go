@@ -63,10 +63,6 @@ func Cosh(x float64) float64 {
 	return math.Call("cosh", x).Float()
 }
 
-func Dim(x, y float64) float64 {
-	return dim(x, y)
-}
-
 func Erf(x float64) float64 {
 	return erf(x)
 }

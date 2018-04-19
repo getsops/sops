@@ -488,7 +488,7 @@ func Compile(importPath string, files []*ast.File, fileSet *token.FileSet, impor
 						pkgPath = method.Pkg().Path()
 					}
 					t := method.Type().(*types.Signature)
-					entry := fmt.Sprintf(`{prop: "%s", name: "%s", pkg: "%s", typ: $funcType(%s)}`, name, method.Name(), pkgPath, c.initArgs(t))
+					entry := fmt.Sprintf(`{prop: "%s", name: %s, pkg: "%s", typ: $funcType(%s)}`, name, encodeString(method.Name()), pkgPath, c.initArgs(t))
 					if _, isPtr := t.Recv().Type().(*types.Pointer); isPtr {
 						ptrMethods = append(ptrMethods, entry)
 						continue
@@ -589,7 +589,7 @@ func (c *funcContext) initArgs(ty types.Type) string {
 			if !field.Exported() {
 				pkgPath = field.Pkg().Path()
 			}
-			fields[i] = fmt.Sprintf(`{prop: "%s", name: "%s", anonymous: %t, exported: %t, typ: %s, tag: %s}`, fieldName(t, i), field.Name(), field.Anonymous(), field.Exported(), c.typeName(field.Type()), encodeString(t.Tag(i)))
+			fields[i] = fmt.Sprintf(`{prop: "%s", name: %s, anonymous: %t, exported: %t, typ: %s, tag: %s}`, fieldName(t, i), encodeString(field.Name()), field.Anonymous(), field.Exported(), c.typeName(field.Type()), encodeString(t.Tag(i)))
 		}
 		return fmt.Sprintf(`"%s", [%s]`, pkgPath, strings.Join(fields, ", "))
 	default:

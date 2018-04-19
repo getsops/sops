@@ -34,6 +34,7 @@ import (
 	testpb "google.golang.org/grpc/benchmark/grpc_testing"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
+	"google.golang.org/grpc/status"
 )
 
 var (
@@ -114,7 +115,7 @@ func (s *workerServer) RunServer(stream testpb.WorkerService_RunServerServer) er
 			grpclog.Printf("server mark received:")
 			grpclog.Printf(" - %v", argtype)
 			if bs == nil {
-				return grpc.Errorf(codes.InvalidArgument, "server does not exist when mark received")
+				return status.Error(codes.InvalidArgument, "server does not exist when mark received")
 			}
 			out = &testpb.ServerStatus{
 				Stats: bs.getStats(argtype.Mark.Reset_),
@@ -167,7 +168,7 @@ func (s *workerServer) RunClient(stream testpb.WorkerService_RunClientServer) er
 			grpclog.Printf("client mark received:")
 			grpclog.Printf(" - %v", t)
 			if bc == nil {
-				return grpc.Errorf(codes.InvalidArgument, "client does not exist when mark received")
+				return status.Error(codes.InvalidArgument, "client does not exist when mark received")
 			}
 			out = &testpb.ClientStatus{
 				Stats: bc.getStats(t.Mark.Reset_),

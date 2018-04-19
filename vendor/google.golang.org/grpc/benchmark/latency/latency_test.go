@@ -187,7 +187,7 @@ func TestListenerAndDialer(t *testing.T) {
 	}
 
 	// Create a real listener and wrap it.
-	l, err := net.Listen("tcp", ":0")
+	l, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
 		t.Fatalf("Unexpected error creating listener: %v", err)
 	}

@@ -358,4 +358,31 @@ b: ba"#
                     .success(),
                 "SOPS failed to decrypt a file that uses multiple keys");
     }
+
+
+    #[test]
+    fn extract_string() {
+        let file_path = prepare_temp_file("test_extract_string.yaml",
+                                          "multiline: |\n  multi\n  line".as_bytes());
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "SOPS failed to encrypt a file");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("--extract")
+            .arg("[\"multiline\"]")
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to extract");
+
+        assert_eq!(output.stdout, b"multi\nline");
+    }
+
 }

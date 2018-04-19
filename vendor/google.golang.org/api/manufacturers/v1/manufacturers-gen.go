@@ -43,7 +43,7 @@ var _ = ctxhttp.Do
 const apiId = "manufacturers:v1"
 const apiName = "manufacturers"
 const apiVersion = "v1"
-const basePath = "https://manufacturers.googleapis.com/"
+const basePath = "https://content-manufacturers.googleapis.com/"
 
 // OAuth2 scopes used by this API.
 const (
@@ -224,7 +224,8 @@ type Attributes struct {
 	// e.
 	ProductPageUrl string `json:"productPageUrl,omitempty"`
 
-	// ProductType: The category of the product. For more information,
+	// ProductType: The type or category of the product. For more
+	// information,
 	// see
 	// https://support.google.com/manufacturers/answer/6124116#producttyp
 	// e.
@@ -260,10 +261,10 @@ type Attributes struct {
 	// see https://support.google.com/manufacturers/answer/6124116#price.
 	SuggestedRetailPrice *Price `json:"suggestedRetailPrice,omitempty"`
 
-	// TargetAccountId: The target account id. Should only be used in the
+	// TargetClientId: The target client id. Should only be used in the
 	// accounts of the data
 	// partners.
-	TargetAccountId int64 `json:"targetAccountId,omitempty,string"`
+	TargetClientId string `json:"targetClientId,omitempty"`
 
 	// Theme: The theme of the product. For more information,
 	// see
@@ -299,8 +300,8 @@ type Attributes struct {
 }
 
 func (s *Attributes) MarshalJSON() ([]byte, error) {
-	type noMethod Attributes
-	raw := noMethod(*s)
+	type NoMethod Attributes
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -332,8 +333,8 @@ type Capacity struct {
 }
 
 func (s *Capacity) MarshalJSON() ([]byte, error) {
-	type noMethod Capacity
-	raw := noMethod(*s)
+	type NoMethod Capacity
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -366,8 +367,8 @@ type Count struct {
 }
 
 func (s *Count) MarshalJSON() ([]byte, error) {
-	type noMethod Count
-	raw := noMethod(*s)
+	type NoMethod Count
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -422,8 +423,8 @@ type FeatureDescription struct {
 }
 
 func (s *FeatureDescription) MarshalJSON() ([]byte, error) {
-	type noMethod FeatureDescription
-	raw := noMethod(*s)
+	type NoMethod FeatureDescription
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -440,8 +441,10 @@ type Image struct {
 	// @OutputOnly
 	//
 	// Possible values:
-	//   "STATUS_UNSPECIFIED" - Status is unspecified. Should not be used.
-	//   "PENDING_PROCESSING" - Image was uploaded and is being processed.
+	//   "STATUS_UNSPECIFIED" - The image status is unspecified. Should not
+	// be used.
+	//   "PENDING_PROCESSING" - The image was uploaded and is being
+	// processed.
 	//   "PENDING_CRAWL" - The image crawl is still pending.
 	//   "OK" - The image was processed and it meets the requirements.
 	//   "ROBOTED" - The image URL is protected by robots.txt file and
@@ -454,6 +457,9 @@ type Image struct {
 	//   "TOO_BIG" - The image is too big.
 	//   "CRAWL_SKIPPED" - The image was manually overridden and will not be
 	// crawled.
+	//   "HOSTLOADED" - The image crawl was postponed to avoid overloading
+	// the host.
+	//   "HTTP_404" - The image URL returned a "404 Not Found" error.
 	Status string `json:"status,omitempty"`
 
 	// Type: The type of the image, i.e., crawled or uploaded.
@@ -483,8 +489,8 @@ type Image struct {
 }
 
 func (s *Image) MarshalJSON() ([]byte, error) {
-	type noMethod Image
-	raw := noMethod(*s)
+	type NoMethod Image
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -497,7 +503,8 @@ type Issue struct {
 	// https://support.google.com/manufacturers/answer/6124116.
 	Attribute string `json:"attribute,omitempty"`
 
-	// Description: Description of the issue.
+	// Description: Longer description of the issue focused on how to
+	// resolve it.
 	Description string `json:"description,omitempty"`
 
 	// Severity: The severity of the issue.
@@ -544,8 +551,8 @@ type Issue struct {
 }
 
 func (s *Issue) MarshalJSON() ([]byte, error) {
-	type noMethod Issue
-	raw := noMethod(*s)
+	type NoMethod Issue
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -579,8 +586,8 @@ type ListProductsResponse struct {
 }
 
 func (s *ListProductsResponse) MarshalJSON() ([]byte, error) {
-	type noMethod ListProductsResponse
-	raw := noMethod(*s)
+	type NoMethod ListProductsResponse
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -610,8 +617,8 @@ type Price struct {
 }
 
 func (s *Price) MarshalJSON() ([]byte, error) {
-	type noMethod Price
-	raw := noMethod(*s)
+	type NoMethod Price
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -717,8 +724,8 @@ type Product struct {
 }
 
 func (s *Product) MarshalJSON() ([]byte, error) {
-	type noMethod Product
-	raw := noMethod(*s)
+	type NoMethod Product
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -755,8 +762,8 @@ type ProductDetail struct {
 }
 
 func (s *ProductDetail) MarshalJSON() ([]byte, error) {
-	type noMethod ProductDetail
-	raw := noMethod(*s)
+	type NoMethod ProductDetail
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -856,7 +863,7 @@ func (c *AccountsProductsDeleteCall) Do(opts ...googleapi.CallOption) (*Empty, e
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1016,7 +1023,7 @@ func (c *AccountsProductsGetCall) Do(opts ...googleapi.CallOption) (*Product, er
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1178,7 +1185,7 @@ func (c *AccountsProductsListCall) Do(opts ...googleapi.CallOption) (*ListProduc
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1248,36 +1255,43 @@ type AccountsProductsUpdateCall struct {
 	s          *Service
 	parent     string
 	name       string
-	product    *Product
+	attributes *Attributes
 	urlParams_ gensupport.URLParams
 	ctx_       context.Context
 	header_    http.Header
 }
 
-// Update: Inserts or updates the product in a Manufacturer Center
+// Update: Inserts or updates the attributes of the product in a
+// Manufacturer Center
 // account.
 //
-// The checks at upload time are minimal. All required attributes need
-// to be
-// present for a product to be valid. Issues may show up later
-// after the API has accepted an update for a product and it is possible
-// to
-// overwrite an existing valid product with an invalid product. To
-// detect
-// this, you should retrieve the product and check it for issues once
+// Creates a product with the provided attributes. If the product
+// already
+// exists, then all attributes are replaced with the new ones. The
+// checks at
+// upload time are minimal. All required attributes need to be present
+// for a
+// product to be valid. Issues may show up later after the API has
+// accepted a
+// new upload for a product and it is possible to overwrite an existing
+// valid
+// product with an invalid product. To detect this, you should retrieve
 // the
-// updated version is available.
+// product and check it for issues once the new version is
+// available.
 //
-// Inserted or updated products first need to be processed before they
-// can be
+// Uploaded attributes first need to be processed before they can
+// be
 // retrieved. Until then, new products will be unavailable, and
 // retrieval
-// of updated products will return the original state of the product.
-func (r *AccountsProductsService) Update(parent string, name string, product *Product) *AccountsProductsUpdateCall {
+// of previously uploaded products will return the original state of
+// the
+// product.
+func (r *AccountsProductsService) Update(parent string, name string, attributes *Attributes) *AccountsProductsUpdateCall {
 	c := &AccountsProductsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
 	c.name = name
-	c.product = product
+	c.attributes = attributes
 	return c
 }
 
@@ -1313,7 +1327,7 @@ func (c *AccountsProductsUpdateCall) doRequest(alt string) (*http.Response, erro
 	}
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
-	body, err := googleapi.WithoutDataWrapper.JSONReader(c.product)
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.attributes)
 	if err != nil {
 		return nil, err
 	}
@@ -1331,13 +1345,13 @@ func (c *AccountsProductsUpdateCall) doRequest(alt string) (*http.Response, erro
 }
 
 // Do executes the "manufacturers.accounts.products.update" call.
-// Exactly one of *Product or error will be non-nil. Any non-2xx status
+// Exactly one of *Empty or error will be non-nil. Any non-2xx status
 // code is an error. Response headers are in either
-// *Product.ServerResponse.Header or (if a response was returned at all)
+// *Empty.ServerResponse.Header or (if a response was returned at all)
 // in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
 // check whether the returned error was because http.StatusNotModified
 // was returned.
-func (c *AccountsProductsUpdateCall) Do(opts ...googleapi.CallOption) (*Product, error) {
+func (c *AccountsProductsUpdateCall) Do(opts ...googleapi.CallOption) (*Empty, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -1356,19 +1370,19 @@ func (c *AccountsProductsUpdateCall) Do(opts ...googleapi.CallOption) (*Product,
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, err
 	}
-	ret := &Product{
+	ret := &Empty{
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
 	// {
-	//   "description": "Inserts or updates the product in a Manufacturer Center account.\n\nThe checks at upload time are minimal. All required attributes need to be\npresent for a product to be valid. Issues may show up later\nafter the API has accepted an update for a product and it is possible to\noverwrite an existing valid product with an invalid product. To detect\nthis, you should retrieve the product and check it for issues once the\nupdated version is available.\n\nInserted or updated products first need to be processed before they can be\nretrieved. Until then, new products will be unavailable, and retrieval\nof updated products will return the original state of the product.",
+	//   "description": "Inserts or updates the attributes of the product in a Manufacturer Center\naccount.\n\nCreates a product with the provided attributes. If the product already\nexists, then all attributes are replaced with the new ones. The checks at\nupload time are minimal. All required attributes need to be present for a\nproduct to be valid. Issues may show up later after the API has accepted a\nnew upload for a product and it is possible to overwrite an existing valid\nproduct with an invalid product. To detect this, you should retrieve the\nproduct and check it for issues once the new version is available.\n\nUploaded attributes first need to be processed before they can be\nretrieved. Until then, new products will be unavailable, and retrieval\nof previously uploaded products will return the original state of the\nproduct.",
 	//   "flatPath": "v1/accounts/{accountsId}/products/{productsId}",
 	//   "httpMethod": "PUT",
 	//   "id": "manufacturers.accounts.products.update",
@@ -1394,10 +1408,10 @@ func (c *AccountsProductsUpdateCall) Do(opts ...googleapi.CallOption) (*Product,
 	//   },
 	//   "path": "v1/{+parent}/products/{+name}",
 	//   "request": {
-	//     "$ref": "Product"
+	//     "$ref": "Attributes"
 	//   },
 	//   "response": {
-	//     "$ref": "Product"
+	//     "$ref": "Empty"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/manufacturercenter"

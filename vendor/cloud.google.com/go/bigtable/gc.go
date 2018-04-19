@@ -52,7 +52,7 @@ func (ip intersectionPolicy) proto() *bttdpb.GcRule {
 		inter.Rules = append(inter.Rules, sp.proto())
 	}
 	return &bttdpb.GcRule{
-		Rule: &bttdpb.GcRule_Intersection_{inter},
+		Rule: &bttdpb.GcRule_Intersection_{Intersection: inter},
 	}
 }
 
@@ -77,7 +77,7 @@ func (up unionPolicy) proto() *bttdpb.GcRule {
 		union.Rules = append(union.Rules, sp.proto())
 	}
 	return &bttdpb.GcRule{
-		Rule: &bttdpb.GcRule_Union_{union},
+		Rule: &bttdpb.GcRule_Union_{Union: union},
 	}
 }
 
@@ -90,7 +90,7 @@ type maxVersionsPolicy int
 func (mvp maxVersionsPolicy) String() string { return fmt.Sprintf("versions() > %d", int(mvp)) }
 
 func (mvp maxVersionsPolicy) proto() *bttdpb.GcRule {
-	return &bttdpb.GcRule{Rule: &bttdpb.GcRule_MaxNumVersions{int32(mvp)}}
+	return &bttdpb.GcRule{Rule: &bttdpb.GcRule_MaxNumVersions{MaxNumVersions: int32(mvp)}}
 }
 
 // MaxAgePolicy returns a GC policy that applies to all cells
@@ -123,7 +123,7 @@ func (ma maxAgePolicy) proto() *bttdpb.GcRule {
 	// Fix this if people care about GC policies over 290 years.
 	ns := time.Duration(ma).Nanoseconds()
 	return &bttdpb.GcRule{
-		Rule: &bttdpb.GcRule_MaxAge{&durpb.Duration{
+		Rule: &bttdpb.GcRule_MaxAge{MaxAge: &durpb.Duration{
 			Seconds: ns / 1e9,
 			Nanos:   int32(ns % 1e9),
 		}},
@@ -135,24 +135,24 @@ func GCRuleToString(rule *bttdpb.GcRule) string {
 	if rule == nil {
 		return "<default>"
 	}
-	var ruleStr string
-	if r, ok := rule.Rule.(*bttdpb.GcRule_MaxNumVersions); ok {
-		ruleStr += MaxVersionsPolicy(int(r.MaxNumVersions)).String()
-	} else if r, ok := rule.Rule.(*bttdpb.GcRule_MaxAge); ok {
-		ruleStr += MaxAgePolicy(time.Duration(r.MaxAge.Seconds) * time.Second).String()
-	} else if r, ok := rule.Rule.(*bttdpb.GcRule_Intersection_); ok {
-		var chunks []string
-		for _, intRule := range r.Intersection.Rules {
-			chunks = append(chunks, GCRuleToString(intRule))
-		}
-		ruleStr += "(" + strings.Join(chunks, " && ") + ")"
-	} else if r, ok := rule.Rule.(*bttdpb.GcRule_Union_); ok {
-		var chunks []string
-		for _, unionRule := range r.Union.Rules {
-			chunks = append(chunks, GCRuleToString(unionRule))
-		}
-		ruleStr += "(" + strings.Join(chunks, " || ") + ")"
+	switch r := rule.Rule.(type) {
+	case *bttdpb.GcRule_MaxNumVersions:
+		return MaxVersionsPolicy(int(r.MaxNumVersions)).String()
+	case *bttdpb.GcRule_MaxAge:
+		return MaxAgePolicy(time.Duration(r.MaxAge.Seconds) * time.Second).String()
+	case *bttdpb.GcRule_Intersection_:
+		return joinRules(r.Intersection.Rules, " && ")
+	case *bttdpb.GcRule_Union_:
+		return joinRules(r.Union.Rules, " || ")
+	default:
+		return ""
 	}
+}
 
-	return ruleStr
+func joinRules(rules []*bttdpb.GcRule, sep string) string {
+	var chunks []string
+	for _, r := range rules {
+		chunks = append(chunks, GCRuleToString(r))
+	}
+	return "(" + strings.Join(chunks, sep) + ")"
 }

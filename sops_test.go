@@ -83,6 +83,56 @@ func TestUnencryptedSuffix(t *testing.T) {
 	}
 }
 
+func TestEncryptedSuffix(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key:   "foo_encrypted",
+			Value: "bar",
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	tree := Tree{Branch: branch, Metadata: Metadata{EncryptedSuffix: "_encrypted"}}
+	expected := TreeBranch{
+		TreeItem{
+			Key:   "foo_encrypted",
+			Value: "rab",
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	if !reflect.DeepEqual(tree.Branch, expected) {
+		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branch, expected)
+	}
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Decrypting the tree failed: %s", err)
+	}
+	expected[0].Value = "bar"
+	if !reflect.DeepEqual(tree.Branch, expected) {
+		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branch, expected)
+	}
+}
+
 type MockCipher struct{}
 
 func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {

@@ -20,26 +20,37 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-
-	"cloud.google.com/go/internal/pretty"
 	"cloud.google.com/go/internal/testutil"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
+	"google.golang.org/api/googleapi"
 	raw "google.golang.org/api/storage/v1"
 )
 
 func TestBucketAttrsToRawBucket(t *testing.T) {
 	t.Parallel()
 	attrs := &BucketAttrs{
-		Name:              "name",
-		ACL:               []ACLRule{{Entity: "bob@example.com", Role: RoleOwner}},
-		DefaultObjectACL:  []ACLRule{{Entity: AllUsers, Role: RoleReader}},
-		Location:          "loc",
-		StorageClass:      "class",
+		Name:             "name",
+		ACL:              []ACLRule{{Entity: "bob@example.com", Role: RoleOwner}},
+		DefaultObjectACL: []ACLRule{{Entity: AllUsers, Role: RoleReader}},
+		Location:         "loc",
+		StorageClass:     "class",
+		RetentionPolicy: &RetentionPolicy{
+			RetentionPeriod: 3 * time.Second,
+		},
 		VersioningEnabled: false,
 		// should be ignored:
 		MetaGeneration: 39,
 		Created:        time.Now(),
 		Labels:         map[string]string{"label": "value"},
+		CORS: []CORS{
+			{
+				MaxAge:          time.Hour,
+				Methods:         []string{"GET", "POST"},
+				Origins:         []string{"*"},
+				ResponseHeaders: []string{"FOO"},
+			},
+		},
 	}
 	got := attrs.toRawBucket()
 	want := &raw.Bucket{
@@ -52,14 +63,21 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 		},
 		Location:     "loc",
 		StorageClass: "class",
-		Versioning:   nil, // ignore VersioningEnabled if flase
-		Labels:       map[string]string{"label": "value"},
+		RetentionPolicy: &raw.BucketRetentionPolicy{
+			RetentionPeriod: 3,
+		},
+		Versioning: nil, // ignore VersioningEnabled if false
+		Labels:     map[string]string{"label": "value"},
+		Cors: []*raw.BucketCors{
+			{
+				MaxAgeSeconds:  3600,
+				Method:         []string{"GET", "POST"},
+				Origin:         []string{"*"},
+				ResponseHeader: []string{"FOO"},
+			},
+		},
 	}
-	msg, ok, err := pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
 
@@ -68,11 +86,7 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 	got = attrs.toRawBucket()
 	want.Versioning = &raw.BucketVersioning{Enabled: true}
 	want.Billing = &raw.BucketBilling{RequesterPays: true}
-	msg, ok, err = pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
 }
@@ -102,11 +116,7 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 		},
 		NullFields: []string{"Labels.b"},
 	}
-	msg, ok, err := pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
 
@@ -118,14 +128,10 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 		ForceSendFields: []string{"Labels"},
 		NullFields:      []string{"Labels.b"},
 	}
-	msg, ok, err = pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
-
 }
 
 func TestCallBuilders(t *testing.T) {
@@ -171,10 +177,20 @@ func TestCallBuilders(t *testing.T) {
 		},
 		{
 			func(b *BucketHandle) (interface{}, error) {
-				return b.newPatchCall(&BucketAttrsToUpdate{VersioningEnabled: false})
+				return b.newPatchCall(&BucketAttrsToUpdate{
+					VersioningEnabled: false,
+					RequesterPays:     false,
+				})
 			},
 			rc.Buckets.Patch("name", &raw.Bucket{
-				Versioning: &raw.BucketVersioning{Enabled: false, ForceSendFields: []string{"Enabled"}},
+				Versioning: &raw.BucketVersioning{
+					Enabled:         false,
+					ForceSendFields: []string{"Enabled"},
+				},
+				Billing: &raw.BucketBilling{
+					RequesterPays:   false,
+					ForceSendFields: []string{"RequesterPays"},
+				},
 			}).Projection("full"),
 			func(req interface{}) { req.(*raw.BucketsPatchCall).IfMetagenerationMatch(metagen).UserProject("p") },
 		},
@@ -207,5 +223,97 @@ func TestCallBuilders(t *testing.T) {
 	}
 	if _, err := bm.newPatchCall(&BucketAttrsToUpdate{}); err == nil {
 		t.Errorf("got nil, want error")
+	}
+}
+
+func TestNewBucket(t *testing.T) {
+	labels := map[string]string{"a": "b"}
+	matchClasses := []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"}
+	rb := &raw.Bucket{
+		Name:           "name",
+		Location:       "loc",
+		Metageneration: 3,
+		StorageClass:   "sc",
+		TimeCreated:    "2017-10-23T04:05:06Z",
+		Versioning:     &raw.BucketVersioning{Enabled: true},
+		Labels:         labels,
+		Billing:        &raw.BucketBilling{RequesterPays: true},
+		Lifecycle: &raw.BucketLifecycle{
+			Rule: []*raw.BucketLifecycleRule{{
+				Action: &raw.BucketLifecycleRuleAction{
+					Type:         "SetStorageClass",
+					StorageClass: "NEARLINE",
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					Age:                 10,
+					IsLive:              googleapi.Bool(true),
+					CreatedBefore:       "2017-01-02",
+					MatchesStorageClass: matchClasses,
+					NumNewerVersions:    3,
+				},
+			}},
+		},
+		RetentionPolicy: &raw.BucketRetentionPolicy{
+			RetentionPeriod: 3,
+			EffectiveTime:   time.Now().Format(time.RFC3339),
+		},
+		Cors: []*raw.BucketCors{
+			{
+				MaxAgeSeconds:  3600,
+				Method:         []string{"GET", "POST"},
+				Origin:         []string{"*"},
+				ResponseHeader: []string{"FOO"},
+			},
+		},
+		Acl: []*raw.BucketAccessControl{
+			{Bucket: "name", Role: "READER", Email: "joe@example.com", Entity: "allUsers"},
+		},
+	}
+	want := &BucketAttrs{
+		Name:              "name",
+		Location:          "loc",
+		MetaGeneration:    3,
+		StorageClass:      "sc",
+		Created:           time.Date(2017, 10, 23, 4, 5, 6, 0, time.UTC),
+		VersioningEnabled: true,
+		Labels:            labels,
+		RequesterPays:     true,
+		Lifecycle: Lifecycle{
+			Rules: []LifecycleRule{
+				{
+					Action: LifecycleAction{
+						Type:         SetStorageClassAction,
+						StorageClass: "NEARLINE",
+					},
+					Condition: LifecycleCondition{
+						AgeInDays:             10,
+						Liveness:              Live,
+						CreatedBefore:         time.Date(2017, 1, 2, 0, 0, 0, 0, time.UTC),
+						MatchesStorageClasses: matchClasses,
+						NumNewerVersions:      3,
+					},
+				},
+			},
+		},
+		RetentionPolicy: &RetentionPolicy{
+			RetentionPeriod: 3 * time.Second,
+		},
+		CORS: []CORS{
+			{
+				MaxAge:          time.Hour,
+				Methods:         []string{"GET", "POST"},
+				Origins:         []string{"*"},
+				ResponseHeaders: []string{"FOO"},
+			},
+		},
+		ACL:              []ACLRule{{Entity: "allUsers", Role: RoleReader}},
+		DefaultObjectACL: []ACLRule{},
+	}
+	got, err := newBucket(rb)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := testutil.Diff(got, want, cmpopts.IgnoreTypes(time.Time{})); diff != "" {
+		t.Errorf("got=-, want=+:\n%s", diff)
 	}
 }

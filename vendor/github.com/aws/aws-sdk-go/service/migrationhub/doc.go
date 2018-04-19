@@ -3,6 +3,10 @@
 // Package migrationhub provides the client and types for making API
 // requests to AWS Migration Hub.
 //
+// The AWS Migration Hub API methods help to obtain server and application migration
+// status and integrate your resource-specific migration tool by providing a
+// programmatic interface to Migration Hub.
+//
 // See https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31 for more information on this service.
 //
 // See migrationhub package documentation for more information.
@@ -10,7 +14,7 @@
 //
 // Using the Client
 //
-// To AWS Migration Hub with the SDK use the New function to create
+// To contact AWS Migration Hub with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.
 // These clients are safe to use concurrently.
 //

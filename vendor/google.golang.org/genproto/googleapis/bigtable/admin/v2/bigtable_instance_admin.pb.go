@@ -16,6 +16,7 @@ It has these top-level messages:
 	GetInstanceRequest
 	ListInstancesRequest
 	ListInstancesResponse
+	PartialUpdateInstanceRequest
 	DeleteInstanceRequest
 	CreateClusterRequest
 	GetClusterRequest
@@ -23,20 +24,42 @@ It has these top-level messages:
 	ListClustersResponse
 	DeleteClusterRequest
 	CreateInstanceMetadata
+	UpdateInstanceMetadata
 	CreateClusterMetadata
 	UpdateClusterMetadata
+	CreateAppProfileRequest
+	GetAppProfileRequest
+	ListAppProfilesRequest
+	ListAppProfilesResponse
+	UpdateAppProfileRequest
+	DeleteAppProfileRequest
+	UpdateAppProfileMetadata
 	CreateTableRequest
+	CreateTableFromSnapshotRequest
 	DropRowRangeRequest
 	ListTablesRequest
 	ListTablesResponse
 	GetTableRequest
 	DeleteTableRequest
 	ModifyColumnFamiliesRequest
+	GenerateConsistencyTokenRequest
+	GenerateConsistencyTokenResponse
+	CheckConsistencyRequest
+	CheckConsistencyResponse
+	SnapshotTableRequest
+	GetSnapshotRequest
+	ListSnapshotsRequest
+	ListSnapshotsResponse
+	DeleteSnapshotRequest
+	SnapshotTableMetadata
+	CreateTableFromSnapshotMetadata
 	Instance
 	Cluster
+	AppProfile
 	Table
 	ColumnFamily
 	GcRule
+	Snapshot
 */
 package admin
 
@@ -44,8 +67,11 @@ import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
 import _ "google.golang.org/genproto/googleapis/api/annotations"
+import google_iam_v11 "google.golang.org/genproto/googleapis/iam/v1"
+import google_iam_v1 "google.golang.org/genproto/googleapis/iam/v1"
 import google_longrunning "google.golang.org/genproto/googleapis/longrunning"
 import google_protobuf3 "github.com/golang/protobuf/ptypes/empty"
+import google_protobuf4 "google.golang.org/genproto/protobuf/field_mask"
 import google_protobuf1 "github.com/golang/protobuf/ptypes/timestamp"
 
 import (
@@ -206,6 +232,34 @@ func (m *ListInstancesResponse) GetNextPageToken() string {
 	return ""
 }
 
+// Request message for BigtableInstanceAdmin.PartialUpdateInstance.
+type PartialUpdateInstanceRequest struct {
+	// The Instance which will (partially) replace the current value.
+	Instance *Instance `protobuf:"bytes,1,opt,name=instance" json:"instance,omitempty"`
+	// The subset of Instance fields which should be replaced.
+	// Must be explicitly set.
+	UpdateMask *google_protobuf4.FieldMask `protobuf:"bytes,2,opt,name=update_mask,json=updateMask" json:"update_mask,omitempty"`
+}
+
+func (m *PartialUpdateInstanceRequest) Reset()                    { *m = PartialUpdateInstanceRequest{} }
+func (m *PartialUpdateInstanceRequest) String() string            { return proto.CompactTextString(m) }
+func (*PartialUpdateInstanceRequest) ProtoMessage()               {}
+func (*PartialUpdateInstanceRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+
+func (m *PartialUpdateInstanceRequest) GetInstance() *Instance {
+	if m != nil {
+		return m.Instance
+	}
+	return nil
+}
+
+func (m *PartialUpdateInstanceRequest) GetUpdateMask() *google_protobuf4.FieldMask {
+	if m != nil {
+		return m.UpdateMask
+	}
+	return nil
+}
+
 // Request message for BigtableInstanceAdmin.DeleteInstance.
 type DeleteInstanceRequest struct {
 	// The unique name of the instance to be deleted.
@@ -216,7 +270,7 @@ type DeleteInstanceRequest struct {
 func (m *DeleteInstanceRequest) Reset()                    { *m = DeleteInstanceRequest{} }
 func (m *DeleteInstanceRequest) String() string            { return proto.CompactTextString(m) }
 func (*DeleteInstanceRequest) ProtoMessage()               {}
-func (*DeleteInstanceRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+func (*DeleteInstanceRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
 func (m *DeleteInstanceRequest) GetName() string {
 	if m != nil {
@@ -243,7 +297,7 @@ type CreateClusterRequest struct {
 func (m *CreateClusterRequest) Reset()                    { *m = CreateClusterRequest{} }
 func (m *CreateClusterRequest) String() string            { return proto.CompactTextString(m) }
 func (*CreateClusterRequest) ProtoMessage()               {}
-func (*CreateClusterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
+func (*CreateClusterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
 
 func (m *CreateClusterRequest) GetParent() string {
 	if m != nil {
@@ -276,7 +330,7 @@ type GetClusterRequest struct {
 func (m *GetClusterRequest) Reset()                    { *m = GetClusterRequest{} }
 func (m *GetClusterRequest) String() string            { return proto.CompactTextString(m) }
 func (*GetClusterRequest) ProtoMessage()               {}
-func (*GetClusterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
+func (*GetClusterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
 
 func (m *GetClusterRequest) GetName() string {
 	if m != nil {
@@ -299,7 +353,7 @@ type ListClustersRequest struct {
 func (m *ListClustersRequest) Reset()                    { *m = ListClustersRequest{} }
 func (m *ListClustersRequest) String() string            { return proto.CompactTextString(m) }
 func (*ListClustersRequest) ProtoMessage()               {}
-func (*ListClustersRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
+func (*ListClustersRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{8} }
 
 func (m *ListClustersRequest) GetParent() string {
 	if m != nil {
@@ -333,7 +387,7 @@ type ListClustersResponse struct {
 func (m *ListClustersResponse) Reset()                    { *m = ListClustersResponse{} }
 func (m *ListClustersResponse) String() string            { return proto.CompactTextString(m) }
 func (*ListClustersResponse) ProtoMessage()               {}
-func (*ListClustersResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{8} }
+func (*ListClustersResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{9} }
 
 func (m *ListClustersResponse) GetClusters() []*Cluster {
 	if m != nil {
@@ -366,7 +420,7 @@ type DeleteClusterRequest struct {
 func (m *DeleteClusterRequest) Reset()                    { *m = DeleteClusterRequest{} }
 func (m *DeleteClusterRequest) String() string            { return proto.CompactTextString(m) }
 func (*DeleteClusterRequest) ProtoMessage()               {}
-func (*DeleteClusterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{9} }
+func (*DeleteClusterRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{10} }
 
 func (m *DeleteClusterRequest) GetName() string {
 	if m != nil {
@@ -388,7 +442,7 @@ type CreateInstanceMetadata struct {
 func (m *CreateInstanceMetadata) Reset()                    { *m = CreateInstanceMetadata{} }
 func (m *CreateInstanceMetadata) String() string            { return proto.CompactTextString(m) }
 func (*CreateInstanceMetadata) ProtoMessage()               {}
-func (*CreateInstanceMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{10} }
+func (*CreateInstanceMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{11} }
 
 func (m *CreateInstanceMetadata) GetOriginalRequest() *CreateInstanceRequest {
 	if m != nil {
@@ -411,6 +465,42 @@ func (m *CreateInstanceMetadata) GetFinishTime() *google_protobuf1.Timestamp {
 	return nil
 }
 
+// The metadata for the Operation returned by UpdateInstance.
+type UpdateInstanceMetadata struct {
+	// The request that prompted the initiation of this UpdateInstance operation.
+	OriginalRequest *PartialUpdateInstanceRequest `protobuf:"bytes,1,opt,name=original_request,json=originalRequest" json:"original_request,omitempty"`
+	// The time at which the original request was received.
+	RequestTime *google_protobuf1.Timestamp `protobuf:"bytes,2,opt,name=request_time,json=requestTime" json:"request_time,omitempty"`
+	// The time at which the operation failed or was completed successfully.
+	FinishTime *google_protobuf1.Timestamp `protobuf:"bytes,3,opt,name=finish_time,json=finishTime" json:"finish_time,omitempty"`
+}
+
+func (m *UpdateInstanceMetadata) Reset()                    { *m = UpdateInstanceMetadata{} }
+func (m *UpdateInstanceMetadata) String() string            { return proto.CompactTextString(m) }
+func (*UpdateInstanceMetadata) ProtoMessage()               {}
+func (*UpdateInstanceMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{12} }
+
+func (m *UpdateInstanceMetadata) GetOriginalRequest() *PartialUpdateInstanceRequest {
+	if m != nil {
+		return m.OriginalRequest
+	}
+	return nil
+}
+
+func (m *UpdateInstanceMetadata) GetRequestTime() *google_protobuf1.Timestamp {
+	if m != nil {
+		return m.RequestTime
+	}
+	return nil
+}
+
+func (m *UpdateInstanceMetadata) GetFinishTime() *google_protobuf1.Timestamp {
+	if m != nil {
+		return m.FinishTime
+	}
+	return nil
+}
+
 // The metadata for the Operation returned by CreateCluster.
 type CreateClusterMetadata struct {
 	// The request that prompted the initiation of this CreateCluster operation.
@@ -424,7 +514,7 @@ type CreateClusterMetadata struct {
 func (m *CreateClusterMetadata) Reset()                    { *m = CreateClusterMetadata{} }
 func (m *CreateClusterMetadata) String() string            { return proto.CompactTextString(m) }
 func (*CreateClusterMetadata) ProtoMessage()               {}
-func (*CreateClusterMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{11} }
+func (*CreateClusterMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{13} }
 
 func (m *CreateClusterMetadata) GetOriginalRequest() *CreateClusterRequest {
 	if m != nil {
@@ -460,7 +550,7 @@ type UpdateClusterMetadata struct {
 func (m *UpdateClusterMetadata) Reset()                    { *m = UpdateClusterMetadata{} }
 func (m *UpdateClusterMetadata) String() string            { return proto.CompactTextString(m) }
 func (*UpdateClusterMetadata) ProtoMessage()               {}
-func (*UpdateClusterMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{12} }
+func (*UpdateClusterMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{14} }
 
 func (m *UpdateClusterMetadata) GetOriginalRequest() *Cluster {
 	if m != nil {
@@ -483,11 +573,248 @@ func (m *UpdateClusterMetadata) GetFinishTime() *google_protobuf1.Timestamp {
 	return nil
 }
 
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for BigtableInstanceAdmin.CreateAppProfile.
+type CreateAppProfileRequest struct {
+	// The unique name of the instance in which to create the new app profile.
+	// Values are of the form
+	// `projects/<project>/instances/<instance>`.
+	Parent string `protobuf:"bytes,1,opt,name=parent" json:"parent,omitempty"`
+	// The ID to be used when referring to the new app profile within its
+	// instance, e.g., just `myprofile` rather than
+	// `projects/myproject/instances/myinstance/appProfiles/myprofile`.
+	AppProfileId string `protobuf:"bytes,2,opt,name=app_profile_id,json=appProfileId" json:"app_profile_id,omitempty"`
+	// The app profile to be created.
+	// Fields marked `OutputOnly` will be ignored.
+	AppProfile *AppProfile `protobuf:"bytes,3,opt,name=app_profile,json=appProfile" json:"app_profile,omitempty"`
+	// If true, ignore safety checks when creating the app profile.
+	IgnoreWarnings bool `protobuf:"varint,4,opt,name=ignore_warnings,json=ignoreWarnings" json:"ignore_warnings,omitempty"`
+}
+
+func (m *CreateAppProfileRequest) Reset()                    { *m = CreateAppProfileRequest{} }
+func (m *CreateAppProfileRequest) String() string            { return proto.CompactTextString(m) }
+func (*CreateAppProfileRequest) ProtoMessage()               {}
+func (*CreateAppProfileRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{15} }
+
+func (m *CreateAppProfileRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+func (m *CreateAppProfileRequest) GetAppProfileId() string {
+	if m != nil {
+		return m.AppProfileId
+	}
+	return ""
+}
+
+func (m *CreateAppProfileRequest) GetAppProfile() *AppProfile {
+	if m != nil {
+		return m.AppProfile
+	}
+	return nil
+}
+
+func (m *CreateAppProfileRequest) GetIgnoreWarnings() bool {
+	if m != nil {
+		return m.IgnoreWarnings
+	}
+	return false
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for BigtableInstanceAdmin.GetAppProfile.
+type GetAppProfileRequest struct {
+	// The unique name of the requested app profile. Values are of the form
+	// `projects/<project>/instances/<instance>/appProfiles/<app_profile>`.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+}
+
+func (m *GetAppProfileRequest) Reset()                    { *m = GetAppProfileRequest{} }
+func (m *GetAppProfileRequest) String() string            { return proto.CompactTextString(m) }
+func (*GetAppProfileRequest) ProtoMessage()               {}
+func (*GetAppProfileRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{16} }
+
+func (m *GetAppProfileRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for BigtableInstanceAdmin.ListAppProfiles.
+type ListAppProfilesRequest struct {
+	// The unique name of the instance for which a list of app profiles is
+	// requested. Values are of the form
+	// `projects/<project>/instances/<instance>`.
+	Parent string `protobuf:"bytes,1,opt,name=parent" json:"parent,omitempty"`
+	// The value of `next_page_token` returned by a previous call.
+	PageToken string `protobuf:"bytes,2,opt,name=page_token,json=pageToken" json:"page_token,omitempty"`
+}
+
+func (m *ListAppProfilesRequest) Reset()                    { *m = ListAppProfilesRequest{} }
+func (m *ListAppProfilesRequest) String() string            { return proto.CompactTextString(m) }
+func (*ListAppProfilesRequest) ProtoMessage()               {}
+func (*ListAppProfilesRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{17} }
+
+func (m *ListAppProfilesRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+func (m *ListAppProfilesRequest) GetPageToken() string {
+	if m != nil {
+		return m.PageToken
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Response message for BigtableInstanceAdmin.ListAppProfiles.
+type ListAppProfilesResponse struct {
+	// The list of requested app profiles.
+	AppProfiles []*AppProfile `protobuf:"bytes,1,rep,name=app_profiles,json=appProfiles" json:"app_profiles,omitempty"`
+	// Set if not all app profiles could be returned in a single response.
+	// Pass this value to `page_token` in another request to get the next
+	// page of results.
+	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken" json:"next_page_token,omitempty"`
+}
+
+func (m *ListAppProfilesResponse) Reset()                    { *m = ListAppProfilesResponse{} }
+func (m *ListAppProfilesResponse) String() string            { return proto.CompactTextString(m) }
+func (*ListAppProfilesResponse) ProtoMessage()               {}
+func (*ListAppProfilesResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{18} }
+
+func (m *ListAppProfilesResponse) GetAppProfiles() []*AppProfile {
+	if m != nil {
+		return m.AppProfiles
+	}
+	return nil
+}
+
+func (m *ListAppProfilesResponse) GetNextPageToken() string {
+	if m != nil {
+		return m.NextPageToken
+	}
+	return ""
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for BigtableInstanceAdmin.UpdateAppProfile.
+type UpdateAppProfileRequest struct {
+	// The app profile which will (partially) replace the current value.
+	AppProfile *AppProfile `protobuf:"bytes,1,opt,name=app_profile,json=appProfile" json:"app_profile,omitempty"`
+	// The subset of app profile fields which should be replaced.
+	// If unset, all fields will be replaced.
+	UpdateMask *google_protobuf4.FieldMask `protobuf:"bytes,2,opt,name=update_mask,json=updateMask" json:"update_mask,omitempty"`
+	// If true, ignore safety checks when updating the app profile.
+	IgnoreWarnings bool `protobuf:"varint,3,opt,name=ignore_warnings,json=ignoreWarnings" json:"ignore_warnings,omitempty"`
+}
+
+func (m *UpdateAppProfileRequest) Reset()                    { *m = UpdateAppProfileRequest{} }
+func (m *UpdateAppProfileRequest) String() string            { return proto.CompactTextString(m) }
+func (*UpdateAppProfileRequest) ProtoMessage()               {}
+func (*UpdateAppProfileRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{19} }
+
+func (m *UpdateAppProfileRequest) GetAppProfile() *AppProfile {
+	if m != nil {
+		return m.AppProfile
+	}
+	return nil
+}
+
+func (m *UpdateAppProfileRequest) GetUpdateMask() *google_protobuf4.FieldMask {
+	if m != nil {
+		return m.UpdateMask
+	}
+	return nil
+}
+
+func (m *UpdateAppProfileRequest) GetIgnoreWarnings() bool {
+	if m != nil {
+		return m.IgnoreWarnings
+	}
+	return false
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// Request message for BigtableInstanceAdmin.DeleteAppProfile.
+type DeleteAppProfileRequest struct {
+	// The unique name of the app profile to be deleted. Values are of the form
+	// `projects/<project>/instances/<instance>/appProfiles/<app_profile>`.
+	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	// If true, ignore safety checks when deleting the app profile.
+	IgnoreWarnings bool `protobuf:"varint,2,opt,name=ignore_warnings,json=ignoreWarnings" json:"ignore_warnings,omitempty"`
+}
+
+func (m *DeleteAppProfileRequest) Reset()                    { *m = DeleteAppProfileRequest{} }
+func (m *DeleteAppProfileRequest) String() string            { return proto.CompactTextString(m) }
+func (*DeleteAppProfileRequest) ProtoMessage()               {}
+func (*DeleteAppProfileRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{20} }
+
+func (m *DeleteAppProfileRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DeleteAppProfileRequest) GetIgnoreWarnings() bool {
+	if m != nil {
+		return m.IgnoreWarnings
+	}
+	return false
+}
+
+// This is a private alpha release of Cloud Bigtable replication. This feature
+// is not currently available to most Cloud Bigtable customers. This feature
+// might be changed in backward-incompatible ways and is not recommended for
+// production use. It is not subject to any SLA or deprecation policy.
+//
+// The metadata for the Operation returned by UpdateAppProfile.
+type UpdateAppProfileMetadata struct {
+}
+
+func (m *UpdateAppProfileMetadata) Reset()                    { *m = UpdateAppProfileMetadata{} }
+func (m *UpdateAppProfileMetadata) String() string            { return proto.CompactTextString(m) }
+func (*UpdateAppProfileMetadata) ProtoMessage()               {}
+func (*UpdateAppProfileMetadata) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{21} }
+
 func init() {
 	proto.RegisterType((*CreateInstanceRequest)(nil), "google.bigtable.admin.v2.CreateInstanceRequest")
 	proto.RegisterType((*GetInstanceRequest)(nil), "google.bigtable.admin.v2.GetInstanceRequest")
 	proto.RegisterType((*ListInstancesRequest)(nil), "google.bigtable.admin.v2.ListInstancesRequest")
 	proto.RegisterType((*ListInstancesResponse)(nil), "google.bigtable.admin.v2.ListInstancesResponse")
+	proto.RegisterType((*PartialUpdateInstanceRequest)(nil), "google.bigtable.admin.v2.PartialUpdateInstanceRequest")
 	proto.RegisterType((*DeleteInstanceRequest)(nil), "google.bigtable.admin.v2.DeleteInstanceRequest")
 	proto.RegisterType((*CreateClusterRequest)(nil), "google.bigtable.admin.v2.CreateClusterRequest")
 	proto.RegisterType((*GetClusterRequest)(nil), "google.bigtable.admin.v2.GetClusterRequest")
@@ -495,8 +822,16 @@ func init() {
 	proto.RegisterType((*ListClustersResponse)(nil), "google.bigtable.admin.v2.ListClustersResponse")
 	proto.RegisterType((*DeleteClusterRequest)(nil), "google.bigtable.admin.v2.DeleteClusterRequest")
 	proto.RegisterType((*CreateInstanceMetadata)(nil), "google.bigtable.admin.v2.CreateInstanceMetadata")
+	proto.RegisterType((*UpdateInstanceMetadata)(nil), "google.bigtable.admin.v2.UpdateInstanceMetadata")
 	proto.RegisterType((*CreateClusterMetadata)(nil), "google.bigtable.admin.v2.CreateClusterMetadata")
 	proto.RegisterType((*UpdateClusterMetadata)(nil), "google.bigtable.admin.v2.UpdateClusterMetadata")
+	proto.RegisterType((*CreateAppProfileRequest)(nil), "google.bigtable.admin.v2.CreateAppProfileRequest")
+	proto.RegisterType((*GetAppProfileRequest)(nil), "google.bigtable.admin.v2.GetAppProfileRequest")
+	proto.RegisterType((*ListAppProfilesRequest)(nil), "google.bigtable.admin.v2.ListAppProfilesRequest")
+	proto.RegisterType((*ListAppProfilesResponse)(nil), "google.bigtable.admin.v2.ListAppProfilesResponse")
+	proto.RegisterType((*UpdateAppProfileRequest)(nil), "google.bigtable.admin.v2.UpdateAppProfileRequest")
+	proto.RegisterType((*DeleteAppProfileRequest)(nil), "google.bigtable.admin.v2.DeleteAppProfileRequest")
+	proto.RegisterType((*UpdateAppProfileMetadata)(nil), "google.bigtable.admin.v2.UpdateAppProfileMetadata")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -518,6 +853,8 @@ type BigtableInstanceAdminClient interface {
 	ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error)
 	// Updates an instance within a project.
 	UpdateInstance(ctx context.Context, in *Instance, opts ...grpc.CallOption) (*Instance, error)
+	// Partially updates an instance within a project.
+	PartialUpdateInstance(ctx context.Context, in *PartialUpdateInstanceRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error)
 	// Delete an instance from a project.
 	DeleteInstance(ctx context.Context, in *DeleteInstanceRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 	// Creates a cluster within an instance.
@@ -530,6 +867,67 @@ type BigtableInstanceAdminClient interface {
 	UpdateCluster(ctx context.Context, in *Cluster, opts ...grpc.CallOption) (*google_longrunning.Operation, error)
 	// Deletes a cluster from an instance.
 	DeleteCluster(ctx context.Context, in *DeleteClusterRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Creates an app profile within an instance.
+	CreateAppProfile(ctx context.Context, in *CreateAppProfileRequest, opts ...grpc.CallOption) (*AppProfile, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Gets information about an app profile.
+	GetAppProfile(ctx context.Context, in *GetAppProfileRequest, opts ...grpc.CallOption) (*AppProfile, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Lists information about app profiles in an instance.
+	ListAppProfiles(ctx context.Context, in *ListAppProfilesRequest, opts ...grpc.CallOption) (*ListAppProfilesResponse, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Updates an app profile within an instance.
+	UpdateAppProfile(ctx context.Context, in *UpdateAppProfileRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Deletes an app profile from an instance.
+	DeleteAppProfile(ctx context.Context, in *DeleteAppProfileRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
+	// This is a private alpha release of Cloud Bigtable instance level
+	// permissions. This feature is not currently available to most Cloud Bigtable
+	// customers. This feature might be changed in backward-incompatible ways and
+	// is not recommended for production use. It is not subject to any SLA or
+	// deprecation policy.
+	//
+	// Gets the access control policy for an instance resource. Returns an empty
+	// policy if an instance exists but does not have a policy set.
+	GetIamPolicy(ctx context.Context, in *google_iam_v11.GetIamPolicyRequest, opts ...grpc.CallOption) (*google_iam_v1.Policy, error)
+	// This is a private alpha release of Cloud Bigtable instance level
+	// permissions. This feature is not currently available to most Cloud Bigtable
+	// customers. This feature might be changed in backward-incompatible ways and
+	// is not recommended for production use. It is not subject to any SLA or
+	// deprecation policy.
+	//
+	// Sets the access control policy on an instance resource. Replaces any
+	// existing policy.
+	SetIamPolicy(ctx context.Context, in *google_iam_v11.SetIamPolicyRequest, opts ...grpc.CallOption) (*google_iam_v1.Policy, error)
+	// This is a private alpha release of Cloud Bigtable instance level
+	// permissions. This feature is not currently available to most Cloud Bigtable
+	// customers. This feature might be changed in backward-incompatible ways and
+	// is not recommended for production use. It is not subject to any SLA or
+	// deprecation policy.
+	//
+	// Returns permissions that the caller has on the specified instance resource.
+	TestIamPermissions(ctx context.Context, in *google_iam_v11.TestIamPermissionsRequest, opts ...grpc.CallOption) (*google_iam_v11.TestIamPermissionsResponse, error)
 }
 
 type bigtableInstanceAdminClient struct {
@@ -570,6 +968,15 @@ func (c *bigtableInstanceAdminClient) ListInstances(ctx context.Context, in *Lis
 func (c *bigtableInstanceAdminClient) UpdateInstance(ctx context.Context, in *Instance, opts ...grpc.CallOption) (*Instance, error) {
 	out := new(Instance)
 	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/UpdateInstance", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) PartialUpdateInstance(ctx context.Context, in *PartialUpdateInstanceRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error) {
+	out := new(google_longrunning.Operation)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/PartialUpdateInstance", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -630,6 +1037,78 @@ func (c *bigtableInstanceAdminClient) DeleteCluster(ctx context.Context, in *Del
 	return out, nil
 }
 
+func (c *bigtableInstanceAdminClient) CreateAppProfile(ctx context.Context, in *CreateAppProfileRequest, opts ...grpc.CallOption) (*AppProfile, error) {
+	out := new(AppProfile)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/CreateAppProfile", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) GetAppProfile(ctx context.Context, in *GetAppProfileRequest, opts ...grpc.CallOption) (*AppProfile, error) {
+	out := new(AppProfile)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/GetAppProfile", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) ListAppProfiles(ctx context.Context, in *ListAppProfilesRequest, opts ...grpc.CallOption) (*ListAppProfilesResponse, error) {
+	out := new(ListAppProfilesResponse)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/ListAppProfiles", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) UpdateAppProfile(ctx context.Context, in *UpdateAppProfileRequest, opts ...grpc.CallOption) (*google_longrunning.Operation, error) {
+	out := new(google_longrunning.Operation)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/UpdateAppProfile", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) DeleteAppProfile(ctx context.Context, in *DeleteAppProfileRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error) {
+	out := new(google_protobuf3.Empty)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/DeleteAppProfile", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) GetIamPolicy(ctx context.Context, in *google_iam_v11.GetIamPolicyRequest, opts ...grpc.CallOption) (*google_iam_v1.Policy, error) {
+	out := new(google_iam_v1.Policy)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/GetIamPolicy", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) SetIamPolicy(ctx context.Context, in *google_iam_v11.SetIamPolicyRequest, opts ...grpc.CallOption) (*google_iam_v1.Policy, error) {
+	out := new(google_iam_v1.Policy)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/SetIamPolicy", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *bigtableInstanceAdminClient) TestIamPermissions(ctx context.Context, in *google_iam_v11.TestIamPermissionsRequest, opts ...grpc.CallOption) (*google_iam_v11.TestIamPermissionsResponse, error) {
+	out := new(google_iam_v11.TestIamPermissionsResponse)
+	err := grpc.Invoke(ctx, "/google.bigtable.admin.v2.BigtableInstanceAdmin/TestIamPermissions", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for BigtableInstanceAdmin service
 
 type BigtableInstanceAdminServer interface {
@@ -641,6 +1120,8 @@ type BigtableInstanceAdminServer interface {
 	ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
 	// Updates an instance within a project.
 	UpdateInstance(context.Context, *Instance) (*Instance, error)
+	// Partially updates an instance within a project.
+	PartialUpdateInstance(context.Context, *PartialUpdateInstanceRequest) (*google_longrunning.Operation, error)
 	// Delete an instance from a project.
 	DeleteInstance(context.Context, *DeleteInstanceRequest) (*google_protobuf3.Empty, error)
 	// Creates a cluster within an instance.
@@ -653,6 +1134,67 @@ type BigtableInstanceAdminServer interface {
 	UpdateCluster(context.Context, *Cluster) (*google_longrunning.Operation, error)
 	// Deletes a cluster from an instance.
 	DeleteCluster(context.Context, *DeleteClusterRequest) (*google_protobuf3.Empty, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Creates an app profile within an instance.
+	CreateAppProfile(context.Context, *CreateAppProfileRequest) (*AppProfile, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Gets information about an app profile.
+	GetAppProfile(context.Context, *GetAppProfileRequest) (*AppProfile, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Lists information about app profiles in an instance.
+	ListAppProfiles(context.Context, *ListAppProfilesRequest) (*ListAppProfilesResponse, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Updates an app profile within an instance.
+	UpdateAppProfile(context.Context, *UpdateAppProfileRequest) (*google_longrunning.Operation, error)
+	// This is a private alpha release of Cloud Bigtable replication. This feature
+	// is not currently available to most Cloud Bigtable customers. This feature
+	// might be changed in backward-incompatible ways and is not recommended for
+	// production use. It is not subject to any SLA or deprecation policy.
+	//
+	// Deletes an app profile from an instance.
+	DeleteAppProfile(context.Context, *DeleteAppProfileRequest) (*google_protobuf3.Empty, error)
+	// This is a private alpha release of Cloud Bigtable instance level
+	// permissions. This feature is not currently available to most Cloud Bigtable
+	// customers. This feature might be changed in backward-incompatible ways and
+	// is not recommended for production use. It is not subject to any SLA or
+	// deprecation policy.
+	//
+	// Gets the access control policy for an instance resource. Returns an empty
+	// policy if an instance exists but does not have a policy set.
+	GetIamPolicy(context.Context, *google_iam_v11.GetIamPolicyRequest) (*google_iam_v1.Policy, error)
+	// This is a private alpha release of Cloud Bigtable instance level
+	// permissions. This feature is not currently available to most Cloud Bigtable
+	// customers. This feature might be changed in backward-incompatible ways and
+	// is not recommended for production use. It is not subject to any SLA or
+	// deprecation policy.
+	//
+	// Sets the access control policy on an instance resource. Replaces any
+	// existing policy.
+	SetIamPolicy(context.Context, *google_iam_v11.SetIamPolicyRequest) (*google_iam_v1.Policy, error)
+	// This is a private alpha release of Cloud Bigtable instance level
+	// permissions. This feature is not currently available to most Cloud Bigtable
+	// customers. This feature might be changed in backward-incompatible ways and
+	// is not recommended for production use. It is not subject to any SLA or
+	// deprecation policy.
+	//
+	// Returns permissions that the caller has on the specified instance resource.
+	TestIamPermissions(context.Context, *google_iam_v11.TestIamPermissionsRequest) (*google_iam_v11.TestIamPermissionsResponse, error)
 }
 
 func RegisterBigtableInstanceAdminServer(s *grpc.Server, srv BigtableInstanceAdminServer) {
@@ -727,6 +1269,24 @@ func _BigtableInstanceAdmin_UpdateInstance_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BigtableInstanceAdminServer).UpdateInstance(ctx, req.(*Instance))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_PartialUpdateInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PartialUpdateInstanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).PartialUpdateInstance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/PartialUpdateInstance",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).PartialUpdateInstance(ctx, req.(*PartialUpdateInstanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -839,6 +1399,150 @@ func _BigtableInstanceAdmin_DeleteCluster_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BigtableInstanceAdmin_CreateAppProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAppProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).CreateAppProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/CreateAppProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).CreateAppProfile(ctx, req.(*CreateAppProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_GetAppProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAppProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).GetAppProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/GetAppProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).GetAppProfile(ctx, req.(*GetAppProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_ListAppProfiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAppProfilesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).ListAppProfiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/ListAppProfiles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).ListAppProfiles(ctx, req.(*ListAppProfilesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_UpdateAppProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAppProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).UpdateAppProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/UpdateAppProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).UpdateAppProfile(ctx, req.(*UpdateAppProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_DeleteAppProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAppProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).DeleteAppProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/DeleteAppProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).DeleteAppProfile(ctx, req.(*DeleteAppProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_GetIamPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(google_iam_v11.GetIamPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).GetIamPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/GetIamPolicy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).GetIamPolicy(ctx, req.(*google_iam_v11.GetIamPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_SetIamPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(google_iam_v11.SetIamPolicyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).SetIamPolicy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/SetIamPolicy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).SetIamPolicy(ctx, req.(*google_iam_v11.SetIamPolicyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BigtableInstanceAdmin_TestIamPermissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(google_iam_v11.TestIamPermissionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BigtableInstanceAdminServer).TestIamPermissions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.bigtable.admin.v2.BigtableInstanceAdmin/TestIamPermissions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BigtableInstanceAdminServer).TestIamPermissions(ctx, req.(*google_iam_v11.TestIamPermissionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _BigtableInstanceAdmin_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "google.bigtable.admin.v2.BigtableInstanceAdmin",
 	HandlerType: (*BigtableInstanceAdminServer)(nil),
@@ -858,6 +1562,10 @@ var _BigtableInstanceAdmin_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateInstance",
 			Handler:    _BigtableInstanceAdmin_UpdateInstance_Handler,
+		},
+		{
+			MethodName: "PartialUpdateInstance",
+			Handler:    _BigtableInstanceAdmin_PartialUpdateInstance_Handler,
 		},
 		{
 			MethodName: "DeleteInstance",
@@ -883,6 +1591,38 @@ var _BigtableInstanceAdmin_serviceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteCluster",
 			Handler:    _BigtableInstanceAdmin_DeleteCluster_Handler,
 		},
+		{
+			MethodName: "CreateAppProfile",
+			Handler:    _BigtableInstanceAdmin_CreateAppProfile_Handler,
+		},
+		{
+			MethodName: "GetAppProfile",
+			Handler:    _BigtableInstanceAdmin_GetAppProfile_Handler,
+		},
+		{
+			MethodName: "ListAppProfiles",
+			Handler:    _BigtableInstanceAdmin_ListAppProfiles_Handler,
+		},
+		{
+			MethodName: "UpdateAppProfile",
+			Handler:    _BigtableInstanceAdmin_UpdateAppProfile_Handler,
+		},
+		{
+			MethodName: "DeleteAppProfile",
+			Handler:    _BigtableInstanceAdmin_DeleteAppProfile_Handler,
+		},
+		{
+			MethodName: "GetIamPolicy",
+			Handler:    _BigtableInstanceAdmin_GetIamPolicy_Handler,
+		},
+		{
+			MethodName: "SetIamPolicy",
+			Handler:    _BigtableInstanceAdmin_SetIamPolicy_Handler,
+		},
+		{
+			MethodName: "TestIamPermissions",
+			Handler:    _BigtableInstanceAdmin_TestIamPermissions_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "google/bigtable/admin/v2/bigtable_instance_admin.proto",
@@ -893,70 +1633,103 @@ func init() {
 }
 
 var fileDescriptor0 = []byte{
-	// 1026 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0xc1, 0x6f, 0x1b, 0xc5,
-	0x17, 0xd6, 0xd8, 0xfd, 0xf5, 0x57, 0xbf, 0xad, 0x93, 0x30, 0xc4, 0x91, 0xb5, 0xb4, 0x34, 0xdd,
-	0x4a, 0xad, 0xeb, 0x86, 0x5d, 0x61, 0x10, 0x41, 0x89, 0x8c, 0x20, 0xa1, 0x8a, 0x22, 0xa5, 0x22,
-	0xb2, 0x0a, 0x52, 0x7b, 0xc0, 0x9a, 0xd8, 0x93, 0x65, 0xe9, 0x7a, 0x76, 0xd9, 0x1d, 0x47, 0x44,
-	0xa8, 0x17, 0x84, 0x38, 0x54, 0x82, 0x03, 0x1c, 0x81, 0x13, 0x17, 0x84, 0xf8, 0x4f, 0x38, 0x72,
-	0xe4, 0x84, 0xc4, 0x19, 0xf1, 0x27, 0xa0, 0xd9, 0x99, 0x59, 0x7b, 0x9d, 0xb5, 0x77, 0x2d, 0x84,
-	0xd4, 0x9b, 0x77, 0xe6, 0xbd, 0x37, 0xdf, 0xfb, 0xde, 0x37, 0xef, 0x8d, 0xe1, 0x0d, 0x37, 0x08,
-	0x5c, 0x9f, 0x3a, 0x27, 0x9e, 0xcb, 0xc9, 0x89, 0x4f, 0x1d, 0x32, 0x1c, 0x79, 0xcc, 0x39, 0xeb,
-	0xa4, 0x2b, 0x7d, 0x8f, 0xc5, 0x9c, 0xb0, 0x01, 0xed, 0x27, 0x5b, 0x76, 0x18, 0x05, 0x3c, 0xc0,
-	0x4d, 0xe9, 0x67, 0x6b, 0x2b, 0x5b, 0x6e, 0x9e, 0x75, 0xcc, 0x6b, 0x2a, 0x22, 0x09, 0x3d, 0x87,
-	0x30, 0x16, 0x70, 0xc2, 0xbd, 0x80, 0xc5, 0xd2, 0xcf, 0xbc, 0x33, 0xf7, 0x3c, 0x7d, 0x8c, 0x32,
-	0xbc, 0xa5, 0x0c, 0xfd, 0x80, 0xb9, 0xd1, 0x98, 0x31, 0x8f, 0xb9, 0x4e, 0x10, 0xd2, 0x28, 0x13,
-	0xed, 0x25, 0x65, 0x94, 0x7c, 0x9d, 0x8c, 0x4f, 0x1d, 0x3a, 0x0a, 0xf9, 0xb9, 0xda, 0xbc, 0x31,
-	0xbb, 0xc9, 0xbd, 0x11, 0x8d, 0x39, 0x19, 0x85, 0xd2, 0xc0, 0xfa, 0xb5, 0x02, 0x8d, 0xfd, 0x88,
-	0x12, 0x4e, 0x0f, 0xd5, 0xd9, 0x3d, 0xfa, 0xc9, 0x98, 0xc6, 0x1c, 0x6f, 0xc0, 0xe5, 0x90, 0x44,
-	0x94, 0xf1, 0x26, 0xda, 0x44, 0xad, 0x5a, 0x4f, 0x7d, 0xe1, 0x1b, 0x60, 0xa4, 0x6c, 0x78, 0xc3,
-	0x66, 0x25, 0xd9, 0x04, 0xbd, 0x74, 0x38, 0xc4, 0x6f, 0xc1, 0x15, 0xfd, 0xd5, 0xac, 0x6e, 0xa2,
-	0x96, 0xd1, 0xb1, 0xec, 0x79, 0x4c, 0xd9, 0xe9, 0xa9, 0xa9, 0x0f, 0x7e, 0x04, 0x57, 0x06, 0xfe,
-	0x38, 0xe6, 0x34, 0x8a, 0x9b, 0x97, 0x36, 0xab, 0x2d, 0xa3, 0xd3, 0x9d, 0xef, 0x9f, 0x8b, 0xdd,
-	0xde, 0x57, 0xfe, 0xf7, 0x19, 0x8f, 0xce, 0x7b, 0x69, 0x38, 0xf3, 0x43, 0xa8, 0x67, 0xb6, 0xf0,
-	0x1a, 0x54, 0x9f, 0xd0, 0x73, 0x95, 0xa1, 0xf8, 0x89, 0xb7, 0xe1, 0x7f, 0x67, 0xc4, 0x1f, 0xd3,
-	0x24, 0x31, 0xa3, 0x73, 0x73, 0xc1, 0xd1, 0x32, 0x52, 0x4f, 0xda, 0xef, 0x54, 0xde, 0x44, 0x56,
-	0x0b, 0xf0, 0x01, 0xe5, 0xb3, 0x4c, 0x62, 0xb8, 0xc4, 0xc8, 0x88, 0xaa, 0x53, 0x92, 0xdf, 0xd6,
-	0x03, 0x58, 0x3f, 0xf2, 0xe2, 0xd4, 0x34, 0x2e, 0x62, 0xfd, 0x3a, 0x40, 0x48, 0x5c, 0xda, 0xe7,
-	0xc1, 0x13, 0xca, 0x14, 0xe9, 0x35, 0xb1, 0xf2, 0x50, 0x2c, 0x58, 0xbf, 0x20, 0x68, 0xcc, 0xc4,
-	0x8b, 0xc3, 0x80, 0xc5, 0x14, 0xbf, 0x0d, 0x35, 0xcd, 0x6c, 0xdc, 0x44, 0x09, 0x9d, 0x65, 0xca,
-	0x31, 0x71, 0xc2, 0x77, 0x61, 0xed, 0x94, 0x78, 0x3e, 0x1d, 0xf6, 0xfd, 0x60, 0x20, 0xa5, 0xd7,
-	0xac, 0x6c, 0x56, 0x5b, 0xb5, 0xde, 0xaa, 0x5c, 0x3f, 0xd2, 0xcb, 0xf8, 0x36, 0xac, 0x32, 0xfa,
-	0x29, 0xef, 0x4f, 0x41, 0xad, 0x26, 0x50, 0xeb, 0x62, 0xf9, 0x38, 0x85, 0x7b, 0x0f, 0x1a, 0xef,
-	0x52, 0x9f, 0x5e, 0x14, 0x5d, 0x1e, 0x55, 0xcf, 0x10, 0xac, 0xcb, 0x32, 0x6b, 0xc6, 0x8b, 0xb9,
-	0x52, 0x15, 0x9f, 0x08, 0xb4, 0xa6, 0x56, 0x0e, 0x87, 0x78, 0x17, 0xfe, 0xaf, 0x3e, 0x94, 0x3c,
-	0x4b, 0xd4, 0x58, 0x7b, 0x58, 0x77, 0xe0, 0x85, 0x03, 0xca, 0x67, 0x80, 0xe4, 0xa1, 0x3e, 0x82,
-	0x17, 0x45, 0x41, 0xb4, 0xdc, 0xfe, 0x65, 0x7d, 0x7f, 0x42, 0x52, 0x2f, 0x93, 0x70, 0xaa, 0xbc,
-	0xdd, 0xa9, 0xcb, 0x22, 0xab, 0x5b, 0x22, 0x9b, 0xd4, 0xe5, 0xbf, 0xa8, 0x6d, 0x1b, 0xd6, 0x65,
-	0x6d, 0x4b, 0x90, 0xf4, 0x37, 0x82, 0x8d, 0xec, 0x0d, 0x7e, 0x40, 0x39, 0x19, 0x12, 0x4e, 0xf0,
-	0x63, 0x58, 0x0b, 0x22, 0xcf, 0xf5, 0x18, 0xf1, 0xfb, 0x91, 0x0c, 0x91, 0xb8, 0x1a, 0x1d, 0x67,
-	0xc9, 0x6e, 0xd0, 0x5b, 0xd5, 0x81, 0x34, 0x94, 0x2e, 0x5c, 0x55, 0x21, 0xfb, 0xa2, 0x1f, 0xaa,
-	0xab, 0x6e, 0xea, 0xb8, 0xba, 0x59, 0xda, 0x0f, 0x75, 0xb3, 0xec, 0x19, 0xca, 0x5e, 0xac, 0xe0,
-	0x5d, 0x30, 0x4e, 0x3d, 0xe6, 0xc5, 0x1f, 0x49, 0xef, 0x6a, 0xa1, 0x37, 0x48, 0x73, 0xb1, 0x60,
-	0xfd, 0x85, 0x74, 0xc3, 0x55, 0xfc, 0xa4, 0x19, 0x3f, 0x9a, 0x9b, 0xb1, 0x5d, 0x94, 0x71, 0x96,
-	0xea, 0xe7, 0x2b, 0xe1, 0x3f, 0x10, 0x34, 0xde, 0x0f, 0x87, 0x39, 0x09, 0x1f, 0xcd, 0x4d, 0xb8,
-	0x84, 0x86, 0x9f, 0xa7, 0x1c, 0x3b, 0xbf, 0x1b, 0xd0, 0xd8, 0x53, 0x50, 0xb5, 0xfa, 0xde, 0x11,
-	0x88, 0xf1, 0xd7, 0x08, 0x56, 0xb2, 0xaa, 0xc4, 0xcb, 0xea, 0xd7, 0xbc, 0xae, 0x1d, 0xa6, 0xde,
-	0x01, 0xf6, 0x7b, 0xfa, 0x1d, 0x60, 0x6d, 0x7d, 0xfe, 0xdb, 0x9f, 0xdf, 0x56, 0x6e, 0x5b, 0x37,
-	0xc5, 0x0b, 0xe2, 0x33, 0xd9, 0x4f, 0xba, 0x61, 0x14, 0x7c, 0x4c, 0x07, 0x3c, 0x76, 0xda, 0x4f,
-	0xd3, 0x57, 0x45, 0xbc, 0x83, 0xda, 0xf8, 0x19, 0x02, 0x63, 0x6a, 0x46, 0xe1, 0xad, 0xf9, 0x68,
-	0x2e, 0x8e, 0x32, 0xb3, 0xc4, 0xe8, 0xb0, 0xee, 0x26, 0x78, 0x6e, 0x61, 0x89, 0x47, 0xdc, 0xf3,
-	0x29, 0x34, 0x13, 0x30, 0x4e, 0xfb, 0x29, 0xfe, 0x0e, 0x41, 0x3d, 0x33, 0xb6, 0xf0, 0x02, 0xa9,
-	0xe7, 0xcd, 0x4b, 0xd3, 0x29, 0x6d, 0x2f, 0x1b, 0xe6, 0x0c, 0xba, 0x45, 0x6c, 0xe1, 0x2f, 0x11,
-	0xac, 0x48, 0xe5, 0xa6, 0x6c, 0x95, 0xc8, 0xbf, 0x14, 0x47, 0xaa, 0x66, 0x66, 0x31, 0x47, 0xa2,
-	0x66, 0x5f, 0x20, 0x58, 0xc9, 0xce, 0xcb, 0x45, 0x22, 0xca, 0x9d, 0xac, 0xe6, 0xc6, 0x05, 0x29,
-	0xdf, 0x17, 0xef, 0x44, 0xcd, 0x47, 0xbb, 0x44, 0xb5, 0x7e, 0x40, 0x50, 0xcf, 0xf4, 0x1b, 0xbc,
-	0x64, 0x63, 0x2a, 0x52, 0x72, 0x37, 0xc1, 0xb2, 0x6d, 0x6d, 0xe5, 0xd7, 0x26, 0x83, 0xc6, 0xd1,
-	0x33, 0x6c, 0x47, 0xcf, 0x66, 0xfc, 0x0d, 0x02, 0x98, 0x0c, 0x67, 0x7c, 0x6f, 0xa1, 0xb2, 0x67,
-	0x90, 0x15, 0x77, 0x1c, 0xeb, 0xf5, 0x04, 0x9d, 0x8d, 0xb7, 0x8a, 0x98, 0x4a, 0xa1, 0x09, 0xd2,
-	0x7e, 0x44, 0x70, 0x75, 0x7a, 0x72, 0xe3, 0x57, 0x16, 0x2b, 0x76, 0xe6, 0xc1, 0x60, 0xda, 0x65,
-	0xcd, 0x95, 0xbe, 0xb3, 0x28, 0x4b, 0x72, 0x28, 0xba, 0x42, 0x3d, 0xd3, 0xa4, 0x71, 0x31, 0x21,
-	0x45, 0xd5, 0xdc, 0x4e, 0x90, 0xbc, 0x6a, 0x2e, 0xc5, 0x97, 0x90, 0xfb, 0x57, 0x08, 0xea, 0x99,
-	0x27, 0xc4, 0x22, 0x9d, 0xe5, 0xbd, 0x35, 0xe6, 0x8a, 0x5d, 0x91, 0xd3, 0x5e, 0x0a, 0xd2, 0xde,
-	0xf7, 0x08, 0xae, 0x0d, 0x82, 0xd1, 0x5c, 0x0c, 0x7b, 0x66, 0x6e, 0xef, 0x3f, 0x16, 0x67, 0x1f,
-	0xa3, 0xc7, 0x5d, 0xe5, 0xe7, 0x06, 0x3e, 0x61, 0xae, 0x1d, 0x44, 0xae, 0xe3, 0x52, 0x96, 0x20,
-	0x73, 0xe4, 0x16, 0x09, 0xbd, 0xf8, 0xe2, 0xbf, 0xc1, 0xdd, 0xe4, 0xc7, 0xcf, 0x95, 0x97, 0x0f,
-	0xa4, 0xff, 0xbe, 0x1f, 0x8c, 0x87, 0xb6, 0x3e, 0xca, 0x4e, 0xce, 0xb0, 0x3f, 0xe8, 0x9c, 0x5c,
-	0x4e, 0x42, 0xbd, 0xf6, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x55, 0x18, 0xc5, 0x74, 0xc7, 0x0e,
-	0x00, 0x00,
+	// 1566 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x59, 0xcf, 0x6f, 0xdc, 0xc4,
+	0x17, 0xd7, 0x6c, 0xfa, 0xed, 0xb7, 0x79, 0x9b, 0x5f, 0xdf, 0xf9, 0x36, 0xc9, 0xca, 0xf4, 0x47,
+	0xea, 0x56, 0x6d, 0xba, 0x0d, 0x36, 0x59, 0x50, 0x5b, 0x25, 0xa4, 0xa2, 0x4d, 0x4b, 0x14, 0x94,
+	0xaa, 0xd1, 0xb6, 0x14, 0xb5, 0x8a, 0x58, 0x4d, 0xb2, 0x93, 0xc5, 0xc4, 0x6b, 0x1b, 0xdb, 0x1b,
+	0xa8, 0x50, 0x2f, 0x08, 0x21, 0x54, 0x09, 0x0e, 0x20, 0x71, 0xa9, 0xe0, 0xc2, 0x05, 0x55, 0x08,
+	0xc4, 0x85, 0x1b, 0x57, 0x90, 0xe0, 0xc8, 0x5f, 0x80, 0xc4, 0x19, 0x71, 0xe3, 0x8a, 0x66, 0x3c,
+	0xe3, 0xb5, 0xbd, 0xfe, 0xb5, 0xad, 0x2a, 0xf5, 0xd4, 0xf5, 0xcc, 0x9b, 0x37, 0x9f, 0xf9, 0xbc,
+	0xcf, 0x7b, 0xf3, 0x26, 0x85, 0xf3, 0x1d, 0xdb, 0xee, 0x98, 0x54, 0xdf, 0x36, 0x3a, 0x3e, 0xd9,
+	0x36, 0xa9, 0x4e, 0xda, 0x5d, 0xc3, 0xd2, 0xf7, 0x1b, 0xe1, 0x48, 0xcb, 0xb0, 0x3c, 0x9f, 0x58,
+	0x3b, 0xb4, 0xc5, 0xa7, 0x34, 0xc7, 0xb5, 0x7d, 0x1b, 0xd7, 0x82, 0x75, 0x9a, 0xb4, 0xd2, 0x82,
+	0xc9, 0xfd, 0x86, 0x72, 0x44, 0x78, 0x24, 0x8e, 0xa1, 0x13, 0xcb, 0xb2, 0x7d, 0xe2, 0x1b, 0xb6,
+	0xe5, 0x05, 0xeb, 0x94, 0x33, 0x99, 0xfb, 0xc9, 0x6d, 0x84, 0xe1, 0x31, 0x61, 0x68, 0x90, 0xae,
+	0xbe, 0xbf, 0xc8, 0xfe, 0x69, 0x39, 0xb6, 0x69, 0xec, 0xdc, 0x13, 0xf3, 0x4a, 0x7c, 0x3e, 0x36,
+	0x77, 0x52, 0xcc, 0x99, 0xb6, 0xd5, 0x71, 0x7b, 0x96, 0x65, 0x58, 0x1d, 0xdd, 0x76, 0xa8, 0x1b,
+	0x43, 0xf2, 0x9c, 0x30, 0xe2, 0x5f, 0xdb, 0xbd, 0x5d, 0x9d, 0x76, 0x1d, 0x5f, 0x7a, 0x98, 0x4b,
+	0x4e, 0xee, 0x1a, 0xd4, 0x6c, 0xb7, 0xba, 0xc4, 0xdb, 0x13, 0x16, 0xc7, 0x93, 0x16, 0xbe, 0xd1,
+	0xa5, 0x9e, 0x4f, 0xba, 0x4e, 0x60, 0xa0, 0xfe, 0x56, 0x81, 0xe9, 0x55, 0x97, 0x12, 0x9f, 0xae,
+	0x8b, 0x93, 0x35, 0xe9, 0x3b, 0x3d, 0xea, 0xf9, 0x78, 0x06, 0x0e, 0x3a, 0xc4, 0xa5, 0x96, 0x5f,
+	0x43, 0x73, 0x68, 0x7e, 0xb4, 0x29, 0xbe, 0xf0, 0x71, 0xa8, 0x86, 0x5c, 0x1b, 0xed, 0x5a, 0x85,
+	0x4f, 0x82, 0x1c, 0x5a, 0x6f, 0xe3, 0x4b, 0x70, 0x48, 0x7e, 0xd5, 0x46, 0xe6, 0xd0, 0x7c, 0xb5,
+	0xa1, 0x6a, 0x59, 0x71, 0xd0, 0xc2, 0x5d, 0xc3, 0x35, 0xf8, 0x0e, 0x1c, 0xda, 0x31, 0x7b, 0x9e,
+	0x4f, 0x5d, 0xaf, 0x76, 0x60, 0x6e, 0x64, 0xbe, 0xda, 0x58, 0xc9, 0x5e, 0x9f, 0x8a, 0x5d, 0x5b,
+	0x15, 0xeb, 0xaf, 0x59, 0xbe, 0x7b, 0xaf, 0x19, 0xba, 0x53, 0xde, 0x84, 0xf1, 0xd8, 0x14, 0x9e,
+	0x82, 0x91, 0x3d, 0x7a, 0x4f, 0x9c, 0x90, 0xfd, 0xc4, 0x17, 0xe0, 0x3f, 0xfb, 0xc4, 0xec, 0x51,
+	0x7e, 0xb0, 0x6a, 0xe3, 0x44, 0xce, 0xd6, 0x81, 0xa7, 0x66, 0x60, 0xbf, 0x54, 0xb9, 0x88, 0xd4,
+	0x79, 0xc0, 0x6b, 0xd4, 0x4f, 0x32, 0x89, 0xe1, 0x80, 0x45, 0xba, 0x54, 0xec, 0xc2, 0x7f, 0xab,
+	0xd7, 0xe1, 0xf0, 0x86, 0xe1, 0x85, 0xa6, 0x5e, 0x11, 0xeb, 0x47, 0x01, 0x1c, 0xd2, 0xa1, 0x2d,
+	0xdf, 0xde, 0xa3, 0x96, 0x20, 0x7d, 0x94, 0x8d, 0xdc, 0x62, 0x03, 0xea, 0xb7, 0x08, 0xa6, 0x13,
+	0xfe, 0x3c, 0xc7, 0xb6, 0x3c, 0x8a, 0x5f, 0x81, 0x51, 0xc9, 0xac, 0x57, 0x43, 0x9c, 0xce, 0x32,
+	0xe1, 0xe8, 0x2f, 0xc2, 0x67, 0x61, 0x6a, 0x97, 0x18, 0x26, 0x6d, 0xb7, 0x4c, 0x7b, 0x27, 0x10,
+	0x67, 0xad, 0x32, 0x37, 0x32, 0x3f, 0xda, 0x9c, 0x0c, 0xc6, 0x37, 0xe4, 0x30, 0x3e, 0x0d, 0x93,
+	0x16, 0x7d, 0xcf, 0x6f, 0x45, 0xa0, 0x8e, 0x70, 0xa8, 0xe3, 0x6c, 0x78, 0x33, 0x84, 0xfb, 0x10,
+	0xc1, 0x91, 0x4d, 0xe2, 0xfa, 0x06, 0x31, 0x5f, 0x77, 0xda, 0x29, 0xe2, 0x8b, 0x6a, 0x08, 0x3d,
+	0x86, 0x86, 0x96, 0xa1, 0xda, 0xe3, 0x8e, 0x79, 0x32, 0x88, 0x58, 0x2a, 0xd2, 0x85, 0xcc, 0x06,
+	0xed, 0x55, 0x96, 0x2f, 0xd7, 0x89, 0xb7, 0xd7, 0x84, 0xc0, 0x9c, 0xfd, 0x56, 0xcf, 0xc1, 0xf4,
+	0x55, 0x6a, 0xd2, 0x41, 0x54, 0x69, 0x81, 0x7c, 0x80, 0xe0, 0x70, 0x20, 0x42, 0xa9, 0x87, 0xe2,
+	0x48, 0x0a, 0x3d, 0xf6, 0xd3, 0x67, 0x54, 0x8c, 0xac, 0xb7, 0xf1, 0x32, 0xfc, 0x57, 0x7c, 0x88,
+	0xe4, 0x29, 0xa1, 0x40, 0xb9, 0x42, 0x3d, 0x03, 0xff, 0x5b, 0xa3, 0x7e, 0x02, 0x48, 0x1a, 0xea,
+	0x0d, 0xf8, 0x3f, 0x93, 0x8b, 0x4c, 0x86, 0x27, 0x54, 0xdf, 0x37, 0x28, 0x50, 0x73, 0xdf, 0x9d,
+	0x10, 0xdf, 0x4a, 0x24, 0x95, 0x03, 0xed, 0x95, 0x38, 0x4d, 0xb8, 0xe4, 0x69, 0x28, 0xaf, 0x0e,
+	0x87, 0x83, 0xd8, 0x96, 0x20, 0xe9, 0x6f, 0x04, 0x33, 0xf1, 0xfa, 0x72, 0x9d, 0xfa, 0xa4, 0x4d,
+	0x7c, 0x82, 0xef, 0xc2, 0x94, 0xed, 0x1a, 0x1d, 0xc3, 0x22, 0x66, 0xcb, 0x0d, 0x5c, 0x08, 0x9d,
+	0xea, 0x43, 0xd6, 0xaa, 0xe6, 0xa4, 0x74, 0x24, 0xa1, 0xac, 0xc0, 0x98, 0x70, 0xd9, 0x62, 0xd5,
+	0x3a, 0x53, 0xbc, 0xb7, 0x64, 0x29, 0x6f, 0x56, 0x85, 0x3d, 0x1b, 0x61, 0xd2, 0xdf, 0x35, 0x2c,
+	0xc3, 0x7b, 0x2b, 0x58, 0x3d, 0x52, 0xb8, 0x1a, 0x02, 0x73, 0x36, 0xa0, 0xfe, 0x83, 0x60, 0x26,
+	0x9e, 0x91, 0xe1, 0x91, 0x49, 0xe6, 0x91, 0xcf, 0x67, 0x1f, 0x39, 0x2f, 0xc9, 0x9f, 0xad, 0x93,
+	0xff, 0x85, 0xe4, 0x45, 0x28, 0x94, 0x11, 0x1e, 0xfc, 0x4e, 0xe6, 0xc1, 0xb5, 0xa2, 0x58, 0xc7,
+	0x45, 0xf6, 0x6c, 0x1d, 0xf8, 0x0f, 0x04, 0xd3, 0x41, 0x5c, 0x92, 0x07, 0xde, 0xc8, 0x3c, 0x70,
+	0x89, 0xec, 0x7d, 0xa6, 0xce, 0xf8, 0x0b, 0x82, 0xd9, 0x20, 0x12, 0x97, 0x1d, 0x67, 0xd3, 0xb5,
+	0x77, 0x0d, 0xb3, 0xb0, 0xbf, 0x39, 0x05, 0x13, 0xc4, 0x71, 0x5a, 0x4e, 0x60, 0xdd, 0xaf, 0xd1,
+	0x63, 0x24, 0x74, 0xb1, 0xde, 0xc6, 0xd7, 0xa0, 0x1a, 0xb1, 0x12, 0xb0, 0x4e, 0x65, 0xd3, 0x13,
+	0xd9, 0x1f, 0xfa, 0x8e, 0xf0, 0x19, 0x98, 0x34, 0x3a, 0x96, 0xed, 0xd2, 0xd6, 0xbb, 0xc4, 0x65,
+	0x1d, 0x20, 0x6b, 0x79, 0xd0, 0xfc, 0xa1, 0xe6, 0x44, 0x30, 0xfc, 0x86, 0x18, 0x65, 0x75, 0x6b,
+	0x8d, 0xfa, 0x83, 0xa7, 0x48, 0xab, 0x5b, 0x37, 0x60, 0x86, 0x55, 0xe3, 0xbe, 0xf1, 0x93, 0xd6,
+	0xf7, 0x07, 0x08, 0x66, 0x07, 0x3c, 0x8a, 0x12, 0xbf, 0x06, 0x63, 0x11, 0x22, 0x64, 0x99, 0x2f,
+	0xc7, 0x44, 0xb5, 0xcf, 0x44, 0x6a, 0x05, 0xaf, 0xa4, 0x55, 0xf0, 0x9f, 0x11, 0xcc, 0x06, 0xba,
+	0x1d, 0x64, 0x23, 0x11, 0x15, 0xf4, 0x98, 0x51, 0x79, 0x92, 0xee, 0x21, 0x2d, 0xa4, 0x23, 0xa9,
+	0x21, 0xbd, 0x0d, 0xb3, 0xc1, 0x55, 0x54, 0x2a, 0xaa, 0x69, 0x7e, 0x2b, 0xa9, 0x7e, 0x15, 0xa8,
+	0x25, 0xf9, 0x91, 0xa9, 0xdd, 0x78, 0x34, 0x0b, 0xd3, 0x57, 0x04, 0x0d, 0xb2, 0x1c, 0x5f, 0x66,
+	0x6c, 0xe0, 0x4f, 0x11, 0x4c, 0xc4, 0x2f, 0x28, 0x3c, 0xec, 0x55, 0xa6, 0x1c, 0x95, 0x0b, 0x22,
+	0x4f, 0x1a, 0xed, 0x86, 0x7c, 0xd2, 0xa8, 0x0b, 0x1f, 0xfc, 0xfe, 0xe7, 0xe7, 0x95, 0xd3, 0xea,
+	0x09, 0xf6, 0x90, 0x7a, 0x3f, 0x90, 0xde, 0x8a, 0xe3, 0xda, 0x6f, 0xd3, 0x1d, 0xdf, 0xd3, 0xeb,
+	0xf7, 0xc3, 0xc7, 0x95, 0xb7, 0x84, 0xea, 0xf8, 0x01, 0x82, 0x6a, 0xa4, 0x99, 0xc6, 0x0b, 0xd9,
+	0x68, 0x06, 0x7b, 0x6e, 0xa5, 0x44, 0xbb, 0xa8, 0x9e, 0xe5, 0x78, 0x4e, 0xe2, 0x00, 0x0f, 0x23,
+	0x39, 0x82, 0xa6, 0x0f, 0x46, 0xaf, 0xdf, 0xc7, 0x0f, 0x11, 0x8c, 0xc7, 0xfa, 0x6b, 0x9c, 0x53,
+	0xfb, 0xd3, 0x1a, 0x7b, 0x45, 0x2f, 0x6d, 0x1f, 0x24, 0x56, 0x02, 0x5d, 0x1e, 0x5b, 0xf8, 0x23,
+	0x04, 0x13, 0xf1, 0x2b, 0x16, 0x97, 0x38, 0x7f, 0x29, 0x8e, 0x44, 0xcc, 0x94, 0x62, 0x8e, 0x58,
+	0xcc, 0xd8, 0x33, 0x24, 0xf5, 0xca, 0xc7, 0x8f, 0xd9, 0x23, 0x14, 0x49, 0xea, 0x65, 0x0e, 0xef,
+	0x7c, 0xa3, 0xce, 0xe1, 0x85, 0x8f, 0xf3, 0x5c, 0x9c, 0xfd, 0x57, 0xc2, 0x87, 0x08, 0x26, 0xe2,
+	0x9d, 0x7e, 0x9e, 0xe6, 0x53, 0xdf, 0x04, 0xca, 0xcc, 0x40, 0x59, 0xb8, 0xc6, 0x5e, 0xe8, 0x32,
+	0x7c, 0xf5, 0x12, 0xe2, 0xfa, 0x12, 0xc1, 0x78, 0xac, 0x5f, 0xc0, 0x43, 0x36, 0x16, 0x45, 0x2c,
+	0xad, 0x70, 0x2c, 0x17, 0xd4, 0x85, 0x74, 0x29, 0xc5, 0xd0, 0xe8, 0xb2, 0xfb, 0x5e, 0x92, 0xaf,
+	0x0a, 0xfc, 0x19, 0x02, 0xe8, 0x3f, 0x2b, 0xf0, 0xb9, 0xdc, 0x44, 0x4c, 0x20, 0x2b, 0xee, 0x18,
+	0xd4, 0x97, 0x38, 0x3a, 0x0d, 0x2f, 0x14, 0x31, 0x15, 0x42, 0x63, 0xa4, 0x7d, 0x8d, 0x60, 0x2c,
+	0xfa, 0xe6, 0xc0, 0xcf, 0xe7, 0x27, 0x58, 0xe2, 0xa9, 0xa3, 0x68, 0x65, 0xcd, 0x45, 0x3a, 0xc6,
+	0x51, 0x96, 0xe4, 0x90, 0x15, 0xb1, 0xf1, 0x58, 0x93, 0x85, 0x8b, 0x09, 0x29, 0x8a, 0xe6, 0x05,
+	0x8e, 0x64, 0x51, 0x19, 0x8a, 0x2f, 0x96, 0x9d, 0x9f, 0x20, 0x18, 0x8f, 0x3d, 0x7e, 0xf2, 0x74,
+	0x96, 0xf6, 0x4a, 0xca, 0x14, 0xbb, 0x20, 0xa7, 0x3e, 0x5c, 0x08, 0x7f, 0x40, 0x30, 0x95, 0xec,
+	0xce, 0xf0, 0x62, 0x91, 0xf4, 0x07, 0x6e, 0x4b, 0xa5, 0xd4, 0x05, 0xaf, 0x5e, 0xe5, 0x18, 0x2f,
+	0xa9, 0x7a, 0x99, 0x00, 0x46, 0x1a, 0x93, 0xa5, 0x68, 0x4b, 0x81, 0xbf, 0x42, 0x30, 0x1e, 0x6b,
+	0xc4, 0xf2, 0x38, 0x4c, 0xeb, 0xd8, 0x4a, 0xa2, 0x15, 0x41, 0xc6, 0x7a, 0x21, 0xa3, 0x11, 0xa8,
+	0x8c, 0xd4, 0xef, 0x11, 0x4c, 0x26, 0x7a, 0x35, 0xfc, 0x42, 0xbe, 0xd6, 0x07, 0x1b, 0x45, 0x65,
+	0x71, 0x88, 0x15, 0x22, 0x41, 0xe2, 0x88, 0xcb, 0xf3, 0x8b, 0x7f, 0x44, 0x30, 0x95, 0x6c, 0x58,
+	0xf2, 0x64, 0x90, 0xd1, 0xfc, 0x15, 0xa5, 0xcd, 0x26, 0xc7, 0xf7, 0x5a, 0x63, 0x99, 0xe3, 0x8b,
+	0xc4, 0x54, 0x2b, 0xcf, 0x6e, 0x5c, 0x0b, 0x5f, 0x20, 0x98, 0x4a, 0x76, 0x70, 0x79, 0xc0, 0x33,
+	0xba, 0xbd, 0xcc, 0xac, 0x12, 0x8c, 0xd6, 0x87, 0xd6, 0xc0, 0xc7, 0x08, 0xc6, 0x58, 0x4f, 0x44,
+	0xba, 0x9b, 0xfc, 0x0f, 0xce, 0xfd, 0x6e, 0xc0, 0x20, 0x5d, 0x6d, 0x7f, 0x51, 0x8b, 0x4e, 0x4a,
+	0x14, 0xd3, 0x09, 0x9b, 0x60, 0x36, 0xbc, 0x3b, 0x1a, 0x1c, 0x84, 0x4b, 0x3d, 0xbb, 0xe7, 0xee,
+	0x64, 0x5f, 0xae, 0x9d, 0x88, 0x67, 0x56, 0x73, 0x18, 0x94, 0x9b, 0x79, 0x50, 0x6e, 0x3e, 0x35,
+	0x28, 0x5e, 0x02, 0xca, 0x77, 0x08, 0xf0, 0x2d, 0xea, 0xf1, 0x41, 0xea, 0x76, 0x0d, 0xcf, 0xe3,
+	0x7f, 0x39, 0x9a, 0x4f, 0x6c, 0x36, 0x68, 0x22, 0x61, 0x9d, 0x2d, 0x61, 0x29, 0x92, 0x61, 0x95,
+	0x43, 0x5d, 0x51, 0x2f, 0x96, 0x83, 0xea, 0x0f, 0x78, 0x5a, 0x42, 0xf5, 0x2b, 0x3f, 0x21, 0x38,
+	0xb2, 0x63, 0x77, 0x33, 0x05, 0x75, 0x45, 0x49, 0x6d, 0xe5, 0x37, 0x99, 0x8a, 0x36, 0xd1, 0xdd,
+	0x15, 0xb1, 0xae, 0x63, 0x9b, 0xc4, 0xea, 0x68, 0xb6, 0xdb, 0xd1, 0x3b, 0xd4, 0xe2, 0x1a, 0xd3,
+	0x83, 0x29, 0xe2, 0x18, 0xde, 0xe0, 0xff, 0x71, 0x2c, 0xf3, 0x1f, 0x8f, 0x2a, 0xc7, 0xd6, 0x82,
+	0xf5, 0xab, 0xa6, 0xdd, 0x6b, 0x6b, 0x72, 0x2b, 0x8d, 0xef, 0xa1, 0xdd, 0x6e, 0xfc, 0x2a, 0x0d,
+	0xb6, 0xb8, 0xc1, 0x96, 0x34, 0xd8, 0xe2, 0x06, 0x5b, 0xb7, 0x1b, 0xdb, 0x07, 0xf9, 0x5e, 0x2f,
+	0xfe, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x1c, 0xa0, 0x3f, 0x27, 0xbe, 0x19, 0x00, 0x00,
 }

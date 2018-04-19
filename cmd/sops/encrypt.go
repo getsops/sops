@@ -19,6 +19,7 @@ type encryptOpts struct {
 	InputPath         string
 	KeyServices       []keyservice.KeyServiceClient
 	UnencryptedSuffix string
+	EncryptedSuffix   string
 	KeyGroups         []sops.KeyGroup
 	GroupThreshold    int
 }
@@ -42,6 +43,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 		Metadata: sops.Metadata{
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
+			EncryptedSuffix:   opts.EncryptedSuffix,
 			Version:           version,
 			ShamirThreshold:   opts.GroupThreshold,
 		},

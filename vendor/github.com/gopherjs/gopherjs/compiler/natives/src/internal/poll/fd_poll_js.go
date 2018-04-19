@@ -55,3 +55,34 @@ func (*FD) SetWriteDeadline(t time.Time) error { return nil }
 func PollDescriptor() uintptr {
 	return ^uintptr(0)
 }
+
+// Copy of sync.runtime_Semacquire.
+func runtime_Semacquire(s *uint32) {
+	if *s == 0 {
+		ch := make(chan bool)
+		semWaiters[s] = append(semWaiters[s], ch)
+		<-ch
+	}
+	*s--
+}
+
+// Copy of sync.runtime_Semrelease.
+func runtime_Semrelease(s *uint32) {
+	*s++
+
+	w := semWaiters[s]
+	if len(w) == 0 {
+		return
+	}
+
+	ch := w[0]
+	w = w[1:]
+	semWaiters[s] = w
+	if len(w) == 0 {
+		delete(semWaiters, s)
+	}
+
+	ch <- true
+}
+
+var semWaiters = make(map[*uint32][]chan bool)

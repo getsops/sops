@@ -35,12 +35,22 @@
       "output_token": "Marker",
       "limit_key": "MaxRecords"
     },
+    "DescribeReplicationInstanceTaskLogs": {
+      "input_token": "Marker",
+      "output_token": "Marker",
+      "limit_key": "MaxRecords"
+    },
     "DescribeReplicationInstances": {
       "input_token": "Marker",
       "output_token": "Marker",
       "limit_key": "MaxRecords"
     },
     "DescribeReplicationSubnetGroups": {
+      "input_token": "Marker",
+      "output_token": "Marker",
+      "limit_key": "MaxRecords"
+    },
+    "DescribeReplicationTaskAssessmentResults": {
       "input_token": "Marker",
       "output_token": "Marker",
       "limit_key": "MaxRecords"

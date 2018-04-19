@@ -16,47 +16,30 @@ var _ = math.Inf
 
 // Billing related configuration of the service.
 //
-// The following example shows how to configure metrics for billing:
-//
+// The following example shows how to configure monitored resources and metrics
+// for billing:
+//     monitored_resources:
+//     - type: library.googleapis.com/branch
+//       labels:
+//       - key: /city
+//         description: The city where the library branch is located in.
+//       - key: /name
+//         description: The name of the branch.
 //     metrics:
-//     - name: library.googleapis.com/read_calls
-//       metric_kind: DELTA
-//       value_type: INT64
-//     - name: library.googleapis.com/write_calls
+//     - name: library.googleapis.com/book/borrowed_count
 //       metric_kind: DELTA
 //       value_type: INT64
 //     billing:
-//       metrics:
-//       - library.googleapis.com/read_calls
-//       - library.googleapis.com/write_calls
-//
-// The next example shows how to enable billing status check and customize the
-// check behavior. It makes sure billing status check is included in the `Check`
-// method of [Service Control API](https://cloud.google.com/service-control/).
-// In the example, "google.storage.Get" method can be served when the billing
-// status is either `current` or `delinquent`, while "google.storage.Write"
-// method can only be served when the billing status is `current`:
-//
-//     billing:
-//       rules:
-//       - selector: google.storage.Get
-//         allowed_statuses:
-//         - current
-//         - delinquent
-//       - selector: google.storage.Write
-//         allowed_statuses: current
-//
-// Mostly services should only allow `current` status when serving requests.
-// In addition, services can choose to allow both `current` and `delinquent`
-// statuses when serving read-only requests to resources. If there's no
-// matching selector for operation, no billing status check will be performed.
-//
+//       consumer_destinations:
+//       - monitored_resource: library.googleapis.com/branch
+//         metrics:
+//         - library.googleapis.com/book/borrowed_count
 type Billing struct {
-	// Names of the metrics to report to billing. Each name must
-	// be defined in [Service.metrics][google.api.Service.metrics] section.
-	Metrics []string `protobuf:"bytes,1,rep,name=metrics" json:"metrics,omitempty"`
-	// A list of billing status rules for configuring billing status check.
-	Rules []*BillingStatusRule `protobuf:"bytes,5,rep,name=rules" json:"rules,omitempty"`
+	// Billing configurations for sending metrics to the consumer project.
+	// There can be multiple consumer destinations per service, each one must have
+	// a different monitored resource type. A metric can be used in at most
+	// one consumer destination.
+	ConsumerDestinations []*Billing_BillingDestination `protobuf:"bytes,8,rep,name=consumer_destinations,json=consumerDestinations" json:"consumer_destinations,omitempty"`
 }
 
 func (m *Billing) Reset()                    { *m = Billing{} }
@@ -64,87 +47,67 @@ func (m *Billing) String() string            { return proto.CompactTextString(m)
 func (*Billing) ProtoMessage()               {}
 func (*Billing) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
 
-func (m *Billing) GetMetrics() []string {
+func (m *Billing) GetConsumerDestinations() []*Billing_BillingDestination {
+	if m != nil {
+		return m.ConsumerDestinations
+	}
+	return nil
+}
+
+// Configuration of a specific billing destination (Currently only support
+// bill against consumer project).
+type Billing_BillingDestination struct {
+	// The monitored resource type. The type must be defined in
+	// [Service.monitored_resources][google.api.Service.monitored_resources] section.
+	MonitoredResource string `protobuf:"bytes,1,opt,name=monitored_resource,json=monitoredResource" json:"monitored_resource,omitempty"`
+	// Names of the metrics to report to this billing destination.
+	// Each name must be defined in [Service.metrics][google.api.Service.metrics] section.
+	Metrics []string `protobuf:"bytes,2,rep,name=metrics" json:"metrics,omitempty"`
+}
+
+func (m *Billing_BillingDestination) Reset()                    { *m = Billing_BillingDestination{} }
+func (m *Billing_BillingDestination) String() string            { return proto.CompactTextString(m) }
+func (*Billing_BillingDestination) ProtoMessage()               {}
+func (*Billing_BillingDestination) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0, 0} }
+
+func (m *Billing_BillingDestination) GetMonitoredResource() string {
+	if m != nil {
+		return m.MonitoredResource
+	}
+	return ""
+}
+
+func (m *Billing_BillingDestination) GetMetrics() []string {
 	if m != nil {
 		return m.Metrics
 	}
 	return nil
 }
 
-func (m *Billing) GetRules() []*BillingStatusRule {
-	if m != nil {
-		return m.Rules
-	}
-	return nil
-}
-
-// Defines the billing status requirements for operations.
-//
-// When used with
-// [Service Control API](https://cloud.google.com/service-control/), the
-// following statuses are supported:
-//
-// - **current**: the associated billing account is up to date and capable of
-//                paying for resource usages.
-// - **delinquent**: the associated billing account has a correctable problem,
-//                   such as late payment.
-//
-// Mostly services should only allow `current` status when serving requests.
-// In addition, services can choose to allow both `current` and `delinquent`
-// statuses when serving read-only requests to resources. If the list of
-// allowed_statuses is empty, it means no billing requirement.
-//
-type BillingStatusRule struct {
-	// Selects the operation names to which this rule applies.
-	// Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
-	Selector string `protobuf:"bytes,1,opt,name=selector" json:"selector,omitempty"`
-	// Allowed billing statuses. The billing status check passes if the actual
-	// billing status matches any of the provided values here.
-	AllowedStatuses []string `protobuf:"bytes,2,rep,name=allowed_statuses,json=allowedStatuses" json:"allowed_statuses,omitempty"`
-}
-
-func (m *BillingStatusRule) Reset()                    { *m = BillingStatusRule{} }
-func (m *BillingStatusRule) String() string            { return proto.CompactTextString(m) }
-func (*BillingStatusRule) ProtoMessage()               {}
-func (*BillingStatusRule) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
-
-func (m *BillingStatusRule) GetSelector() string {
-	if m != nil {
-		return m.Selector
-	}
-	return ""
-}
-
-func (m *BillingStatusRule) GetAllowedStatuses() []string {
-	if m != nil {
-		return m.AllowedStatuses
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*Billing)(nil), "google.api.Billing")
-	proto.RegisterType((*BillingStatusRule)(nil), "google.api.BillingStatusRule")
+	proto.RegisterType((*Billing_BillingDestination)(nil), "google.api.Billing.BillingDestination")
 }
 
 func init() { proto.RegisterFile("google/api/billing.proto", fileDescriptor2) }
 
 var fileDescriptor2 = []byte{
-	// 253 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x90, 0x4f, 0x4b, 0x03, 0x31,
-	0x10, 0xc5, 0x59, 0x4b, 0xad, 0x8d, 0xe2, 0x9f, 0xbd, 0x18, 0x16, 0x85, 0xa5, 0xa7, 0xf5, 0x92,
-	0x05, 0x7b, 0xf4, 0xb6, 0xe0, 0xbd, 0x6c, 0x2f, 0xd2, 0x8b, 0xa4, 0x71, 0x0c, 0x81, 0x34, 0xb3,
-	0x64, 0xb2, 0xfa, 0xf5, 0xc5, 0x24, 0xea, 0x4a, 0x8f, 0x6f, 0x7e, 0xef, 0x65, 0xe6, 0x85, 0x71,
-	0x8d, 0xa8, 0x2d, 0xb4, 0x72, 0x30, 0xed, 0xde, 0x58, 0x6b, 0x9c, 0x16, 0x83, 0xc7, 0x80, 0x25,
-	0x4b, 0x44, 0xc8, 0xc1, 0x54, 0x77, 0x13, 0x97, 0x74, 0x0e, 0x83, 0x0c, 0x06, 0x1d, 0x25, 0x67,
-	0x75, 0x3b, 0xa1, 0x07, 0x08, 0xde, 0xa8, 0x04, 0x56, 0x2f, 0x6c, 0xd1, 0xa5, 0x37, 0x4b, 0xce,
-	0x16, 0x09, 0x11, 0x2f, 0xea, 0x59, 0xb3, 0xec, 0x7f, 0x64, 0xb9, 0x66, 0x73, 0x3f, 0x5a, 0x20,
-	0x3e, 0xaf, 0x67, 0xcd, 0xf9, 0xe3, 0xbd, 0xf8, 0xdb, 0x2b, 0x72, 0x7a, 0x1b, 0x64, 0x18, 0xa9,
-	0x1f, 0x2d, 0xf4, 0xc9, 0xbb, 0xda, 0xb1, 0x9b, 0x23, 0x56, 0x56, 0xec, 0x8c, 0xc0, 0x82, 0x0a,
-	0xe8, 0x79, 0x51, 0x17, 0xcd, 0xb2, 0xff, 0xd5, 0xe5, 0x03, 0xbb, 0x96, 0xd6, 0xe2, 0x27, 0xbc,
-	0xbd, 0x52, 0x4c, 0x00, 0xf1, 0x93, 0x78, 0xc8, 0x55, 0x9e, 0x6f, 0xf3, 0xb8, 0xd3, 0xec, 0x52,
-	0xe1, 0x61, 0x72, 0x46, 0x77, 0x91, 0x77, 0x6d, 0xbe, 0x5b, 0x6d, 0x8a, 0xdd, 0x73, 0x66, 0x1a,
-	0xad, 0x74, 0x5a, 0xa0, 0xd7, 0xad, 0x06, 0x17, 0x3b, 0xb7, 0x09, 0xc9, 0xc1, 0x50, 0xfc, 0x0f,
-	0x02, 0xff, 0x61, 0x14, 0x28, 0x74, 0xef, 0x46, 0x3f, 0xfd, 0x53, 0xfb, 0xd3, 0x98, 0x58, 0x7f,
-	0x05, 0x00, 0x00, 0xff, 0xff, 0xd1, 0x90, 0x2d, 0x32, 0x84, 0x01, 0x00, 0x00,
+	// 265 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x90, 0xc1, 0x4a, 0xc4, 0x30,
+	0x10, 0x86, 0xe9, 0xae, 0xb8, 0x6e, 0x14, 0xc1, 0xa0, 0x58, 0x8a, 0x87, 0xe2, 0x41, 0x7a, 0xb1,
+	0x05, 0x3d, 0x7a, 0xb2, 0x28, 0xe2, 0xad, 0xf4, 0xa8, 0xc8, 0x92, 0xcd, 0x8e, 0x61, 0xa0, 0x9d,
+	0x29, 0x49, 0xd6, 0x07, 0xf2, 0x5d, 0x7c, 0x2f, 0xb1, 0x69, 0xdd, 0x8a, 0xa7, 0x30, 0xf9, 0xfe,
+	0xf9, 0x67, 0xe6, 0x17, 0xb1, 0x61, 0x36, 0x0d, 0x14, 0xaa, 0xc3, 0x62, 0x8d, 0x4d, 0x83, 0x64,
+	0xf2, 0xce, 0xb2, 0x67, 0x29, 0x02, 0xc9, 0x55, 0x87, 0xc9, 0xc5, 0x44, 0xa5, 0x88, 0xd8, 0x2b,
+	0x8f, 0x4c, 0x2e, 0x28, 0x93, 0xf3, 0x09, 0x6d, 0xc1, 0x5b, 0xd4, 0x01, 0x5c, 0x7e, 0x45, 0x62,
+	0x51, 0x06, 0x53, 0xf9, 0x2a, 0xce, 0x34, 0x93, 0xdb, 0xb6, 0x60, 0x57, 0x1b, 0x70, 0x1e, 0x29,
+	0x78, 0xc4, 0x07, 0xe9, 0x3c, 0x3b, 0xbc, 0xb9, 0xca, 0x77, 0xe3, 0xf2, 0xa1, 0x67, 0x7c, 0x1f,
+	0x76, 0xf2, 0xfa, 0x74, 0x34, 0x99, 0x7c, 0xba, 0xe4, 0x4d, 0xc8, 0xff, 0x5a, 0x79, 0x2d, 0x64,
+	0xcb, 0x84, 0x9e, 0x2d, 0x6c, 0x56, 0x16, 0x1c, 0x6f, 0xad, 0x86, 0x38, 0x4a, 0xa3, 0x6c, 0x59,
+	0x9f, 0xfc, 0x92, 0x7a, 0x00, 0x32, 0x16, 0x8b, 0xb0, 0xbd, 0x8b, 0x67, 0xe9, 0x3c, 0x5b, 0xd6,
+	0x63, 0x59, 0x92, 0x38, 0xd6, 0xdc, 0x4e, 0x36, 0x2c, 0x8f, 0x86, 0x71, 0xd5, 0xcf, 0x9d, 0x55,
+	0xf4, 0xf2, 0x38, 0x30, 0xc3, 0x8d, 0x22, 0x93, 0xb3, 0x35, 0x85, 0x01, 0xea, 0x53, 0x28, 0x02,
+	0x52, 0x1d, 0xba, 0x3e, 0x21, 0x07, 0xf6, 0x03, 0x35, 0x68, 0xa6, 0x77, 0x34, 0x77, 0x7f, 0xaa,
+	0xcf, 0xd9, 0xde, 0xd3, 0x7d, 0xf5, 0xbc, 0xde, 0xef, 0x1b, 0x6f, 0xbf, 0x03, 0x00, 0x00, 0xff,
+	0xff, 0xca, 0x8b, 0xb4, 0x63, 0x9d, 0x01, 0x00, 0x00,
 }

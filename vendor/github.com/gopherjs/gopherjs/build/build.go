@@ -41,9 +41,12 @@ func NewBuildContext(installSuffix string, buildTags []string) *build.Context {
 		GOARCH:        "js",
 		InstallSuffix: installSuffix,
 		Compiler:      "gc",
-		BuildTags:     append(buildTags, "netgo"),
-		ReleaseTags:   build.Default.ReleaseTags,
-		CgoEnabled:    true, // detect `import "C"` to throw proper error
+		BuildTags: append(buildTags,
+			"netgo",  // See https://godoc.org/net#hdr-Name_Resolution.
+			"purego", // See https://golang.org/issues/23172.
+		),
+		ReleaseTags: build.Default.ReleaseTags,
+		CgoEnabled:  true, // detect `import "C"` to throw proper error
 	}
 }
 
@@ -112,6 +115,7 @@ func importWithSrcDir(path string, srcDir string, mode build.ImportMode, install
 		pkg.GoFiles = exclude(pkg.GoFiles, "fd_poll_runtime.go")
 	case "crypto/rand":
 		pkg.GoFiles = []string{"rand.go", "util.go"}
+		pkg.TestGoFiles = exclude(pkg.TestGoFiles, "rand_linux_test.go") // Don't want linux-specific tests (since linux-specific package files are excluded too).
 	}
 
 	if len(pkg.CgoFiles) > 0 {
