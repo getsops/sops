@@ -109,7 +109,7 @@ func (p *PostgresAuditor) Handle(event interface{}) {
 		// Save the event to the database
 		log.WithField("file", event.File).
 			Debug("Saving decrypt event to database")
-		_, err = p.DB.Exec("INSERT INTO decrypt_event (username, file) VALUES ($1, $2)", u.Username, event.File)
+		_, err = p.DB.Exec("INSERT INTO audit_event (action, username, file) VALUES ($1, $2, $3)", "decrypt", u.Username, event.File)
 		if err != nil {
 			log.Fatalf("Failed to insert audit record: %s", err)
 		}
@@ -117,7 +117,7 @@ func (p *PostgresAuditor) Handle(event interface{}) {
 		// Save the event to the database
 		log.WithField("file", event.File).
 			Debug("Saving encrypt event to database")
-		_, err = p.DB.Exec("INSERT INTO encrypt_event (username, file) VALUES ($1, $2)", u.Username, event.File)
+		_, err = p.DB.Exec("INSERT INTO audit_event (action, username, file) VALUES ($1, $2, $3)", "encrypt", u.Username, event.File)
 		if err != nil {
 			log.Fatalf("Failed to insert audit record: %s", err)
 		}
@@ -125,7 +125,7 @@ func (p *PostgresAuditor) Handle(event interface{}) {
 		// Save the event to the database
 		log.WithField("file", event.File).
 			Debug("Saving rotate event to database")
-		_, err = p.DB.Exec("INSERT INTO rotate_event (username, file) VALUES ($1, $2)", u.Username, event.File)
+		_, err = p.DB.Exec("INSERT INTO audit_event (action, username, file) VALUES ($1, $2, $3)", "rotate", u.Username, event.File)
 		if err != nil {
 			log.Fatalf("Failed to insert audit record: %s", err)
 		}
