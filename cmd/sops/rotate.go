@@ -65,7 +65,7 @@ func rotate(opts rotateOpts) ([]byte, error) {
 		return nil, err
 	}
 
-	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	encryptedFile, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}

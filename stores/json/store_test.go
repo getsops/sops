@@ -247,13 +247,15 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 		2
 	]
 }`
-	out, err := Store{}.Marshal(branch)
+	store := Store{}
+	out, err := store.EmitPlainFile(branch)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(out))
 }
 
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`{"hello": 2}`)
-	_, err := Store{}.UnmarshalMetadata(data)
+	store := Store{}
+	_, err := store.LoadEncryptedFile(data)
 	assert.Equal(t, sops.MetadataNotFound, err)
 }

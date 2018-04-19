@@ -9,6 +9,6 @@ import (
 
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`hello: 2`)
-	_, err := (&Store{}).UnmarshalMetadata(data)
+	_, err := (&Store{}).LoadEncryptedFile(data)
 	assert.Equal(t, sops.MetadataNotFound, err)
 }

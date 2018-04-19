@@ -44,7 +44,7 @@ func Delete(opts DeleteOpts) error {
 	}
 
 	tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
-	output, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	output, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
 		return err
 	}

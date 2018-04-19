@@ -99,7 +99,7 @@ func updateFile(opts Opts) error {
 	if len(errs) > 0 {
 		return fmt.Errorf("error updating one or more master keys: %s", errs)
 	}
-	output, err := store.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	output, err := store.EmitEncryptedFile(*tree)
 	if err != nil {
 		return fmt.Errorf("error marshaling tree: %s", err)
 	}

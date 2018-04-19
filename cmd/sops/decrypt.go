@@ -38,7 +38,7 @@ func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	if len(opts.Extract) > 0 {
 		return extract(tree, opts.Extract, opts.OutputStore)
 	}
-	decryptedFile, err = opts.OutputStore.Marshal(tree.Branch)
+	decryptedFile, err = opts.OutputStore.EmitPlainFile(tree.Branch)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 	}
@@ -52,7 +52,7 @@ func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 	}
 	if newBranch, ok := v.(sops.TreeBranch); ok {
 		tree.Branch = newBranch
-		decrypted, err := outputStore.Marshal(tree.Branch)
+		decrypted, err := outputStore.EmitPlainFile(tree.Branch)
 		if err != nil {
 			return nil, common.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 		}
@@ -60,7 +60,7 @@ func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 	} else if str, ok := v.(string); ok {
 		return []byte(str), nil
 	}
-	bytes, err := outputStore.MarshalValue(v)
+	bytes, err := outputStore.EmitValue(v)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), codes.ErrorDumpingTree)
 	}
