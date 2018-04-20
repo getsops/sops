@@ -44,9 +44,8 @@ func (err *fileAlreadyEncryptedError) UserError() string {
 }
 
 func ensureNoMetadata(opts encryptOpts, bytes []byte) error {
-	_, err := opts.InputStore.UnmarshalMetadata(bytes)
-	if err != nil {
-		// OK, no metadata found
+	_, err := opts.InputStore.LoadEncryptedFile(bytes)
+	if err == sops.MetadataNotFound {
 		return nil
 	}
 	return &fileAlreadyEncryptedError{}
@@ -61,7 +60,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err := ensureNoMetadata(opts, fileBytes); err != nil {
 		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
 	}
-	branch, err := opts.InputStore.Unmarshal(fileBytes)
+	branch, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
@@ -95,7 +94,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 		return nil, err
 	}
 
-	encryptedFile, err = opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	encryptedFile, err = opts.OutputStore.EmitEncryptedFile(tree)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
