@@ -247,13 +247,25 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 		2
 	]
 }`
-	out, err := Store{}.Marshal(branch)
+	store := Store{}
+	out, err := store.EmitPlainFile(branch)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(out))
 }
 
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`{"hello": 2}`)
-	_, err := Store{}.UnmarshalMetadata(data)
+	store := Store{}
+	_, err := store.LoadEncryptedFile(data)
 	assert.Equal(t, sops.MetadataNotFound, err)
+}
+
+func TestLoadJSONFormattedBinaryFile(t *testing.T) {
+	// This is JSON data, but we want SOPS to interpret it as binary,
+	// e.g. because the --input-type binary flag was provided.
+	data := []byte(`{"hello": 2}`)
+	store := BinaryStore{}
+	branch, err := store.LoadPlainFile(data)
+	assert.Nil(t, err)
+	assert.Equal(t, "data", branch[0].Key)
 }

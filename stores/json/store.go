@@ -19,9 +19,25 @@ type BinaryStore struct {
 	store Store
 }
 
-// Marshal takes a sops tree branch and returns a json formatted string
-func (store BinaryStore) Marshal(tree sops.TreeBranch) ([]byte, error) {
-	for _, item := range tree {
+func (store BinaryStore) LoadEncryptedFile(in []byte) (sops.Tree, error) {
+	return store.store.LoadEncryptedFile(in)
+}
+
+func (store BinaryStore) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
+	return sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "data",
+			Value: string(in),
+		},
+	}, nil
+}
+
+func (store BinaryStore) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
+	return store.store.EmitEncryptedFile(in)
+}
+
+func (store BinaryStore) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
+	for _, item := range in {
 		if item.Key == "data" {
 			return []byte(item.Value.(string)), nil
 		}
@@ -29,33 +45,8 @@ func (store BinaryStore) Marshal(tree sops.TreeBranch) ([]byte, error) {
 	return nil, fmt.Errorf("No binary data found in tree")
 }
 
-// MarshalWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
-func (store BinaryStore) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
-	return store.store.MarshalWithMetadata(tree, metadata)
-}
-
-// MarshalValue is unusable for BinaryStore
-func (store BinaryStore) MarshalValue(v interface{}) ([]byte, error) {
+func (store BinaryStore) EmitValue(v interface{}) ([]byte, error) {
 	return nil, fmt.Errorf("Binary files are not structured and extracting a single value is not possible")
-}
-
-// Unmarshal takes an input byte slice and returns a sops tree branch
-func (store BinaryStore) Unmarshal(in []byte) (sops.TreeBranch, error) {
-	branch, err := store.store.Unmarshal(in)
-	if err != nil {
-		return sops.TreeBranch{
-			sops.TreeItem{
-				Key:   "data",
-				Value: string(in),
-			},
-		}, nil
-	}
-	return branch, nil
-}
-
-// UnmarshalMetadata takes a binary format sops file and extracts sops' metadata from it
-func (store BinaryStore) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
-	return store.store.UnmarshalMetadata(in)
 }
 
 func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error) {
@@ -205,56 +196,16 @@ func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	return out.Bytes(), err
 }
 
-// Unmarshal takes an input json string and returns a sops tree branch
-func (store Store) Unmarshal(in []byte) (sops.TreeBranch, error) {
-	branch, err := store.treeBranchFromJSON(in)
-	if err != nil {
-		return branch, fmt.Errorf("Could not unmarshal input data: %s", err)
-	}
-	for i, item := range branch {
-		if item.Key == "sops" {
-			branch = append(branch[:i], branch[i+1:]...)
-		}
-	}
-	return branch, nil
-}
-
-// Marshal takes a sops tree branch and returns a json formatted string
-func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
-	out, err := store.jsonFromTreeBranch(tree)
-	if err != nil {
-		return nil, fmt.Errorf("Error marshaling to json: %s", err)
-	}
-	return out, nil
-}
-
-// MarshalWithMetadata takes a sops tree branch and sops metadata and marshals them to json.
-func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
-	tree = append(tree, sops.TreeItem{Key: "sops", Value: stores.MetadataFromInternal(metadata)})
-	out, err := store.jsonFromTreeBranch(tree)
-	if err != nil {
-		return nil, fmt.Errorf("Error marshaling to json: %s", err)
-	}
-	return out, nil
-}
-
-// MarshalValue takes any value and returns a json formatted string
-func (store Store) MarshalValue(v interface{}) ([]byte, error) {
-	s, err := store.encodeValue(v)
-	if err != nil {
-		return nil, err
-	}
-	return store.reindentJSON(s)
-}
-
-// UnmarshalMetadata takes a json string and extracts sops' metadata from it
-func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
-	file := stores.SopsFile{}
-	err := json.Unmarshal(in, &file)
+func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
+	// Because we don't know what fields the input file will have, we have to
+	// load the file in two steps.
+	// First, we load the file's metadata, the structure of which is known.
+	metadataHolder := stores.SopsFile{}
+	err := json.Unmarshal(in, &metadataHolder)
 	if err != nil {
 		if err, ok := err.(*json.UnmarshalTypeError); ok {
 			if err.Value == "number" && err.Struct == "Metadata" && err.Field == "version" {
-				return sops.Metadata{},
+				return sops.Tree{},
 					fmt.Errorf("SOPS versions higher than 2.0.10 can not automatically decrypt JSON files " +
 						"created with SOPS 1.x. In order to be able to decrypt this file, you can either edit it " +
 						"manually and make sure the JSON value under `sops -> version` is a string and not a " +
@@ -262,10 +213,61 @@ func (store Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
 						"using `sops -r your_file.json`")
 			}
 		}
-		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input json: %s", err)
+		return sops.Tree{}, fmt.Errorf("Error unmarshalling input json: %s", err)
 	}
-	if file.Metadata == nil {
-		return sops.Metadata{}, sops.MetadataNotFound
+	if metadataHolder.Metadata == nil {
+		return sops.Tree{}, sops.MetadataNotFound
 	}
-	return file.Metadata.ToInternal()
+	metadata, err := metadataHolder.Metadata.ToInternal()
+	if err != nil {
+		return sops.Tree{}, err
+	}
+	// After that, we load the whole file into a map.
+	branch, err := store.treeBranchFromJSON(in)
+	if err != nil {
+		return sops.Tree{}, fmt.Errorf("Could not unmarshal input data: %s", err)
+	}
+	// Discard metadata, as we already loaded it.
+	for i, item := range branch {
+		if item.Key == "sops" {
+			branch = append(branch[:i], branch[i+1:]...)
+		}
+	}
+	return sops.Tree{
+		Branch:   branch,
+		Metadata: metadata,
+	}, nil
+}
+
+func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
+	branch, err := store.treeBranchFromJSON(in)
+	if err != nil {
+		return branch, fmt.Errorf("Could not unmarshal input data: %s", err)
+	}
+	return branch, nil
+}
+
+func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
+	tree := append(in.Branch, sops.TreeItem{Key: "sops", Value: stores.MetadataFromInternal(in.Metadata)})
+	out, err := store.jsonFromTreeBranch(tree)
+	if err != nil {
+		return nil, fmt.Errorf("Error marshaling to json: %s", err)
+	}
+	return out, nil
+}
+
+func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
+	out, err := store.jsonFromTreeBranch(in)
+	if err != nil {
+		return nil, fmt.Errorf("Error marshaling to json: %s", err)
+	}
+	return out, nil
+}
+
+func (store *Store) EmitValue(v interface{}) ([]byte, error) {
+	s, err := store.encodeValue(v)
+	if err != nil {
+		return nil, err
+	}
+	return store.reindentJSON(s)
 }

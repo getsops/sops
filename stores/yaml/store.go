@@ -33,20 +33,6 @@ func (store Store) mapSliceToTreeBranch(in yaml.MapSlice) sops.TreeBranch {
 	return branch
 }
 
-// Unmarshal takes a YAML document as input and unmarshals it into a sops tree, returning the tree
-func (store Store) Unmarshal(in []byte) (sops.TreeBranch, error) {
-	var data yaml.MapSlice
-	if err := (yaml.CommentUnmarshaler{}).Unmarshal(in, &data); err != nil {
-		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
-	}
-	for i, item := range data {
-		if item.Key == "sops" {
-			data = append(data[:i], data[i+1:]...)
-		}
-	}
-	return store.mapSliceToTreeBranch(data), nil
-}
-
 func (store Store) yamlValueToTreeValue(in interface{}) interface{} {
 	switch in := in.(type) {
 	case map[interface{}]interface{}:
@@ -115,9 +101,50 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
-// Marshal takes a sops tree branch and marshals it into a yaml document
-func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
-	yamlMap := store.treeBranchToYamlMap(tree)
+func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
+	// Because we don't know what fields the input file will have, we have to
+	// load the file in two steps.
+	// First, we load the file's metadata, the structure of which is known.
+	metadataHolder := stores.SopsFile{}
+	err := yaml.Unmarshal(in, &metadataHolder)
+	if err != nil {
+		return sops.Tree{}, fmt.Errorf("Error unmarshalling input yaml: %s", err)
+	}
+	if metadataHolder.Metadata == nil {
+		return sops.Tree{}, sops.MetadataNotFound
+	}
+	metadata, err := metadataHolder.Metadata.ToInternal()
+	if err != nil {
+		return sops.Tree{}, err
+	}
+	// After that, we load the whole file into a map.
+	var data yaml.MapSlice
+	if err := (yaml.CommentUnmarshaler{}).Unmarshal(in, &data); err != nil {
+		return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
+	}
+	// Discard metadata, as we already loaded it.
+	for i, item := range data {
+		if item.Key == "sops" {
+			data = append(data[:i], data[i+1:]...)
+		}
+	}
+	return sops.Tree{
+		Branch:   store.mapSliceToTreeBranch(data),
+		Metadata: metadata,
+	}, nil
+}
+
+func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranch, error) {
+	var data yaml.MapSlice
+	if err := (yaml.CommentUnmarshaler{}).Unmarshal(in, &data); err != nil {
+		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
+	}
+	return store.mapSliceToTreeBranch(data), nil
+}
+
+func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
+	yamlMap := store.treeBranchToYamlMap(in.Branch)
+	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: stores.MetadataFromInternal(in.Metadata)})
 	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
@@ -125,10 +152,8 @@ func (store Store) Marshal(tree sops.TreeBranch) ([]byte, error) {
 	return out, nil
 }
 
-// MarshalWithMetadata takes a sops tree branch and metadata and marshals them into a yaml document
-func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metadata) ([]byte, error) {
-	yamlMap := store.treeBranchToYamlMap(tree)
-	yamlMap = append(yamlMap, yaml.MapItem{Key: "sops", Value: stores.MetadataFromInternal(metadata)})
+func (store *Store) EmitPlainFile(in sops.TreeBranch) ([]byte, error) {
+	yamlMap := store.treeBranchToYamlMap(in)
 	out, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
@@ -136,21 +161,7 @@ func (store Store) MarshalWithMetadata(tree sops.TreeBranch, metadata sops.Metad
 	return out, nil
 }
 
-// MarshalValue takes any value and marshals it into a yaml document
-func (store Store) MarshalValue(v interface{}) ([]byte, error) {
+func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 	v = store.treeValueToYamlValue(v)
 	return (&yaml.YAMLMarshaler{Indent: 4}).Marshal(v)
-}
-
-// UnmarshalMetadata takes a yaml document as a string and extracts sops' metadata from it
-func (store *Store) UnmarshalMetadata(in []byte) (sops.Metadata, error) {
-	file := stores.SopsFile{}
-	err := yaml.Unmarshal(in, &file)
-	if err != nil {
-		return sops.Metadata{}, fmt.Errorf("Error unmarshalling input yaml: %s", err)
-	}
-	if file.Metadata == nil {
-		return sops.Metadata{}, sops.MetadataNotFound
-	}
-	return file.Metadata.ToInternal()
 }

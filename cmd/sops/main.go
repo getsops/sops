@@ -753,7 +753,7 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 	kind := reflect.ValueOf(valueToInsert).Kind()
 	if kind == reflect.Map || kind == reflect.Slice {
 		var err error
-		valueToInsert, err = (&json.Store{}).Unmarshal([]byte(jsonValue))
+		valueToInsert, err = (&json.Store{}).LoadPlainFile([]byte(jsonValue))
 		if err != nil {
 			return nil, common.NewExitError("Invalid --set value format", codes.ErrorInvalidSetFormat)
 		}
