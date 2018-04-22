@@ -20,6 +20,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/aes"
+	_ "go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"

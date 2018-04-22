@@ -46,6 +46,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/logging"
@@ -179,6 +180,8 @@ func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 type Tree struct {
 	Branch   TreeBranch
 	Metadata Metadata
+	// FilePath is the path of the file this struct represents
+	FilePath string
 }
 
 // Truncate truncates the tree to the path specified
@@ -284,6 +287,9 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 // Encrypt walks over the tree and encrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct, or those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not).
 // If encryption is successful, it returns the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
+	audit.SubmitEvent(audit.EncryptEvent{
+		File: tree.FilePath,
+	})
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		// Only add to MAC if not a comment
@@ -332,6 +338,9 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 // If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
+	audit.SubmitEvent(audit.DecryptEvent{
+		File: tree.FilePath,
+	})
 	hash := sha512.New()
 	_, err := tree.Branch.walkBranch(tree.Branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 		encrypted := true

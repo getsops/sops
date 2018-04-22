@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"path/filepath"
 
 	"fmt"
 
@@ -59,18 +60,24 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err := ensureNoMetadata(opts, fileBytes); err != nil {
 		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
 	}
-	var tree sops.Tree
 	branch, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
-	tree.Branch = branch
-	tree.Metadata = sops.Metadata{
-		KeyGroups:         opts.KeyGroups,
-		UnencryptedSuffix: opts.UnencryptedSuffix,
-		EncryptedSuffix:   opts.EncryptedSuffix,
-		Version:           version,
-		ShamirThreshold:   opts.GroupThreshold,
+	path, err := filepath.Abs(opts.InputPath)
+	if err != nil {
+		return nil, err
+	}
+	tree := sops.Tree{
+		Branch: branch,
+		Metadata: sops.Metadata{
+			KeyGroups:         opts.KeyGroups,
+			UnencryptedSuffix: opts.UnencryptedSuffix,
+			EncryptedSuffix:   opts.EncryptedSuffix,
+			Version:           version,
+			ShamirThreshold:   opts.GroupThreshold,
+		},
+		FilePath: path,
 	}
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {

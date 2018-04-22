@@ -2,11 +2,10 @@ package common
 
 import (
 	"fmt"
-	"time"
-
 	"io/ioutil"
-
+	"path/filepath"
 	"strings"
+	"time"
 
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
@@ -81,7 +80,12 @@ func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops
 	if err != nil {
 		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
+	path, err := filepath.Abs(inputPath)
+	if err != nil {
+		return nil, err
+	}
 	tree, err := loader.LoadEncryptedFile(fileBytes)
+	tree.FilePath = path
 	return &tree, err
 }
 
