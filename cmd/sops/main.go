@@ -124,11 +124,16 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				return keyservicecmd.Run(keyservicecmd.Opts{
+				err := keyservicecmd.Run(keyservicecmd.Opts{
 					Network: c.String("network"),
 					Address: c.String("address"),
 					Prompt:  c.Bool("prompt"),
 				})
+				if err != nil {
+					log.Errorf("Error running keyservice: %s", err)
+					return err
+				}
+				return nil
 			},
 		},
 		{
