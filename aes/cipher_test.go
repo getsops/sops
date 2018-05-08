@@ -5,6 +5,9 @@ import (
 	"strings"
 	"testing"
 	"testing/quick"
+
+	"github.com/stretchr/testify/assert"
+	"go.mozilla.org/sops"
 )
 
 func TestDecrypt(t *testing.T) {
@@ -103,4 +106,18 @@ func TestRoundtripBool(t *testing.T) {
 	if err := quick.Check(f, nil); err != nil {
 		t.Error(err)
 	}
+}
+
+func TestEncryptEmptyComment(t *testing.T) {
+	key := []byte(strings.Repeat("f", 32))
+	s, err := NewCipher().Encrypt(sops.Comment{}, key, "")
+	assert.Nil(t, err)
+	assert.Equal(t, "", s)
+}
+
+func TestDecryptEmptyValue(t *testing.T) {
+	key := []byte(strings.Repeat("f", 32))
+	s, err := NewCipher().Decrypt("", key, "")
+	assert.Nil(t, err)
+	assert.Equal(t, "", s)
 }
