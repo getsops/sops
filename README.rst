@@ -602,6 +602,53 @@ in `/tmp/sops.sock` and not the local key service, you can run:
 
 `sops --enable-local-keyservice=false --keyservice unix:///tmp/sops.sock -d file.yaml`
 
+Auditing
+~~~~~~~~
+
+Sometimes, users want to be able to tell what files were accessed by whom in an
+environment they control. For this reason, SOPS can generate audit logs to
+record activity on encrypted files. When enabled, SOPS will write a log entry
+into a pre-configured PostgreSQL database when a file is decrypted. The log
+includes a timestamp, the username SOPS is running as, and the file that was
+decrypted.
+
+In order to enable auditing, you must first create the database and credentials
+using the schema found in :code:`audit/schema.sql`. This schema defines the
+tables that store the audit events and a role named :code:`sops` that only has
+permission to add entries to the audit event tables. The default password for
+the role :code:`sops` is :code:`sops`. You should change this password.
+
+Once you have created the database, you have to tell SOPS how to connect to it.
+Because we don't want users of SOPS to be able to control auditing, the audit
+configuration file location is not configurable, and must be at
+:code:`/etc/sops/audit.yaml`. This file should have strict permissions such
+that only the root user can modify it.
+
+For example, to enable auditing to a PostgreSQL database named :code:`sops`
+running on localhost, using the user :code:`sops` and the password :code:`sops`,
+:code:`/etc/sops/audit.yaml` should have the following contents:
+
+.. code:: yaml
+
+    backends:
+        postgres:
+            - connection_string: "postgres://sops:sops@localhost/sops?sslmode=verify-full"
+
+
+You can find more information on the :code:`connection_string` format in the
+`PostgreSQL docs <https://www.postgresql.org/docs/current/static/libpq-connect.html#libpq-connstring>`_.
+
+Under the :code:`postgres` map entry in the above YAML is a list, so one can
+provide more than one backend, and SOPS will log to all of them:
+
+.. code:: yaml
+
+    backends:
+        postgres:
+            - connection_string: "postgres://sops:sops@localhost/sops?sslmode=verify-full"
+            - connection_string: "postgres://sops:sops@remotehost/sops?sslmode=verify-full"
+
+
 Important information on types
 ------------------------------
 

@@ -20,6 +20,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/aes"
+	_ "go.mozilla.org/sops/audit"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
@@ -123,11 +124,16 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				return keyservicecmd.Run(keyservicecmd.Opts{
+				err := keyservicecmd.Run(keyservicecmd.Opts{
 					Network: c.String("network"),
 					Address: c.String("address"),
 					Prompt:  c.Bool("prompt"),
 				})
+				if err != nil {
+					log.Errorf("Error running keyservice: %s", err)
+					return err
+				}
+				return nil
 			},
 		},
 		{
@@ -753,7 +759,7 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 	kind := reflect.ValueOf(valueToInsert).Kind()
 	if kind == reflect.Map || kind == reflect.Slice {
 		var err error
-		valueToInsert, err = (&json.Store{}).Unmarshal([]byte(jsonValue))
+		valueToInsert, err = (&json.Store{}).LoadPlainFile([]byte(jsonValue))
 		if err != nil {
 			return nil, common.NewExitError("Invalid --set value format", codes.ErrorInvalidSetFormat)
 		}

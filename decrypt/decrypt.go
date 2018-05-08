@@ -41,23 +41,15 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	default:
 		store = &sopsjson.BinaryStore{}
 	}
-	// Load Sops metadata from the document and access the data key
-	metadata, err := store.UnmarshalMetadata(data)
+	// Load SOPS file and access the data key
+	tree, err := store.LoadEncryptedFile(data)
 	if err != nil {
 		return nil, err
 	}
-	key, err := metadata.GetDataKey()
+	key, err := tree.Metadata.GetDataKey()
 	if err != nil {
 		return nil, err
 	}
-
-	// Load the encrypted document and create a tree structure
-	// with the encrypted content and metadata
-	branch, err := store.Unmarshal(data)
-	if err != nil {
-		return nil, err
-	}
-	tree := sops.Tree{Branch: branch, Metadata: metadata}
 
 	// Decrypt the tree
 	cipher := aes.NewCipher()
@@ -70,13 +62,13 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	// the one that was stored in the document. If they match,
 	// integrity was preserved
 	originalMac, err := cipher.Decrypt(
-		metadata.MessageAuthenticationCode,
+		tree.Metadata.MessageAuthenticationCode,
 		key,
-		metadata.LastModified.Format(time.RFC3339),
+		tree.Metadata.LastModified.Format(time.RFC3339),
 	)
 	if originalMac != mac {
 		return nil, fmt.Errorf("Failed to verify data integrity. expected mac %q, got %q", originalMac, mac)
 	}
 
-	return store.Marshal(tree.Branch)
+	return store.EmitPlainFile(tree.Branch)
 }

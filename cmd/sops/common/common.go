@@ -2,11 +2,10 @@ package common
 
 import (
 	"fmt"
-	"time"
-
 	"io/ioutil"
-
+	"path/filepath"
 	"strings"
+	"time"
 
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
@@ -76,24 +75,18 @@ func EncryptTree(opts EncryptTreeOpts) error {
 }
 
 // LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
-func LoadEncryptedFile(inputStore sops.Store, inputPath string) (*sops.Tree, error) {
+func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
 	fileBytes, err := ioutil.ReadFile(inputPath)
 	if err != nil {
 		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
-	metadata, err := inputStore.UnmarshalMetadata(fileBytes)
+	path, err := filepath.Abs(inputPath)
 	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Error loading file metadata: %s", err), codes.CouldNotReadInputFile)
+		return nil, err
 	}
-	branch, err := inputStore.Unmarshal(fileBytes)
-	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Error loading file: %s", err), codes.CouldNotReadInputFile)
-	}
-	tree := sops.Tree{
-		Branch:   branch,
-		Metadata: metadata,
-	}
-	return &tree, nil
+	tree, err := loader.LoadEncryptedFile(fileBytes)
+	tree.FilePath = path
+	return &tree, err
 }
 
 func NewExitError(i interface{}, exitCode int) *cli.ExitError {

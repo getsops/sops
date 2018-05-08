@@ -15,6 +15,8 @@ import (
 	"bufio"
 	"bytes"
 
+	"path/filepath"
+
 	"github.com/google/shlex"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
@@ -83,23 +85,29 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 		fileBytes = []byte(exampleTree[0].Value.(string))
 	} else {
 		var err error
-		fileBytes, err = opts.InputStore.Marshal(exampleTree)
+		fileBytes, err = opts.InputStore.EmitPlainFile(exampleTree)
 		if err != nil {
 			return nil, err
 		}
 	}
-	var tree sops.Tree
-	branch, err := opts.InputStore.Unmarshal(fileBytes)
+	branch, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
-	tree.Branch = branch
-	tree.Metadata = sops.Metadata{
-		KeyGroups:         opts.KeyGroups,
-		UnencryptedSuffix: opts.UnencryptedSuffix,
-		EncryptedSuffix:   opts.EncryptedSuffix,
-		Version:           version,
-		ShamirThreshold:   opts.GroupThreshold,
+	path, err := filepath.Abs(opts.InputPath)
+	if err != nil {
+		return nil, err
+	}
+	tree := sops.Tree{
+		Branch: branch,
+		Metadata: sops.Metadata{
+			KeyGroups:         opts.KeyGroups,
+			UnencryptedSuffix: opts.UnencryptedSuffix,
+			EncryptedSuffix:   opts.EncryptedSuffix,
+			Version:           version,
+			ShamirThreshold:   opts.GroupThreshold,
+		},
+		FilePath: path,
 	}
 
 	// Generate a data key
@@ -143,9 +151,9 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Write to temporary file
 	var out []byte
 	if opts.ShowMasterKeys {
-		out, err = opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+		out, err = opts.OutputStore.EmitEncryptedFile(*tree)
 	} else {
-		out, err = opts.OutputStore.Marshal(tree.Branch)
+		out, err = opts.OutputStore.EmitPlainFile(tree.Branch)
 	}
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
@@ -178,7 +186,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	}
 
 	// Output the file
-	encryptedFile, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	encryptedFile, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
@@ -202,7 +210,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), codes.CouldNotReadInputFile)
 		}
-		newBranch, err := opts.InputStore.Unmarshal(edited)
+		newBranch, err := opts.InputStore.LoadPlainFile(edited)
 		if err != nil {
 			log.WithField(
 				"error",
@@ -214,7 +222,9 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			continue
 		}
 		if opts.ShowMasterKeys {
-			metadata, err := opts.InputStore.UnmarshalMetadata(edited)
+			// The file is not actually encrypted, but it contains SOPS
+			// metadata
+			t, err := opts.InputStore.LoadEncryptedFile(edited)
 			if err != nil {
 				log.WithField(
 					"error",
@@ -224,7 +234,9 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				bufio.NewReader(os.Stdin).ReadByte()
 				continue
 			}
-			opts.Tree.Metadata = metadata
+			// Replace the whole tree, because otherwise newBranch would
+			// contain the SOPS metadata
+			opts.Tree = &t
 		}
 		opts.Tree.Branch = newBranch
 		needVersionUpdated, err := AIsNewerThanB(version, opts.Tree.Metadata.Version)

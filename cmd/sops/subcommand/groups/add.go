@@ -35,7 +35,7 @@ func Add(opts AddOpts) error {
 		tree.Metadata.ShamirThreshold = opts.GroupThreshold
 	}
 	tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
-	output, err := opts.OutputStore.MarshalWithMetadata(tree.Branch, tree.Metadata)
+	output, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
 		return err
 	}
