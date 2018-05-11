@@ -43,12 +43,13 @@ func (err *fileAlreadyEncryptedError) UserError() string {
 	return wordwrap.WrapString(message, 75)
 }
 
-func ensureNoMetadata(opts encryptOpts, bytes []byte) error {
-	_, err := opts.InputStore.LoadEncryptedFile(bytes)
-	if err == sops.MetadataNotFound {
-		return nil
+func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
+	for _, b := range branch {
+		if b.Key == "sops" {
+			return &fileAlreadyEncryptedError{}
+		}
 	}
-	return &fileAlreadyEncryptedError{}
+	return nil
 }
 
 func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
@@ -57,12 +58,12 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
-	if err := ensureNoMetadata(opts, fileBytes); err != nil {
-		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
-	}
 	branch, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
+	}
+	if err := ensureNoMetadata(opts, branch); err != nil {
+		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
 	}
 	path, err := filepath.Abs(opts.InputPath)
 	if err != nil {
