@@ -385,4 +385,28 @@ b: ba"#
         assert_eq!(output.stdout, b"multi\nline");
     }
 
+
+    #[test]
+    fn roundtrip_binary() {
+        let data = b"\"\"{}this_is_binary_data";
+        let file_path = prepare_temp_file("test.binary", data);
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(),
+                "SOPS failed to encrypt a binary file");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to decrypt a binary file");
+        assert_eq!(output.stdout, data);
+    }
+
 }
