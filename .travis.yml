@@ -25,6 +25,14 @@ before_deploy:
   - GOOS=darwin CGO_ENABLED=0 go build -o dist/sops-${TRAVIS_TAG}.darwin go.mozilla.org/sops/cmd/sops
   - GOOS=windows CGO_ENABLED=0 go build -o dist/sops-${TRAVIS_TAG}.exe go.mozilla.org/sops/cmd/sops
   - GOOS=linux CGO_ENABLED=0 go build -o dist/sops-${TRAVIS_TAG}.linux go.mozilla.org/sops/cmd/sops
+  - |
+      if [ ! -z "$TRAVIS_TAG" ]; then
+        version="$(grep '^const version' cmd/sops/version.go |cut -d '"' -f 2)"
+        if [ "$version" != "$TRAVIS_TAG" ]; then
+            echo "Git tag $TRAVIS_TAG does not match version $version, update the source!"
+            exit 1
+        fi
+      fi
 
 deploy:
   provider: releases

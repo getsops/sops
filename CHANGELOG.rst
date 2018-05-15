@@ -1,6 +1,19 @@
 Changelog
 =========
 
+3.0.5
+-----
+
+* Prevent files from being encrypted twice
+
+* Fix empty comments not being decrypted correctly
+
+* If keyservicecmd returns an error, log it.
+
+* Initial sops workspace auditing support (still wip)
+
+* Refactor Store interface to reflect operations SOPS performs
+
 3.0.3
 ----
 
