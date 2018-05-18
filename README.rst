@@ -228,14 +228,15 @@ arguments when creating new files.
 .. code:: bash
 
 	# add a new pgp key to the file and rotate the data key
-	$ sops -r --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+	$ sops -r -i --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
 	# remove a pgp key from the file and rotate the data key
-	$ sops -r --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+	$ sops -r -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
 Alternatively, invoking `sops` with the flag **-s** will display the master keys
 while editing. This method can be used to add or remove kms or pgp keys under the
-sops section.
+sops section. Invoking `sops` with the **-i** flag will perform an in-place edit
+instead of redirecting output to `stdout`.
 
 For example, to add a KMS master key to a file, add the following entry while
 editing:
