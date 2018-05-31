@@ -8,12 +8,18 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: Build containers
+          name: Build container image
           command: |
             docker build -t mozilla/sops .
             docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
       - run:
-          name: Push containers
+          name: Save sha256 checksum of container image
+          command: |
+            docker images --no-trunc | \
+             awk '/^mozilla/ {print $3}' | \
+             tee $CIRCLE_ARTIFACTS/docker-image-shasum256.txt
+      - run:
+          name: Push container image to dockerhub
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
