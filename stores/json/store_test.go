@@ -198,15 +198,19 @@ func TestDecodeJSONArrayOfObjects(t *testing.T) {
 	assert.Equal(t, expected, branch)
 }
 
-func TestDecodeJSONObjectWithEscaping(t *testing.T) {
-	in := `{"foo\\bar": "value", "baz\\\\foo": 2}`
+func TestDecodeJSONWithEscaping(t *testing.T) {
+	in := `{"foo\\bar": "value", "a_key_with\"quotes\"": 4, "baz\\\\foo": 2}`
 	expected := sops.TreeBranch{
 		sops.TreeItem{
-			Key:   "foo\\\\bar",
+			Key:   "foo\\bar",
 			Value: "value",
 		},
 		sops.TreeItem{
-			Key:   "baz\\\\\\\\foo",
+			Key:   "a_key_with\"quotes\"",
+			Value: 4.0,
+		},
+		sops.TreeItem{
+			Key:   "baz\\\\foo",
 			Value: 2.0,
 		},
 	}

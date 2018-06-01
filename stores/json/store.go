@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"strings"
 
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/stores"
@@ -73,14 +72,6 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 
 var errEndOfObject = fmt.Errorf("End of object")
 
-func correctKeyForEncoding(key string) string {
-	// handles escaping in the original json
-	if strings.Contains(key, "\\") {
-		key = strings.Replace(key, "\\", "\\\\", -1)
-	}
-	return key
-}
-
 func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, error) {
 	var item sops.TreeItem
 	key, err := dec.Token()
@@ -88,7 +79,7 @@ func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, er
 		return item, err
 	}
 	if k, ok := key.(string); ok {
-		item.Key = correctKeyForEncoding(k)
+		item.Key = k
 	} else if d, ok := key.(json.Delim); ok && d.String() == "}" {
 		return item, errEndOfObject
 	} else {
@@ -177,7 +168,11 @@ func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("Error encoding value %s: %s", v, err)
 		}
-		out += `"` + item.Key.(string) + `": ` + string(v)
+		k, err := json.Marshal(item.Key.(string))
+		if err != nil {
+			return nil, fmt.Errorf("Error encoding key %s: %s", v, err)
+		}
+		out += string(k) + `: ` + string(v)
 		if i != len(tree)-1 {
 			out += ","
 		}
