@@ -198,27 +198,6 @@ func TestDecodeJSONArrayOfObjects(t *testing.T) {
 	assert.Equal(t, expected, branch)
 }
 
-func TestDecodeJSONWithEscaping(t *testing.T) {
-	in := `{"foo\\bar": "value", "a_key_with\"quotes\"": 4, "baz\\\\foo": 2}`
-	expected := sops.TreeBranch{
-		sops.TreeItem{
-			Key:   "foo\\bar",
-			Value: "value",
-		},
-		sops.TreeItem{
-			Key:   "a_key_with\"quotes\"",
-			Value: 4.0,
-		},
-		sops.TreeItem{
-			Key:   "baz\\\\foo",
-			Value: 2.0,
-		},
-	}
-	branch, err := Store{}.treeBranchFromJSON([]byte(in))
-	assert.Nil(t, err)
-	assert.Equal(t, expected, branch)
-}
-
 func TestEncodeSimpleJSON(t *testing.T) {
 	branch := sops.TreeBranch{
 		sops.TreeItem{
@@ -232,6 +211,27 @@ func TestEncodeSimpleJSON(t *testing.T) {
 		sops.TreeItem{
 			Key:   "bar",
 			Value: false,
+		},
+	}
+	out, err := Store{}.jsonFromTreeBranch(branch)
+	assert.Nil(t, err)
+	expected, _ := Store{}.treeBranchFromJSON(out)
+	assert.Equal(t, expected, branch)
+}
+
+func TestEncodeJSONWithEscaping(t *testing.T) {
+	branch := sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "foo\\bar",
+			Value: "value",
+		},
+		sops.TreeItem{
+			Key:   "a_key_with\"quotes\"",
+			Value: 4.0,
+		},
+		sops.TreeItem{
+			Key:   "baz\\\\foo",
+			Value: 2.0,
 		},
 	}
 	out, err := Store{}.jsonFromTreeBranch(branch)
