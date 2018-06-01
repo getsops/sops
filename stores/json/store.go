@@ -170,7 +170,7 @@ func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 		}
 		k, err := json.Marshal(item.Key.(string))
 		if err != nil {
-			return nil, fmt.Errorf("Error encoding key %s: %s", v, err)
+			return nil, fmt.Errorf("Error encoding key %s: %s", k, err)
 		}
 		out += string(k) + `: ` + string(v)
 		if i != len(tree)-1 {
