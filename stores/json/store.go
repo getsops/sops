@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"strings"
 
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/stores"
@@ -72,6 +73,14 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 
 var errEndOfObject = fmt.Errorf("End of object")
 
+func correctKeyForEncoding(key string) string {
+	// handles escaping in the original json
+	if strings.Contains(key, "\\") {
+		key = strings.Replace(key, "\\", "\\\\", -1)
+	}
+	return key
+}
+
 func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, error) {
 	var item sops.TreeItem
 	key, err := dec.Token()
@@ -79,7 +88,7 @@ func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, er
 		return item, err
 	}
 	if k, ok := key.(string); ok {
-		item.Key = k
+		item.Key = correctKeyForEncoding(k)
 	} else if d, ok := key.(json.Delim); ok && d.String() == "}" {
 		return item, errEndOfObject
 	} else {
