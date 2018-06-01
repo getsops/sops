@@ -168,7 +168,11 @@ func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("Error encoding value %s: %s", v, err)
 		}
-		out += `"` + item.Key.(string) + `": ` + string(v)
+		k, err := json.Marshal(item.Key.(string))
+		if err != nil {
+			return nil, fmt.Errorf("Error encoding key %s: %s", k, err)
+		}
+		out += string(k) + `: ` + string(v)
 		if i != len(tree)-1 {
 			out += ","
 		}

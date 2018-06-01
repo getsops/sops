@@ -219,6 +219,27 @@ func TestEncodeSimpleJSON(t *testing.T) {
 	assert.Equal(t, expected, branch)
 }
 
+func TestEncodeJSONWithEscaping(t *testing.T) {
+	branch := sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "foo\\bar",
+			Value: "value",
+		},
+		sops.TreeItem{
+			Key:   "a_key_with\"quotes\"",
+			Value: 4.0,
+		},
+		sops.TreeItem{
+			Key:   "baz\\\\foo",
+			Value: 2.0,
+		},
+	}
+	out, err := Store{}.jsonFromTreeBranch(branch)
+	assert.Nil(t, err)
+	expected, _ := Store{}.treeBranchFromJSON(out)
+	assert.Equal(t, expected, branch)
+}
+
 func TestEncodeJSONArrayOfObjects(t *testing.T) {
 	branch := sops.TreeBranch{
 		sops.TreeItem{
