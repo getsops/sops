@@ -82,6 +82,9 @@ func main() {
    To encrypt or decrypt a document with Azure Key Vault, specify the
    Azure Key Vault key URL in the --azure-kv flag or in the SOPS_AZURE_KEYVAULT_URL
    environment variable.
+   (authentication is based on environment variables, see
+    https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
+    The user/sp needs the key/encrypt and key/decrypt permissions)
 
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
