@@ -30,8 +30,11 @@ test:
 showcoverage: test
 	$(GO) tool cover -html=coverage.out
 
-generate:
+generate: keyservice/keyservice.pb.go
 	$(GO) generate
+
+%.pb.go: %.proto
+	protoc --go_out=plugins=grpc:. $<
 
 functional-tests:
 	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops

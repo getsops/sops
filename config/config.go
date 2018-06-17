@@ -13,6 +13,7 @@ import (
 	"github.com/mozilla-services/yaml"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/azkv"
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/logging"
@@ -63,9 +64,10 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	KMS    []kmsKey
-	GCPKMS []gcpKmsKey `yaml:"gcp_kms"`
-	PGP    []string
+	KMS     []kmsKey
+	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
+	AzureKV []azureKVKey `yaml:"azure_keyvault"`
+	PGP     []string
 }
 
 type gcpKmsKey struct {
@@ -78,12 +80,19 @@ type kmsKey struct {
 	Context map[string]*string `yaml:"context"`
 }
 
+type azureKVKey struct {
+	VaultURL string `yaml:"vaultUrl"`
+	Key      string `yaml:"key"`
+	Version  string `yaml:"version"`
+}
+
 type creationRule struct {
 	FilenameRegex     string `yaml:"filename_regex"`
 	PathRegex         string `yaml:"path_regex"`
 	KMS               string
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
+	AzureKeyVault     string     `yaml:"azure_keyvault"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
@@ -170,6 +179,9 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(rule.GCPKMS) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range azkv.MasterKeysFromURLs(rule.AzureKeyVault) {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
