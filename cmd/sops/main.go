@@ -92,7 +92,7 @@ func main() {
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k and --gcp-kms flags are only used to encrypt new documents. Editing
+   The -p, -k, --gcp-kms and --azure-kv flags are only used to encrypt new documents. Editing
    or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
@@ -188,7 +188,8 @@ func main() {
 					Action: func(c *cli.Context) error {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
-						azkvs := c.StringSlice("azkv")
+						gcpKmses := c.StringSlice("gcp-kms")
+						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
@@ -196,9 +197,16 @@ func main() {
 						for _, arn := range kmsArns {
 							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context"))))
 						}
-						// NOTE: Why isn't GCP here?
+						for _, kms := range gcpKmses {
+							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
+						}
 						for _, url := range azkvs {
-							group = append(group, azkv.NewMasterKeyFromURL(url))
+							k, err := azkv.NewMasterKeyFromURL(url)
+							if err != nil {
+								log.WithError(err).Error("Failed to add key")
+								continue
+							}
+							group = append(group, k)
 						}
 						return groups.Add(groups.AddOpts{
 							InputPath:      c.String("file"),
@@ -499,7 +507,11 @@ func main() {
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			for _, k := range azkv.MasterKeysFromURLs(c.String("add-azure-kv")) {
+			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
+			if err != nil {
+				return err
+			}
+			for _, k := range azureKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 
@@ -513,7 +525,11 @@ func main() {
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			for _, k := range azkv.MasterKeysFromURLs(c.String("rm-azure-kv")) {
+			azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
+			if err != nil {
+				return err
+			}
+			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			output, err = rotate(rotateOpts{
@@ -726,7 +742,11 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("azure-kv") != "" {
-		for _, k := range azkv.MasterKeysFromURLs(c.String("azure-kv")) {
+		azureKeys, err := azkv.MasterKeysFromURLs(c.String("azure-kv"))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range azureKeys {
 			azkvKeys = append(azkvKeys, k)
 		}
 	}

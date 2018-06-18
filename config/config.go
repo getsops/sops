@@ -181,7 +181,11 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(rule.GCPKMS) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range azkv.MasterKeysFromURLs(rule.AzureKeyVault) {
+		azureKeys, err := azkv.MasterKeysFromURLs(rule.AzureKeyVault)
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range azureKeys {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)

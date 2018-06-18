@@ -12,12 +12,14 @@ func TestAzureKeySourceFromUrl(t *testing.T) {
 	cases := []struct {
 		name              string
 		input             string
+		expectSuccess     bool
 		expectedFoundKeys int
 		expectedKeys      []MasterKey
 	}{
 		{
 			name:              "Single url",
 			input:             "https://test.vault.azure.net/keys/test-key/a2a690a4fcc04166b739da342a912c90",
+			expectSuccess:     true,
 			expectedFoundKeys: 1,
 			expectedKeys: []MasterKey{
 				{
@@ -30,6 +32,7 @@ func TestAzureKeySourceFromUrl(t *testing.T) {
 		{
 			name:              "Multiple url",
 			input:             "https://test.vault.azure.net/keys/test-key/a2a690a4fcc04166b739da342a912c90,https://test2.vault.azure.net/keys/another-test-key/cf0021e8b743453bae758e7fbf71b60e",
+			expectSuccess:     true,
 			expectedFoundKeys: 2,
 			expectedKeys: []MasterKey{
 				{
@@ -44,11 +47,22 @@ func TestAzureKeySourceFromUrl(t *testing.T) {
 				},
 			},
 		},
+		{
+			name:          "Single malformed url",
+			input:         "https://test.vault.azure.net/no-keys-here/test-key/a2a690a4fcc04166b739da342a912c90",
+			expectSuccess: false,
+		},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			keys := MasterKeysFromURLs(c.input)
+			keys, err := MasterKeysFromURLs(c.input)
+			if err != nil && c.expectSuccess {
+				t.Fatalf("Unexpected error %v", err)
+			} else if err == nil && !c.expectSuccess {
+				t.Fatal("Expected error, but no error was returned")
+			}
+
 			if c.expectedFoundKeys != len(keys) {
 				t.Errorf("Unexpected number of keys returned, expected %d, got %d", c.expectedFoundKeys, len(keys))
 			}
@@ -87,8 +101,11 @@ func TestRoundtrip(t *testing.T) {
 
 	input := []byte("test-string")
 
-	key := NewMasterKeyFromURL(*azureKeyAcceptanceTestUrl)
-	err := key.Encrypt(input)
+	key, err := NewMasterKeyFromURL(*azureKeyAcceptanceTestUrl)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = key.Encrypt(input)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -58,33 +58,36 @@ func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey
 }
 
 // MasterKeysFromURLs takes a comma separated list of Azure Key Vault URLs and returns a slice of new MasterKeys for them
-func MasterKeysFromURLs(urls string) []*MasterKey {
+func MasterKeysFromURLs(urls string) ([]*MasterKey, error) {
 	var keys []*MasterKey
 	if urls == "" {
-		return keys
+		return keys, nil
 	}
 	for _, s := range strings.Split(urls, ",") {
-		keys = append(keys, NewMasterKeyFromURL(s))
+		k, err := NewMasterKeyFromURL(s)
+		if err != nil {
+			return nil, err
+		}
+		keys = append(keys, k)
 	}
-	return keys
+	return keys, nil
 }
 
 // NewMasterKeyFromResourceID takes an Azure Key Vault key URL and returns a new MasterKey
 // URL format is {vaultUrl}/keys/{key-name}/{key-version}
-func NewMasterKeyFromURL(url string) *MasterKey {
+func NewMasterKeyFromURL(url string) (*MasterKey, error) {
 	k := &MasterKey{}
 	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)/([^/]+)$")
 	parts := re.FindStringSubmatch(url)
 	if parts == nil || len(parts) < 2 {
-		log.Error("No match!")
-		// !?
+		return nil, fmt.Errorf("Could not parse valid key from %q", url)
 	}
 
 	k.VaultURL = parts[1]
 	k.Name = parts[2]
 	k.Version = parts[3]
 	k.CreationDate = time.Now().UTC()
-	return k
+	return k, nil
 }
 
 // EncryptedDataKey returns the encrypted data key this master key holds
