@@ -5,6 +5,7 @@ message Key {
 		KmsKey kms_key = 1;
 		PgpKey pgp_key = 2;
 		GcpKmsKey gcp_kms_key = 3;
+		AzureKeyVaultKey azure_keyvault_key = 4;
 	}
 }
 
@@ -20,6 +21,12 @@ message KmsKey {
 
 message GcpKmsKey {
 	string resource_id = 1;
+}
+
+message AzureKeyVaultKey {
+	string vault_url = 1;
+	string name = 2;
+	string version = 3;
 }
 
 message EncryptRequest {

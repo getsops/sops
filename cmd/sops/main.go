@@ -21,6 +21,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/aes"
 	_ "go.mozilla.org/sops/audit"
+	"go.mozilla.org/sops/azkv"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
@@ -59,7 +60,7 @@ func main() {
 		},
 	}
 	app.Name = "sops"
-	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS and GPG support"
+	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, Azure Key Vault and GPG support"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version
 	app.Authors = []cli.Author{
@@ -78,17 +79,24 @@ func main() {
    (you need to setup google application default credentials. See
     https://developers.google.com/identity/protocols/application-default-credentials)
 
+   To encrypt or decrypt a document with Azure Key Vault, specify the
+   Azure Key Vault key URL in the --azure-kv flag or in the SOPS_AZURE_KEYVAULT_URL
+   environment variable.
+   (authentication is based on environment variables, see
+    https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
+    The user/sp needs the key/encrypt and key/decrypt permissions)
+
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
 
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k and --gcp-kms flags are only used to encrypt new documents. Editing
+   The -p, -k, --gcp-kms and --azure-kv flags are only used to encrypt new documents. Editing
    or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
-   the "add-{kms,pgp,gcp-kms}" and "rm-{kms,pgp,gcp-kms}" flags.
+   the "add-{kms,pgp,gcp-kms,azure-kv}" and "rm-{kms,pgp,gcp-kms,azure-kv}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
@@ -160,6 +168,10 @@ func main() {
 							Name:  "gcp-kms",
 							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
 						},
+						cli.StringSliceFlag{
+							Name:  "azure-kv",
+							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
+						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
@@ -176,12 +188,25 @@ func main() {
 					Action: func(c *cli.Context) error {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
+						gcpKmses := c.StringSlice("gcp-kms")
+						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
 						}
 						for _, arn := range kmsArns {
 							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context"))))
+						}
+						for _, kms := range gcpKmses {
+							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
+						}
+						for _, url := range azkvs {
+							k, err := azkv.NewMasterKeyFromURL(url)
+							if err != nil {
+								log.WithError(err).Error("Failed to add key")
+								continue
+							}
+							group = append(group, k)
 						}
 						return groups.Add(groups.AddOpts{
 							InputPath:      c.String("file"),
@@ -289,6 +314,11 @@ func main() {
 			EnvVar: "SOPS_GCP_KMS_IDS",
 		},
 		cli.StringFlag{
+			Name:   "azure-kv",
+			Usage:  "comma separated list of Azure Key Vault URLs",
+			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
+		},
+		cli.StringFlag{
 			Name:   "pgp, p",
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
@@ -320,6 +350,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-gcp-kms",
 			Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-azure-kv",
+			Usage: "add the provided comma-separated list of Azure Key Vault key URLs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-azure-kv",
+			Usage: "remove the provided comma-separated list of Azure Key Vault key URLs from the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "add-kms",
@@ -380,7 +418,8 @@ func main() {
 		}
 		fileName := c.Args()[0]
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -468,6 +507,13 @@ func main() {
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
+			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
+			if err != nil {
+				return err
+			}
+			for _, k := range azureKeys {
+				addMasterKeys = append(addMasterKeys, k)
+			}
 
 			var rmMasterKeys []keys.MasterKey
 			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext) {
@@ -477,6 +523,13 @@ func main() {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+			azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
+			if err != nil {
+				return err
+			}
+			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			output, err = rotate(rotateOpts{
@@ -673,6 +726,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
 	var cloudKmsKeys []keys.MasterKey
+	var azkvKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -687,12 +741,21 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			cloudKmsKeys = append(cloudKmsKeys, k)
 		}
 	}
+	if c.String("azure-kv") != "" {
+		azureKeys, err := azkv.MasterKeysFromURLs(c.String("azure-kv"))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range azureKeys {
+			azkvKeys = append(azkvKeys, k)
+		}
+	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
@@ -707,6 +770,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var group sops.KeyGroup
 	group = append(group, kmsKeys...)
 	group = append(group, cloudKmsKeys...)
+	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
 	return []sops.KeyGroup{group}, nil
 }
