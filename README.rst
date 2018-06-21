@@ -218,17 +218,35 @@ the vault. The following environment variables are used to authenticate:
 	AZURE_CLIENT_ID
 	AZURE_CLIENT_SECRET
 
+You can create a service principal using the cli like this:
+
+.. code:: bash
+	$ az ad sp create-for-rbac -n my-keyvault-sp
+
+	{
+		"appId": "<some-uuid>",
+		"displayName": "my-keyvault-sp",
+		"name": "http://my-keyvault-sp",
+		"password": "<some-uuid>",
+		"tenant": "<tenant-id>"
+	}
+
+The appId is the client id, and the password is the client secret.
+
 Encrypting/decrypting with Azure Key Vault requires the resource identifier for
 a key. This has the following form::
 
 	https://${VAULT_URL}/keys/${KEY_NAME}/${KEY_VERSION}
 
-To create a Key Vault from the commandline:
+To create a Key Vault and assign your service principal permissions on it
+from the commandline:
 
 .. code:: bash
 
 	$ az keyvault --name sops --resource-group my-rg --location westeurope
 	$ az keyvault key create --name sops-key --vault-name sops --protection software --ops encrypt decrypt
+	$ az keyvault set-policy --name sops --resource-group my-rg --object-id $AZURE_CLIENT_ID \
+		--key-permissions encrypt decrypt
 	$ az keyvault key show --name sops-key --vault-name sops --query key.kid
 
 	https://sops.vault.azure.net/keys/sops-key/some-string
