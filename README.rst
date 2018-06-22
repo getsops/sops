@@ -221,6 +221,7 @@ the vault. The following environment variables are used to authenticate:
 You can create a service principal using the cli like this:
 
 .. code:: bash
+
 	$ az ad sp create-for-rbac -n my-keyvault-sp
 
 	{
@@ -243,11 +244,17 @@ from the commandline:
 
 .. code:: bash
 
-	$ az keyvault --name sops --resource-group my-rg --location westeurope
-	$ az keyvault key create --name sops-key --vault-name sops --protection software --ops encrypt decrypt
-	$ az keyvault set-policy --name sops --resource-group my-rg --object-id $AZURE_CLIENT_ID \
+	# Create a resource group if you do not have one:
+	$ az group create --name sops-rg --location westeurope
+	# Key Vault names are globally unique, so generate one:
+	$ keyvault_name=sops-$(uuidgen)
+	# Create a Vault, a key, and give the service principal access:
+	$ az keyvault create --name $keyvault_name --resource-group sops-rg --location westeurope
+	$ az keyvault key create --name sops-key --vault-name $keyvault_name --protection software --ops encrypt decrypt
+	$ az keyvault set-policy --name $keyvault_name --resource-group sops-rg --spn $AZURE_CLIENT_ID \
 		--key-permissions encrypt decrypt
-	$ az keyvault key show --name sops-key --vault-name sops --query key.kid
+	# Read the key id:
+	$ az keyvault key show --name sops-key --vault-name $keyvault_name --query key.kid
 
 	https://sops.vault.azure.net/keys/sops-key/some-string
 
