@@ -247,7 +247,7 @@ from the commandline:
 	# Create a resource group if you do not have one:
 	$ az group create --name sops-rg --location westeurope
 	# Key Vault names are globally unique, so generate one:
-	$ keyvault_name=sops-$(uuidgen)
+	$ keyvault_name=sops-$(uuidgen | tr -d - | head -c 16)
 	# Create a Vault, a key, and give the service principal access:
 	$ az keyvault create --name $keyvault_name --resource-group sops-rg --location westeurope
 	$ az keyvault key create --name sops-key --vault-name $keyvault_name --protection software --ops encrypt decrypt
