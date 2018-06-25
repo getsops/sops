@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **sops** is an editor of encrypted files that supports YAML, JSON and BINARY
-formats and encrypts with AWS KMS, GCP KMS and PGP.
+formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -207,23 +207,84 @@ And decrypt it using::
 
 	 $ sops --decrypt test.enc.yaml
 
+Encrypting using Azure Key Vault
+~~~~~~~~~~~~~~~~~~~~~~~~
+The Azure Key Vault integration uses service principals to access secrets in
+the vault. The following environment variables are used to authenticate:
+
+.. code:: bash
+
+	AZURE_TENANT_ID
+	AZURE_CLIENT_ID
+	AZURE_CLIENT_SECRET
+
+You can create a service principal using the cli like this:
+
+.. code:: bash
+
+	$ az ad sp create-for-rbac -n my-keyvault-sp
+
+	{
+		"appId": "<some-uuid>",
+		"displayName": "my-keyvault-sp",
+		"name": "http://my-keyvault-sp",
+		"password": "<some-uuid>",
+		"tenant": "<tenant-id>"
+	}
+
+The appId is the client id, and the password is the client secret.
+
+Encrypting/decrypting with Azure Key Vault requires the resource identifier for
+a key. This has the following form::
+
+	https://${VAULT_URL}/keys/${KEY_NAME}/${KEY_VERSION}
+
+To create a Key Vault and assign your service principal permissions on it
+from the commandline:
+
+.. code:: bash
+
+	# Create a resource group if you do not have one:
+	$ az group create --name sops-rg --location westeurope
+	# Key Vault names are globally unique, so generate one:
+	$ keyvault_name=sops-$(uuidgen | tr -d - | head -c 16)
+	# Create a Vault, a key, and give the service principal access:
+	$ az keyvault create --name $keyvault_name --resource-group sops-rg --location westeurope
+	$ az keyvault key create --name sops-key --vault-name $keyvault_name --protection software --ops encrypt decrypt
+	$ az keyvault set-policy --name $keyvault_name --resource-group sops-rg --spn $AZURE_CLIENT_ID \
+		--key-permissions encrypt decrypt
+	# Read the key id:
+	$ az keyvault key show --name sops-key --vault-name $keyvault_name --query key.kid
+
+	https://sops.vault.azure.net/keys/sops-key/some-string
+
+Now you can encrypt a file using::
+
+	$ sops --encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/some-string test.yaml > test.enc.yaml
+
+And decrypt it using::
+
+	 $ sops --decrypt test.enc.yaml
+
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, `sops` uses the PGP, KMS and GCP KMS defined in the
-command line arguments `--kms`, `--pgp` or `--gcp-kms`, or from the environment
-variables `SOPS_KMS_ARN`, `SOPS_PGP_FP`, `SOPS_GCP_KMS_IDS`. That information is
-stored in the file under the `sops` section, such that decrypting files does not
-require providing those parameters again.
+command line arguments `--kms`, `--pgp`, `--gcp-kms` or `--azure-kv`, or from
+the environment variables `SOPS_KMS_ARN`, `SOPS_PGP_FP`, `SOPS_GCP_KMS_IDS`,
+`SOPS_AZURE_KEYVAULT_URL`. That information is stored in the file under the
+`sops` section, such that decrypting files does not require providing those
+parameters again.
 
 Master PGP and KMS keys can be added and removed from a `sops` file in one of
 two ways: by using command line flag, or by editing the file directly.
 
-Command line flag `--add-kms`, `--add-pgp`, `--add-gcp-kms`, `--rm-kms`,
-`--rm-pgp` and `--rm-gcp-kms` can be used to add and remove keys from a file.
-These flags use the comma separated syntax as the `--kms`, `--pgp` and `--gcp-kms`
-arguments when creating new files.
+Command line flag `--add-kms`, `--add-pgp`, `--add-gcp-kms`, `--add-azure-kv`,
+`--rm-kms`, `--rm-pgp`, `--rm-gcp-kms` and `--rm-azure-kv` can be used to add
+and remove keys from a file.
+These flags use the comma separated syntax as the `--kms`, `--pgp`, `--gcp-kms`
+and `--azure-kv` arguments when creating new files.
 
 .. code:: bash
 
