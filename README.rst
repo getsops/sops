@@ -37,7 +37,7 @@ If you don't have Go installed, set it up with:
 .. code:: bash
 
 	$ {apt,yum,brew} install golang
-	$ echo 'GOPATH=~/go' >> ~/.bashrc
+	$ echo 'export GOPATH=~/go' >> ~/.bashrc
 	$ source ~/.bashrc
 	$ mkdir $GOPATH
 
