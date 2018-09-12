@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.1.0
+-----
+
+* Add support for Azure Key Service
+
+* Fix bug that prevented JSON escapes in input files from working
+
 3.0.5
 -----
 
