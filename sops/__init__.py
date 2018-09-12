@@ -48,7 +48,7 @@ if sys.version_info[0] == 3:
 
 PY2 = sys.version_info[0] == 2
 
-VERSION = '1.17'
+VERSION = '1.18'
 
 DESC = """
 `sops` supports AWS KMS and PGP encryption:
