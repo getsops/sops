@@ -285,6 +285,8 @@
       }
     }, 
     "RotateChannelCredentials": {
+      "deprecated": true, 
+      "deprecatedMessage": "This API is deprecated. Please use RotateIngestEndpointCredentials instead", 
       "errors": [
         {
           "shape": "UnprocessableEntityException"
@@ -316,6 +318,40 @@
       "name": "RotateChannelCredentials", 
       "output": {
         "shape": "RotateChannelCredentialsResponse"
+      }
+    }, 
+    "RotateIngestEndpointCredentials": {
+      "errors": [
+        {
+          "shape": "UnprocessableEntityException"
+        }, 
+        {
+          "shape": "InternalServerErrorException"
+        }, 
+        {
+          "shape": "ForbiddenException"
+        }, 
+        {
+          "shape": "NotFoundException"
+        }, 
+        {
+          "shape": "ServiceUnavailableException"
+        }, 
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ], 
+      "http": {
+        "method": "PUT", 
+        "requestUri": "/channels/{id}/ingest_endpoints/{ingest_endpoint_id}/credentials", 
+        "responseCode": 200
+      }, 
+      "input": {
+        "shape": "RotateIngestEndpointCredentialsRequest"
+      }, 
+      "name": "RotateIngestEndpointCredentials", 
+      "output": {
+        "shape": "RotateIngestEndpointCredentialsResponse"
       }
     }, 
     "UpdateChannel": {
@@ -428,13 +464,16 @@
           "shape": "__string"
         }
       }, 
+      "required": [
+        "Id"
+      ], 
       "type": "structure"
     }, 
     "ChannelList": {
       "members": {
         "Channels": {
           "locationName": "channels", 
-          "shape": "ListOfChannel"
+          "shape": "__listOfChannel"
         }, 
         "NextToken": {
           "locationName": "nextToken", 
@@ -448,6 +487,72 @@
         "Description": {
           "locationName": "description", 
           "shape": "__string"
+        }
+      }, 
+      "type": "structure"
+    }, 
+    "CmafEncryption": {
+      "members": {
+        "KeyRotationIntervalSeconds": {
+          "locationName": "keyRotationIntervalSeconds", 
+          "shape": "__integer"
+        }, 
+        "SpekeKeyProvider": {
+          "locationName": "spekeKeyProvider", 
+          "shape": "SpekeKeyProvider"
+        }
+      }, 
+      "required": [
+        "SpekeKeyProvider"
+      ], 
+      "type": "structure"
+    }, 
+    "CmafPackage": {
+      "members": {
+        "Encryption": {
+          "locationName": "encryption", 
+          "shape": "CmafEncryption"
+        }, 
+        "HlsManifests": {
+          "locationName": "hlsManifests", 
+          "shape": "__listOfHlsManifest"
+        }, 
+        "SegmentDurationSeconds": {
+          "locationName": "segmentDurationSeconds", 
+          "shape": "__integer"
+        }, 
+        "SegmentPrefix": {
+          "locationName": "segmentPrefix", 
+          "shape": "__string"
+        }, 
+        "StreamSelection": {
+          "locationName": "streamSelection", 
+          "shape": "StreamSelection"
+        }
+      }, 
+      "type": "structure"
+    }, 
+    "CmafPackageCreateOrUpdateParameters": {
+      "members": {
+        "Encryption": {
+          "locationName": "encryption", 
+          "shape": "CmafEncryption"
+        }, 
+        "HlsManifests": {
+          "locationName": "hlsManifests", 
+          "shape": "__listOfHlsManifestCreateOrUpdateParameters"
+        }, 
+        "SegmentDurationSeconds": {
+          "locationName": "segmentDurationSeconds", 
+          "shape": "__integer"
+        }, 
+        "SegmentPrefix": {
+          "locationName": "segmentPrefix", 
+          "shape": "__string"
+        }, 
+        "StreamSelection": {
+          "locationName": "streamSelection", 
+          "shape": "StreamSelection"
         }
       }, 
       "type": "structure"
@@ -495,6 +600,10 @@
           "locationName": "channelId", 
           "shape": "__string"
         }, 
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackageCreateOrUpdateParameters"
+        }, 
         "DashPackage": {
           "locationName": "dashPackage", 
           "shape": "DashPackage"
@@ -529,7 +638,7 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
       "required": [
@@ -547,6 +656,10 @@
         "ChannelId": {
           "locationName": "channelId", 
           "shape": "__string"
+        }, 
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackage"
         }, 
         "DashPackage": {
           "locationName": "dashPackage", 
@@ -586,7 +699,7 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
       "type": "structure"
@@ -624,6 +737,10 @@
         "MinUpdatePeriodSeconds": {
           "locationName": "minUpdatePeriodSeconds", 
           "shape": "__integer"
+        }, 
+        "PeriodTriggers": {
+          "locationName": "periodTriggers", 
+          "shape": "__listOf__PeriodTriggersElement"
         }, 
         "Profile": {
           "locationName": "profile", 
@@ -735,6 +852,10 @@
           "locationName": "channelId", 
           "shape": "__string"
         }, 
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackage"
+        }, 
         "DashPackage": {
           "locationName": "dashPackage", 
           "shape": "DashPackage"
@@ -773,7 +894,7 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
       "type": "structure"
@@ -830,9 +951,85 @@
       "members": {
         "IngestEndpoints": {
           "locationName": "ingestEndpoints", 
-          "shape": "ListOfIngestEndpoint"
+          "shape": "__listOfIngestEndpoint"
         }
       }, 
+      "type": "structure"
+    }, 
+    "HlsManifest": {
+      "members": {
+        "AdMarkers": {
+          "locationName": "adMarkers", 
+          "shape": "AdMarkers"
+        }, 
+        "Id": {
+          "locationName": "id", 
+          "shape": "__string"
+        }, 
+        "IncludeIframeOnlyStream": {
+          "locationName": "includeIframeOnlyStream", 
+          "shape": "__boolean"
+        }, 
+        "ManifestName": {
+          "locationName": "manifestName", 
+          "shape": "__string"
+        }, 
+        "PlaylistType": {
+          "locationName": "playlistType", 
+          "shape": "PlaylistType"
+        }, 
+        "PlaylistWindowSeconds": {
+          "locationName": "playlistWindowSeconds", 
+          "shape": "__integer"
+        }, 
+        "ProgramDateTimeIntervalSeconds": {
+          "locationName": "programDateTimeIntervalSeconds", 
+          "shape": "__integer"
+        }, 
+        "Url": {
+          "locationName": "url", 
+          "shape": "__string"
+        }
+      }, 
+      "required": [
+        "Id"
+      ], 
+      "type": "structure"
+    }, 
+    "HlsManifestCreateOrUpdateParameters": {
+      "members": {
+        "AdMarkers": {
+          "locationName": "adMarkers", 
+          "shape": "AdMarkers"
+        }, 
+        "Id": {
+          "locationName": "id", 
+          "shape": "__string"
+        }, 
+        "IncludeIframeOnlyStream": {
+          "locationName": "includeIframeOnlyStream", 
+          "shape": "__boolean"
+        }, 
+        "ManifestName": {
+          "locationName": "manifestName", 
+          "shape": "__string"
+        }, 
+        "PlaylistType": {
+          "locationName": "playlistType", 
+          "shape": "PlaylistType"
+        }, 
+        "PlaylistWindowSeconds": {
+          "locationName": "playlistWindowSeconds", 
+          "shape": "__integer"
+        }, 
+        "ProgramDateTimeIntervalSeconds": {
+          "locationName": "programDateTimeIntervalSeconds", 
+          "shape": "__integer"
+        }
+      }, 
+      "required": [
+        "Id"
+      ], 
       "type": "structure"
     }, 
     "HlsPackage": {
@@ -878,6 +1075,10 @@
     }, 
     "IngestEndpoint": {
       "members": {
+        "Id": {
+          "locationName": "id", 
+          "shape": "__string"
+        }, 
         "Password": {
           "locationName": "password", 
           "shape": "__string"
@@ -925,7 +1126,7 @@
       "members": {
         "Channels": {
           "locationName": "channels", 
-          "shape": "ListOfChannel"
+          "shape": "__listOfChannel"
         }, 
         "NextToken": {
           "locationName": "nextToken", 
@@ -933,30 +1134,6 @@
         }
       }, 
       "type": "structure"
-    }, 
-    "ListOfChannel": {
-      "member": {
-        "shape": "Channel"
-      }, 
-      "type": "list"
-    }, 
-    "ListOfIngestEndpoint": {
-      "member": {
-        "shape": "IngestEndpoint"
-      }, 
-      "type": "list"
-    }, 
-    "ListOfOriginEndpoint": {
-      "member": {
-        "shape": "OriginEndpoint"
-      }, 
-      "type": "list"
-    }, 
-    "ListOf__string": {
-      "member": {
-        "shape": "__string"
-      }, 
-      "type": "list"
     }, 
     "ListOriginEndpointsRequest": {
       "members": {
@@ -986,7 +1163,7 @@
         }, 
         "OriginEndpoints": {
           "locationName": "originEndpoints", 
-          "shape": "ListOfOriginEndpoint"
+          "shape": "__listOfOriginEndpoint"
         }
       }, 
       "type": "structure"
@@ -1052,6 +1229,10 @@
           "locationName": "channelId", 
           "shape": "__string"
         }, 
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackage"
+        }, 
         "DashPackage": {
           "locationName": "dashPackage", 
           "shape": "DashPackage"
@@ -1090,7 +1271,7 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
       "type": "structure"
@@ -1100,6 +1281,10 @@
         "ChannelId": {
           "locationName": "channelId", 
           "shape": "__string"
+        }, 
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackageCreateOrUpdateParameters"
         }, 
         "DashPackage": {
           "locationName": "dashPackage", 
@@ -1135,9 +1320,13 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
+      "required": [
+        "Id", 
+        "ChannelId"
+      ], 
       "type": "structure"
     }, 
     "OriginEndpointList": {
@@ -1148,13 +1337,17 @@
         }, 
         "OriginEndpoints": {
           "locationName": "originEndpoints", 
-          "shape": "ListOfOriginEndpoint"
+          "shape": "__listOfOriginEndpoint"
         }
       }, 
       "type": "structure"
     }, 
     "OriginEndpointUpdateParameters": {
       "members": {
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackageCreateOrUpdateParameters"
+        }, 
         "DashPackage": {
           "locationName": "dashPackage", 
           "shape": "DashPackage"
@@ -1185,7 +1378,7 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
       "type": "structure"
@@ -1206,6 +1399,7 @@
       "type": "string"
     }, 
     "RotateChannelCredentialsRequest": {
+      "deprecated": true, 
       "members": {
         "Id": {
           "location": "uri", 
@@ -1219,6 +1413,47 @@
       "type": "structure"
     }, 
     "RotateChannelCredentialsResponse": {
+      "deprecated": true, 
+      "members": {
+        "Arn": {
+          "locationName": "arn", 
+          "shape": "__string"
+        }, 
+        "Description": {
+          "locationName": "description", 
+          "shape": "__string"
+        }, 
+        "HlsIngest": {
+          "locationName": "hlsIngest", 
+          "shape": "HlsIngest"
+        }, 
+        "Id": {
+          "locationName": "id", 
+          "shape": "__string"
+        }
+      }, 
+      "type": "structure"
+    }, 
+    "RotateIngestEndpointCredentialsRequest": {
+      "members": {
+        "Id": {
+          "location": "uri", 
+          "locationName": "id", 
+          "shape": "__string"
+        }, 
+        "IngestEndpointId": {
+          "location": "uri", 
+          "locationName": "ingest_endpoint_id", 
+          "shape": "__string"
+        }
+      }, 
+      "required": [
+        "IngestEndpointId", 
+        "Id"
+      ], 
+      "type": "structure"
+    }, 
+    "RotateIngestEndpointCredentialsResponse": {
       "members": {
         "Arn": {
           "locationName": "arn", 
@@ -1264,7 +1499,7 @@
         }, 
         "SystemIds": {
           "locationName": "systemIds", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }, 
         "Url": {
           "locationName": "url", 
@@ -1370,6 +1605,10 @@
     }, 
     "UpdateOriginEndpointRequest": {
       "members": {
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackageCreateOrUpdateParameters"
+        }, 
         "DashPackage": {
           "locationName": "dashPackage", 
           "shape": "DashPackage"
@@ -1405,7 +1644,7 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
       "required": [
@@ -1422,6 +1661,10 @@
         "ChannelId": {
           "locationName": "channelId", 
           "shape": "__string"
+        }, 
+        "CmafPackage": {
+          "locationName": "cmafPackage", 
+          "shape": "CmafPackage"
         }, 
         "DashPackage": {
           "locationName": "dashPackage", 
@@ -1461,10 +1704,16 @@
         }, 
         "Whitelist": {
           "locationName": "whitelist", 
-          "shape": "ListOf__string"
+          "shape": "__listOf__string"
         }
       }, 
       "type": "structure"
+    }, 
+    "__PeriodTriggersElement": {
+      "enum": [
+        "ADS"
+      ], 
+      "type": "string"
     }, 
     "__boolean": {
       "type": "boolean"
@@ -1475,11 +1724,53 @@
     "__integer": {
       "type": "integer"
     }, 
+    "__listOfChannel": {
+      "member": {
+        "shape": "Channel"
+      }, 
+      "type": "list"
+    }, 
+    "__listOfHlsManifest": {
+      "member": {
+        "shape": "HlsManifest"
+      }, 
+      "type": "list"
+    }, 
+    "__listOfHlsManifestCreateOrUpdateParameters": {
+      "member": {
+        "shape": "HlsManifestCreateOrUpdateParameters"
+      }, 
+      "type": "list"
+    }, 
+    "__listOfIngestEndpoint": {
+      "member": {
+        "shape": "IngestEndpoint"
+      }, 
+      "type": "list"
+    }, 
+    "__listOfOriginEndpoint": {
+      "member": {
+        "shape": "OriginEndpoint"
+      }, 
+      "type": "list"
+    }, 
+    "__listOf__PeriodTriggersElement": {
+      "member": {
+        "shape": "__PeriodTriggersElement"
+      }, 
+      "type": "list"
+    }, 
+    "__listOf__string": {
+      "member": {
+        "shape": "__string"
+      }, 
+      "type": "list"
+    }, 
+    "__long": {
+      "type": "long"
+    }, 
     "__string": {
       "type": "string"
-    }, 
-    "__timestamp": {
-      "type": "timestamp"
     }
   }
 }

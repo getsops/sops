@@ -18,45 +18,9 @@ package contentmoderator
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 )
-
-// AzureRegionBaseURL enumerates the values for azure region base url.
-type AzureRegionBaseURL string
-
-const (
-	// Australiaeastapicognitivemicrosoftcom ...
-	Australiaeastapicognitivemicrosoftcom AzureRegionBaseURL = "australiaeast.api.cognitive.microsoft.com"
-	// Brazilsouthapicognitivemicrosoftcom ...
-	Brazilsouthapicognitivemicrosoftcom AzureRegionBaseURL = "brazilsouth.api.cognitive.microsoft.com"
-	// ContentmoderatortestazureApinet ...
-	ContentmoderatortestazureApinet AzureRegionBaseURL = "contentmoderatortest.azure-api.net"
-	// Eastasiaapicognitivemicrosoftcom ...
-	Eastasiaapicognitivemicrosoftcom AzureRegionBaseURL = "eastasia.api.cognitive.microsoft.com"
-	// Eastus2apicognitivemicrosoftcom ...
-	Eastus2apicognitivemicrosoftcom AzureRegionBaseURL = "eastus2.api.cognitive.microsoft.com"
-	// Eastusapicognitivemicrosoftcom ...
-	Eastusapicognitivemicrosoftcom AzureRegionBaseURL = "eastus.api.cognitive.microsoft.com"
-	// Northeuropeapicognitivemicrosoftcom ...
-	Northeuropeapicognitivemicrosoftcom AzureRegionBaseURL = "northeurope.api.cognitive.microsoft.com"
-	// Southcentralusapicognitivemicrosoftcom ...
-	Southcentralusapicognitivemicrosoftcom AzureRegionBaseURL = "southcentralus.api.cognitive.microsoft.com"
-	// Southeastasiaapicognitivemicrosoftcom ...
-	Southeastasiaapicognitivemicrosoftcom AzureRegionBaseURL = "southeastasia.api.cognitive.microsoft.com"
-	// Westcentralusapicognitivemicrosoftcom ...
-	Westcentralusapicognitivemicrosoftcom AzureRegionBaseURL = "westcentralus.api.cognitive.microsoft.com"
-	// Westeuropeapicognitivemicrosoftcom ...
-	Westeuropeapicognitivemicrosoftcom AzureRegionBaseURL = "westeurope.api.cognitive.microsoft.com"
-	// Westus2apicognitivemicrosoftcom ...
-	Westus2apicognitivemicrosoftcom AzureRegionBaseURL = "westus2.api.cognitive.microsoft.com"
-	// Westusapicognitivemicrosoftcom ...
-	Westusapicognitivemicrosoftcom AzureRegionBaseURL = "westus.api.cognitive.microsoft.com"
-)
-
-// PossibleAzureRegionBaseURLValues returns an array of possible values for the AzureRegionBaseURL const type.
-func PossibleAzureRegionBaseURLValues() []AzureRegionBaseURL {
-	return []AzureRegionBaseURL{Australiaeastapicognitivemicrosoftcom, Brazilsouthapicognitivemicrosoftcom, ContentmoderatortestazureApinet, Eastasiaapicognitivemicrosoftcom, Eastus2apicognitivemicrosoftcom, Eastusapicognitivemicrosoftcom, Northeuropeapicognitivemicrosoftcom, Southcentralusapicognitivemicrosoftcom, Southeastasiaapicognitivemicrosoftcom, Westcentralusapicognitivemicrosoftcom, Westeuropeapicognitivemicrosoftcom, Westus2apicognitivemicrosoftcom, Westusapicognitivemicrosoftcom}
-}
 
 // StatusEnum enumerates the values for status enum.
 type StatusEnum string
@@ -110,15 +74,22 @@ type Body struct {
 	// Description - Description of the list.
 	Description *string `json:"Description,omitempty"`
 	// Metadata - Metadata of the list.
-	Metadata *BodyMetadata `json:"Metadata,omitempty"`
+	Metadata map[string]*string `json:"Metadata"`
 }
 
-// BodyMetadata metadata of the list.
-type BodyMetadata struct {
-	// KeyOne - Optional key value pair to describe your list.
-	KeyOne *string `json:"Key One,omitempty"`
-	// KeyTwo - Optional key value pair to describe your list.
-	KeyTwo *string `json:"Key Two,omitempty"`
+// MarshalJSON is the custom marshaler for Body.
+func (b Body) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if b.Name != nil {
+		objectMap["Name"] = b.Name
+	}
+	if b.Description != nil {
+		objectMap["Description"] = b.Description
+	}
+	if b.Metadata != nil {
+		objectMap["Metadata"] = b.Metadata
+	}
+	return json.Marshal(objectMap)
 }
 
 // BodyModel ...
@@ -412,15 +383,25 @@ type ImageList struct {
 	// Description - Description for image list.
 	Description *string `json:"Description,omitempty"`
 	// Metadata - Image List Metadata.
-	Metadata *ImageListMetadata `json:"Metadata,omitempty"`
+	Metadata map[string]*string `json:"Metadata"`
 }
 
-// ImageListMetadata image List Metadata.
-type ImageListMetadata struct {
-	// KeyOne - Optional Key value pair to describe your list.
-	KeyOne *string `json:"Key One,omitempty"`
-	// KeyTwo - Optional Key value pair to describe your list.
-	KeyTwo *string `json:"Key Two,omitempty"`
+// MarshalJSON is the custom marshaler for ImageList.
+func (il ImageList) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if il.ID != nil {
+		objectMap["Id"] = il.ID
+	}
+	if il.Name != nil {
+		objectMap["Name"] = il.Name
+	}
+	if il.Description != nil {
+		objectMap["Description"] = il.Description
+	}
+	if il.Metadata != nil {
+		objectMap["Metadata"] = il.Metadata
+	}
+	return json.Marshal(objectMap)
 }
 
 // IPA IP Address details.
@@ -578,19 +559,11 @@ type RefreshIndex struct {
 	// IsUpdateSuccess - Update success status.
 	IsUpdateSuccess *bool `json:"IsUpdateSuccess,omitempty"`
 	// AdvancedInfo - Advanced info list.
-	AdvancedInfo *[]RefreshIndexAdvancedInfoItem `json:"AdvancedInfo,omitempty"`
+	AdvancedInfo *[]map[string]*string `json:"AdvancedInfo,omitempty"`
 	// Status - Refresh index status.
 	Status *Status `json:"Status,omitempty"`
 	// TrackingID - Tracking Id.
 	TrackingID *string `json:"TrackingId,omitempty"`
-}
-
-// RefreshIndexAdvancedInfoItem ...
-type RefreshIndexAdvancedInfoItem struct {
-	// KeyOne - Key parameter to describe advanced info.
-	KeyOne *string `json:"Key One,omitempty"`
-	// KeyTwo - Key parameter to describe advanced info.
-	KeyTwo *string `json:"Key Two,omitempty"`
 }
 
 // Review the Review object.
@@ -690,15 +663,25 @@ type TermList struct {
 	// Description - Description for term list.
 	Description *string `json:"Description,omitempty"`
 	// Metadata - Term list metadata.
-	Metadata *TermListMetadata `json:"Metadata,omitempty"`
+	Metadata map[string]*string `json:"Metadata"`
 }
 
-// TermListMetadata term list metadata.
-type TermListMetadata struct {
-	// KeyOne - Optional Key value pair to describe your list.
-	KeyOne *string `json:"Key One,omitempty"`
-	// KeyTwo - Optional Key value pair to describe your list.
-	KeyTwo *string `json:"Key Two,omitempty"`
+// MarshalJSON is the custom marshaler for TermList.
+func (tl TermList) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tl.ID != nil {
+		objectMap["Id"] = tl.ID
+	}
+	if tl.Name != nil {
+		objectMap["Name"] = tl.Name
+	}
+	if tl.Description != nil {
+		objectMap["Description"] = tl.Description
+	}
+	if tl.Metadata != nil {
+		objectMap["Metadata"] = tl.Metadata
+	}
+	return json.Marshal(objectMap)
 }
 
 // Terms terms properties.

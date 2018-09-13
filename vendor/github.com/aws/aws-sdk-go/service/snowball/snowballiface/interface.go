@@ -119,6 +119,10 @@ type SnowballAPI interface {
 	ListClustersWithContext(aws.Context, *snowball.ListClustersInput, ...request.Option) (*snowball.ListClustersOutput, error)
 	ListClustersRequest(*snowball.ListClustersInput) (*request.Request, *snowball.ListClustersOutput)
 
+	ListCompatibleImages(*snowball.ListCompatibleImagesInput) (*snowball.ListCompatibleImagesOutput, error)
+	ListCompatibleImagesWithContext(aws.Context, *snowball.ListCompatibleImagesInput, ...request.Option) (*snowball.ListCompatibleImagesOutput, error)
+	ListCompatibleImagesRequest(*snowball.ListCompatibleImagesInput) (*request.Request, *snowball.ListCompatibleImagesOutput)
+
 	ListJobs(*snowball.ListJobsInput) (*snowball.ListJobsOutput, error)
 	ListJobsWithContext(aws.Context, *snowball.ListJobsInput, ...request.Option) (*snowball.ListJobsOutput, error)
 	ListJobsRequest(*snowball.ListJobsInput) (*request.Request, *snowball.ListJobsOutput)

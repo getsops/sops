@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,19 +26,19 @@ func TestDecodeToMap(t *testing.T) {
 	if got := DecodeToMap(nil); !testutil.Equal(got, map[string]interface{}(nil)) {
 		t.Errorf("DecodeToMap(nil) = %v, want nil", got)
 	}
-	nullv := &pb.Value{&pb.Value_NullValue{}}
-	stringv := &pb.Value{&pb.Value_StringValue{"x"}}
-	boolv := &pb.Value{&pb.Value_BoolValue{true}}
-	numberv := &pb.Value{&pb.Value_NumberValue{2.7}}
+	nullv := &pb.Value{Kind: &pb.Value_NullValue{}}
+	stringv := &pb.Value{Kind: &pb.Value_StringValue{"x"}}
+	boolv := &pb.Value{Kind: &pb.Value_BoolValue{true}}
+	numberv := &pb.Value{Kind: &pb.Value_NumberValue{2.7}}
 	in := &pb.Struct{Fields: map[string]*pb.Value{
 		"n": nullv,
 		"s": stringv,
 		"b": boolv,
 		"f": numberv,
-		"l": &pb.Value{&pb.Value_ListValue{&pb.ListValue{
-			[]*pb.Value{nullv, stringv, boolv, numberv},
+		"l": {Kind: &pb.Value_ListValue{&pb.ListValue{
+			Values: []*pb.Value{nullv, stringv, boolv, numberv},
 		}}},
-		"S": &pb.Value{&pb.Value_StructValue{&pb.Struct{Fields: map[string]*pb.Value{
+		"S": {Kind: &pb.Value_StructValue{&pb.Struct{Fields: map[string]*pb.Value{
 			"n1": nullv,
 			"b1": boolv,
 		}}}},

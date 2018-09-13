@@ -2,7 +2,7 @@ language: go
 go:
   - 1.6
   - 1.7
-  - 1.8
+  - 1.x
 go_import_path: google.golang.org/genproto
 
 script:

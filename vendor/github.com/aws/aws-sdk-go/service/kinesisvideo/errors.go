@@ -70,7 +70,7 @@ const (
 	// "VersionMismatchException".
 	//
 	// The stream version that you specified is not the latest version. To get the
-	// latest version, use the DescribeStream (http://docs.aws.amazon.com/kinesisvideo/latest/dg/API_DescribeStream.html)
+	// latest version, use the DescribeStream (http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html)
 	// API.
 	ErrCodeVersionMismatchException = "VersionMismatchException"
 )

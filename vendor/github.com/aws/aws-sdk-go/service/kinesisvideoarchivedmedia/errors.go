@@ -18,6 +18,25 @@ const (
 	// be used.
 	ErrCodeInvalidArgumentException = "InvalidArgumentException"
 
+	// ErrCodeInvalidCodecPrivateDataException for service response error code
+	// "InvalidCodecPrivateDataException".
+	//
+	// The Codec Private Data in the video stream is not valid for this operation.
+	ErrCodeInvalidCodecPrivateDataException = "InvalidCodecPrivateDataException"
+
+	// ErrCodeMissingCodecPrivateDataException for service response error code
+	// "MissingCodecPrivateDataException".
+	//
+	// No Codec Private Data was found in the video stream.
+	ErrCodeMissingCodecPrivateDataException = "MissingCodecPrivateDataException"
+
+	// ErrCodeNoDataRetentionException for service response error code
+	// "NoDataRetentionException".
+	//
+	// A PlaybackMode of ON_DEMAND was requested for a stream that does not retain
+	// data (that is, has a DataRetentionInHours of 0).
+	ErrCodeNoDataRetentionException = "NoDataRetentionException"
+
 	// ErrCodeNotAuthorizedException for service response error code
 	// "NotAuthorizedException".
 	//
@@ -28,6 +47,19 @@ const (
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
 	//
-	// Kinesis Video Streams can't find the stream that you specified.
+	// GetMedia throws this error when Kinesis Video Streams can't find the stream
+	// that you specified.
+	//
+	// GetHLSStreamingSessionURL throws this error if a session with a PlaybackMode
+	// of ON_DEMAND is requested for a stream that has no fragments within the requested
+	// time range, or if a session with a PlaybackMode of LIVE is requested for
+	// a stream that has no fragments within the last 30 seconds.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
+
+	// ErrCodeUnsupportedStreamMediaTypeException for service response error code
+	// "UnsupportedStreamMediaTypeException".
+	//
+	// An HLS streaming session was requested for a stream with a media type that
+	// is not video/h264.
+	ErrCodeUnsupportedStreamMediaTypeException = "UnsupportedStreamMediaTypeException"
 )

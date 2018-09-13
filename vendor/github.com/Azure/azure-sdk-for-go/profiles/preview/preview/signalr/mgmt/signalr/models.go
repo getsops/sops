@@ -50,15 +50,17 @@ const (
 type SkuTier = original.SkuTier
 
 const (
-	Basic   SkuTier = original.Basic
-	Free    SkuTier = original.Free
-	Premium SkuTier = original.Premium
+	Basic    SkuTier = original.Basic
+	Free     SkuTier = original.Free
+	Premium  SkuTier = original.Premium
+	Standard SkuTier = original.Standard
 )
 
 type CreateOrUpdateFuture = original.CreateOrUpdateFuture
 type CreateOrUpdateProperties = original.CreateOrUpdateProperties
 type CreateParameters = original.CreateParameters
 type DeleteFuture = original.DeleteFuture
+type Dimension = original.Dimension
 type Keys = original.Keys
 type MetricSpecification = original.MetricSpecification
 type NameAvailability = original.NameAvailability
@@ -82,8 +84,14 @@ type ServiceSpecification = original.ServiceSpecification
 type TrackedResource = original.TrackedResource
 type UpdateFuture = original.UpdateFuture
 type UpdateParameters = original.UpdateParameters
+type Usage = original.Usage
+type UsageList = original.UsageList
+type UsageListIterator = original.UsageListIterator
+type UsageListPage = original.UsageListPage
+type UsageName = original.UsageName
 type OperationsClient = original.OperationsClient
 type Client = original.Client
+type UsagesClient = original.UsagesClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
@@ -111,6 +119,12 @@ func NewClient(subscriptionID string) Client {
 }
 func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 	return original.NewClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewUsagesClient(subscriptionID string) UsagesClient {
+	return original.NewUsagesClient(subscriptionID)
+}
+func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesClient {
+	return original.NewUsagesClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

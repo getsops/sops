@@ -199,7 +199,7 @@ func (client ExpressRouteCircuitPeeringsClient) DeleteResponder(resp *http.Respo
 	return
 }
 
-// Get gets the specified authorization from the specified express route circuit.
+// Get gets the specified peering for the express route circuit.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // circuitName - the name of the express route circuit.

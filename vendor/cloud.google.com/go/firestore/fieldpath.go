@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -161,7 +161,7 @@ func setAtPath(m map[string]*pb.Value, fp FieldPath, val *pb.Value) {
 	} else {
 		v, ok := m[fp[0]]
 		if !ok {
-			v = &pb.Value{&pb.Value_MapValue{&pb.MapValue{map[string]*pb.Value{}}}}
+			v = &pb.Value{ValueType: &pb.Value_MapValue{&pb.MapValue{Fields: map[string]*pb.Value{}}}}
 			m[fp[0]] = v
 		}
 		// The type assertion below cannot fail, because setAtPath is only called

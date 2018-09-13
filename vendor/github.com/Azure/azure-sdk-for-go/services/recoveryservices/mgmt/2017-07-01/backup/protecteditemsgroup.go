@@ -40,7 +40,8 @@ func NewProtectedItemsGroupClientWithBaseURI(baseURI string, subscriptionID stri
 }
 
 // CreateOrUpdate enables backup of an item or to modifies the backup policy information of an already backed up item.
-// This is an asynchronous operation. To know the status of the operation, call the GetItemOperationResult API.
+// This is an
+// asynchronous operation. To know the status of the operation, call the GetItemOperationResult API.
 // Parameters:
 // vaultName - the name of the recovery services vault.
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
@@ -116,7 +117,8 @@ func (client ProtectedItemsGroupClient) CreateOrUpdateResponder(resp *http.Respo
 }
 
 // Delete used to disable backup of an item within a container. This is an asynchronous operation. To know the status
-// of the request, call the GetItemOperationResult API.
+// of the
+// request, call the GetItemOperationResult API.
 // Parameters:
 // vaultName - the name of the recovery services vault.
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
@@ -189,7 +191,8 @@ func (client ProtectedItemsGroupClient) DeleteResponder(resp *http.Response) (re
 }
 
 // Get provides the details of the backed up item. This is an asynchronous operation. To know the status of the
-// operation, call the GetItemOperationResult API.
+// operation,
+// call the GetItemOperationResult API.
 // Parameters:
 // vaultName - the name of the recovery services vault.
 // resourceGroupName - the name of the resource group where the recovery services vault is present.

@@ -128,7 +128,7 @@ func TestJSONSliceInt(t *testing.T) {
 
 	assert.Nil(t, err)
 	require.NotNil(t, m)
-	assert.Equal(t, []objx.Map{objx.Map{"b": 1}, objx.Map{"c": 2}}, m.Get("a").ObjxMapSlice())
+	assert.Equal(t, []objx.Map{{"b": 1}, {"c": 2}}, m.Get("a").ObjxMapSlice())
 }
 
 func TestJSONSliceMixed(t *testing.T) {

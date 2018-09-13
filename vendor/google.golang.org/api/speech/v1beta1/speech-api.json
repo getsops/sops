@@ -14,7 +14,7 @@
   "canonicalName": "Speech",
   "description": "Converts audio to text by applying powerful neural network models.",
   "discoveryVersion": "v1",
-  "documentationLink": "https://cloud.google.com/speech/",
+  "documentationLink": "https://cloud.google.com/speech-to-text/docs/quickstart-protocol",
   "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -185,7 +174,7 @@
       }
     }
   },
-  "revision": "20180312",
+  "revision": "20180629",
   "rootUrl": "https://speech.googleapis.com/",
   "schemas": {
     "AsyncRecognizeRequest": {

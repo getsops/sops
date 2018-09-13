@@ -9,7 +9,7 @@
     }
   },
   "basePath": "",
-  "baseUrl": "https://content-tpu.googleapis.com/",
+  "baseUrl": "https://tpu.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "TPU",
   "description": "TPU API provides customers with access to Google TPU technology.",
@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -120,7 +109,7 @@
         "locations": {
           "methods": {
             "get": {
-              "description": "Get information about a location.",
+              "description": "Gets information about a location.",
               "flatPath": "v1alpha1/projects/{projectsId}/locations/{locationsId}",
               "httpMethod": "GET",
               "id": "tpu.projects.locations.get",
@@ -411,34 +400,6 @@
                     "https://www.googleapis.com/auth/cloud-platform"
                   ]
                 },
-                "reset": {
-                  "description": "Resets a node, which stops and starts the VM.",
-                  "flatPath": "v1alpha1/projects/{projectsId}/locations/{locationsId}/nodes/{nodesId}:reset",
-                  "httpMethod": "POST",
-                  "id": "tpu.projects.locations.nodes.reset",
-                  "parameterOrder": [
-                    "name"
-                  ],
-                  "parameters": {
-                    "name": {
-                      "description": "The resource name.",
-                      "location": "path",
-                      "pattern": "^projects/[^/]+/locations/[^/]+/nodes/[^/]+$",
-                      "required": true,
-                      "type": "string"
-                    }
-                  },
-                  "path": "v1alpha1/{+name}:reset",
-                  "request": {
-                    "$ref": "ResetNodeRequest"
-                  },
-                  "response": {
-                    "$ref": "Operation"
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ]
-                },
                 "start": {
                   "description": "Starts a node.",
                   "flatPath": "v1alpha1/projects/{projectsId}/locations/{locationsId}/nodes/{nodesId}:start",
@@ -697,8 +658,8 @@
       }
     }
   },
-  "revision": "20180303",
-  "rootUrl": "https://content-tpu.googleapis.com/",
+  "revision": "20180902",
+  "rootUrl": "https://tpu.googleapis.com/",
   "schemas": {
     "AcceleratorType": {
       "description": "A accelerator type that a Node can be configured with.",
@@ -932,6 +893,9 @@
           "description": "Output only.\nDEPRECATED! Use network_endpoints instead.\nThe network port for the TPU Node as visible to Compute Engine instances.",
           "type": "string"
         },
+        "schedulingConfig": {
+          "$ref": "SchedulingConfig"
+        },
         "serviceAccount": {
           "description": "Output only.\nThe service account used to run the tensor flow services within the node.\nTo share resources, including Google Cloud Storage data, with the\nTensorflow job running in the Node, this account must have permissions to\nthat data.",
           "type": "string"
@@ -946,7 +910,11 @@
             "REIMAGING",
             "DELETING",
             "REPAIRING",
-            "STOPPED"
+            "STOPPED",
+            "STOPPING",
+            "STARTING",
+            "PREEMPTED",
+            "TERMINATED"
           ],
           "enumDescriptions": [
             "TPU node state is not known/set.",
@@ -956,7 +924,11 @@
             "TPU node is undergoing reimaging.",
             "TPU node is being deleted.",
             "TPU node is being repaired and may be unusable. Details can be\nfound in the `help_description` field.",
-            "7 - Reserved. Was SUSPENDED.\nTPU node is stopped."
+            "7 - Reserved. Was SUSPENDED.\nTPU node is stopped.",
+            "TPU node is currently stopping.",
+            "TPU node is currently starting.",
+            "TPU node has been preempted. Only applies to Preemptible TPU Nodes.",
+            "TPU node has been terminated due to maintenance or has reached the end of\nits life cycle (for preemptible nodes)."
           ],
           "type": "string"
         },
@@ -1050,10 +1022,13 @@
       },
       "type": "object"
     },
-    "ResetNodeRequest": {
-      "description": "Request for ResetNode.",
-      "id": "ResetNodeRequest",
-      "properties": {},
+    "SchedulingConfig": {
+      "id": "SchedulingConfig",
+      "properties": {
+        "preemptible": {
+          "type": "boolean"
+        }
+      },
       "type": "object"
     },
     "StartNodeRequest": {

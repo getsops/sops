@@ -65,11 +65,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -89,12 +84,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -187,7 +176,7 @@
           ],
           "parameters": {
             "filter": {
-              "description": "A string for filtering Operations.\nIn v2alpha1, the following filter fields are supported\u0026#58;\n\n* createTime\u0026#58; The time this job was created\n* events\u0026#58; The set of event (names) that have occurred while running\n  the pipeline.  The \u0026#58; operator can be used to determine if a\n  particular event has occurred.\n* error\u0026#58; If the pipeline is running, this value is NULL.  Once the\n  pipeline finishes, the value is the standard Google error code.\n* labels.key or labels.\"key with space\" where key is a label key.\n\nIn v1 and v1alpha2, the following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n* labels.key where key is a label key.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`\n* `projectId = my-project AND labels.color = *`\n* `projectId = my-project AND labels.color = red`",
+              "description": "A string for filtering Operations.\nIn v2alpha1, the following filter fields are supported\u0026#58;\n\n* createTime\u0026#58; The time this job was created\n* events\u0026#58; The set of event (names) that have occurred while running\n  the pipeline.  The \u0026#58; operator can be used to determine if a\n  particular event has occurred.\n* error\u0026#58; If the pipeline is running, this value is NULL.  Once the\n  pipeline finishes, the value is the standard Google error code.\n* labels.key or labels.\"key with space\" where key is a label key.\n* done\u0026#58; If the pipeline is running, this value is false. Once the\n  pipeline finishes, the value is true.\n\nIn v1 and v1alpha2, the following filter fields are supported\u0026#58;\n\n* projectId\u0026#58; Required. Corresponds to\n  OperationMetadata.projectId.\n* createTime\u0026#58; The time this job was created, in seconds from the\n  [epoch](http://en.wikipedia.org/wiki/Unix_time). Can use `\u003e=` and/or `\u003c=`\n  operators.\n* status\u0026#58; Can be `RUNNING`, `SUCCESS`, `FAILURE`, or `CANCELED`. Only\n  one status may be specified.\n* labels.key where key is a label key.\n\nExamples\u0026#58;\n\n* `projectId = my-project AND createTime \u003e= 1432140000`\n* `projectId = my-project AND createTime \u003e= 1432140000 AND createTime \u003c= 1432150000 AND status = RUNNING`\n* `projectId = my-project AND labels.color = *`\n* `projectId = my-project AND labels.color = red`",
               "location": "query",
               "type": "string"
             },
@@ -399,7 +388,7 @@
       }
     }
   },
-  "revision": "20180225",
+  "revision": "20180905",
   "rootUrl": "https://genomics.googleapis.com/",
   "schemas": {
     "CancelOperationRequest": {
@@ -434,8 +423,20 @@
       },
       "type": "object"
     },
+    "ContainerKilledEvent": {
+      "description": "An event generated when a container is forcibly terminated by the\nworker. Currently, this only occurs when the container outlives the\ntimeout specified by the user.",
+      "id": "ContainerKilledEvent",
+      "properties": {
+        "actionId": {
+          "description": "The numeric ID of the action that started the container.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "ContainerStartedEvent": {
-      "description": "This event is generated when a container starts.",
+      "description": "An event generated when a container starts.",
       "id": "ContainerStartedEvent",
       "properties": {
         "actionId": {
@@ -444,7 +445,7 @@
           "type": "integer"
         },
         "ipAddress": {
-          "description": "The public IP address that can be used to connect to the container.  This\nfield is only populated when at least one port mapping is present.  If the\ninstance was created with a private address this field will be empty even\nif port mappings exist.",
+          "description": "The public IP address that can be used to connect to the container. This\nfield is only populated when at least one port mapping is present. If the\ninstance was created with a private address, this field will be empty even\nif port mappings exist.",
           "type": "string"
         },
         "portMappings": {
@@ -452,14 +453,14 @@
             "format": "int32",
             "type": "integer"
           },
-          "description": "The container to host port mappings installed for this container.  This\nset will contain any ports exposed using the PUBLISH_EXPOSED_PORTS flag as\nwell as any specified in the Action definition.",
+          "description": "The container-to-host port mappings installed for this container. This\nset will contain any ports exposed using the `PUBLISH_EXPOSED_PORTS` flag\nas well as any specified in the `Action` definition.",
           "type": "object"
         }
       },
       "type": "object"
     },
     "ContainerStoppedEvent": {
-      "description": "This event is generated when a container exits.",
+      "description": "An event generated when a container exits.",
       "id": "ContainerStoppedEvent",
       "properties": {
         "actionId": {
@@ -471,6 +472,10 @@
           "description": "The exit status of the container.",
           "format": "int32",
           "type": "integer"
+        },
+        "stderr": {
+          "description": "The tail end of any content written to standard error by the container.\nIf the content emits large amounts of debugging noise or contains\nsensitive information, you can prevent the content from being printed by\nsetting the `DISABLE_STANDARD_ERROR_CAPTURE` flag.\n\nNote that only a small amount of the end of the stream is captured here.\nThe entire stream is stored in the `/google/logs` directory mounted into\neach action, and can be copied off the machine as described elsewhere.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -519,15 +524,15 @@
       "type": "object"
     },
     "DelayedEvent": {
-      "description": "This event is generated whenever a resource limitation or transient error\ndelays execution of a pipeline that was otherwise ready to run.",
+      "description": "An event generated whenever a resource limitation or transient error\ndelays execution of a pipeline that was otherwise ready to run.",
       "id": "DelayedEvent",
       "properties": {
         "cause": {
-          "description": "A textual description of the cause of the delay.  The string may change\nwithout notice since it is often generated by another service (such as\nCompute Engine).",
+          "description": "A textual description of the cause of the delay. The string can change\nwithout notice because it is often generated by another service (such as\nCompute Engine).",
           "type": "string"
         },
         "metrics": {
-          "description": "If the delay was caused by a resource shortage, this field lists the\nCompute Engine metrics that are preventing this operation from running\n(for example, CPUS or INSTANCES).  If the particular metric is not known,\na single UNKNOWN metric will be present.",
+          "description": "If the delay was caused by a resource shortage, this field lists the\nCompute Engine metrics that are preventing this operation from running\n(for example, `CPUS` or `INSTANCES`). If the particular metric is not\nknown, a single `UNKNOWN` metric will be present.",
           "items": {
             "type": "string"
           },
@@ -606,11 +611,11 @@
       "type": "object"
     },
     "Event": {
-      "description": "Event carries information about events that occur during pipeline execution.",
+      "description": "Carries information about events that occur during pipeline execution.",
       "id": "Event",
       "properties": {
         "description": {
-          "description": "A human readable description of the event.  Note that these strings may\nchange at any time without notice.  Any application logic must use the\ninformation in the details field.",
+          "description": "A human-readable description of the event. Note that these strings can\nchange at any time without notice. Any application logic must use the\ninformation in the `details` field.",
           "type": "string"
         },
         "details": {
@@ -618,11 +623,11 @@
             "description": "Properties of the object. Contains field @type with type URL.",
             "type": "any"
           },
-          "description": "Machine readable details about the event.",
+          "description": "Machine-readable details about the event.",
           "type": "object"
         },
         "timestamp": {
-          "description": "The time that the event occurred.",
+          "description": "The time at which the event occurred.",
           "format": "google-datetime",
           "type": "string"
         }
@@ -630,11 +635,11 @@
       "type": "object"
     },
     "FailedEvent": {
-      "description": "This event is generated when the execution of a pipeline has failed.  Note\nthat other events may continue to occur after this event.",
+      "description": "An event generated when the execution of a pipeline has failed. Note\nthat other events can continue to occur after this event.",
       "id": "FailedEvent",
       "properties": {
         "cause": {
-          "description": "The human readable description of the cause of the failure.",
+          "description": "The human-readable description of the cause of the failure.",
           "type": "string"
         },
         "code": {
@@ -1010,7 +1015,7 @@
       "type": "object"
     },
     "PullStartedEvent": {
-      "description": "This event is generated when the worker starts pulling an image.",
+      "description": "An event generated when the worker starts pulling an image.",
       "id": "PullStartedEvent",
       "properties": {
         "imageUri": {
@@ -1021,7 +1026,7 @@
       "type": "object"
     },
     "PullStoppedEvent": {
-      "description": "This event is generated when the worker stops pulling an image.",
+      "description": "An event generated when the worker stops pulling an image.",
       "id": "PullStoppedEvent",
       "properties": {
         "imageUri": {
@@ -1113,6 +1118,12 @@
           "type": "string"
         }
       },
+      "type": "object"
+    },
+    "RunPipelineResponse": {
+      "description": "The response to the RunPipeline method, returned in the operation's result\nfield on success.",
+      "id": "RunPipelineResponse",
+      "properties": {},
       "type": "object"
     },
     "RuntimeMetadata": {
@@ -1252,7 +1263,7 @@
       "type": "object"
     },
     "UnexpectedExitStatusEvent": {
-      "description": "This event is generated when the execution of a container results in a\nnon-zero exit status that was not otherwise ignored.  Execution will\ncontinue, but only actions that are flagged as ALWAYS_RUN will be executed:\nother actions will be skipped.",
+      "description": "An event generated when the execution of a container results in a\nnon-zero exit status that was not otherwise ignored. Execution will\ncontinue, but only actions that are flagged as `ALWAYS_RUN` will be\nexecuted. Other actions will be skipped.",
       "id": "UnexpectedExitStatusEvent",
       "properties": {
         "actionId": {
@@ -1269,7 +1280,7 @@
       "type": "object"
     },
     "WorkerAssignedEvent": {
-      "description": "This event is generated once a worker VM has been assigned to run the\npipeline.",
+      "description": "An event generated after a worker VM has been assigned to run the\npipeline.",
       "id": "WorkerAssignedEvent",
       "properties": {
         "instance": {
@@ -1284,7 +1295,7 @@
       "type": "object"
     },
     "WorkerReleasedEvent": {
-      "description": "This event is generated when the worker VM that was assigned to the pipeline\nhas been released (i.e., deleted).",
+      "description": "An event generated when the worker VM that was assigned to the pipeline\nhas been released (deleted).",
       "id": "WorkerReleasedEvent",
       "properties": {
         "instance": {

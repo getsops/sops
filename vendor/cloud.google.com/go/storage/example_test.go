@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -391,7 +391,31 @@ func ExampleWriter_Write() {
 	}
 	wc := client.Bucket("bucketname").Object("filename1").NewWriter(ctx)
 	wc.ContentType = "text/plain"
-	wc.ACL = []storage.ACLRule{{storage.AllUsers, storage.RoleReader}}
+	wc.ACL = []storage.ACLRule{{Entity: storage.AllUsers, Role: storage.RoleReader}}
+	if _, err := wc.Write([]byte("hello world")); err != nil {
+		// TODO: handle error.
+		// Note that Write may return nil in some error situations,
+		// so always check the error from Close.
+	}
+	if err := wc.Close(); err != nil {
+		// TODO: handle error.
+	}
+	fmt.Println("updated object:", wc.Attrs())
+}
+
+// To limit the time to write an object (or do anything else
+// that takes a context), use context.WithTimeout.
+func ExampleWriter_Write_timeout() {
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		// TODO: handle error.
+	}
+	tctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel() // Cancel when done, whether we time out or not.
+	wc := client.Bucket("bucketname").Object("filename1").NewWriter(tctx)
+	wc.ContentType = "text/plain"
+	wc.ACL = []storage.ACLRule{{Entity: storage.AllUsers, Role: storage.RoleReader}}
 	if _, err := wc.Write([]byte("hello world")); err != nil {
 		// TODO: handle error.
 		// Note that Write may return nil in some error situations,

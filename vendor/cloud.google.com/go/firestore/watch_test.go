@@ -1,4 +1,4 @@
-// Copyright 2018 Google Inc. All Rights Reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -173,108 +173,6 @@ func mapDocs(m map[string]*DocumentSnapshot, less func(a, b *DocumentSnapshot) b
 	return ds
 }
 
-func TestWatchStream(t *testing.T) {
-	// Preliminary, very basic tests. Will expand and turn into cross-language tests
-	// later.
-	ctx := context.Background()
-	c, srv := newMock(t)
-	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-	defer cancel()
-
-	baseTime := time.Now()
-	readTime := baseTime.Add(5 * time.Second)
-	readTimestamp := mustTimestampProto(readTime)
-	doc := func(path string, value int, tm time.Time) *DocumentSnapshot {
-		ref := c.Doc(path)
-		ts := mustTimestampProto(tm)
-		return &DocumentSnapshot{
-			Ref: ref,
-			proto: &pb.Document{
-				Name:       ref.Path,
-				Fields:     map[string]*pb.Value{"foo": intval(value)},
-				CreateTime: ts,
-				UpdateTime: ts,
-			},
-			CreateTime: tm,
-			UpdateTime: tm,
-			ReadTime:   readTime,
-		}
-	}
-	change := func(ds *DocumentSnapshot) *pb.ListenResponse {
-		return &pb.ListenResponse{ResponseType: &pb.ListenResponse_DocumentChange{&pb.DocumentChange{
-			Document:  ds.proto,
-			TargetIds: []int32{watchTargetID},
-		}}}
-	}
-
-	del := func(ds *DocumentSnapshot) *pb.ListenResponse {
-		return &pb.ListenResponse{ResponseType: &pb.ListenResponse_DocumentDelete{&pb.DocumentDelete{
-			Document: ds.Ref.Path,
-		}}}
-	}
-
-	q := Query{c: c, collectionID: "x"}
-	current := &pb.ListenResponse{ResponseType: &pb.ListenResponse_TargetChange{&pb.TargetChange{
-		TargetChangeType: pb.TargetChange_CURRENT,
-	}}}
-	noChange := &pb.ListenResponse{ResponseType: &pb.ListenResponse_TargetChange{&pb.TargetChange{
-		TargetChangeType: pb.TargetChange_NO_CHANGE,
-		ReadTime:         readTimestamp,
-	}}}
-	doc1 := doc("C/d1", 1, baseTime)
-	doc1a := doc("C/d1", 2, baseTime.Add(time.Second))
-	doc2 := doc("C/d2", 3, baseTime)
-	for _, test := range []struct {
-		desc      string
-		responses []interface{}
-		want      []*DocumentSnapshot
-	}{
-		{
-			"no changes: empty btree",
-			[]interface{}{current, noChange},
-			nil,
-		},
-		{
-			"add a doc",
-			[]interface{}{change(doc1), current, noChange},
-			[]*DocumentSnapshot{doc1},
-		},
-		{
-			"add a doc, then remove it",
-			[]interface{}{change(doc1), del(doc1), current, noChange},
-			[]*DocumentSnapshot(nil),
-		},
-		{
-			"add a doc, then add another one",
-			[]interface{}{change(doc1), change(doc2), current, noChange},
-			[]*DocumentSnapshot{doc1, doc2},
-		},
-		{
-			"add a doc, then change it",
-			[]interface{}{change(doc1), change(doc1a), current, noChange},
-			[]*DocumentSnapshot{doc1a},
-		},
-	} {
-		ws, err := newWatchStreamForQuery(ctx, q)
-		if err != nil {
-			t.Fatal(err)
-		}
-		request := &pb.ListenRequest{
-			Database:     "projects/projectID/databases/(default)",
-			TargetChange: &pb.ListenRequest_AddTarget{ws.target},
-		}
-		srv.addRPC(request, test.responses)
-		tree, _, _, err := ws.nextSnapshot()
-		if err != nil {
-			t.Fatalf("%s: %v", test.desc, err)
-		}
-		got := treeDocs(tree)
-		if diff := testDiff(got, test.want); diff != "" {
-			t.Errorf("%s: %s", test.desc, diff)
-		}
-	}
-}
-
 func TestWatchCancel(t *testing.T) {
 	// Canceling the context of a watch should result in a codes.Canceled error from the next
 	// call to the iterator's Next method.
@@ -321,23 +219,6 @@ func TestWatchCancel(t *testing.T) {
 	_, _, _, err = ws.nextSnapshot()
 	codeEq(t, "cancel from gax.Sleep", codes.Canceled, err)
 
-	// Cancel from an RPC.
-	ctx2, cancel = context.WithCancel(ctx)
-	ws, err = newWatchStreamForQuery(ctx2, q)
-	if err != nil {
-		t.Fatal(err)
-	}
-	srv.addRPC(request, []interface{}{current, noChange,
-		&pb.ListenResponse{ResponseType: &pb.ListenResponse_DocumentChange{&pb.DocumentChange{
-			Document:  nil,
-			TargetIds: []int32{watchTargetID},
-		}}},
-	})
-	// Call nextSnapshot once to open the stream.
-	_, _, _, _ = ws.nextSnapshot()
-	cancel()
-	// This call to nextSnapshot will call Recv on the stream with a canceled context,
-	// so the error will come from gRPC.
-	_, _, _, err = ws.nextSnapshot()
-	codeEq(t, "cancel from Recv", codes.Canceled, err)
+	// TODO(jba): Test that we get codes.Canceled when canceling an RPC.
+	// We had a test for this in a21236af, but it was flaky for unclear reasons.
 }

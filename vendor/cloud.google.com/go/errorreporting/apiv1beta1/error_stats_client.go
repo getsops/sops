@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/version"
+	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
@@ -69,6 +70,8 @@ func defaultErrorStatsCallOptions() *ErrorStatsCallOptions {
 }
 
 // ErrorStatsClient is a client for interacting with Stackdriver Error Reporting API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type ErrorStatsClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
@@ -127,6 +130,7 @@ func (c *ErrorStatsClient) ListGroupStats(ctx context.Context, req *clouderrorre
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListGroupStats[0:len(c.CallOptions.ListGroupStats):len(c.CallOptions.ListGroupStats)], opts...)
 	it := &ErrorGroupStatsIterator{}
+	req = proto.Clone(req).(*clouderrorreportingpb.ListGroupStatsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*clouderrorreportingpb.ErrorGroupStats, string, error) {
 		var resp *clouderrorreportingpb.ListGroupStatsResponse
 		req.PageToken = pageToken
@@ -154,6 +158,7 @@ func (c *ErrorStatsClient) ListGroupStats(ctx context.Context, req *clouderrorre
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 
@@ -162,6 +167,7 @@ func (c *ErrorStatsClient) ListEvents(ctx context.Context, req *clouderrorreport
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListEvents[0:len(c.CallOptions.ListEvents):len(c.CallOptions.ListEvents)], opts...)
 	it := &ErrorEventIterator{}
+	req = proto.Clone(req).(*clouderrorreportingpb.ListEventsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*clouderrorreportingpb.ErrorEvent, string, error) {
 		var resp *clouderrorreportingpb.ListEventsResponse
 		req.PageToken = pageToken
@@ -189,6 +195,7 @@ func (c *ErrorStatsClient) ListEvents(ctx context.Context, req *clouderrorreport
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 

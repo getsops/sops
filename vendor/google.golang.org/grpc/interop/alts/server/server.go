@@ -31,6 +31,7 @@ import (
 )
 
 var (
+	hsAddr     = flag.String("alts_handshaker_service_address", "", "ALTS handshaker gRPC service address")
 	serverAddr = flag.String("server_address", ":8080", "The port on which the server is listening")
 )
 
@@ -41,7 +42,11 @@ func main() {
 	if err != nil {
 		grpclog.Fatalf("gRPC Server: failed to start the server at %v: %v", *serverAddr, err)
 	}
-	altsTC := alts.NewServerCreds()
+	opts := alts.DefaultServerOptions()
+	if *hsAddr != "" {
+		opts.HandshakerServiceAddress = *hsAddr
+	}
+	altsTC := alts.NewServerCreds(opts)
 	grpcServer := grpc.NewServer(grpc.Creds(altsTC))
 	testpb.RegisterTestServiceServer(grpcServer, interop.NewTestServer())
 	grpcServer.Serve(lis)

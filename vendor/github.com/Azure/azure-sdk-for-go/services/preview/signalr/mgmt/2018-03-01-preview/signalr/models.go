@@ -79,11 +79,13 @@ const (
 	Free SkuTier = "Free"
 	// Premium ...
 	Premium SkuTier = "Premium"
+	// Standard ...
+	Standard SkuTier = "Standard"
 )
 
 // PossibleSkuTierValues returns an array of possible values for the SkuTier const type.
 func PossibleSkuTierValues() []SkuTier {
-	return []SkuTier{Basic, Free, Premium}
+	return []SkuTier{Basic, Free, Premium, Standard}
 }
 
 // CreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
@@ -176,6 +178,18 @@ func (future *DeleteFuture) Result(client Client) (ar autorest.Response, err err
 	return
 }
 
+// Dimension specifications of the Dimension of metrics.
+type Dimension struct {
+	// Name - The public facing name of the dimension.
+	Name *string `json:"name,omitempty"`
+	// DisplayName - Localized friendly display name of the dimension.
+	DisplayName *string `json:"displayName,omitempty"`
+	// InternalName - Name of the dimension as it appears in MDM.
+	InternalName *string `json:"internalName,omitempty"`
+	// ToBeExportedForShoebox - A Boolean flag indicating whether this dimension should be included for the shoebox export scenario.
+	ToBeExportedForShoebox *bool `json:"toBeExportedForShoebox,omitempty"`
+}
+
 // Keys a class represents the access keys of SignalR service.
 type Keys struct {
 	autorest.Response `json:"-"`
@@ -183,6 +197,10 @@ type Keys struct {
 	PrimaryKey *string `json:"primaryKey,omitempty"`
 	// SecondaryKey - The secondary access key.
 	SecondaryKey *string `json:"secondaryKey,omitempty"`
+	// PrimaryConnectionString - SignalR connection string constructed via the primaryKey
+	PrimaryConnectionString *string `json:"primaryConnectionString,omitempty"`
+	// SecondaryConnectionString - SignalR connection string constructed via the secondaryKey
+	SecondaryConnectionString *string `json:"secondaryConnectionString,omitempty"`
 }
 
 // MetricSpecification specifications of the Metrics for Azure Monitoring.
@@ -203,6 +221,8 @@ type MetricSpecification struct {
 	FillGapWithZero *string `json:"fillGapWithZero,omitempty"`
 	// Category - The name of the metric category that the metric belongs to. A metric can only belong to a single category.
 	Category *string `json:"category,omitempty"`
+	// Dimensions - The dimensions of the metrics.
+	Dimensions *[]Dimension `json:"dimensions,omitempty"`
 }
 
 // NameAvailability result of the request to check name availability. It contains a flag and possible reason of
@@ -371,6 +391,8 @@ type Properties struct {
 	PublicPort *int32 `json:"publicPort,omitempty"`
 	// ServerPort - The publicly accessibly port of the SignalR service which is designed for customer server side usage.
 	ServerPort *int32 `json:"serverPort,omitempty"`
+	// Version - Version of the SignalR resource. Probably you need the same or higher version of client SDKs.
+	Version *string `json:"version,omitempty"`
 	// HostNamePrefix - Prefix for the hostName of the SignalR service. Retained for future use.
 	// The hostname will be of format: &lt;hostNamePrefix&gt;.service.signalr.net.
 	HostNamePrefix *string `json:"hostNamePrefix,omitempty"`
@@ -527,7 +549,7 @@ func (page ResourceListPage) Values() []ResourceType {
 type ResourceSku struct {
 	// Name - The name of the SKU. This is typically a letter + number code, such as A0 or P3.  Required (if sku is specified)
 	Name *string `json:"name,omitempty"`
-	// Tier - The tier of this particular SKU. Optional. Possible values include: 'Free', 'Basic', 'Premium'
+	// Tier - Optional tier of this particular SKU. `Basic` is deprecated, use `Standard` instead for Basic tier. Possible values include: 'Free', 'Basic', 'Standard', 'Premium'
 	Tier SkuTier `json:"tier,omitempty"`
 	// Size - Optional, string. When the name field is the combination of tier and some other value, this would be the standalone code.
 	Size *string `json:"size,omitempty"`
@@ -754,4 +776,129 @@ func (up UpdateParameters) MarshalJSON() ([]byte, error) {
 		objectMap["properties"] = up.Properties
 	}
 	return json.Marshal(objectMap)
+}
+
+// Usage object that describes a specific usage of SignalR resources.
+type Usage struct {
+	// ID - Fully qualified ARM resource id
+	ID *string `json:"id,omitempty"`
+	// CurrentValue - Current value for the usage quota.
+	CurrentValue *int64 `json:"currentValue,omitempty"`
+	// Limit - The maximum permitted value for the usage quota. If there is no limit, this value will be -1.
+	Limit *int64 `json:"limit,omitempty"`
+	// Name - Localizable String object containing the name and a localized value.
+	Name *UsageName `json:"name,omitempty"`
+	// Unit - Representing the units of the usage quota. Possible values are: Count, Bytes, Seconds, Percent, CountPerSecond, BytesPerSecond.
+	Unit *string `json:"unit,omitempty"`
+}
+
+// UsageList object that includes an array of SignalR resource usages and a possible link for next set.
+type UsageList struct {
+	autorest.Response `json:"-"`
+	// Value - List of SignalR usages
+	Value *[]Usage `json:"value,omitempty"`
+	// NextLink - The URL the client should use to fetch the next page (per server side paging).
+	// It's null for now, added for future use.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// UsageListIterator provides access to a complete listing of Usage values.
+type UsageListIterator struct {
+	i    int
+	page UsageListPage
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *UsageListIterator) Next() error {
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err := iter.page.Next()
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter UsageListIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter UsageListIterator) Response() UsageList {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter UsageListIterator) Value() Usage {
+	if !iter.page.NotDone() {
+		return Usage{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (ul UsageList) IsEmpty() bool {
+	return ul.Value == nil || len(*ul.Value) == 0
+}
+
+// usageListPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (ul UsageList) usageListPreparer() (*http.Request, error) {
+	if ul.NextLink == nil || len(to.String(ul.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare(&http.Request{},
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(ul.NextLink)))
+}
+
+// UsageListPage contains a page of Usage values.
+type UsageListPage struct {
+	fn func(UsageList) (UsageList, error)
+	ul UsageList
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *UsageListPage) Next() error {
+	next, err := page.fn(page.ul)
+	if err != nil {
+		return err
+	}
+	page.ul = next
+	return nil
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page UsageListPage) NotDone() bool {
+	return !page.ul.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page UsageListPage) Response() UsageList {
+	return page.ul
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page UsageListPage) Values() []Usage {
+	if page.ul.IsEmpty() {
+		return nil
+	}
+	return *page.ul.Value
+}
+
+// UsageName localizable String object containing the name and a localized value.
+type UsageName struct {
+	// Value - The indentifier of the usage.
+	Value *string `json:"value,omitempty"`
+	// LocalizedValue - Localized name of the usage.
+	LocalizedValue *string `json:"localizedValue,omitempty"`
 }

@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ func trunc32(i int64) int32 {
 	return int32(i)
 }
 
-// Logic from https://github.com/GoogleCloudPlatform/google-cloud-java/blob/master/google-cloud-pubsub/src/main/java/com/google/cloud/pubsub/v1/StatusUtil.java.
+// Logic from https://github.com/GoogleCloudPlatform/google-cloud-java/blob/master/google-cloud-clients/google-cloud-pubsub/src/main/java/com/google/cloud/pubsub/v1/StatusUtil.java
 func isRetryable(err error) bool {
 	s, ok := status.FromError(err)
 	if !ok { // includes io.EOF, normal stream close, which causes us to reopen
@@ -75,46 +75,4 @@ func isRetryable(err error) bool {
 	default:
 		return false
 	}
-}
-
-// Split req into a prefix that is smaller than maxSize, and a remainder.
-func splitRequest(req *pb.StreamingPullRequest, maxSize int) (prefix, remainder *pb.StreamingPullRequest) {
-	const int32Bytes = 4
-
-	// Copy all fields before splitting the variable-sized ones.
-	remainder = &pb.StreamingPullRequest{}
-	*remainder = *req
-	// Split message so it isn't too big.
-	size := reqFixedOverhead
-	i := 0
-	for size < maxSize && (i < len(req.AckIds) || i < len(req.ModifyDeadlineAckIds)) {
-		if i < len(req.AckIds) {
-			size += overheadPerID + len(req.AckIds[i])
-		}
-		if i < len(req.ModifyDeadlineAckIds) {
-			size += overheadPerID + len(req.ModifyDeadlineAckIds[i]) + int32Bytes
-		}
-		i++
-	}
-
-	min := func(a, b int) int {
-		if a < b {
-			return a
-		}
-		return b
-	}
-
-	j := i
-	if size > maxSize {
-		j--
-	}
-	k := min(j, len(req.AckIds))
-	remainder.AckIds = req.AckIds[k:]
-	req.AckIds = req.AckIds[:k]
-	k = min(j, len(req.ModifyDeadlineAckIds))
-	remainder.ModifyDeadlineAckIds = req.ModifyDeadlineAckIds[k:]
-	remainder.ModifyDeadlineSeconds = req.ModifyDeadlineSeconds[k:]
-	req.ModifyDeadlineAckIds = req.ModifyDeadlineAckIds[:k]
-	req.ModifyDeadlineSeconds = req.ModifyDeadlineSeconds[:k]
-	return req, remainder
 }

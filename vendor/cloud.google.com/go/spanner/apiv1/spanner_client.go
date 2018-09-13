@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/version"
+	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
@@ -100,6 +101,8 @@ func defaultCallOptions() *CallOptions {
 }
 
 // Client is a client for interacting with Cloud Spanner API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type Client struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
@@ -212,6 +215,7 @@ func (c *Client) ListSessions(ctx context.Context, req *spannerpb.ListSessionsRe
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListSessions[0:len(c.CallOptions.ListSessions):len(c.CallOptions.ListSessions)], opts...)
 	it := &SessionIterator{}
+	req = proto.Clone(req).(*spannerpb.ListSessionsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*spannerpb.Session, string, error) {
 		var resp *spannerpb.ListSessionsResponse
 		req.PageToken = pageToken
@@ -239,6 +243,7 @@ func (c *Client) ListSessions(ctx context.Context, req *spannerpb.ListSessionsRe
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 

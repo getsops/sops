@@ -677,7 +677,7 @@
       }
     ]
   },
-    {
+  {
     "description": "Blob payload",
     "metadata": {
       "protocol": "rest-json",
@@ -1103,8 +1103,50 @@
             "shape": "TimestampType",
             "location": "header",
             "locationName": "x-amz-timearg"
+          },
+          "TimeArgInQuery": {
+            "shape": "TimestampType",
+            "location": "querystring",
+            "locationName": "TimeQuery"
+          },
+          "TimeCustom": {
+            "timestampFormat": "iso8601",
+            "shape": "TimestampType"
+          },
+          "TimeCustomInHeader": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType",
+            "location": "header",
+            "locationName": "x-amz-timecustom-header"
+          },
+          "TimeCustomInQuery": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType",
+            "location": "querystring",
+            "locationName": "TimeCustomQuery"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatRfcType"
+          },
+          "TimeFormatInHeader": {
+            "shape": "TimestampFormatUnixType",
+            "location": "header",
+            "locationName": "x-amz-timeformat-header"
+          },
+          "TimeFormatInQuery": {
+            "shape": "TimestampFormatUnixType",
+            "location": "querystring",
+            "locationName": "TimeFormatQuery"
           }
         }
+      },
+      "TimestampFormatRfcType": {
+        "timestampFormat": "rfc822",
+        "type": "timestamp"
+      },
+      "TimestampFormatUnixType": {
+        "timestampFormat": "unixTimestamp",
+        "type": "timestamp"
       },
       "TimestampType": {
         "type": "timestamp"
@@ -1123,32 +1165,24 @@
           "name": "OperationName"
         },
         "params": {
-          "TimeArg": 1422172800
+          "TimeArg": 1422172800,
+          "TimeArgInQuery": 1422172800,
+          "TimeArgInHeader": 1422172800,
+          "TimeCustom": 1422172800,
+          "TimeCustomInQuery": 1422172800,
+          "TimeCustomInHeader": 1422172800,
+          "TimeFormat": 1422172800,
+          "TimeFormatInQuery": 1422172800,
+          "TimeFormatInHeader": 1422172800
         },
         "serialized": {
-          "uri": "/path",
-          "headers": {},
-          "body": "{\"TimeArg\": 1422172800}"
-        }
-      },
-      {
-        "given": {
-          "input": {
-            "shape": "InputShape"
+          "uri": "/path?TimeQuery=2015-01-25T08%3A00%3A00Z&TimeCustomQuery=1422172800&TimeFormatQuery=1422172800",
+          "headers": {
+            "x-amz-timearg": "Sun, 25 Jan 2015 08:00:00 GMT",
+            "x-amz-timecustom-header": "1422172800",
+            "x-amz-timeformat-header": "1422172800"
           },
-          "http": {
-            "method": "POST",
-            "requestUri": "/path"
-          },
-          "name": "OperationName"
-        },
-        "params": {
-          "TimeArgInHeader": 1422172800
-        },
-        "serialized": {
-          "uri": "/path",
-          "headers": {"x-amz-timearg": "Sun, 25 Jan 2015 08:00:00 GMT"},
-          "body": ""
+          "body": "{\"TimeArg\": 1422172800, \"TimeCustom\": \"2015-01-25T08:00:00Z\", \"TimeFormat\": \"Sun, 25 Jan 2015 08:00:00 GMT\"}"
         }
       }
     ]
@@ -1251,7 +1285,7 @@
         "members": {
           "Token": {
             "shape": "StringType",
-              "idempotencyToken": true
+            "idempotencyToken": true
           }
         }
       },
@@ -1397,7 +1431,7 @@
           "body": "{\"BodyListField\":[\"{\\\"Foo\\\":\\\"Bar\\\"}\"]}"
         }
       },
-	  {
+      {
         "given": {
           "input": {
             "shape": "InputShape"

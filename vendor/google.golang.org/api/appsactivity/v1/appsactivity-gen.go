@@ -1,4 +1,4 @@
-// Package appsactivity provides access to the G Suite Activity API.
+// Package appsactivity provides access to the Drive Activity API.
 //
 // See https://developers.google.com/google-apps/activity/
 //
@@ -672,6 +672,7 @@ func (c *ActivitiesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "activities")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

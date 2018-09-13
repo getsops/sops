@@ -1,4 +1,4 @@
-// Copyright 2018 Google Inc. All Rights Reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package testutil
 
 import (
+	"log"
 	"time"
 
 	"go.opencensus.io/plugin/ocgrpc"
@@ -34,12 +35,12 @@ func NewTestExporter() *TestExporter {
 
 	view.RegisterExporter(te)
 	view.SetReportingPeriod(time.Millisecond)
-	if err := ocgrpc.ClientRequestCountView.Subscribe(); err != nil {
-		panic(err)
+	if err := view.Register(ocgrpc.DefaultClientViews...); err != nil {
+		log.Fatal(err)
 	}
 
 	trace.RegisterExporter(te)
-	trace.SetDefaultSampler(trace.AlwaysSample())
+	trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
 
 	return te
 }

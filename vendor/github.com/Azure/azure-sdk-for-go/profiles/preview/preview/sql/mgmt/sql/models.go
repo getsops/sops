@@ -35,6 +35,7 @@ type DatabaseVulnerabilityAssessmentScansClient = original.DatabaseVulnerability
 type ElasticPoolOperationsClient = original.ElasticPoolOperationsClient
 type ElasticPoolsClient = original.ElasticPoolsClient
 type InstanceFailoverGroupsClient = original.InstanceFailoverGroupsClient
+type ManagedInstanceTdeCertificatesClient = original.ManagedInstanceTdeCertificatesClient
 type CapabilityGroup = original.CapabilityGroup
 
 const (
@@ -211,6 +212,9 @@ const (
 type BackupShortTermRetentionPoliciesCreateOrUpdateFuture = original.BackupShortTermRetentionPoliciesCreateOrUpdateFuture
 type BackupShortTermRetentionPoliciesUpdateFuture = original.BackupShortTermRetentionPoliciesUpdateFuture
 type BackupShortTermRetentionPolicy = original.BackupShortTermRetentionPolicy
+type BackupShortTermRetentionPolicyListResult = original.BackupShortTermRetentionPolicyListResult
+type BackupShortTermRetentionPolicyListResultIterator = original.BackupShortTermRetentionPolicyListResultIterator
+type BackupShortTermRetentionPolicyListResultPage = original.BackupShortTermRetentionPolicyListResultPage
 type BackupShortTermRetentionPolicyProperties = original.BackupShortTermRetentionPolicyProperties
 type Database = original.Database
 type DatabaseListResult = original.DatabaseListResult
@@ -229,8 +233,6 @@ type DatabasesResumeFuture = original.DatabasesResumeFuture
 type DatabasesUpdateFuture = original.DatabasesUpdateFuture
 type DatabasesUpgradeDataWarehouseFuture = original.DatabasesUpgradeDataWarehouseFuture
 type DatabaseUpdate = original.DatabaseUpdate
-type DatabaseVulnerabilityAssessment = original.DatabaseVulnerabilityAssessment
-type DatabaseVulnerabilityAssessmentProperties = original.DatabaseVulnerabilityAssessmentProperties
 type DatabaseVulnerabilityAssessmentScanExportProperties = original.DatabaseVulnerabilityAssessmentScanExportProperties
 type DatabaseVulnerabilityAssessmentScansExport = original.DatabaseVulnerabilityAssessmentScansExport
 type DatabaseVulnerabilityAssessmentScansInitiateScanFuture = original.DatabaseVulnerabilityAssessmentScansInitiateScanFuture
@@ -272,6 +274,7 @@ type LogSizeCapability = original.LogSizeCapability
 type ManagedInstanceEditionCapability = original.ManagedInstanceEditionCapability
 type ManagedInstanceFamilyCapability = original.ManagedInstanceFamilyCapability
 type ManagedInstancePairInfo = original.ManagedInstancePairInfo
+type ManagedInstanceTdeCertificatesCreateFuture = original.ManagedInstanceTdeCertificatesCreateFuture
 type ManagedInstanceVcoresCapability = original.ManagedInstanceVcoresCapability
 type ManagedInstanceVersionCapability = original.ManagedInstanceVersionCapability
 type MaxSizeCapability = original.MaxSizeCapability
@@ -284,6 +287,9 @@ type ResourceMoveDefinition = original.ResourceMoveDefinition
 type ServerVersionCapability = original.ServerVersionCapability
 type ServiceObjectiveCapability = original.ServiceObjectiveCapability
 type Sku = original.Sku
+type TdeCertificate = original.TdeCertificate
+type TdeCertificateProperties = original.TdeCertificateProperties
+type TdeCertificatesCreateFuture = original.TdeCertificatesCreateFuture
 type TrackedResource = original.TrackedResource
 type VulnerabilityAssessmentRecurringScansProperties = original.VulnerabilityAssessmentRecurringScansProperties
 type VulnerabilityAssessmentScanError = original.VulnerabilityAssessmentScanError
@@ -292,6 +298,7 @@ type VulnerabilityAssessmentScanRecordListResult = original.VulnerabilityAssessm
 type VulnerabilityAssessmentScanRecordListResultIterator = original.VulnerabilityAssessmentScanRecordListResultIterator
 type VulnerabilityAssessmentScanRecordListResultPage = original.VulnerabilityAssessmentScanRecordListResultPage
 type VulnerabilityAssessmentScanRecordProperties = original.VulnerabilityAssessmentScanRecordProperties
+type TdeCertificatesClient = original.TdeCertificatesClient
 
 func NewBackupShortTermRetentionPoliciesClient(subscriptionID string) BackupShortTermRetentionPoliciesClient {
 	return original.NewBackupShortTermRetentionPoliciesClient(subscriptionID)
@@ -346,6 +353,12 @@ func NewInstanceFailoverGroupsClient(subscriptionID string) InstanceFailoverGrou
 }
 func NewInstanceFailoverGroupsClientWithBaseURI(baseURI string, subscriptionID string) InstanceFailoverGroupsClient {
 	return original.NewInstanceFailoverGroupsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewManagedInstanceTdeCertificatesClient(subscriptionID string) ManagedInstanceTdeCertificatesClient {
+	return original.NewManagedInstanceTdeCertificatesClient(subscriptionID)
+}
+func NewManagedInstanceTdeCertificatesClientWithBaseURI(baseURI string, subscriptionID string) ManagedInstanceTdeCertificatesClient {
+	return original.NewManagedInstanceTdeCertificatesClientWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleCapabilityGroupValues() []CapabilityGroup {
 	return original.PossibleCapabilityGroupValues()
@@ -403,6 +416,12 @@ func PossibleVulnerabilityAssessmentScanStateValues() []VulnerabilityAssessmentS
 }
 func PossibleVulnerabilityAssessmentScanTriggerTypeValues() []VulnerabilityAssessmentScanTriggerType {
 	return original.PossibleVulnerabilityAssessmentScanTriggerTypeValues()
+}
+func NewTdeCertificatesClient(subscriptionID string) TdeCertificatesClient {
+	return original.NewTdeCertificatesClient(subscriptionID)
+}
+func NewTdeCertificatesClientWithBaseURI(baseURI string, subscriptionID string) TdeCertificatesClient {
+	return original.NewTdeCertificatesClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

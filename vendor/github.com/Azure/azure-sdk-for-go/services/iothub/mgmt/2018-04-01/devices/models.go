@@ -1793,6 +1793,21 @@ type RoutingStorageContainerProperties struct {
 	Encoding *string `json:"encoding,omitempty"`
 }
 
+// RoutingTwin twin reference input parameter. This is an optional parameter
+type RoutingTwin struct {
+	// Tags - Twin Tags
+	Tags       interface{}            `json:"tags,omitempty"`
+	Properties *RoutingTwinProperties `json:"properties,omitempty"`
+}
+
+// RoutingTwinProperties ...
+type RoutingTwinProperties struct {
+	// DesiredProperties - Twin desired properties
+	DesiredProperties interface{} `json:"desiredProperties,omitempty"`
+	// ReportedProperties - Twin desired properties
+	ReportedProperties interface{} `json:"reportedProperties,omitempty"`
+}
+
 // SetObject ...
 type SetObject struct {
 	autorest.Response `json:"-"`
@@ -1948,6 +1963,8 @@ type TestAllRoutesInput struct {
 	RoutingSource RoutingSource `json:"routingSource,omitempty"`
 	// Message - Routing message
 	Message *RoutingMessage `json:"message,omitempty"`
+	// Twin - Routing Twin Reference
+	Twin *RoutingTwin `json:"twin,omitempty"`
 }
 
 // TestAllRoutesResult result of testing all routes
@@ -1963,6 +1980,8 @@ type TestRouteInput struct {
 	Message *RoutingMessage `json:"message,omitempty"`
 	// Route - Route properties
 	Route *RouteProperties `json:"route,omitempty"`
+	// Twin - Routing Twin Reference
+	Twin *RoutingTwin `json:"twin,omitempty"`
 }
 
 // TestRouteResult result of testing one route

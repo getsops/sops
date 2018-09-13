@@ -1,4 +1,4 @@
-// Package testing provides access to the Google Cloud Testing API.
+// Package testing provides access to the Cloud Testing API.
 //
 // See https://developers.google.com/cloud-test-lab/
 //
@@ -286,7 +286,6 @@ func (s *AndroidDeviceList) MarshalJSON() ([]byte, error) {
 // more information on types of Android tests.
 type AndroidInstrumentationTest struct {
 	// AppApk: The APK for the application under test.
-	// Required
 	AppApk *FileReference `json:"appApk,omitempty"`
 
 	// AppPackageId: The java package for the application under
@@ -312,17 +311,16 @@ type AndroidInstrumentationTest struct {
 	// .html#using-android-test-orchestrator>
 	// for more information about Android Test Orchestrator.
 	//
-	// Optional, if empty, test will be run without orchestrator.
+	// Optional. If not set, the test will be run without the orchestrator.
 	//
 	// Possible values:
-	//   "ORCHESTRATOR_OPTION_UNSPECIFIED" - This means that the server
-	// should choose the mode. And test will be run
-	// without orchestrator.
-	// Using orchestrator is highly encouraged because of all the benefits
-	// it
-	// offers. And in the future, all instrumentation tests will be run
-	// with
-	// orchestrator by default if preference unspecified.
+	//   "ORCHESTRATOR_OPTION_UNSPECIFIED" - Default value: the server will
+	// choose the mode. Currently implies that
+	// the test will run without the orchestrator. In the future,
+	// all instrumentation tests will be run with the orchestrator.
+	// Using the orchestrator is highly encouraged because of all the
+	// benefits it
+	// offers.
 	//   "USE_ORCHESTRATOR" - Run test using orchestrator.
 	// ** Only compatible with AndroidJUnitRunner version 1.0 or higher!
 	// **
@@ -459,6 +457,18 @@ type AndroidModel struct {
 	//   "PHYSICAL" - Actual hardware
 	Form string `json:"form,omitempty"`
 
+	// FormFactor: Whther this device is a phone, tablet, wearable,
+	// etc.
+	// @OutputOnly
+	//
+	// Possible values:
+	//   "DEVICE_FORM_FACTOR_UNSPECIFIED" - Do not use. For proto versioning
+	// only.
+	//   "PHONE" - This device has the shape of a phone
+	//   "TABLET" - This device has the shape of a tablet
+	//   "WEARABLE" - This device has the shape of a watch or other wearable
+	FormFactor string `json:"formFactor,omitempty"`
+
 	// Id: The unique opaque id for this model.
 	// Use this for invoking the TestExecutionService.
 	// @OutputOnly
@@ -546,7 +556,6 @@ func (s *AndroidModel) MarshalJSON() ([]byte, error) {
 // or physical Android Device, finding culprits and crashes as it goes.
 type AndroidRoboTest struct {
 	// AppApk: The APK for the application under test.
-	// Required
 	AppApk *FileReference `json:"appApk,omitempty"`
 
 	// AppInitialActivity: The initial activity that should be used to start
@@ -616,8 +625,8 @@ func (s *AndroidRoboTest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// AndroidRuntimeConfiguration: Configuration that can be selected at
-// the time a test is run.
+// AndroidRuntimeConfiguration: Android configuration that can be
+// selected at the time a test is run.
 type AndroidRuntimeConfiguration struct {
 	// Locales: The set of available locales.
 	// @OutputOnly
@@ -657,7 +666,6 @@ func (s *AndroidRuntimeConfiguration) MarshalJSON() ([]byte, error) {
 // user of this api, for the time being.
 type AndroidTestLoop struct {
 	// AppApk: The APK for the application under test.
-	// Required
 	AppApk *FileReference `json:"appApk,omitempty"`
 
 	// AppPackageId: The java package for the application under
@@ -1051,7 +1059,9 @@ type Date struct {
 	// if specifying a year/month where the day is not significant.
 	Day int64 `json:"day,omitempty"`
 
-	// Month: Month of year. Must be from 1 to 12.
+	// Month: Month of year. Must be from 1 to 12, or 0 if specifying a date
+	// without a
+	// month.
 	Month int64 `json:"month,omitempty"`
 
 	// Year: Year of date. Must be from 1 to 9999, or 0 if specifying a date
@@ -1599,6 +1609,38 @@ func (s *Orientation) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// ProvidedSoftwareCatalog: The currently provided software environment
+// on the devices under test.
+type ProvidedSoftwareCatalog struct {
+	// OrchestratorVersion: A string representing the current version of
+	// Android Test Orchestrator that
+	// is provided by TestExecutionService. Example: "1.0.2 beta"
+	OrchestratorVersion string `json:"orchestratorVersion,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "OrchestratorVersion")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "OrchestratorVersion") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ProvidedSoftwareCatalog) MarshalJSON() ([]byte, error) {
+	type NoMethod ProvidedSoftwareCatalog
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // RegularFile: A file or directory to install on the device before the
 // test starts
 type RegularFile struct {
@@ -1887,6 +1929,10 @@ type TestEnvironmentCatalog struct {
 	// NetworkConfigurationCatalog: Supported network configurations
 	NetworkConfigurationCatalog *NetworkConfigurationCatalog `json:"networkConfigurationCatalog,omitempty"`
 
+	// SoftwareCatalog: The software test environment provided by
+	// TestExecutionService.
+	SoftwareCatalog *ProvidedSoftwareCatalog `json:"softwareCatalog,omitempty"`
+
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
@@ -2101,11 +2147,20 @@ type TestMatrix struct {
 	// allowed.
 	//   "TEST_ONLY_APK" - The APK is marked as "testOnly".
 	// NOT USED
+	//   "MALFORMED_IPA" - The input IPA could not be parsed.
+	// NOT USED
 	//   "NO_CODE_APK" - APK contains no code.
 	// See
 	// also
 	// https://developer.android.com/guide/topics/manifest/application-e
 	// lement.html#code
+	//   "INVALID_INPUT_APK" - Either the provided input APK path was
+	// malformed,
+	// the APK file does not exist, or the user does not have permission
+	// to
+	// access the APK file.
+	//   "INVALID_APK_PREVIEW_SDK" - APK is built for a preview SDK which is
+	// unsupported
 	InvalidMatrixDetails string `json:"invalidMatrixDetails,omitempty"`
 
 	// ProjectId: The cloud project that owns the test matrix.
@@ -2257,9 +2312,13 @@ type TestSetup struct {
 	// Optional
 	FilesToPush []*DeviceFile `json:"filesToPush,omitempty"`
 
-	// NetworkProfile: The network traffic profile used for running the
-	// test.
-	// Optional
+	// NetworkProfile: Optional. The network traffic profile used for
+	// running the test.
+	// Available network profiles can be queried by using
+	// the
+	// NETWORK_CONFIGURATION environment type when
+	// calling
+	// TestEnvironmentDiscoveryService.GetTestEnvironmentCatalog.
 	NetworkProfile string `json:"networkProfile,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Account") to
@@ -2590,6 +2649,7 @@ func (c *ApplicationDetailServiceGetApkDetailsCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/applicationDetailService/getApkDetails")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2717,6 +2777,7 @@ func (c *ProjectsTestMatricesCancelCall) doRequest(alt string) (*http.Response, 
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/testMatrices/{testMatrixId}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2880,6 +2941,7 @@ func (c *ProjectsTestMatricesCreateCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/testMatrices")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3034,6 +3096,7 @@ func (c *ProjectsTestMatricesGetCall) doRequest(alt string) (*http.Response, err
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/testMatrices/{testMatrixId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3195,6 +3258,7 @@ func (c *TestEnvironmentCatalogGetCall) doRequest(alt string) (*http.Response, e
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/testEnvironmentCatalog/{environmentType}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3256,7 +3320,8 @@ func (c *TestEnvironmentCatalogGetCall) Do(opts ...googleapi.CallOption) (*TestE
 	//       "enum": [
 	//         "ENVIRONMENT_TYPE_UNSPECIFIED",
 	//         "ANDROID",
-	//         "NETWORK_CONFIGURATION"
+	//         "NETWORK_CONFIGURATION",
+	//         "PROVIDED_SOFTWARE"
 	//       ],
 	//       "location": "path",
 	//       "required": true,

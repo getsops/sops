@@ -1189,3 +1189,47 @@ func encodeHeaderRaw(t *testing.T, pairs ...string) []byte {
 	var he hpackEncoder
 	return he.encodeHeaderRaw(t, pairs...)
 }
+
+func TestSettingsDuplicates(t *testing.T) {
+	tests := []struct {
+		settings []Setting
+		want     bool
+	}{
+		{nil, false},
+		{[]Setting{{ID: 1}}, false},
+		{[]Setting{{ID: 1}, {ID: 2}}, false},
+		{[]Setting{{ID: 1}, {ID: 2}}, false},
+		{[]Setting{{ID: 1}, {ID: 2}, {ID: 3}}, false},
+		{[]Setting{{ID: 1}, {ID: 2}, {ID: 3}}, false},
+		{[]Setting{{ID: 1}, {ID: 2}, {ID: 3}, {ID: 4}}, false},
+
+		{[]Setting{{ID: 1}, {ID: 2}, {ID: 3}, {ID: 2}}, true},
+		{[]Setting{{ID: 4}, {ID: 2}, {ID: 3}, {ID: 4}}, true},
+
+		{[]Setting{
+			{ID: 1}, {ID: 2}, {ID: 3}, {ID: 4},
+			{ID: 5}, {ID: 6}, {ID: 7}, {ID: 8},
+			{ID: 9}, {ID: 10}, {ID: 11}, {ID: 12},
+		}, false},
+
+		{[]Setting{
+			{ID: 1}, {ID: 2}, {ID: 3}, {ID: 4},
+			{ID: 5}, {ID: 6}, {ID: 7}, {ID: 8},
+			{ID: 9}, {ID: 10}, {ID: 11}, {ID: 11},
+		}, true},
+	}
+	for i, tt := range tests {
+		fr, _ := testFramer()
+		fr.WriteSettings(tt.settings...)
+		f, err := fr.ReadFrame()
+		if err != nil {
+			t.Fatalf("%d. ReadFrame: %v", i, err)
+		}
+		sf := f.(*SettingsFrame)
+		got := sf.HasDuplicates()
+		if got != tt.want {
+			t.Errorf("%d. HasDuplicates = %v; want %v", i, got, tt.want)
+		}
+	}
+
+}

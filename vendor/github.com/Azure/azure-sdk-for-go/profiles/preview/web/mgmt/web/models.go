@@ -70,6 +70,21 @@ const (
 	Website        AzureResourceType = original.Website
 )
 
+type AzureStorageState = original.AzureStorageState
+
+const (
+	InvalidCredentials AzureStorageState = original.InvalidCredentials
+	InvalidShare       AzureStorageState = original.InvalidShare
+	Ok                 AzureStorageState = original.Ok
+)
+
+type AzureStorageType = original.AzureStorageType
+
+const (
+	AzureBlob  AzureStorageType = original.AzureBlob
+	AzureFiles AzureStorageType = original.AzureFiles
+)
+
 type BackupItemStatus = original.BackupItemStatus
 
 const (
@@ -328,6 +343,13 @@ const (
 	InternalLoadBalancingModeWeb        InternalLoadBalancingMode = original.InternalLoadBalancingModeWeb
 )
 
+type IPFilterTag = original.IPFilterTag
+
+const (
+	Default  IPFilterTag = original.Default
+	XffProxy IPFilterTag = original.XffProxy
+)
+
 type IssueType = original.IssueType
 
 const (
@@ -456,6 +478,15 @@ const (
 	FileZilla3 PublishingProfileFormat = original.FileZilla3
 	Ftp        PublishingProfileFormat = original.Ftp
 	WebDeploy  PublishingProfileFormat = original.WebDeploy
+)
+
+type RenderingType = original.RenderingType
+
+const (
+	NoGraph               RenderingType = original.NoGraph
+	Table                 RenderingType = original.Table
+	TimeSeries            RenderingType = original.TimeSeries
+	TimeSeriesPerInstance RenderingType = original.TimeSeriesPerInstance
 )
 
 type ResourceScopeType = original.ResourceScopeType
@@ -594,13 +625,13 @@ const (
 type WorkerSizeOptions = original.WorkerSizeOptions
 
 const (
-	D1      WorkerSizeOptions = original.D1
-	D2      WorkerSizeOptions = original.D2
-	D3      WorkerSizeOptions = original.D3
-	Default WorkerSizeOptions = original.Default
-	Large   WorkerSizeOptions = original.Large
-	Medium  WorkerSizeOptions = original.Medium
-	Small   WorkerSizeOptions = original.Small
+	WorkerSizeOptionsD1      WorkerSizeOptions = original.WorkerSizeOptionsD1
+	WorkerSizeOptionsD2      WorkerSizeOptions = original.WorkerSizeOptionsD2
+	WorkerSizeOptionsD3      WorkerSizeOptions = original.WorkerSizeOptionsD3
+	WorkerSizeOptionsDefault WorkerSizeOptions = original.WorkerSizeOptionsDefault
+	WorkerSizeOptionsLarge   WorkerSizeOptions = original.WorkerSizeOptionsLarge
+	WorkerSizeOptionsMedium  WorkerSizeOptions = original.WorkerSizeOptionsMedium
+	WorkerSizeOptionsSmall   WorkerSizeOptions = original.WorkerSizeOptionsSmall
 )
 
 type AbnormalTimePeriod = original.AbnormalTimePeriod
@@ -692,6 +723,8 @@ type AutoHealRules = original.AutoHealRules
 type AutoHealTriggers = original.AutoHealTriggers
 type AzureBlobStorageApplicationLogsConfig = original.AzureBlobStorageApplicationLogsConfig
 type AzureBlobStorageHTTPLogsConfig = original.AzureBlobStorageHTTPLogsConfig
+type AzureStorageInfoValue = original.AzureStorageInfoValue
+type AzureStoragePropertyDictionaryResource = original.AzureStoragePropertyDictionaryResource
 type AzureTableStorageApplicationLogsConfig = original.AzureTableStorageApplicationLogsConfig
 type BackupItem = original.BackupItem
 type BackupItemCollection = original.BackupItemCollection
@@ -747,12 +780,15 @@ type CustomHostnameAnalysisResult = original.CustomHostnameAnalysisResult
 type CustomHostnameAnalysisResultProperties = original.CustomHostnameAnalysisResultProperties
 type DatabaseBackupSetting = original.DatabaseBackupSetting
 type DataSource = original.DataSource
+type DataTableResponseColumn = original.DataTableResponseColumn
+type DataTableResponseObject = original.DataTableResponseObject
 type DefaultErrorResponse = original.DefaultErrorResponse
 type DefaultErrorResponseError = original.DefaultErrorResponseError
 type DefaultErrorResponseErrorDetailsItem = original.DefaultErrorResponseErrorDetailsItem
 type DeletedAppRestoreRequest = original.DeletedAppRestoreRequest
 type DeletedAppRestoreRequestProperties = original.DeletedAppRestoreRequestProperties
 type DeletedSite = original.DeletedSite
+type DeletedSiteProperties = original.DeletedSiteProperties
 type DeletedWebAppCollection = original.DeletedWebAppCollection
 type DeletedWebAppCollectionIterator = original.DeletedWebAppCollectionIterator
 type DeletedWebAppCollectionPage = original.DeletedWebAppCollectionPage
@@ -765,6 +801,12 @@ type DeploymentProperties = original.DeploymentProperties
 type DetectorAbnormalTimePeriod = original.DetectorAbnormalTimePeriod
 type DetectorDefinition = original.DetectorDefinition
 type DetectorDefinitionProperties = original.DetectorDefinitionProperties
+type DetectorInfo = original.DetectorInfo
+type DetectorResponse = original.DetectorResponse
+type DetectorResponseCollection = original.DetectorResponseCollection
+type DetectorResponseCollectionIterator = original.DetectorResponseCollectionIterator
+type DetectorResponseCollectionPage = original.DetectorResponseCollectionPage
+type DetectorResponseProperties = original.DetectorResponseProperties
 type DiagnosticAnalysis = original.DiagnosticAnalysis
 type DiagnosticAnalysisCollection = original.DiagnosticAnalysisCollection
 type DiagnosticAnalysisCollectionIterator = original.DiagnosticAnalysisCollectionIterator
@@ -775,6 +817,7 @@ type DiagnosticCategoryCollection = original.DiagnosticCategoryCollection
 type DiagnosticCategoryCollectionIterator = original.DiagnosticCategoryCollectionIterator
 type DiagnosticCategoryCollectionPage = original.DiagnosticCategoryCollectionPage
 type DiagnosticCategoryProperties = original.DiagnosticCategoryProperties
+type DiagnosticData = original.DiagnosticData
 type DiagnosticDetectorCollection = original.DiagnosticDetectorCollection
 type DiagnosticDetectorCollectionIterator = original.DiagnosticDetectorCollectionIterator
 type DiagnosticDetectorCollectionPage = original.DiagnosticDetectorCollectionPage
@@ -858,6 +901,7 @@ type ListOperation = original.ListOperation
 type ListVnetInfo = original.ListVnetInfo
 type ListVnetRoute = original.ListVnetRoute
 type LocalizableString = original.LocalizableString
+type LogSpecification = original.LogSpecification
 type ManagedServiceIdentity = original.ManagedServiceIdentity
 type MetricAvailabilily = original.MetricAvailabilily
 type MetricAvailability = original.MetricAvailability
@@ -896,6 +940,8 @@ type PremierAddOnOfferCollection = original.PremierAddOnOfferCollection
 type PremierAddOnOfferCollectionIterator = original.PremierAddOnOfferCollectionIterator
 type PremierAddOnOfferCollectionPage = original.PremierAddOnOfferCollectionPage
 type PremierAddOnOfferProperties = original.PremierAddOnOfferProperties
+type PremierAddOnPatchResource = original.PremierAddOnPatchResource
+type PremierAddOnPatchResourceProperties = original.PremierAddOnPatchResourceProperties
 type PremierAddOnProperties = original.PremierAddOnProperties
 type PrivateAccess = original.PrivateAccess
 type PrivateAccessProperties = original.PrivateAccessProperties
@@ -937,6 +983,7 @@ type ReissueCertificateOrderRequest = original.ReissueCertificateOrderRequest
 type ReissueCertificateOrderRequestProperties = original.ReissueCertificateOrderRequestProperties
 type RelayServiceConnectionEntity = original.RelayServiceConnectionEntity
 type RelayServiceConnectionEntityProperties = original.RelayServiceConnectionEntityProperties
+type Rendering = original.Rendering
 type RenewCertificateOrderRequest = original.RenewCertificateOrderRequest
 type RenewCertificateOrderRequestProperties = original.RenewCertificateOrderRequestProperties
 type RequestsBasedTrigger = original.RequestsBasedTrigger
@@ -944,6 +991,11 @@ type Resource = original.Resource
 type ResourceCollection = original.ResourceCollection
 type ResourceCollectionIterator = original.ResourceCollectionIterator
 type ResourceCollectionPage = original.ResourceCollectionPage
+type ResourceHealthMetadata = original.ResourceHealthMetadata
+type ResourceHealthMetadataCollection = original.ResourceHealthMetadataCollection
+type ResourceHealthMetadataCollectionIterator = original.ResourceHealthMetadataCollectionIterator
+type ResourceHealthMetadataCollectionPage = original.ResourceHealthMetadataCollectionPage
+type ResourceHealthMetadataProperties = original.ResourceHealthMetadataProperties
 type ResourceMetric = original.ResourceMetric
 type ResourceMetricAvailability = original.ResourceMetricAvailability
 type ResourceMetricCollection = original.ResourceMetricCollection
@@ -1020,10 +1072,7 @@ type SnapshotCollection = original.SnapshotCollection
 type SnapshotCollectionIterator = original.SnapshotCollectionIterator
 type SnapshotCollectionPage = original.SnapshotCollectionPage
 type SnapshotProperties = original.SnapshotProperties
-type SnapshotRecoveryRequest = original.SnapshotRecoveryRequest
-type SnapshotRecoveryRequestProperties = original.SnapshotRecoveryRequestProperties
 type SnapshotRecoverySource = original.SnapshotRecoverySource
-type SnapshotRecoveryTarget = original.SnapshotRecoveryTarget
 type SnapshotRestoreRequest = original.SnapshotRestoreRequest
 type SnapshotRestoreRequestProperties = original.SnapshotRestoreRequestProperties
 type Solution = original.Solution
@@ -1045,6 +1094,8 @@ type StorageMigrationResponse = original.StorageMigrationResponse
 type StorageMigrationResponseProperties = original.StorageMigrationResponseProperties
 type String = original.String
 type StringDictionary = original.StringDictionary
+type SwiftVirtualNetwork = original.SwiftVirtualNetwork
+type SwiftVirtualNetworkProperties = original.SwiftVirtualNetworkProperties
 type TldLegalAgreement = original.TldLegalAgreement
 type TldLegalAgreementCollection = original.TldLegalAgreementCollection
 type TldLegalAgreementCollectionIterator = original.TldLegalAgreementCollectionIterator
@@ -1101,6 +1152,7 @@ type WorkerPoolCollectionPage = original.WorkerPoolCollectionPage
 type WorkerPoolResource = original.WorkerPoolResource
 type ProviderClient = original.ProviderClient
 type RecommendationsClient = original.RecommendationsClient
+type ResourceHealthMetadataClient = original.ResourceHealthMetadataClient
 type TopLevelDomainsClient = original.TopLevelDomainsClient
 
 func NewAppsClient(subscriptionID string) AppsClient {
@@ -1181,6 +1233,12 @@ func PossibleAutoHealActionTypeValues() []AutoHealActionType {
 func PossibleAzureResourceTypeValues() []AzureResourceType {
 	return original.PossibleAzureResourceTypeValues()
 }
+func PossibleAzureStorageStateValues() []AzureStorageState {
+	return original.PossibleAzureStorageStateValues()
+}
+func PossibleAzureStorageTypeValues() []AzureStorageType {
+	return original.PossibleAzureStorageTypeValues()
+}
 func PossibleBackupItemStatusValues() []BackupItemStatus {
 	return original.PossibleBackupItemStatusValues()
 }
@@ -1256,6 +1314,9 @@ func PossibleInAvailabilityReasonTypeValues() []InAvailabilityReasonType {
 func PossibleInternalLoadBalancingModeValues() []InternalLoadBalancingMode {
 	return original.PossibleInternalLoadBalancingModeValues()
 }
+func PossibleIPFilterTagValues() []IPFilterTag {
+	return original.PossibleIPFilterTagValues()
+}
 func PossibleIssueTypeValues() []IssueType {
 	return original.PossibleIssueTypeValues()
 }
@@ -1297,6 +1358,9 @@ func PossiblePublicCertificateLocationValues() []PublicCertificateLocation {
 }
 func PossiblePublishingProfileFormatValues() []PublishingProfileFormat {
 	return original.PossiblePublishingProfileFormatValues()
+}
+func PossibleRenderingTypeValues() []RenderingType {
+	return original.PossibleRenderingTypeValues()
 }
 func PossibleResourceScopeTypeValues() []ResourceScopeType {
 	return original.PossibleResourceScopeTypeValues()
@@ -1357,6 +1421,12 @@ func NewRecommendationsClient(subscriptionID string) RecommendationsClient {
 }
 func NewRecommendationsClientWithBaseURI(baseURI string, subscriptionID string) RecommendationsClient {
 	return original.NewRecommendationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResourceHealthMetadataClient(subscriptionID string) ResourceHealthMetadataClient {
+	return original.NewResourceHealthMetadataClient(subscriptionID)
+}
+func NewResourceHealthMetadataClientWithBaseURI(baseURI string, subscriptionID string) ResourceHealthMetadataClient {
+	return original.NewResourceHealthMetadataClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewTopLevelDomainsClient(subscriptionID string) TopLevelDomainsClient {
 	return original.NewTopLevelDomainsClient(subscriptionID)

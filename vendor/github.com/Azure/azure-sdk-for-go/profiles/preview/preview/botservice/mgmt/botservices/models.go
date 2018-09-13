@@ -19,7 +19,7 @@
 
 package botservice
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/botservice/mgmt/2017-12-01/botservices"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/botservice/mgmt/2018-07-12/botservices"
 
 type BotConnectionClient = original.BotConnectionClient
 type BotsClient = original.BotsClient

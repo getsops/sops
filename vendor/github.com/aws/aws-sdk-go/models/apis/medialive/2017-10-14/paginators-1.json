@@ -1,10 +1,10 @@
 {
   "pagination": {
-    "ListInputs": {
+    "DescribeSchedule": {
       "input_token": "NextToken",
       "output_token": "NextToken",
       "limit_key": "MaxResults",
-      "result_key": "Inputs"
+      "result_key": "ScheduleActions"
     },
     "ListChannels": {
       "input_token": "NextToken",
@@ -17,6 +17,24 @@
       "output_token": "NextToken",
       "limit_key": "MaxResults",
       "result_key": "InputSecurityGroups"
+    },
+    "ListInputs": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults",
+      "result_key": "Inputs"
+    },
+    "ListOfferings": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults",
+      "result_key": "Offerings"
+    },
+    "ListReservations": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults",
+      "result_key": "Reservations"
     }
   }
 }

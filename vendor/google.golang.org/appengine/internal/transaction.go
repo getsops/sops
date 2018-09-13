@@ -72,6 +72,8 @@ func RunTransactionOnce(c netcontext.Context, f func(netcontext.Context) error, 
 	}
 	if readOnly {
 		req.Mode = pb.BeginTransactionRequest_READ_ONLY.Enum()
+	} else {
+		req.Mode = pb.BeginTransactionRequest_READ_WRITE.Enum()
 	}
 	if err := Call(c, "datastore_v3", "BeginTransaction", req, &t.transaction); err != nil {
 		return nil, err

@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -119,6 +108,34 @@
       "resources": {
         "environments": {
           "methods": {
+            "authorize": {
+              "description": "Sends an access token to a running environment on behalf of a user. When\nthis completes, the environment will be authorized to run gcloud commands\nwithout requiring the user to manually authenticate.",
+              "flatPath": "v1alpha1/users/{usersId}/environments/{environmentsId}:authorize",
+              "httpMethod": "POST",
+              "id": "cloudshell.users.environments.authorize",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "Name of the resource that should receive the token, for example\n`users/me/environments/default` or\n`users/someone@example.com/environments/default`.",
+                  "location": "path",
+                  "pattern": "^users/[^/]+/environments/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1alpha1/{+name}:authorize",
+              "request": {
+                "$ref": "AuthorizeEnvironmentRequest"
+              },
+              "response": {
+                "$ref": "Empty"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
+            },
             "get": {
               "description": "Gets an environment. Returns NOT_FOUND if the environment does not exist.",
               "flatPath": "v1alpha1/users/{usersId}/environments/{environmentsId}",
@@ -270,9 +287,20 @@
       }
     }
   },
-  "revision": "20180203",
+  "revision": "20180809",
   "rootUrl": "https://cloudshell.googleapis.com/",
   "schemas": {
+    "AuthorizeEnvironmentRequest": {
+      "description": "Request message for AuthorizeEnvironment.",
+      "id": "AuthorizeEnvironmentRequest",
+      "properties": {
+        "accessToken": {
+          "description": "The OAuth access token that should be sent to the environment.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "CreatePublicKeyRequest": {
       "description": "Request message for CreatePublicKey.",
       "id": "CreatePublicKeyRequest",
@@ -442,7 +470,12 @@
     "StartEnvironmentRequest": {
       "description": "Request message for StartEnvironment.",
       "id": "StartEnvironmentRequest",
-      "properties": {},
+      "properties": {
+        "accessToken": {
+          "description": "The initial access token passed to the environment. If this is present and\nvalid, the environment will be pre-authenticated with gcloud so that the\nuser can run gcloud commands in Cloud Shell without having to log in. This\ncode can be updated later by calling AuthorizeEnvironment.",
+          "type": "string"
+        }
+      },
       "type": "object"
     },
     "StartEnvironmentResponse": {

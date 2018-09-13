@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -294,7 +294,7 @@ func TestKeySets(t *testing.T) {
 		{
 			KeyRange{Key{1}, Key{2}, ClosedOpen},
 			&sppb.KeySet{Ranges: []*sppb.KeyRange{
-				&sppb.KeyRange{
+				{
 					StartKeyType: &sppb.KeyRange_StartClosed{StartClosed: listValueProto(int1)},
 					EndKeyType:   &sppb.KeyRange_EndOpen{EndOpen: listValueProto(int2)},
 				},
@@ -303,7 +303,7 @@ func TestKeySets(t *testing.T) {
 		{
 			Key{2}.AsPrefix(),
 			&sppb.KeySet{Ranges: []*sppb.KeyRange{
-				&sppb.KeyRange{
+				{
 					StartKeyType: &sppb.KeyRange_StartClosed{StartClosed: listValueProto(int2)},
 					EndKeyType:   &sppb.KeyRange_EndClosed{EndClosed: listValueProto(int2)},
 				},
@@ -316,11 +316,11 @@ func TestKeySets(t *testing.T) {
 			),
 			&sppb.KeySet{
 				Ranges: []*sppb.KeyRange{
-					&sppb.KeyRange{
+					{
 						StartKeyType: &sppb.KeyRange_StartClosed{StartClosed: listValueProto(int1)},
 						EndKeyType:   &sppb.KeyRange_EndClosed{EndClosed: listValueProto(int2)},
 					},
-					&sppb.KeyRange{
+					{
 						StartKeyType: &sppb.KeyRange_StartOpen{StartOpen: listValueProto(int3)},
 						EndKeyType:   &sppb.KeyRange_EndClosed{EndClosed: listValueProto(int4)},
 					},
@@ -340,11 +340,11 @@ func TestKeySets(t *testing.T) {
 					listValueProto(intProto(6)),
 				},
 				Ranges: []*sppb.KeyRange{
-					&sppb.KeyRange{
+					{
 						StartKeyType: &sppb.KeyRange_StartClosed{StartClosed: listValueProto(int2)},
 						EndKeyType:   &sppb.KeyRange_EndClosed{EndClosed: listValueProto(int3)},
 					},
-					&sppb.KeyRange{
+					{
 						StartKeyType: &sppb.KeyRange_StartOpen{StartOpen: listValueProto(int4)},
 						EndKeyType:   &sppb.KeyRange_EndClosed{EndClosed: listValueProto(intProto(5))},
 					},

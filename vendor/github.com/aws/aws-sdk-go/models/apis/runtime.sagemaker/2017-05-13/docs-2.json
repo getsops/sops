@@ -1,15 +1,22 @@
 {
   "version": "2.0",
-  "service": "<p> Amazon SageMaker runtime API. </p>",
+  "service": "<p> The Amazon SageMaker runtime API. </p>",
   "operations": {
-    "InvokeEndpoint": "<p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href=\"http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html\">How It Works</a> </p> <p> Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p>"
+    "InvokeEndpoint": "<p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href=\"http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html\">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Cals to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html\">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note>"
   },
   "shapes": {
     "BodyBlob": {
       "base": null,
       "refs": {
-        "InvokeEndpointInput$Body": "<p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p>",
-        "InvokeEndpointOutput$Body": "<p>Includes the inference provided by the model.</p>"
+        "InvokeEndpointInput$Body": "<p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p> <p>For information about the format of the request body, see <a href=\"http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html\">Common Data Formats—Inference</a>.</p>",
+        "InvokeEndpointOutput$Body": "<p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href=\"http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html\">Common Data Formats—Inference</a>.</p>"
+      }
+    },
+    "CustomAttributesHeader": {
+      "base": null,
+      "refs": {
+        "InvokeEndpointInput$CustomAttributes": "<p/>",
+        "InvokeEndpointOutput$CustomAttributes": "<p/>"
       }
     },
     "EndpointName": {
@@ -28,7 +35,7 @@
       }
     },
     "InternalFailure": {
-      "base": "<p> Internal failure occurred. </p>",
+      "base": "<p> An internal failure occurred. </p>",
       "refs": {
       }
     },
@@ -45,7 +52,7 @@
     "LogStreamArn": {
       "base": null,
       "refs": {
-        "ModelError$LogStreamArn": "<p> Amazon Resource Name (ARN) of the log stream. </p>"
+        "ModelError$LogStreamArn": "<p> The Amazon Resource Name (ARN) of the log stream. </p>"
       }
     },
     "Message": {
@@ -64,7 +71,7 @@
       }
     },
     "ServiceUnavailable": {
-      "base": "<p> Service is unavailable. Try your call again. </p>",
+      "base": "<p> The service is unavailable. Try your call again. </p>",
       "refs": {
       }
     },

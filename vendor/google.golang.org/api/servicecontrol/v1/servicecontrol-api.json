@@ -63,11 +63,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -87,12 +82,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -291,7 +280,7 @@
       }
     }
   },
-  "revision": "20180312",
+  "revision": "20180901",
   "rootUrl": "https://servicecontrol.googleapis.com/",
   "schemas": {
     "AllocateInfo": {
@@ -399,9 +388,21 @@
           "$ref": "RequestMetadata",
           "description": "Metadata about the operation."
         },
+        "resourceLocation": {
+          "$ref": "ResourceLocation",
+          "description": "The resource location information."
+        },
         "resourceName": {
           "description": "The resource or collection that is the target of the operation.\nThe name is a scheme-less URI, not including the API service name.\nFor example:\n\n    \"shelves/SHELF_ID/books\"\n    \"shelves/SHELF_ID/books/BOOK_ID\"",
           "type": "string"
+        },
+        "resourceOriginalState": {
+          "additionalProperties": {
+            "description": "Properties of the object.",
+            "type": "any"
+          },
+          "description": "The resource's original state before mutation. Present only for\noperations which have successfully modified the targeted resource(s).\nIn general, this field should contain all changed fields, except those\nthat are already been included in `request`, `response`, `metadata` or\n`service_data` fields.\nWhen the JSON object represented here has a proto equivalent,\nthe proto name will be indicated in the `@type` property.",
+          "type": "object"
         },
         "response": {
           "additionalProperties": {
@@ -426,6 +427,43 @@
         "status": {
           "$ref": "Status",
           "description": "The status of the overall operation."
+        }
+      },
+      "type": "object"
+    },
+    "Auth": {
+      "description": "This message defines request authentication attributes. Terminology is\nbased on the JSON Web Token (JWT) standard, but the terms also\ncorrelate to concepts in other standards.",
+      "id": "Auth",
+      "properties": {
+        "accessLevels": {
+          "description": "A list of access level resource names that allow resources to be\naccessed by authenticated requester. It is part of Secure GCP processing\nfor the incoming request. An access level string has the format:\n\"//{api_service_name}/accessPolicies/{policy_id}/accessLevels/{short_name}\"\n\nExample:\n\"//accesscontextmanager.googleapis.com/accessPolicies/MY_POLICY_ID/accessLevels/MY_LEVEL\"",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "audiences": {
+          "description": "The intended audience(s) for this authentication information. Reflects\nthe audience (`aud`) claim within a JWT. The audience\nvalue(s) depends on the `issuer`, but typically include one or more of\nthe following pieces of information:\n\n*  The services intended to receive the credential such as\n   [\"pubsub.googleapis.com\", \"storage.googleapis.com\"]\n*  A set of service-based scopes. For example,\n   [\"https://www.googleapis.com/auth/cloud-platform\"]\n*  The client id of an app, such as the Firebase project id for JWTs\n   from Firebase Auth.\n\nConsult the documentation for the credential issuer to determine the\ninformation provided.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "claims": {
+          "additionalProperties": {
+            "description": "Properties of the object.",
+            "type": "any"
+          },
+          "description": "Structured claims presented with the credential. JWTs include\n`{key: value}` pairs for standard and private claims. The following\nis a subset of the standard required and optional claims that would\ntypically be presented for a Google-based JWT:\n\n   {'iss': 'accounts.google.com',\n    'sub': '113289723416554971153',\n    'aud': ['123456789012', 'pubsub.googleapis.com'],\n    'azp': '123456789012.apps.googleusercontent.com',\n    'email': 'jsmith@example.com',\n    'iat': 1353601026,\n    'exp': 1353604926}\n\nSAML assertions are similarly specified, but with an identity provider\ndependent structure.",
+          "type": "object"
+        },
+        "presenter": {
+          "description": "The authorized presenter of the credential. Reflects the optional\nAuthorized Presenter (`azp`) claim within a JWT or the\nOAuth client id. For example, a Google Cloud Platform client id looks\nas follows: \"123456789012.apps.googleusercontent.com\".",
+          "type": "string"
+        },
+        "principal": {
+          "description": "The authenticated principal. Reflects the issuer (`iss`) and subject\n(`sub`) claims within a JWT. The issuer and subject should be `/`\ndelimited, with `/` percent-encoded within the subject fragment. For\nGoogle accounts, the principal format is:\n\"https://accounts.google.com/{id}\"",
+          "type": "string"
         }
       },
       "type": "object"
@@ -468,6 +506,10 @@
         "resource": {
           "description": "The resource being accessed, as a REST-style string. For example:\n\n    bigquery.googleapis.com/projects/PROJECTID/datasets/DATASETID",
           "type": "string"
+        },
+        "resourceAttributes": {
+          "$ref": "Resource",
+          "description": "Resource attributes used in IAM condition evaluation. This field contains\nresource attributes like resource type and resource name.\n\nTo get the whole view of the attributes used in IAM\ncondition evaluation, the user must also look into\n`AuditLog.request_metadata.request_attributes`."
         }
       },
       "type": "object"
@@ -505,13 +547,15 @@
             "LOAS_PROJECT_DISABLED",
             "SECURITY_POLICY_VIOLATED",
             "INVALID_CREDENTIAL",
+            "LOCATION_POLICY_VIOLATED",
             "NAMESPACE_LOOKUP_UNAVAILABLE",
             "SERVICE_STATUS_UNAVAILABLE",
             "BILLING_STATUS_UNAVAILABLE",
             "QUOTA_CHECK_UNAVAILABLE",
             "LOAS_PROJECT_LOOKUP_UNAVAILABLE",
             "CLOUD_RESOURCE_MANAGER_BACKEND_UNAVAILABLE",
-            "SECURITY_POLICY_BACKEND_UNAVAILABLE"
+            "SECURITY_POLICY_BACKEND_UNAVAILABLE",
+            "LOCATION_POLICY_BACKEND_UNAVAILABLE"
           ],
           "enumDescriptions": [
             "This is never used in `CheckResponse`.",
@@ -540,13 +584,15 @@
             "The consumer's LOAS project is not `ACTIVE` in LoquatV2.",
             "Request is not allowed as per security policies defined in Org Policy.",
             "The credential in the request can not be verified.",
+            "Request is not allowed as per location policies defined in Org Policy.",
             "The backend server for looking up project id/number is unavailable.",
             "The backend server for checking service status is unavailable.",
             "The backend server for checking billing status is unavailable.",
             "The backend server for checking quota limits is unavailable.",
             "The Spanner for looking up LOAS project is unavailable.",
             "Cloud Resource Manager backend server is unavailable.",
-            "Backend server for evaluating security policy is unavailable."
+            "Backend server for evaluating security policy is unavailable.",
+            "Backend server for evaluating location policy is unavailable."
           ],
           "type": "string"
         },
@@ -777,6 +823,78 @@
       },
       "type": "object"
     },
+    "HttpRequest": {
+      "description": "A common proto for logging HTTP requests. Only contains semantics\ndefined by the HTTP specification. Product-specific logging\ninformation MUST be defined in a separate message.\n\nThis is an exact copy of HttpRequest message defined in Stackdriver.",
+      "id": "HttpRequest",
+      "properties": {
+        "cacheFillBytes": {
+          "description": "The number of HTTP response bytes inserted into cache. Set only when a\ncache fill was attempted.",
+          "format": "int64",
+          "type": "string"
+        },
+        "cacheHit": {
+          "description": "Whether or not an entity was served from cache\n(with or without validation).",
+          "type": "boolean"
+        },
+        "cacheLookup": {
+          "description": "Whether or not a cache lookup was attempted.",
+          "type": "boolean"
+        },
+        "cacheValidatedWithOriginServer": {
+          "description": "Whether or not the response was validated with the origin server before\nbeing served from cache. This field is only meaningful if `cache_hit` is\nTrue.",
+          "type": "boolean"
+        },
+        "latency": {
+          "description": "The request processing latency on the server, from the time the request was\nreceived until the response was sent.",
+          "format": "google-duration",
+          "type": "string"
+        },
+        "protocol": {
+          "description": "Protocol used for the request. Examples: \"HTTP/1.1\", \"HTTP/2\", \"websocket\"",
+          "type": "string"
+        },
+        "referer": {
+          "description": "The referer URL of the request, as defined in\n[HTTP/1.1 Header Field\nDefinitions](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html).",
+          "type": "string"
+        },
+        "remoteIp": {
+          "description": "The IP address (IPv4 or IPv6) of the client that issued the HTTP\nrequest. Examples: `\"192.168.1.1\"`, `\"FE80::0202:B3FF:FE1E:8329\"`.",
+          "type": "string"
+        },
+        "requestMethod": {
+          "description": "The request method. Examples: `\"GET\"`, `\"HEAD\"`, `\"PUT\"`, `\"POST\"`.",
+          "type": "string"
+        },
+        "requestSize": {
+          "description": "The size of the HTTP request message in bytes, including the request\nheaders and the request body.",
+          "format": "int64",
+          "type": "string"
+        },
+        "requestUrl": {
+          "description": "The scheme (http, https), the host name, the path and the query\nportion of the URL that was requested.\nExample: `\"http://example.com/some/info?color=red\"`.",
+          "type": "string"
+        },
+        "responseSize": {
+          "description": "The size of the HTTP response message sent back to the client, in bytes,\nincluding the response headers and the response body.",
+          "format": "int64",
+          "type": "string"
+        },
+        "serverIp": {
+          "description": "The IP address (IPv4 or IPv6) of the origin server that the request was\nsent to.",
+          "type": "string"
+        },
+        "status": {
+          "description": "The response code indicating the status of response.\nExamples: 200, 404.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "userAgent": {
+          "description": "The user agent sent by the client. Example:\n`\"Mozilla/4.0 (compatible; MSIE 6.0; Windows 98; Q312461; .NET\nCLR 1.0.3705)\"`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "LinearBuckets": {
       "description": "Describing buckets with constant width.",
       "id": "LinearBuckets",
@@ -803,6 +921,10 @@
       "description": "An individual log entry.",
       "id": "LogEntry",
       "properties": {
+        "httpRequest": {
+          "$ref": "HttpRequest",
+          "description": "Optional. Information about the HTTP request associated with this\nlog entry, if applicable."
+        },
         "insertId": {
           "description": "A unique ID for the log entry used for deduplication. If omitted,\nthe implementation will generate one based on operation_id.",
           "type": "string"
@@ -817,6 +939,10 @@
         "name": {
           "description": "Required. The log to which this log entry belongs. Examples: `\"syslog\"`,\n`\"book_log\"`.",
           "type": "string"
+        },
+        "operation": {
+          "$ref": "LogEntryOperation",
+          "description": "Optional. Information about an operation associated with the log entry, if\napplicable."
         },
         "protoPayload": {
           "additionalProperties": {
@@ -867,6 +993,33 @@
         "timestamp": {
           "description": "The time the event described by the log entry occurred. If\nomitted, defaults to operation start time.",
           "format": "google-datetime",
+          "type": "string"
+        },
+        "trace": {
+          "description": "Optional. Resource name of the trace associated with the log entry, if any.\nIf it contains a relative resource name, the name is assumed to be relative\nto `//tracing.googleapis.com`. Example:\n`projects/my-projectid/traces/06796866738c859f2f19b7cfb3214824`",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LogEntryOperation": {
+      "description": "Additional information about a potentially long-running operation with which\na log entry is associated.",
+      "id": "LogEntryOperation",
+      "properties": {
+        "first": {
+          "description": "Optional. Set this to True if this is the first log entry in the operation.",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "Optional. An arbitrary operation identifier. Log entries with the\nsame identifier are assumed to be part of the same operation.",
+          "type": "string"
+        },
+        "last": {
+          "description": "Optional. Set this to True if this is the last log entry in the operation.",
+          "type": "boolean"
+        },
+        "producer": {
+          "description": "Optional. An arbitrary producer identifier. The combination of\n`id` and `producer` must be globally unique.  Examples for `producer`:\n`\"MyDivision.MyBigCompany.com\"`, `\"github.com/MyProject/MyApplication\"`.",
           "type": "string"
         }
       },
@@ -1026,7 +1179,7 @@
           "type": "string"
         },
         "resources": {
-          "description": "The resources that are involved in the operation.",
+          "description": "The resources that are involved in the operation.\nThe maximum supported number of entries in this field is 100.",
           "items": {
             "$ref": "ResourceInfo"
           },
@@ -1043,6 +1196,41 @@
           },
           "description": "User defined labels for the resource that this operation is associated\nwith. Only a combination of 1000 user labels per consumer project are\nallowed.",
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "Peer": {
+      "description": "This message defines attributes for a node that handles a network request.\nThe node can be either a service or an application that sends, forwards,\nor receives the request. Service peers should fill in the `service`,\n`principal`, and `labels` as appropriate.",
+      "id": "Peer",
+      "properties": {
+        "ip": {
+          "description": "The IP address of the peer.",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The labels associated with the peer.",
+          "type": "object"
+        },
+        "port": {
+          "description": "The network port of the peer.",
+          "format": "int64",
+          "type": "string"
+        },
+        "principal": {
+          "description": "The identity of this peer. Similar to `Request.auth.principal`, but\nrelative to the peer instead of the request. For example, the\nidenity associated with a load balancer that forwared the request.",
+          "type": "string"
+        },
+        "regionCode": {
+          "description": "The CLDR country/region code associated with the above IP address.\nIf the IP address is private, the `region_code` should reflect the\nphysical location where this peer is running.",
+          "type": "string"
+        },
+        "service": {
+          "description": "The canonical service name of the peer.\n\nNOTE: different systems may have different service naming schemes.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1316,6 +1504,70 @@
       },
       "type": "object"
     },
+    "Request": {
+      "description": "This message defines attributes for an HTTP request. If the actual\nrequest is not an HTTP request, the runtime system should try to map\nthe actual request to an equivalent HTTP request.",
+      "id": "Request",
+      "properties": {
+        "auth": {
+          "$ref": "Auth",
+          "description": "The request authentication. May be absent for unauthenticated requests.\nDerived from the HTTP request `Authorization` header or equivalent."
+        },
+        "fragment": {
+          "description": "The HTTP URL fragment. No URL decoding is performed.",
+          "type": "string"
+        },
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The HTTP request headers. If multiple headers share the same key, they\nmust be merged according to the HTTP spec. All header keys must be\nlowercased, because HTTP header keys are case-insensitive.",
+          "type": "object"
+        },
+        "host": {
+          "description": "The HTTP request `Host` header value.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The unique ID for a request, which can be propagated to downstream\nsystems. The ID should have low probability of collision\nwithin a single day for a specific service.",
+          "type": "string"
+        },
+        "method": {
+          "description": "The HTTP request method, such as `GET`, `POST`.",
+          "type": "string"
+        },
+        "path": {
+          "description": "The HTTP URL path.",
+          "type": "string"
+        },
+        "protocol": {
+          "description": "The network protocol used with the request, such as \"http/1.1\",\n\"spdy/3\", \"h2\", \"h2c\", \"webrtc\", \"tcp\", \"udp\", \"quic\". See\nhttps://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xhtml#alpn-protocol-ids\nfor details.",
+          "type": "string"
+        },
+        "query": {
+          "description": "The HTTP URL query in the format of `name1=value`\u0026name2=value2`, as it\nappears in the first line of the HTTP request. No decoding is performed.",
+          "type": "string"
+        },
+        "reason": {
+          "description": "A special parameter for request reason. It is used by security systems\nto associate auditing information with a request.",
+          "type": "string"
+        },
+        "scheme": {
+          "description": "The HTTP URL scheme, such as `http` and `https`.",
+          "type": "string"
+        },
+        "size": {
+          "description": "The HTTP request size in bytes. If unknown, it must be -1.",
+          "format": "int64",
+          "type": "string"
+        },
+        "time": {
+          "description": "The timestamp when the `destination` service receives the first byte of\nthe request.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "RequestMetadata": {
       "description": "Metadata about the request.",
       "id": "RequestMetadata",
@@ -1329,7 +1581,41 @@
           "type": "string"
         },
         "callerSuppliedUserAgent": {
-          "description": "The user agent of the caller.\nThis information is not authenticated and should be treated accordingly.\nFor example:\n\n+   `google-api-python-client/1.4.0`:\n    The request was made by the Google API client for Python.\n+   `Cloud SDK Command Line Tool apitools-client/1.0 gcloud/0.9.62`:\n    The request was made by the Google Cloud SDK CLI (gcloud).\n+   `AppEngine-Google; (+http://code.google.com/appengine; appid: s~my-project`:\n    The request was made from the `my-project` App Engine app.\nNOLINT",
+          "description": "The user agent of the caller.\nThis information is not authenticated and should be treated accordingly.\nFor example:\n\n+   `google-api-python-client/1.4.0`:\n    The request was made by the Google API client for Python.\n+   `Cloud SDK Command Line Tool apitools-client/1.0 gcloud/0.9.62`:\n    The request was made by the Google Cloud SDK CLI (gcloud).\n+   `AppEngine-Google; (+http://code.google.com/appengine; appid:\ns~my-project`:\n    The request was made from the `my-project` App Engine app.\nNOLINT",
+          "type": "string"
+        },
+        "destinationAttributes": {
+          "$ref": "Peer",
+          "description": "The destination of a network activity, such as accepting a TCP connection.\nIn a multi hop network activity, the destination represents the receiver of\nthe last hop. Only two fields are used in this message, Peer.port and\nPeer.ip. These fields are optionally populated by those services utilizing\nthe IAM condition feature."
+        },
+        "requestAttributes": {
+          "$ref": "Request",
+          "description": "Request attributes used in IAM condition evaluation. This field contains\nrequest attributes like request time and access levels associated with\nthe request.\n\nTo get the whole view of the attributes used in IAM\ncondition evaluation, the user must also look into\n`AuditLog.authentication_info.resource_attributes`."
+        }
+      },
+      "type": "object"
+    },
+    "Resource": {
+      "description": "This message defines core attributes for a resource. A resource is an\naddressable (named) entity provided by the destination service. For\nexample, a file stored on a network storage service.",
+      "id": "Resource",
+      "properties": {
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The labels or tags on the resource, such as AWS resource tags and\nKubernetes resource labels.",
+          "type": "object"
+        },
+        "name": {
+          "description": "The stable identifier (name) of a resource on the `service`. A resource\ncan be logically identified as \"//{resource.service}/{resource.name}\".\nThe differences between a resource name and a URI are:\n\n*   Resource name is a logical identifier, independent of network\n    protocol and API version. For example,\n    `//pubsub.googleapis.com/projects/123/topics/news-feed`.\n*   URI often includes protocol and version information, so it can\n    be used directly by applications. For example,\n    `https://pubsub.googleapis.com/v1/projects/123/topics/news-feed`.\n\nSee https://cloud.google.com/apis/design/resource_names for details.",
+          "type": "string"
+        },
+        "service": {
+          "description": "The name of the service that this resource belongs to, such as\n`pubsub.googleapis.com`. The service may be different from the DNS\nhostname that actually serves the request.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of the resource. The scheme is platform-specific because\ndifferent platforms define their resources differently.",
           "type": "string"
         }
       },
@@ -1343,9 +1629,34 @@
           "description": "The identifier of the parent of this resource instance.\nMust be in one of the following formats:\n    - “projects/\u003cproject-id or project-number\u003e”\n    - “folders/\u003cfolder-id\u003e”\n    - “organizations/\u003corganization-id\u003e”",
           "type": "string"
         },
+        "resourceLocation": {
+          "description": "The location of the resource. If not empty, the resource will be checked\nagainst location policy. The value must be a valid zone, region or\nmultiregion. For example: \"europe-west4\" or \"northamerica-northeast1-a\"",
+          "type": "string"
+        },
         "resourceName": {
           "description": "Name of the resource. This is used for auditing purposes.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ResourceLocation": {
+      "description": "Location information about a resource.",
+      "id": "ResourceLocation",
+      "properties": {
+        "currentLocations": {
+          "description": "The locations of a resource after the execution of the operation.\nFor example:\n\n    \"europe-west1-a\"\n    \"us-east1\"\n    \"nam3\"",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "originalLocations": {
+          "description": "The locations of a resource prior to the execution of the operation.\nFor example:\n\n    \"europe-west1-a\"\n    \"us-east1\"\n    \"nam3\"",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1423,7 +1734,7 @@
     }
   },
   "servicePath": "",
-  "title": "Google Service Control API",
+  "title": "Service Control API",
   "version": "v1",
   "version_module": true
 }

@@ -405,18 +405,8 @@ func (client BotConnectionClient) ListByBotServiceComplete(ctx context.Context, 
 }
 
 // ListServiceProviders lists the available Service Providers for creating Connection Settings
-// Parameters:
-// resourceGroupName - the name of the Bot resource group in the user subscription.
-func (client BotConnectionClient) ListServiceProviders(ctx context.Context, resourceGroupName string) (result ServiceProviderResponseList, err error) {
-	if err := validation.Validate([]validation.Validation{
-		{TargetValue: resourceGroupName,
-			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 2, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[a-zA-Z0-9][a-zA-Z0-9_.-]*$`, Chain: nil}}}}); err != nil {
-		return result, validation.NewError("botservice.BotConnectionClient", "ListServiceProviders", err.Error())
-	}
-
-	req, err := client.ListServiceProvidersPreparer(ctx, resourceGroupName)
+func (client BotConnectionClient) ListServiceProviders(ctx context.Context) (result ServiceProviderResponseList, err error) {
+	req, err := client.ListServiceProvidersPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "botservice.BotConnectionClient", "ListServiceProviders", nil, "Failure preparing request")
 		return
@@ -438,10 +428,9 @@ func (client BotConnectionClient) ListServiceProviders(ctx context.Context, reso
 }
 
 // ListServiceProvidersPreparer prepares the ListServiceProviders request.
-func (client BotConnectionClient) ListServiceProvidersPreparer(ctx context.Context, resourceGroupName string) (*http.Request, error) {
+func (client BotConnectionClient) ListServiceProvidersPreparer(ctx context.Context) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2017-12-01"
@@ -452,7 +441,7 @@ func (client BotConnectionClient) ListServiceProvidersPreparer(ctx context.Conte
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.BotService/BotServices/listServiceProviders", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/providers/Microsoft.BotService/listAuthServiceProviders", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }

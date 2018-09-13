@@ -1,5 +1,70 @@
 # CHANGELOG
 
+## v10.15.4
+
+### Bug Fixes
+
+- If a polling operation returns a failure status code return the associated error.
+
+## v10.15.3
+
+### Bug Fixes
+
+- Initialize the polling URL and method for an LRO tracker on each iteration, favoring the Azure-AsyncOperation header.
+
+## v10.15.2
+
+### Bug Fixes
+
+- Use fmt.Fprint when printing request/response so that any escape sequences aren't treated as format specifiers.
+
+## v10.15.1
+
+### Bug Fixes
+
+- If an LRO API returns a ```Failed``` provisioning state in the initial response return an error at that point so the caller doesn't have to poll.
+- For failed LROs without an OData v4 error include the response body in the error's ```AdditionalInfo``` field to aid in diagnosing the failure.
+
+## v10.15.0
+
+### New Features
+
+- Add initial support for request/response logging via setting environment variables.
+  Setting ```AZURE_GO_SDK_LOG_LEVEL``` to ```LogInfo``` will log request/response
+  without their bodies.  To include the bodies set the log level to ```LogDebug```.
+  By default the logger writes to strerr, however it can also write to stdout or a file
+  if specified in ```AZURE_GO_SDK_LOG_FILE```.  Note that if the specified file
+  already exists it will be truncated.
+  IMPORTANT: by default the logger will redact the Authorization and Ocp-Apim-Subscription-Key
+  headers.  Any other secrets will *not* be redacted.
+
+## v10.14.0
+
+### New Features
+
+- Added package version that contains version constants and user-agent data.
+
+### Bug Fixes
+
+- Add the user-agent to token requests.
+
+## v10.13.0
+
+- Added support for additionalInfo in ServiceError type.
+
+## v10.12.0
+
+### New Features
+
+- Added field ServicePrincipalToken.MaxMSIRefreshAttempts to configure the maximun number of attempts to refresh an MSI token.
+
+## v10.11.4
+
+### Bug Fixes
+
+- If an LRO returns http.StatusOK on the initial response with no async headers return the response body from Future.GetResult().
+- If there is no "final GET URL" return an error from Future.GetResult().
+
 ## v10.11.3
 
 ### Bug Fixes

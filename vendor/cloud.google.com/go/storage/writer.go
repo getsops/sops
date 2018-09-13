@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -88,6 +88,9 @@ func (w *Writer) open() error {
 	if !utf8.ValidString(attrs.Name) {
 		return fmt.Errorf("storage: object name %q is not valid UTF-8", attrs.Name)
 	}
+	if attrs.KMSKeyName != "" && w.o.encryptionKey != nil {
+		return errors.New("storage: cannot use KMSKeyName with a customer-supplied encryption key")
+	}
 	pr, pw := io.Pipe()
 	w.pw = pw
 	w.opened = true
@@ -118,6 +121,12 @@ func (w *Writer) open() error {
 			Context(w.ctx)
 		if w.ProgressFunc != nil {
 			call.ProgressUpdater(func(n, _ int64) { w.ProgressFunc(n) })
+		}
+		if attrs.KMSKeyName != "" {
+			call.KmsKeyName(attrs.KMSKeyName)
+		}
+		if attrs.PredefinedACL != "" {
+			call.PredefinedAcl(attrs.PredefinedACL)
 		}
 		if err := setEncryptionHeaders(call.Header(), w.o.encryptionKey, false); err != nil {
 			w.mu.Lock()

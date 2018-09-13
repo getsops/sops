@@ -128,6 +128,18 @@ type MediaConvertAPI interface {
 	ListQueuesWithContext(aws.Context, *mediaconvert.ListQueuesInput, ...request.Option) (*mediaconvert.ListQueuesOutput, error)
 	ListQueuesRequest(*mediaconvert.ListQueuesInput) (*request.Request, *mediaconvert.ListQueuesOutput)
 
+	ListTagsForResource(*mediaconvert.ListTagsForResourceInput) (*mediaconvert.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *mediaconvert.ListTagsForResourceInput, ...request.Option) (*mediaconvert.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*mediaconvert.ListTagsForResourceInput) (*request.Request, *mediaconvert.ListTagsForResourceOutput)
+
+	TagResource(*mediaconvert.TagResourceInput) (*mediaconvert.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *mediaconvert.TagResourceInput, ...request.Option) (*mediaconvert.TagResourceOutput, error)
+	TagResourceRequest(*mediaconvert.TagResourceInput) (*request.Request, *mediaconvert.TagResourceOutput)
+
+	UntagResource(*mediaconvert.UntagResourceInput) (*mediaconvert.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *mediaconvert.UntagResourceInput, ...request.Option) (*mediaconvert.UntagResourceOutput, error)
+	UntagResourceRequest(*mediaconvert.UntagResourceInput) (*request.Request, *mediaconvert.UntagResourceOutput)
+
 	UpdateJobTemplate(*mediaconvert.UpdateJobTemplateInput) (*mediaconvert.UpdateJobTemplateOutput, error)
 	UpdateJobTemplateWithContext(aws.Context, *mediaconvert.UpdateJobTemplateInput, ...request.Option) (*mediaconvert.UpdateJobTemplateOutput, error)
 	UpdateJobTemplateRequest(*mediaconvert.UpdateJobTemplateInput) (*request.Request, *mediaconvert.UpdateJobTemplateOutput)

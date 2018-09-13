@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -92,4 +92,15 @@ func jwtConfigFromFile(filename string, scopes []string) (*jwt.Config, error) {
 		return nil, fmt.Errorf("google.JWTConfigFromJSON: %v", err)
 	}
 	return conf, nil
+}
+
+// CanReplay reports whether an integration test can be run in replay mode.
+// The replay file must exist, and the GCLOUD_TESTS_GOLANG_ENABLE_REPLAY
+// environment variable must be non-empty.
+func CanReplay(replayFilename string) bool {
+	if os.Getenv("GCLOUD_TESTS_GOLANG_ENABLE_REPLAY") == "" {
+		return false
+	}
+	_, err := os.Stat(replayFilename)
+	return err == nil
 }

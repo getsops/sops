@@ -19,16 +19,17 @@
 package alts
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
-	altspb "google.golang.org/grpc/credentials/alts/core/proto/grpc_gcp"
+	altspb "google.golang.org/grpc/credentials/alts/internal/proto/grpc_gcp"
 )
 
 func TestInfoServerName(t *testing.T) {
 	// This is not testing any handshaker functionality, so it's fine to only
 	// use NewServerCreds and not NewClientCreds.
-	alts := NewServerCreds()
+	alts := NewServerCreds(DefaultServerOptions())
 	if got, want := alts.Info().ServerName, ""; got != want {
 		t.Fatalf("%v.Info().ServerName = %v, want %v", alts, got, want)
 	}
@@ -38,18 +39,18 @@ func TestOverrideServerName(t *testing.T) {
 	wantServerName := "server.name"
 	// This is not testing any handshaker functionality, so it's fine to only
 	// use NewServerCreds and not NewClientCreds.
-	c := NewServerCreds()
+	c := NewServerCreds(DefaultServerOptions())
 	c.OverrideServerName(wantServerName)
 	if got, want := c.Info().ServerName, wantServerName; got != want {
 		t.Fatalf("c.Info().ServerName = %v, want %v", got, want)
 	}
 }
 
-func TestClone(t *testing.T) {
+func TestCloneClient(t *testing.T) {
 	wantServerName := "server.name"
-	// This is not testing any handshaker functionality, so it's fine to only
-	// use NewServerCreds and not NewClientCreds.
-	c := NewServerCreds()
+	opt := DefaultClientOptions()
+	opt.TargetServiceAccounts = []string{"not", "empty"}
+	c := NewClientCreds(opt)
 	c.OverrideServerName(wantServerName)
 	cc := c.Clone()
 	if got, want := cc.Info().ServerName, wantServerName; got != want {
@@ -62,12 +63,55 @@ func TestClone(t *testing.T) {
 	if got, want := cc.Info().ServerName, ""; got != want {
 		t.Fatalf("cc.Info().ServerName = %v, want %v", got, want)
 	}
+
+	ct := c.(*altsTC)
+	cct := cc.(*altsTC)
+
+	if ct.side != cct.side {
+		t.Errorf("cc.side = %q, want %q", cct.side, ct.side)
+	}
+	if ct.hsAddress != cct.hsAddress {
+		t.Errorf("cc.hsAddress = %q, want %q", cct.hsAddress, ct.hsAddress)
+	}
+	if !reflect.DeepEqual(ct.accounts, cct.accounts) {
+		t.Errorf("cc.accounts = %q, want %q", cct.accounts, ct.accounts)
+	}
+}
+
+func TestCloneServer(t *testing.T) {
+	wantServerName := "server.name"
+	c := NewServerCreds(DefaultServerOptions())
+	c.OverrideServerName(wantServerName)
+	cc := c.Clone()
+	if got, want := cc.Info().ServerName, wantServerName; got != want {
+		t.Fatalf("cc.Info().ServerName = %v, want %v", got, want)
+	}
+	cc.OverrideServerName("")
+	if got, want := c.Info().ServerName, wantServerName; got != want {
+		t.Fatalf("Change in clone should not affect the original, c.Info().ServerName = %v, want %v", got, want)
+	}
+	if got, want := cc.Info().ServerName, ""; got != want {
+		t.Fatalf("cc.Info().ServerName = %v, want %v", got, want)
+	}
+
+	ct := c.(*altsTC)
+	cct := cc.(*altsTC)
+
+	if ct.side != cct.side {
+		t.Errorf("cc.side = %q, want %q", cct.side, ct.side)
+	}
+	if ct.hsAddress != cct.hsAddress {
+		t.Errorf("cc.hsAddress = %q, want %q", cct.hsAddress, ct.hsAddress)
+	}
+	if !reflect.DeepEqual(ct.accounts, cct.accounts) {
+		t.Errorf("cc.accounts = %q, want %q", cct.accounts, ct.accounts)
+	}
 }
 
 func TestInfo(t *testing.T) {
 	// This is not testing any handshaker functionality, so it's fine to only
 	// use NewServerCreds and not NewClientCreds.
-	c := NewServerCreds()
+	c := NewServerCreds(DefaultServerOptions())
 	info := c.Info()
 	if got, want := info.ProtocolVersion, ""; got != want {
 		t.Errorf("info.ProtocolVersion=%v, want %v", got, want)

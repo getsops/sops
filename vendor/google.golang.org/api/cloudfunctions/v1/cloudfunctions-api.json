@@ -12,7 +12,7 @@
   "baseUrl": "https://cloudfunctions.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud Functions",
-  "description": "API for managing lightweight user-provided functions executed in response to events.",
+  "description": "Manages lightweight user-provided functions executed in response to events.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/functions",
   "fullyEncodeReservedExpansion": true,
@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -340,7 +329,7 @@
                   ]
                 },
                 "generateUploadUrl": {
-                  "description": "Returns a signed URL for uploading a function source code.\nFor more information about the signed URL usage see:\nhttps://cloud.google.com/storage/docs/access-control/signed-urls.\nOnce the function source code upload is complete, the used signed\nURL should be provided in CreateFunction or UpdateFunction request\nas a reference to the function source code.\n\nWhen uploading source code to the generated signed URL, please follow\nthese restrictions:\n\n* Source file type should be a zip file.\n* Source file size should not exceed 100MB limit.\n\nWhen making a HTTP PUT request, these two headers need to be specified:\n\n* `content-type: application/zip`\n* `x-google-content-length-range: 0,104857600`",
+                  "description": "Returns a signed URL for uploading a function source code.\nFor more information about the signed URL usage see:\nhttps://cloud.google.com/storage/docs/access-control/signed-urls.\nOnce the function source code upload is complete, the used signed\nURL should be provided in CreateFunction or UpdateFunction request\nas a reference to the function source code.\n\nWhen uploading source code to the generated signed URL, please follow\nthese restrictions:\n\n* Source file type should be a zip file.\n* Source file size should not exceed 100MB limit.\n\nWhen making a HTTP PUT request, these two headers need to be specified:\n\n* `content-type: application/zip`\n* `x-goog-content-length-range: 0,104857600`",
                   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/functions:generateUploadUrl",
                   "httpMethod": "POST",
                   "id": "cloudfunctions.projects.locations.functions.generateUploadUrl",
@@ -469,7 +458,7 @@
       }
     }
   },
-  "revision": "20180120",
+  "revision": "20180702",
   "rootUrl": "https://cloudfunctions.googleapis.com/",
   "schemas": {
     "CallFunctionRequest": {
@@ -519,6 +508,13 @@
           "description": "The name of the function (as defined in source code) that will be\nexecuted. Defaults to the resource name suffix, if not specified. For\nbackward compatibility, if function with given name is not found, then the\nsystem will try to use function named \"function\".\nFor Node.js this is name of a function exported by the module specified\nin `source_location`.",
           "type": "string"
         },
+        "environmentVariables": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "**Beta Feature**\n\nEnvironment variables that shall be available during function execution.",
+          "type": "object"
+        },
         "eventTrigger": {
           "$ref": "EventTrigger",
           "description": "A source that fires events in response to a condition in another service."
@@ -534,8 +530,21 @@
           "description": "Labels associated with this Cloud Function.",
           "type": "object"
         },
+        "maxInstances": {
+          "description": "The limit on the maximum number of function instances that may coexist at a\ngiven time. This feature is currently in alpha, available only for\nwhitelisted users.",
+          "format": "int32",
+          "type": "integer"
+        },
         "name": {
           "description": "A user-defined name of the function. Function names must be unique\nglobally and match pattern `projects/*/locations/*/functions/*`",
+          "type": "string"
+        },
+        "network": {
+          "description": "The VPC Network that this cloud function can connect to. It can be\neither the fully-qualified URI, or the short name of the network resource.\nIf the short network name is used, the network must belong to the same\nproject. Otherwise, it must belong to a project within the same\norganization. The format of this field is either\n`projects/{project}/global/networks/{network}` or `{network}`, where\n{project} is a project id where the network is defined, and {network} is\nthe short name of the network.\n\nSee [the VPC documentation](https://cloud.google.com/compute/docs/vpc) for\nmore information on connecting Cloud projects.\n\nThis feature is currently in alpha, available only for whitelisted users.",
+          "type": "string"
+        },
+        "runtime": {
+          "description": "The runtime in which the function is going to run. If empty, defaults to\nNode.js 6.",
           "type": "string"
         },
         "serviceAccountEmail": {
@@ -735,6 +744,10 @@
       "description": "A resource that represents Google Cloud Platform location.",
       "id": "Location",
       "properties": {
+        "displayName": {
+          "description": "The friendly name for this location, typically a nearby city name.\nFor example, \"Tokyo\".",
+          "type": "string"
+        },
         "labels": {
           "additionalProperties": {
             "type": "string"
@@ -936,7 +949,7 @@
     }
   },
   "servicePath": "",
-  "title": "Google Cloud Functions API",
+  "title": "Cloud Functions API",
   "version": "v1",
   "version_module": true
 }

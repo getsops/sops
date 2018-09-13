@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -75,9 +75,9 @@ type MockCloudSpanner struct {
 	addr   string
 	msgs   chan MockCtlMsg
 	readTs time.Time
-	next   int
 
 	mu          sync.Mutex
+	next        int
 	nextSession int
 	sessions    map[string]*sppb.Session
 }
@@ -161,7 +161,9 @@ func (m *MockCloudSpanner) ExecuteStreamingSql(r *sppb.ExecuteSqlRequest, s sppb
 			if err != nil {
 				return err
 			}
+			m.mu.Lock()
 			m.next = int(s) + 1
+			m.mu.Unlock()
 		}
 		for {
 			msg, more := <-m.msgs
@@ -171,7 +173,9 @@ func (m *MockCloudSpanner) ExecuteStreamingSql(r *sppb.ExecuteSqlRequest, s sppb
 			if msg.Err == nil {
 				var rt []byte
 				if msg.ResumeToken {
+					m.mu.Lock()
 					rt = EncodeResumeToken(uint64(m.next))
+					m.mu.Unlock()
 				}
 				meta := KvMeta
 				meta.Transaction = &sppb.Transaction{
@@ -180,15 +184,18 @@ func (m *MockCloudSpanner) ExecuteStreamingSql(r *sppb.ExecuteSqlRequest, s sppb
 						Nanos:   int32(m.readTs.Nanosecond()),
 					},
 				}
+				m.mu.Lock()
+				next := m.next
+				m.next++
+				m.mu.Unlock()
 				err := s.Send(&sppb.PartialResultSet{
 					Metadata: &meta,
 					Values: []*proto3.Value{
-						{Kind: &proto3.Value_StringValue{StringValue: fmt.Sprintf("foo-%02d", m.next)}},
-						{Kind: &proto3.Value_StringValue{StringValue: fmt.Sprintf("bar-%02d", m.next)}},
+						{Kind: &proto3.Value_StringValue{StringValue: fmt.Sprintf("foo-%02d", next)}},
+						{Kind: &proto3.Value_StringValue{StringValue: fmt.Sprintf("bar-%02d", next)}},
 					},
 					ResumeToken: rt,
 				})
-				m.next = m.next + 1
 				if err != nil {
 					return err
 				}

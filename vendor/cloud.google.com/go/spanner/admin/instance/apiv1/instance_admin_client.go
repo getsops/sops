@@ -23,6 +23,7 @@ import (
 	"cloud.google.com/go/internal/version"
 	"cloud.google.com/go/longrunning"
 	lroauto "cloud.google.com/go/longrunning/autogen"
+	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
@@ -87,6 +88,8 @@ func defaultInstanceAdminCallOptions() *InstanceAdminCallOptions {
 }
 
 // InstanceAdminClient is a client for interacting with Cloud Spanner Instance Admin API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type InstanceAdminClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
@@ -180,6 +183,7 @@ func (c *InstanceAdminClient) ListInstanceConfigs(ctx context.Context, req *inst
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListInstanceConfigs[0:len(c.CallOptions.ListInstanceConfigs):len(c.CallOptions.ListInstanceConfigs)], opts...)
 	it := &InstanceConfigIterator{}
+	req = proto.Clone(req).(*instancepb.ListInstanceConfigsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*instancepb.InstanceConfig, string, error) {
 		var resp *instancepb.ListInstanceConfigsResponse
 		req.PageToken = pageToken
@@ -207,6 +211,7 @@ func (c *InstanceAdminClient) ListInstanceConfigs(ctx context.Context, req *inst
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 
@@ -231,6 +236,7 @@ func (c *InstanceAdminClient) ListInstances(ctx context.Context, req *instancepb
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListInstances[0:len(c.CallOptions.ListInstances):len(c.CallOptions.ListInstances)], opts...)
 	it := &InstanceIterator{}
+	req = proto.Clone(req).(*instancepb.ListInstancesRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*instancepb.Instance, string, error) {
 		var resp *instancepb.ListInstancesResponse
 		req.PageToken = pageToken
@@ -258,6 +264,7 @@ func (c *InstanceAdminClient) ListInstances(ctx context.Context, req *instancepb
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 

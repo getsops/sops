@@ -74,13 +74,13 @@ const (
 	ContainerTypeDPMContainer1                          ContainerTypeBasicProtectionContainer = original.ContainerTypeDPMContainer1
 	ContainerTypeGenericContainer1                      ContainerTypeBasicProtectionContainer = original.ContainerTypeGenericContainer1
 	ContainerTypeIaaSVMContainer                        ContainerTypeBasicProtectionContainer = original.ContainerTypeIaaSVMContainer
-	ContainerTypeMABWindowsContainer                    ContainerTypeBasicProtectionContainer = original.ContainerTypeMABWindowsContainer
 	ContainerTypeMicrosoftClassicComputevirtualMachines ContainerTypeBasicProtectionContainer = original.ContainerTypeMicrosoftClassicComputevirtualMachines
 	ContainerTypeMicrosoftComputevirtualMachines        ContainerTypeBasicProtectionContainer = original.ContainerTypeMicrosoftComputevirtualMachines
 	ContainerTypeProtectionContainer                    ContainerTypeBasicProtectionContainer = original.ContainerTypeProtectionContainer
 	ContainerTypeSQLAGWorkLoadContainer1                ContainerTypeBasicProtectionContainer = original.ContainerTypeSQLAGWorkLoadContainer1
 	ContainerTypeStorageContainer1                      ContainerTypeBasicProtectionContainer = original.ContainerTypeStorageContainer1
 	ContainerTypeVMAppContainer1                        ContainerTypeBasicProtectionContainer = original.ContainerTypeVMAppContainer1
+	ContainerTypeWindows1                               ContainerTypeBasicProtectionContainer = original.ContainerTypeWindows1
 )
 
 type CopyOptions = original.CopyOptions
@@ -93,6 +93,14 @@ const (
 	CopyOptionsSkip           CopyOptions = original.CopyOptionsSkip
 )
 
+type CreateMode = original.CreateMode
+
+const (
+	CreateModeDefault CreateMode = original.CreateModeDefault
+	CreateModeInvalid CreateMode = original.CreateModeInvalid
+	CreateModeRecover CreateMode = original.CreateModeRecover
+)
+
 type DataSourceType = original.DataSourceType
 
 const (
@@ -103,6 +111,7 @@ const (
 	DataSourceTypeFileFolder        DataSourceType = original.DataSourceTypeFileFolder
 	DataSourceTypeGenericDataSource DataSourceType = original.DataSourceTypeGenericDataSource
 	DataSourceTypeInvalid           DataSourceType = original.DataSourceTypeInvalid
+	DataSourceTypeSAPHanaDatabase   DataSourceType = original.DataSourceTypeSAPHanaDatabase
 	DataSourceTypeSharepoint        DataSourceType = original.DataSourceTypeSharepoint
 	DataSourceTypeSQLDataBase       DataSourceType = original.DataSourceTypeSQLDataBase
 	DataSourceTypeSQLDB             DataSourceType = original.DataSourceTypeSQLDB
@@ -149,6 +158,7 @@ const (
 type FeatureType = original.FeatureType
 
 const (
+	FeatureTypeAzureBackupGoals      FeatureType = original.FeatureTypeAzureBackupGoals
 	FeatureTypeAzureVMResourceBackup FeatureType = original.FeatureTypeAzureVMResourceBackup
 	FeatureTypeFeatureSupportRequest FeatureType = original.FeatureTypeFeatureSupportRequest
 )
@@ -241,6 +251,7 @@ const (
 	ItemTypeFileFolder        ItemType = original.ItemTypeFileFolder
 	ItemTypeGenericDataSource ItemType = original.ItemTypeGenericDataSource
 	ItemTypeInvalid           ItemType = original.ItemTypeInvalid
+	ItemTypeSAPHanaDatabase   ItemType = original.ItemTypeSAPHanaDatabase
 	ItemTypeSharepoint        ItemType = original.ItemTypeSharepoint
 	ItemTypeSQLDataBase       ItemType = original.ItemTypeSQLDataBase
 	ItemTypeSQLDB             ItemType = original.ItemTypeSQLDB
@@ -402,24 +413,36 @@ const (
 type ObjectTypeBasicRecoveryPoint = original.ObjectTypeBasicRecoveryPoint
 
 const (
-	ObjectTypeAzureFileShareRecoveryPoint              ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureFileShareRecoveryPoint
-	ObjectTypeAzureWorkloadRecoveryPoint               ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadRecoveryPoint
-	ObjectTypeAzureWorkloadSQLPointInTimeRecoveryPoint ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSQLPointInTimeRecoveryPoint
-	ObjectTypeAzureWorkloadSQLRecoveryPoint            ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSQLRecoveryPoint
-	ObjectTypeGenericRecoveryPoint                     ObjectTypeBasicRecoveryPoint = original.ObjectTypeGenericRecoveryPoint
-	ObjectTypeIaasVMRecoveryPoint                      ObjectTypeBasicRecoveryPoint = original.ObjectTypeIaasVMRecoveryPoint
-	ObjectTypeRecoveryPoint                            ObjectTypeBasicRecoveryPoint = original.ObjectTypeRecoveryPoint
+	ObjectTypeAzureFileShareRecoveryPoint                  ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureFileShareRecoveryPoint
+	ObjectTypeAzureWorkloadRecoveryPoint                   ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadRecoveryPoint
+	ObjectTypeAzureWorkloadSAPHanaPointInTimeRecoveryPoint ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSAPHanaPointInTimeRecoveryPoint
+	ObjectTypeAzureWorkloadSAPHanaRecoveryPoint            ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSAPHanaRecoveryPoint
+	ObjectTypeAzureWorkloadSQLPointInTimeRecoveryPoint     ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSQLPointInTimeRecoveryPoint
+	ObjectTypeAzureWorkloadSQLRecoveryPoint                ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSQLRecoveryPoint
+	ObjectTypeGenericRecoveryPoint                         ObjectTypeBasicRecoveryPoint = original.ObjectTypeGenericRecoveryPoint
+	ObjectTypeIaasVMRecoveryPoint                          ObjectTypeBasicRecoveryPoint = original.ObjectTypeIaasVMRecoveryPoint
+	ObjectTypeRecoveryPoint                                ObjectTypeBasicRecoveryPoint = original.ObjectTypeRecoveryPoint
 )
 
 type ObjectTypeBasicRestoreRequest = original.ObjectTypeBasicRestoreRequest
 
 const (
-	ObjectTypeAzureFileShareRestoreRequest              ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureFileShareRestoreRequest
-	ObjectTypeAzureWorkloadRestoreRequest               ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadRestoreRequest
-	ObjectTypeAzureWorkloadSQLPointInTimeRestoreRequest ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSQLPointInTimeRestoreRequest
-	ObjectTypeAzureWorkloadSQLRestoreRequest            ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSQLRestoreRequest
-	ObjectTypeIaasVMRestoreRequest                      ObjectTypeBasicRestoreRequest = original.ObjectTypeIaasVMRestoreRequest
-	ObjectTypeRestoreRequest                            ObjectTypeBasicRestoreRequest = original.ObjectTypeRestoreRequest
+	ObjectTypeAzureFileShareRestoreRequest                  ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureFileShareRestoreRequest
+	ObjectTypeAzureWorkloadRestoreRequest                   ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadRestoreRequest
+	ObjectTypeAzureWorkloadSAPHanaPointInTimeRestoreRequest ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSAPHanaPointInTimeRestoreRequest
+	ObjectTypeAzureWorkloadSAPHanaRestoreRequest            ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSAPHanaRestoreRequest
+	ObjectTypeAzureWorkloadSQLPointInTimeRestoreRequest     ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSQLPointInTimeRestoreRequest
+	ObjectTypeAzureWorkloadSQLRestoreRequest                ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSQLRestoreRequest
+	ObjectTypeIaasVMRestoreRequest                          ObjectTypeBasicRestoreRequest = original.ObjectTypeIaasVMRestoreRequest
+	ObjectTypeRestoreRequest                                ObjectTypeBasicRestoreRequest = original.ObjectTypeRestoreRequest
+)
+
+type ObjectTypeBasicValidateOperationRequest = original.ObjectTypeBasicValidateOperationRequest
+
+const (
+	ObjectTypeValidateIaasVMRestoreOperationRequest ObjectTypeBasicValidateOperationRequest = original.ObjectTypeValidateIaasVMRestoreOperationRequest
+	ObjectTypeValidateOperationRequest              ObjectTypeBasicValidateOperationRequest = original.ObjectTypeValidateOperationRequest
+	ObjectTypeValidateRestoreOperationRequest       ObjectTypeBasicValidateOperationRequest = original.ObjectTypeValidateRestoreOperationRequest
 )
 
 type OperationStatusValues = original.OperationStatusValues
@@ -456,6 +479,8 @@ const (
 	ProtectableItemTypeIaaSVMProtectableItem                  ProtectableItemType = original.ProtectableItemTypeIaaSVMProtectableItem
 	ProtectableItemTypeMicrosoftClassicComputevirtualMachines ProtectableItemType = original.ProtectableItemTypeMicrosoftClassicComputevirtualMachines
 	ProtectableItemTypeMicrosoftComputevirtualMachines        ProtectableItemType = original.ProtectableItemTypeMicrosoftComputevirtualMachines
+	ProtectableItemTypeSAPHanaDatabase                        ProtectableItemType = original.ProtectableItemTypeSAPHanaDatabase
+	ProtectableItemTypeSAPHanaSystem                          ProtectableItemType = original.ProtectableItemTypeSAPHanaSystem
 	ProtectableItemTypeSQLAvailabilityGroupContainer          ProtectableItemType = original.ProtectableItemTypeSQLAvailabilityGroupContainer
 	ProtectableItemTypeSQLDataBase                            ProtectableItemType = original.ProtectableItemTypeSQLDataBase
 	ProtectableItemTypeSQLInstance                            ProtectableItemType = original.ProtectableItemTypeSQLInstance
@@ -488,6 +513,8 @@ type ProtectedItemType = original.ProtectedItemType
 const (
 	ProtectedItemTypeAzureFileShareProtectedItem            ProtectedItemType = original.ProtectedItemTypeAzureFileShareProtectedItem
 	ProtectedItemTypeAzureIaaSVMProtectedItem               ProtectedItemType = original.ProtectedItemTypeAzureIaaSVMProtectedItem
+	ProtectedItemTypeAzureVMWorkloadProtectedItem           ProtectedItemType = original.ProtectedItemTypeAzureVMWorkloadProtectedItem
+	ProtectedItemTypeAzureVMWorkloadSAPHanaDatabase         ProtectedItemType = original.ProtectedItemTypeAzureVMWorkloadSAPHanaDatabase
 	ProtectedItemTypeAzureVMWorkloadSQLDatabase             ProtectedItemType = original.ProtectedItemTypeAzureVMWorkloadSQLDatabase
 	ProtectedItemTypeDPMProtectedItem                       ProtectedItemType = original.ProtectedItemTypeDPMProtectedItem
 	ProtectedItemTypeGenericProtectedItem                   ProtectedItemType = original.ProtectedItemTypeGenericProtectedItem
@@ -501,8 +528,11 @@ const (
 type ProtectionIntentItemType = original.ProtectionIntentItemType
 
 const (
-	ProtectionIntentItemTypeAzureResourceItem ProtectionIntentItemType = original.ProtectionIntentItemTypeAzureResourceItem
-	ProtectionIntentItemTypeProtectionIntent  ProtectionIntentItemType = original.ProtectionIntentItemTypeProtectionIntent
+	ProtectionIntentItemTypeAzureResourceItem                    ProtectionIntentItemType = original.ProtectionIntentItemTypeAzureResourceItem
+	ProtectionIntentItemTypeAzureWorkloadAutoProtectionIntent    ProtectionIntentItemType = original.ProtectionIntentItemTypeAzureWorkloadAutoProtectionIntent
+	ProtectionIntentItemTypeAzureWorkloadSQLAutoProtectionIntent ProtectionIntentItemType = original.ProtectionIntentItemTypeAzureWorkloadSQLAutoProtectionIntent
+	ProtectionIntentItemTypeProtectionIntent                     ProtectionIntentItemType = original.ProtectionIntentItemTypeProtectionIntent
+	ProtectionIntentItemTypeRecoveryServiceVaultItem             ProtectionIntentItemType = original.ProtectionIntentItemTypeRecoveryServiceVaultItem
 )
 
 type ProtectionState = original.ProtectionState
@@ -697,25 +727,30 @@ const (
 type WeekOfMonth = original.WeekOfMonth
 
 const (
-	First  WeekOfMonth = original.First
-	Fourth WeekOfMonth = original.Fourth
-	Last   WeekOfMonth = original.Last
-	Second WeekOfMonth = original.Second
-	Third  WeekOfMonth = original.Third
+	WeekOfMonthFirst   WeekOfMonth = original.WeekOfMonthFirst
+	WeekOfMonthFourth  WeekOfMonth = original.WeekOfMonthFourth
+	WeekOfMonthInvalid WeekOfMonth = original.WeekOfMonthInvalid
+	WeekOfMonthLast    WeekOfMonth = original.WeekOfMonthLast
+	WeekOfMonthSecond  WeekOfMonth = original.WeekOfMonthSecond
+	WeekOfMonthThird   WeekOfMonth = original.WeekOfMonthThird
 )
 
 type WorkloadItemType = original.WorkloadItemType
 
 const (
-	WorkloadItemTypeInvalid     WorkloadItemType = original.WorkloadItemTypeInvalid
-	WorkloadItemTypeSQLDataBase WorkloadItemType = original.WorkloadItemTypeSQLDataBase
-	WorkloadItemTypeSQLInstance WorkloadItemType = original.WorkloadItemTypeSQLInstance
+	WorkloadItemTypeInvalid         WorkloadItemType = original.WorkloadItemTypeInvalid
+	WorkloadItemTypeSAPHanaDatabase WorkloadItemType = original.WorkloadItemTypeSAPHanaDatabase
+	WorkloadItemTypeSAPHanaSystem   WorkloadItemType = original.WorkloadItemTypeSAPHanaSystem
+	WorkloadItemTypeSQLDataBase     WorkloadItemType = original.WorkloadItemTypeSQLDataBase
+	WorkloadItemTypeSQLInstance     WorkloadItemType = original.WorkloadItemTypeSQLInstance
 )
 
 type WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeBasicWorkloadItem
 
 const (
 	WorkloadItemTypeAzureVMWorkloadItem WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeAzureVMWorkloadItem
+	WorkloadItemTypeSAPHanaDatabase1    WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSAPHanaDatabase1
+	WorkloadItemTypeSAPHanaSystem1      WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSAPHanaSystem1
 	WorkloadItemTypeSQLDataBase1        WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSQLDataBase1
 	WorkloadItemTypeSQLInstance1        WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSQLInstance1
 	WorkloadItemTypeWorkloadItem        WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeWorkloadItem
@@ -731,6 +766,7 @@ const (
 	WorkloadTypeFileFolder        WorkloadType = original.WorkloadTypeFileFolder
 	WorkloadTypeGenericDataSource WorkloadType = original.WorkloadTypeGenericDataSource
 	WorkloadTypeInvalid           WorkloadType = original.WorkloadTypeInvalid
+	WorkloadTypeSAPHanaDatabase   WorkloadType = original.WorkloadTypeSAPHanaDatabase
 	WorkloadTypeSharepoint        WorkloadType = original.WorkloadTypeSharepoint
 	WorkloadTypeSQLDataBase       WorkloadType = original.WorkloadTypeSQLDataBase
 	WorkloadTypeSQLDB             WorkloadType = original.WorkloadTypeSQLDB
@@ -739,6 +775,7 @@ const (
 	WorkloadTypeVMwareVM          WorkloadType = original.WorkloadTypeVMwareVM
 )
 
+type AzureBackupGoalFeatureSupportRequest = original.AzureBackupGoalFeatureSupportRequest
 type AzureBackupServerContainer = original.AzureBackupServerContainer
 type AzureBackupServerEngine = original.AzureBackupServerEngine
 type AzureFileShareBackupRequest = original.AzureFileShareBackupRequest
@@ -763,6 +800,8 @@ type BasicAzureIaaSVMProtectedItem = original.BasicAzureIaaSVMProtectedItem
 type AzureIaaSVMProtectedItem = original.AzureIaaSVMProtectedItem
 type AzureIaaSVMProtectedItemExtendedInfo = original.AzureIaaSVMProtectedItemExtendedInfo
 type AzureIaaSVMProtectionPolicy = original.AzureIaaSVMProtectionPolicy
+type BasicAzureRecoveryServiceVaultProtectionIntent = original.BasicAzureRecoveryServiceVaultProtectionIntent
+type AzureRecoveryServiceVaultProtectionIntent = original.AzureRecoveryServiceVaultProtectionIntent
 type AzureResourceProtectionIntent = original.AzureResourceProtectionIntent
 type AzureSQLAGWorkloadContainerProtectionContainer = original.AzureSQLAGWorkloadContainerProtectionContainer
 type AzureSQLContainer = original.AzureSQLContainer
@@ -783,14 +822,23 @@ type BasicAzureVMWorkloadItem = original.BasicAzureVMWorkloadItem
 type AzureVMWorkloadItem = original.AzureVMWorkloadItem
 type BasicAzureVMWorkloadProtectableItem = original.BasicAzureVMWorkloadProtectableItem
 type AzureVMWorkloadProtectableItem = original.AzureVMWorkloadProtectableItem
+type BasicAzureVMWorkloadProtectedItem = original.BasicAzureVMWorkloadProtectedItem
+type AzureVMWorkloadProtectedItem = original.AzureVMWorkloadProtectedItem
 type AzureVMWorkloadProtectedItemExtendedInfo = original.AzureVMWorkloadProtectedItemExtendedInfo
 type AzureVMWorkloadProtectionPolicy = original.AzureVMWorkloadProtectionPolicy
+type AzureVMWorkloadSAPHanaDatabaseProtectableItem = original.AzureVMWorkloadSAPHanaDatabaseProtectableItem
+type AzureVMWorkloadSAPHanaDatabaseProtectedItem = original.AzureVMWorkloadSAPHanaDatabaseProtectedItem
+type AzureVMWorkloadSAPHanaDatabaseWorkloadItem = original.AzureVMWorkloadSAPHanaDatabaseWorkloadItem
+type AzureVMWorkloadSAPHanaSystemProtectableItem = original.AzureVMWorkloadSAPHanaSystemProtectableItem
+type AzureVMWorkloadSAPHanaSystemWorkloadItem = original.AzureVMWorkloadSAPHanaSystemWorkloadItem
 type AzureVMWorkloadSQLAvailabilityGroupProtectableItem = original.AzureVMWorkloadSQLAvailabilityGroupProtectableItem
 type AzureVMWorkloadSQLDatabaseProtectableItem = original.AzureVMWorkloadSQLDatabaseProtectableItem
 type AzureVMWorkloadSQLDatabaseProtectedItem = original.AzureVMWorkloadSQLDatabaseProtectedItem
 type AzureVMWorkloadSQLDatabaseWorkloadItem = original.AzureVMWorkloadSQLDatabaseWorkloadItem
 type AzureVMWorkloadSQLInstanceProtectableItem = original.AzureVMWorkloadSQLInstanceProtectableItem
 type AzureVMWorkloadSQLInstanceWorkloadItem = original.AzureVMWorkloadSQLInstanceWorkloadItem
+type BasicAzureWorkloadAutoProtectionIntent = original.BasicAzureWorkloadAutoProtectionIntent
+type AzureWorkloadAutoProtectionIntent = original.AzureWorkloadAutoProtectionIntent
 type AzureWorkloadBackupRequest = original.AzureWorkloadBackupRequest
 type BasicAzureWorkloadContainer = original.BasicAzureWorkloadContainer
 type AzureWorkloadContainer = original.AzureWorkloadContainer
@@ -803,6 +851,13 @@ type BasicAzureWorkloadRecoveryPoint = original.BasicAzureWorkloadRecoveryPoint
 type AzureWorkloadRecoveryPoint = original.AzureWorkloadRecoveryPoint
 type BasicAzureWorkloadRestoreRequest = original.BasicAzureWorkloadRestoreRequest
 type AzureWorkloadRestoreRequest = original.AzureWorkloadRestoreRequest
+type AzureWorkloadSAPHanaPointInTimeRecoveryPoint = original.AzureWorkloadSAPHanaPointInTimeRecoveryPoint
+type AzureWorkloadSAPHanaPointInTimeRestoreRequest = original.AzureWorkloadSAPHanaPointInTimeRestoreRequest
+type BasicAzureWorkloadSAPHanaRecoveryPoint = original.BasicAzureWorkloadSAPHanaRecoveryPoint
+type AzureWorkloadSAPHanaRecoveryPoint = original.AzureWorkloadSAPHanaRecoveryPoint
+type BasicAzureWorkloadSAPHanaRestoreRequest = original.BasicAzureWorkloadSAPHanaRestoreRequest
+type AzureWorkloadSAPHanaRestoreRequest = original.AzureWorkloadSAPHanaRestoreRequest
+type AzureWorkloadSQLAutoProtectionIntent = original.AzureWorkloadSQLAutoProtectionIntent
 type AzureWorkloadSQLPointInTimeRecoveryPoint = original.AzureWorkloadSQLPointInTimeRecoveryPoint
 type AzureWorkloadSQLPointInTimeRestoreRequest = original.AzureWorkloadSQLPointInTimeRestoreRequest
 type BasicAzureWorkloadSQLRecoveryPoint = original.BasicAzureWorkloadSQLRecoveryPoint
@@ -815,6 +870,7 @@ type BMSBackupEngineQueryObject = original.BMSBackupEngineQueryObject
 type BMSBackupEnginesQueryObject = original.BMSBackupEnginesQueryObject
 type BMSBackupSummariesQueryObject = original.BMSBackupSummariesQueryObject
 type BMSContainerQueryObject = original.BMSContainerQueryObject
+type BMSContainersInquiryQueryObject = original.BMSContainersInquiryQueryObject
 type BMSPOQueryObject = original.BMSPOQueryObject
 type BMSRefreshContainersQueryObject = original.BMSRefreshContainersQueryObject
 type BMSRPQueryObject = original.BMSRPQueryObject
@@ -981,6 +1037,13 @@ type SubProtectionPolicy = original.SubProtectionPolicy
 type TargetAFSRestoreInfo = original.TargetAFSRestoreInfo
 type TargetRestoreInfo = original.TargetRestoreInfo
 type TokenInformation = original.TokenInformation
+type ValidateIaasVMRestoreOperationRequest = original.ValidateIaasVMRestoreOperationRequest
+type BasicValidateOperationRequest = original.BasicValidateOperationRequest
+type ValidateOperationRequest = original.ValidateOperationRequest
+type ValidateOperationResponse = original.ValidateOperationResponse
+type ValidateOperationsResponse = original.ValidateOperationsResponse
+type BasicValidateRestoreOperationRequest = original.BasicValidateRestoreOperationRequest
+type ValidateRestoreOperationRequest = original.ValidateRestoreOperationRequest
 type WeeklyRetentionFormat = original.WeeklyRetentionFormat
 type WeeklyRetentionSchedule = original.WeeklyRetentionSchedule
 type WorkloadInquiryDetails = original.WorkloadInquiryDetails
@@ -997,6 +1060,7 @@ type WorkloadProtectableItemResourceList = original.WorkloadProtectableItemResou
 type WorkloadProtectableItemResourceListIterator = original.WorkloadProtectableItemResourceListIterator
 type WorkloadProtectableItemResourceListPage = original.WorkloadProtectableItemResourceListPage
 type YearlyRetentionSchedule = original.YearlyRetentionSchedule
+type OperationClient = original.OperationClient
 type OperationResultsClient = original.OperationResultsClient
 type OperationsClient = original.OperationsClient
 type OperationStatusesClient = original.OperationStatusesClient
@@ -1102,6 +1166,9 @@ func PossibleContainerTypeBasicProtectionContainerValues() []ContainerTypeBasicP
 func PossibleCopyOptionsValues() []CopyOptions {
 	return original.PossibleCopyOptionsValues()
 }
+func PossibleCreateModeValues() []CreateMode {
+	return original.PossibleCreateModeValues()
+}
 func PossibleDataSourceTypeValues() []DataSourceType {
 	return original.PossibleDataSourceTypeValues()
 }
@@ -1179,6 +1246,9 @@ func PossibleObjectTypeBasicRecoveryPointValues() []ObjectTypeBasicRecoveryPoint
 }
 func PossibleObjectTypeBasicRestoreRequestValues() []ObjectTypeBasicRestoreRequest {
 	return original.PossibleObjectTypeBasicRestoreRequestValues()
+}
+func PossibleObjectTypeBasicValidateOperationRequestValues() []ObjectTypeBasicValidateOperationRequest {
+	return original.PossibleObjectTypeBasicValidateOperationRequestValues()
 }
 func PossibleOperationStatusValuesValues() []OperationStatusValues {
 	return original.PossibleOperationStatusValuesValues()
@@ -1278,6 +1348,12 @@ func PossibleWorkloadItemTypeBasicWorkloadItemValues() []WorkloadItemTypeBasicWo
 }
 func PossibleWorkloadTypeValues() []WorkloadType {
 	return original.PossibleWorkloadTypeValues()
+}
+func NewOperationClient(subscriptionID string) OperationClient {
+	return original.NewOperationClient(subscriptionID)
+}
+func NewOperationClientWithBaseURI(baseURI string, subscriptionID string) OperationClient {
+	return original.NewOperationClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewOperationResultsClient(subscriptionID string) OperationResultsClient {
 	return original.NewOperationResultsClient(subscriptionID)

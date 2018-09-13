@@ -1,4 +1,4 @@
-// Copyright 2018 Google Inc. All Rights Reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -34,6 +35,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	gax "github.com/googleapis/gax-go"
 	"golang.org/x/build/kubernetes"
 	k8sapi "golang.org/x/build/kubernetes/api"
 	"golang.org/x/build/kubernetes/gke"
@@ -144,7 +146,7 @@ func (tr *GCETestRunner) StartInstance(ctx context.Context, inst *InstanceConfig
 		return err
 	}
 
-	_, err = tr.ComputeService.Instances.Insert(inst.ProjectID, inst.Zone, &compute.Instance{
+	op, err := tr.ComputeService.Instances.Insert(inst.ProjectID, inst.Zone, &compute.Instance{
 		MachineType: fmt.Sprintf("zones/%s/machineTypes/%s", inst.Zone, inst.MachineType),
 		Name:        inst.Name,
 		Disks: []*compute.AttachedDisk{{
@@ -177,7 +179,47 @@ func (tr *GCETestRunner) StartInstance(ctx context.Context, inst *InstanceConfig
 		}},
 	}).Do()
 
-	return err
+	if err != nil {
+		return fmt.Errorf("failed to create instance: %v", err)
+	}
+
+	// Poll status of the operation to create the instance.
+	getOpCall := tr.ComputeService.ZoneOperations.Get(inst.ProjectID, inst.Zone, op.Name)
+	for {
+		if err := checkOpErrors(op); err != nil {
+			return fmt.Errorf("failed to create instance: %v", err)
+		}
+		if op.Status == "DONE" {
+			return nil
+		}
+
+		if err := gax.Sleep(ctx, 5*time.Second); err != nil {
+			return err
+		}
+
+		op, err = getOpCall.Do()
+		if err != nil {
+			return fmt.Errorf("failed to get operation: %v", err)
+		}
+	}
+}
+
+// checkOpErrors returns nil if the operation does not have any errors and an
+// error summarizing all errors encountered if the operation has errored.
+func checkOpErrors(op *compute.Operation) error {
+	if op.Error == nil || len(op.Error.Errors) == 0 {
+		return nil
+	}
+
+	var errs []string
+	for _, e := range op.Error.Errors {
+		if e.Message != "" {
+			errs = append(errs, e.Message)
+		} else {
+			errs = append(errs, e.Code)
+		}
+	}
+	return errors.New(strings.Join(errs, ","))
 }
 
 // DeleteInstance deletes an instance with project id, name, and zone matched
@@ -189,7 +231,7 @@ func (tr *GCETestRunner) DeleteInstance(ctx context.Context, inst *InstanceConfi
 	return nil
 }
 
-// PollForSerialOutput polls the serial output of the GCE instance specified by
+// PollForSerialOutput polls serial port 2 of the GCE instance specified by
 // inst and returns when the finishString appears in the serial output
 // of the instance, or when the context times out.
 func (tr *GCETestRunner) PollForSerialOutput(ctx context.Context, inst *InstanceConfig, finishString string) error {
@@ -201,16 +243,18 @@ func (tr *GCETestRunner) PollForSerialOutput(ctx context.Context, inst *Instance
 	for {
 		select {
 		case <-ctx.Done():
-			return fmt.Errorf("timed out waiting for profiling finishing on instance %s", inst.Name)
-
+			return ctx.Err()
 		case <-time.After(20 * time.Second):
-			resp, err := tr.ComputeService.Instances.GetSerialPortOutput(inst.ProjectID, inst.Zone, inst.Name).Context(ctx).Do()
+			resp, err := tr.ComputeService.Instances.GetSerialPortOutput(inst.ProjectID, inst.Zone, inst.Name).Port(2).Context(ctx).Do()
 			if err != nil {
 				// Transient failure.
 				log.Printf("Transient error getting serial port output from instance %s (will retry): %v", inst.Name, err)
 				continue
 			}
-
+			if resp.Contents == "" {
+				log.Printf("Ignoring empty serial port output from instance %s (will retry)", inst.Name)
+				continue
+			}
 			if output = resp.Contents; strings.Contains(output, finishString) {
 				return nil
 			}
@@ -237,6 +281,10 @@ func (tr *TestRunner) QueryProfiles(projectID, service, startTime, endTime, prof
 		return ProfileResponse{}, fmt.Errorf("failed to read response body: %v", err)
 	}
 
+	if resp.StatusCode != 200 {
+		return ProfileResponse{}, fmt.Errorf("failed to query API: status: %s, response body: %s", resp.Status, string(body))
+	}
+
 	var pr ProfileResponse
 	if err := json.Unmarshal(body, &pr); err != nil {
 		return ProfileResponse{}, err
@@ -249,6 +297,9 @@ func (tr *TestRunner) QueryProfiles(projectID, service, startTime, endTime, prof
 // bucket and pushes the image to Google Container Registry.
 func (tr *GKETestRunner) createAndPublishDockerImage(ctx context.Context, projectID, sourceBucket, sourceObject, ImageName string) error {
 	cloudbuildService, err := cloudbuild.New(tr.Client)
+	if err != nil {
+		return err
+	}
 
 	build := &cloudbuild.Build{
 		Source: &cloudbuild.Source{
@@ -388,6 +439,10 @@ func (tr *GKETestRunner) createCluster(ctx context.Context, client *http.Client,
 }
 
 func (tr *GKETestRunner) deployContainer(ctx context.Context, kubernetesClient *kubernetes.Client, podName, ImageName string) error {
+	// TODO: Pod restart policy defaults to "Always". Previous logs will disappear
+	// after restarting. Always restart causes the test not be able to see the
+	// finish signal. Should probably set the restart policy to "OnFailure" when
+	// we get the GKE workflow working and testable.
 	pod := &k8sapi.Pod{
 		ObjectMeta: k8sapi.ObjectMeta{
 			Name: podName,
@@ -495,7 +550,7 @@ func (tr *GKETestRunner) uploadImageSource(ctx context.Context, bucket, objectNa
 	}
 	wc := tr.StorageClient.Bucket(bucket).Object(objectName).NewWriter(ctx)
 	wc.ContentType = "application/zip"
-	wc.ACL = []storage.ACLRule{{storage.AllUsers, storage.RoleReader}}
+	wc.ACL = []storage.ACLRule{{Entity: storage.AllUsers, Role: storage.RoleReader}}
 	if _, err := wc.Write(zipBuf.Bytes()); err != nil {
 		return err
 	}

@@ -516,9 +516,9 @@ func (c *funcContext) translateExpr(expr ast.Expr) *expression {
 			fields, jsTag := c.translateSelection(sel, e.Pos())
 			if jsTag != "" {
 				if _, ok := sel.Type().(*types.Signature); ok {
-					return c.formatExpr("$internalize(%1e.%2s.%3s, %4s, %1e.%2s)", e.X, strings.Join(fields, "."), jsTag, c.typeName(sel.Type()))
+					return c.formatExpr("$internalize(%1e.%2s%3s, %4s, %1e.%2s)", e.X, strings.Join(fields, "."), formatJSStructTagVal(jsTag), c.typeName(sel.Type()))
 				}
-				return c.internalize(c.formatExpr("%e.%s.%s", e.X, strings.Join(fields, "."), jsTag), sel.Type())
+				return c.internalize(c.formatExpr("%e.%s%s", e.X, strings.Join(fields, "."), formatJSStructTagVal(jsTag)), sel.Type())
 			}
 			return c.formatExpr("%e.%s", e.X, strings.Join(fields, "."))
 		case types.MethodVal:
@@ -669,7 +669,7 @@ func (c *funcContext) translateExpr(expr ast.Expr) *expression {
 			case types.FieldVal:
 				fields, jsTag := c.translateSelection(sel, f.Pos())
 				if jsTag != "" {
-					call := c.formatExpr("%e.%s.%s(%s)", f.X, strings.Join(fields, "."), jsTag, externalizeArgs(e.Args))
+					call := c.formatExpr("%e.%s%s(%s)", f.X, strings.Join(fields, "."), formatJSStructTagVal(jsTag), externalizeArgs(e.Args))
 					switch sig.Results().Len() {
 					case 0:
 						return call

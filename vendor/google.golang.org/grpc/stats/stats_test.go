@@ -403,7 +403,7 @@ const (
 	inTrailer
 	outPayload
 	outHeader
-	outTrailer
+	// TODO: test outTrailer ?
 	connbegin
 	connend
 )

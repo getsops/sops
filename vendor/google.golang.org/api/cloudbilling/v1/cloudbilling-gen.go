@@ -237,7 +237,6 @@ func (s *AggregationInfo) MarshalJSON() ([]byte, error) {
 type AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
-	// Next ID: 4
 	AuditLogConfigs []*AuditLogConfig `json:"auditLogConfigs,omitempty"`
 
 	// Service: Specifies a service that will be enabled for audit
@@ -349,9 +348,6 @@ type BillingAccount struct {
 	// being
 	// resold through.
 	// Otherwise this will be empty.
-	//
-	// > This field is currently in
-	// > [Beta](https://cloud.google.com/terms/launch-stages).
 	MasterBillingAccount string `json:"masterBillingAccount,omitempty"`
 
 	// Name: The resource name of the billing account. The resource name has
@@ -400,6 +396,15 @@ func (s *BillingAccount) MarshalJSON() ([]byte, error) {
 
 // Binding: Associates `members` with a `role`.
 type Binding struct {
+	// Condition: Unimplemented. The condition that is associated with this
+	// binding.
+	// NOTE: an unsatisfied condition will not allow user access via
+	// current
+	// binding. Different bindings, including their conditions, are
+	// examined
+	// independently.
+	Condition *Expr `json:"condition,omitempty"`
+
 	// Members: Specifies the identities requesting access for a Cloud
 	// Platform resource.
 	// `members` can have the following values:
@@ -414,7 +419,7 @@ type Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` or `joe@example.com`.
+	//    account. For example, `alice@gmail.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -436,12 +441,10 @@ type Binding struct {
 	Members []string `json:"members,omitempty"`
 
 	// Role: Role that is assigned to `members`.
-	// For example, `roles/viewer`, `roles/editor`, or
-	// `roles/owner`.
-	// Required
+	// For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
 	Role string `json:"role,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Members") to
+	// ForceSendFields is a list of field names (e.g. "Condition") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -449,7 +452,7 @@ type Binding struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "Members") to include in
+	// NullFields is a list of field names (e.g. "Condition") to include in
 	// API requests with the JSON null value. By default, fields with empty
 	// values are omitted from API requests. However, any field with an
 	// empty value appearing in NullFields will be sent to the server as
@@ -502,6 +505,60 @@ type Category struct {
 
 func (s *Category) MarshalJSON() ([]byte, error) {
 	type NoMethod Category
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// Expr: Represents an expression text. Example:
+//
+//     title: "User account presence"
+//     description: "Determines whether the request has a user account"
+//     expression: "size(request.user) > 0"
+type Expr struct {
+	// Description: An optional description of the expression. This is a
+	// longer text which
+	// describes the expression, e.g. when hovered over it in a UI.
+	Description string `json:"description,omitempty"`
+
+	// Expression: Textual representation of an expression in
+	// Common Expression Language syntax.
+	//
+	// The application context of the containing message determines
+	// which
+	// well-known feature set of CEL is supported.
+	Expression string `json:"expression,omitempty"`
+
+	// Location: An optional string indicating the location of the
+	// expression for error
+	// reporting, e.g. a file name and a position in the file.
+	Location string `json:"location,omitempty"`
+
+	// Title: An optional title for the expression, i.e. a short string
+	// describing
+	// its purpose. This can be used e.g. in UIs which allow to enter
+	// the
+	// expression.
+	Title string `json:"title,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Description") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Description") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Expr) MarshalJSON() ([]byte, error) {
+	type NoMethod Expr
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -713,7 +770,7 @@ func (s *Money) MarshalJSON() ([]byte, error) {
 // specify access control policies for Cloud Platform resources.
 //
 //
-// A `Policy` consists of a list of `bindings`. A `Binding` binds a list
+// A `Policy` consists of a list of `bindings`. A `binding` binds a list
 // of
 // `members` to a `role`, where the members can be user accounts, Google
 // groups,
@@ -721,7 +778,7 @@ func (s *Money) MarshalJSON() ([]byte, error) {
 // permissions
 // defined by IAM.
 //
-// **Example**
+// **JSON Example**
 //
 //     {
 //       "bindings": [
@@ -732,7 +789,7 @@ func (s *Money) MarshalJSON() ([]byte, error) {
 //             "group:admins@example.com",
 //             "domain:google.com",
 //
-// "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+// "serviceAccount:my-other-app@appspot.gserviceaccount.com"
 //           ]
 //         },
 //         {
@@ -741,6 +798,20 @@ func (s *Money) MarshalJSON() ([]byte, error) {
 //         }
 //       ]
 //     }
+//
+// **YAML Example**
+//
+//     bindings:
+//     - members:
+//       - user:mike@example.com
+//       - group:admins@example.com
+//       - domain:google.com
+//       - serviceAccount:my-other-app@appspot.gserviceaccount.com
+//       role: roles/owner
+//     - members:
+//       - user:sean@example.com
+//       role: roles/viewer
+//
 //
 // For a description of IAM and its features, see the
 // [IAM developer's guide](https://cloud.google.com/iam/docs).
@@ -1322,7 +1393,8 @@ type BillingAccountsCreateCall struct {
 // Create: Creates a billing account.
 // This method can only be used to create
 // [billing
-// subaccounts](https://cloud.google.com/billing/docs/concepts).
+// subaccounts](https://cloud.google.com/billing/docs/concepts)
+// by GCP resellers.
 // When creating a subaccount, the current authenticated user must have
 // the
 // `billing.accounts.update` IAM permission on the master account, which
@@ -1331,9 +1403,9 @@ type BillingAccountsCreateCall struct {
 // account
 // [administrators](https://cloud.google.com/billing/docs/how-to/
 // billing-access).
-//
-// > This method is currently in
-// > [Beta](https://cloud.google.com/terms/launch-stages).
+// This method will return an error if the master account has not
+// been
+// provisioned as a reseller account.
 func (r *BillingAccountsService) Create(billingaccount *BillingAccount) *BillingAccountsCreateCall {
 	c := &BillingAccountsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.billingaccount = billingaccount
@@ -1378,6 +1450,7 @@ func (c *BillingAccountsCreateCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/billingAccounts")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1423,7 +1496,7 @@ func (c *BillingAccountsCreateCall) Do(opts ...googleapi.CallOption) (*BillingAc
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a billing account.\nThis method can only be used to create\n[billing subaccounts](https://cloud.google.com/billing/docs/concepts).\nWhen creating a subaccount, the current authenticated user must have the\n`billing.accounts.update` IAM permission on the master account, which is\ntypically given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+	//   "description": "Creates a billing account.\nThis method can only be used to create\n[billing subaccounts](https://cloud.google.com/billing/docs/concepts)\nby GCP resellers.\nWhen creating a subaccount, the current authenticated user must have the\n`billing.accounts.update` IAM permission on the master account, which is\ntypically given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).\nThis method will return an error if the master account has not been\nprovisioned as a reseller account.",
 	//   "flatPath": "v1/billingAccounts",
 	//   "httpMethod": "POST",
 	//   "id": "cloudbilling.billingAccounts.create",
@@ -1512,6 +1585,7 @@ func (c *BillingAccountsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1606,9 +1680,6 @@ type BillingAccountsGetIamPolicyCall struct {
 // account
 // [viewers](https://cloud.google.com/billing/docs/how-to/billing
 // -access).
-//
-// > This method is currently in
-// > [Beta](https://cloud.google.com/terms/launch-stages).
 func (r *BillingAccountsService) GetIamPolicy(resource string) *BillingAccountsGetIamPolicyCall {
 	c := &BillingAccountsGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -1661,6 +1732,7 @@ func (c *BillingAccountsGetIamPolicyCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1709,7 +1781,7 @@ func (c *BillingAccountsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Pol
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets the access control policy for a billing account.\nThe caller must have the `billing.accounts.getIamPolicy` permission on the\naccount, which is often given to billing account\n[viewers](https://cloud.google.com/billing/docs/how-to/billing-access).\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+	//   "description": "Gets the access control policy for a billing account.\nThe caller must have the `billing.accounts.getIamPolicy` permission on the\naccount, which is often given to billing account\n[viewers](https://cloud.google.com/billing/docs/how-to/billing-access).",
 	//   "flatPath": "v1/billingAccounts/{billingAccountsId}:getIamPolicy",
 	//   "httpMethod": "GET",
 	//   "id": "cloudbilling.billingAccounts.getIamPolicy",
@@ -1766,9 +1838,6 @@ func (r *BillingAccountsService) List() *BillingAccountsListCall {
 // "master_billing_account=billingAccounts/012345-678901-ABCDEF").
 // Boolea
 // n algebra and other fields are not currently supported.
-//
-// > This field is currently in
-// > [Beta](https://cloud.google.com/terms/launch-stages).
 func (c *BillingAccountsListCall) Filter(filter string) *BillingAccountsListCall {
 	c.urlParams_.Set("filter", filter)
 	return c
@@ -1839,6 +1908,7 @@ func (c *BillingAccountsListCall) doRequest(alt string) (*http.Response, error) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/billingAccounts")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1891,7 +1961,7 @@ func (c *BillingAccountsListCall) Do(opts ...googleapi.CallOption) (*ListBilling
 	//   "parameterOrder": [],
 	//   "parameters": {
 	//     "filter": {
-	//       "description": "Options for how to filter the returned billing accounts.\nCurrently this only supports filtering for\n[subaccounts](https://cloud.google.com/billing/docs/concepts) under a\nsingle provided reseller billing account.\n(e.g. \"master_billing_account=billingAccounts/012345-678901-ABCDEF\").\nBoolean algebra and other fields are not currently supported.\n\n\u003e This field is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+	//       "description": "Options for how to filter the returned billing accounts.\nCurrently this only supports filtering for\n[subaccounts](https://cloud.google.com/billing/docs/concepts) under a\nsingle provided reseller billing account.\n(e.g. \"master_billing_account=billingAccounts/012345-678901-ABCDEF\").\nBoolean algebra and other fields are not currently supported.",
 	//       "location": "query",
 	//       "type": "string"
 	//     },
@@ -1959,9 +2029,6 @@ type BillingAccountsPatchCall struct {
 // [administrator](https://cloud.google.com/billing/docs/how-to/billi
 // ng-access)
 // of the billing account.
-//
-// > This method is currently in
-// > [Beta](https://cloud.google.com/terms/launch-stages).
 func (r *BillingAccountsService) Patch(name string, billingaccount *BillingAccount) *BillingAccountsPatchCall {
 	c := &BillingAccountsPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -2015,6 +2082,7 @@ func (c *BillingAccountsPatchCall) doRequest(alt string) (*http.Response, error)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -2063,7 +2131,7 @@ func (c *BillingAccountsPatchCall) Do(opts ...googleapi.CallOption) (*BillingAcc
 	}
 	return ret, nil
 	// {
-	//   "description": "Updates a billing account's fields.\nCurrently the only field that can be edited is `display_name`.\nThe current authenticated user must have the `billing.accounts.update`\nIAM permission, which is typically given to the\n[administrator](https://cloud.google.com/billing/docs/how-to/billing-access)\nof the billing account.\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+	//   "description": "Updates a billing account's fields.\nCurrently the only field that can be edited is `display_name`.\nThe current authenticated user must have the `billing.accounts.update`\nIAM permission, which is typically given to the\n[administrator](https://cloud.google.com/billing/docs/how-to/billing-access)\nof the billing account.",
 	//   "flatPath": "v1/billingAccounts/{billingAccountsId}",
 	//   "httpMethod": "PATCH",
 	//   "id": "cloudbilling.billingAccounts.patch",
@@ -2119,9 +2187,6 @@ type BillingAccountsSetIamPolicyCall struct {
 // account
 // [administrators](https://cloud.google.com/billing/docs/how-to/
 // billing-access).
-//
-// > This method is currently in
-// > [Beta](https://cloud.google.com/terms/launch-stages).
 func (r *BillingAccountsService) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *BillingAccountsSetIamPolicyCall {
 	c := &BillingAccountsSetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -2167,6 +2232,7 @@ func (c *BillingAccountsSetIamPolicyCall) doRequest(alt string) (*http.Response,
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2215,7 +2281,7 @@ func (c *BillingAccountsSetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Pol
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the access control policy for a billing account. Replaces any existing\npolicy.\nThe caller must have the `billing.accounts.setIamPolicy` permission on the\naccount, which is often given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+	//   "description": "Sets the access control policy for a billing account. Replaces any existing\npolicy.\nThe caller must have the `billing.accounts.setIamPolicy` permission on the\naccount, which is often given to billing account\n[administrators](https://cloud.google.com/billing/docs/how-to/billing-access).",
 	//   "flatPath": "v1/billingAccounts/{billingAccountsId}:setIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "cloudbilling.billingAccounts.setIamPolicy",
@@ -2260,11 +2326,7 @@ type BillingAccountsTestIamPermissionsCall struct {
 // account. This method takes
 // the resource and a set of permissions as input and returns the subset
 // of
-// the input permissions that the caller is allowed for that
-// resource.
-//
-// > This method is currently in
-// > [Beta](https://cloud.google.com/terms/launch-stages).
+// the input permissions that the caller is allowed for that resource.
 func (r *BillingAccountsService) TestIamPermissions(resource string, testiampermissionsrequest *TestIamPermissionsRequest) *BillingAccountsTestIamPermissionsCall {
 	c := &BillingAccountsTestIamPermissionsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -2310,6 +2372,7 @@ func (c *BillingAccountsTestIamPermissionsCall) doRequest(alt string) (*http.Res
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2358,7 +2421,7 @@ func (c *BillingAccountsTestIamPermissionsCall) Do(opts ...googleapi.CallOption)
 	}
 	return ret, nil
 	// {
-	//   "description": "Tests the access control policy for a billing account. This method takes\nthe resource and a set of permissions as input and returns the subset of\nthe input permissions that the caller is allowed for that resource.\n\n\u003e This method is currently in\n\u003e [Beta](https://cloud.google.com/terms/launch-stages).",
+	//   "description": "Tests the access control policy for a billing account. This method takes\nthe resource and a set of permissions as input and returns the subset of\nthe input permissions that the caller is allowed for that resource.",
 	//   "flatPath": "v1/billingAccounts/{billingAccountsId}:testIamPermissions",
 	//   "httpMethod": "POST",
 	//   "id": "cloudbilling.billingAccounts.testIamPermissions",
@@ -2478,6 +2541,7 @@ func (c *BillingAccountsProjectsListCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/projects")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2655,6 +2719,7 @@ func (c *ProjectsGetBillingInfoCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/billingInfo")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2842,6 +2907,7 @@ func (c *ProjectsUpdateBillingInfoCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/billingInfo")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -2999,6 +3065,7 @@ func (c *ServicesListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/services")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3065,7 +3132,10 @@ func (c *ServicesListCall) Do(opts ...googleapi.CallOption) (*ListServicesRespon
 	//   "path": "v1/services",
 	//   "response": {
 	//     "$ref": "ListServicesResponse"
-	//   }
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
 	// }
 
 }
@@ -3213,6 +3283,7 @@ func (c *ServicesSkusListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+parent}/skus")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3308,7 +3379,10 @@ func (c *ServicesSkusListCall) Do(opts ...googleapi.CallOption) (*ListSkusRespon
 	//   "path": "v1/{+parent}/skus",
 	//   "response": {
 	//     "$ref": "ListSkusResponse"
-	//   }
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
 	// }
 
 }

@@ -140,7 +140,7 @@
     "EventArnsList": {
       "base": null,
       "refs": {
-        "DescribeEntityAggregatesRequest$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"
+        "DescribeEntityAggregatesRequest$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456\", \"arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101\"</code> </p>"
       }
     },
     "EventDescription": {
@@ -305,20 +305,20 @@
     "eventArn": {
       "base": null,
       "refs": {
-        "AffectedEntity$eventArn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>",
-        "EntityAggregate$eventArn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>",
-        "Event$arn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>",
+        "AffectedEntity$eventArn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>",
+        "EntityAggregate$eventArn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>",
+        "Event$arn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>",
         "EventArnsList$member": null,
-        "EventDetailsErrorItem$eventArn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>",
+        "EventDetailsErrorItem$eventArn": "<p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>",
         "eventArnList$member": null
       }
     },
     "eventArnList": {
       "base": null,
       "refs": {
-        "DescribeEventDetailsRequest$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>",
-        "EntityFilter$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>",
-        "EventFilter$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331\", \"arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz\"</code> </p>"
+        "DescribeEventDetailsRequest$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456\", \"arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101\"</code> </p>",
+        "EntityFilter$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456\", \"arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101\"</code> </p>",
+        "EventFilter$eventArns": "<p>A list of event ARNs (unique identifiers). For example: <code>\"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456\", \"arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101\"</code> </p>"
       }
     },
     "eventDescription": {
@@ -355,7 +355,7 @@
     "eventTypeCategory": {
       "base": null,
       "refs": {
-        "Event$eventTypeCategory": "<p>The </p>",
+        "Event$eventTypeCategory": "<p>The category of the event. Possible values are <code>issue</code>, <code>scheduledChange</code>, and <code>accountNotification</code>.</p>",
         "EventType$category": "<p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>",
         "EventTypeCategoryList$member": null,
         "eventTypeCategoryList$member": null

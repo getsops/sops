@@ -1,9 +1,9 @@
 {
   "version": "2.0",
-  "service": "<p>AWS Snowball is a petabyte-scale data transport solution that uses secure appliances to transfer large amounts of data between your on-premises data centers and Amazon Simple Storage Service (Amazon S3). The Snowball commands described here provide access to the same functionality that is available in the AWS Snowball Management Console, which enables you to create and manage jobs for Snowball. To transfer data locally with a Snowball appliance, you'll need to use the Snowball client or the Amazon S3 API adapter for Snowball. For more information, see the <a href=\"http://docs.aws.amazon.com/AWSImportExport/latest/ug/api-reference.html\">User Guide</a>.</p>",
+  "service": "<p>AWS Snowball is a petabyte-scale data transport solution that uses secure devices to transfer large amounts of data between your on-premises data centers and Amazon Simple Storage Service (Amazon S3). The Snowball commands described here provide access to the same functionality that is available in the AWS Snowball Management Console, which enables you to create and manage jobs for Snowball. To transfer data locally with a Snowball device, you'll need to use the Snowball client or the Amazon S3 API adapter for Snowball. For more information, see the <a href=\"http://docs.aws.amazon.com/AWSImportExport/latest/ug/api-reference.html\">User Guide</a>.</p>",
   "operations": {
     "CancelCluster": "<p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>",
-    "CancelJob": "<p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action will return a job's <code>JobState</code> as part of the response element data returned.</p>",
+    "CancelJob": "<p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action returns a job's <code>JobState</code> as part of the response element data returned.</p>",
     "CreateAddress": "<p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>",
     "CreateCluster": "<p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>",
     "CreateJob": "<p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>",
@@ -16,6 +16,7 @@
     "GetSnowballUsage": "<p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>",
     "ListClusterJobs": "<p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>",
     "ListClusters": "<p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>",
+    "ListCompatibleImages": "<p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snowball Edge device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>",
     "ListJobs": "<p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>",
     "UpdateCluster": "<p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>",
     "UpdateJob": "<p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>"
@@ -52,6 +53,12 @@
       "base": null,
       "refs": {
         "DescribeAddressesResult$Addresses": "<p>The Snowball shipping addresses that were created for this account.</p>"
+      }
+    },
+    "AmiId": {
+      "base": null,
+      "refs": {
+        "Ec2AmiResource$AmiId": "<p>The ID of the AMI in Amazon EC2.</p>"
       }
     },
     "Boolean": {
@@ -123,6 +130,18 @@
         "ClusterMetadata$ClusterState": "<p>The current status of the cluster.</p>"
       }
     },
+    "CompatibleImage": {
+      "base": "<p>A JSON-formatted object that describes a compatible Amazon Machine Image (AMI), including the ID and name for a Snowball Edge AMI. This AMI is compatible with the device's physical hardware requirements, and it should be able to be run in an SBE1 instance on the device.</p>",
+      "refs": {
+        "CompatibleImageList$member": null
+      }
+    },
+    "CompatibleImageList": {
+      "base": null,
+      "refs": {
+        "ListCompatibleImagesResult$CompatibleImages": "<p>A JSON-formatted object that describes a compatible AMI, including the ID and name for a Snowball Edge AMI.</p>"
+      }
+    },
     "CreateAddressRequest": {
       "base": null,
       "refs": {
@@ -154,9 +173,9 @@
       }
     },
     "DataTransfer": {
-      "base": "<p>Defines the real-time status of a Snowball's data transfer while the appliance is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>",
+      "base": "<p>Defines the real-time status of a Snowball's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>",
       "refs": {
-        "JobMetadata$DataTransferProgress": "<p>A value that defines the real-time status of a Snowball's data transfer while the appliance is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>"
+        "JobMetadata$DataTransferProgress": "<p>A value that defines the real-time status of a Snowball's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>"
       }
     },
     "DescribeAddressRequest": {
@@ -196,6 +215,23 @@
     },
     "DescribeJobResult": {
       "base": null,
+      "refs": {
+      }
+    },
+    "Ec2AmiResource": {
+      "base": "<p>A JSON-formatted object that contains the IDs for an Amazon Machine Image (AMI), including the Amazon EC2 AMI ID and the Snowball Edge AMI ID. Each AMI has these two IDs to simplify identifying the AMI in both the AWS Cloud and on the device.</p>",
+      "refs": {
+        "Ec2AmiResourceList$member": null
+      }
+    },
+    "Ec2AmiResourceList": {
+      "base": null,
+      "refs": {
+        "JobResource$Ec2AmiResources": "<p>The Amazon Machine Images (AMIs) associated with this job.</p>"
+      }
+    },
+    "Ec2RequestFailedException": {
+      "base": "<p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>",
       "refs": {
       }
     },
@@ -317,14 +353,14 @@
       }
     },
     "JobResource": {
-      "base": "<p>Contains an array of <code>S3Resource</code> objects. Each <code>S3Resource</code> object represents an Amazon S3 bucket that your transferred data will be exported from or imported into.</p>",
+      "base": "<p>Contains an array of AWS resource objects. Each object represents an Amazon S3 bucket, an AWS Lambda function, or an Amazon Machine Image (AMI) based on Amazon EC2 that is associated with a particular job.</p>",
       "refs": {
         "ClusterMetadata$Resources": "<p>The arrays of <a>JobResource</a> objects that can include updated <a>S3Resource</a> objects or <a>LambdaResource</a> objects.</p>",
         "CreateClusterRequest$Resources": "<p>The resources associated with the cluster job. These resources include Amazon S3 buckets and optional AWS Lambda functions written in the Python language. </p>",
         "CreateJobRequest$Resources": "<p>Defines the Amazon S3 buckets associated with this job.</p> <p>With <code>IMPORT</code> jobs, you specify the bucket or buckets that your transferred data will be imported into.</p> <p>With <code>EXPORT</code> jobs, you specify the bucket or buckets that your transferred data will be exported from. Optionally, you can also specify a <code>KeyRange</code> value. If you choose to export a range, you define the length of the range by providing either an inclusive <code>BeginMarker</code> value, an inclusive <code>EndMarker</code> value, or both. Ranges are UTF-8 binary sorted.</p>",
         "JobMetadata$Resources": "<p>An array of <code>S3Resource</code> objects. Each <code>S3Resource</code> object represents an Amazon S3 bucket that your transferred data will be exported from or imported into.</p>",
         "UpdateClusterRequest$Resources": "<p>The updated arrays of <a>JobResource</a> objects that can include updated <a>S3Resource</a> objects or <a>LambdaResource</a> objects.</p>",
-        "UpdateJobRequest$Resources": "<p>The updated <a>S3Resource</a> object (for a single Amazon S3 bucket or key range), or the updated <a>JobResource</a> object (for multiple buckets or key ranges). </p>"
+        "UpdateJobRequest$Resources": "<p>The updated <code>JobResource</code> object, or the updated <a>JobResource</a> object. </p>"
       }
     },
     "JobState": {
@@ -403,6 +439,16 @@
       "refs": {
       }
     },
+    "ListCompatibleImagesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListCompatibleImagesResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListJobsRequest": {
       "base": null,
       "refs": {
@@ -419,6 +465,7 @@
         "DescribeAddressesRequest$MaxResults": "<p>The number of <code>ADDRESS</code> objects to return.</p>",
         "ListClusterJobsRequest$MaxResults": "<p>The number of <code>JobListEntry</code> objects to return.</p>",
         "ListClustersRequest$MaxResults": "<p>The number of <code>ClusterListEntry</code> objects to return.</p>",
+        "ListCompatibleImagesRequest$MaxResults": "<p>The maximum number of results for the list of compatible images. Currently, a Snowball Edge device can store 10 AMIs.</p>",
         "ListJobsRequest$MaxResults": "<p>The number of <code>JobListEntry</code> objects to return.</p>"
       }
     },
@@ -489,8 +536,8 @@
     "ShippingOption": {
       "base": null,
       "refs": {
-        "ClusterMetadata$ShippingOption": "<p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>",
-        "CreateClusterRequest$ShippingOption": "<p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge appliance, rather it represents how quickly each appliance moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, appliances shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>",
+        "ClusterMetadata$ShippingOption": "<p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>",
+        "CreateClusterRequest$ShippingOption": "<p>The shipping speed for each node in this cluster. This speed doesn't dictate how soon you'll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>",
         "CreateJobRequest$ShippingOption": "<p>The shipping speed for this job. This speed doesn't dictate how soon you'll get the Snowball, rather it represents how quickly the Snowball moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul>",
         "ShippingDetails$ShippingOption": "<p>The shipping speed for a particular job. This speed doesn't dictate how soon you'll get the Snowball from the job's creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul>",
         "UpdateClusterRequest$ShippingOption": "<p>The updated shipping option value of this cluster's <a>ShippingDetails</a> object.</p>",
@@ -508,11 +555,11 @@
     "SnowballType": {
       "base": null,
       "refs": {
-        "ClusterMetadata$SnowballType": "<p>The type of AWS Snowball appliance to use for this cluster. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>",
-        "CreateClusterRequest$SnowballType": "<p>The type of AWS Snowball appliance to use for this cluster. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>",
-        "CreateJobRequest$SnowballType": "<p>The type of AWS Snowball appliance to use for this job. Currently, the only supported appliance type for cluster jobs is <code>EDGE</code>.</p>",
-        "JobListEntry$SnowballType": "<p>The type of appliance used with this job.</p>",
-        "JobMetadata$SnowballType": "<p>The type of appliance used with this job.</p>"
+        "ClusterMetadata$SnowballType": "<p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>",
+        "CreateClusterRequest$SnowballType": "<p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>",
+        "CreateJobRequest$SnowballType": "<p>The type of AWS Snowball device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p>",
+        "JobListEntry$SnowballType": "<p>The type of device used with this job.</p>",
+        "JobMetadata$SnowballType": "<p>The type of device used with this job.</p>"
       }
     },
     "SnsTopicARN": {
@@ -541,11 +588,15 @@
         "ClusterListEntry$Description": "<p>Defines an optional description of the cluster, for example <code>Environmental Data Cluster-01</code>.</p>",
         "ClusterMetadata$ClusterId": "<p>The automatically generated ID for a cluster.</p>",
         "ClusterMetadata$Description": "<p>The optional description of the cluster.</p>",
+        "CompatibleImage$AmiId": "<p>The unique identifier for an individual Snowball Edge AMI.</p>",
+        "CompatibleImage$Name": "<p>The optional name of a compatible image.</p>",
         "CreateAddressResult$AddressId": "<p>The automatically generated ID for a specific address. You'll use this ID when you create a job to specify which address you want the Snowball for that job shipped to.</p>",
         "CreateClusterRequest$Description": "<p>An optional description of this specific cluster, for example <code>Environmental Data Cluster-01</code>.</p>",
         "CreateJobRequest$Description": "<p>Defines an optional description of this specific job, for example <code>Important Photos 2016-08-11</code>.</p>",
         "DescribeAddressesRequest$NextToken": "<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of <code>ADDRESS</code> objects, you have the option of specifying a value for <code>NextToken</code> as the starting point for your list of returned addresses.</p>",
         "DescribeAddressesResult$NextToken": "<p>HTTP requests are stateless. If you use the automatically generated <code>NextToken</code> value in your next <code>DescribeAddresses</code> call, your list of returned addresses will start from this point in the array.</p>",
+        "Ec2AmiResource$SnowballAmiId": "<p>The ID of the AMI on the Snowball Edge device.</p>",
+        "Ec2RequestFailedException$Message": null,
         "GetJobManifestResult$ManifestURI": "<p>The Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value.</p>",
         "GetJobUnlockCodeResult$UnlockCode": "<p>The <code>UnlockCode</code> value for the specified job. The <code>UnlockCode</code> value can be accessed for up to 90 days after the job has been created.</p>",
         "InvalidAddressException$Message": null,
@@ -553,6 +604,7 @@
         "InvalidJobStateException$Message": null,
         "InvalidNextTokenException$Message": null,
         "InvalidResourceException$Message": null,
+        "InvalidResourceException$ResourceType": "<p>The provided resource value is invalid.</p>",
         "JobListEntry$JobId": "<p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>",
         "JobListEntry$Description": "<p>The optional description of this specific job, for example <code>Important Photos 2016-08-11</code>.</p>",
         "JobLogs$JobCompletionReportURI": "<p>A link to an Amazon S3 presigned URL where the job completion report is located.</p>",
@@ -568,6 +620,8 @@
         "ListClusterJobsResult$NextToken": "<p>HTTP requests are stateless. If you use the automatically generated <code>NextToken</code> value in your next <code>ListClusterJobsResult</code> call, your list of returned jobs will start from this point in the array.</p>",
         "ListClustersRequest$NextToken": "<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of <code>ClusterListEntry</code> objects, you have the option of specifying <code>NextToken</code> as the starting point for your returned list.</p>",
         "ListClustersResult$NextToken": "<p>HTTP requests are stateless. If you use the automatically generated <code>NextToken</code> value in your next <code>ClusterListEntry</code> call, your list of returned clusters will start from this point in the array.</p>",
+        "ListCompatibleImagesRequest$NextToken": "<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of compatible images, you can specify a value for <code>NextToken</code> as the starting point for your list of returned images.</p>",
+        "ListCompatibleImagesResult$NextToken": "<p>Because HTTP requests are stateless, this is the starting point for your next list of returned images.</p>",
         "ListJobsRequest$NextToken": "<p>HTTP requests are stateless. To identify what object comes \"next\" in the list of <code>JobListEntry</code> objects, you have the option of specifying <code>NextToken</code> as the starting point for your returned list.</p>",
         "ListJobsResult$NextToken": "<p>HTTP requests are stateless. If you use this automatically generated <code>NextToken</code> value in your next <code>ListJobs</code> call, your returned <code>JobListEntry</code> objects will start from this point in the array.</p>",
         "Shipment$Status": "<p>Status information for a shipment.</p>",

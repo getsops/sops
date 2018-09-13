@@ -88,6 +88,13 @@ type ApplicationDiscoveryServiceAPI interface {
 	DescribeConfigurationsWithContext(aws.Context, *applicationdiscoveryservice.DescribeConfigurationsInput, ...request.Option) (*applicationdiscoveryservice.DescribeConfigurationsOutput, error)
 	DescribeConfigurationsRequest(*applicationdiscoveryservice.DescribeConfigurationsInput) (*request.Request, *applicationdiscoveryservice.DescribeConfigurationsOutput)
 
+	DescribeContinuousExports(*applicationdiscoveryservice.DescribeContinuousExportsInput) (*applicationdiscoveryservice.DescribeContinuousExportsOutput, error)
+	DescribeContinuousExportsWithContext(aws.Context, *applicationdiscoveryservice.DescribeContinuousExportsInput, ...request.Option) (*applicationdiscoveryservice.DescribeContinuousExportsOutput, error)
+	DescribeContinuousExportsRequest(*applicationdiscoveryservice.DescribeContinuousExportsInput) (*request.Request, *applicationdiscoveryservice.DescribeContinuousExportsOutput)
+
+	DescribeContinuousExportsPages(*applicationdiscoveryservice.DescribeContinuousExportsInput, func(*applicationdiscoveryservice.DescribeContinuousExportsOutput, bool) bool) error
+	DescribeContinuousExportsPagesWithContext(aws.Context, *applicationdiscoveryservice.DescribeContinuousExportsInput, func(*applicationdiscoveryservice.DescribeContinuousExportsOutput, bool) bool, ...request.Option) error
+
 	DescribeExportConfigurations(*applicationdiscoveryservice.DescribeExportConfigurationsInput) (*applicationdiscoveryservice.DescribeExportConfigurationsOutput, error)
 	DescribeExportConfigurationsWithContext(aws.Context, *applicationdiscoveryservice.DescribeExportConfigurationsInput, ...request.Option) (*applicationdiscoveryservice.DescribeExportConfigurationsOutput, error)
 	DescribeExportConfigurationsRequest(*applicationdiscoveryservice.DescribeExportConfigurationsInput) (*request.Request, *applicationdiscoveryservice.DescribeExportConfigurationsOutput)
@@ -120,6 +127,10 @@ type ApplicationDiscoveryServiceAPI interface {
 	ListServerNeighborsWithContext(aws.Context, *applicationdiscoveryservice.ListServerNeighborsInput, ...request.Option) (*applicationdiscoveryservice.ListServerNeighborsOutput, error)
 	ListServerNeighborsRequest(*applicationdiscoveryservice.ListServerNeighborsInput) (*request.Request, *applicationdiscoveryservice.ListServerNeighborsOutput)
 
+	StartContinuousExport(*applicationdiscoveryservice.StartContinuousExportInput) (*applicationdiscoveryservice.StartContinuousExportOutput, error)
+	StartContinuousExportWithContext(aws.Context, *applicationdiscoveryservice.StartContinuousExportInput, ...request.Option) (*applicationdiscoveryservice.StartContinuousExportOutput, error)
+	StartContinuousExportRequest(*applicationdiscoveryservice.StartContinuousExportInput) (*request.Request, *applicationdiscoveryservice.StartContinuousExportOutput)
+
 	StartDataCollectionByAgentIds(*applicationdiscoveryservice.StartDataCollectionByAgentIdsInput) (*applicationdiscoveryservice.StartDataCollectionByAgentIdsOutput, error)
 	StartDataCollectionByAgentIdsWithContext(aws.Context, *applicationdiscoveryservice.StartDataCollectionByAgentIdsInput, ...request.Option) (*applicationdiscoveryservice.StartDataCollectionByAgentIdsOutput, error)
 	StartDataCollectionByAgentIdsRequest(*applicationdiscoveryservice.StartDataCollectionByAgentIdsInput) (*request.Request, *applicationdiscoveryservice.StartDataCollectionByAgentIdsOutput)
@@ -127,6 +138,10 @@ type ApplicationDiscoveryServiceAPI interface {
 	StartExportTask(*applicationdiscoveryservice.StartExportTaskInput) (*applicationdiscoveryservice.StartExportTaskOutput, error)
 	StartExportTaskWithContext(aws.Context, *applicationdiscoveryservice.StartExportTaskInput, ...request.Option) (*applicationdiscoveryservice.StartExportTaskOutput, error)
 	StartExportTaskRequest(*applicationdiscoveryservice.StartExportTaskInput) (*request.Request, *applicationdiscoveryservice.StartExportTaskOutput)
+
+	StopContinuousExport(*applicationdiscoveryservice.StopContinuousExportInput) (*applicationdiscoveryservice.StopContinuousExportOutput, error)
+	StopContinuousExportWithContext(aws.Context, *applicationdiscoveryservice.StopContinuousExportInput, ...request.Option) (*applicationdiscoveryservice.StopContinuousExportOutput, error)
+	StopContinuousExportRequest(*applicationdiscoveryservice.StopContinuousExportInput) (*request.Request, *applicationdiscoveryservice.StopContinuousExportOutput)
 
 	StopDataCollectionByAgentIds(*applicationdiscoveryservice.StopDataCollectionByAgentIdsInput) (*applicationdiscoveryservice.StopDataCollectionByAgentIdsOutput, error)
 	StopDataCollectionByAgentIdsWithContext(aws.Context, *applicationdiscoveryservice.StopDataCollectionByAgentIdsInput, ...request.Option) (*applicationdiscoveryservice.StopDataCollectionByAgentIdsOutput, error)

@@ -101,7 +101,9 @@ var brokenAuthHeaderProviders = []string{
 	"https://api.pushbullet.com/",
 	"https://api.soundcloud.com/",
 	"https://api.twitch.tv/",
+	"https://id.twitch.tv/",
 	"https://app.box.com/",
+	"https://api.box.com/",
 	"https://connect.stripe.com/",
 	"https://login.mailchimp.com/",
 	"https://login.microsoftonline.com/",
@@ -126,6 +128,10 @@ var brokenAuthHeaderProviders = []string{
 	"https://api.sipgate.com/v1/authorization/oauth",
 	"https://api.medium.com/v1/tokens",
 	"https://log.finalsurge.com/oauth/token",
+	"https://multisport.todaysplan.com.au/rest/oauth/access_token",
+	"https://whats.todaysplan.com.au/rest/oauth/access_token",
+	"https://stackoverflow.com/oauth/access_token",
+	"https://account.health.nokia.com",
 }
 
 // brokenAuthHeaderDomains lists broken providers that issue dynamic endpoints.

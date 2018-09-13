@@ -32,8 +32,8 @@ type FeaturesClient struct {
 }
 
 // NewFeaturesClient creates an instance of the FeaturesClient client.
-func NewFeaturesClient(azureRegion AzureRegions) FeaturesClient {
-	return FeaturesClient{New(azureRegion)}
+func NewFeaturesClient(endpoint string) FeaturesClient {
+	return FeaturesClient{New(endpoint)}
 }
 
 // AddPhraseList creates a new phraselist feature.
@@ -67,7 +67,7 @@ func (client FeaturesClient) AddPhraseList(ctx context.Context, appID uuid.UUID,
 // AddPhraseListPreparer prepares the AddPhraseList request.
 func (client FeaturesClient) AddPhraseListPreparer(ctx context.Context, appID uuid.UUID, versionID string, phraselistCreateObject PhraselistCreateObject) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -78,7 +78,7 @@ func (client FeaturesClient) AddPhraseListPreparer(ctx context.Context, appID uu
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/phraselists", pathParameters),
 		autorest.WithJSON(phraselistCreateObject))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -134,7 +134,7 @@ func (client FeaturesClient) DeletePhraseList(ctx context.Context, appID uuid.UU
 // DeletePhraseListPreparer prepares the DeletePhraseList request.
 func (client FeaturesClient) DeletePhraseListPreparer(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -145,7 +145,7 @@ func (client FeaturesClient) DeletePhraseListPreparer(ctx context.Context, appID
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/phraselists/{phraselistId}", pathParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -200,7 +200,7 @@ func (client FeaturesClient) GetPhraseList(ctx context.Context, appID uuid.UUID,
 // GetPhraseListPreparer prepares the GetPhraseList request.
 func (client FeaturesClient) GetPhraseListPreparer(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -211,7 +211,7 @@ func (client FeaturesClient) GetPhraseListPreparer(ctx context.Context, appID uu
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/phraselists/{phraselistId}", pathParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -249,7 +249,7 @@ func (client FeaturesClient) List(ctx context.Context, appID uuid.UUID, versionI
 				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
 		{TargetValue: take,
 			Constraints: []validation.Constraint{{Target: "take", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: 500, Chain: nil},
+				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: int64(500), Chain: nil},
 					{Target: "take", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("authoring.FeaturesClient", "List", err.Error())
@@ -279,7 +279,7 @@ func (client FeaturesClient) List(ctx context.Context, appID uuid.UUID, versionI
 // ListPreparer prepares the List request.
 func (client FeaturesClient) ListPreparer(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -301,7 +301,7 @@ func (client FeaturesClient) ListPreparer(ctx context.Context, appID uuid.UUID, 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/features", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -340,7 +340,7 @@ func (client FeaturesClient) ListPhraseLists(ctx context.Context, appID uuid.UUI
 				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
 		{TargetValue: take,
 			Constraints: []validation.Constraint{{Target: "take", Name: validation.Null, Rule: false,
-				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: 500, Chain: nil},
+				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: int64(500), Chain: nil},
 					{Target: "take", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
 				}}}}}); err != nil {
 		return result, validation.NewError("authoring.FeaturesClient", "ListPhraseLists", err.Error())
@@ -370,7 +370,7 @@ func (client FeaturesClient) ListPhraseLists(ctx context.Context, appID uuid.UUI
 // ListPhraseListsPreparer prepares the ListPhraseLists request.
 func (client FeaturesClient) ListPhraseListsPreparer(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -392,7 +392,7 @@ func (client FeaturesClient) ListPhraseListsPreparer(ctx context.Context, appID 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/phraselists", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -450,7 +450,7 @@ func (client FeaturesClient) UpdatePhraseList(ctx context.Context, appID uuid.UU
 // UpdatePhraseListPreparer prepares the UpdatePhraseList request.
 func (client FeaturesClient) UpdatePhraseListPreparer(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32, phraselistUpdateObject *PhraselistUpdateObject) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
-		"AzureRegion": client.AzureRegion,
+		"Endpoint": client.Endpoint,
 	}
 
 	pathParameters := map[string]interface{}{
@@ -462,7 +462,7 @@ func (client FeaturesClient) UpdatePhraseListPreparer(ctx context.Context, appID
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
-		autorest.WithCustomBaseURL("https://{AzureRegion}.api.cognitive.microsoft.com/luis/api/v2.0", urlParameters),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
 		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/phraselists/{phraselistId}", pathParameters))
 	if phraselistUpdateObject != nil {
 		preparer = autorest.DecoratePreparer(preparer,

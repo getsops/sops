@@ -18,6 +18,7 @@ package vision
 
 import (
 	visionpb "google.golang.org/genproto/googleapis/cloud/vision/v1"
+	longrunningpb "google.golang.org/genproto/googleapis/longrunning"
 )
 
 import (
@@ -70,6 +71,18 @@ func (s *mockImageAnnotatorServer) BatchAnnotateImages(ctx context.Context, req 
 		return nil, s.err
 	}
 	return s.resps[0].(*visionpb.BatchAnnotateImagesResponse), nil
+}
+
+func (s *mockImageAnnotatorServer) AsyncBatchAnnotateFiles(ctx context.Context, req *visionpb.AsyncBatchAnnotateFilesRequest) (*longrunningpb.Operation, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*longrunningpb.Operation), nil
 }
 
 // clientOpt is the option tests should use to connect to the test server.
@@ -149,6 +162,88 @@ func TestImageAnnotatorBatchAnnotateImagesError(t *testing.T) {
 	}
 
 	resp, err := c.BatchAnnotateImages(context.Background(), request)
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
+}
+func TestImageAnnotatorAsyncBatchAnnotateFiles(t *testing.T) {
+	var expectedResponse *visionpb.AsyncBatchAnnotateFilesResponse = &visionpb.AsyncBatchAnnotateFilesResponse{}
+
+	mockImageAnnotator.err = nil
+	mockImageAnnotator.reqs = nil
+
+	any, err := ptypes.MarshalAny(expectedResponse)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mockImageAnnotator.resps = append(mockImageAnnotator.resps[:0], &longrunningpb.Operation{
+		Name:   "longrunning-test",
+		Done:   true,
+		Result: &longrunningpb.Operation_Response{Response: any},
+	})
+
+	var requests []*visionpb.AsyncAnnotateFileRequest = nil
+	var request = &visionpb.AsyncBatchAnnotateFilesRequest{
+		Requests: requests,
+	}
+
+	c, err := NewImageAnnotatorClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	respLRO, err := c.AsyncBatchAnnotateFiles(context.Background(), request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp, err := respLRO.Wait(context.Background())
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockImageAnnotator.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestImageAnnotatorAsyncBatchAnnotateFilesError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockImageAnnotator.err = nil
+	mockImageAnnotator.resps = append(mockImageAnnotator.resps[:0], &longrunningpb.Operation{
+		Name: "longrunning-test",
+		Done: true,
+		Result: &longrunningpb.Operation_Error{
+			Error: &status.Status{
+				Code:    int32(errCode),
+				Message: "test error",
+			},
+		},
+	})
+
+	var requests []*visionpb.AsyncAnnotateFileRequest = nil
+	var request = &visionpb.AsyncBatchAnnotateFilesRequest{
+		Requests: requests,
+	}
+
+	c, err := NewImageAnnotatorClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	respLRO, err := c.AsyncBatchAnnotateFiles(context.Background(), request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp, err := respLRO.Wait(context.Background())
 
 	if st, ok := gstatus.FromError(err); !ok {
 		t.Errorf("got error %v, expected grpc error", err)

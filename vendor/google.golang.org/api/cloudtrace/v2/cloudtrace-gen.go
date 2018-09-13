@@ -476,7 +476,7 @@ type Span struct {
 	// DisplayName: A description of the span's operation (up to 128
 	// bytes).
 	// Stackdriver Trace displays the description in the
-	// {% dynamic print site_values.console_name %}.
+	// Google Cloud Platform Console.
 	// For example, the display name can be a qualified method name or a
 	// file name
 	// and a line number where the operation is called. A best practice is
@@ -1006,6 +1006,7 @@ func (c *ProjectsTracesBatchWriteCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}/traces:batchWrite")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1142,6 +1143,7 @@ func (c *ProjectsTracesSpansCreateSpanCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

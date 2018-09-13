@@ -5,7 +5,7 @@
   "description": "Searches over a website or collection of websites",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/custom-search/v1/using_rest",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/WZw06ascIaWh_DLEVTvERCFA66s\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/Nz7EqsJaWIDJp3FUTW78pyd2v30\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -52,12 +52,12 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
@@ -163,15 +163,17 @@
               "type": "string"
             },
             "imgDominantColor": {
-              "description": "Returns images of a specific dominant color: yellow, green, teal, blue, purple, pink, white, gray, black and brown.",
+              "description": "Returns images of a specific dominant color: red, orange, yellow, green, teal, blue, purple, pink, white, gray, black and brown.",
               "enum": [
                 "black",
                 "blue",
                 "brown",
                 "gray",
                 "green",
+                "orange",
                 "pink",
                 "purple",
+                "red",
                 "teal",
                 "white",
                 "yellow"
@@ -182,8 +184,10 @@
                 "brown",
                 "gray",
                 "green",
+                "orange",
                 "pink",
                 "purple",
+                "red",
                 "teal",
                 "white",
                 "yellow"
@@ -354,13 +358,15 @@
               "default": "off",
               "description": "Search safety level",
               "enum": [
+                "active",
                 "high",
                 "medium",
                 "off"
               ],
               "enumDescriptions": [
-                "Enables highest level of safe search filtering.",
-                "Enables moderate safe search filtering.",
+                "Enables safe search filtering.",
+                "(Deprecated) Same as active.",
+                "(Deprecated) Same as active.",
                 "Disables safe search filtering."
               ],
               "location": "query",
@@ -417,7 +423,7 @@
         "siterestrict": {
           "methods": {
             "list": {
-              "description": "(Closed Beta API) Returns metadata about the search performed, metadata about the custom search engine used for the search, and the search results only for site-restrict cses.",
+              "description": "Returns metadata about the search performed, metadata about the custom search engine used for the search, and the search results. Uses a small set of url patterns.",
               "httpMethod": "GET",
               "id": "search.cse.siterestrict.list",
               "parameterOrder": [
@@ -513,15 +519,17 @@
                   "type": "string"
                 },
                 "imgDominantColor": {
-                  "description": "Returns images of a specific dominant color: yellow, green, teal, blue, purple, pink, white, gray, black and brown.",
+                  "description": "Returns images of a specific dominant color: red, orange, yellow, green, teal, blue, purple, pink, white, gray, black and brown.",
                   "enum": [
                     "black",
                     "blue",
                     "brown",
                     "gray",
                     "green",
+                    "orange",
                     "pink",
                     "purple",
+                    "red",
                     "teal",
                     "white",
                     "yellow"
@@ -532,8 +540,10 @@
                     "brown",
                     "gray",
                     "green",
+                    "orange",
                     "pink",
                     "purple",
+                    "red",
                     "teal",
                     "white",
                     "yellow"
@@ -767,7 +777,7 @@
       }
     }
   },
-  "revision": "20180220",
+  "revision": "20180815",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Context": {

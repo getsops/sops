@@ -33,40 +33,6 @@ func ExampleNewPublisherClient() {
 	_ = c
 }
 
-func ExamplePublisherClient_SubscriptionIAM() {
-	ctx := context.Background()
-	c, err := pubsub.NewPublisherClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-
-	subscription := &pubsubpb.Subscription{}
-	h := c.SubscriptionIAM(subscription)
-	policy, err := h.Policy(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	//TODO: Use the IAM policy
-	_ = policy
-}
-
-func ExamplePublisherClient_TopicIAM() {
-	ctx := context.Background()
-	c, err := pubsub.NewPublisherClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-
-	topic := &pubsubpb.Topic{}
-	h := c.TopicIAM(topic)
-	policy, err := h.Policy(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	//TODO: Use the IAM policy
-	_ = policy
-}
-
 func ExamplePublisherClient_CreateTopic() {
 	ctx := context.Background()
 	c, err := pubsub.NewPublisherClient(ctx)

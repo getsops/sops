@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/version"
+	"github.com/golang/protobuf/proto"
 	gax "github.com/googleapis/gax-go"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
@@ -75,6 +76,8 @@ func defaultJobControllerCallOptions() *JobControllerCallOptions {
 }
 
 // JobControllerClient is a client for interacting with Google Cloud Dataproc API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type JobControllerClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn
@@ -164,6 +167,7 @@ func (c *JobControllerClient) ListJobs(ctx context.Context, req *dataprocpb.List
 	ctx = insertMetadata(ctx, c.xGoogMetadata)
 	opts = append(c.CallOptions.ListJobs[0:len(c.CallOptions.ListJobs):len(c.CallOptions.ListJobs)], opts...)
 	it := &JobIterator{}
+	req = proto.Clone(req).(*dataprocpb.ListJobsRequest)
 	it.InternalFetch = func(pageSize int, pageToken string) ([]*dataprocpb.Job, string, error) {
 		var resp *dataprocpb.ListJobsResponse
 		req.PageToken = pageToken
@@ -191,6 +195,7 @@ func (c *JobControllerClient) ListJobs(ctx context.Context, req *dataprocpb.List
 		return nextPageToken, nil
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(fetch, it.bufLen, it.takeBuf)
+	it.pageInfo.MaxSize = int(req.PageSize)
 	return it
 }
 

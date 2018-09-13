@@ -21,6 +21,9 @@
 // If the pkg_prefix flag is not an empty string,
 // any proto file without `go_package` option
 // or whose option does not begin with the prefix is ignored.
+// If multiple roots contain files with the same name,
+// eg "root1/path/to/file" and "root2/path/to/file",
+// only the first file is processed; the rest are ignored.
 // Protoc is executed on remaining files,
 // one invocation per set of files declaring the same Go package.
 package main
@@ -58,22 +61,33 @@ func main() {
 		log.Fatal("need go_out flag")
 	}
 
+	seenFiles := make(map[string]bool)
 	pkgFiles := make(map[string][]string)
-	walkFn := func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if !info.Mode().IsRegular() || !strings.HasSuffix(path, ".proto") {
+	for _, root := range flag.Args() {
+		walkFn := func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			if !info.Mode().IsRegular() || !strings.HasSuffix(path, ".proto") {
+				return nil
+			}
+
+			switch rel, err := filepath.Rel(root, path); {
+			case err != nil:
+				return err
+			case seenFiles[rel]:
+				return nil
+			default:
+				seenFiles[rel] = true
+			}
+
+			pkg, err := goPkg(path)
+			if err != nil {
+				return err
+			}
+			pkgFiles[pkg] = append(pkgFiles[pkg], path)
 			return nil
 		}
-		pkg, err := goPkg(path)
-		if err != nil {
-			return err
-		}
-		pkgFiles[pkg] = append(pkgFiles[pkg], path)
-		return nil
-	}
-	for _, root := range flag.Args() {
 		if err := filepath.Walk(root, walkFn); err != nil {
 			log.Fatal(err)
 		}

@@ -1686,9 +1686,9 @@ func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifier(ctx context.Con
 func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"
@@ -1769,10 +1769,10 @@ func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifierSlot(ctx context
 func (client AppsClient) CreateOrUpdateDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"
@@ -3831,9 +3831,9 @@ func (client AppsClient) DeleteDomainOwnershipIdentifier(ctx context.Context, re
 func (client AppsClient) DeleteDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"
@@ -3909,10 +3909,10 @@ func (client AppsClient) DeleteDomainOwnershipIdentifierSlot(ctx context.Context
 func (client AppsClient) DeleteDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"
@@ -7582,9 +7582,9 @@ func (client AppsClient) GetDomainOwnershipIdentifier(ctx context.Context, resou
 func (client AppsClient) GetDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"
@@ -7661,10 +7661,10 @@ func (client AppsClient) GetDomainOwnershipIdentifierSlot(ctx context.Context, r
 func (client AppsClient) GetDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"
@@ -24719,7 +24719,7 @@ func (client AppsClient) UpdateDiagnosticLogsConfig(ctx context.Context, resourc
 					{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.Null, Rule: false,
-								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: 100, Chain: nil},
+								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
 									{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMinimum, Rule: 25, Chain: nil},
 								}},
 							}},
@@ -24815,7 +24815,7 @@ func (client AppsClient) UpdateDiagnosticLogsConfigSlot(ctx context.Context, res
 					{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.Null, Rule: false,
-								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: 100, Chain: nil},
+								Chain: []validation.Constraint{{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
 									{Target: "siteLogsConfig.SiteLogsConfigProperties.HTTPLogs.FileSystem.RetentionInMb", Name: validation.InclusiveMinimum, Rule: 25, Chain: nil},
 								}},
 							}},
@@ -24930,9 +24930,9 @@ func (client AppsClient) UpdateDomainOwnershipIdentifier(ctx context.Context, re
 func (client AppsClient) UpdateDomainOwnershipIdentifierPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"
@@ -25013,10 +25013,10 @@ func (client AppsClient) UpdateDomainOwnershipIdentifierSlot(ctx context.Context
 func (client AppsClient) UpdateDomainOwnershipIdentifierSlotPreparer(ctx context.Context, resourceGroupName string, name string, domainOwnershipIdentifierName string, domainOwnershipIdentifier Identifier, slot string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"domainOwnershipIdentifierName": autorest.Encode("path", domainOwnershipIdentifierName),
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"slot":              autorest.Encode("path", slot),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+		"name":                          autorest.Encode("path", name),
+		"resourceGroupName":             autorest.Encode("path", resourceGroupName),
+		"slot":                          autorest.Encode("path", slot),
+		"subscriptionId":                autorest.Encode("path", client.SubscriptionID),
 	}
 
 	const APIVersion = "2016-08-01"

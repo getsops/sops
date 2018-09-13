@@ -1,4 +1,4 @@
-// Copyright 2018 Google Inc. All Rights Reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -49,35 +49,35 @@ const statsPrefix = "cloud.google.com/go/pubsub/"
 var (
 	// PullCount is a measure of the number of messages pulled.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	PullCount = stats.Int64(statsPrefix+"pull_count", "Number of PubSub messages pulled", stats.UnitNone)
+	PullCount = stats.Int64(statsPrefix+"pull_count", "Number of PubSub messages pulled", stats.UnitDimensionless)
 
 	// AckCount is a measure of the number of messages acked.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	AckCount = stats.Int64(statsPrefix+"ack_count", "Number of PubSub messages acked", stats.UnitNone)
+	AckCount = stats.Int64(statsPrefix+"ack_count", "Number of PubSub messages acked", stats.UnitDimensionless)
 
 	// NackCount is a measure of the number of messages nacked.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	NackCount = stats.Int64(statsPrefix+"nack_count", "Number of PubSub messages nacked", stats.UnitNone)
+	NackCount = stats.Int64(statsPrefix+"nack_count", "Number of PubSub messages nacked", stats.UnitDimensionless)
 
 	// ModAckCount is a measure of the number of messages whose ack-deadline was modified.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	ModAckCount = stats.Int64(statsPrefix+"mod_ack_count", "Number of ack-deadlines modified", stats.UnitNone)
+	ModAckCount = stats.Int64(statsPrefix+"mod_ack_count", "Number of ack-deadlines modified", stats.UnitDimensionless)
 
 	// StreamOpenCount is a measure of the number of times a streaming-pull stream was opened.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	StreamOpenCount = stats.Int64(statsPrefix+"stream_open_count", "Number of calls opening a new streaming pull", stats.UnitNone)
+	StreamOpenCount = stats.Int64(statsPrefix+"stream_open_count", "Number of calls opening a new streaming pull", stats.UnitDimensionless)
 
 	// StreamRetryCount is a measure of the number of times a streaming-pull operation was retried.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	StreamRetryCount = stats.Int64(statsPrefix+"stream_retry_count", "Number of retries of a stream send or receive", stats.UnitNone)
+	StreamRetryCount = stats.Int64(statsPrefix+"stream_retry_count", "Number of retries of a stream send or receive", stats.UnitDimensionless)
 
 	// StreamRequestCount is a measure of the number of requests sent on a streaming-pull stream.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	StreamRequestCount = stats.Int64(statsPrefix+"stream_request_count", "Number gRPC StreamingPull request messages sent", stats.UnitNone)
+	StreamRequestCount = stats.Int64(statsPrefix+"stream_request_count", "Number gRPC StreamingPull request messages sent", stats.UnitDimensionless)
 
-	// StreamRequestCount is a measure of the number of responses received on a streaming-pull stream.
+	// StreamResponseCount is a measure of the number of responses received on a streaming-pull stream.
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	StreamResponseCount = stats.Int64(statsPrefix+"stream_response_count", "Number of gRPC StreamingPull response messages received", stats.UnitNone)
+	StreamResponseCount = stats.Int64(statsPrefix+"stream_response_count", "Number of gRPC StreamingPull response messages received", stats.UnitDimensionless)
 
 	// PullCountView is a cumulative sum of PullCount.
 	// It is EXPERIMENTAL and subject to change or removal without notice.

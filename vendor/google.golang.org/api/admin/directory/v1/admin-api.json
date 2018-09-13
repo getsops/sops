@@ -90,10 +90,10 @@
   "baseUrl": "https://www.googleapis.com/admin/directory/v1/",
   "batchPath": "batch/admin/directory_v1",
   "canonicalName": "directory",
-  "description": "The Admin SDK Directory API lets you view and manage enterprise resources such as users and groups, administrative notifications, security features, and more.",
+  "description": "Manages enterprise resources such as users and groups, administrative notifications, security features, and more.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/admin-sdk/directory/",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/ny7NvsE3PzK3etgzPNk9J8KeI7k\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/Zp5udf3d_MSf3cProroao6vKvEo\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -139,12 +139,12 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
@@ -401,7 +401,7 @@
               "type": "string"
             },
             "query": {
-              "description": "Search string in the format given at http://support.google.com/chromeos/a/bin/answer.py?hl=en\u0026answer=1698333",
+              "description": "Search string in the format given at http://support.google.com/chromeos/a/bin/answer.py?answer=1698333",
               "location": "query",
               "type": "string"
             },
@@ -923,7 +923,7 @@
           ]
         },
         "list": {
-          "description": "Retrieve all groups in a domain (paginated)",
+          "description": "Retrieve all groups of a domain or of a user given a userKey (paginated)",
           "httpMethod": "GET",
           "id": "directory.groups.list",
           "parameters": {
@@ -944,13 +944,42 @@
               "minimum": "1",
               "type": "integer"
             },
+            "orderBy": {
+              "description": "Column to use for sorting results",
+              "enum": [
+                "email"
+              ],
+              "enumDescriptions": [
+                "Email of the group."
+              ],
+              "location": "query",
+              "type": "string"
+            },
             "pageToken": {
               "description": "Token to specify next page in the list",
               "location": "query",
               "type": "string"
             },
+            "query": {
+              "description": "Query string search. Should be of the form \"\". Complete documentation is at https://developers.google.com/admin-sdk/directory/v1/guides/search-groups",
+              "location": "query",
+              "type": "string"
+            },
+            "sortOrder": {
+              "description": "Whether to return results in ascending or descending order. Only of use when orderBy is also used",
+              "enum": [
+                "ASCENDING",
+                "DESCENDING"
+              ],
+              "enumDescriptions": [
+                "Ascending order.",
+                "Descending order."
+              ],
+              "location": "query",
+              "type": "string"
+            },
             "userKey": {
-              "description": "Email or immutable ID of the user if only those groups are to be listed, the given user is a member of. If ID, it should match with id of user object",
+              "description": "Email or immutable Id of the user if only those groups are to be listed, the given user is a member of. If Id, it should match with id of user object",
               "location": "query",
               "type": "string"
             }
@@ -1239,6 +1268,11 @@
               "required": true,
               "type": "string"
             },
+            "includeDerivedMembership": {
+              "description": "Whether to list indirect memberships. Default: false.",
+              "location": "query",
+              "type": "boolean"
+            },
             "maxResults": {
               "description": "Maximum number of results to return. Default is 200",
               "format": "int32",
@@ -1508,7 +1542,7 @@
               "type": "string"
             },
             "query": {
-              "description": "Search string in the format given at http://support.google.com/a/bin/answer.py?hl=en\u0026answer=1408863#search",
+              "description": "Search string in the format given at http://support.google.com/a/bin/answer.py?answer=1408863#search",
               "location": "query",
               "type": "string"
             },
@@ -3935,7 +3969,6 @@
       }
     }
   },
-  "revision": "20180316",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Alias": {
@@ -5665,6 +5698,15 @@
       "description": "JSON template for Schema resource in Directory API.",
       "id": "Schema",
       "properties": {
+        "displayName": {
+          "annotations": {
+            "required": [
+              "directory.schemas.insert"
+            ]
+          },
+          "description": "Display name for the schema.",
+          "type": "string"
+        },
         "etag": {
           "description": "ETag of the resource.",
           "type": "string"
@@ -5707,6 +5749,16 @@
       "description": "JSON template for FieldSpec resource for Schemas in Directory API.",
       "id": "SchemaFieldSpec",
       "properties": {
+        "displayName": {
+          "annotations": {
+            "required": [
+              "directory.schemas.insert",
+              "directory.schemas.update"
+            ]
+          },
+          "description": "Display Name of the field.",
+          "type": "string"
+        },
         "etag": {
           "description": "ETag of the resource.",
           "type": "string"
@@ -5934,6 +5986,10 @@
           },
           "readOnly": true,
           "type": "array"
+        },
+        "archived": {
+          "description": "Indicates if user is archived",
+          "type": "boolean"
         },
         "changePasswordAtNextLogin": {
           "description": "Boolean indicating if the user should change password in next login",
@@ -6557,6 +6613,10 @@
         },
         "homeDirectory": {
           "description": "The path to the home directory for this account.",
+          "type": "string"
+        },
+        "operatingSystemType": {
+          "description": "The operating system type for this account.",
           "type": "string"
         },
         "primary": {

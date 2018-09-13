@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Google Inc. All Rights Reserved.
+Copyright 2015 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ var (
 	version      = "<unknown version>"
 	revision     = "<unknown revision>"
 	revisionDate = "<unknown revision date>"
+	cliUserAgent = "cbt-cli-go/unknown"
 )
 
 func getCredentialOpts(opts []option.ClientOption) []option.ClientOption {
@@ -73,6 +74,7 @@ func getClient(clientConf bigtable.ClientConfig) *bigtable.Client {
 		if ep := config.DataEndpoint; ep != "" {
 			opts = append(opts, option.WithEndpoint(ep))
 		}
+		opts = append(opts, option.WithUserAgent(cliUserAgent))
 		opts = getCredentialOpts(opts)
 		var err error
 		client, err = bigtable.NewClientWithConfig(context.Background(), config.Project, config.Instance, clientConf, opts...)
@@ -89,6 +91,7 @@ func getAdminClient() *bigtable.AdminClient {
 		if ep := config.AdminEndpoint; ep != "" {
 			opts = append(opts, option.WithEndpoint(ep))
 		}
+		opts = append(opts, option.WithUserAgent(cliUserAgent))
 		opts = getCredentialOpts(opts)
 		var err error
 		adminClient, err = bigtable.NewAdminClient(context.Background(), config.Project, config.Instance, opts...)
@@ -143,6 +146,10 @@ func main() {
 		os.Stdout = f
 	}
 
+	if config.UserAgent != "" {
+		cliUserAgent = config.UserAgent
+	}
+
 	ctx := context.Background()
 	for _, cmd := range commands {
 		if cmd.Name == flag.Arg(0) {
@@ -173,7 +180,7 @@ func init() {
 	}
 	tw.Flush()
 	buf.WriteString(configHelp)
-	buf.WriteString("\ncbt ` + version + ` ` + revision + ` ` + revisionDate + `")
+	buf.WriteString("\ncbt " + version + " " + revision + " " + revisionDate + "\n")
 	cmdSummary = buf.String()
 }
 
@@ -184,12 +191,14 @@ for production use. They are not subject to any SLA or deprecation policy.
 
 For convenience, values of the -project, -instance, -creds,
 -admin-endpoint and -data-endpoint flags may be specified in
-` + cbtconfig.Filename() + ` in this format:
+~/.cbtrc in this format:
+
 	project = my-project-123
 	instance = my-instance
 	creds = path-to-account-key.json
 	admin-endpoint = hostname:port
 	data-endpoint = hostname:port
+
 All values are optional, and all will be overridden by flags.
 `
 
@@ -221,7 +230,7 @@ var commands = []struct {
 	},
 	{
 		Name: "createcluster",
-		Desc: "Create a cluster in the configured instance (replication alpha)",
+		Desc: "Create a cluster in the configured instance ",
 		do:   doCreateCluster,
 		Usage: "cbt createcluster <cluster-id> <zone> <num-nodes> <storage type>\n" +
 			"  cluster-id		Permanent, unique id for the cluster in the instance\n" +
@@ -258,14 +267,14 @@ var commands = []struct {
 	},
 	{
 		Name:     "deleteinstance",
-		Desc:     "Deletes an instance",
+		Desc:     "Delete an instance",
 		do:       doDeleteInstance,
 		Usage:    "cbt deleteinstance <instance>",
 		Required: cbtconfig.ProjectRequired,
 	},
 	{
 		Name:     "deletecluster",
-		Desc:     "Deletes a cluster from the configured instance (replication alpha)",
+		Desc:     "Delete a cluster from the configured instance ",
 		do:       doDeleteCluster,
 		Usage:    "cbt deletecluster <cluster>",
 		Required: cbtconfig.ProjectAndInstanceRequired,
@@ -275,7 +284,7 @@ var commands = []struct {
 		Desc: "Delete all cells in a column",
 		do:   doDeleteColumn,
 		Usage: "cbt deletecolumn <table> <row> <family> <column> [app-profile=<app profile id>]\n" +
-			"  app-profile=<app profile id>		The app profile id to use for the request (replication alpha)\n",
+			"  app-profile=<app profile id>		The app profile id to use for the request\n",
 		Required: cbtconfig.ProjectAndInstanceRequired,
 	},
 	{
@@ -290,7 +299,7 @@ var commands = []struct {
 		Desc: "Delete a row",
 		do:   doDeleteRow,
 		Usage: "cbt deleterow <table> <row> [app-profile=<app profile id>]\n" +
-			"  app-profile=<app profile id>		The app profile id to use for the request (replication alpha)\n",
+			"  app-profile=<app profile id>		The app profile id to use for the request\n",
 		Required: cbtconfig.ProjectAndInstanceRequired,
 	},
 	{
@@ -323,7 +332,7 @@ var commands = []struct {
 	},
 	{
 		Name:     "listclusters",
-		Desc:     "List instances in an instance",
+		Desc:     "List clusters in an instance",
 		do:       doListClusters,
 		Usage:    "cbt listclusters",
 		Required: cbtconfig.ProjectAndInstanceRequired,
@@ -332,8 +341,11 @@ var commands = []struct {
 		Name: "lookup",
 		Desc: "Read from a single row",
 		do:   doLookup,
-		Usage: "cbt lookup <table> <row> [app-profile=<app profile id>]\n" +
-			"  app-profile=<app profile id>		The app profile id to use for the request (replication alpha)\n",
+		Usage: "cbt lookup <table> <row> [columns=[family]:[qualifier],...] [cells-per-column=<n>] " +
+			"[app-profile=<app profile id>]\n" +
+			"  columns=[family]:[qualifier],...	Read only these columns, comma-separated\n" +
+			"  cells-per-column=<n> 			Read only this many cells per column\n" +
+			"  app-profile=<app profile id>		The app profile id to use for the request\n",
 		Required: cbtconfig.ProjectAndInstanceRequired,
 	},
 	{
@@ -356,13 +368,16 @@ var commands = []struct {
 		Desc: "Read rows",
 		do:   doRead,
 		Usage: "cbt read <table> [start=<row>] [end=<row>] [prefix=<prefix>]" +
-			" [regex=<regex>] [count=<n>] [app-profile=<app profile id>]\n" +
-			"  start=<row>		Start reading at this row\n" +
-			"  end=<row>		Stop reading before this row\n" +
-			"  prefix=<prefix>	Read rows with this prefix\n" +
-			"  regex=<regex> 	Read rows with keys matching this regex\n" +
-			"  count=<n>		Read only this many rows\n" +
-			"  app-profile=<app profile id>		The app profile id to use for the request (replication alpha)\n",
+			" [regex=<regex>] [columns=[family]:[qualifier],...] [count=<n>] [cells-per-column=<n>]" +
+			" [app-profile=<app profile id>]\n" +
+			"  start=<row>				Start reading at this row\n" +
+			"  end=<row>				Stop reading before this row\n" +
+			"  prefix=<prefix>			Read rows with this prefix\n" +
+			"  regex=<regex> 			Read rows with keys matching this regex\n" +
+			"  columns=[family]:[qualifier],...	Read only these columns, comma-separated\n" +
+			"  count=<n>				Read only this many rows\n" +
+			"  cells-per-column=<n>			Read only this many cells per column\n" +
+			"  app-profile=<app profile id>		The app profile id to use for the request\n",
 		Required: cbtconfig.ProjectAndInstanceRequired,
 	},
 	{
@@ -370,7 +385,7 @@ var commands = []struct {
 		Desc: "Set value of a cell",
 		do:   doSet,
 		Usage: "cbt set <table> <row> [app-profile=<app profile id>] family:column=val[@ts] ...\n" +
-			"  app-profile=<app profile id>		The app profile id to use for the request (replication alpha)\n" +
+			"  app-profile=<app profile id>		The app profile id to use for the request\n" +
 			"  family:column=val[@ts] may be repeated to set multiple cells.\n" +
 			"\n" +
 			"  ts is an optional integer timestamp.\n" +
@@ -382,7 +397,7 @@ var commands = []struct {
 		Name: "setgcpolicy",
 		Desc: "Set the GC policy for a column family",
 		do:   doSetGCPolicy,
-		Usage: "cbt setgcpolicy <table> <family> ( maxage=<d> | maxversions=<n> )\n" +
+		Usage: "cbt setgcpolicy <table> <family> ( maxage=<d> | maxversions=<n> | never)\n" +
 			"\n" +
 			`  maxage=<d>		Maximum timestamp age to preserve (e.g. "1h", "4d")` + "\n" +
 			"  maxversions=<n>	Maximum number of versions to preserve",
@@ -390,7 +405,7 @@ var commands = []struct {
 	},
 	{
 		Name:     "waitforreplication",
-		Desc:     "Blocks until all the completed writes have been replicated to all the clusters (replication alpha)",
+		Desc:     "Block until all the completed writes have been replicated to all the clusters",
 		do:       doWaitForReplicaiton,
 		Usage:    "cbt waitforreplication <table>",
 		Required: cbtconfig.ProjectAndInstanceRequired,
@@ -442,6 +457,45 @@ var commands = []struct {
 		Usage:    "cbt version",
 		Required: cbtconfig.NoneRequired,
 	},
+	{
+		Name: "createappprofile",
+		Desc: "Creates app profile for an instance",
+		do:   doCreateAppProfile,
+		Usage: "usage: cbt createappprofile <instance-id> <profile-id> <description> " +
+			"(route-any | [ route-to=<cluster-id> : transactional-writes]) [optional flag] \n" +
+			"optional flags may be `force`",
+		Required: cbtconfig.ProjectAndInstanceRequired,
+	},
+	{
+		Name:     "getappprofile",
+		Desc:     "Reads app profile for an instance",
+		do:       doGetAppProfile,
+		Usage:    "cbt getappprofile <instance-id> <profile-id>",
+		Required: cbtconfig.ProjectAndInstanceRequired,
+	},
+	{
+		Name:     "listappprofile",
+		Desc:     "Lists app profile for an instance",
+		do:       doListAppProfiles,
+		Usage:    "cbt listappprofile <instance-id> ",
+		Required: cbtconfig.ProjectAndInstanceRequired,
+	},
+	{
+		Name: "updateappprofile",
+		Desc: "Updates app profile for an instance",
+		do:   doUpdateAppProfile,
+		Usage: "usage: cbt updateappprofile  <instance-id> <profile-id> <description>" +
+			"(route-any | [ route-to=<cluster-id> : transactional-writes]) [optional flag] \n" +
+			"optional flags may be `force`",
+		Required: cbtconfig.ProjectAndInstanceRequired,
+	},
+	{
+		Name:     "deleteappprofile",
+		Desc:     "Deletes app profile for an instance",
+		do:       doDeleteAppProfile,
+		Usage:    "cbt deleteappprofile <instance-id> <profile-id>",
+		Required: cbtconfig.ProjectAndInstanceRequired,
+	},
 }
 
 func doCount(ctx context.Context, args ...string) {
@@ -467,19 +521,16 @@ func doCreateTable(ctx context.Context, args ...string) {
 	}
 
 	tblConf := bigtable.TableConf{TableID: args[0]}
-	for _, arg := range args[1:] {
-		i := strings.Index(arg, "=")
-		if i < 0 {
-			log.Fatalf("Bad arg %q", arg)
-		}
-		key, val := arg[:i], arg[i+1:]
+	parsed, err := parseArgs(args[1:], []string{"families", "splits"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for key, val := range parsed {
 		chunks, err := csv.NewReader(strings.NewReader(val)).Read()
 		if err != nil {
-			log.Fatalf("Invalid families arg format: %v", err)
+			log.Fatalf("Invalid %s arg format: %v", key, err)
 		}
 		switch key {
-		default:
-			log.Fatalf("Unknown arg key %q", key)
 		case "families":
 			tblConf.Families = make(map[string]bigtable.GCPolicy)
 			for _, family := range chunks {
@@ -581,21 +632,14 @@ func doUpdateCluster(ctx context.Context, args ...string) {
 	}
 
 	numNodes := int64(0)
-	var err error
-	for _, arg := range args[1:] {
-		i := strings.Index(arg, "=")
-		if i < 0 {
-			log.Fatalf("Bad arg %q", arg)
-		}
-		key, val := arg[:i], arg[i+1:]
-		switch key {
-		default:
-			log.Fatalf("Unknown arg key %q", key)
-		case "num-nodes":
-			numNodes, err = strconv.ParseInt(val, 0, 32)
-			if err != nil {
-				log.Fatalf("Bad num-nodes %q: %v", val, err)
-			}
+	parsed, err := parseArgs(args[1:], []string{"num-nodes"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	if val, ok := parsed["num-nodes"]; ok {
+		numNodes, err = strconv.ParseInt(val, 0, 32)
+		if err != nil {
+			log.Fatalf("Bad num-nodes %q: %v", val, err)
 		}
 	}
 	if numNodes > 0 {
@@ -630,7 +674,7 @@ func doDeleteCluster(ctx context.Context, args ...string) {
 
 func doDeleteColumn(ctx context.Context, args ...string) {
 	usage := "usage: cbt deletecolumn <table> <row> <family> <column> [app-profile=<app profile id>]"
-	if len(args) != 4 || len(args) != 5 {
+	if len(args) != 4 && len(args) != 5 {
 		log.Fatal(usage)
 	}
 	var appProfile string
@@ -660,7 +704,7 @@ func doDeleteFamily(ctx context.Context, args ...string) {
 
 func doDeleteRow(ctx context.Context, args ...string) {
 	usage := "usage: cbt deleterow <table> <row> [app-profile=<app profile id>]"
-	if len(args) != 2 || len(args) != 3 {
+	if len(args) != 2 && len(args) != 3 {
 		log.Fatal(usage)
 	}
 	var appProfile string
@@ -747,7 +791,7 @@ var docTemplate = template.Must(template.New("doc").Funcs(template.FuncMap{
 	"indent": indentLines,
 }).
 	Parse(`
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -768,7 +812,7 @@ var docTemplate = template.Must(template.New("doc").Funcs(template.FuncMap{
 /*
 Cbt is a tool for doing basic interactions with Cloud Bigtable. To learn how to
 install the cbt tool, see the
-[cbt overview](https://cloud.google.com/bigtable/docs/go/cbt-overview).
+[cbt overview](https://cloud.google.com/bigtable/docs/cbt-overview).
 
 Usage:
 
@@ -850,19 +894,40 @@ func doListClusters(ctx context.Context, args ...string) {
 
 func doLookup(ctx context.Context, args ...string) {
 	if len(args) < 2 {
-		log.Fatalf("usage: cbt lookup <table> <row> [app-profile=<app profile id>]")
+		log.Fatalf("usage: cbt lookup <table> <row> [columns=<family:qualifier>...] [cells-per-column=<n>] " +
+			"[app-profile=<app profile id>]")
 	}
-	var appProfile string
-	if len(args) > 2 {
-		i := strings.Index(args[2], "=")
-		if i < 0 {
-			log.Fatalf("Bad arg %q", args[2])
+
+	parsed, err := parseArgs(args[2:], []string{"columns", "cells-per-column", "app-profile"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	var opts []bigtable.ReadOption
+	var filters []bigtable.Filter
+	if cellsPerColumn := parsed["cells-per-column"]; cellsPerColumn != "" {
+		n, err := strconv.Atoi(cellsPerColumn)
+		if err != nil {
+			log.Fatalf("Bad number of cells per column %q: %v", cellsPerColumn, err)
 		}
-		appProfile = strings.Split(args[2], "=")[1]
+		filters = append(filters, bigtable.LatestNFilter(n))
 	}
+	if columns := parsed["columns"]; columns != "" {
+		columnFilters, err := parseColumnsFilter(columns)
+		if err != nil {
+			log.Fatal(err)
+		}
+		filters = append(filters, columnFilters)
+	}
+
+	if len(filters) > 1 {
+		opts = append(opts, bigtable.RowFilter(bigtable.ChainFilters(filters...)))
+	} else if len(filters) == 1 {
+		opts = append(opts, bigtable.RowFilter(filters[0]))
+	}
+
 	table, row := args[0], args[1]
-	tbl := getClient(bigtable.ClientConfig{AppProfile: appProfile}).Open(table)
-	r, err := tbl.ReadRow(ctx, row)
+	tbl := getClient(bigtable.ClientConfig{AppProfile: parsed["app-profile"]}).Open(table)
+	r, err := tbl.ReadRow(ctx, row, opts...)
 	if err != nil {
 		log.Fatalf("Reading row: %v", err)
 	}
@@ -948,7 +1013,9 @@ var mddocTemplate = template.Must(template.New("mddoc").Funcs(template.FuncMap{
 	"indent": indentLines,
 }).
 	Parse(`
-Cbt is a tool for doing basic interactions with Cloud Bigtable.
+Cbt is a tool for doing basic interactions with Cloud Bigtable. To learn how to
+install the cbt tool, see the
+[cbt overview](https://cloud.google.com/bigtable/docs/cbt-overview).
 
 Usage:
 
@@ -982,22 +1049,15 @@ func doRead(ctx context.Context, args ...string) {
 		log.Fatalf("usage: cbt read <table> [args ...]")
 	}
 
-	parsed := make(map[string]string)
-	for _, arg := range args[1:] {
-		i := strings.Index(arg, "=")
-		if i < 0 {
-			log.Fatalf("Bad arg %q", arg)
-		}
-		key, val := arg[:i], arg[i+1:]
-		switch key {
-		default:
-			log.Fatalf("Unknown arg key %q", key)
-		case "limit":
-			// Be nicer; we used to support this, but renamed it to "end".
-			log.Fatalf("Unknown arg key %q; did you mean %q?", key, "end")
-		case "start", "end", "prefix", "count", "regex", "app-profile":
-			parsed[key] = val
-		}
+	parsed, err := parseArgs(args[1:], []string{
+		"start", "end", "prefix", "columns", "count", "cells-per-column", "regex", "app-profile", "limit",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	if _, ok := parsed["limit"]; ok {
+		// Be nicer; we used to support this, but renamed it to "end".
+		log.Fatal("Unknown arg key 'limit'; did you mean 'end'?")
 	}
 	if (parsed["start"] != "" || parsed["end"] != "") && parsed["prefix"] != "" {
 		log.Fatal(`"start"/"end" may not be mixed with "prefix"`)
@@ -1021,13 +1081,35 @@ func doRead(ctx context.Context, args ...string) {
 		}
 		opts = append(opts, bigtable.LimitRows(n))
 	}
+
+	var filters []bigtable.Filter
+	if cellsPerColumn := parsed["cells-per-column"]; cellsPerColumn != "" {
+		n, err := strconv.Atoi(cellsPerColumn)
+		if err != nil {
+			log.Fatalf("Bad number of cells per column %q: %v", cellsPerColumn, err)
+		}
+		filters = append(filters, bigtable.LatestNFilter(n))
+	}
 	if regex := parsed["regex"]; regex != "" {
-		opts = append(opts, bigtable.RowFilter(bigtable.RowKeyFilter(regex)))
+		filters = append(filters, bigtable.RowKeyFilter(regex))
+	}
+	if columns := parsed["columns"]; columns != "" {
+		columnFilters, err := parseColumnsFilter(columns)
+		if err != nil {
+			log.Fatal(err)
+		}
+		filters = append(filters, columnFilters)
+	}
+
+	if len(filters) > 1 {
+		opts = append(opts, bigtable.RowFilter(bigtable.ChainFilters(filters...)))
+	} else if len(filters) == 1 {
+		opts = append(opts, bigtable.RowFilter(filters[0]))
 	}
 
 	// TODO(dsymonds): Support filters.
 	tbl := getClient(bigtable.ClientConfig{AppProfile: parsed["app-profile"]}).Open(args[0])
-	err := tbl.ReadRows(ctx, rr, func(r bigtable.Row) bool {
+	err = tbl.ReadRows(ctx, rr, func(r bigtable.Row) bool {
 		printRow(r)
 		return true
 	}, opts...)
@@ -1074,7 +1156,7 @@ func doSet(ctx context.Context, args ...string) {
 
 func doSetGCPolicy(ctx context.Context, args ...string) {
 	if len(args) < 3 {
-		log.Fatalf("usage: cbt setgcpolicy <table> <family> ( maxage=<d> | maxversions=<n> | maxage=<d> (and|or) maxversions=<n> )")
+		log.Fatalf("usage: cbt setgcpolicy <table> <family> ( maxage=<d> | maxversions=<n> | maxage=<d> (and|or) maxversions=<n> | never )")
 	}
 	table := args[0]
 	fam := args[1]
@@ -1102,6 +1184,7 @@ func doWaitForReplicaiton(ctx context.Context, args ...string) {
 
 func parseGCPolicy(policyStr string) (bigtable.GCPolicy, error) {
 	words := strings.Fields(policyStr)
+
 	switch len(words) {
 	case 1:
 		return parseSinglePolicy(words[0])
@@ -1130,10 +1213,16 @@ func parseGCPolicy(policyStr string) (bigtable.GCPolicy, error) {
 
 func parseSinglePolicy(s string) (bigtable.GCPolicy, error) {
 	words := strings.Split(s, "=")
-	if len(words) != 2 {
-		return nil, fmt.Errorf("Expected 'name=value', got %q", words)
+	if len(words) != 2 && words[0] != "never" {
+		return nil, fmt.Errorf("Expected 'name=value ', got %q", words)
 	}
+
 	switch words[0] {
+	case "never":
+		if len(words) != 1 {
+			return nil, fmt.Errorf("Expected 'never', got %q", s)
+		}
+		return bigtable.NoGcPolicy(), nil
 	case "maxage":
 		d, err := parseDuration(words[1])
 		if err != nil {
@@ -1147,7 +1236,7 @@ func parseSinglePolicy(s string) (bigtable.GCPolicy, error) {
 		}
 		return bigtable.MaxVersionsPolicy(int(n)), nil
 	default:
-		return nil, fmt.Errorf("Expected 'maxage' or 'maxversions', got %q", words[1])
+		return nil, fmt.Errorf("Expected 'maxage' or 'maxversions', got %q", words[len(words)-1])
 	}
 	return nil, nil
 }
@@ -1185,25 +1274,19 @@ func doSnapshotTable(ctx context.Context, args ...string) {
 	tableName := args[2]
 	ttl := bigtable.DefaultSnapshotDuration
 
-	for _, arg := range args[3:] {
-		i := strings.Index(arg, "=")
-		if i < 0 {
-			log.Fatalf("Bad arg %q", arg)
-		}
-		key, val := arg[:i], arg[i+1:]
-		switch key {
-		default:
-			log.Fatalf("Unknown arg key %q", key)
-		case "ttl":
-			var err error
-			ttl, err = parseDuration(val)
-			if err != nil {
-				log.Fatalf("Invalid snapshot ttl value %q: %v", val, err)
-			}
+	parsed, err := parseArgs(args[3:], []string{"ttl"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	if val, ok := parsed["ttl"]; ok {
+		var err error
+		ttl, err = parseDuration(val)
+		if err != nil {
+			log.Fatalf("Invalid snapshot ttl value %q: %v", val, err)
 		}
 	}
 
-	err := getAdminClient().SnapshotTable(ctx, tableName, clusterName, snapshotName, ttl)
+	err = getAdminClient().SnapshotTable(ctx, tableName, clusterName, snapshotName, ttl)
 	if err != nil {
 		log.Fatalf("Failed to create Snapshot: %v", err)
 	}
@@ -1222,7 +1305,7 @@ func doListSnapshots(ctx context.Context, args ...string) {
 		cluster = args[0]
 	}
 
-	it := getAdminClient().ListSnapshots(ctx, cluster)
+	it := getAdminClient().Snapshots(ctx, cluster)
 
 	tw := tabwriter.NewWriter(os.Stdout, 10, 8, 4, '\t', 0)
 	fmt.Fprintf(tw, "Snapshot\tSource Table\tCreated At\tExpires At\n")
@@ -1276,6 +1359,164 @@ func doDeleteSnapshot(ctx context.Context, args ...string) {
 	}
 }
 
+func doCreateAppProfile(ctx context.Context, args ...string) {
+	if len(args) < 4 || len(args) > 6 {
+		log.Fatal("usage: cbt createappprofile <instance-id> <profile-id> <description> " +
+			" (route-any | [ route-to=<cluster-id> : transactional-writes]) [optional flag] \n" +
+			"optional flags may be `force`")
+	}
+
+	routingPolicy, clusterID, err := parseProfileRoute(args[3])
+	if err != nil {
+		log.Fatalln("Exactly one of (route-any | [route-to : transactional-writes]) must be specified.")
+	}
+
+	config := bigtable.ProfileConf{
+		RoutingPolicy: routingPolicy,
+		InstanceID:    args[0],
+		ProfileID:     args[1],
+		Description:   args[2],
+	}
+
+	opFlags := []string{"force", "transactional-writes"}
+	parseValues, err := parseArgs(args[4:], opFlags)
+	if err != nil {
+		log.Fatalf("optional flags can be specified as (force=<true>|transactional-writes=<true>) got %s ", args[4:])
+	}
+
+	for _, f := range opFlags {
+		fv, err := parseProfileOpts(f, parseValues)
+		if err != nil {
+			log.Fatalf("optional flags can be specified as (force=<true>|transactional-writes=<true>) got %s ", args[4:])
+		}
+
+		switch f {
+		case opFlags[0]:
+			config.IgnoreWarnings = fv
+		case opFlags[1]:
+			config.AllowTransactionalWrites = fv
+		default:
+
+		}
+	}
+
+	if routingPolicy == bigtable.SingleClusterRouting {
+		config.ClusterID = clusterID
+	}
+
+	profile, err := getInstanceAdminClient().CreateAppProfile(ctx, config)
+	if err != nil {
+		log.Fatalf("Failed to create app profile : %v", err)
+	}
+
+	fmt.Printf("Name: %s\n", profile.Name)
+	fmt.Printf("RoutingPolicy: %v\n", profile.RoutingPolicy)
+}
+
+func doGetAppProfile(ctx context.Context, args ...string) {
+	if len(args) != 2 {
+		log.Fatalln("usage: cbt getappprofile <instance-id> <profile-id>")
+	}
+
+	instanceID := args[0]
+	profileID := args[1]
+	profile, err := getInstanceAdminClient().GetAppProfile(ctx, instanceID, profileID)
+	if err != nil {
+		log.Fatalf("Failed to get app profile : %v", err)
+	}
+
+	fmt.Printf("Name: %s\n", profile.Name)
+	fmt.Printf("Etag: %s\n", profile.Etag)
+	fmt.Printf("Description: %s\n", profile.Description)
+	fmt.Printf("RoutingPolicy: %v\n", profile.RoutingPolicy)
+}
+
+func doListAppProfiles(ctx context.Context, args ...string) {
+	if len(args) != 1 {
+		log.Fatalln("usage: cbt listappprofile <instance-id>")
+	}
+
+	instance := args[0]
+
+	it := getInstanceAdminClient().ListAppProfiles(ctx, instance)
+
+	tw := tabwriter.NewWriter(os.Stdout, 10, 8, 4, '\t', 0)
+	fmt.Fprintf(tw, "AppProfile\tProfile Description\tProfile Etag\tProfile Routing Policy\n")
+	fmt.Fprintf(tw, "-----------\t--------------------\t------------\t----------------------\n")
+
+	for {
+		profile, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			log.Fatalf("Failed to fetch app profile %v", err)
+		}
+		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", profile.Name, profile.Description, profile.Etag, profile.RoutingPolicy)
+	}
+	tw.Flush()
+}
+
+func doUpdateAppProfile(ctx context.Context, args ...string) {
+
+	if len(args) < 4 {
+		log.Fatal("usage: cbt updateappprofile  <instance-id> <profile-id> <description>" +
+			" (route-any | [ route-to=<cluster-id> : transactional-writes]) [optional flag] \n" +
+			"optional flags may be `force`")
+	}
+
+	routingPolicy, clusterID, err := parseProfileRoute(args[3])
+	if err != nil {
+		log.Fatalln("Exactly one of (route-any | [route-to : transactional-writes]) must be specified.")
+	}
+	InstanceID := args[0]
+	ProfileID := args[1]
+	config := bigtable.ProfileAttrsToUpdate{
+		RoutingPolicy: routingPolicy,
+		Description:   args[2],
+	}
+	opFlags := []string{"force", "transactional-writes"}
+	parseValues, err := parseArgs(args[4:], opFlags)
+	if err != nil {
+		log.Fatalf("optional flags can be specified as (force=<true>|transactional-writes=<true>) got %s ", args[4:])
+	}
+
+	for _, f := range opFlags {
+		fv, err := parseProfileOpts(f, parseValues)
+		if err != nil {
+			log.Fatalf("optional flags can be specified as (force=<true>|transactional-writes=<true>) got %s ", args[4:])
+		}
+
+		switch f {
+		case opFlags[0]:
+			config.IgnoreWarnings = fv
+		case opFlags[1]:
+			config.AllowTransactionalWrites = fv
+		default:
+
+		}
+	}
+	if routingPolicy == bigtable.SingleClusterRouting {
+		config.ClusterID = clusterID
+	}
+
+	err = getInstanceAdminClient().UpdateAppProfile(ctx, InstanceID, ProfileID, config)
+	if err != nil {
+		log.Fatalf("Failed to update app profile : %v", err)
+	}
+}
+
+func doDeleteAppProfile(ctx context.Context, args ...string) {
+	if len(args) != 2 {
+		log.Println("usage: cbt deleteappprofile <instance-id> <profile-id>")
+	}
+
+	err := getInstanceAdminClient().DeleteAppProfile(ctx, args[0], args[1])
+	if err != nil {
+		log.Fatalf("Failed to delete  app profile : %v", err)
+	}
+}
+
 // parseDuration parses a duration string.
 // It is similar to Go's time.ParseDuration, except with a different set of supported units,
 // and only simple formats supported.
@@ -1320,4 +1561,110 @@ var unitMap = map[string]time.Duration{
 
 func doVersion(ctx context.Context, args ...string) {
 	fmt.Printf("%s %s %s\n", version, revision, revisionDate)
+}
+
+// parseArgs takes a slice of arguments of the form key=value and returns a map from
+// key to value. It returns an error if an argument is malformed or a key is not in
+// the valid slice.
+func parseArgs(args []string, valid []string) (map[string]string, error) {
+	parsed := make(map[string]string)
+	for _, arg := range args {
+		i := strings.Index(arg, "=")
+		if i < 0 {
+			return nil, fmt.Errorf("Bad arg %q", arg)
+		}
+		key, val := arg[:i], arg[i+1:]
+		if !stringInSlice(key, valid) {
+			return nil, fmt.Errorf("Unknown arg key %q", key)
+		}
+		parsed[key] = val
+	}
+	return parsed, nil
+}
+
+func stringInSlice(s string, list []string) bool {
+	for _, e := range list {
+		if s == e {
+			return true
+		}
+	}
+	return false
+}
+
+func parseColumnsFilter(columns string) (bigtable.Filter, error) {
+	splitColumns := strings.FieldsFunc(columns, func(c rune) bool { return c == ',' })
+	if len(splitColumns) == 1 {
+		filter, err := columnFilter(splitColumns[0])
+		if err != nil {
+			return nil, err
+		}
+		return filter, nil
+	}
+
+	var columnFilters []bigtable.Filter
+	for _, column := range splitColumns {
+		filter, err := columnFilter(column)
+		if err != nil {
+			return nil, err
+		}
+		columnFilters = append(columnFilters, filter)
+	}
+	return bigtable.InterleaveFilters(columnFilters...), nil
+}
+
+func columnFilter(column string) (bigtable.Filter, error) {
+	splitColumn := strings.Split(column, ":")
+	if len(splitColumn) == 1 {
+		return bigtable.ColumnFilter(splitColumn[0]), nil
+	} else if len(splitColumn) == 2 {
+		if strings.HasSuffix(column, ":") {
+			return bigtable.FamilyFilter(splitColumn[0]), nil
+		} else if strings.HasPrefix(column, ":") {
+			return bigtable.ColumnFilter(splitColumn[1]), nil
+		} else {
+			familyFilter := bigtable.FamilyFilter(splitColumn[0])
+			qualifierFilter := bigtable.ColumnFilter(splitColumn[1])
+			return bigtable.ChainFilters(familyFilter, qualifierFilter), nil
+		}
+	} else {
+		return nil, fmt.Errorf("Bad format for column %q", column)
+	}
+}
+
+func parseProfileRoute(str string) (routingPolicy, clusterID string, err error) {
+
+	route := strings.Split(str, "=")
+	switch route[0] {
+	case "route-any":
+		if len(route) > 1 {
+			err = fmt.Errorf("got %v", route)
+			break
+		}
+		routingPolicy = bigtable.MultiClusterRouting
+
+	case "route-to":
+		if len(route) != 2 || route[1] == "" {
+			err = fmt.Errorf("got %v", route)
+			break
+		}
+		routingPolicy = bigtable.SingleClusterRouting
+		clusterID = route[1]
+	default:
+		err = fmt.Errorf("got %v", route)
+	}
+
+	return
+}
+
+func parseProfileOpts(opt string, parsedArgs map[string]string) (bool, error) {
+
+	if val, ok := parsedArgs[opt]; ok {
+		status, err := strconv.ParseBool(val)
+		if err != nil {
+			return false, fmt.Errorf("expected %s = <true> got %s ", opt, val)
+		}
+
+		return status, nil
+	}
+	return false, nil
 }

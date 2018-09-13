@@ -46,12 +46,12 @@ func TestPairsMD(t *testing.T) {
 func TestCopy(t *testing.T) {
 	const key, val = "key", "val"
 	orig := Pairs(key, val)
-	copy := orig.Copy()
-	if !reflect.DeepEqual(orig, copy) {
-		t.Errorf("copied value not equal to the original, got %v, want %v", copy, orig)
+	cpy := orig.Copy()
+	if !reflect.DeepEqual(orig, cpy) {
+		t.Errorf("copied value not equal to the original, got %v, want %v", cpy, orig)
 	}
 	orig[key][0] = "foo"
-	if v := copy[key][0]; v != val {
+	if v := cpy[key][0]; v != val {
 		t.Errorf("change in original should not affect copy, got %q, want %q", v, val)
 	}
 }
@@ -69,6 +69,90 @@ func TestJoin(t *testing.T) {
 		md := Join(test.mds...)
 		if !reflect.DeepEqual(md, test.want) {
 			t.Errorf("context's metadata is %v, want %v", md, test.want)
+		}
+	}
+}
+
+func TestGet(t *testing.T) {
+	for _, test := range []struct {
+		md       MD
+		key      string
+		wantVals []string
+	}{
+		{md: Pairs("My-Optional-Header", "42"), key: "My-Optional-Header", wantVals: []string{"42"}},
+		{md: Pairs("Header", "42", "Header", "43", "Header", "44", "other", "1"), key: "HEADER", wantVals: []string{"42", "43", "44"}},
+		{md: Pairs("HEADER", "10"), key: "HEADER", wantVals: []string{"10"}},
+	} {
+		vals := test.md.Get(test.key)
+		if !reflect.DeepEqual(vals, test.wantVals) {
+			t.Errorf("value of metadata %v is %v, want %v", test.key, vals, test.wantVals)
+		}
+	}
+}
+
+func TestSet(t *testing.T) {
+	for _, test := range []struct {
+		md      MD
+		setKey  string
+		setVals []string
+		want    MD
+	}{
+		{
+			md:      Pairs("My-Optional-Header", "42", "other-key", "999"),
+			setKey:  "Other-Key",
+			setVals: []string{"1"},
+			want:    Pairs("my-optional-header", "42", "other-key", "1"),
+		},
+		{
+			md:      Pairs("My-Optional-Header", "42"),
+			setKey:  "Other-Key",
+			setVals: []string{"1", "2", "3"},
+			want:    Pairs("my-optional-header", "42", "other-key", "1", "other-key", "2", "other-key", "3"),
+		},
+		{
+			md:      Pairs("My-Optional-Header", "42"),
+			setKey:  "Other-Key",
+			setVals: []string{},
+			want:    Pairs("my-optional-header", "42"),
+		},
+	} {
+		test.md.Set(test.setKey, test.setVals...)
+		if !reflect.DeepEqual(test.md, test.want) {
+			t.Errorf("value of metadata is %v, want %v", test.md, test.want)
+		}
+	}
+}
+
+func TestAppend(t *testing.T) {
+	for _, test := range []struct {
+		md         MD
+		appendKey  string
+		appendVals []string
+		want       MD
+	}{
+		{
+			md:         Pairs("My-Optional-Header", "42"),
+			appendKey:  "Other-Key",
+			appendVals: []string{"1"},
+			want:       Pairs("my-optional-header", "42", "other-key", "1"),
+		},
+		{
+			md:         Pairs("My-Optional-Header", "42"),
+			appendKey:  "my-OptIoNal-HeAder",
+			appendVals: []string{"1", "2", "3"},
+			want: Pairs("my-optional-header", "42", "my-optional-header", "1",
+				"my-optional-header", "2", "my-optional-header", "3"),
+		},
+		{
+			md:         Pairs("My-Optional-Header", "42"),
+			appendKey:  "my-OptIoNal-HeAder",
+			appendVals: []string{},
+			want:       Pairs("my-optional-header", "42"),
+		},
+	} {
+		test.md.Append(test.appendKey, test.appendVals...)
+		if !reflect.DeepEqual(test.md, test.want) {
+			t.Errorf("value of metadata is %v, want %v", test.md, test.want)
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"math"
+	"math/big"
 	"testing"
 	"time"
 
@@ -36,6 +37,7 @@ func TestConvertBasicValues(t *testing.T) {
 		{Type: FloatFieldType},
 		{Type: BooleanFieldType},
 		{Type: BytesFieldType},
+		{Type: NumericFieldType},
 	}
 	row := &bq.TableRow{
 		F: []*bq.TableCell{
@@ -44,13 +46,15 @@ func TestConvertBasicValues(t *testing.T) {
 			{V: "1.2"},
 			{V: "true"},
 			{V: base64.StdEncoding.EncodeToString([]byte("foo"))},
+			{V: "123.123456789"},
 		},
 	}
 	got, err := convertRow(row, schema)
 	if err != nil {
 		t.Fatalf("error converting: %v", err)
 	}
-	want := []Value{"a", int64(1), 1.2, true, []byte("foo")}
+
+	want := []Value{"a", int64(1), 1.2, true, []byte("foo"), big.NewRat(123123456789, 1e9)}
 	if !testutil.Equal(got, want) {
 		t.Errorf("converting basic values: got:\n%v\nwant:\n%v", got, want)
 	}
@@ -401,17 +405,23 @@ func TestValuesSaverConvertsToMap(t *testing.T) {
 					{Name: "intField", Type: IntegerFieldType},
 					{Name: "strField", Type: StringFieldType},
 					{Name: "dtField", Type: DateTimeFieldType},
+					{Name: "nField", Type: NumericFieldType},
 				},
 				InsertID: "iid",
 				Row: []Value{1, "a",
 					civil.DateTime{
 						Date: civil.Date{Year: 1, Month: 2, Day: 3},
 						Time: civil.Time{Hour: 4, Minute: 5, Second: 6, Nanosecond: 7000}},
+					big.NewRat(123456789000, 1e9),
 				},
 			},
 			wantInsertID: "iid",
-			wantRow: map[string]Value{"intField": 1, "strField": "a",
-				"dtField": "0001-02-03 04:05:06.000007"},
+			wantRow: map[string]Value{
+				"intField": 1,
+				"strField": "a",
+				"dtField":  "0001-02-03 04:05:06.000007",
+				"nField":   "123.456789000",
+			},
 		},
 		{
 			vs: ValuesSaver{
@@ -527,6 +537,8 @@ func TestStructSaver(t *testing.T) {
 			{Name: "b", Type: BooleanFieldType},
 		}},
 		{Name: "p", Type: IntegerFieldType, Required: false},
+		{Name: "n", Type: NumericFieldType, Required: false},
+		{Name: "nr", Type: NumericFieldType, Repeated: true},
 	}
 
 	type (
@@ -539,6 +551,8 @@ func TestStructSaver(t *testing.T) {
 			Nested  *N
 			Rnested []*N
 			P       NullInt64
+			N       *big.Rat
+			NR      []*big.Rat
 		}
 	)
 
@@ -570,6 +584,8 @@ func TestStructSaver(t *testing.T) {
 		Nested:  &N{B: true},
 		Rnested: []*N{{true}, {false}},
 		P:       NullInt64{Valid: true, Int64: 17},
+		N:       big.NewRat(123456, 1000),
+		NR:      []*big.Rat{big.NewRat(3, 1), big.NewRat(56789, 1e5)},
 	}
 	want := map[string]Value{
 		"s":       "x",
@@ -579,6 +595,8 @@ func TestStructSaver(t *testing.T) {
 		"nested":  map[string]Value{"b": true},
 		"rnested": []Value{map[string]Value{"b": true}, map[string]Value{"b": false}},
 		"p":       NullInt64{Valid: true, Int64: 17},
+		"n":       "123.456000000",
+		"nr":      []string{"3.000000000", "0.567890000"},
 	}
 	check("all values", in, want)
 	check("all values, ptr", &in, want)
@@ -625,6 +643,24 @@ func TestStructSaverErrors(t *testing.T) {
 		_, _, err := ss.Save()
 		if err == nil {
 			t.Errorf("#%d, %v, %v: got nil, want error", i, test.struct_, test.schema)
+		}
+	}
+}
+
+func TestNumericString(t *testing.T) {
+	for _, test := range []struct {
+		in   *big.Rat
+		want string
+	}{
+		{big.NewRat(2, 3), "0.666666667"}, // round to 9 places
+		{big.NewRat(1, 2), "0.500000000"},
+		{big.NewRat(1, 2*1e8), "0.000000005"},
+		{big.NewRat(5, 1e10), "0.000000001"},   // round up the 5 in the 10th decimal place
+		{big.NewRat(-5, 1e10), "-0.000000001"}, // round half away from zero
+	} {
+		got := NumericString(test.in)
+		if got != test.want {
+			t.Errorf("%v: got %q, want %q", test.in, got, test.want)
 		}
 	}
 }
@@ -765,6 +801,7 @@ var (
 		{Name: "D", Type: DateFieldType},
 		{Name: "T", Type: TimeFieldType},
 		{Name: "DT", Type: DateTimeFieldType},
+		{Name: "N", Type: NumericFieldType},
 		{Name: "nested", Type: RecordFieldType, Schema: Schema{
 			{Name: "nestS", Type: StringFieldType},
 			{Name: "nestI", Type: IntegerFieldType},
@@ -776,9 +813,10 @@ var (
 	testDate      = civil.Date{Year: 2016, Month: 11, Day: 5}
 	testTime      = civil.Time{Hour: 7, Minute: 50, Second: 22, Nanosecond: 8}
 	testDateTime  = civil.DateTime{Date: testDate, Time: testTime}
+	testNumeric   = big.NewRat(123, 456)
 
 	testValues = []Value{"x", "y", []byte{1, 2, 3}, int64(7), int64(8), 3.14, true,
-		testTimestamp, testDate, testTime, testDateTime,
+		testTimestamp, testDate, testTime, testDateTime, testNumeric,
 		[]Value{"nested", int64(17)}, "z"}
 )
 
@@ -792,6 +830,7 @@ type testStruct1 struct {
 	By     []byte
 	s      string
 	F      float64
+	N      *big.Rat
 	Nested nested
 	Tagged string `bigquery:"t"`
 }
@@ -824,6 +863,7 @@ func TestStructLoader(t *testing.T) {
 		S:      "x",
 		S2:     "y",
 		By:     []byte{1, 2, 3},
+		N:      big.NewRat(123, 456),
 		Nested: nested{NestS: "nested", NestI: 17},
 		Tagged: "z",
 	}
@@ -923,6 +963,7 @@ type testStructNullable struct {
 	Date      NullDate
 	Time      NullTime
 	DateTime  NullDateTime
+	Numeric   *big.Rat
 	Record    *subNullable
 }
 
@@ -940,6 +981,7 @@ var testStructNullableSchema = Schema{
 	{Name: "Date", Type: DateFieldType, Required: false},
 	{Name: "Time", Type: TimeFieldType, Required: false},
 	{Name: "DateTime", Type: DateTimeFieldType, Required: false},
+	{Name: "Numeric", Type: NumericFieldType, Required: false},
 	{Name: "Record", Type: RecordFieldType, Required: false, Schema: Schema{
 		{Name: "X", Type: IntegerFieldType, Required: false},
 	}},
@@ -947,14 +989,15 @@ var testStructNullableSchema = Schema{
 
 func TestStructLoaderNullable(t *testing.T) {
 	var ts testStructNullable
-	nilVals := []Value{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
+	nilVals := make([]Value, len(testStructNullableSchema))
 	mustLoad(t, &ts, testStructNullableSchema, nilVals)
 	want := testStructNullable{}
 	if diff := testutil.Diff(ts, want); diff != "" {
 		t.Error(diff)
 	}
 
-	nonnilVals := []Value{"x", []byte{1, 2, 3}, int64(1), 2.3, true, testTimestamp, testDate, testTime, testDateTime, []Value{int64(4)}}
+	nonnilVals := []Value{"x", []byte{1, 2, 3}, int64(1), 2.3, true, testTimestamp, testDate, testTime,
+		testDateTime, big.NewRat(1, 2), []Value{int64(4)}}
 
 	// All ts fields are nil. Loading non-nil values will cause them all to
 	// be allocated.
@@ -969,6 +1012,7 @@ func TestStructLoaderNullable(t *testing.T) {
 		Date:      NullDate{Date: testDate, Valid: true},
 		Time:      NullTime{Time: testTime, Valid: true},
 		DateTime:  NullDateTime{DateTime: testDateTime, Valid: true},
+		Numeric:   big.NewRat(1, 2),
 		Record:    &subNullable{X: NullInt64{Int64: 4, Valid: true}},
 	}
 	if diff := testutil.Diff(ts, want); diff != "" {
@@ -978,7 +1022,7 @@ func TestStructLoaderNullable(t *testing.T) {
 	// Struct pointers are reused, byte slices are not.
 	want = ts
 	want.Bytes = []byte{17}
-	vals2 := []Value{nil, []byte{17}, nil, nil, nil, nil, nil, nil, nil, []Value{int64(7)}}
+	vals2 := []Value{nil, []byte{17}, nil, nil, nil, nil, nil, nil, nil, nil, []Value{int64(7)}}
 	mustLoad(t, &ts, testStructNullableSchema, vals2)
 	if ts.Record != want.Record {
 		t.Error("record pointers not identical")

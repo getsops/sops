@@ -1,52 +1,275 @@
 # CHANGELOG
 
+## `v20.1.0`
+
+### New Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|                 network |       2018-07-01      |
+
+## `v20.0.0`
+
+### New Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|                   batch |     2018-08-01.7.0    |
+|             botservices |       2018-07-12      |
+|       containerregistry |       2018-09-01      |
+|          costmanagement |   2018-08-01-preview  |
+|              iotcentral |       2018-09-01      |
+|                   logic |   2018-07-01-preview  |
+|                  policy |       2018-05-01      |
+
+### Updated Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|                 advisor |       2017-04-19      |
+|                     cdn |       2017-10-12      |
+|             consumption |       2018-06-30      |
+|       containerregistry | 2017-10-01<br/>2018-02-01 |
+|                 devices |       2018-04-01      |
+|               graphrbac |          1.6          |
+|             hanaonazure |   2017-11-03-preview  |
+|                 migrate |       2018-02-02      |
+|                   mysql |       2017-12-01      |
+|                 network |       2018-06-01      |
+|        powerbidedicated |       2017-10-01      |
+|            reservations |       2018-06-01      |
+|                 signalr |   2018-03-01-preview  |
+|            siterecovery |       2018-01-10      |
+|                     sql |   2017-03-01-preview  |
+|                 storage | 2018-02-01<br/>2018-03-01-preview |
+
+### Removed Packages
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|              iotcentral | 2017-07-01-privatepreview |
+|                 network |       2018-05-01      |
+
+### Breaking Changes
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|              automation | 2015-10-31<br/>2017-05-15-preview<br/>2018-01-preview |
+|              azurestack |       2017-06-01      |
+|                 compute | 2017-12-01<br/>2018-04-01<br/>2018-06-01 |
+|          computervision |          v2.0         |
+|       containerinstance |       2018-06-01      |
+|        containerservice |       2018-03-31      |
+|        contentmoderator |          v1.0         |
+|             datafactory |       2018-06-01      |
+|                     dns | 2015-05-04-preview<br/>2016-04-01<br/>2017-09-01<br/>2017-10-01<br/>2018-03-01-preview |
+|                    face |          v1.0         |
+|               hdinsight | 2015-03-01-preview<br/>2018-06-01-preview |
+|                insights | 2017-05-01-preview<br/>2018-03-01 |
+|          luis/authoring |          v2.0         |
+|            luis/runtime |          v2.0         |
+|                 network |       2018-04-01      |
+|                security |   2017-08-01-preview  |
+|                     sql |   2017-10-01-preview  |
+|           textanalytics |          v2.0         |
+|            visualsearch |          v1.0         |
+|                     web |       2018-02-01      |
+
+## `v19.1.0`
+
+### New Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|              iotcentral |       2018-09-01      |
+|                 network |       2018-06-01      |
+|                security |   2017-08-01-preview  |
+
+### Updated Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|               eventgrid |       2018-01-01      |
+
+## `v19.0.0`
+
+### Removed Packages
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|        servermanagement | 2015-07-01-preview<br/>2016-07-01-preview |
+
+### Breaking Changes
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|               authoring |          v2.0         |
+|              automation | 2015-10-31<br/>2017-05-15-preview<br/>2018-01-preview |
+|                  backup | 2016-12-01<br/>2017-07-01 |
+|             botservices |       2017-12-01      |
+|                 compute | 2015-06-15<br/>2016-03-30<br/>2017-03-30<br/>2017-12-01<br/>2018-04-01<br/>2016-04-30-preview |
+|          computervision |          v2.0         |
+|       containerregistry |       2017-10-01      |
+|               eventgrid |       2018-01-01      |
+|               hdinsight | 2018-06-01-preview |
+|                insights | 2017-05-01-preview<br/>2018-03-01 |
+|                 migrate |       2018-02-02      |
+|                 runtime |          v2.0         |
+|                     sql |   2017-03-01-preview  |
+|                     web |       2018-02-01      |
+
+### New Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|        alertsmanagement |   2018-05-05-preview  |
+|                 compute |       2018-06-01      |
+|          costmanagement |       2018-05-31      |
+|       servicefabricmesh |   2018-07-01-preview  |
+|            compute/skus |       2017-09-01      |
+
+### Updated Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|           apimanagement | 2018-01-01<br/>2018-06-01-preview |
+|       containerregistry |       2018-02-01      |
+|        containerservice |       2018-03-31      |
+|              management |   2018-03-01-preview  |
+
+## `v18.1.0`
+
+### New Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+| cognitive services training | v2.1              |
+|             consumption |      2018-06-30       |
+
+### Updated Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|               hdinsight | 2015-03-01-preview<br/>2018-06-01-preview |
+|              postgresql |      2017-12-01       |
+|               resources |      2018-05-01       |
+|                  search |      2015-08-19       |
+
+## `v18.0.0`
+
+### New Services
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|           apimanagement |  2018-06-01-preview   |
+|               hdinsight |  2018-06-01-preview   |
+|          computervision |         v2.0          |
+| recoveryservices/backup |      2016-12-01       |
+|         storagedatalake |      2018-06-17       |
+|               devspaces |  2018-06-01-preview   |
+|              automation |  2017-05-15-preview   |
+|                keyvault | v7.0 <br/> 2018-02-14 |
+|              automation |    2018-01-preview    |
+|                   media |  2018-06-01-preview   |
+|             datafactory |      2018-06-01       |
+
+### Updates Services
+
+|   Package Name |            API Version             |
+| -------------: | :--------------------------------: |
+|           face |                v1.0                |
+| luis/authoring |                v2.0                |
+|   luis/runtime |                v2.0                |
+|  textanalytics |                v2.0                |
+|       eventhub | 2017-04-01 <br/>2018-01-01-preview |
+|        monitor |         2017-05-01-preview         |
+|        signalr |         2018-03-01-preview         |
+|            sql |         2017-10-01-preview         |
+|        storage | 2018-03-01-preview <br/>2018-02-01 |
+|     servicebus |             2017-04-01             |
+
+### Breaking Changes
+
+|            Package Name |      API Version      |
+| ----------------------: | :-------------------: |
+|   adhybridhealthservice |      2014-01-01       |
+|                 advisor |      2017-04-19       |
+|             appinsights |  2015-05-01 <br/> v1  |
+|              automation | 2015-10-31/automation |
+|                 batchai |  2018-05-01/batchai   |
+|          computervision |         v1.0          |
+|             consumption |      2018-05-31       |
+|                 network |      2018-04-01       |
+|     operationalinsights |   2015-03-20<br/>v1   |
+| recoveryservices/backup |      2017-07-01       |
+|            reservations |      2018-06-01       |
+
+## `v17.4.0`
+
+### New Services
+
+|     Package Name | API Version |
+| ---------------: | :---------: |
+|      autosuggest |    v1.0     |
+| containerservice | 2018-03-31  |
+
+### Updated Services
+
+|     Package Name |                API Version                |
+| ---------------: | :---------------------------------------: |
+|      consumption |                2018-05-31                 |
+|       documentdb |                2015-04-08                 |
+|          network | 2018-02-01<br/>2018-04-01<br/>2018-05-01  |
+| notificationhubs |                2017-04-01                 |
+|              sql | 2017-03-01-preview<br/>2017-10-01-preview |
+
 ## `v17.3.1`
 
 ### Updated Services
 
-|          Package Name |     API Version     |
-| --------------------: | :-----------------: |
-|               network | 2017-10-01<br/>2017-11-01<br/>2018-01-01<br/>2018-02-01<br/>2018-04-01<br/>2018-05-01 |
-|         servicefabric | 5.6<br/>6.0<br/>6.1<br/>6.2 |
+|  Package Name |                                      API Version                                      |
+| ------------: | :-----------------------------------------------------------------------------------: |
+|       network | 2017-10-01<br/>2017-11-01<br/>2018-01-01<br/>2018-02-01<br/>2018-04-01<br/>2018-05-01 |
+| servicefabric |                              5.6<br/>6.0<br/>6.1<br/>6.2                              |
 
 ## `v17.3.0`
 
 ### New Services
 
-|          Package Name |     API Version     |
-| --------------------: | :-----------------: |
-|     containerinstance |      2018-06-01     |
-|          reservations |      2018-06-01     |
+|      Package Name | API Version |
+| ----------------: | :---------: |
+| containerinstance | 2018-06-01  |
+|      reservations | 2018-06-01  |
 
 ### Updated Services
 
-|          Package Name |     API Version     |
-| --------------------: | :-----------------: |
-|           datafactory |      2017-09-01     |
-|               network |      2015-06-15     |
+| Package Name | API Version |
+| -----------: | :---------: |
+|  datafactory | 2017-09-01  |
+|      network | 2015-06-15  |
 
 ## `v17.2.0`
 
 ### New Services
 
-|          Package Name |     API Version     |
-| --------------------: | :-----------------: |
-|   managedapplications |      2018-06-01     |
-|             resources |      2018-05-01     |
+|        Package Name | API Version |
+| ------------------: | :---------: |
+| managedapplications | 2018-06-01  |
+|           resources | 2018-05-01  |
 
 ### Updated Services
 
-|          Package Name |     API Version     |
-| --------------------: | :-----------------: |
-|  networksecuritygroup |       classic       |
+|         Package Name | API Version |
+| -------------------: | :---------: |
+| networksecuritygroup |   classic   |
 
 ## `v17.1.0`
 
 ### New Services
 
-|          Package Name |     API Version     |
-| --------------------: | :-----------------: |
-|            iotcentral | 2017-07-01-privatepreview |
+| Package Name |        API Version        |
+| -----------: | :-----------------------: |
+|   iotcentral | 2017-07-01-privatepreview |
 
 ## `v17.0.0`
 
@@ -257,7 +480,7 @@
 
 ## `v16.1.0`
 
-* Added a `NewAuthorizerFromEnvironment()` function for the keyvault service.
+- Added a `NewAuthorizerFromEnvironment()` function for the keyvault service.
 
 ## `v16.0.0`
 
@@ -348,8 +571,8 @@
 
 ### Bug Fixes
 
-* Drain the response body when retrying a request.
-* Avoid allocating when draining a response body.
+- Drain the response body when retrying a request.
+- Avoid allocating when draining a response body.
 
 ## `v15.1.0`
 
@@ -383,14 +606,14 @@ NOTE: There is a new subdirectory, ./services/preview, which going forward will 
 
 ### New Features
 
-* Added helper func per enum type that returns a slice of all possible values for that type.
+- Added helper func per enum type that returns a slice of all possible values for that type.
 
 ### Bug Fixes
 
-* Removed the "arm-" prefix from user-agent strings as not all services are for ARM.
-* Fixed missing marshaller for structs with flattened fields.
-* Fixed an issue where the incorrect content MIME type was being specified.
-* Marshalling of empty values for enum types now works as expected.
+- Removed the "arm-" prefix from user-agent strings as not all services are for ARM.
+- Fixed missing marshaller for structs with flattened fields.
+- Fixed an issue where the incorrect content MIME type was being specified.
+- Marshalling of empty values for enum types now works as expected.
 
 ### New Services
 
@@ -450,80 +673,80 @@ NOTE: There is a new subdirectory, ./services/preview, which going forward will 
 
 ### New Services
 
-* Batch 2018-03-01.6.1
-* BatchAI 2018-03-01
-* Cognitive services custom vision prediction v1.1
-* Eventhub 2018-01-01-preview
-* MySQL 2017-12-01
-* PostgreSQL 2017-12-01
-* Redis 2018-03-01
-* Subscription 2018-03-01-preview
+- Batch 2018-03-01.6.1
+- BatchAI 2018-03-01
+- Cognitive services custom vision prediction v1.1
+- Eventhub 2018-01-01-preview
+- MySQL 2017-12-01
+- PostgreSQL 2017-12-01
+- Redis 2018-03-01
+- Subscription 2018-03-01-preview
 
 ## `v14.5.0`
 
 ### Changes
 
-* Added new preview packages for apimanagement and dns.
+- Added new preview packages for apimanagement and dns.
 
 ## `v14.4.0`
 
 ### Changes
 
-* Added new preview API versions for mysql and postgresql.
+- Added new preview API versions for mysql and postgresql.
 
 ## `v14.3.0`
 
 ### Changes
 
-* Add exports for max file range and sizes for files in storage.
-* Updated README regarding blob storage support.
-* Add godoc indexer tool.
-* Add apidiff tool.
+- Add exports for max file range and sizes for files in storage.
+- Updated README regarding blob storage support.
+- Add godoc indexer tool.
+- Add apidiff tool.
 
 ## `v14.2.0`
 
 ### Changes
 
-* For blob storage, added GetProperties() method to Container.
-* Added PublicAccess field to ContainerProperties struct.
+- For blob storage, added GetProperties() method to Container.
+- Added PublicAccess field to ContainerProperties struct.
 
 ## `v14.1.1`
 
-* Fixing timestamp marshalling bug in the `storage` package.
-* Updating `profileBuilder` to clear-output folders when it is run by `go generate`.
-* Tweaking Swagger -> SDK config to use "latest" instead of "nightly" and be tied to a particular version of autorest.go.
+- Fixing timestamp marshalling bug in the `storage` package.
+- Updating `profileBuilder` to clear-output folders when it is run by `go generate`.
+- Tweaking Swagger -> SDK config to use "latest" instead of "nightly" and be tied to a particular version of autorest.go.
 
 ## `v14.1.0`
 
 ### Changes
 
-* Update README with details on new authentication helpers.
-* Update `latest` profile to point to latest stable API versions.
-* Add new API version for Azure Monitoring service and for Batch Data plane service.
+- Update README with details on new authentication helpers.
+- Update `latest` profile to point to latest stable API versions.
+- Add new API version for Azure Monitoring service and for Batch Data plane service.
 
 ## `v14.0.2`
 
 ### Changes
 
-* Updating `profileBuilder list` to accept an `input` flag instead of reading from `stdin`.
-* Simplifying CI to have less chatter, be faster, and have no special cases.
+- Updating `profileBuilder list` to accept an `input` flag instead of reading from `stdin`.
+- Simplifying CI to have less chatter, be faster, and have no special cases.
 
 ## `v14.0.1`
 
 ### Changes
 
-* Removed the ./services/search/2016-09-01/search package, it was never intended to be included and doesn't work.
+- Removed the ./services/search/2016-09-01/search package, it was never intended to be included and doesn't work.
 
 ## `v14.0.0`
 
 ### Breaking Changes
 
-* Removed the ./arm, ./datalake-store and ./dataplane directories. You can find the same packages under ./services
-* The management package was moved to ./services/classic/management
-* Renamed package ./services/redis/mgmt/2017-10-01/cache to ./services/redis/mgmt/2017-10-01/redis
+- Removed the ./arm, ./datalake-store and ./dataplane directories. You can find the same packages under ./services
+- The management package was moved to ./services/classic/management
+- Renamed package ./services/redis/mgmt/2017-10-01/cache to ./services/redis/mgmt/2017-10-01/redis
 
 ### Changes
 
-* Removed the "-beta" suffix.
-* Added various new services.
-* Added ./version package for centralized SDK versioning.
+- Removed the "-beta" suffix.
+- Added various new services.
+- Added ./version package for centralized SDK versioning.

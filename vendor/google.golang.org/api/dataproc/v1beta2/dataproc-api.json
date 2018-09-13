@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -1630,7 +1619,7 @@
       }
     }
   },
-  "revision": "20180320",
+  "revision": "20180824",
   "rootUrl": "https://dataproc.googleapis.com/",
   "schemas": {
     "AcceleratorConfig": {
@@ -1643,7 +1632,7 @@
           "type": "integer"
         },
         "acceleratorTypeUri": {
-          "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See Compute Engine AcceleratorTypes( /compute/docs/reference/beta/acceleratorTypes)Examples * https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * nvidia-tesla-k80",
+          "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See Compute Engine AcceleratorTypes( /compute/docs/reference/beta/acceleratorTypes)Examples * https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * nvidia-tesla-k80Auto Zone Exception: If you are using the Cloud Dataproc Auto Zone Placement feature, you must use the short name of the accelerator type resource, for example, nvidia-tesla-k80.",
           "type": "string"
         }
       },
@@ -1653,15 +1642,19 @@
       "description": "Associates members with a role.",
       "id": "Binding",
       "properties": {
+        "condition": {
+          "$ref": "Expr",
+          "description": "Unimplemented. The condition that is associated with this binding. NOTE: an unsatisfied condition will not allow user access via current binding. Different bindings, including their conditions, are examined independently."
+        },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource. members can have the following values:\nallUsers: A special identifier that represents anyone who is  on the internet; with or without a Google account.\nallAuthenticatedUsers: A special identifier that represents anyone  who is authenticated with a Google account or a service account.\nuser:{emailid}: An email address that represents a specific Google  account. For example, alice@gmail.com or joe@example.com.\nserviceAccount:{emailid}: An email address that represents a service  account. For example, my-other-app@appspot.gserviceaccount.com.\ngroup:{emailid}: An email address that represents a Google group.  For example, admins@example.com.\ndomain:{domain}: A Google Apps domain name that represents all the  users of that domain. For example, google.com or example.com.",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource. members can have the following values:\nallUsers: A special identifier that represents anyone who is  on the internet; with or without a Google account.\nallAuthenticatedUsers: A special identifier that represents anyone  who is authenticated with a Google account or a service account.\nuser:{emailid}: An email address that represents a specific Google  account. For example, alice@gmail.com .\nserviceAccount:{emailid}: An email address that represents a service  account. For example, my-other-app@appspot.gserviceaccount.com.\ngroup:{emailid}: An email address that represents a Google group.  For example, admins@example.com.\ndomain:{domain}: A Google Apps domain name that represents all the  users of that domain. For example, google.com or example.com.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "role": {
-          "description": "Role that is assigned to members. For example, roles/viewer, roles/editor, or roles/owner. Required",
+          "description": "Role that is assigned to members. For example, roles/viewer, roles/editor, or roles/owner.",
           "type": "string"
         }
       },
@@ -1698,7 +1691,7 @@
         },
         "metrics": {
           "$ref": "ClusterMetrics",
-          "description": "Contains cluster daemon metrics such as HDFS and YARN stats.Beta Feature: This report is available for testing purposes only. It may be changed before final release."
+          "description": "Output only. Contains cluster daemon metrics such as HDFS and YARN stats.Beta Feature: This report is available for testing purposes only. It may be changed before final release."
         },
         "projectId": {
           "description": "Required. The Google Cloud Platform project ID that the cluster belongs to.",
@@ -1725,6 +1718,10 @@
         "configBucket": {
           "description": "Optional. A Cloud Storage staging bucket used for sharing generated SSH keys and config. If you do not specify a staging bucket, Cloud Dataproc will determine an appropriate Cloud Storage location (US, ASIA, or EU) for your cluster's staging bucket according to the Google Compute Engine zone where your cluster is deployed, and then it will create and manage this project-level, per-location bucket for you.",
           "type": "string"
+        },
+        "encryptionConfig": {
+          "$ref": "EncryptionConfig",
+          "description": "Optional. Encryption settings for the cluster."
         },
         "gceClusterConfig": {
           "$ref": "GceClusterConfig",
@@ -1998,6 +1995,40 @@
       "properties": {},
       "type": "object"
     },
+    "EncryptionConfig": {
+      "description": "Encryption settings for the cluster.",
+      "id": "EncryptionConfig",
+      "properties": {
+        "gcePdKmsKeyName": {
+          "description": "Optional. The Cloud KMS key name to use for PD disk encryption for all instances in the cluster.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Expr": {
+      "description": "Represents an expression text. Example:\ntitle: \"User account presence\"\ndescription: \"Determines whether the request has a user account\"\nexpression: \"size(request.user) \u003e 0\"\n",
+      "id": "Expr",
+      "properties": {
+        "description": {
+          "description": "An optional description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.",
+          "type": "string"
+        },
+        "expression": {
+          "description": "Textual representation of an expression in Common Expression Language syntax.The application context of the containing message determines which well-known feature set of CEL is supported.",
+          "type": "string"
+        },
+        "location": {
+          "description": "An optional string indicating the location of the expression for error reporting, e.g. a file name and a position in the file.",
+          "type": "string"
+        },
+        "title": {
+          "description": "An optional title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "GceClusterConfig": {
       "description": "Common config settings for resources of Compute Engine cluster instances, applicable to all instances in the cluster.",
       "id": "GceClusterConfig",
@@ -2018,11 +2049,11 @@
           "type": "string"
         },
         "serviceAccount": {
-          "description": "Optional. The service account of the instances. Defaults to the default Compute Engine service account. Custom service accounts need permissions equivalent to the folloing IAM roles:\nroles/logging.logWriter\nroles/storage.objectAdmin(see https://cloud.google.com/compute/docs/access/service-accounts#custom_service_accounts for more information). Example: [account_id]@[project_id].iam.gserviceaccount.com",
+          "description": "Optional. The service account of the instances. Defaults to the default Compute Engine service account. Custom service accounts need permissions equivalent to the following IAM roles:\nroles/logging.logWriter\nroles/storage.objectAdmin(see https://cloud.google.com/compute/docs/access/service-accounts#custom_service_accounts for more information). Example: [account_id]@[project_id].iam.gserviceaccount.com",
           "type": "string"
         },
         "serviceAccountScopes": {
-          "description": "Optional. The URIs of service account scopes to be included in Google Compute Engine instances. The following base set of scopes is always included:\nhttps://www.googleapis.com/auth/cloud.useraccounts.readonly\nhttps://www.googleapis.com/auth/devstorage.read_write\nhttps://www.googleapis.com/auth/logging.writeIf no scopes are specified, the following defaults are also provided:\nhttps://www.googleapis.com/auth/bigquery\nhttps://www.googleapis.com/auth/bigtable.admin.table\nhttps://www.googleapis.com/auth/bigtable.data\nhttps://www.googleapis.com/auth/devstorage.full_control",
+          "description": "Optional. The URIs of service account scopes to be included in Compute Engine instances. The following base set of scopes is always included:\nhttps://www.googleapis.com/auth/cloud.useraccounts.readonly\nhttps://www.googleapis.com/auth/devstorage.read_write\nhttps://www.googleapis.com/auth/logging.writeIf no scopes are specified, the following defaults are also provided:\nhttps://www.googleapis.com/auth/bigquery\nhttps://www.googleapis.com/auth/bigtable.admin.table\nhttps://www.googleapis.com/auth/bigtable.data\nhttps://www.googleapis.com/auth/devstorage.full_control",
           "items": {
             "type": "string"
           },
@@ -2044,6 +2075,12 @@
           "type": "string"
         }
       },
+      "type": "object"
+    },
+    "GetIamPolicyRequest": {
+      "description": "Request message for GetIamPolicy method.",
+      "id": "GetIamPolicyRequest",
+      "properties": {},
       "type": "object"
     },
     "HadoopJob": {
@@ -2156,11 +2193,11 @@
           "description": "Optional. Disk option config settings."
         },
         "imageUri": {
-          "description": "Output only. The Compute Engine image resource used for cluster instances. Inferred from SoftwareConfig.image_version.",
+          "description": "Optional. The Compute Engine image resource used for cluster instances. It can be specified or may be inferred from SoftwareConfig.image_version.",
           "type": "string"
         },
         "instanceNames": {
-          "description": "Optional. The list of instance names. Cloud Dataproc derives the names from cluster_name, num_instances, and the instance group if not set by user (recommended practice is to let Cloud Dataproc derive the name).",
+          "description": "Output only. The list of instance names. Cloud Dataproc derives the names from cluster_name, num_instances, and the instance group.",
           "items": {
             "type": "string"
           },
@@ -2171,7 +2208,7 @@
           "type": "boolean"
         },
         "machineTypeUri": {
-          "description": "Optional. The Compute Engine machine type used for cluster instances.A full URL, partial URI, or short name are valid. Examples:\nhttps://www.googleapis.com/compute/v1/projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2\nprojects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2\nn1-standard-2",
+          "description": "Optional. The Compute Engine machine type used for cluster instances.A full URL, partial URI, or short name are valid. Examples:\nhttps://www.googleapis.com/compute/v1/projects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2\nprojects/[project_id]/zones/us-east1-a/machineTypes/n1-standard-2\nn1-standard-2Auto Zone Exception: If you are using the Cloud Dataproc Auto Zone Placement feature, you must use the short name of the machine type resource, for example, n1-standard-2.",
           "type": "string"
         },
         "managedGroupConfig": {
@@ -2195,6 +2232,17 @@
       "id": "InstantiateWorkflowTemplateRequest",
       "properties": {
         "instanceId": {
+          "description": "Deprecated. Please use request_id field instead.",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. Map from parameter names to values that should be used for those parameters.",
+          "type": "object"
+        },
+        "requestId": {
           "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
           "type": "string"
         },
@@ -2644,6 +2692,21 @@
       },
       "type": "object"
     },
+    "ParameterValidation": {
+      "description": "Configuration for parameter validation.",
+      "id": "ParameterValidation",
+      "properties": {
+        "regex": {
+          "$ref": "RegexValidation",
+          "description": "Validation based on regular expressions."
+        },
+        "values": {
+          "$ref": "ValueValidation",
+          "description": "Validation based on a list of allowed values."
+        }
+      },
+      "type": "object"
+    },
     "PigJob": {
       "description": "A Cloud Dataproc job for running Apache Pig (https://pig.apache.org/) queries on YARN.",
       "id": "PigJob",
@@ -2689,7 +2752,7 @@
       "type": "object"
     },
     "Policy": {
-      "description": "Defines an Identity and Access Management (IAM) policy. It is used to specify access control policies for Cloud Platform resources.A Policy consists of a list of bindings. A Binding binds a list of members to a role, where the members can be user accounts, Google groups, Google domains, and service accounts. A role is a named list of permissions defined by IAM.Example\n{\n  \"bindings\": [\n    {\n      \"role\": \"roles/owner\",\n      \"members\": [\n        \"user:mike@example.com\",\n        \"group:admins@example.com\",\n        \"domain:google.com\",\n        \"serviceAccount:my-other-app@appspot.gserviceaccount.com\",\n      ]\n    },\n    {\n      \"role\": \"roles/viewer\",\n      \"members\": [\"user:sean@example.com\"]\n    }\n  ]\n}\nFor a description of IAM and its features, see the IAM developer's guide (https://cloud.google.com/iam/docs).",
+      "description": "Defines an Identity and Access Management (IAM) policy. It is used to specify access control policies for Cloud Platform resources.A Policy consists of a list of bindings. A binding binds a list of members to a role, where the members can be user accounts, Google groups, Google domains, and service accounts. A role is a named list of permissions defined by IAM.JSON Example\n{\n  \"bindings\": [\n    {\n      \"role\": \"roles/owner\",\n      \"members\": [\n        \"user:mike@example.com\",\n        \"group:admins@example.com\",\n        \"domain:google.com\",\n        \"serviceAccount:my-other-app@appspot.gserviceaccount.com\"\n      ]\n    },\n    {\n      \"role\": \"roles/viewer\",\n      \"members\": [\"user:sean@example.com\"]\n    }\n  ]\n}\nYAML Example\nbindings:\n- members:\n  - user:mike@example.com\n  - group:admins@example.com\n  - domain:google.com\n  - serviceAccount:my-other-app@appspot.gserviceaccount.com\n  role: roles/owner\n- members:\n  - user:sean@example.com\n  role: roles/viewer\nFor a description of IAM and its features, see the IAM developer's guide (https://cloud.google.com/iam/docs).",
       "id": "Policy",
       "properties": {
         "bindings": {
@@ -2783,6 +2846,20 @@
       },
       "type": "object"
     },
+    "RegexValidation": {
+      "description": "Validation based on regular expressions.",
+      "id": "RegexValidation",
+      "properties": {
+        "regexes": {
+          "description": "Required. RE2 regular expressions used to validate the parameter's value. The value must match the regex in its entirety (substring matches are not sufficient).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "SetIamPolicyRequest": {
       "description": "Request message for SetIamPolicy method.",
       "id": "SetIamPolicyRequest",
@@ -2799,7 +2876,7 @@
       "id": "SoftwareConfig",
       "properties": {
         "imageVersion": {
-          "description": "Optional. The version of software inside the cluster. It must match the regular expression [0-9]+\\.[0-9]+. If unspecified, it defaults to the latest version (see Cloud Dataproc Versioning).",
+          "description": "Optional. The version of software inside the cluster. It must be one of the supported Cloud Dataproc Versions, such as \"1.2\" (including a subminor version, such as \"1.2.29\"), or the \"preview\" version. If unspecified, it defaults to the latest version.",
           "type": "string"
         },
         "properties": {
@@ -2948,6 +3025,32 @@
       },
       "type": "object"
     },
+    "TemplateParameter": {
+      "description": "A configurable parameter that replaces one or more fields in the template. Parameterizable fields: - Labels - File uris - Job properties - Job arguments - Script variables - Main class (in HadoopJob and SparkJob) - Zone (in ClusterSelector)",
+      "id": "TemplateParameter",
+      "properties": {
+        "description": {
+          "description": "Optional. Brief description of the parameter. Must not exceed 1024 characters.",
+          "type": "string"
+        },
+        "fields": {
+          "description": "Required. Paths to all fields that the parameter replaces. A field is allowed to appear in at most one parameter's list of field paths.A field path is similar in syntax to a google.protobuf.FieldMask. For example, a field path that references the zone field of a workflow template's cluster selector would be specified as \u003ccode\u003eplacement.clusterSelector.zone\u003c/code\u003e.Also, field paths can reference fields using the following syntax:\nValues in maps can be referenced by key. Examples\u003cbr\u003e\nlabels'key'\nplacement.clusterSelector.clusterLabels'key'\nplacement.managedCluster.labels'key'\nplacement.clusterSelector.clusterLabels'key'\njobsstep-id.labels'key'\nJobs in the jobs list can be referenced by step-id. Examples:\u003cbr\u003e\njobsstep-id.hadoopJob.mainJarFileUri\njobsstep-id.hiveJob.queryFileUri\njobsstep-id.pySparkJob.mainPythonFileUri\njobsstep-id.hadoopJob.jarFileUris0\njobsstep-id.hadoopJob.archiveUris0\njobsstep-id.hadoopJob.fileUris0\njobsstep-id.pySparkJob.pythonFileUris0\nItems in repeated fields can be referenced by a zero-based index. Example:\u003cbr\u003e\njobsstep-id.sparkJob.args0\nOther examples:\njobsstep-id.hadoopJob.properties'key'\njobsstep-id.hadoopJob.args0\njobsstep-id.hiveJob.scriptVariables'key'\njobsstep-id.hadoopJob.mainJarFileUri\nplacement.clusterSelector.zoneIt may not be possible to parameterize maps and repeated fields in their entirety since only individual map values and individual items in repeated fields can be referenced. For example, the following field paths are invalid:\nplacement.clusterSelector.clusterLabels\njobsstep-id.sparkJob.args",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Required. Parameter name. The parameter name is used as the key, and paired with the parameter value, which are passed to the template when the template is instantiated. The name must contain only capital letters (A-Z), numbers (0-9), and underscores (_), and must not start with a number. The maximum length is 40 characters.",
+          "type": "string"
+        },
+        "validation": {
+          "$ref": "ParameterValidation",
+          "description": "Optional. Validation rules to be applied to this parameter's value."
+        }
+      },
+      "type": "object"
+    },
     "TestIamPermissionsRequest": {
       "description": "Request message for TestIamPermissions method.",
       "id": "TestIamPermissionsRequest",
@@ -2968,6 +3071,20 @@
       "properties": {
         "permissions": {
           "description": "A subset of TestPermissionsRequest.permissions that the caller is allowed.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ValueValidation": {
+      "description": "Validation based on a list of allowed values.",
+      "id": "ValueValidation",
+      "properties": {
+        "values": {
+          "description": "Required. List of allowed values for the parameter.",
           "items": {
             "type": "string"
           },
@@ -3122,6 +3239,13 @@
           "description": "Output only. The \"resource name\" of the template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
           "type": "string"
         },
+        "parameters": {
+          "description": "Optional. Template parameters whose values are substituted into the template. Values for parameters must be provided when the template is instantiated.",
+          "items": {
+            "$ref": "TemplateParameter"
+          },
+          "type": "array"
+        },
         "placement": {
           "$ref": "WorkflowTemplatePlacement",
           "description": "Required. WorkflowTemplate scheduling information."
@@ -3202,7 +3326,7 @@
     }
   },
   "servicePath": "",
-  "title": "Google Cloud Dataproc API",
+  "title": "Cloud Dataproc API",
   "version": "v1beta2",
   "version_module": true
 }

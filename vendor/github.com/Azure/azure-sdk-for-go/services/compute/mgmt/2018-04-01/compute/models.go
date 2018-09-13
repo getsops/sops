@@ -71,130 +71,6 @@ func PossibleComponentNamesValues() []ComponentNames {
 	return []ComponentNames{MicrosoftWindowsShellSetup}
 }
 
-// ContainerServiceOrchestratorTypes enumerates the values for container service orchestrator types.
-type ContainerServiceOrchestratorTypes string
-
-const (
-	// Custom ...
-	Custom ContainerServiceOrchestratorTypes = "Custom"
-	// DCOS ...
-	DCOS ContainerServiceOrchestratorTypes = "DCOS"
-	// Kubernetes ...
-	Kubernetes ContainerServiceOrchestratorTypes = "Kubernetes"
-	// Swarm ...
-	Swarm ContainerServiceOrchestratorTypes = "Swarm"
-)
-
-// PossibleContainerServiceOrchestratorTypesValues returns an array of possible values for the ContainerServiceOrchestratorTypes const type.
-func PossibleContainerServiceOrchestratorTypesValues() []ContainerServiceOrchestratorTypes {
-	return []ContainerServiceOrchestratorTypes{Custom, DCOS, Kubernetes, Swarm}
-}
-
-// ContainerServiceVMSizeTypes enumerates the values for container service vm size types.
-type ContainerServiceVMSizeTypes string
-
-const (
-	// StandardA0 ...
-	StandardA0 ContainerServiceVMSizeTypes = "Standard_A0"
-	// StandardA1 ...
-	StandardA1 ContainerServiceVMSizeTypes = "Standard_A1"
-	// StandardA10 ...
-	StandardA10 ContainerServiceVMSizeTypes = "Standard_A10"
-	// StandardA11 ...
-	StandardA11 ContainerServiceVMSizeTypes = "Standard_A11"
-	// StandardA2 ...
-	StandardA2 ContainerServiceVMSizeTypes = "Standard_A2"
-	// StandardA3 ...
-	StandardA3 ContainerServiceVMSizeTypes = "Standard_A3"
-	// StandardA4 ...
-	StandardA4 ContainerServiceVMSizeTypes = "Standard_A4"
-	// StandardA5 ...
-	StandardA5 ContainerServiceVMSizeTypes = "Standard_A5"
-	// StandardA6 ...
-	StandardA6 ContainerServiceVMSizeTypes = "Standard_A6"
-	// StandardA7 ...
-	StandardA7 ContainerServiceVMSizeTypes = "Standard_A7"
-	// StandardA8 ...
-	StandardA8 ContainerServiceVMSizeTypes = "Standard_A8"
-	// StandardA9 ...
-	StandardA9 ContainerServiceVMSizeTypes = "Standard_A9"
-	// StandardD1 ...
-	StandardD1 ContainerServiceVMSizeTypes = "Standard_D1"
-	// StandardD11 ...
-	StandardD11 ContainerServiceVMSizeTypes = "Standard_D11"
-	// StandardD11V2 ...
-	StandardD11V2 ContainerServiceVMSizeTypes = "Standard_D11_v2"
-	// StandardD12 ...
-	StandardD12 ContainerServiceVMSizeTypes = "Standard_D12"
-	// StandardD12V2 ...
-	StandardD12V2 ContainerServiceVMSizeTypes = "Standard_D12_v2"
-	// StandardD13 ...
-	StandardD13 ContainerServiceVMSizeTypes = "Standard_D13"
-	// StandardD13V2 ...
-	StandardD13V2 ContainerServiceVMSizeTypes = "Standard_D13_v2"
-	// StandardD14 ...
-	StandardD14 ContainerServiceVMSizeTypes = "Standard_D14"
-	// StandardD14V2 ...
-	StandardD14V2 ContainerServiceVMSizeTypes = "Standard_D14_v2"
-	// StandardD1V2 ...
-	StandardD1V2 ContainerServiceVMSizeTypes = "Standard_D1_v2"
-	// StandardD2 ...
-	StandardD2 ContainerServiceVMSizeTypes = "Standard_D2"
-	// StandardD2V2 ...
-	StandardD2V2 ContainerServiceVMSizeTypes = "Standard_D2_v2"
-	// StandardD3 ...
-	StandardD3 ContainerServiceVMSizeTypes = "Standard_D3"
-	// StandardD3V2 ...
-	StandardD3V2 ContainerServiceVMSizeTypes = "Standard_D3_v2"
-	// StandardD4 ...
-	StandardD4 ContainerServiceVMSizeTypes = "Standard_D4"
-	// StandardD4V2 ...
-	StandardD4V2 ContainerServiceVMSizeTypes = "Standard_D4_v2"
-	// StandardD5V2 ...
-	StandardD5V2 ContainerServiceVMSizeTypes = "Standard_D5_v2"
-	// StandardDS1 ...
-	StandardDS1 ContainerServiceVMSizeTypes = "Standard_DS1"
-	// StandardDS11 ...
-	StandardDS11 ContainerServiceVMSizeTypes = "Standard_DS11"
-	// StandardDS12 ...
-	StandardDS12 ContainerServiceVMSizeTypes = "Standard_DS12"
-	// StandardDS13 ...
-	StandardDS13 ContainerServiceVMSizeTypes = "Standard_DS13"
-	// StandardDS14 ...
-	StandardDS14 ContainerServiceVMSizeTypes = "Standard_DS14"
-	// StandardDS2 ...
-	StandardDS2 ContainerServiceVMSizeTypes = "Standard_DS2"
-	// StandardDS3 ...
-	StandardDS3 ContainerServiceVMSizeTypes = "Standard_DS3"
-	// StandardDS4 ...
-	StandardDS4 ContainerServiceVMSizeTypes = "Standard_DS4"
-	// StandardG1 ...
-	StandardG1 ContainerServiceVMSizeTypes = "Standard_G1"
-	// StandardG2 ...
-	StandardG2 ContainerServiceVMSizeTypes = "Standard_G2"
-	// StandardG3 ...
-	StandardG3 ContainerServiceVMSizeTypes = "Standard_G3"
-	// StandardG4 ...
-	StandardG4 ContainerServiceVMSizeTypes = "Standard_G4"
-	// StandardG5 ...
-	StandardG5 ContainerServiceVMSizeTypes = "Standard_G5"
-	// StandardGS1 ...
-	StandardGS1 ContainerServiceVMSizeTypes = "Standard_GS1"
-	// StandardGS2 ...
-	StandardGS2 ContainerServiceVMSizeTypes = "Standard_GS2"
-	// StandardGS3 ...
-	StandardGS3 ContainerServiceVMSizeTypes = "Standard_GS3"
-	// StandardGS4 ...
-	StandardGS4 ContainerServiceVMSizeTypes = "Standard_GS4"
-	// StandardGS5 ...
-	StandardGS5 ContainerServiceVMSizeTypes = "Standard_GS5"
-)
-
-// PossibleContainerServiceVMSizeTypesValues returns an array of possible values for the ContainerServiceVMSizeTypes const type.
-func PossibleContainerServiceVMSizeTypesValues() []ContainerServiceVMSizeTypes {
-	return []ContainerServiceVMSizeTypes{StandardA0, StandardA1, StandardA10, StandardA11, StandardA2, StandardA3, StandardA4, StandardA5, StandardA6, StandardA7, StandardA8, StandardA9, StandardD1, StandardD11, StandardD11V2, StandardD12, StandardD12V2, StandardD13, StandardD13V2, StandardD14, StandardD14V2, StandardD1V2, StandardD2, StandardD2V2, StandardD3, StandardD3V2, StandardD4, StandardD4V2, StandardD5V2, StandardDS1, StandardDS11, StandardDS12, StandardDS13, StandardDS14, StandardDS2, StandardDS3, StandardDS4, StandardG1, StandardG2, StandardG3, StandardG4, StandardG5, StandardGS1, StandardGS2, StandardGS3, StandardGS4, StandardGS5}
-}
-
 // DiskCreateOption enumerates the values for disk create option.
 type DiskCreateOption string
 
@@ -378,53 +254,6 @@ func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 	return []ResourceIdentityType{ResourceIdentityTypeNone, ResourceIdentityTypeSystemAssigned, ResourceIdentityTypeSystemAssignedUserAssigned, ResourceIdentityTypeUserAssigned}
 }
 
-// ResourceSkuCapacityScaleType enumerates the values for resource sku capacity scale type.
-type ResourceSkuCapacityScaleType string
-
-const (
-	// ResourceSkuCapacityScaleTypeAutomatic ...
-	ResourceSkuCapacityScaleTypeAutomatic ResourceSkuCapacityScaleType = "Automatic"
-	// ResourceSkuCapacityScaleTypeManual ...
-	ResourceSkuCapacityScaleTypeManual ResourceSkuCapacityScaleType = "Manual"
-	// ResourceSkuCapacityScaleTypeNone ...
-	ResourceSkuCapacityScaleTypeNone ResourceSkuCapacityScaleType = "None"
-)
-
-// PossibleResourceSkuCapacityScaleTypeValues returns an array of possible values for the ResourceSkuCapacityScaleType const type.
-func PossibleResourceSkuCapacityScaleTypeValues() []ResourceSkuCapacityScaleType {
-	return []ResourceSkuCapacityScaleType{ResourceSkuCapacityScaleTypeAutomatic, ResourceSkuCapacityScaleTypeManual, ResourceSkuCapacityScaleTypeNone}
-}
-
-// ResourceSkuRestrictionsReasonCode enumerates the values for resource sku restrictions reason code.
-type ResourceSkuRestrictionsReasonCode string
-
-const (
-	// NotAvailableForSubscription ...
-	NotAvailableForSubscription ResourceSkuRestrictionsReasonCode = "NotAvailableForSubscription"
-	// QuotaID ...
-	QuotaID ResourceSkuRestrictionsReasonCode = "QuotaId"
-)
-
-// PossibleResourceSkuRestrictionsReasonCodeValues returns an array of possible values for the ResourceSkuRestrictionsReasonCode const type.
-func PossibleResourceSkuRestrictionsReasonCodeValues() []ResourceSkuRestrictionsReasonCode {
-	return []ResourceSkuRestrictionsReasonCode{NotAvailableForSubscription, QuotaID}
-}
-
-// ResourceSkuRestrictionsType enumerates the values for resource sku restrictions type.
-type ResourceSkuRestrictionsType string
-
-const (
-	// Location ...
-	Location ResourceSkuRestrictionsType = "Location"
-	// Zone ...
-	Zone ResourceSkuRestrictionsType = "Zone"
-)
-
-// PossibleResourceSkuRestrictionsTypeValues returns an array of possible values for the ResourceSkuRestrictionsType const type.
-func PossibleResourceSkuRestrictionsTypeValues() []ResourceSkuRestrictionsType {
-	return []ResourceSkuRestrictionsType{Location, Zone}
-}
-
 // RollingUpgradeActionType enumerates the values for rolling upgrade action type.
 type RollingUpgradeActionType string
 
@@ -516,11 +345,13 @@ const (
 	StorageAccountTypesPremiumLRS StorageAccountTypes = "Premium_LRS"
 	// StorageAccountTypesStandardLRS ...
 	StorageAccountTypesStandardLRS StorageAccountTypes = "Standard_LRS"
+	// StorageAccountTypesStandardSSDLRS ...
+	StorageAccountTypesStandardSSDLRS StorageAccountTypes = "StandardSSD_LRS"
 )
 
 // PossibleStorageAccountTypesValues returns an array of possible values for the StorageAccountTypes const type.
 func PossibleStorageAccountTypesValues() []StorageAccountTypes {
-	return []StorageAccountTypes{StorageAccountTypesPremiumLRS, StorageAccountTypesStandardLRS}
+	return []StorageAccountTypes{StorageAccountTypesPremiumLRS, StorageAccountTypesStandardLRS, StorageAccountTypesStandardSSDLRS}
 }
 
 // UpgradeMode enumerates the values for upgrade mode.
@@ -625,343 +456,343 @@ func PossibleVirtualMachineScaleSetSkuScaleTypeValues() []VirtualMachineScaleSet
 type VirtualMachineSizeTypes string
 
 const (
-	// VirtualMachineSizeTypesBasicA0 ...
-	VirtualMachineSizeTypesBasicA0 VirtualMachineSizeTypes = "Basic_A0"
-	// VirtualMachineSizeTypesBasicA1 ...
-	VirtualMachineSizeTypesBasicA1 VirtualMachineSizeTypes = "Basic_A1"
-	// VirtualMachineSizeTypesBasicA2 ...
-	VirtualMachineSizeTypesBasicA2 VirtualMachineSizeTypes = "Basic_A2"
-	// VirtualMachineSizeTypesBasicA3 ...
-	VirtualMachineSizeTypesBasicA3 VirtualMachineSizeTypes = "Basic_A3"
-	// VirtualMachineSizeTypesBasicA4 ...
-	VirtualMachineSizeTypesBasicA4 VirtualMachineSizeTypes = "Basic_A4"
-	// VirtualMachineSizeTypesStandardA0 ...
-	VirtualMachineSizeTypesStandardA0 VirtualMachineSizeTypes = "Standard_A0"
-	// VirtualMachineSizeTypesStandardA1 ...
-	VirtualMachineSizeTypesStandardA1 VirtualMachineSizeTypes = "Standard_A1"
-	// VirtualMachineSizeTypesStandardA10 ...
-	VirtualMachineSizeTypesStandardA10 VirtualMachineSizeTypes = "Standard_A10"
-	// VirtualMachineSizeTypesStandardA11 ...
-	VirtualMachineSizeTypesStandardA11 VirtualMachineSizeTypes = "Standard_A11"
-	// VirtualMachineSizeTypesStandardA1V2 ...
-	VirtualMachineSizeTypesStandardA1V2 VirtualMachineSizeTypes = "Standard_A1_v2"
-	// VirtualMachineSizeTypesStandardA2 ...
-	VirtualMachineSizeTypesStandardA2 VirtualMachineSizeTypes = "Standard_A2"
-	// VirtualMachineSizeTypesStandardA2mV2 ...
-	VirtualMachineSizeTypesStandardA2mV2 VirtualMachineSizeTypes = "Standard_A2m_v2"
-	// VirtualMachineSizeTypesStandardA2V2 ...
-	VirtualMachineSizeTypesStandardA2V2 VirtualMachineSizeTypes = "Standard_A2_v2"
-	// VirtualMachineSizeTypesStandardA3 ...
-	VirtualMachineSizeTypesStandardA3 VirtualMachineSizeTypes = "Standard_A3"
-	// VirtualMachineSizeTypesStandardA4 ...
-	VirtualMachineSizeTypesStandardA4 VirtualMachineSizeTypes = "Standard_A4"
-	// VirtualMachineSizeTypesStandardA4mV2 ...
-	VirtualMachineSizeTypesStandardA4mV2 VirtualMachineSizeTypes = "Standard_A4m_v2"
-	// VirtualMachineSizeTypesStandardA4V2 ...
-	VirtualMachineSizeTypesStandardA4V2 VirtualMachineSizeTypes = "Standard_A4_v2"
-	// VirtualMachineSizeTypesStandardA5 ...
-	VirtualMachineSizeTypesStandardA5 VirtualMachineSizeTypes = "Standard_A5"
-	// VirtualMachineSizeTypesStandardA6 ...
-	VirtualMachineSizeTypesStandardA6 VirtualMachineSizeTypes = "Standard_A6"
-	// VirtualMachineSizeTypesStandardA7 ...
-	VirtualMachineSizeTypesStandardA7 VirtualMachineSizeTypes = "Standard_A7"
-	// VirtualMachineSizeTypesStandardA8 ...
-	VirtualMachineSizeTypesStandardA8 VirtualMachineSizeTypes = "Standard_A8"
-	// VirtualMachineSizeTypesStandardA8mV2 ...
-	VirtualMachineSizeTypesStandardA8mV2 VirtualMachineSizeTypes = "Standard_A8m_v2"
-	// VirtualMachineSizeTypesStandardA8V2 ...
-	VirtualMachineSizeTypesStandardA8V2 VirtualMachineSizeTypes = "Standard_A8_v2"
-	// VirtualMachineSizeTypesStandardA9 ...
-	VirtualMachineSizeTypesStandardA9 VirtualMachineSizeTypes = "Standard_A9"
-	// VirtualMachineSizeTypesStandardB1ms ...
-	VirtualMachineSizeTypesStandardB1ms VirtualMachineSizeTypes = "Standard_B1ms"
-	// VirtualMachineSizeTypesStandardB1s ...
-	VirtualMachineSizeTypesStandardB1s VirtualMachineSizeTypes = "Standard_B1s"
-	// VirtualMachineSizeTypesStandardB2ms ...
-	VirtualMachineSizeTypesStandardB2ms VirtualMachineSizeTypes = "Standard_B2ms"
-	// VirtualMachineSizeTypesStandardB2s ...
-	VirtualMachineSizeTypesStandardB2s VirtualMachineSizeTypes = "Standard_B2s"
-	// VirtualMachineSizeTypesStandardB4ms ...
-	VirtualMachineSizeTypesStandardB4ms VirtualMachineSizeTypes = "Standard_B4ms"
-	// VirtualMachineSizeTypesStandardB8ms ...
-	VirtualMachineSizeTypesStandardB8ms VirtualMachineSizeTypes = "Standard_B8ms"
-	// VirtualMachineSizeTypesStandardD1 ...
-	VirtualMachineSizeTypesStandardD1 VirtualMachineSizeTypes = "Standard_D1"
-	// VirtualMachineSizeTypesStandardD11 ...
-	VirtualMachineSizeTypesStandardD11 VirtualMachineSizeTypes = "Standard_D11"
-	// VirtualMachineSizeTypesStandardD11V2 ...
-	VirtualMachineSizeTypesStandardD11V2 VirtualMachineSizeTypes = "Standard_D11_v2"
-	// VirtualMachineSizeTypesStandardD12 ...
-	VirtualMachineSizeTypesStandardD12 VirtualMachineSizeTypes = "Standard_D12"
-	// VirtualMachineSizeTypesStandardD12V2 ...
-	VirtualMachineSizeTypesStandardD12V2 VirtualMachineSizeTypes = "Standard_D12_v2"
-	// VirtualMachineSizeTypesStandardD13 ...
-	VirtualMachineSizeTypesStandardD13 VirtualMachineSizeTypes = "Standard_D13"
-	// VirtualMachineSizeTypesStandardD13V2 ...
-	VirtualMachineSizeTypesStandardD13V2 VirtualMachineSizeTypes = "Standard_D13_v2"
-	// VirtualMachineSizeTypesStandardD14 ...
-	VirtualMachineSizeTypesStandardD14 VirtualMachineSizeTypes = "Standard_D14"
-	// VirtualMachineSizeTypesStandardD14V2 ...
-	VirtualMachineSizeTypesStandardD14V2 VirtualMachineSizeTypes = "Standard_D14_v2"
-	// VirtualMachineSizeTypesStandardD15V2 ...
-	VirtualMachineSizeTypesStandardD15V2 VirtualMachineSizeTypes = "Standard_D15_v2"
-	// VirtualMachineSizeTypesStandardD16sV3 ...
-	VirtualMachineSizeTypesStandardD16sV3 VirtualMachineSizeTypes = "Standard_D16s_v3"
-	// VirtualMachineSizeTypesStandardD16V3 ...
-	VirtualMachineSizeTypesStandardD16V3 VirtualMachineSizeTypes = "Standard_D16_v3"
-	// VirtualMachineSizeTypesStandardD1V2 ...
-	VirtualMachineSizeTypesStandardD1V2 VirtualMachineSizeTypes = "Standard_D1_v2"
-	// VirtualMachineSizeTypesStandardD2 ...
-	VirtualMachineSizeTypesStandardD2 VirtualMachineSizeTypes = "Standard_D2"
-	// VirtualMachineSizeTypesStandardD2sV3 ...
-	VirtualMachineSizeTypesStandardD2sV3 VirtualMachineSizeTypes = "Standard_D2s_v3"
-	// VirtualMachineSizeTypesStandardD2V2 ...
-	VirtualMachineSizeTypesStandardD2V2 VirtualMachineSizeTypes = "Standard_D2_v2"
-	// VirtualMachineSizeTypesStandardD2V3 ...
-	VirtualMachineSizeTypesStandardD2V3 VirtualMachineSizeTypes = "Standard_D2_v3"
-	// VirtualMachineSizeTypesStandardD3 ...
-	VirtualMachineSizeTypesStandardD3 VirtualMachineSizeTypes = "Standard_D3"
-	// VirtualMachineSizeTypesStandardD32sV3 ...
-	VirtualMachineSizeTypesStandardD32sV3 VirtualMachineSizeTypes = "Standard_D32s_v3"
-	// VirtualMachineSizeTypesStandardD32V3 ...
-	VirtualMachineSizeTypesStandardD32V3 VirtualMachineSizeTypes = "Standard_D32_v3"
-	// VirtualMachineSizeTypesStandardD3V2 ...
-	VirtualMachineSizeTypesStandardD3V2 VirtualMachineSizeTypes = "Standard_D3_v2"
-	// VirtualMachineSizeTypesStandardD4 ...
-	VirtualMachineSizeTypesStandardD4 VirtualMachineSizeTypes = "Standard_D4"
-	// VirtualMachineSizeTypesStandardD4sV3 ...
-	VirtualMachineSizeTypesStandardD4sV3 VirtualMachineSizeTypes = "Standard_D4s_v3"
-	// VirtualMachineSizeTypesStandardD4V2 ...
-	VirtualMachineSizeTypesStandardD4V2 VirtualMachineSizeTypes = "Standard_D4_v2"
-	// VirtualMachineSizeTypesStandardD4V3 ...
-	VirtualMachineSizeTypesStandardD4V3 VirtualMachineSizeTypes = "Standard_D4_v3"
-	// VirtualMachineSizeTypesStandardD5V2 ...
-	VirtualMachineSizeTypesStandardD5V2 VirtualMachineSizeTypes = "Standard_D5_v2"
-	// VirtualMachineSizeTypesStandardD64sV3 ...
-	VirtualMachineSizeTypesStandardD64sV3 VirtualMachineSizeTypes = "Standard_D64s_v3"
-	// VirtualMachineSizeTypesStandardD64V3 ...
-	VirtualMachineSizeTypesStandardD64V3 VirtualMachineSizeTypes = "Standard_D64_v3"
-	// VirtualMachineSizeTypesStandardD8sV3 ...
-	VirtualMachineSizeTypesStandardD8sV3 VirtualMachineSizeTypes = "Standard_D8s_v3"
-	// VirtualMachineSizeTypesStandardD8V3 ...
-	VirtualMachineSizeTypesStandardD8V3 VirtualMachineSizeTypes = "Standard_D8_v3"
-	// VirtualMachineSizeTypesStandardDS1 ...
-	VirtualMachineSizeTypesStandardDS1 VirtualMachineSizeTypes = "Standard_DS1"
-	// VirtualMachineSizeTypesStandardDS11 ...
-	VirtualMachineSizeTypesStandardDS11 VirtualMachineSizeTypes = "Standard_DS11"
-	// VirtualMachineSizeTypesStandardDS11V2 ...
-	VirtualMachineSizeTypesStandardDS11V2 VirtualMachineSizeTypes = "Standard_DS11_v2"
-	// VirtualMachineSizeTypesStandardDS12 ...
-	VirtualMachineSizeTypesStandardDS12 VirtualMachineSizeTypes = "Standard_DS12"
-	// VirtualMachineSizeTypesStandardDS12V2 ...
-	VirtualMachineSizeTypesStandardDS12V2 VirtualMachineSizeTypes = "Standard_DS12_v2"
-	// VirtualMachineSizeTypesStandardDS13 ...
-	VirtualMachineSizeTypesStandardDS13 VirtualMachineSizeTypes = "Standard_DS13"
-	// VirtualMachineSizeTypesStandardDS132V2 ...
-	VirtualMachineSizeTypesStandardDS132V2 VirtualMachineSizeTypes = "Standard_DS13-2_v2"
-	// VirtualMachineSizeTypesStandardDS134V2 ...
-	VirtualMachineSizeTypesStandardDS134V2 VirtualMachineSizeTypes = "Standard_DS13-4_v2"
-	// VirtualMachineSizeTypesStandardDS13V2 ...
-	VirtualMachineSizeTypesStandardDS13V2 VirtualMachineSizeTypes = "Standard_DS13_v2"
-	// VirtualMachineSizeTypesStandardDS14 ...
-	VirtualMachineSizeTypesStandardDS14 VirtualMachineSizeTypes = "Standard_DS14"
-	// VirtualMachineSizeTypesStandardDS144V2 ...
-	VirtualMachineSizeTypesStandardDS144V2 VirtualMachineSizeTypes = "Standard_DS14-4_v2"
-	// VirtualMachineSizeTypesStandardDS148V2 ...
-	VirtualMachineSizeTypesStandardDS148V2 VirtualMachineSizeTypes = "Standard_DS14-8_v2"
-	// VirtualMachineSizeTypesStandardDS14V2 ...
-	VirtualMachineSizeTypesStandardDS14V2 VirtualMachineSizeTypes = "Standard_DS14_v2"
-	// VirtualMachineSizeTypesStandardDS15V2 ...
-	VirtualMachineSizeTypesStandardDS15V2 VirtualMachineSizeTypes = "Standard_DS15_v2"
-	// VirtualMachineSizeTypesStandardDS1V2 ...
-	VirtualMachineSizeTypesStandardDS1V2 VirtualMachineSizeTypes = "Standard_DS1_v2"
-	// VirtualMachineSizeTypesStandardDS2 ...
-	VirtualMachineSizeTypesStandardDS2 VirtualMachineSizeTypes = "Standard_DS2"
-	// VirtualMachineSizeTypesStandardDS2V2 ...
-	VirtualMachineSizeTypesStandardDS2V2 VirtualMachineSizeTypes = "Standard_DS2_v2"
-	// VirtualMachineSizeTypesStandardDS3 ...
-	VirtualMachineSizeTypesStandardDS3 VirtualMachineSizeTypes = "Standard_DS3"
-	// VirtualMachineSizeTypesStandardDS3V2 ...
-	VirtualMachineSizeTypesStandardDS3V2 VirtualMachineSizeTypes = "Standard_DS3_v2"
-	// VirtualMachineSizeTypesStandardDS4 ...
-	VirtualMachineSizeTypesStandardDS4 VirtualMachineSizeTypes = "Standard_DS4"
-	// VirtualMachineSizeTypesStandardDS4V2 ...
-	VirtualMachineSizeTypesStandardDS4V2 VirtualMachineSizeTypes = "Standard_DS4_v2"
-	// VirtualMachineSizeTypesStandardDS5V2 ...
-	VirtualMachineSizeTypesStandardDS5V2 VirtualMachineSizeTypes = "Standard_DS5_v2"
-	// VirtualMachineSizeTypesStandardE16sV3 ...
-	VirtualMachineSizeTypesStandardE16sV3 VirtualMachineSizeTypes = "Standard_E16s_v3"
-	// VirtualMachineSizeTypesStandardE16V3 ...
-	VirtualMachineSizeTypesStandardE16V3 VirtualMachineSizeTypes = "Standard_E16_v3"
-	// VirtualMachineSizeTypesStandardE2sV3 ...
-	VirtualMachineSizeTypesStandardE2sV3 VirtualMachineSizeTypes = "Standard_E2s_v3"
-	// VirtualMachineSizeTypesStandardE2V3 ...
-	VirtualMachineSizeTypesStandardE2V3 VirtualMachineSizeTypes = "Standard_E2_v3"
-	// VirtualMachineSizeTypesStandardE3216V3 ...
-	VirtualMachineSizeTypesStandardE3216V3 VirtualMachineSizeTypes = "Standard_E32-16_v3"
-	// VirtualMachineSizeTypesStandardE328sV3 ...
-	VirtualMachineSizeTypesStandardE328sV3 VirtualMachineSizeTypes = "Standard_E32-8s_v3"
-	// VirtualMachineSizeTypesStandardE32sV3 ...
-	VirtualMachineSizeTypesStandardE32sV3 VirtualMachineSizeTypes = "Standard_E32s_v3"
-	// VirtualMachineSizeTypesStandardE32V3 ...
-	VirtualMachineSizeTypesStandardE32V3 VirtualMachineSizeTypes = "Standard_E32_v3"
-	// VirtualMachineSizeTypesStandardE4sV3 ...
-	VirtualMachineSizeTypesStandardE4sV3 VirtualMachineSizeTypes = "Standard_E4s_v3"
-	// VirtualMachineSizeTypesStandardE4V3 ...
-	VirtualMachineSizeTypesStandardE4V3 VirtualMachineSizeTypes = "Standard_E4_v3"
-	// VirtualMachineSizeTypesStandardE6416sV3 ...
-	VirtualMachineSizeTypesStandardE6416sV3 VirtualMachineSizeTypes = "Standard_E64-16s_v3"
-	// VirtualMachineSizeTypesStandardE6432sV3 ...
-	VirtualMachineSizeTypesStandardE6432sV3 VirtualMachineSizeTypes = "Standard_E64-32s_v3"
-	// VirtualMachineSizeTypesStandardE64sV3 ...
-	VirtualMachineSizeTypesStandardE64sV3 VirtualMachineSizeTypes = "Standard_E64s_v3"
-	// VirtualMachineSizeTypesStandardE64V3 ...
-	VirtualMachineSizeTypesStandardE64V3 VirtualMachineSizeTypes = "Standard_E64_v3"
-	// VirtualMachineSizeTypesStandardE8sV3 ...
-	VirtualMachineSizeTypesStandardE8sV3 VirtualMachineSizeTypes = "Standard_E8s_v3"
-	// VirtualMachineSizeTypesStandardE8V3 ...
-	VirtualMachineSizeTypesStandardE8V3 VirtualMachineSizeTypes = "Standard_E8_v3"
-	// VirtualMachineSizeTypesStandardF1 ...
-	VirtualMachineSizeTypesStandardF1 VirtualMachineSizeTypes = "Standard_F1"
-	// VirtualMachineSizeTypesStandardF16 ...
-	VirtualMachineSizeTypesStandardF16 VirtualMachineSizeTypes = "Standard_F16"
-	// VirtualMachineSizeTypesStandardF16s ...
-	VirtualMachineSizeTypesStandardF16s VirtualMachineSizeTypes = "Standard_F16s"
-	// VirtualMachineSizeTypesStandardF16sV2 ...
-	VirtualMachineSizeTypesStandardF16sV2 VirtualMachineSizeTypes = "Standard_F16s_v2"
-	// VirtualMachineSizeTypesStandardF1s ...
-	VirtualMachineSizeTypesStandardF1s VirtualMachineSizeTypes = "Standard_F1s"
-	// VirtualMachineSizeTypesStandardF2 ...
-	VirtualMachineSizeTypesStandardF2 VirtualMachineSizeTypes = "Standard_F2"
-	// VirtualMachineSizeTypesStandardF2s ...
-	VirtualMachineSizeTypesStandardF2s VirtualMachineSizeTypes = "Standard_F2s"
-	// VirtualMachineSizeTypesStandardF2sV2 ...
-	VirtualMachineSizeTypesStandardF2sV2 VirtualMachineSizeTypes = "Standard_F2s_v2"
-	// VirtualMachineSizeTypesStandardF32sV2 ...
-	VirtualMachineSizeTypesStandardF32sV2 VirtualMachineSizeTypes = "Standard_F32s_v2"
-	// VirtualMachineSizeTypesStandardF4 ...
-	VirtualMachineSizeTypesStandardF4 VirtualMachineSizeTypes = "Standard_F4"
-	// VirtualMachineSizeTypesStandardF4s ...
-	VirtualMachineSizeTypesStandardF4s VirtualMachineSizeTypes = "Standard_F4s"
-	// VirtualMachineSizeTypesStandardF4sV2 ...
-	VirtualMachineSizeTypesStandardF4sV2 VirtualMachineSizeTypes = "Standard_F4s_v2"
-	// VirtualMachineSizeTypesStandardF64sV2 ...
-	VirtualMachineSizeTypesStandardF64sV2 VirtualMachineSizeTypes = "Standard_F64s_v2"
-	// VirtualMachineSizeTypesStandardF72sV2 ...
-	VirtualMachineSizeTypesStandardF72sV2 VirtualMachineSizeTypes = "Standard_F72s_v2"
-	// VirtualMachineSizeTypesStandardF8 ...
-	VirtualMachineSizeTypesStandardF8 VirtualMachineSizeTypes = "Standard_F8"
-	// VirtualMachineSizeTypesStandardF8s ...
-	VirtualMachineSizeTypesStandardF8s VirtualMachineSizeTypes = "Standard_F8s"
-	// VirtualMachineSizeTypesStandardF8sV2 ...
-	VirtualMachineSizeTypesStandardF8sV2 VirtualMachineSizeTypes = "Standard_F8s_v2"
-	// VirtualMachineSizeTypesStandardG1 ...
-	VirtualMachineSizeTypesStandardG1 VirtualMachineSizeTypes = "Standard_G1"
-	// VirtualMachineSizeTypesStandardG2 ...
-	VirtualMachineSizeTypesStandardG2 VirtualMachineSizeTypes = "Standard_G2"
-	// VirtualMachineSizeTypesStandardG3 ...
-	VirtualMachineSizeTypesStandardG3 VirtualMachineSizeTypes = "Standard_G3"
-	// VirtualMachineSizeTypesStandardG4 ...
-	VirtualMachineSizeTypesStandardG4 VirtualMachineSizeTypes = "Standard_G4"
-	// VirtualMachineSizeTypesStandardG5 ...
-	VirtualMachineSizeTypesStandardG5 VirtualMachineSizeTypes = "Standard_G5"
-	// VirtualMachineSizeTypesStandardGS1 ...
-	VirtualMachineSizeTypesStandardGS1 VirtualMachineSizeTypes = "Standard_GS1"
-	// VirtualMachineSizeTypesStandardGS2 ...
-	VirtualMachineSizeTypesStandardGS2 VirtualMachineSizeTypes = "Standard_GS2"
-	// VirtualMachineSizeTypesStandardGS3 ...
-	VirtualMachineSizeTypesStandardGS3 VirtualMachineSizeTypes = "Standard_GS3"
-	// VirtualMachineSizeTypesStandardGS4 ...
-	VirtualMachineSizeTypesStandardGS4 VirtualMachineSizeTypes = "Standard_GS4"
-	// VirtualMachineSizeTypesStandardGS44 ...
-	VirtualMachineSizeTypesStandardGS44 VirtualMachineSizeTypes = "Standard_GS4-4"
-	// VirtualMachineSizeTypesStandardGS48 ...
-	VirtualMachineSizeTypesStandardGS48 VirtualMachineSizeTypes = "Standard_GS4-8"
-	// VirtualMachineSizeTypesStandardGS5 ...
-	VirtualMachineSizeTypesStandardGS5 VirtualMachineSizeTypes = "Standard_GS5"
-	// VirtualMachineSizeTypesStandardGS516 ...
-	VirtualMachineSizeTypesStandardGS516 VirtualMachineSizeTypes = "Standard_GS5-16"
-	// VirtualMachineSizeTypesStandardGS58 ...
-	VirtualMachineSizeTypesStandardGS58 VirtualMachineSizeTypes = "Standard_GS5-8"
-	// VirtualMachineSizeTypesStandardH16 ...
-	VirtualMachineSizeTypesStandardH16 VirtualMachineSizeTypes = "Standard_H16"
-	// VirtualMachineSizeTypesStandardH16m ...
-	VirtualMachineSizeTypesStandardH16m VirtualMachineSizeTypes = "Standard_H16m"
-	// VirtualMachineSizeTypesStandardH16mr ...
-	VirtualMachineSizeTypesStandardH16mr VirtualMachineSizeTypes = "Standard_H16mr"
-	// VirtualMachineSizeTypesStandardH16r ...
-	VirtualMachineSizeTypesStandardH16r VirtualMachineSizeTypes = "Standard_H16r"
-	// VirtualMachineSizeTypesStandardH8 ...
-	VirtualMachineSizeTypesStandardH8 VirtualMachineSizeTypes = "Standard_H8"
-	// VirtualMachineSizeTypesStandardH8m ...
-	VirtualMachineSizeTypesStandardH8m VirtualMachineSizeTypes = "Standard_H8m"
-	// VirtualMachineSizeTypesStandardL16s ...
-	VirtualMachineSizeTypesStandardL16s VirtualMachineSizeTypes = "Standard_L16s"
-	// VirtualMachineSizeTypesStandardL32s ...
-	VirtualMachineSizeTypesStandardL32s VirtualMachineSizeTypes = "Standard_L32s"
-	// VirtualMachineSizeTypesStandardL4s ...
-	VirtualMachineSizeTypesStandardL4s VirtualMachineSizeTypes = "Standard_L4s"
-	// VirtualMachineSizeTypesStandardL8s ...
-	VirtualMachineSizeTypesStandardL8s VirtualMachineSizeTypes = "Standard_L8s"
-	// VirtualMachineSizeTypesStandardM12832ms ...
-	VirtualMachineSizeTypesStandardM12832ms VirtualMachineSizeTypes = "Standard_M128-32ms"
-	// VirtualMachineSizeTypesStandardM12864ms ...
-	VirtualMachineSizeTypesStandardM12864ms VirtualMachineSizeTypes = "Standard_M128-64ms"
-	// VirtualMachineSizeTypesStandardM128ms ...
-	VirtualMachineSizeTypesStandardM128ms VirtualMachineSizeTypes = "Standard_M128ms"
-	// VirtualMachineSizeTypesStandardM128s ...
-	VirtualMachineSizeTypesStandardM128s VirtualMachineSizeTypes = "Standard_M128s"
-	// VirtualMachineSizeTypesStandardM6416ms ...
-	VirtualMachineSizeTypesStandardM6416ms VirtualMachineSizeTypes = "Standard_M64-16ms"
-	// VirtualMachineSizeTypesStandardM6432ms ...
-	VirtualMachineSizeTypesStandardM6432ms VirtualMachineSizeTypes = "Standard_M64-32ms"
-	// VirtualMachineSizeTypesStandardM64ms ...
-	VirtualMachineSizeTypesStandardM64ms VirtualMachineSizeTypes = "Standard_M64ms"
-	// VirtualMachineSizeTypesStandardM64s ...
-	VirtualMachineSizeTypesStandardM64s VirtualMachineSizeTypes = "Standard_M64s"
-	// VirtualMachineSizeTypesStandardNC12 ...
-	VirtualMachineSizeTypesStandardNC12 VirtualMachineSizeTypes = "Standard_NC12"
-	// VirtualMachineSizeTypesStandardNC12sV2 ...
-	VirtualMachineSizeTypesStandardNC12sV2 VirtualMachineSizeTypes = "Standard_NC12s_v2"
-	// VirtualMachineSizeTypesStandardNC12sV3 ...
-	VirtualMachineSizeTypesStandardNC12sV3 VirtualMachineSizeTypes = "Standard_NC12s_v3"
-	// VirtualMachineSizeTypesStandardNC24 ...
-	VirtualMachineSizeTypesStandardNC24 VirtualMachineSizeTypes = "Standard_NC24"
-	// VirtualMachineSizeTypesStandardNC24r ...
-	VirtualMachineSizeTypesStandardNC24r VirtualMachineSizeTypes = "Standard_NC24r"
-	// VirtualMachineSizeTypesStandardNC24rsV2 ...
-	VirtualMachineSizeTypesStandardNC24rsV2 VirtualMachineSizeTypes = "Standard_NC24rs_v2"
-	// VirtualMachineSizeTypesStandardNC24rsV3 ...
-	VirtualMachineSizeTypesStandardNC24rsV3 VirtualMachineSizeTypes = "Standard_NC24rs_v3"
-	// VirtualMachineSizeTypesStandardNC24sV2 ...
-	VirtualMachineSizeTypesStandardNC24sV2 VirtualMachineSizeTypes = "Standard_NC24s_v2"
-	// VirtualMachineSizeTypesStandardNC24sV3 ...
-	VirtualMachineSizeTypesStandardNC24sV3 VirtualMachineSizeTypes = "Standard_NC24s_v3"
-	// VirtualMachineSizeTypesStandardNC6 ...
-	VirtualMachineSizeTypesStandardNC6 VirtualMachineSizeTypes = "Standard_NC6"
-	// VirtualMachineSizeTypesStandardNC6sV2 ...
-	VirtualMachineSizeTypesStandardNC6sV2 VirtualMachineSizeTypes = "Standard_NC6s_v2"
-	// VirtualMachineSizeTypesStandardNC6sV3 ...
-	VirtualMachineSizeTypesStandardNC6sV3 VirtualMachineSizeTypes = "Standard_NC6s_v3"
-	// VirtualMachineSizeTypesStandardND12s ...
-	VirtualMachineSizeTypesStandardND12s VirtualMachineSizeTypes = "Standard_ND12s"
-	// VirtualMachineSizeTypesStandardND24rs ...
-	VirtualMachineSizeTypesStandardND24rs VirtualMachineSizeTypes = "Standard_ND24rs"
-	// VirtualMachineSizeTypesStandardND24s ...
-	VirtualMachineSizeTypesStandardND24s VirtualMachineSizeTypes = "Standard_ND24s"
-	// VirtualMachineSizeTypesStandardND6s ...
-	VirtualMachineSizeTypesStandardND6s VirtualMachineSizeTypes = "Standard_ND6s"
-	// VirtualMachineSizeTypesStandardNV12 ...
-	VirtualMachineSizeTypesStandardNV12 VirtualMachineSizeTypes = "Standard_NV12"
-	// VirtualMachineSizeTypesStandardNV24 ...
-	VirtualMachineSizeTypesStandardNV24 VirtualMachineSizeTypes = "Standard_NV24"
-	// VirtualMachineSizeTypesStandardNV6 ...
-	VirtualMachineSizeTypesStandardNV6 VirtualMachineSizeTypes = "Standard_NV6"
+	// BasicA0 ...
+	BasicA0 VirtualMachineSizeTypes = "Basic_A0"
+	// BasicA1 ...
+	BasicA1 VirtualMachineSizeTypes = "Basic_A1"
+	// BasicA2 ...
+	BasicA2 VirtualMachineSizeTypes = "Basic_A2"
+	// BasicA3 ...
+	BasicA3 VirtualMachineSizeTypes = "Basic_A3"
+	// BasicA4 ...
+	BasicA4 VirtualMachineSizeTypes = "Basic_A4"
+	// StandardA0 ...
+	StandardA0 VirtualMachineSizeTypes = "Standard_A0"
+	// StandardA1 ...
+	StandardA1 VirtualMachineSizeTypes = "Standard_A1"
+	// StandardA10 ...
+	StandardA10 VirtualMachineSizeTypes = "Standard_A10"
+	// StandardA11 ...
+	StandardA11 VirtualMachineSizeTypes = "Standard_A11"
+	// StandardA1V2 ...
+	StandardA1V2 VirtualMachineSizeTypes = "Standard_A1_v2"
+	// StandardA2 ...
+	StandardA2 VirtualMachineSizeTypes = "Standard_A2"
+	// StandardA2mV2 ...
+	StandardA2mV2 VirtualMachineSizeTypes = "Standard_A2m_v2"
+	// StandardA2V2 ...
+	StandardA2V2 VirtualMachineSizeTypes = "Standard_A2_v2"
+	// StandardA3 ...
+	StandardA3 VirtualMachineSizeTypes = "Standard_A3"
+	// StandardA4 ...
+	StandardA4 VirtualMachineSizeTypes = "Standard_A4"
+	// StandardA4mV2 ...
+	StandardA4mV2 VirtualMachineSizeTypes = "Standard_A4m_v2"
+	// StandardA4V2 ...
+	StandardA4V2 VirtualMachineSizeTypes = "Standard_A4_v2"
+	// StandardA5 ...
+	StandardA5 VirtualMachineSizeTypes = "Standard_A5"
+	// StandardA6 ...
+	StandardA6 VirtualMachineSizeTypes = "Standard_A6"
+	// StandardA7 ...
+	StandardA7 VirtualMachineSizeTypes = "Standard_A7"
+	// StandardA8 ...
+	StandardA8 VirtualMachineSizeTypes = "Standard_A8"
+	// StandardA8mV2 ...
+	StandardA8mV2 VirtualMachineSizeTypes = "Standard_A8m_v2"
+	// StandardA8V2 ...
+	StandardA8V2 VirtualMachineSizeTypes = "Standard_A8_v2"
+	// StandardA9 ...
+	StandardA9 VirtualMachineSizeTypes = "Standard_A9"
+	// StandardB1ms ...
+	StandardB1ms VirtualMachineSizeTypes = "Standard_B1ms"
+	// StandardB1s ...
+	StandardB1s VirtualMachineSizeTypes = "Standard_B1s"
+	// StandardB2ms ...
+	StandardB2ms VirtualMachineSizeTypes = "Standard_B2ms"
+	// StandardB2s ...
+	StandardB2s VirtualMachineSizeTypes = "Standard_B2s"
+	// StandardB4ms ...
+	StandardB4ms VirtualMachineSizeTypes = "Standard_B4ms"
+	// StandardB8ms ...
+	StandardB8ms VirtualMachineSizeTypes = "Standard_B8ms"
+	// StandardD1 ...
+	StandardD1 VirtualMachineSizeTypes = "Standard_D1"
+	// StandardD11 ...
+	StandardD11 VirtualMachineSizeTypes = "Standard_D11"
+	// StandardD11V2 ...
+	StandardD11V2 VirtualMachineSizeTypes = "Standard_D11_v2"
+	// StandardD12 ...
+	StandardD12 VirtualMachineSizeTypes = "Standard_D12"
+	// StandardD12V2 ...
+	StandardD12V2 VirtualMachineSizeTypes = "Standard_D12_v2"
+	// StandardD13 ...
+	StandardD13 VirtualMachineSizeTypes = "Standard_D13"
+	// StandardD13V2 ...
+	StandardD13V2 VirtualMachineSizeTypes = "Standard_D13_v2"
+	// StandardD14 ...
+	StandardD14 VirtualMachineSizeTypes = "Standard_D14"
+	// StandardD14V2 ...
+	StandardD14V2 VirtualMachineSizeTypes = "Standard_D14_v2"
+	// StandardD15V2 ...
+	StandardD15V2 VirtualMachineSizeTypes = "Standard_D15_v2"
+	// StandardD16sV3 ...
+	StandardD16sV3 VirtualMachineSizeTypes = "Standard_D16s_v3"
+	// StandardD16V3 ...
+	StandardD16V3 VirtualMachineSizeTypes = "Standard_D16_v3"
+	// StandardD1V2 ...
+	StandardD1V2 VirtualMachineSizeTypes = "Standard_D1_v2"
+	// StandardD2 ...
+	StandardD2 VirtualMachineSizeTypes = "Standard_D2"
+	// StandardD2sV3 ...
+	StandardD2sV3 VirtualMachineSizeTypes = "Standard_D2s_v3"
+	// StandardD2V2 ...
+	StandardD2V2 VirtualMachineSizeTypes = "Standard_D2_v2"
+	// StandardD2V3 ...
+	StandardD2V3 VirtualMachineSizeTypes = "Standard_D2_v3"
+	// StandardD3 ...
+	StandardD3 VirtualMachineSizeTypes = "Standard_D3"
+	// StandardD32sV3 ...
+	StandardD32sV3 VirtualMachineSizeTypes = "Standard_D32s_v3"
+	// StandardD32V3 ...
+	StandardD32V3 VirtualMachineSizeTypes = "Standard_D32_v3"
+	// StandardD3V2 ...
+	StandardD3V2 VirtualMachineSizeTypes = "Standard_D3_v2"
+	// StandardD4 ...
+	StandardD4 VirtualMachineSizeTypes = "Standard_D4"
+	// StandardD4sV3 ...
+	StandardD4sV3 VirtualMachineSizeTypes = "Standard_D4s_v3"
+	// StandardD4V2 ...
+	StandardD4V2 VirtualMachineSizeTypes = "Standard_D4_v2"
+	// StandardD4V3 ...
+	StandardD4V3 VirtualMachineSizeTypes = "Standard_D4_v3"
+	// StandardD5V2 ...
+	StandardD5V2 VirtualMachineSizeTypes = "Standard_D5_v2"
+	// StandardD64sV3 ...
+	StandardD64sV3 VirtualMachineSizeTypes = "Standard_D64s_v3"
+	// StandardD64V3 ...
+	StandardD64V3 VirtualMachineSizeTypes = "Standard_D64_v3"
+	// StandardD8sV3 ...
+	StandardD8sV3 VirtualMachineSizeTypes = "Standard_D8s_v3"
+	// StandardD8V3 ...
+	StandardD8V3 VirtualMachineSizeTypes = "Standard_D8_v3"
+	// StandardDS1 ...
+	StandardDS1 VirtualMachineSizeTypes = "Standard_DS1"
+	// StandardDS11 ...
+	StandardDS11 VirtualMachineSizeTypes = "Standard_DS11"
+	// StandardDS11V2 ...
+	StandardDS11V2 VirtualMachineSizeTypes = "Standard_DS11_v2"
+	// StandardDS12 ...
+	StandardDS12 VirtualMachineSizeTypes = "Standard_DS12"
+	// StandardDS12V2 ...
+	StandardDS12V2 VirtualMachineSizeTypes = "Standard_DS12_v2"
+	// StandardDS13 ...
+	StandardDS13 VirtualMachineSizeTypes = "Standard_DS13"
+	// StandardDS132V2 ...
+	StandardDS132V2 VirtualMachineSizeTypes = "Standard_DS13-2_v2"
+	// StandardDS134V2 ...
+	StandardDS134V2 VirtualMachineSizeTypes = "Standard_DS13-4_v2"
+	// StandardDS13V2 ...
+	StandardDS13V2 VirtualMachineSizeTypes = "Standard_DS13_v2"
+	// StandardDS14 ...
+	StandardDS14 VirtualMachineSizeTypes = "Standard_DS14"
+	// StandardDS144V2 ...
+	StandardDS144V2 VirtualMachineSizeTypes = "Standard_DS14-4_v2"
+	// StandardDS148V2 ...
+	StandardDS148V2 VirtualMachineSizeTypes = "Standard_DS14-8_v2"
+	// StandardDS14V2 ...
+	StandardDS14V2 VirtualMachineSizeTypes = "Standard_DS14_v2"
+	// StandardDS15V2 ...
+	StandardDS15V2 VirtualMachineSizeTypes = "Standard_DS15_v2"
+	// StandardDS1V2 ...
+	StandardDS1V2 VirtualMachineSizeTypes = "Standard_DS1_v2"
+	// StandardDS2 ...
+	StandardDS2 VirtualMachineSizeTypes = "Standard_DS2"
+	// StandardDS2V2 ...
+	StandardDS2V2 VirtualMachineSizeTypes = "Standard_DS2_v2"
+	// StandardDS3 ...
+	StandardDS3 VirtualMachineSizeTypes = "Standard_DS3"
+	// StandardDS3V2 ...
+	StandardDS3V2 VirtualMachineSizeTypes = "Standard_DS3_v2"
+	// StandardDS4 ...
+	StandardDS4 VirtualMachineSizeTypes = "Standard_DS4"
+	// StandardDS4V2 ...
+	StandardDS4V2 VirtualMachineSizeTypes = "Standard_DS4_v2"
+	// StandardDS5V2 ...
+	StandardDS5V2 VirtualMachineSizeTypes = "Standard_DS5_v2"
+	// StandardE16sV3 ...
+	StandardE16sV3 VirtualMachineSizeTypes = "Standard_E16s_v3"
+	// StandardE16V3 ...
+	StandardE16V3 VirtualMachineSizeTypes = "Standard_E16_v3"
+	// StandardE2sV3 ...
+	StandardE2sV3 VirtualMachineSizeTypes = "Standard_E2s_v3"
+	// StandardE2V3 ...
+	StandardE2V3 VirtualMachineSizeTypes = "Standard_E2_v3"
+	// StandardE3216V3 ...
+	StandardE3216V3 VirtualMachineSizeTypes = "Standard_E32-16_v3"
+	// StandardE328sV3 ...
+	StandardE328sV3 VirtualMachineSizeTypes = "Standard_E32-8s_v3"
+	// StandardE32sV3 ...
+	StandardE32sV3 VirtualMachineSizeTypes = "Standard_E32s_v3"
+	// StandardE32V3 ...
+	StandardE32V3 VirtualMachineSizeTypes = "Standard_E32_v3"
+	// StandardE4sV3 ...
+	StandardE4sV3 VirtualMachineSizeTypes = "Standard_E4s_v3"
+	// StandardE4V3 ...
+	StandardE4V3 VirtualMachineSizeTypes = "Standard_E4_v3"
+	// StandardE6416sV3 ...
+	StandardE6416sV3 VirtualMachineSizeTypes = "Standard_E64-16s_v3"
+	// StandardE6432sV3 ...
+	StandardE6432sV3 VirtualMachineSizeTypes = "Standard_E64-32s_v3"
+	// StandardE64sV3 ...
+	StandardE64sV3 VirtualMachineSizeTypes = "Standard_E64s_v3"
+	// StandardE64V3 ...
+	StandardE64V3 VirtualMachineSizeTypes = "Standard_E64_v3"
+	// StandardE8sV3 ...
+	StandardE8sV3 VirtualMachineSizeTypes = "Standard_E8s_v3"
+	// StandardE8V3 ...
+	StandardE8V3 VirtualMachineSizeTypes = "Standard_E8_v3"
+	// StandardF1 ...
+	StandardF1 VirtualMachineSizeTypes = "Standard_F1"
+	// StandardF16 ...
+	StandardF16 VirtualMachineSizeTypes = "Standard_F16"
+	// StandardF16s ...
+	StandardF16s VirtualMachineSizeTypes = "Standard_F16s"
+	// StandardF16sV2 ...
+	StandardF16sV2 VirtualMachineSizeTypes = "Standard_F16s_v2"
+	// StandardF1s ...
+	StandardF1s VirtualMachineSizeTypes = "Standard_F1s"
+	// StandardF2 ...
+	StandardF2 VirtualMachineSizeTypes = "Standard_F2"
+	// StandardF2s ...
+	StandardF2s VirtualMachineSizeTypes = "Standard_F2s"
+	// StandardF2sV2 ...
+	StandardF2sV2 VirtualMachineSizeTypes = "Standard_F2s_v2"
+	// StandardF32sV2 ...
+	StandardF32sV2 VirtualMachineSizeTypes = "Standard_F32s_v2"
+	// StandardF4 ...
+	StandardF4 VirtualMachineSizeTypes = "Standard_F4"
+	// StandardF4s ...
+	StandardF4s VirtualMachineSizeTypes = "Standard_F4s"
+	// StandardF4sV2 ...
+	StandardF4sV2 VirtualMachineSizeTypes = "Standard_F4s_v2"
+	// StandardF64sV2 ...
+	StandardF64sV2 VirtualMachineSizeTypes = "Standard_F64s_v2"
+	// StandardF72sV2 ...
+	StandardF72sV2 VirtualMachineSizeTypes = "Standard_F72s_v2"
+	// StandardF8 ...
+	StandardF8 VirtualMachineSizeTypes = "Standard_F8"
+	// StandardF8s ...
+	StandardF8s VirtualMachineSizeTypes = "Standard_F8s"
+	// StandardF8sV2 ...
+	StandardF8sV2 VirtualMachineSizeTypes = "Standard_F8s_v2"
+	// StandardG1 ...
+	StandardG1 VirtualMachineSizeTypes = "Standard_G1"
+	// StandardG2 ...
+	StandardG2 VirtualMachineSizeTypes = "Standard_G2"
+	// StandardG3 ...
+	StandardG3 VirtualMachineSizeTypes = "Standard_G3"
+	// StandardG4 ...
+	StandardG4 VirtualMachineSizeTypes = "Standard_G4"
+	// StandardG5 ...
+	StandardG5 VirtualMachineSizeTypes = "Standard_G5"
+	// StandardGS1 ...
+	StandardGS1 VirtualMachineSizeTypes = "Standard_GS1"
+	// StandardGS2 ...
+	StandardGS2 VirtualMachineSizeTypes = "Standard_GS2"
+	// StandardGS3 ...
+	StandardGS3 VirtualMachineSizeTypes = "Standard_GS3"
+	// StandardGS4 ...
+	StandardGS4 VirtualMachineSizeTypes = "Standard_GS4"
+	// StandardGS44 ...
+	StandardGS44 VirtualMachineSizeTypes = "Standard_GS4-4"
+	// StandardGS48 ...
+	StandardGS48 VirtualMachineSizeTypes = "Standard_GS4-8"
+	// StandardGS5 ...
+	StandardGS5 VirtualMachineSizeTypes = "Standard_GS5"
+	// StandardGS516 ...
+	StandardGS516 VirtualMachineSizeTypes = "Standard_GS5-16"
+	// StandardGS58 ...
+	StandardGS58 VirtualMachineSizeTypes = "Standard_GS5-8"
+	// StandardH16 ...
+	StandardH16 VirtualMachineSizeTypes = "Standard_H16"
+	// StandardH16m ...
+	StandardH16m VirtualMachineSizeTypes = "Standard_H16m"
+	// StandardH16mr ...
+	StandardH16mr VirtualMachineSizeTypes = "Standard_H16mr"
+	// StandardH16r ...
+	StandardH16r VirtualMachineSizeTypes = "Standard_H16r"
+	// StandardH8 ...
+	StandardH8 VirtualMachineSizeTypes = "Standard_H8"
+	// StandardH8m ...
+	StandardH8m VirtualMachineSizeTypes = "Standard_H8m"
+	// StandardL16s ...
+	StandardL16s VirtualMachineSizeTypes = "Standard_L16s"
+	// StandardL32s ...
+	StandardL32s VirtualMachineSizeTypes = "Standard_L32s"
+	// StandardL4s ...
+	StandardL4s VirtualMachineSizeTypes = "Standard_L4s"
+	// StandardL8s ...
+	StandardL8s VirtualMachineSizeTypes = "Standard_L8s"
+	// StandardM12832ms ...
+	StandardM12832ms VirtualMachineSizeTypes = "Standard_M128-32ms"
+	// StandardM12864ms ...
+	StandardM12864ms VirtualMachineSizeTypes = "Standard_M128-64ms"
+	// StandardM128ms ...
+	StandardM128ms VirtualMachineSizeTypes = "Standard_M128ms"
+	// StandardM128s ...
+	StandardM128s VirtualMachineSizeTypes = "Standard_M128s"
+	// StandardM6416ms ...
+	StandardM6416ms VirtualMachineSizeTypes = "Standard_M64-16ms"
+	// StandardM6432ms ...
+	StandardM6432ms VirtualMachineSizeTypes = "Standard_M64-32ms"
+	// StandardM64ms ...
+	StandardM64ms VirtualMachineSizeTypes = "Standard_M64ms"
+	// StandardM64s ...
+	StandardM64s VirtualMachineSizeTypes = "Standard_M64s"
+	// StandardNC12 ...
+	StandardNC12 VirtualMachineSizeTypes = "Standard_NC12"
+	// StandardNC12sV2 ...
+	StandardNC12sV2 VirtualMachineSizeTypes = "Standard_NC12s_v2"
+	// StandardNC12sV3 ...
+	StandardNC12sV3 VirtualMachineSizeTypes = "Standard_NC12s_v3"
+	// StandardNC24 ...
+	StandardNC24 VirtualMachineSizeTypes = "Standard_NC24"
+	// StandardNC24r ...
+	StandardNC24r VirtualMachineSizeTypes = "Standard_NC24r"
+	// StandardNC24rsV2 ...
+	StandardNC24rsV2 VirtualMachineSizeTypes = "Standard_NC24rs_v2"
+	// StandardNC24rsV3 ...
+	StandardNC24rsV3 VirtualMachineSizeTypes = "Standard_NC24rs_v3"
+	// StandardNC24sV2 ...
+	StandardNC24sV2 VirtualMachineSizeTypes = "Standard_NC24s_v2"
+	// StandardNC24sV3 ...
+	StandardNC24sV3 VirtualMachineSizeTypes = "Standard_NC24s_v3"
+	// StandardNC6 ...
+	StandardNC6 VirtualMachineSizeTypes = "Standard_NC6"
+	// StandardNC6sV2 ...
+	StandardNC6sV2 VirtualMachineSizeTypes = "Standard_NC6s_v2"
+	// StandardNC6sV3 ...
+	StandardNC6sV3 VirtualMachineSizeTypes = "Standard_NC6s_v3"
+	// StandardND12s ...
+	StandardND12s VirtualMachineSizeTypes = "Standard_ND12s"
+	// StandardND24rs ...
+	StandardND24rs VirtualMachineSizeTypes = "Standard_ND24rs"
+	// StandardND24s ...
+	StandardND24s VirtualMachineSizeTypes = "Standard_ND24s"
+	// StandardND6s ...
+	StandardND6s VirtualMachineSizeTypes = "Standard_ND6s"
+	// StandardNV12 ...
+	StandardNV12 VirtualMachineSizeTypes = "Standard_NV12"
+	// StandardNV24 ...
+	StandardNV24 VirtualMachineSizeTypes = "Standard_NV24"
+	// StandardNV6 ...
+	StandardNV6 VirtualMachineSizeTypes = "Standard_NV6"
 )
 
 // PossibleVirtualMachineSizeTypesValues returns an array of possible values for the VirtualMachineSizeTypes const type.
 func PossibleVirtualMachineSizeTypesValues() []VirtualMachineSizeTypes {
-	return []VirtualMachineSizeTypes{VirtualMachineSizeTypesBasicA0, VirtualMachineSizeTypesBasicA1, VirtualMachineSizeTypesBasicA2, VirtualMachineSizeTypesBasicA3, VirtualMachineSizeTypesBasicA4, VirtualMachineSizeTypesStandardA0, VirtualMachineSizeTypesStandardA1, VirtualMachineSizeTypesStandardA10, VirtualMachineSizeTypesStandardA11, VirtualMachineSizeTypesStandardA1V2, VirtualMachineSizeTypesStandardA2, VirtualMachineSizeTypesStandardA2mV2, VirtualMachineSizeTypesStandardA2V2, VirtualMachineSizeTypesStandardA3, VirtualMachineSizeTypesStandardA4, VirtualMachineSizeTypesStandardA4mV2, VirtualMachineSizeTypesStandardA4V2, VirtualMachineSizeTypesStandardA5, VirtualMachineSizeTypesStandardA6, VirtualMachineSizeTypesStandardA7, VirtualMachineSizeTypesStandardA8, VirtualMachineSizeTypesStandardA8mV2, VirtualMachineSizeTypesStandardA8V2, VirtualMachineSizeTypesStandardA9, VirtualMachineSizeTypesStandardB1ms, VirtualMachineSizeTypesStandardB1s, VirtualMachineSizeTypesStandardB2ms, VirtualMachineSizeTypesStandardB2s, VirtualMachineSizeTypesStandardB4ms, VirtualMachineSizeTypesStandardB8ms, VirtualMachineSizeTypesStandardD1, VirtualMachineSizeTypesStandardD11, VirtualMachineSizeTypesStandardD11V2, VirtualMachineSizeTypesStandardD12, VirtualMachineSizeTypesStandardD12V2, VirtualMachineSizeTypesStandardD13, VirtualMachineSizeTypesStandardD13V2, VirtualMachineSizeTypesStandardD14, VirtualMachineSizeTypesStandardD14V2, VirtualMachineSizeTypesStandardD15V2, VirtualMachineSizeTypesStandardD16sV3, VirtualMachineSizeTypesStandardD16V3, VirtualMachineSizeTypesStandardD1V2, VirtualMachineSizeTypesStandardD2, VirtualMachineSizeTypesStandardD2sV3, VirtualMachineSizeTypesStandardD2V2, VirtualMachineSizeTypesStandardD2V3, VirtualMachineSizeTypesStandardD3, VirtualMachineSizeTypesStandardD32sV3, VirtualMachineSizeTypesStandardD32V3, VirtualMachineSizeTypesStandardD3V2, VirtualMachineSizeTypesStandardD4, VirtualMachineSizeTypesStandardD4sV3, VirtualMachineSizeTypesStandardD4V2, VirtualMachineSizeTypesStandardD4V3, VirtualMachineSizeTypesStandardD5V2, VirtualMachineSizeTypesStandardD64sV3, VirtualMachineSizeTypesStandardD64V3, VirtualMachineSizeTypesStandardD8sV3, VirtualMachineSizeTypesStandardD8V3, VirtualMachineSizeTypesStandardDS1, VirtualMachineSizeTypesStandardDS11, VirtualMachineSizeTypesStandardDS11V2, VirtualMachineSizeTypesStandardDS12, VirtualMachineSizeTypesStandardDS12V2, VirtualMachineSizeTypesStandardDS13, VirtualMachineSizeTypesStandardDS132V2, VirtualMachineSizeTypesStandardDS134V2, VirtualMachineSizeTypesStandardDS13V2, VirtualMachineSizeTypesStandardDS14, VirtualMachineSizeTypesStandardDS144V2, VirtualMachineSizeTypesStandardDS148V2, VirtualMachineSizeTypesStandardDS14V2, VirtualMachineSizeTypesStandardDS15V2, VirtualMachineSizeTypesStandardDS1V2, VirtualMachineSizeTypesStandardDS2, VirtualMachineSizeTypesStandardDS2V2, VirtualMachineSizeTypesStandardDS3, VirtualMachineSizeTypesStandardDS3V2, VirtualMachineSizeTypesStandardDS4, VirtualMachineSizeTypesStandardDS4V2, VirtualMachineSizeTypesStandardDS5V2, VirtualMachineSizeTypesStandardE16sV3, VirtualMachineSizeTypesStandardE16V3, VirtualMachineSizeTypesStandardE2sV3, VirtualMachineSizeTypesStandardE2V3, VirtualMachineSizeTypesStandardE3216V3, VirtualMachineSizeTypesStandardE328sV3, VirtualMachineSizeTypesStandardE32sV3, VirtualMachineSizeTypesStandardE32V3, VirtualMachineSizeTypesStandardE4sV3, VirtualMachineSizeTypesStandardE4V3, VirtualMachineSizeTypesStandardE6416sV3, VirtualMachineSizeTypesStandardE6432sV3, VirtualMachineSizeTypesStandardE64sV3, VirtualMachineSizeTypesStandardE64V3, VirtualMachineSizeTypesStandardE8sV3, VirtualMachineSizeTypesStandardE8V3, VirtualMachineSizeTypesStandardF1, VirtualMachineSizeTypesStandardF16, VirtualMachineSizeTypesStandardF16s, VirtualMachineSizeTypesStandardF16sV2, VirtualMachineSizeTypesStandardF1s, VirtualMachineSizeTypesStandardF2, VirtualMachineSizeTypesStandardF2s, VirtualMachineSizeTypesStandardF2sV2, VirtualMachineSizeTypesStandardF32sV2, VirtualMachineSizeTypesStandardF4, VirtualMachineSizeTypesStandardF4s, VirtualMachineSizeTypesStandardF4sV2, VirtualMachineSizeTypesStandardF64sV2, VirtualMachineSizeTypesStandardF72sV2, VirtualMachineSizeTypesStandardF8, VirtualMachineSizeTypesStandardF8s, VirtualMachineSizeTypesStandardF8sV2, VirtualMachineSizeTypesStandardG1, VirtualMachineSizeTypesStandardG2, VirtualMachineSizeTypesStandardG3, VirtualMachineSizeTypesStandardG4, VirtualMachineSizeTypesStandardG5, VirtualMachineSizeTypesStandardGS1, VirtualMachineSizeTypesStandardGS2, VirtualMachineSizeTypesStandardGS3, VirtualMachineSizeTypesStandardGS4, VirtualMachineSizeTypesStandardGS44, VirtualMachineSizeTypesStandardGS48, VirtualMachineSizeTypesStandardGS5, VirtualMachineSizeTypesStandardGS516, VirtualMachineSizeTypesStandardGS58, VirtualMachineSizeTypesStandardH16, VirtualMachineSizeTypesStandardH16m, VirtualMachineSizeTypesStandardH16mr, VirtualMachineSizeTypesStandardH16r, VirtualMachineSizeTypesStandardH8, VirtualMachineSizeTypesStandardH8m, VirtualMachineSizeTypesStandardL16s, VirtualMachineSizeTypesStandardL32s, VirtualMachineSizeTypesStandardL4s, VirtualMachineSizeTypesStandardL8s, VirtualMachineSizeTypesStandardM12832ms, VirtualMachineSizeTypesStandardM12864ms, VirtualMachineSizeTypesStandardM128ms, VirtualMachineSizeTypesStandardM128s, VirtualMachineSizeTypesStandardM6416ms, VirtualMachineSizeTypesStandardM6432ms, VirtualMachineSizeTypesStandardM64ms, VirtualMachineSizeTypesStandardM64s, VirtualMachineSizeTypesStandardNC12, VirtualMachineSizeTypesStandardNC12sV2, VirtualMachineSizeTypesStandardNC12sV3, VirtualMachineSizeTypesStandardNC24, VirtualMachineSizeTypesStandardNC24r, VirtualMachineSizeTypesStandardNC24rsV2, VirtualMachineSizeTypesStandardNC24rsV3, VirtualMachineSizeTypesStandardNC24sV2, VirtualMachineSizeTypesStandardNC24sV3, VirtualMachineSizeTypesStandardNC6, VirtualMachineSizeTypesStandardNC6sV2, VirtualMachineSizeTypesStandardNC6sV3, VirtualMachineSizeTypesStandardND12s, VirtualMachineSizeTypesStandardND24rs, VirtualMachineSizeTypesStandardND24s, VirtualMachineSizeTypesStandardND6s, VirtualMachineSizeTypesStandardNV12, VirtualMachineSizeTypesStandardNV24, VirtualMachineSizeTypesStandardNV6}
+	return []VirtualMachineSizeTypes{BasicA0, BasicA1, BasicA2, BasicA3, BasicA4, StandardA0, StandardA1, StandardA10, StandardA11, StandardA1V2, StandardA2, StandardA2mV2, StandardA2V2, StandardA3, StandardA4, StandardA4mV2, StandardA4V2, StandardA5, StandardA6, StandardA7, StandardA8, StandardA8mV2, StandardA8V2, StandardA9, StandardB1ms, StandardB1s, StandardB2ms, StandardB2s, StandardB4ms, StandardB8ms, StandardD1, StandardD11, StandardD11V2, StandardD12, StandardD12V2, StandardD13, StandardD13V2, StandardD14, StandardD14V2, StandardD15V2, StandardD16sV3, StandardD16V3, StandardD1V2, StandardD2, StandardD2sV3, StandardD2V2, StandardD2V3, StandardD3, StandardD32sV3, StandardD32V3, StandardD3V2, StandardD4, StandardD4sV3, StandardD4V2, StandardD4V3, StandardD5V2, StandardD64sV3, StandardD64V3, StandardD8sV3, StandardD8V3, StandardDS1, StandardDS11, StandardDS11V2, StandardDS12, StandardDS12V2, StandardDS13, StandardDS132V2, StandardDS134V2, StandardDS13V2, StandardDS14, StandardDS144V2, StandardDS148V2, StandardDS14V2, StandardDS15V2, StandardDS1V2, StandardDS2, StandardDS2V2, StandardDS3, StandardDS3V2, StandardDS4, StandardDS4V2, StandardDS5V2, StandardE16sV3, StandardE16V3, StandardE2sV3, StandardE2V3, StandardE3216V3, StandardE328sV3, StandardE32sV3, StandardE32V3, StandardE4sV3, StandardE4V3, StandardE6416sV3, StandardE6432sV3, StandardE64sV3, StandardE64V3, StandardE8sV3, StandardE8V3, StandardF1, StandardF16, StandardF16s, StandardF16sV2, StandardF1s, StandardF2, StandardF2s, StandardF2sV2, StandardF32sV2, StandardF4, StandardF4s, StandardF4sV2, StandardF64sV2, StandardF72sV2, StandardF8, StandardF8s, StandardF8sV2, StandardG1, StandardG2, StandardG3, StandardG4, StandardG5, StandardGS1, StandardGS2, StandardGS3, StandardGS4, StandardGS44, StandardGS48, StandardGS5, StandardGS516, StandardGS58, StandardH16, StandardH16m, StandardH16mr, StandardH16r, StandardH8, StandardH8m, StandardL16s, StandardL32s, StandardL4s, StandardL8s, StandardM12832ms, StandardM12864ms, StandardM128ms, StandardM128s, StandardM6416ms, StandardM6432ms, StandardM64ms, StandardM64s, StandardNC12, StandardNC12sV2, StandardNC12sV3, StandardNC24, StandardNC24r, StandardNC24rsV2, StandardNC24rsV3, StandardNC24sV2, StandardNC24sV3, StandardNC6, StandardNC6sV2, StandardNC6sV3, StandardND12s, StandardND24rs, StandardND24s, StandardND6s, StandardNV12, StandardNV24, StandardNV6}
 }
 
 // AccessURI a disk access SAS uri.
@@ -1156,6 +987,101 @@ type AvailabilitySetListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of availability sets
 	Value *[]AvailabilitySet `json:"value,omitempty"`
+	// NextLink - The URI to fetch the next page of AvailabilitySets. Call ListNext() with this URI to fetch the next page of AvailabilitySets.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// AvailabilitySetListResultIterator provides access to a complete listing of AvailabilitySet values.
+type AvailabilitySetListResultIterator struct {
+	i    int
+	page AvailabilitySetListResultPage
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *AvailabilitySetListResultIterator) Next() error {
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err := iter.page.Next()
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter AvailabilitySetListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter AvailabilitySetListResultIterator) Response() AvailabilitySetListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter AvailabilitySetListResultIterator) Value() AvailabilitySet {
+	if !iter.page.NotDone() {
+		return AvailabilitySet{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (aslr AvailabilitySetListResult) IsEmpty() bool {
+	return aslr.Value == nil || len(*aslr.Value) == 0
+}
+
+// availabilitySetListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (aslr AvailabilitySetListResult) availabilitySetListResultPreparer() (*http.Request, error) {
+	if aslr.NextLink == nil || len(to.String(aslr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare(&http.Request{},
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(aslr.NextLink)))
+}
+
+// AvailabilitySetListResultPage contains a page of AvailabilitySet values.
+type AvailabilitySetListResultPage struct {
+	fn   func(AvailabilitySetListResult) (AvailabilitySetListResult, error)
+	aslr AvailabilitySetListResult
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *AvailabilitySetListResultPage) Next() error {
+	next, err := page.fn(page.aslr)
+	if err != nil {
+		return err
+	}
+	page.aslr = next
+	return nil
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page AvailabilitySetListResultPage) NotDone() bool {
+	return !page.aslr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page AvailabilitySetListResultPage) Response() AvailabilitySetListResult {
+	return page.aslr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page AvailabilitySetListResultPage) Values() []AvailabilitySet {
+	if page.aslr.IsEmpty() {
+		return nil
+	}
+	return *page.aslr.Value
 }
 
 // AvailabilitySetProperties the instance view of a resource.
@@ -1254,378 +1180,6 @@ type BootDiagnosticsInstanceView struct {
 	ConsoleScreenshotBlobURI *string `json:"consoleScreenshotBlobUri,omitempty"`
 	// SerialConsoleLogBlobURI - The Linux serial console log blob Uri.
 	SerialConsoleLogBlobURI *string `json:"serialConsoleLogBlobUri,omitempty"`
-}
-
-// ContainerService container service.
-type ContainerService struct {
-	autorest.Response           `json:"-"`
-	*ContainerServiceProperties `json:"properties,omitempty"`
-	// ID - Resource Id
-	ID *string `json:"id,omitempty"`
-	// Name - Resource name
-	Name *string `json:"name,omitempty"`
-	// Type - Resource type
-	Type *string `json:"type,omitempty"`
-	// Location - Resource location
-	Location *string `json:"location,omitempty"`
-	// Tags - Resource tags
-	Tags map[string]*string `json:"tags"`
-}
-
-// MarshalJSON is the custom marshaler for ContainerService.
-func (cs ContainerService) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	if cs.ContainerServiceProperties != nil {
-		objectMap["properties"] = cs.ContainerServiceProperties
-	}
-	if cs.ID != nil {
-		objectMap["id"] = cs.ID
-	}
-	if cs.Name != nil {
-		objectMap["name"] = cs.Name
-	}
-	if cs.Type != nil {
-		objectMap["type"] = cs.Type
-	}
-	if cs.Location != nil {
-		objectMap["location"] = cs.Location
-	}
-	if cs.Tags != nil {
-		objectMap["tags"] = cs.Tags
-	}
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON is the custom unmarshaler for ContainerService struct.
-func (cs *ContainerService) UnmarshalJSON(body []byte) error {
-	var m map[string]*json.RawMessage
-	err := json.Unmarshal(body, &m)
-	if err != nil {
-		return err
-	}
-	for k, v := range m {
-		switch k {
-		case "properties":
-			if v != nil {
-				var containerServiceProperties ContainerServiceProperties
-				err = json.Unmarshal(*v, &containerServiceProperties)
-				if err != nil {
-					return err
-				}
-				cs.ContainerServiceProperties = &containerServiceProperties
-			}
-		case "id":
-			if v != nil {
-				var ID string
-				err = json.Unmarshal(*v, &ID)
-				if err != nil {
-					return err
-				}
-				cs.ID = &ID
-			}
-		case "name":
-			if v != nil {
-				var name string
-				err = json.Unmarshal(*v, &name)
-				if err != nil {
-					return err
-				}
-				cs.Name = &name
-			}
-		case "type":
-			if v != nil {
-				var typeVar string
-				err = json.Unmarshal(*v, &typeVar)
-				if err != nil {
-					return err
-				}
-				cs.Type = &typeVar
-			}
-		case "location":
-			if v != nil {
-				var location string
-				err = json.Unmarshal(*v, &location)
-				if err != nil {
-					return err
-				}
-				cs.Location = &location
-			}
-		case "tags":
-			if v != nil {
-				var tags map[string]*string
-				err = json.Unmarshal(*v, &tags)
-				if err != nil {
-					return err
-				}
-				cs.Tags = tags
-			}
-		}
-	}
-
-	return nil
-}
-
-// ContainerServiceAgentPoolProfile profile for the container service agent pool.
-type ContainerServiceAgentPoolProfile struct {
-	// Name - Unique name of the agent pool profile in the context of the subscription and resource group.
-	Name *string `json:"name,omitempty"`
-	// Count - Number of agents (VMs) to host docker containers. Allowed values must be in the range of 1 to 100 (inclusive). The default value is 1.
-	Count *int32 `json:"count,omitempty"`
-	// VMSize - Size of agent VMs. Possible values include: 'StandardA0', 'StandardA1', 'StandardA2', 'StandardA3', 'StandardA4', 'StandardA5', 'StandardA6', 'StandardA7', 'StandardA8', 'StandardA9', 'StandardA10', 'StandardA11', 'StandardD1', 'StandardD2', 'StandardD3', 'StandardD4', 'StandardD11', 'StandardD12', 'StandardD13', 'StandardD14', 'StandardD1V2', 'StandardD2V2', 'StandardD3V2', 'StandardD4V2', 'StandardD5V2', 'StandardD11V2', 'StandardD12V2', 'StandardD13V2', 'StandardD14V2', 'StandardG1', 'StandardG2', 'StandardG3', 'StandardG4', 'StandardG5', 'StandardDS1', 'StandardDS2', 'StandardDS3', 'StandardDS4', 'StandardDS11', 'StandardDS12', 'StandardDS13', 'StandardDS14', 'StandardGS1', 'StandardGS2', 'StandardGS3', 'StandardGS4', 'StandardGS5'
-	VMSize ContainerServiceVMSizeTypes `json:"vmSize,omitempty"`
-	// DNSPrefix - DNS prefix to be used to create the FQDN for the agent pool.
-	DNSPrefix *string `json:"dnsPrefix,omitempty"`
-	// Fqdn - FDQN for the agent pool.
-	Fqdn *string `json:"fqdn,omitempty"`
-}
-
-// ContainerServiceCustomProfile properties to configure a custom container service cluster.
-type ContainerServiceCustomProfile struct {
-	// Orchestrator - The name of the custom orchestrator to use.
-	Orchestrator *string `json:"orchestrator,omitempty"`
-}
-
-// ContainerServiceDiagnosticsProfile ...
-type ContainerServiceDiagnosticsProfile struct {
-	// VMDiagnostics - Profile for the container service VM diagnostic agent.
-	VMDiagnostics *ContainerServiceVMDiagnostics `json:"vmDiagnostics,omitempty"`
-}
-
-// ContainerServiceLinuxProfile profile for Linux VMs in the container service cluster.
-type ContainerServiceLinuxProfile struct {
-	// AdminUsername - The administrator username to use for Linux VMs.
-	AdminUsername *string `json:"adminUsername,omitempty"`
-	// SSH - The ssh key configuration for Linux VMs.
-	SSH *ContainerServiceSSHConfiguration `json:"ssh,omitempty"`
-}
-
-// ContainerServiceListResult the response from the List Container Services operation.
-type ContainerServiceListResult struct {
-	autorest.Response `json:"-"`
-	// Value - the list of container services.
-	Value *[]ContainerService `json:"value,omitempty"`
-	// NextLink - The URL to get the next set of container service results.
-	NextLink *string `json:"nextLink,omitempty"`
-}
-
-// ContainerServiceListResultIterator provides access to a complete listing of ContainerService values.
-type ContainerServiceListResultIterator struct {
-	i    int
-	page ContainerServiceListResultPage
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-func (iter *ContainerServiceListResultIterator) Next() error {
-	iter.i++
-	if iter.i < len(iter.page.Values()) {
-		return nil
-	}
-	err := iter.page.Next()
-	if err != nil {
-		iter.i--
-		return err
-	}
-	iter.i = 0
-	return nil
-}
-
-// NotDone returns true if the enumeration should be started or is not yet complete.
-func (iter ContainerServiceListResultIterator) NotDone() bool {
-	return iter.page.NotDone() && iter.i < len(iter.page.Values())
-}
-
-// Response returns the raw server response from the last page request.
-func (iter ContainerServiceListResultIterator) Response() ContainerServiceListResult {
-	return iter.page.Response()
-}
-
-// Value returns the current value or a zero-initialized value if the
-// iterator has advanced beyond the end of the collection.
-func (iter ContainerServiceListResultIterator) Value() ContainerService {
-	if !iter.page.NotDone() {
-		return ContainerService{}
-	}
-	return iter.page.Values()[iter.i]
-}
-
-// IsEmpty returns true if the ListResult contains no values.
-func (cslr ContainerServiceListResult) IsEmpty() bool {
-	return cslr.Value == nil || len(*cslr.Value) == 0
-}
-
-// containerServiceListResultPreparer prepares a request to retrieve the next set of results.
-// It returns nil if no more results exist.
-func (cslr ContainerServiceListResult) containerServiceListResultPreparer() (*http.Request, error) {
-	if cslr.NextLink == nil || len(to.String(cslr.NextLink)) < 1 {
-		return nil, nil
-	}
-	return autorest.Prepare(&http.Request{},
-		autorest.AsJSON(),
-		autorest.AsGet(),
-		autorest.WithBaseURL(to.String(cslr.NextLink)))
-}
-
-// ContainerServiceListResultPage contains a page of ContainerService values.
-type ContainerServiceListResultPage struct {
-	fn   func(ContainerServiceListResult) (ContainerServiceListResult, error)
-	cslr ContainerServiceListResult
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-func (page *ContainerServiceListResultPage) Next() error {
-	next, err := page.fn(page.cslr)
-	if err != nil {
-		return err
-	}
-	page.cslr = next
-	return nil
-}
-
-// NotDone returns true if the page enumeration should be started or is not yet complete.
-func (page ContainerServiceListResultPage) NotDone() bool {
-	return !page.cslr.IsEmpty()
-}
-
-// Response returns the raw server response from the last page request.
-func (page ContainerServiceListResultPage) Response() ContainerServiceListResult {
-	return page.cslr
-}
-
-// Values returns the slice of values for the current page or nil if there are no values.
-func (page ContainerServiceListResultPage) Values() []ContainerService {
-	if page.cslr.IsEmpty() {
-		return nil
-	}
-	return *page.cslr.Value
-}
-
-// ContainerServiceMasterProfile profile for the container service master.
-type ContainerServiceMasterProfile struct {
-	// Count - Number of masters (VMs) in the container service cluster. Allowed values are 1, 3, and 5. The default value is 1.
-	Count *int32 `json:"count,omitempty"`
-	// DNSPrefix - DNS prefix to be used to create the FQDN for master.
-	DNSPrefix *string `json:"dnsPrefix,omitempty"`
-	// Fqdn - FDQN for the master.
-	Fqdn *string `json:"fqdn,omitempty"`
-}
-
-// ContainerServiceOrchestratorProfile profile for the container service orchestrator.
-type ContainerServiceOrchestratorProfile struct {
-	// OrchestratorType - The orchestrator to use to manage container service cluster resources. Valid values are Swarm, DCOS, and Custom. Possible values include: 'Swarm', 'DCOS', 'Custom', 'Kubernetes'
-	OrchestratorType ContainerServiceOrchestratorTypes `json:"orchestratorType,omitempty"`
-}
-
-// ContainerServiceProperties properties of the container service.
-type ContainerServiceProperties struct {
-	// ProvisioningState - the current deployment or provisioning state, which only appears in the response.
-	ProvisioningState *string `json:"provisioningState,omitempty"`
-	// OrchestratorProfile - Properties of the orchestrator.
-	OrchestratorProfile *ContainerServiceOrchestratorProfile `json:"orchestratorProfile,omitempty"`
-	// CustomProfile - Properties for custom clusters.
-	CustomProfile *ContainerServiceCustomProfile `json:"customProfile,omitempty"`
-	// ServicePrincipalProfile - Properties for cluster service principals.
-	ServicePrincipalProfile *ContainerServiceServicePrincipalProfile `json:"servicePrincipalProfile,omitempty"`
-	// MasterProfile - Properties of master agents.
-	MasterProfile *ContainerServiceMasterProfile `json:"masterProfile,omitempty"`
-	// AgentPoolProfiles - Properties of the agent pool.
-	AgentPoolProfiles *[]ContainerServiceAgentPoolProfile `json:"agentPoolProfiles,omitempty"`
-	// WindowsProfile - Properties of Windows VMs.
-	WindowsProfile *ContainerServiceWindowsProfile `json:"windowsProfile,omitempty"`
-	// LinuxProfile - Properties of Linux VMs.
-	LinuxProfile *ContainerServiceLinuxProfile `json:"linuxProfile,omitempty"`
-	// DiagnosticsProfile - Properties of the diagnostic agent.
-	DiagnosticsProfile *ContainerServiceDiagnosticsProfile `json:"diagnosticsProfile,omitempty"`
-}
-
-// ContainerServicesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
-type ContainerServicesCreateOrUpdateFuture struct {
-	azure.Future
-}
-
-// Result returns the result of the asynchronous operation.
-// If the operation has not completed it will return an error.
-func (future *ContainerServicesCreateOrUpdateFuture) Result(client ContainerServicesClient) (cs ContainerService, err error) {
-	var done bool
-	done, err = future.Done(client)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "compute.ContainerServicesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
-		return
-	}
-	if !done {
-		err = azure.NewAsyncOpIncompleteError("compute.ContainerServicesCreateOrUpdateFuture")
-		return
-	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if cs.Response.Response, err = future.GetResult(sender); err == nil && cs.Response.Response.StatusCode != http.StatusNoContent {
-		cs, err = client.CreateOrUpdateResponder(cs.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.ContainerServicesCreateOrUpdateFuture", "Result", cs.Response.Response, "Failure responding to request")
-		}
-	}
-	return
-}
-
-// ContainerServicesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
-type ContainerServicesDeleteFuture struct {
-	azure.Future
-}
-
-// Result returns the result of the asynchronous operation.
-// If the operation has not completed it will return an error.
-func (future *ContainerServicesDeleteFuture) Result(client ContainerServicesClient) (ar autorest.Response, err error) {
-	var done bool
-	done, err = future.Done(client)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "compute.ContainerServicesDeleteFuture", "Result", future.Response(), "Polling failure")
-		return
-	}
-	if !done {
-		err = azure.NewAsyncOpIncompleteError("compute.ContainerServicesDeleteFuture")
-		return
-	}
-	ar.Response = future.Response()
-	return
-}
-
-// ContainerServiceServicePrincipalProfile information about a service principal identity for the cluster to use
-// for manipulating Azure APIs.
-type ContainerServiceServicePrincipalProfile struct {
-	// ClientID - The ID for the service principal.
-	ClientID *string `json:"clientId,omitempty"`
-	// Secret - The secret password associated with the service principal.
-	Secret *string `json:"secret,omitempty"`
-}
-
-// ContainerServiceSSHConfiguration SSH configuration for Linux-based VMs running on Azure.
-type ContainerServiceSSHConfiguration struct {
-	// PublicKeys - the list of SSH public keys used to authenticate with Linux-based VMs.
-	PublicKeys *[]ContainerServiceSSHPublicKey `json:"publicKeys,omitempty"`
-}
-
-// ContainerServiceSSHPublicKey contains information about SSH certificate public key data.
-type ContainerServiceSSHPublicKey struct {
-	// KeyData - Certificate public key used to authenticate with VMs through SSH. The certificate must be in PEM format with or without headers.
-	KeyData *string `json:"keyData,omitempty"`
-}
-
-// ContainerServiceVMDiagnostics profile for diagnostics on the container service VMs.
-type ContainerServiceVMDiagnostics struct {
-	// Enabled - Whether the VM diagnostic agent is provisioned on the VM.
-	Enabled *bool `json:"enabled,omitempty"`
-	// StorageURI - The URI of the storage account where diagnostics are stored.
-	StorageURI *string `json:"storageUri,omitempty"`
-}
-
-// ContainerServiceWindowsProfile profile for Windows VMs in the container service cluster.
-type ContainerServiceWindowsProfile struct {
-	// AdminUsername - The administrator username to use for Windows VMs.
-	AdminUsername *string `json:"adminUsername,omitempty"`
-	// AdminPassword - The administrator password to use for Windows VMs.
-	AdminPassword *string `json:"adminPassword,omitempty"`
 }
 
 // CreationData data used when creating a disk.
@@ -2042,9 +1596,9 @@ func (future *DisksGrantAccessFuture) Result(client DisksClient) (au AccessURI, 
 	return
 }
 
-// DiskSku the disks sku name. Can be Standard_LRS or Premium_LRS.
+// DiskSku the disks sku name. Can be Standard_LRS, Premium_LRS, or StandardSSD_LRS.
 type DiskSku struct {
-	// Name - The sku name. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS'
+	// Name - The sku name. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS', 'StorageAccountTypesStandardSSDLRS'
 	Name StorageAccountTypes `json:"name,omitempty"`
 	// Tier - The sku tier.
 	Tier *string `json:"tier,omitempty"`
@@ -2195,7 +1749,7 @@ type GrantAccessData struct {
 
 // HardwareProfile specifies the hardware settings for the virtual machine.
 type HardwareProfile struct {
-	// VMSize - Specifies the size of the virtual machine. For more information about virtual machine sizes, see [Sizes for virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-sizes?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json). <br><br> The available VM sizes depend on region and availability set. For a list of available sizes use these APIs:  <br><br> [List all available virtual machine sizes in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes) <br><br> [List all available virtual machine sizes in a region](https://docs.microsoft.com/rest/api/compute/virtualmachinesizes/list) <br><br> [List all available virtual machine sizes for resizing](https://docs.microsoft.com/rest/api/compute/virtualmachines/listavailablesizes). Possible values include: 'VirtualMachineSizeTypesBasicA0', 'VirtualMachineSizeTypesBasicA1', 'VirtualMachineSizeTypesBasicA2', 'VirtualMachineSizeTypesBasicA3', 'VirtualMachineSizeTypesBasicA4', 'VirtualMachineSizeTypesStandardA0', 'VirtualMachineSizeTypesStandardA1', 'VirtualMachineSizeTypesStandardA2', 'VirtualMachineSizeTypesStandardA3', 'VirtualMachineSizeTypesStandardA4', 'VirtualMachineSizeTypesStandardA5', 'VirtualMachineSizeTypesStandardA6', 'VirtualMachineSizeTypesStandardA7', 'VirtualMachineSizeTypesStandardA8', 'VirtualMachineSizeTypesStandardA9', 'VirtualMachineSizeTypesStandardA10', 'VirtualMachineSizeTypesStandardA11', 'VirtualMachineSizeTypesStandardA1V2', 'VirtualMachineSizeTypesStandardA2V2', 'VirtualMachineSizeTypesStandardA4V2', 'VirtualMachineSizeTypesStandardA8V2', 'VirtualMachineSizeTypesStandardA2mV2', 'VirtualMachineSizeTypesStandardA4mV2', 'VirtualMachineSizeTypesStandardA8mV2', 'VirtualMachineSizeTypesStandardB1s', 'VirtualMachineSizeTypesStandardB1ms', 'VirtualMachineSizeTypesStandardB2s', 'VirtualMachineSizeTypesStandardB2ms', 'VirtualMachineSizeTypesStandardB4ms', 'VirtualMachineSizeTypesStandardB8ms', 'VirtualMachineSizeTypesStandardD1', 'VirtualMachineSizeTypesStandardD2', 'VirtualMachineSizeTypesStandardD3', 'VirtualMachineSizeTypesStandardD4', 'VirtualMachineSizeTypesStandardD11', 'VirtualMachineSizeTypesStandardD12', 'VirtualMachineSizeTypesStandardD13', 'VirtualMachineSizeTypesStandardD14', 'VirtualMachineSizeTypesStandardD1V2', 'VirtualMachineSizeTypesStandardD2V2', 'VirtualMachineSizeTypesStandardD3V2', 'VirtualMachineSizeTypesStandardD4V2', 'VirtualMachineSizeTypesStandardD5V2', 'VirtualMachineSizeTypesStandardD2V3', 'VirtualMachineSizeTypesStandardD4V3', 'VirtualMachineSizeTypesStandardD8V3', 'VirtualMachineSizeTypesStandardD16V3', 'VirtualMachineSizeTypesStandardD32V3', 'VirtualMachineSizeTypesStandardD64V3', 'VirtualMachineSizeTypesStandardD2sV3', 'VirtualMachineSizeTypesStandardD4sV3', 'VirtualMachineSizeTypesStandardD8sV3', 'VirtualMachineSizeTypesStandardD16sV3', 'VirtualMachineSizeTypesStandardD32sV3', 'VirtualMachineSizeTypesStandardD64sV3', 'VirtualMachineSizeTypesStandardD11V2', 'VirtualMachineSizeTypesStandardD12V2', 'VirtualMachineSizeTypesStandardD13V2', 'VirtualMachineSizeTypesStandardD14V2', 'VirtualMachineSizeTypesStandardD15V2', 'VirtualMachineSizeTypesStandardDS1', 'VirtualMachineSizeTypesStandardDS2', 'VirtualMachineSizeTypesStandardDS3', 'VirtualMachineSizeTypesStandardDS4', 'VirtualMachineSizeTypesStandardDS11', 'VirtualMachineSizeTypesStandardDS12', 'VirtualMachineSizeTypesStandardDS13', 'VirtualMachineSizeTypesStandardDS14', 'VirtualMachineSizeTypesStandardDS1V2', 'VirtualMachineSizeTypesStandardDS2V2', 'VirtualMachineSizeTypesStandardDS3V2', 'VirtualMachineSizeTypesStandardDS4V2', 'VirtualMachineSizeTypesStandardDS5V2', 'VirtualMachineSizeTypesStandardDS11V2', 'VirtualMachineSizeTypesStandardDS12V2', 'VirtualMachineSizeTypesStandardDS13V2', 'VirtualMachineSizeTypesStandardDS14V2', 'VirtualMachineSizeTypesStandardDS15V2', 'VirtualMachineSizeTypesStandardDS134V2', 'VirtualMachineSizeTypesStandardDS132V2', 'VirtualMachineSizeTypesStandardDS148V2', 'VirtualMachineSizeTypesStandardDS144V2', 'VirtualMachineSizeTypesStandardE2V3', 'VirtualMachineSizeTypesStandardE4V3', 'VirtualMachineSizeTypesStandardE8V3', 'VirtualMachineSizeTypesStandardE16V3', 'VirtualMachineSizeTypesStandardE32V3', 'VirtualMachineSizeTypesStandardE64V3', 'VirtualMachineSizeTypesStandardE2sV3', 'VirtualMachineSizeTypesStandardE4sV3', 'VirtualMachineSizeTypesStandardE8sV3', 'VirtualMachineSizeTypesStandardE16sV3', 'VirtualMachineSizeTypesStandardE32sV3', 'VirtualMachineSizeTypesStandardE64sV3', 'VirtualMachineSizeTypesStandardE3216V3', 'VirtualMachineSizeTypesStandardE328sV3', 'VirtualMachineSizeTypesStandardE6432sV3', 'VirtualMachineSizeTypesStandardE6416sV3', 'VirtualMachineSizeTypesStandardF1', 'VirtualMachineSizeTypesStandardF2', 'VirtualMachineSizeTypesStandardF4', 'VirtualMachineSizeTypesStandardF8', 'VirtualMachineSizeTypesStandardF16', 'VirtualMachineSizeTypesStandardF1s', 'VirtualMachineSizeTypesStandardF2s', 'VirtualMachineSizeTypesStandardF4s', 'VirtualMachineSizeTypesStandardF8s', 'VirtualMachineSizeTypesStandardF16s', 'VirtualMachineSizeTypesStandardF2sV2', 'VirtualMachineSizeTypesStandardF4sV2', 'VirtualMachineSizeTypesStandardF8sV2', 'VirtualMachineSizeTypesStandardF16sV2', 'VirtualMachineSizeTypesStandardF32sV2', 'VirtualMachineSizeTypesStandardF64sV2', 'VirtualMachineSizeTypesStandardF72sV2', 'VirtualMachineSizeTypesStandardG1', 'VirtualMachineSizeTypesStandardG2', 'VirtualMachineSizeTypesStandardG3', 'VirtualMachineSizeTypesStandardG4', 'VirtualMachineSizeTypesStandardG5', 'VirtualMachineSizeTypesStandardGS1', 'VirtualMachineSizeTypesStandardGS2', 'VirtualMachineSizeTypesStandardGS3', 'VirtualMachineSizeTypesStandardGS4', 'VirtualMachineSizeTypesStandardGS5', 'VirtualMachineSizeTypesStandardGS48', 'VirtualMachineSizeTypesStandardGS44', 'VirtualMachineSizeTypesStandardGS516', 'VirtualMachineSizeTypesStandardGS58', 'VirtualMachineSizeTypesStandardH8', 'VirtualMachineSizeTypesStandardH16', 'VirtualMachineSizeTypesStandardH8m', 'VirtualMachineSizeTypesStandardH16m', 'VirtualMachineSizeTypesStandardH16r', 'VirtualMachineSizeTypesStandardH16mr', 'VirtualMachineSizeTypesStandardL4s', 'VirtualMachineSizeTypesStandardL8s', 'VirtualMachineSizeTypesStandardL16s', 'VirtualMachineSizeTypesStandardL32s', 'VirtualMachineSizeTypesStandardM64s', 'VirtualMachineSizeTypesStandardM64ms', 'VirtualMachineSizeTypesStandardM128s', 'VirtualMachineSizeTypesStandardM128ms', 'VirtualMachineSizeTypesStandardM6432ms', 'VirtualMachineSizeTypesStandardM6416ms', 'VirtualMachineSizeTypesStandardM12864ms', 'VirtualMachineSizeTypesStandardM12832ms', 'VirtualMachineSizeTypesStandardNC6', 'VirtualMachineSizeTypesStandardNC12', 'VirtualMachineSizeTypesStandardNC24', 'VirtualMachineSizeTypesStandardNC24r', 'VirtualMachineSizeTypesStandardNC6sV2', 'VirtualMachineSizeTypesStandardNC12sV2', 'VirtualMachineSizeTypesStandardNC24sV2', 'VirtualMachineSizeTypesStandardNC24rsV2', 'VirtualMachineSizeTypesStandardNC6sV3', 'VirtualMachineSizeTypesStandardNC12sV3', 'VirtualMachineSizeTypesStandardNC24sV3', 'VirtualMachineSizeTypesStandardNC24rsV3', 'VirtualMachineSizeTypesStandardND6s', 'VirtualMachineSizeTypesStandardND12s', 'VirtualMachineSizeTypesStandardND24s', 'VirtualMachineSizeTypesStandardND24rs', 'VirtualMachineSizeTypesStandardNV6', 'VirtualMachineSizeTypesStandardNV12', 'VirtualMachineSizeTypesStandardNV24'
+	// VMSize - Specifies the size of the virtual machine. For more information about virtual machine sizes, see [Sizes for virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-sizes?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json). <br><br> The available VM sizes depend on region and availability set. For a list of available sizes use these APIs:  <br><br> [List all available virtual machine sizes in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes) <br><br> [List all available virtual machine sizes in a region](https://docs.microsoft.com/rest/api/compute/virtualmachinesizes/list) <br><br> [List all available virtual machine sizes for resizing](https://docs.microsoft.com/rest/api/compute/virtualmachines/listavailablesizes). Possible values include: 'BasicA0', 'BasicA1', 'BasicA2', 'BasicA3', 'BasicA4', 'StandardA0', 'StandardA1', 'StandardA2', 'StandardA3', 'StandardA4', 'StandardA5', 'StandardA6', 'StandardA7', 'StandardA8', 'StandardA9', 'StandardA10', 'StandardA11', 'StandardA1V2', 'StandardA2V2', 'StandardA4V2', 'StandardA8V2', 'StandardA2mV2', 'StandardA4mV2', 'StandardA8mV2', 'StandardB1s', 'StandardB1ms', 'StandardB2s', 'StandardB2ms', 'StandardB4ms', 'StandardB8ms', 'StandardD1', 'StandardD2', 'StandardD3', 'StandardD4', 'StandardD11', 'StandardD12', 'StandardD13', 'StandardD14', 'StandardD1V2', 'StandardD2V2', 'StandardD3V2', 'StandardD4V2', 'StandardD5V2', 'StandardD2V3', 'StandardD4V3', 'StandardD8V3', 'StandardD16V3', 'StandardD32V3', 'StandardD64V3', 'StandardD2sV3', 'StandardD4sV3', 'StandardD8sV3', 'StandardD16sV3', 'StandardD32sV3', 'StandardD64sV3', 'StandardD11V2', 'StandardD12V2', 'StandardD13V2', 'StandardD14V2', 'StandardD15V2', 'StandardDS1', 'StandardDS2', 'StandardDS3', 'StandardDS4', 'StandardDS11', 'StandardDS12', 'StandardDS13', 'StandardDS14', 'StandardDS1V2', 'StandardDS2V2', 'StandardDS3V2', 'StandardDS4V2', 'StandardDS5V2', 'StandardDS11V2', 'StandardDS12V2', 'StandardDS13V2', 'StandardDS14V2', 'StandardDS15V2', 'StandardDS134V2', 'StandardDS132V2', 'StandardDS148V2', 'StandardDS144V2', 'StandardE2V3', 'StandardE4V3', 'StandardE8V3', 'StandardE16V3', 'StandardE32V3', 'StandardE64V3', 'StandardE2sV3', 'StandardE4sV3', 'StandardE8sV3', 'StandardE16sV3', 'StandardE32sV3', 'StandardE64sV3', 'StandardE3216V3', 'StandardE328sV3', 'StandardE6432sV3', 'StandardE6416sV3', 'StandardF1', 'StandardF2', 'StandardF4', 'StandardF8', 'StandardF16', 'StandardF1s', 'StandardF2s', 'StandardF4s', 'StandardF8s', 'StandardF16s', 'StandardF2sV2', 'StandardF4sV2', 'StandardF8sV2', 'StandardF16sV2', 'StandardF32sV2', 'StandardF64sV2', 'StandardF72sV2', 'StandardG1', 'StandardG2', 'StandardG3', 'StandardG4', 'StandardG5', 'StandardGS1', 'StandardGS2', 'StandardGS3', 'StandardGS4', 'StandardGS5', 'StandardGS48', 'StandardGS44', 'StandardGS516', 'StandardGS58', 'StandardH8', 'StandardH16', 'StandardH8m', 'StandardH16m', 'StandardH16r', 'StandardH16mr', 'StandardL4s', 'StandardL8s', 'StandardL16s', 'StandardL32s', 'StandardM64s', 'StandardM64ms', 'StandardM128s', 'StandardM128ms', 'StandardM6432ms', 'StandardM6416ms', 'StandardM12864ms', 'StandardM12832ms', 'StandardNC6', 'StandardNC12', 'StandardNC24', 'StandardNC24r', 'StandardNC6sV2', 'StandardNC12sV2', 'StandardNC24sV2', 'StandardNC24rsV2', 'StandardNC6sV3', 'StandardNC12sV3', 'StandardNC24sV3', 'StandardNC24rsV3', 'StandardND6s', 'StandardND12s', 'StandardND24s', 'StandardND24rs', 'StandardNV6', 'StandardNV12', 'StandardNV24'
 	VMSize VirtualMachineSizeTypes `json:"vmSize,omitempty"`
 }
 
@@ -2323,7 +1877,7 @@ type ImageDataDisk struct {
 	Caching CachingTypes `json:"caching,omitempty"`
 	// DiskSizeGB - Specifies the size of empty data disks in gigabytes. This element can be used to overwrite the name of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
 	DiskSizeGB *int32 `json:"diskSizeGB,omitempty"`
-	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS or Premium_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS'
+	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS, Premium_LRS, and StandardSSD_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS', 'StorageAccountTypesStandardSSDLRS'
 	StorageAccountType StorageAccountTypes `json:"storageAccountType,omitempty"`
 }
 
@@ -2453,7 +2007,7 @@ type ImageOSDisk struct {
 	Caching CachingTypes `json:"caching,omitempty"`
 	// DiskSizeGB - Specifies the size of empty data disks in gigabytes. This element can be used to overwrite the name of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
 	DiskSizeGB *int32 `json:"diskSizeGB,omitempty"`
-	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS or Premium_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS'
+	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS, Premium_LRS, and StandardSSD_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS', 'StorageAccountTypesStandardSSDLRS'
 	StorageAccountType StorageAccountTypes `json:"storageAccountType,omitempty"`
 }
 
@@ -2518,7 +2072,7 @@ type ImagesDeleteFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *ImagesDeleteFuture) Result(client ImagesClient) (osr OperationStatusResponse, err error) {
+func (future *ImagesDeleteFuture) Result(client ImagesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -2529,13 +2083,7 @@ func (future *ImagesDeleteFuture) Result(client ImagesClient) (osr OperationStat
 		err = azure.NewAsyncOpIncompleteError("compute.ImagesDeleteFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeleteResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.ImagesDeleteFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -2889,28 +2437,12 @@ type LogAnalyticsOperationResult struct {
 	autorest.Response `json:"-"`
 	// Properties - LogAnalyticsOutput
 	Properties *LogAnalyticsOutput `json:"properties,omitempty"`
-	// Name - Operation ID
-	Name *string `json:"name,omitempty"`
-	// Status - Operation status
-	Status *string `json:"status,omitempty"`
-	// StartTime - Start time of the operation
-	StartTime *date.Time `json:"startTime,omitempty"`
-	// EndTime - End time of the operation
-	EndTime *date.Time `json:"endTime,omitempty"`
-	// Error - Api error
-	Error *APIError `json:"error,omitempty"`
 }
 
 // LogAnalyticsOutput logAnalytics output properties
 type LogAnalyticsOutput struct {
 	// Output - Output file Uri path to blob container.
 	Output *string `json:"output,omitempty"`
-}
-
-// LongRunningOperationProperties compute-specific operation properties, including output
-type LongRunningOperationProperties struct {
-	// Output - Operation output data (raw JSON)
-	Output interface{} `json:"output,omitempty"`
 }
 
 // MaintenanceRedeployStatus maintenance Operation Status.
@@ -2933,7 +2465,7 @@ type MaintenanceRedeployStatus struct {
 
 // ManagedDiskParameters the parameters of a managed disk.
 type ManagedDiskParameters struct {
-	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS or Premium_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS'
+	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS, Premium_LRS, and StandardSSD_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS', 'StorageAccountTypesStandardSSDLRS'
 	StorageAccountType StorageAccountTypes `json:"storageAccountType,omitempty"`
 	// ID - Resource Id
 	ID *string `json:"id,omitempty"`
@@ -3008,21 +2540,6 @@ type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of compute operations
 	Value *[]OperationValue `json:"value,omitempty"`
-}
-
-// OperationStatusResponse operation status response
-type OperationStatusResponse struct {
-	autorest.Response `json:"-"`
-	// Name - Operation ID
-	Name *string `json:"name,omitempty"`
-	// Status - Operation status
-	Status *string `json:"status,omitempty"`
-	// StartTime - Start time of the operation
-	StartTime *date.Time `json:"startTime,omitempty"`
-	// EndTime - End time of the operation
-	EndTime *date.Time `json:"endTime,omitempty"`
-	// Error - Api error
-	Error *APIError `json:"error,omitempty"`
 }
 
 // OperationValue describes the properties of a Compute Operation value.
@@ -3238,196 +2755,6 @@ func (r Resource) MarshalJSON() ([]byte, error) {
 		objectMap["tags"] = r.Tags
 	}
 	return json.Marshal(objectMap)
-}
-
-// ResourceSku describes an available Compute SKU.
-type ResourceSku struct {
-	// ResourceType - The type of resource the SKU applies to.
-	ResourceType *string `json:"resourceType,omitempty"`
-	// Name - The name of SKU.
-	Name *string `json:"name,omitempty"`
-	// Tier - Specifies the tier of virtual machines in a scale set.<br /><br /> Possible Values:<br /><br /> **Standard**<br /><br /> **Basic**
-	Tier *string `json:"tier,omitempty"`
-	// Size - The Size of the SKU.
-	Size *string `json:"size,omitempty"`
-	// Family - The Family of this particular SKU.
-	Family *string `json:"family,omitempty"`
-	// Kind - The Kind of resources that are supported in this SKU.
-	Kind *string `json:"kind,omitempty"`
-	// Capacity - Specifies the number of virtual machines in the scale set.
-	Capacity *ResourceSkuCapacity `json:"capacity,omitempty"`
-	// Locations - The set of locations that the SKU is available.
-	Locations *[]string `json:"locations,omitempty"`
-	// LocationInfo - A list of locations and availability zones in those locations where the SKU is available.
-	LocationInfo *[]ResourceSkuLocationInfo `json:"locationInfo,omitempty"`
-	// APIVersions - The api versions that support this SKU.
-	APIVersions *[]string `json:"apiVersions,omitempty"`
-	// Costs - Metadata for retrieving price info.
-	Costs *[]ResourceSkuCosts `json:"costs,omitempty"`
-	// Capabilities - A name value pair to describe the capability.
-	Capabilities *[]ResourceSkuCapabilities `json:"capabilities,omitempty"`
-	// Restrictions - The restrictions because of which SKU cannot be used. This is empty if there are no restrictions.
-	Restrictions *[]ResourceSkuRestrictions `json:"restrictions,omitempty"`
-}
-
-// ResourceSkuCapabilities describes The SKU capabilites object.
-type ResourceSkuCapabilities struct {
-	// Name - An invariant to describe the feature.
-	Name *string `json:"name,omitempty"`
-	// Value - An invariant if the feature is measured by quantity.
-	Value *string `json:"value,omitempty"`
-}
-
-// ResourceSkuCapacity describes scaling information of a SKU.
-type ResourceSkuCapacity struct {
-	// Minimum - The minimum capacity.
-	Minimum *int64 `json:"minimum,omitempty"`
-	// Maximum - The maximum capacity that can be set.
-	Maximum *int64 `json:"maximum,omitempty"`
-	// Default - The default capacity.
-	Default *int64 `json:"default,omitempty"`
-	// ScaleType - The scale type applicable to the sku. Possible values include: 'ResourceSkuCapacityScaleTypeAutomatic', 'ResourceSkuCapacityScaleTypeManual', 'ResourceSkuCapacityScaleTypeNone'
-	ScaleType ResourceSkuCapacityScaleType `json:"scaleType,omitempty"`
-}
-
-// ResourceSkuCosts describes metadata for retrieving price info.
-type ResourceSkuCosts struct {
-	// MeterID - Used for querying price from commerce.
-	MeterID *string `json:"meterID,omitempty"`
-	// Quantity - The multiplier is needed to extend the base metered cost.
-	Quantity *int64 `json:"quantity,omitempty"`
-	// ExtendedUnit - An invariant to show the extended unit.
-	ExtendedUnit *string `json:"extendedUnit,omitempty"`
-}
-
-// ResourceSkuLocationInfo ...
-type ResourceSkuLocationInfo struct {
-	// Location - Location of the SKU
-	Location *string `json:"location,omitempty"`
-	// Zones - List of availability zones where the SKU is supported.
-	Zones *[]string `json:"zones,omitempty"`
-}
-
-// ResourceSkuRestrictionInfo ...
-type ResourceSkuRestrictionInfo struct {
-	// Locations - Locations where the SKU is restricted
-	Locations *[]string `json:"locations,omitempty"`
-	// Zones - List of availability zones where the SKU is restricted.
-	Zones *[]string `json:"zones,omitempty"`
-}
-
-// ResourceSkuRestrictions describes scaling information of a SKU.
-type ResourceSkuRestrictions struct {
-	// Type - The type of restrictions. Possible values include: 'Location', 'Zone'
-	Type ResourceSkuRestrictionsType `json:"type,omitempty"`
-	// Values - The value of restrictions. If the restriction type is set to location. This would be different locations where the SKU is restricted.
-	Values *[]string `json:"values,omitempty"`
-	// RestrictionInfo - The information about the restriction where the SKU cannot be used.
-	RestrictionInfo *ResourceSkuRestrictionInfo `json:"restrictionInfo,omitempty"`
-	// ReasonCode - The reason for restriction. Possible values include: 'QuotaID', 'NotAvailableForSubscription'
-	ReasonCode ResourceSkuRestrictionsReasonCode `json:"reasonCode,omitempty"`
-}
-
-// ResourceSkusResult the Compute List Skus operation response.
-type ResourceSkusResult struct {
-	autorest.Response `json:"-"`
-	// Value - The list of skus available for the subscription.
-	Value *[]ResourceSku `json:"value,omitempty"`
-	// NextLink - The uri to fetch the next page of Compute Skus. Call ListNext() with this to fetch the next page of VMSS Skus.
-	NextLink *string `json:"nextLink,omitempty"`
-}
-
-// ResourceSkusResultIterator provides access to a complete listing of ResourceSku values.
-type ResourceSkusResultIterator struct {
-	i    int
-	page ResourceSkusResultPage
-}
-
-// Next advances to the next value.  If there was an error making
-// the request the iterator does not advance and the error is returned.
-func (iter *ResourceSkusResultIterator) Next() error {
-	iter.i++
-	if iter.i < len(iter.page.Values()) {
-		return nil
-	}
-	err := iter.page.Next()
-	if err != nil {
-		iter.i--
-		return err
-	}
-	iter.i = 0
-	return nil
-}
-
-// NotDone returns true if the enumeration should be started or is not yet complete.
-func (iter ResourceSkusResultIterator) NotDone() bool {
-	return iter.page.NotDone() && iter.i < len(iter.page.Values())
-}
-
-// Response returns the raw server response from the last page request.
-func (iter ResourceSkusResultIterator) Response() ResourceSkusResult {
-	return iter.page.Response()
-}
-
-// Value returns the current value or a zero-initialized value if the
-// iterator has advanced beyond the end of the collection.
-func (iter ResourceSkusResultIterator) Value() ResourceSku {
-	if !iter.page.NotDone() {
-		return ResourceSku{}
-	}
-	return iter.page.Values()[iter.i]
-}
-
-// IsEmpty returns true if the ListResult contains no values.
-func (rsr ResourceSkusResult) IsEmpty() bool {
-	return rsr.Value == nil || len(*rsr.Value) == 0
-}
-
-// resourceSkusResultPreparer prepares a request to retrieve the next set of results.
-// It returns nil if no more results exist.
-func (rsr ResourceSkusResult) resourceSkusResultPreparer() (*http.Request, error) {
-	if rsr.NextLink == nil || len(to.String(rsr.NextLink)) < 1 {
-		return nil, nil
-	}
-	return autorest.Prepare(&http.Request{},
-		autorest.AsJSON(),
-		autorest.AsGet(),
-		autorest.WithBaseURL(to.String(rsr.NextLink)))
-}
-
-// ResourceSkusResultPage contains a page of ResourceSku values.
-type ResourceSkusResultPage struct {
-	fn  func(ResourceSkusResult) (ResourceSkusResult, error)
-	rsr ResourceSkusResult
-}
-
-// Next advances to the next page of values.  If there was an error making
-// the request the page does not advance and the error is returned.
-func (page *ResourceSkusResultPage) Next() error {
-	next, err := page.fn(page.rsr)
-	if err != nil {
-		return err
-	}
-	page.rsr = next
-	return nil
-}
-
-// NotDone returns true if the page enumeration should be started or is not yet complete.
-func (page ResourceSkusResultPage) NotDone() bool {
-	return !page.rsr.IsEmpty()
-}
-
-// Response returns the raw server response from the last page request.
-func (page ResourceSkusResultPage) Response() ResourceSkusResult {
-	return page.rsr
-}
-
-// Values returns the slice of values for the current page or nil if there are no values.
-func (page ResourceSkusResultPage) Values() []ResourceSku {
-	if page.rsr.IsEmpty() {
-		return nil
-	}
-	return *page.rsr.Value
 }
 
 // RollbackStatusInfo information about rollback on failed VM instances after a OS Upgrade operation.
@@ -3762,119 +3089,11 @@ type RunCommandParameterDefinition struct {
 	Required *bool `json:"required,omitempty"`
 }
 
-// RunCommandResult run command operation response.
+// RunCommandResult ...
 type RunCommandResult struct {
-	autorest.Response           `json:"-"`
-	*RunCommandResultProperties `json:"properties,omitempty"`
-	// Name - Operation ID
-	Name *string `json:"name,omitempty"`
-	// Status - Operation status
-	Status *string `json:"status,omitempty"`
-	// StartTime - Start time of the operation
-	StartTime *date.Time `json:"startTime,omitempty"`
-	// EndTime - End time of the operation
-	EndTime *date.Time `json:"endTime,omitempty"`
-	// Error - Api error
-	Error *APIError `json:"error,omitempty"`
-}
-
-// MarshalJSON is the custom marshaler for RunCommandResult.
-func (rcr RunCommandResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	if rcr.RunCommandResultProperties != nil {
-		objectMap["properties"] = rcr.RunCommandResultProperties
-	}
-	if rcr.Name != nil {
-		objectMap["name"] = rcr.Name
-	}
-	if rcr.Status != nil {
-		objectMap["status"] = rcr.Status
-	}
-	if rcr.StartTime != nil {
-		objectMap["startTime"] = rcr.StartTime
-	}
-	if rcr.EndTime != nil {
-		objectMap["endTime"] = rcr.EndTime
-	}
-	if rcr.Error != nil {
-		objectMap["error"] = rcr.Error
-	}
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON is the custom unmarshaler for RunCommandResult struct.
-func (rcr *RunCommandResult) UnmarshalJSON(body []byte) error {
-	var m map[string]*json.RawMessage
-	err := json.Unmarshal(body, &m)
-	if err != nil {
-		return err
-	}
-	for k, v := range m {
-		switch k {
-		case "properties":
-			if v != nil {
-				var runCommandResultProperties RunCommandResultProperties
-				err = json.Unmarshal(*v, &runCommandResultProperties)
-				if err != nil {
-					return err
-				}
-				rcr.RunCommandResultProperties = &runCommandResultProperties
-			}
-		case "name":
-			if v != nil {
-				var name string
-				err = json.Unmarshal(*v, &name)
-				if err != nil {
-					return err
-				}
-				rcr.Name = &name
-			}
-		case "status":
-			if v != nil {
-				var status string
-				err = json.Unmarshal(*v, &status)
-				if err != nil {
-					return err
-				}
-				rcr.Status = &status
-			}
-		case "startTime":
-			if v != nil {
-				var startTime date.Time
-				err = json.Unmarshal(*v, &startTime)
-				if err != nil {
-					return err
-				}
-				rcr.StartTime = &startTime
-			}
-		case "endTime":
-			if v != nil {
-				var endTime date.Time
-				err = json.Unmarshal(*v, &endTime)
-				if err != nil {
-					return err
-				}
-				rcr.EndTime = &endTime
-			}
-		case "error":
-			if v != nil {
-				var errorVar APIError
-				err = json.Unmarshal(*v, &errorVar)
-				if err != nil {
-					return err
-				}
-				rcr.Error = &errorVar
-			}
-		}
-	}
-
-	return nil
-}
-
-// RunCommandResultProperties compute-specific operation properties, including output
-type RunCommandResultProperties struct {
-	// Output - Operation output data (raw JSON)
-	Output interface{} `json:"output,omitempty"`
+	autorest.Response `json:"-"`
+	// Value - Run command operation response.
+	Value *[]InstanceViewStatus `json:"value,omitempty"`
 }
 
 // Sku describes a virtual machine scale set sku.
@@ -4679,63 +3898,19 @@ type VirtualMachineCaptureParameters struct {
 	OverwriteVhds *bool `json:"overwriteVhds,omitempty"`
 }
 
-// VirtualMachineCaptureResult resource Id.
+// VirtualMachineCaptureResult output of virtual machine capture operation.
 type VirtualMachineCaptureResult struct {
-	autorest.Response                      `json:"-"`
-	*VirtualMachineCaptureResultProperties `json:"properties,omitempty"`
+	autorest.Response `json:"-"`
+	// Schema - the schema of the captured virtual machine
+	Schema *string `json:"$schema,omitempty"`
+	// ContentVersion - the version of the content
+	ContentVersion *string `json:"contentVersion,omitempty"`
+	// Parameters - parameters of the captured virtual machine
+	Parameters interface{} `json:"parameters,omitempty"`
+	// Resources - a list of resource items of the captured virtual machine
+	Resources *[]interface{} `json:"resources,omitempty"`
 	// ID - Resource Id
 	ID *string `json:"id,omitempty"`
-}
-
-// MarshalJSON is the custom marshaler for VirtualMachineCaptureResult.
-func (vmcr VirtualMachineCaptureResult) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	if vmcr.VirtualMachineCaptureResultProperties != nil {
-		objectMap["properties"] = vmcr.VirtualMachineCaptureResultProperties
-	}
-	if vmcr.ID != nil {
-		objectMap["id"] = vmcr.ID
-	}
-	return json.Marshal(objectMap)
-}
-
-// UnmarshalJSON is the custom unmarshaler for VirtualMachineCaptureResult struct.
-func (vmcr *VirtualMachineCaptureResult) UnmarshalJSON(body []byte) error {
-	var m map[string]*json.RawMessage
-	err := json.Unmarshal(body, &m)
-	if err != nil {
-		return err
-	}
-	for k, v := range m {
-		switch k {
-		case "properties":
-			if v != nil {
-				var virtualMachineCaptureResultProperties VirtualMachineCaptureResultProperties
-				err = json.Unmarshal(*v, &virtualMachineCaptureResultProperties)
-				if err != nil {
-					return err
-				}
-				vmcr.VirtualMachineCaptureResultProperties = &virtualMachineCaptureResultProperties
-			}
-		case "id":
-			if v != nil {
-				var ID string
-				err = json.Unmarshal(*v, &ID)
-				if err != nil {
-					return err
-				}
-				vmcr.ID = &ID
-			}
-		}
-	}
-
-	return nil
-}
-
-// VirtualMachineCaptureResultProperties compute-specific operation properties, including output
-type VirtualMachineCaptureResultProperties struct {
-	// Output - Operation output data (raw JSON)
-	Output interface{} `json:"output,omitempty"`
 }
 
 // VirtualMachineExtension describes a Virtual Machine Extension.
@@ -5053,7 +4228,7 @@ type VirtualMachineExtensionsDeleteFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineExtensionsDeleteFuture) Result(client VirtualMachineExtensionsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineExtensionsDeleteFuture) Result(client VirtualMachineExtensionsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -5064,13 +4239,7 @@ func (future *VirtualMachineExtensionsDeleteFuture) Result(client VirtualMachine
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineExtensionsDeleteFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeleteResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineExtensionsDeleteFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -5662,7 +4831,7 @@ type VirtualMachineScaleSetDataDisk struct {
 	WriteAcceleratorEnabled *bool `json:"writeAcceleratorEnabled,omitempty"`
 	// CreateOption - The create option. Possible values include: 'DiskCreateOptionTypesFromImage', 'DiskCreateOptionTypesEmpty', 'DiskCreateOptionTypesAttach'
 	CreateOption DiskCreateOptionTypes `json:"createOption,omitempty"`
-	// DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the name of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
+	// DiskSizeGB - Specifies the size of an empty data disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
 	DiskSizeGB *int32 `json:"diskSizeGB,omitempty"`
 	// ManagedDisk - The managed disk parameters.
 	ManagedDisk *VirtualMachineScaleSetManagedDiskParameters `json:"managedDisk,omitempty"`
@@ -5901,7 +5070,7 @@ type VirtualMachineScaleSetExtensionsDeleteFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetExtensionsDeleteFuture) Result(client VirtualMachineScaleSetExtensionsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetExtensionsDeleteFuture) Result(client VirtualMachineScaleSetExtensionsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -5912,13 +5081,7 @@ func (future *VirtualMachineScaleSetExtensionsDeleteFuture) Result(client Virtua
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetExtensionsDeleteFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeleteResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetExtensionsDeleteFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6035,6 +5198,14 @@ type VirtualMachineScaleSetIPConfigurationProperties struct {
 	LoadBalancerBackendAddressPools *[]SubResource `json:"loadBalancerBackendAddressPools,omitempty"`
 	// LoadBalancerInboundNatPools - Specifies an array of references to inbound Nat pools of the load balancers. A scale set can reference inbound nat pools of one public and one internal load balancer. Multiple scale sets cannot use the same load balancer
 	LoadBalancerInboundNatPools *[]SubResource `json:"loadBalancerInboundNatPools,omitempty"`
+}
+
+// VirtualMachineScaleSetIPTag contains the IP tag associated with the public IP address.
+type VirtualMachineScaleSetIPTag struct {
+	// IPTagType - IP tag type. Example: FirstPartyUsage.
+	IPTagType *string `json:"ipTagType,omitempty"`
+	// Tag - IP tag associated with the public IP. Example: SQL, Storage etc.
+	Tag *string `json:"tag,omitempty"`
 }
 
 // VirtualMachineScaleSetListOSUpgradeHistory list of Virtual Machine Scale Set OS Upgrade History operation
@@ -6451,7 +5622,7 @@ func (page VirtualMachineScaleSetListWithLinkResultPage) Values() []VirtualMachi
 
 // VirtualMachineScaleSetManagedDiskParameters describes the parameters of a ScaleSet managed disk.
 type VirtualMachineScaleSetManagedDiskParameters struct {
-	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS or Premium_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS'
+	// StorageAccountType - Specifies the storage account type for the managed disk. Possible values are: Standard_LRS, Premium_LRS, and StandardSSD_LRS. Possible values include: 'StorageAccountTypesStandardLRS', 'StorageAccountTypesPremiumLRS', 'StorageAccountTypesStandardSSDLRS'
 	StorageAccountType StorageAccountTypes `json:"storageAccountType,omitempty"`
 }
 
@@ -6564,6 +5735,8 @@ type VirtualMachineScaleSetOSDisk struct {
 	WriteAcceleratorEnabled *bool `json:"writeAcceleratorEnabled,omitempty"`
 	// CreateOption - Specifies how the virtual machines in the scale set should be created.<br><br> The only allowed value is: **FromImage** \u2013 This value is used when you are using an image to create the virtual machine. If you are using a platform image, you also use the imageReference element described above. If you are using a marketplace image, you  also use the plan element previously described. Possible values include: 'DiskCreateOptionTypesFromImage', 'DiskCreateOptionTypesEmpty', 'DiskCreateOptionTypesAttach'
 	CreateOption DiskCreateOptionTypes `json:"createOption,omitempty"`
+	// DiskSizeGB - Specifies the size of the operating system disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
+	DiskSizeGB *int32 `json:"diskSizeGB,omitempty"`
 	// OsType - This property allows you to specify the type of the OS that is included in the disk if creating a VM from user-image or a specialized VHD. <br><br> Possible values are: <br><br> **Windows** <br><br> **Linux**. Possible values include: 'Windows', 'Linux'
 	OsType OperatingSystemTypes `json:"osType,omitempty"`
 	// Image - Specifies information about the unmanaged user image to base the scale set on.
@@ -6679,6 +5852,8 @@ type VirtualMachineScaleSetPublicIPAddressConfigurationProperties struct {
 	IdleTimeoutInMinutes *int32 `json:"idleTimeoutInMinutes,omitempty"`
 	// DNSSettings - The dns settings to be applied on the publicIP addresses .
 	DNSSettings *VirtualMachineScaleSetPublicIPAddressConfigurationDNSSettings `json:"dnsSettings,omitempty"`
+	// IPTags - The list of IP tags associated with the public IP address.
+	IPTags *[]VirtualMachineScaleSetIPTag `json:"ipTags,omitempty"`
 }
 
 // VirtualMachineScaleSetRollingUpgradesCancelFuture an abstraction for monitoring and retrieving the results of a
@@ -6689,7 +5864,7 @@ type VirtualMachineScaleSetRollingUpgradesCancelFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetRollingUpgradesCancelFuture) Result(client VirtualMachineScaleSetRollingUpgradesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetRollingUpgradesCancelFuture) Result(client VirtualMachineScaleSetRollingUpgradesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6700,13 +5875,7 @@ func (future *VirtualMachineScaleSetRollingUpgradesCancelFuture) Result(client V
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetRollingUpgradesCancelFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.CancelResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetRollingUpgradesCancelFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6718,7 +5887,7 @@ type VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture) Result(client VirtualMachineScaleSetRollingUpgradesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture) Result(client VirtualMachineScaleSetRollingUpgradesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6729,13 +5898,7 @@ func (future *VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture) Result(
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.StartOSUpgradeResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6776,7 +5939,7 @@ type VirtualMachineScaleSetsDeallocateFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsDeallocateFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsDeallocateFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6787,13 +5950,7 @@ func (future *VirtualMachineScaleSetsDeallocateFuture) Result(client VirtualMach
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsDeallocateFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeallocateResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsDeallocateFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6805,7 +5962,7 @@ type VirtualMachineScaleSetsDeleteFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsDeleteFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsDeleteFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6816,13 +5973,7 @@ func (future *VirtualMachineScaleSetsDeleteFuture) Result(client VirtualMachineS
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsDeleteFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeleteResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsDeleteFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6834,7 +5985,7 @@ type VirtualMachineScaleSetsDeleteInstancesFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsDeleteInstancesFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsDeleteInstancesFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6845,13 +5996,7 @@ func (future *VirtualMachineScaleSetsDeleteInstancesFuture) Result(client Virtua
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsDeleteInstancesFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeleteInstancesResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsDeleteInstancesFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6885,7 +6030,7 @@ type VirtualMachineScaleSetsPerformMaintenanceFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsPerformMaintenanceFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsPerformMaintenanceFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6896,13 +6041,7 @@ func (future *VirtualMachineScaleSetsPerformMaintenanceFuture) Result(client Vir
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsPerformMaintenanceFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.PerformMaintenanceResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsPerformMaintenanceFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6914,7 +6053,7 @@ type VirtualMachineScaleSetsPowerOffFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsPowerOffFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsPowerOffFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6925,13 +6064,7 @@ func (future *VirtualMachineScaleSetsPowerOffFuture) Result(client VirtualMachin
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsPowerOffFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.PowerOffResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsPowerOffFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6943,7 +6076,7 @@ type VirtualMachineScaleSetsRedeployFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsRedeployFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsRedeployFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6954,13 +6087,7 @@ func (future *VirtualMachineScaleSetsRedeployFuture) Result(client VirtualMachin
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsRedeployFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.RedeployResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsRedeployFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -6972,7 +6099,7 @@ type VirtualMachineScaleSetsReimageAllFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsReimageAllFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsReimageAllFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -6983,13 +6110,7 @@ func (future *VirtualMachineScaleSetsReimageAllFuture) Result(client VirtualMach
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsReimageAllFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.ReimageAllResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsReimageAllFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -7001,7 +6122,7 @@ type VirtualMachineScaleSetsReimageFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsReimageFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsReimageFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -7012,13 +6133,7 @@ func (future *VirtualMachineScaleSetsReimageFuture) Result(client VirtualMachine
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsReimageFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.ReimageResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsReimageFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -7030,7 +6145,7 @@ type VirtualMachineScaleSetsRestartFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsRestartFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsRestartFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -7041,13 +6156,7 @@ func (future *VirtualMachineScaleSetsRestartFuture) Result(client VirtualMachine
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsRestartFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.RestartResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsRestartFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -7059,7 +6168,7 @@ type VirtualMachineScaleSetsStartFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsStartFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsStartFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -7070,13 +6179,7 @@ func (future *VirtualMachineScaleSetsStartFuture) Result(client VirtualMachineSc
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsStartFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.StartResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsStartFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -7127,7 +6230,7 @@ type VirtualMachineScaleSetsUpdateInstancesFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetsUpdateInstancesFuture) Result(client VirtualMachineScaleSetsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetsUpdateInstancesFuture) Result(client VirtualMachineScaleSetsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -7138,13 +6241,7 @@ func (future *VirtualMachineScaleSetsUpdateInstancesFuture) Result(client Virtua
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetsUpdateInstancesFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.UpdateInstancesResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetsUpdateInstancesFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -7425,6 +6522,8 @@ type VirtualMachineScaleSetUpdateOSDisk struct {
 	Caching CachingTypes `json:"caching,omitempty"`
 	// WriteAcceleratorEnabled - Specifies whether writeAccelerator should be enabled or disabled on the disk.
 	WriteAcceleratorEnabled *bool `json:"writeAcceleratorEnabled,omitempty"`
+	// DiskSizeGB - Specifies the size of the operating system disk in gigabytes. This element can be used to overwrite the size of the disk in a virtual machine image. <br><br> This value cannot be larger than 1023 GB
+	DiskSizeGB *int32 `json:"diskSizeGB,omitempty"`
 	// Image - The Source User Image VirtualHardDisk. This VirtualHardDisk will be copied before using it to attach to the Virtual Machine. If SourceImage is provided, the destination VirtualHardDisk should not exist.
 	Image *VirtualHardDisk `json:"image,omitempty"`
 	// VhdContainers - The list of virtual hard disk container uris.
@@ -7557,6 +6656,8 @@ type VirtualMachineScaleSetVM struct {
 	Plan *Plan `json:"plan,omitempty"`
 	// Resources - The virtual machine child extension resources.
 	Resources *[]VirtualMachineExtension `json:"resources,omitempty"`
+	// Zones - The virtual machine zones.
+	Zones *[]string `json:"zones,omitempty"`
 	// ID - Resource Id
 	ID *string `json:"id,omitempty"`
 	// Name - Resource name
@@ -7586,6 +6687,9 @@ func (vmssv VirtualMachineScaleSetVM) MarshalJSON() ([]byte, error) {
 	}
 	if vmssv.Resources != nil {
 		objectMap["resources"] = vmssv.Resources
+	}
+	if vmssv.Zones != nil {
+		objectMap["zones"] = vmssv.Zones
 	}
 	if vmssv.ID != nil {
 		objectMap["id"] = vmssv.ID
@@ -7658,6 +6762,15 @@ func (vmssv *VirtualMachineScaleSetVM) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				vmssv.Resources = &resources
+			}
+		case "zones":
+			if v != nil {
+				var zones []string
+				err = json.Unmarshal(*v, &zones)
+				if err != nil {
+					return err
+				}
+				vmssv.Zones = &zones
 			}
 		case "id":
 			if v != nil {
@@ -7889,7 +7002,7 @@ type VirtualMachineScaleSetVMProperties struct {
 	// VMID - Azure VM unique ID.
 	VMID *string `json:"vmId,omitempty"`
 	// InstanceView - The virtual machine instance view.
-	InstanceView *VirtualMachineInstanceView `json:"instanceView,omitempty"`
+	InstanceView *VirtualMachineScaleSetVMInstanceView `json:"instanceView,omitempty"`
 	// HardwareProfile - Specifies the hardware settings for the virtual machine.
 	HardwareProfile *HardwareProfile `json:"hardwareProfile,omitempty"`
 	// StorageProfile - Specifies the storage settings for the virtual machine disks.
@@ -7916,7 +7029,7 @@ type VirtualMachineScaleSetVMsDeallocateFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsDeallocateFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsDeallocateFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -7927,13 +7040,7 @@ func (future *VirtualMachineScaleSetVMsDeallocateFuture) Result(client VirtualMa
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsDeallocateFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeallocateResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsDeallocateFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -7945,7 +7052,7 @@ type VirtualMachineScaleSetVMsDeleteFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsDeleteFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsDeleteFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -7956,13 +7063,7 @@ func (future *VirtualMachineScaleSetVMsDeleteFuture) Result(client VirtualMachin
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsDeleteFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeleteResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsDeleteFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -7974,7 +7075,7 @@ type VirtualMachineScaleSetVMsPerformMaintenanceFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsPerformMaintenanceFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsPerformMaintenanceFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -7985,13 +7086,7 @@ func (future *VirtualMachineScaleSetVMsPerformMaintenanceFuture) Result(client V
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsPerformMaintenanceFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.PerformMaintenanceResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsPerformMaintenanceFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8003,7 +7098,7 @@ type VirtualMachineScaleSetVMsPowerOffFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsPowerOffFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsPowerOffFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8014,13 +7109,7 @@ func (future *VirtualMachineScaleSetVMsPowerOffFuture) Result(client VirtualMach
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsPowerOffFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.PowerOffResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsPowerOffFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8032,7 +7121,7 @@ type VirtualMachineScaleSetVMsRedeployFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsRedeployFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsRedeployFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8043,13 +7132,7 @@ func (future *VirtualMachineScaleSetVMsRedeployFuture) Result(client VirtualMach
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsRedeployFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.RedeployResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsRedeployFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8061,7 +7144,7 @@ type VirtualMachineScaleSetVMsReimageAllFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsReimageAllFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsReimageAllFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8072,13 +7155,7 @@ func (future *VirtualMachineScaleSetVMsReimageAllFuture) Result(client VirtualMa
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsReimageAllFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.ReimageAllResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsReimageAllFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8090,7 +7167,7 @@ type VirtualMachineScaleSetVMsReimageFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsReimageFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsReimageFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8101,13 +7178,7 @@ func (future *VirtualMachineScaleSetVMsReimageFuture) Result(client VirtualMachi
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsReimageFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.ReimageResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsReimageFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8119,7 +7190,7 @@ type VirtualMachineScaleSetVMsRestartFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsRestartFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsRestartFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8130,11 +7201,34 @@ func (future *VirtualMachineScaleSetVMsRestartFuture) Result(client VirtualMachi
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsRestartFuture")
 		return
 	}
+	ar.Response = future.Response()
+	return
+}
+
+// VirtualMachineScaleSetVMsRunCommandFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type VirtualMachineScaleSetVMsRunCommandFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *VirtualMachineScaleSetVMsRunCommandFuture) Result(client VirtualMachineScaleSetVMsClient) (rcr RunCommandResult, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsRunCommandFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsRunCommandFuture")
+		return
+	}
 	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.RestartResponder(osr.Response.Response)
+	if rcr.Response.Response, err = future.GetResult(sender); err == nil && rcr.Response.Response.StatusCode != http.StatusNoContent {
+		rcr, err = client.RunCommandResponder(rcr.Response.Response)
 		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsRestartFuture", "Result", osr.Response.Response, "Failure responding to request")
+			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsRunCommandFuture", "Result", rcr.Response.Response, "Failure responding to request")
 		}
 	}
 	return
@@ -8148,7 +7242,7 @@ type VirtualMachineScaleSetVMsStartFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachineScaleSetVMsStartFuture) Result(client VirtualMachineScaleSetVMsClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachineScaleSetVMsStartFuture) Result(client VirtualMachineScaleSetVMsClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8159,13 +7253,7 @@ func (future *VirtualMachineScaleSetVMsStartFuture) Result(client VirtualMachine
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachineScaleSetVMsStartFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.StartResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachineScaleSetVMsStartFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8235,7 +7323,7 @@ type VirtualMachinesConvertToManagedDisksFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesConvertToManagedDisksFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesConvertToManagedDisksFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8246,13 +7334,7 @@ func (future *VirtualMachinesConvertToManagedDisksFuture) Result(client VirtualM
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesConvertToManagedDisksFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.ConvertToManagedDisksResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesConvertToManagedDisksFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8293,7 +7375,7 @@ type VirtualMachinesDeallocateFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesDeallocateFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesDeallocateFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8304,13 +7386,7 @@ func (future *VirtualMachinesDeallocateFuture) Result(client VirtualMachinesClie
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesDeallocateFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeallocateResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesDeallocateFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8322,7 +7398,7 @@ type VirtualMachinesDeleteFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesDeleteFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesDeleteFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8333,13 +7409,7 @@ func (future *VirtualMachinesDeleteFuture) Result(client VirtualMachinesClient) 
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesDeleteFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.DeleteResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesDeleteFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8374,7 +7444,7 @@ type VirtualMachinesPerformMaintenanceFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesPerformMaintenanceFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesPerformMaintenanceFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8385,13 +7455,7 @@ func (future *VirtualMachinesPerformMaintenanceFuture) Result(client VirtualMach
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesPerformMaintenanceFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.PerformMaintenanceResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesPerformMaintenanceFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8403,7 +7467,7 @@ type VirtualMachinesPowerOffFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesPowerOffFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesPowerOffFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8414,13 +7478,7 @@ func (future *VirtualMachinesPowerOffFuture) Result(client VirtualMachinesClient
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesPowerOffFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.PowerOffResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesPowerOffFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8432,7 +7490,7 @@ type VirtualMachinesRedeployFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesRedeployFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesRedeployFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8443,13 +7501,7 @@ func (future *VirtualMachinesRedeployFuture) Result(client VirtualMachinesClient
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesRedeployFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.RedeployResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesRedeployFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8461,7 +7513,7 @@ type VirtualMachinesRestartFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesRestartFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesRestartFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8472,13 +7524,7 @@ func (future *VirtualMachinesRestartFuture) Result(client VirtualMachinesClient)
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesRestartFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.RestartResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesRestartFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -8518,7 +7564,7 @@ type VirtualMachinesStartFuture struct {
 
 // Result returns the result of the asynchronous operation.
 // If the operation has not completed it will return an error.
-func (future *VirtualMachinesStartFuture) Result(client VirtualMachinesClient) (osr OperationStatusResponse, err error) {
+func (future *VirtualMachinesStartFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
 	done, err = future.Done(client)
 	if err != nil {
@@ -8529,13 +7575,7 @@ func (future *VirtualMachinesStartFuture) Result(client VirtualMachinesClient) (
 		err = azure.NewAsyncOpIncompleteError("compute.VirtualMachinesStartFuture")
 		return
 	}
-	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	if osr.Response.Response, err = future.GetResult(sender); err == nil && osr.Response.Response.StatusCode != http.StatusNoContent {
-		osr, err = client.StartResponder(osr.Response.Response)
-		if err != nil {
-			err = autorest.NewErrorWithError(err, "compute.VirtualMachinesStartFuture", "Result", osr.Response.Response, "Failure responding to request")
-		}
-	}
+	ar.Response = future.Response()
 	return
 }
 

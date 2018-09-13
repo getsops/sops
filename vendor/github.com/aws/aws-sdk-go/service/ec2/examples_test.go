@@ -281,6 +281,37 @@ func ExampleEC2_AssociateDhcpOptions_shared01() {
 	fmt.Println(result)
 }
 
+// To associate an IAM instance profile with an instance
+//
+// This example associates an IAM instance profile named admin-role with the specified
+// instance.
+func ExampleEC2_AssociateIamInstanceProfile_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.AssociateIamInstanceProfileInput{
+		IamInstanceProfile: &ec2.IamInstanceProfileSpecification{
+			Name: aws.String("admin-role"),
+		},
+		InstanceId: aws.String("i-123456789abcde123"),
+	}
+
+	result, err := svc.AssociateIamInstanceProfile(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To associate a route table with a subnet
 //
 // This example associates the specified route table with the specified subnet.
@@ -379,6 +410,211 @@ func ExampleEC2_AttachVolume_shared00() {
 	}
 
 	result, err := svc.AttachVolume(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To add a rule that allows outbound traffic to a specific address range
+//
+// This example adds a rule that grants access to the specified address ranges on TCP
+// port 80.
+func ExampleEC2_AuthorizeSecurityGroupEgress_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.AuthorizeSecurityGroupEgressInput{
+		GroupId: aws.String("sg-1a2b3c4d"),
+		IpPermissions: []*ec2.IpPermission{
+			{
+				FromPort:   aws.Int64(80),
+				IpProtocol: aws.String("tcp"),
+				IpRanges: []*ec2.IpRange{
+					{
+						CidrIp: aws.String("10.0.0.0/16"),
+					},
+				},
+				ToPort: aws.Int64(80),
+			},
+		},
+	}
+
+	result, err := svc.AuthorizeSecurityGroupEgress(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To add a rule that allows outbound traffic to a specific security group
+//
+// This example adds a rule that grants access to the specified security group on TCP
+// port 80.
+func ExampleEC2_AuthorizeSecurityGroupEgress_shared01() {
+	svc := ec2.New(session.New())
+	input := &ec2.AuthorizeSecurityGroupEgressInput{
+		GroupId: aws.String("sg-1a2b3c4d"),
+		IpPermissions: []*ec2.IpPermission{
+			{
+				FromPort:   aws.Int64(80),
+				IpProtocol: aws.String("tcp"),
+				ToPort:     aws.Int64(80),
+				UserIdGroupPairs: []*ec2.UserIdGroupPair{
+					{
+						GroupId: aws.String("sg-4b51a32f"),
+					},
+				},
+			},
+		},
+	}
+
+	result, err := svc.AuthorizeSecurityGroupEgress(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To add a rule that allows inbound SSH traffic from an IPv4 address range
+//
+// This example enables inbound traffic on TCP port 22 (SSH). The rule includes a description
+// to help you identify it later.
+func ExampleEC2_AuthorizeSecurityGroupIngress_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.AuthorizeSecurityGroupIngressInput{
+		GroupId: aws.String("sg-903004f8"),
+		IpPermissions: []*ec2.IpPermission{
+			{
+				FromPort:   aws.Int64(22),
+				IpProtocol: aws.String("tcp"),
+				IpRanges: []*ec2.IpRange{
+					{
+						CidrIp:      aws.String("203.0.113.0/24"),
+						Description: aws.String("SSH access from the LA office"),
+					},
+				},
+				ToPort: aws.Int64(22),
+			},
+		},
+	}
+
+	result, err := svc.AuthorizeSecurityGroupIngress(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To add a rule that allows inbound HTTP traffic from another security group
+//
+// This example enables inbound traffic on TCP port 80 from the specified security group.
+// The group must be in the same VPC or a peer VPC. Incoming traffic is allowed based
+// on the private IP addresses of instances that are associated with the specified security
+// group.
+func ExampleEC2_AuthorizeSecurityGroupIngress_shared01() {
+	svc := ec2.New(session.New())
+	input := &ec2.AuthorizeSecurityGroupIngressInput{
+		GroupId: aws.String("sg-111aaa22"),
+		IpPermissions: []*ec2.IpPermission{
+			{
+				FromPort:   aws.Int64(80),
+				IpProtocol: aws.String("tcp"),
+				ToPort:     aws.Int64(80),
+				UserIdGroupPairs: []*ec2.UserIdGroupPair{
+					{
+						Description: aws.String("HTTP access from other instances"),
+						GroupId:     aws.String("sg-1a2b3c4d"),
+					},
+				},
+			},
+		},
+	}
+
+	result, err := svc.AuthorizeSecurityGroupIngress(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To add a rule that allows inbound RDP traffic from an IPv6 address range
+//
+// This example adds an inbound rule that allows RDP traffic from the specified IPv6
+// address range. The rule includes a description to help you identify it later.
+func ExampleEC2_AuthorizeSecurityGroupIngress_shared02() {
+	svc := ec2.New(session.New())
+	input := &ec2.AuthorizeSecurityGroupIngressInput{
+		GroupId: aws.String("sg-123abc12 "),
+		IpPermissions: []*ec2.IpPermission{
+			{
+				FromPort:   aws.Int64(3389),
+				IpProtocol: aws.String("tcp"),
+				Ipv6Ranges: []*ec2.Ipv6Range{
+					{
+						CidrIpv6:    aws.String("2001:db8:1234:1a00::/64"),
+						Description: aws.String("RDP access from the NY office"),
+					},
+				},
+				ToPort: aws.Int64(3389),
+			},
+		},
+	}
+
+	result, err := svc.AuthorizeSecurityGroupIngress(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -516,6 +752,36 @@ func ExampleEC2_ConfirmProductInstance_shared00() {
 	fmt.Println(result)
 }
 
+// To copy an AMI to another region
+//
+// This example copies the specified AMI from the us-east-1 region to the current region.
+func ExampleEC2_CopyImage_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.CopyImageInput{
+		Description:   aws.String(""),
+		Name:          aws.String("My server"),
+		SourceImageId: aws.String("ami-5731123e"),
+		SourceRegion:  aws.String("us-east-1"),
+	}
+
+	result, err := svc.CopyImage(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To copy a snapshot
 //
 // This example copies a snapshot with the snapshot ID of ``snap-066877671789bd71b``
@@ -613,6 +879,49 @@ func ExampleEC2_CreateDhcpOptions_shared00() {
 	fmt.Println(result)
 }
 
+// To create an AMI from an Amazon EBS-backed instance
+//
+// This example creates an AMI from the specified instance and adds an EBS volume with
+// the device name /dev/sdh and an instance store volume with the device name /dev/sdc.
+func ExampleEC2_CreateImage_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.CreateImageInput{
+		BlockDeviceMappings: []*ec2.BlockDeviceMapping{
+			{
+				DeviceName: aws.String("/dev/sdh"),
+				Ebs: &ec2.EbsBlockDevice{
+					VolumeSize: aws.Int64(100),
+				},
+			},
+			{
+				DeviceName:  aws.String("/dev/sdc"),
+				VirtualName: aws.String("ephemeral1"),
+			},
+		},
+		Description: aws.String("An AMI for my server"),
+		InstanceId:  aws.String("i-1234567890abcdef0"),
+		Name:        aws.String("My server"),
+		NoReboot:    aws.Bool(true),
+	}
+
+	result, err := svc.CreateImage(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To create an Internet gateway
 //
 // This example creates an Internet gateway.
@@ -648,6 +957,92 @@ func ExampleEC2_CreateKeyPair_shared00() {
 	}
 
 	result, err := svc.CreateKeyPair(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create a launch template
+//
+// This example creates a launch template that specifies the subnet in which to launch
+// the instance, assigns a public IP address and an IPv6 address to the instance, and
+// creates a tag for the instance.
+func ExampleEC2_CreateLaunchTemplate_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.CreateLaunchTemplateInput{
+		LaunchTemplateData: &ec2.RequestLaunchTemplateData{
+			ImageId:      aws.String("ami-8c1be5f6"),
+			InstanceType: aws.String("t2.small"),
+			NetworkInterfaces: []*ec2.LaunchTemplateInstanceNetworkInterfaceSpecificationRequest{
+				{
+					AssociatePublicIpAddress: aws.Bool(true),
+					DeviceIndex:              aws.Int64(0),
+					Ipv6AddressCount:         aws.Int64(1),
+					SubnetId:                 aws.String("subnet-7b16de0c"),
+				},
+			},
+			TagSpecifications: []*ec2.LaunchTemplateTagSpecificationRequest{
+				{
+					ResourceType: aws.String("instance"),
+					Tags: []*ec2.Tag{
+						{
+							Key:   aws.String("Name"),
+							Value: aws.String("webserver"),
+						},
+					},
+				},
+			},
+		},
+		LaunchTemplateName: aws.String("my-template"),
+		VersionDescription: aws.String("WebVersion1"),
+	}
+
+	result, err := svc.CreateLaunchTemplate(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create a launch template version
+//
+// This example creates a new launch template version based on version 1 of the specified
+// launch template and specifies a different AMI ID.
+func ExampleEC2_CreateLaunchTemplateVersion_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.CreateLaunchTemplateVersionInput{
+		LaunchTemplateData: &ec2.RequestLaunchTemplateData{
+			ImageId: aws.String("ami-c998b6b2"),
+		},
+		LaunchTemplateId:   aws.String("lt-0abcd290751193123"),
+		SourceVersion:      aws.String("1"),
+		VersionDescription: aws.String("WebVersion2"),
+	}
+
+	result, err := svc.CreateLaunchTemplateVersion(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -858,6 +1253,35 @@ func ExampleEC2_CreateRouteTable_shared00() {
 	}
 
 	result, err := svc.CreateRouteTable(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create a security group for a VPC
+//
+// This example creates a security group for the specified VPC.
+func ExampleEC2_CreateSecurityGroup_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.CreateSecurityGroupInput{
+		Description: aws.String("My security group"),
+		GroupName:   aws.String("my-security-group"),
+		VpcId:       aws.String("vpc-1a2b3c4d"),
+	}
+
+	result, err := svc.CreateSecurityGroup(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -1193,6 +1617,63 @@ func ExampleEC2_DeleteKeyPair_shared00() {
 	fmt.Println(result)
 }
 
+// To delete a launch template
+//
+// This example deletes the specified launch template.
+func ExampleEC2_DeleteLaunchTemplate_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DeleteLaunchTemplateInput{
+		LaunchTemplateId: aws.String("lt-0abcd290751193123"),
+	}
+
+	result, err := svc.DeleteLaunchTemplate(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To delete a launch template version
+//
+// This example deletes the specified launch template version.
+func ExampleEC2_DeleteLaunchTemplateVersions_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DeleteLaunchTemplateVersionsInput{
+		LaunchTemplateId: aws.String("lt-0abcd290751193123"),
+		Versions: []*string{
+			aws.String("1"),
+		},
+	}
+
+	result, err := svc.DeleteLaunchTemplateVersions(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To delete a NAT gateway
 //
 // This example deletes the specified NAT gateway.
@@ -1369,6 +1850,33 @@ func ExampleEC2_DeleteRouteTable_shared00() {
 	}
 
 	result, err := svc.DeleteRouteTable(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To delete a security group
+//
+// This example deletes the specified security group.
+func ExampleEC2_DeleteSecurityGroup_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DeleteSecurityGroupInput{
+		GroupId: aws.String("sg-903004f8"),
+	}
+
+	result, err := svc.DeleteSecurityGroup(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -1787,6 +2295,92 @@ func ExampleEC2_DescribeDhcpOptions_shared00() {
 	fmt.Println(result)
 }
 
+// To describe an IAM instance profile association
+//
+// This example describes the specified IAM instance profile association.
+func ExampleEC2_DescribeIamInstanceProfileAssociations_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeIamInstanceProfileAssociationsInput{
+		AssociationIds: []*string{
+			aws.String("iip-assoc-0db249b1f25fa24b8"),
+		},
+	}
+
+	result, err := svc.DescribeIamInstanceProfileAssociations(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe the launch permissions for an AMI
+//
+// This example describes the launch permissions for the specified AMI.
+func ExampleEC2_DescribeImageAttribute_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeImageAttributeInput{
+		Attribute: aws.String("launchPermission"),
+		ImageId:   aws.String("ami-5731123e"),
+	}
+
+	result, err := svc.DescribeImageAttribute(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe an AMI
+//
+// This example describes the specified AMI.
+func ExampleEC2_DescribeImages_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeImagesInput{
+		ImageIds: []*string{
+			aws.String("ami-5731123e"),
+		},
+	}
+
+	result, err := svc.DescribeImages(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To describe the instance type
 //
 // This example describes the instance type of the specified instance.
@@ -1874,6 +2468,132 @@ func ExampleEC2_DescribeInstanceAttribute_shared02() {
 	fmt.Println(result)
 }
 
+// To describe the status of an instance
+//
+// This example describes the current status of the specified instance.
+func ExampleEC2_DescribeInstanceStatus_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeInstanceStatusInput{
+		InstanceIds: []*string{
+			aws.String("i-1234567890abcdef0"),
+		},
+	}
+
+	result, err := svc.DescribeInstanceStatus(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe an Amazon EC2 instance
+//
+// This example describes the specified instance.
+func ExampleEC2_DescribeInstances_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeInstancesInput{
+		InstanceIds: []*string{
+			aws.String("i-1234567890abcdef0"),
+		},
+	}
+
+	result, err := svc.DescribeInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe the instances with a specific instance type
+//
+// This example describes the instances with the t2.micro instance type.
+func ExampleEC2_DescribeInstances_shared01() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeInstancesInput{
+		Filters: []*ec2.Filter{
+			{
+				Name: aws.String("instance-type"),
+				Values: []*string{
+					aws.String("t2.micro"),
+				},
+			},
+		},
+	}
+
+	result, err := svc.DescribeInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe the instances with a specific tag
+//
+// This example describes the instances with the Purpose=test tag.
+func ExampleEC2_DescribeInstances_shared02() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeInstancesInput{
+		Filters: []*ec2.Filter{
+			{
+				Name: aws.String("tag:Purpose"),
+				Values: []*string{
+					aws.String("test"),
+				},
+			},
+		},
+	}
+
+	result, err := svc.DescribeInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To describe the Internet gateway for a VPC
 //
 // This example describes the Internet gateway for the specified VPC.
@@ -1920,6 +2640,62 @@ func ExampleEC2_DescribeKeyPairs_shared00() {
 	}
 
 	result, err := svc.DescribeKeyPairs(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe the versions for a launch template
+//
+// This example describes the versions for the specified launch template.
+func ExampleEC2_DescribeLaunchTemplateVersions_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeLaunchTemplateVersionsInput{
+		LaunchTemplateId: aws.String("068f72b72934aff71"),
+	}
+
+	result, err := svc.DescribeLaunchTemplateVersions(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe a launch template
+//
+// This example describes the specified launch template.
+func ExampleEC2_DescribeLaunchTemplates_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeLaunchTemplatesInput{
+		LaunchTemplateIds: []*string{
+			aws.String("lt-01238c059e3466abc"),
+		},
+	}
+
+	result, err := svc.DescribeLaunchTemplates(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -2270,6 +3046,98 @@ func ExampleEC2_DescribeScheduledInstances_shared00() {
 	}
 
 	result, err := svc.DescribeScheduledInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe security group references
+//
+// This example describes the security group references for the specified security group.
+func ExampleEC2_DescribeSecurityGroupReferences_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeSecurityGroupReferencesInput{
+		GroupId: []*string{
+			aws.String("sg-903004f8"),
+		},
+	}
+
+	result, err := svc.DescribeSecurityGroupReferences(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe a security group
+//
+// This example describes the specified security group.
+func ExampleEC2_DescribeSecurityGroups_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeSecurityGroupsInput{
+		GroupIds: []*string{
+			aws.String("sg-903004f8"),
+		},
+	}
+
+	result, err := svc.DescribeSecurityGroups(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To describe a tagged security group
+//
+// This example describes the security groups that include the specified tag (Purpose=test).
+func ExampleEC2_DescribeSecurityGroups_shared01() {
+	svc := ec2.New(session.New())
+	input := &ec2.DescribeSecurityGroupsInput{
+		Filters: []*ec2.Filter{
+			{
+				Name: aws.String("tag:Purpose"),
+				Values: []*string{
+					aws.String("test"),
+				},
+			},
+		},
+	}
+
+	result, err := svc.DescribeSecurityGroups(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -3039,6 +3907,33 @@ func ExampleEC2_DisassociateAddress_shared01() {
 	fmt.Println(result)
 }
 
+// To disassociate an IAM instance profile
+//
+// This example disassociates the specified IAM instance profile from an instance.
+func ExampleEC2_DisassociateIamInstanceProfile_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.DisassociateIamInstanceProfileInput{
+		AssociationId: aws.String("iip-assoc-05020b59952902f5f"),
+	}
+
+	result, err := svc.DisassociateIamInstanceProfile(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To disassociate a route table
 //
 // This example disassociates the specified route table from its associated subnet.
@@ -3105,6 +4000,217 @@ func ExampleEC2_EnableVolumeIO_shared00() {
 	}
 
 	result, err := svc.EnableVolumeIO(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get the console output
+//
+// This example gets the console output for the specified instance.
+func ExampleEC2_GetConsoleOutput_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.GetConsoleOutputInput{
+		InstanceId: aws.String("i-1234567890abcdef0"),
+	}
+
+	result, err := svc.GetConsoleOutput(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get the launch template data for an instance
+//
+// This example gets the launch template data for the specified instance.
+func ExampleEC2_GetLaunchTemplateData_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.GetLaunchTemplateDataInput{
+		InstanceId: aws.String("0123d646e8048babc"),
+	}
+
+	result, err := svc.GetLaunchTemplateData(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To make an AMI public
+//
+// This example makes the specified AMI public.
+func ExampleEC2_ModifyImageAttribute_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.ModifyImageAttributeInput{
+		ImageId: aws.String("ami-5731123e"),
+		LaunchPermission: &ec2.LaunchPermissionModifications{
+			Add: []*ec2.LaunchPermission{
+				{
+					Group: aws.String("all"),
+				},
+			},
+		},
+	}
+
+	result, err := svc.ModifyImageAttribute(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To grant launch permissions
+//
+// This example grants launch permissions for the specified AMI to the specified AWS
+// account.
+func ExampleEC2_ModifyImageAttribute_shared01() {
+	svc := ec2.New(session.New())
+	input := &ec2.ModifyImageAttributeInput{
+		ImageId: aws.String("ami-5731123e"),
+		LaunchPermission: &ec2.LaunchPermissionModifications{
+			Add: []*ec2.LaunchPermission{
+				{
+					UserId: aws.String("123456789012"),
+				},
+			},
+		},
+	}
+
+	result, err := svc.ModifyImageAttribute(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To modify the instance type
+//
+// This example modifies the instance type of the specified stopped instance.
+func ExampleEC2_ModifyInstanceAttribute_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.ModifyInstanceAttributeInput{
+		InstanceId: aws.String("i-1234567890abcdef0"),
+		InstanceType: &ec2.AttributeValue{
+			Value: aws.String("m5.large"),
+		},
+	}
+
+	result, err := svc.ModifyInstanceAttribute(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To enable enhanced networking
+//
+// This example enables enhanced networking for the specified stopped instance.
+func ExampleEC2_ModifyInstanceAttribute_shared01() {
+	svc := ec2.New(session.New())
+	input := &ec2.ModifyInstanceAttributeInput{
+		EnaSupport: &ec2.AttributeBooleanValue{
+			Value: aws.Bool(true),
+		},
+		InstanceId: aws.String("i-1234567890abcdef0"),
+	}
+
+	result, err := svc.ModifyInstanceAttribute(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To change the default version of a launch template
+//
+// This example specifies version 2 as the default version of the specified launch template.
+func ExampleEC2_ModifyLaunchTemplate_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.ModifyLaunchTemplateInput{
+		DefaultVersion:   aws.String("2"),
+		LaunchTemplateId: aws.String("lt-0abcd290751193123"),
+	}
+
+	result, err := svc.ModifyLaunchTemplate(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -3539,6 +4645,35 @@ func ExampleEC2_PurchaseScheduledInstances_shared00() {
 	}
 
 	result, err := svc.PurchaseScheduledInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To reboot an EC2 instance
+//
+// This example reboots the specified EC2 instance.
+func ExampleEC2_RebootInstances_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.RebootInstancesInput{
+		InstanceIds: []*string{
+			aws.String("i-1234567890abcdef5"),
+		},
+	}
+
+	result, err := svc.RebootInstances(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -4037,6 +5172,63 @@ func ExampleEC2_RequestSpotInstances_shared01() {
 	fmt.Println(result)
 }
 
+// To reset the launchPermission attribute
+//
+// This example resets the launchPermission attribute for the specified AMI. By default,
+// AMIs are private.
+func ExampleEC2_ResetImageAttribute_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.ResetImageAttributeInput{
+		Attribute: aws.String("launchPermission"),
+		ImageId:   aws.String("ami-5731123e"),
+	}
+
+	result, err := svc.ResetImageAttribute(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To reset the sourceDestCheck attribute
+//
+// This example resets the sourceDestCheck attribute for the specified instance.
+func ExampleEC2_ResetInstanceAttribute_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.ResetInstanceAttributeInput{
+		Attribute:  aws.String("sourceDestCheck"),
+		InstanceId: aws.String("i-1234567890abcdef0"),
+	}
+
+	result, err := svc.ResetInstanceAttribute(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To reset a snapshot attribute
 //
 // This example resets the create volume permissions for snapshot ``snap-1234567890abcdef0``.
@@ -4076,6 +5268,61 @@ func ExampleEC2_RestoreAddressToClassic_shared00() {
 	}
 
 	result, err := svc.RestoreAddressToClassic(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To launch an instance
+//
+// This example launches an instance using the specified AMI, instance type, security
+// group, subnet, block device mapping, and tags.
+func ExampleEC2_RunInstances_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.RunInstancesInput{
+		BlockDeviceMappings: []*ec2.BlockDeviceMapping{
+			{
+				DeviceName: aws.String("/dev/sdh"),
+				Ebs: &ec2.EbsBlockDevice{
+					VolumeSize: aws.Int64(100),
+				},
+			},
+		},
+		ImageId:      aws.String("ami-abc12345"),
+		InstanceType: aws.String("t2.micro"),
+		KeyName:      aws.String("my-key-pair"),
+		MaxCount:     aws.Int64(1),
+		MinCount:     aws.Int64(1),
+		SecurityGroupIds: []*string{
+			aws.String("sg-1a2b3c4d"),
+		},
+		SubnetId: aws.String("subnet-6e7f829e"),
+		TagSpecifications: []*ec2.TagSpecification{
+			{
+				ResourceType: aws.String("instance"),
+				Tags: []*ec2.Tag{
+					{
+						Key:   aws.String("Purpose"),
+						Value: aws.String("test"),
+					},
+				},
+			},
+		},
+	}
+
+	result, err := svc.RunInstances(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -4181,6 +5428,93 @@ func ExampleEC2_RunScheduledInstances_shared01() {
 	fmt.Println(result)
 }
 
+// To start a stopped EC2 instance
+//
+// This example starts the specified EC2 instance.
+func ExampleEC2_StartInstances_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.StartInstancesInput{
+		InstanceIds: []*string{
+			aws.String("i-1234567890abcdef0"),
+		},
+	}
+
+	result, err := svc.StartInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To stop a running EC2 instance
+//
+// This example stops the specified EC2 instance.
+func ExampleEC2_StopInstances_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.StopInstancesInput{
+		InstanceIds: []*string{
+			aws.String("i-1234567890abcdef0"),
+		},
+	}
+
+	result, err := svc.StopInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To terminate an EC2 instance
+//
+// This example terminates the specified EC2 instance.
+func ExampleEC2_TerminateInstances_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.TerminateInstancesInput{
+		InstanceIds: []*string{
+			aws.String("i-1234567890abcdef0"),
+		},
+	}
+
+	result, err := svc.TerminateInstances(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To unassign a secondary private IP address from a network interface
 //
 // This example unassigns the specified private IP address from the specified network
@@ -4195,6 +5529,86 @@ func ExampleEC2_UnassignPrivateIpAddresses_shared00() {
 	}
 
 	result, err := svc.UnassignPrivateIpAddresses(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To update an outbound security group rule description
+//
+// This example updates the description for the specified security group rule.
+func ExampleEC2_UpdateSecurityGroupRuleDescriptionsEgress_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.UpdateSecurityGroupRuleDescriptionsEgressInput{
+		GroupId: aws.String("sg-123abc12"),
+		IpPermissions: []*ec2.IpPermission{
+			{
+				FromPort:   aws.Int64(80),
+				IpProtocol: aws.String("tcp"),
+				IpRanges: []*ec2.IpRange{
+					{
+						CidrIp:      aws.String("203.0.113.0/24"),
+						Description: aws.String("Outbound HTTP access to server 2"),
+					},
+				},
+				ToPort: aws.Int64(80),
+			},
+		},
+	}
+
+	result, err := svc.UpdateSecurityGroupRuleDescriptionsEgress(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To update an inbound security group rule description
+//
+// This example updates the description for the specified security group rule.
+func ExampleEC2_UpdateSecurityGroupRuleDescriptionsIngress_shared00() {
+	svc := ec2.New(session.New())
+	input := &ec2.UpdateSecurityGroupRuleDescriptionsIngressInput{
+		GroupId: aws.String("sg-123abc12"),
+		IpPermissions: []*ec2.IpPermission{
+			{
+				FromPort:   aws.Int64(22),
+				IpProtocol: aws.String("tcp"),
+				IpRanges: []*ec2.IpRange{
+					{
+						CidrIp:      aws.String("203.0.113.0/16"),
+						Description: aws.String("SSH access from the LA office"),
+					},
+				},
+				ToPort: aws.Int64(22),
+			},
+		},
+	}
+
+	result, err := svc.UpdateSecurityGroupRuleDescriptionsIngress(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {

@@ -2035,6 +2035,15 @@
       },
       "exception":true
     },
+    "PullRequestCreatedEventMetadata":{
+      "type":"structure",
+      "members":{
+        "repositoryName":{"shape":"RepositoryName"},
+        "sourceCommitId":{"shape":"CommitId"},
+        "destinationCommitId":{"shape":"CommitId"},
+        "mergeBase":{"shape":"CommitId"}
+      }
+    },
     "PullRequestDoesNotExistException":{
       "type":"structure",
       "members":{
@@ -2048,6 +2057,7 @@
         "eventDate":{"shape":"EventDate"},
         "pullRequestEventType":{"shape":"PullRequestEventType"},
         "actorArn":{"shape":"Arn"},
+        "pullRequestCreatedEventMetadata":{"shape":"PullRequestCreatedEventMetadata"},
         "pullRequestStatusChangedEventMetadata":{"shape":"PullRequestStatusChangedEventMetadata"},
         "pullRequestSourceReferenceUpdatedEventMetadata":{"shape":"PullRequestSourceReferenceUpdatedEventMetadata"},
         "pullRequestMergedStateChangedEventMetadata":{"shape":"PullRequestMergedStateChangedEventMetadata"}
@@ -2090,7 +2100,8 @@
       "members":{
         "repositoryName":{"shape":"RepositoryName"},
         "beforeCommitId":{"shape":"CommitId"},
-        "afterCommitId":{"shape":"CommitId"}
+        "afterCommitId":{"shape":"CommitId"},
+        "mergeBase":{"shape":"CommitId"}
       }
     },
     "PullRequestStatusChangedEventMetadata":{
@@ -2119,6 +2130,7 @@
         "sourceReference":{"shape":"ReferenceName"},
         "destinationReference":{"shape":"ReferenceName"},
         "destinationCommit":{"shape":"CommitId"},
+        "mergeBase":{"shape":"CommitId"},
         "sourceCommit":{"shape":"CommitId"},
         "mergeMetadata":{"shape":"MergeMetadata"}
       }

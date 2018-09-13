@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS CloudHSM V2.
 //    func myFunc(svc cloudhsmv2iface.CloudHSMV2API) bool {
-//        // Make svc.CreateCluster request
+//        // Make svc.CopyBackupToRegion request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockCloudHSMV2Client struct {
 //        cloudhsmv2iface.CloudHSMV2API
 //    }
-//    func (m *mockCloudHSMV2Client) CreateCluster(input *cloudhsmv2.CreateClusterInput) (*cloudhsmv2.CreateClusterOutput, error) {
+//    func (m *mockCloudHSMV2Client) CopyBackupToRegion(input *cloudhsmv2.CopyBackupToRegionInput) (*cloudhsmv2.CopyBackupToRegionOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type CloudHSMV2API interface {
+	CopyBackupToRegion(*cloudhsmv2.CopyBackupToRegionInput) (*cloudhsmv2.CopyBackupToRegionOutput, error)
+	CopyBackupToRegionWithContext(aws.Context, *cloudhsmv2.CopyBackupToRegionInput, ...request.Option) (*cloudhsmv2.CopyBackupToRegionOutput, error)
+	CopyBackupToRegionRequest(*cloudhsmv2.CopyBackupToRegionInput) (*request.Request, *cloudhsmv2.CopyBackupToRegionOutput)
+
 	CreateCluster(*cloudhsmv2.CreateClusterInput) (*cloudhsmv2.CreateClusterOutput, error)
 	CreateClusterWithContext(aws.Context, *cloudhsmv2.CreateClusterInput, ...request.Option) (*cloudhsmv2.CreateClusterOutput, error)
 	CreateClusterRequest(*cloudhsmv2.CreateClusterInput) (*request.Request, *cloudhsmv2.CreateClusterOutput)
@@ -67,6 +71,10 @@ type CloudHSMV2API interface {
 	CreateHsm(*cloudhsmv2.CreateHsmInput) (*cloudhsmv2.CreateHsmOutput, error)
 	CreateHsmWithContext(aws.Context, *cloudhsmv2.CreateHsmInput, ...request.Option) (*cloudhsmv2.CreateHsmOutput, error)
 	CreateHsmRequest(*cloudhsmv2.CreateHsmInput) (*request.Request, *cloudhsmv2.CreateHsmOutput)
+
+	DeleteBackup(*cloudhsmv2.DeleteBackupInput) (*cloudhsmv2.DeleteBackupOutput, error)
+	DeleteBackupWithContext(aws.Context, *cloudhsmv2.DeleteBackupInput, ...request.Option) (*cloudhsmv2.DeleteBackupOutput, error)
+	DeleteBackupRequest(*cloudhsmv2.DeleteBackupInput) (*request.Request, *cloudhsmv2.DeleteBackupOutput)
 
 	DeleteCluster(*cloudhsmv2.DeleteClusterInput) (*cloudhsmv2.DeleteClusterOutput, error)
 	DeleteClusterWithContext(aws.Context, *cloudhsmv2.DeleteClusterInput, ...request.Option) (*cloudhsmv2.DeleteClusterOutput, error)
@@ -100,6 +108,10 @@ type CloudHSMV2API interface {
 
 	ListTagsPages(*cloudhsmv2.ListTagsInput, func(*cloudhsmv2.ListTagsOutput, bool) bool) error
 	ListTagsPagesWithContext(aws.Context, *cloudhsmv2.ListTagsInput, func(*cloudhsmv2.ListTagsOutput, bool) bool, ...request.Option) error
+
+	RestoreBackup(*cloudhsmv2.RestoreBackupInput) (*cloudhsmv2.RestoreBackupOutput, error)
+	RestoreBackupWithContext(aws.Context, *cloudhsmv2.RestoreBackupInput, ...request.Option) (*cloudhsmv2.RestoreBackupOutput, error)
+	RestoreBackupRequest(*cloudhsmv2.RestoreBackupInput) (*request.Request, *cloudhsmv2.RestoreBackupOutput)
 
 	TagResource(*cloudhsmv2.TagResourceInput) (*cloudhsmv2.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *cloudhsmv2.TagResourceInput, ...request.Option) (*cloudhsmv2.TagResourceOutput, error)

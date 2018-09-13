@@ -153,6 +153,9 @@ func (w withGRPCConnectionPool) Apply(o *internal.DialSettings) {
 
 // WithAPIKey returns a ClientOption that specifies an API key to be used
 // as the basis for authentication.
+//
+// API Keys can only be used for JSON-over-HTTP APIs, including those under
+// the import path google.golang.org/api/....
 func WithAPIKey(apiKey string) ClientOption {
 	return withAPIKey(apiKey)
 }

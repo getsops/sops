@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -56,8 +56,8 @@ func (s *pageFetcherReadStub) fetchPage(ctx context.Context, t *Table, schema Sc
 	return result, nil
 }
 
-func waitForQueryStub(context.Context, string) (Schema, error) {
-	return nil, nil
+func waitForQueryStub(context.Context, string) (Schema, uint64, error) {
+	return nil, 1, nil
 }
 
 func TestRead(t *testing.T) {

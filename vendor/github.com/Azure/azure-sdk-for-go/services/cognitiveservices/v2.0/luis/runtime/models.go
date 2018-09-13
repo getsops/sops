@@ -22,41 +22,6 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
-// AzureRegions enumerates the values for azure regions.
-type AzureRegions string
-
-const (
-	// Australiaeast ...
-	Australiaeast AzureRegions = "australiaeast"
-	// Brazilsouth ...
-	Brazilsouth AzureRegions = "brazilsouth"
-	// Eastasia ...
-	Eastasia AzureRegions = "eastasia"
-	// Eastus ...
-	Eastus AzureRegions = "eastus"
-	// Eastus2 ...
-	Eastus2 AzureRegions = "eastus2"
-	// Northeurope ...
-	Northeurope AzureRegions = "northeurope"
-	// Southcentralus ...
-	Southcentralus AzureRegions = "southcentralus"
-	// Southeastasia ...
-	Southeastasia AzureRegions = "southeastasia"
-	// Westcentralus ...
-	Westcentralus AzureRegions = "westcentralus"
-	// Westeurope ...
-	Westeurope AzureRegions = "westeurope"
-	// Westus ...
-	Westus AzureRegions = "westus"
-	// Westus2 ...
-	Westus2 AzureRegions = "westus2"
-)
-
-// PossibleAzureRegionsValues returns an array of possible values for the AzureRegions const type.
-func PossibleAzureRegionsValues() []AzureRegions {
-	return []AzureRegions{Australiaeast, Brazilsouth, Eastasia, Eastus, Eastus2, Northeurope, Southcentralus, Southeastasia, Westcentralus, Westeurope, Westus, Westus2}
-}
-
 // APIError error information returned by the API
 type APIError struct {
 	// StatusCode - HTTP Status code
@@ -92,9 +57,9 @@ type EntityModel struct {
 	// Type - Type of the entity, as defined in LUIS.
 	Type *string `json:"type,omitempty"`
 	// StartIndex - The position of the first character of the matched entity within the utterance.
-	StartIndex *float64 `json:"startIndex,omitempty"`
+	StartIndex *int32 `json:"startIndex,omitempty"`
 	// EndIndex - The position of the last character of the matched entity within the utterance.
-	EndIndex *float64 `json:"endIndex,omitempty"`
+	EndIndex *int32 `json:"endIndex,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for EntityModel.
@@ -129,9 +94,9 @@ type EntityWithResolution struct {
 	// Type - Type of the entity, as defined in LUIS.
 	Type *string `json:"type,omitempty"`
 	// StartIndex - The position of the first character of the matched entity within the utterance.
-	StartIndex *float64 `json:"startIndex,omitempty"`
+	StartIndex *int32 `json:"startIndex,omitempty"`
 	// EndIndex - The position of the last character of the matched entity within the utterance.
-	EndIndex *float64 `json:"endIndex,omitempty"`
+	EndIndex *int32 `json:"endIndex,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for EntityWithResolution.
@@ -167,9 +132,9 @@ type EntityWithScore struct {
 	// Type - Type of the entity, as defined in LUIS.
 	Type *string `json:"type,omitempty"`
 	// StartIndex - The position of the first character of the matched entity within the utterance.
-	StartIndex *float64 `json:"startIndex,omitempty"`
+	StartIndex *int32 `json:"startIndex,omitempty"`
 	// EndIndex - The position of the last character of the matched entity within the utterance.
-	EndIndex *float64 `json:"endIndex,omitempty"`
+	EndIndex *int32 `json:"endIndex,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for EntityWithScore.

@@ -19,7 +19,7 @@ package http
 import (
 	"net/http"
 
-	"go.opencensus.io/exporter/stackdriver/propagation"
+	"contrib.go.opencensus.io/exporter/stackdriver/propagation"
 	"go.opencensus.io/plugin/ochttp"
 )
 

@@ -464,6 +464,30 @@
       "refs": {
       }
     },
+    "SSEDescription": {
+      "base": "<p>The description of the server-side encryption status on the specified DAX cluster.</p>",
+      "refs": {
+        "Cluster$SSEDescription": "<p>The description of the server-side encryption status on the specified DAX cluster.</p>"
+      }
+    },
+    "SSEEnabled": {
+      "base": null,
+      "refs": {
+        "SSESpecification$Enabled": "<p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the cluster.</p>"
+      }
+    },
+    "SSESpecification": {
+      "base": "<p>Represents the settings used to enable server-side encryption.</p>",
+      "refs": {
+        "CreateClusterRequest$SSESpecification": "<p>Represents the settings used to enable server-side encryption on the cluster.</p>"
+      }
+    },
+    "SSEStatus": {
+      "base": null,
+      "refs": {
+        "SSEDescription$Status": "<p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul>"
+      }
+    },
     "SecurityGroupIdentifierList": {
       "base": null,
       "refs": {
@@ -481,6 +505,11 @@
       "base": null,
       "refs": {
         "Cluster$SecurityGroups": "<p>A list of security groups, and the status of each, for the nodes in the cluster.</p>"
+      }
+    },
+    "ServiceLinkedRoleNotFoundFault": {
+      "base": null,
+      "refs": {
       }
     },
     "SourceType": {

@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -145,6 +145,552 @@ func TestEncodeValue(t *testing.T) {
 		if !testEqual(gotType, test.wantType) {
 			t.Errorf("#%d: got encode type: %v, want %v", i, gotType, test.wantType)
 		}
+	}
+}
+
+type encodeTest struct {
+	desc     string
+	in       interface{}
+	want     *proto3.Value
+	wantType *sppb.Type
+}
+
+func checkStructEncoding(desc string, got *proto3.Value, gotType *sppb.Type,
+	want *proto3.Value, wantType *sppb.Type, t *testing.T) {
+	if !testEqual(got, want) {
+		t.Errorf("Test %s: got encode result: %v, want %v", desc, got, want)
+	}
+	if !testEqual(gotType, wantType) {
+		t.Errorf("Test %s: got encode type: %v, want %v", desc, gotType, wantType)
+	}
+}
+
+// Testcase code
+func encodeStructValue(test encodeTest, t *testing.T) {
+	got, gotType, err := encodeValue(test.in)
+	if err != nil {
+		t.Fatalf("Test %s: got error during encoding: %v, want nil", test.desc, err)
+	}
+	checkStructEncoding(test.desc, got, gotType, test.want, test.wantType, t)
+}
+
+func TestEncodeStructValuePointers(t *testing.T) {
+	type structf struct {
+		F int `spanner:"ff2"`
+	}
+	nestedStructProto := structType(mkField("ff2", intType()))
+
+	type testType struct {
+		Stringf    string
+		Structf    *structf
+		ArrStructf []*structf
+	}
+	testTypeProto := structType(
+		mkField("Stringf", stringType()),
+		mkField("Structf", nestedStructProto),
+		mkField("ArrStructf", listType(nestedStructProto)))
+
+	for _, test := range []encodeTest{
+		{
+			"Pointer to Go struct with pointers-to-(array)-struct fields.",
+			&testType{"hello", &structf{50}, []*structf{{30}, {40}}},
+			listProto(
+				stringProto("hello"),
+				listProto(intProto(50)),
+				listProto(
+					listProto(intProto(30)),
+					listProto(intProto(40)))),
+			testTypeProto,
+		},
+		{
+			"Nil pointer to Go struct representing a NULL struct value.",
+			(*testType)(nil),
+			nullProto(),
+			testTypeProto,
+		},
+		{
+			"Slice of pointers to Go structs with NULL and non-NULL elements.",
+			[]*testType{
+				(*testType)(nil),
+				{"hello", nil, []*structf{nil, {40}}},
+				{"world", &structf{70}, nil},
+			},
+			listProto(
+				nullProto(),
+				listProto(
+					stringProto("hello"),
+					nullProto(),
+					listProto(nullProto(), listProto(intProto(40)))),
+				listProto(
+					stringProto("world"),
+					listProto(intProto(70)),
+					nullProto())),
+			listType(testTypeProto),
+		},
+		{
+			"Nil slice of pointers to structs representing a NULL array of structs.",
+			[]*testType(nil),
+			nullProto(),
+			listType(testTypeProto),
+		},
+		{
+			"Empty slice of pointers to structs representing an empty array of structs.",
+			[]*testType{},
+			listProto(),
+			listType(testTypeProto),
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestEncodeStructValueErrors(t *testing.T) {
+	type Embedded struct {
+		A int
+	}
+	type embedded struct {
+		B bool
+	}
+	x := 0
+
+	for _, test := range []struct {
+		desc    string
+		in      interface{}
+		wantErr error
+	}{
+		{
+			"Unsupported embedded fields.",
+			struct{ Embedded }{Embedded{10}},
+			errUnsupportedEmbeddedStructFields("Embedded"),
+		},
+		{
+			"Unsupported pointer to embedded fields.",
+			struct{ *Embedded }{&Embedded{10}},
+			errUnsupportedEmbeddedStructFields("Embedded"),
+		},
+		{
+			"Unsupported embedded + unexported fields.",
+			struct {
+				int
+				*bool
+				embedded
+			}{10, nil, embedded{false}},
+			errUnsupportedEmbeddedStructFields("int"),
+		},
+		{
+			"Unsupported type.",
+			(**struct{})(nil),
+			errEncoderUnsupportedType((**struct{})(nil)),
+		},
+		{
+			"Unsupported type.",
+			3,
+			errEncoderUnsupportedType(3),
+		},
+		{
+			"Unsupported type.",
+			&x,
+			errEncoderUnsupportedType(&x),
+		},
+	} {
+		_, _, got := encodeStruct(test.in)
+		if got == nil || !testEqual(test.wantErr, got) {
+			t.Errorf("Test: %s, expected error %v during decoding, got %v", test.desc, test.wantErr, got)
+		}
+	}
+}
+
+func TestEncodeStructValueArrayStructFields(t *testing.T) {
+	type structf struct {
+		Intff int
+	}
+
+	structfType := structType(mkField("Intff", intType()))
+	for _, test := range []encodeTest{
+		{
+			"Unnamed array-of-struct-typed field.",
+			struct {
+				Intf       int
+				ArrStructf []structf `spanner:""`
+			}{10, []structf{{1}, {2}}},
+			listProto(
+				intProto(10),
+				listProto(
+					listProto(intProto(1)),
+					listProto(intProto(2)))),
+			structType(
+				mkField("Intf", intType()),
+				mkField("", listType(structfType))),
+		},
+		{
+			"Null array-of-struct-typed field.",
+			struct {
+				Intf       int
+				ArrStructf []structf
+			}{10, []structf(nil)},
+			listProto(intProto(10), nullProto()),
+			structType(
+				mkField("Intf", intType()),
+				mkField("ArrStructf", listType(structfType))),
+		},
+		{
+			"Array-of-struct-typed field representing empty array.",
+			struct {
+				Intf       int
+				ArrStructf []structf
+			}{10, []structf{}},
+			listProto(intProto(10), listProto([]*proto3.Value{}...)),
+			structType(
+				mkField("Intf", intType()),
+				mkField("ArrStructf", listType(structfType))),
+		},
+		{
+			"Array-of-struct-typed field with nullable struct elements.",
+			struct {
+				Intf       int
+				ArrStructf []*structf
+			}{
+				10,
+				[]*structf{(*structf)(nil), {1}},
+			},
+			listProto(
+				intProto(10),
+				listProto(
+					nullProto(),
+					listProto(intProto(1)))),
+			structType(
+				mkField("Intf", intType()),
+				mkField("ArrStructf", listType(structfType))),
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestEncodeStructValueStructFields(t *testing.T) {
+	type structf struct {
+		Intff int
+	}
+	structfType := structType(mkField("Intff", intType()))
+	for _, test := range []encodeTest{
+		{
+			"Named struct-type field.",
+			struct {
+				Intf    int
+				Structf structf
+			}{10, structf{10}},
+			listProto(intProto(10), listProto(intProto(10))),
+			structType(
+				mkField("Intf", intType()),
+				mkField("Structf", structfType)),
+		},
+		{
+			"Unnamed struct-type field.",
+			struct {
+				Intf    int
+				Structf structf `spanner:""`
+			}{10, structf{10}},
+			listProto(intProto(10), listProto(intProto(10))),
+			structType(
+				mkField("Intf", intType()),
+				mkField("", structfType)),
+		},
+		{
+			"Duplicate struct-typed field.",
+			struct {
+				Structf1 structf `spanner:""`
+				Structf2 structf `spanner:""`
+			}{structf{10}, structf{20}},
+			listProto(listProto(intProto(10)), listProto(intProto(20))),
+			structType(
+				mkField("", structfType),
+				mkField("", structfType)),
+		},
+		{
+			"Null struct-typed field.",
+			struct {
+				Intf    int
+				Structf *structf
+			}{10, nil},
+			listProto(intProto(10), nullProto()),
+			structType(
+				mkField("Intf", intType()),
+				mkField("Structf", structfType)),
+		},
+		{
+			"Empty struct-typed field.",
+			struct {
+				Intf    int
+				Structf struct{}
+			}{10, struct{}{}},
+			listProto(intProto(10), listProto([]*proto3.Value{}...)),
+			structType(
+				mkField("Intf", intType()),
+				mkField("Structf", structType([]*sppb.StructType_Field{}...))),
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestEncodeStructValueFieldNames(t *testing.T) {
+	type embedded struct {
+		B bool
+	}
+
+	for _, test := range []encodeTest{
+		{
+			"Duplicate fields.",
+			struct {
+				Field1    int `spanner:"field"`
+				DupField1 int `spanner:"field"`
+			}{10, 20},
+			listProto(intProto(10), intProto(20)),
+			structType(
+				mkField("field", intType()),
+				mkField("field", intType())),
+		},
+		{
+			"Duplicate Fields (different types).",
+			struct {
+				IntField    int    `spanner:"field"`
+				StringField string `spanner:"field"`
+			}{10, "abc"},
+			listProto(intProto(10), stringProto("abc")),
+			structType(
+				mkField("field", intType()),
+				mkField("field", stringType())),
+		},
+		{
+			"Duplicate unnamed fields.",
+			struct {
+				Dup  int `spanner:""`
+				Dup1 int `spanner:""`
+			}{10, 20},
+			listProto(intProto(10), intProto(20)),
+			structType(
+				mkField("", intType()),
+				mkField("", intType())),
+		},
+		{
+			"Named and unnamed fields.",
+			struct {
+				Field  string
+				Field1 int    `spanner:""`
+				Field2 string `spanner:"field"`
+			}{"abc", 10, "def"},
+			listProto(stringProto("abc"), intProto(10), stringProto("def")),
+			structType(
+				mkField("Field", stringType()),
+				mkField("", intType()),
+				mkField("field", stringType())),
+		},
+		{
+			"Ignored unexported fields.",
+			struct {
+				Field  int
+				field  bool
+				Field1 string `spanner:"field"`
+			}{10, false, "abc"},
+			listProto(intProto(10), stringProto("abc")),
+			structType(
+				mkField("Field", intType()),
+				mkField("field", stringType())),
+		},
+		{
+			"Ignored unexported struct/slice fields.",
+			struct {
+				a      []*embedded
+				b      []embedded
+				c      embedded
+				d      *embedded
+				Field1 string `spanner:"field"`
+			}{nil, nil, embedded{}, nil, "def"},
+			listProto(stringProto("def")),
+			structType(
+				mkField("field", stringType())),
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestEncodeStructValueBasicFields(t *testing.T) {
+	StructTypeProto := structType(
+		mkField("Stringf", stringType()),
+		mkField("Intf", intType()),
+		mkField("Boolf", boolType()),
+		mkField("Floatf", floatType()),
+		mkField("Bytef", bytesType()),
+		mkField("Timef", timeType()),
+		mkField("Datef", dateType()))
+
+	for _, test := range []encodeTest{
+		{
+			"Basic types.",
+			struct {
+				Stringf string
+				Intf    int
+				Boolf   bool
+				Floatf  float64
+				Bytef   []byte
+				Timef   time.Time
+				Datef   civil.Date
+			}{"abc", 300, false, 3.45, []byte("foo"), t1, d1},
+			listProto(
+				stringProto("abc"),
+				intProto(300),
+				boolProto(false),
+				floatProto(3.45),
+				bytesProto([]byte("foo")),
+				timeProto(t1),
+				dateProto(d1)),
+			StructTypeProto,
+		},
+		{
+			"Basic types null values.",
+			struct {
+				Stringf NullString
+				Intf    NullInt64
+				Boolf   NullBool
+				Floatf  NullFloat64
+				Bytef   []byte
+				Timef   NullTime
+				Datef   NullDate
+			}{
+				NullString{"abc", false},
+				NullInt64{4, false},
+				NullBool{false, false},
+				NullFloat64{5.6, false},
+				nil,
+				NullTime{t1, false},
+				NullDate{d1, false},
+			},
+			listProto(
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto()),
+			StructTypeProto,
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestEncodeStructValueArrayFields(t *testing.T) {
+	StructTypeProto := structType(
+		mkField("Stringf", listType(stringType())),
+		mkField("Intf", listType(intType())),
+		mkField("Int64f", listType(intType())),
+		mkField("Boolf", listType(boolType())),
+		mkField("Floatf", listType(floatType())),
+		mkField("Bytef", listType(bytesType())),
+		mkField("Timef", listType(timeType())),
+		mkField("Datef", listType(dateType())))
+
+	for _, test := range []encodeTest{
+		{
+			"Arrays of basic types with non-nullable elements",
+			struct {
+				Stringf []string
+				Intf    []int
+				Int64f  []int64
+				Boolf   []bool
+				Floatf  []float64
+				Bytef   [][]byte
+				Timef   []time.Time
+				Datef   []civil.Date
+			}{
+				[]string{"abc", "def"},
+				[]int{4, 67},
+				[]int64{5, 68},
+				[]bool{false, true},
+				[]float64{3.45, 0.93},
+				[][]byte{[]byte("foo"), nil},
+				[]time.Time{t1, t2},
+				[]civil.Date{d1, d2},
+			},
+			listProto(
+				listProto(stringProto("abc"), stringProto("def")),
+				listProto(intProto(4), intProto(67)),
+				listProto(intProto(5), intProto(68)),
+				listProto(boolProto(false), boolProto(true)),
+				listProto(floatProto(3.45), floatProto(0.93)),
+				listProto(bytesProto([]byte("foo")), nullProto()),
+				listProto(timeProto(t1), timeProto(t2)),
+				listProto(dateProto(d1), dateProto(d2))),
+			StructTypeProto,
+		},
+		{
+			"Arrays of basic types with nullable elements.",
+			struct {
+				Stringf []NullString
+				Intf    []NullInt64
+				Int64f  []NullInt64
+				Boolf   []NullBool
+				Floatf  []NullFloat64
+				Bytef   [][]byte
+				Timef   []NullTime
+				Datef   []NullDate
+			}{
+				[]NullString{{"abc", false}, {"def", true}},
+				[]NullInt64{{4, false}, {67, true}},
+				[]NullInt64{{5, false}, {68, true}},
+				[]NullBool{{true, false}, {false, true}},
+				[]NullFloat64{{3.45, false}, {0.93, true}},
+				[][]byte{[]byte("foo"), nil},
+				[]NullTime{{t1, false}, {t2, true}},
+				[]NullDate{{d1, false}, {d2, true}},
+			},
+			listProto(
+				listProto(nullProto(), stringProto("def")),
+				listProto(nullProto(), intProto(67)),
+				listProto(nullProto(), intProto(68)),
+				listProto(nullProto(), boolProto(false)),
+				listProto(nullProto(), floatProto(0.93)),
+				listProto(bytesProto([]byte("foo")), nullProto()),
+				listProto(nullProto(), timeProto(t2)),
+				listProto(nullProto(), dateProto(d2))),
+			StructTypeProto,
+		},
+		{
+			"Null arrays of basic types.",
+			struct {
+				Stringf []NullString
+				Intf    []NullInt64
+				Int64f  []NullInt64
+				Boolf   []NullBool
+				Floatf  []NullFloat64
+				Bytef   [][]byte
+				Timef   []NullTime
+				Datef   []NullDate
+			}{
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+				nil,
+			},
+			listProto(
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto(),
+				nullProto()),
+			StructTypeProto,
+		},
+	} {
+		encodeStructValue(test, t)
 	}
 }
 
@@ -426,6 +972,7 @@ func TestDecodeValue(t *testing.T) {
 
 // Test error cases for decodeValue.
 func TestDecodeValueErrors(t *testing.T) {
+	var s string
 	for i, test := range []struct {
 		in *proto3.Value
 		t  *sppb.Type
@@ -433,6 +980,7 @@ func TestDecodeValueErrors(t *testing.T) {
 	}{
 		{nullProto(), stringType(), nil},
 		{nullProto(), stringType(), 1},
+		{timeProto(t1), timeType(), &s},
 	} {
 		err := decodeValue(test.in, test.t, test.v)
 		if err == nil {
@@ -517,6 +1065,52 @@ func TestGenericColumnValue(t *testing.T) {
 		}
 		if !testEqual(*v, test.in) {
 			t.Errorf("unexpected encode result - got %v, want %v", v, test.in)
+		}
+	}
+}
+
+func TestDecodeStruct(t *testing.T) {
+	stype := &sppb.StructType{Fields: []*sppb.StructType_Field{
+		{Name: "Id", Type: stringType()},
+		{Name: "Time", Type: timeType()},
+	}}
+	lv := listValueProto(stringProto("id"), timeProto(t1))
+
+	type (
+		S1 struct {
+			ID   string
+			Time time.Time
+		}
+		S2 struct {
+			ID   string
+			Time string
+		}
+	)
+	var (
+		s1 S1
+		s2 S2
+	)
+
+	for i, test := range []struct {
+		ptr  interface{}
+		want interface{}
+		fail bool
+	}{
+		{
+			ptr:  &s1,
+			want: &S1{ID: "id", Time: t1},
+		},
+		{
+			ptr:  &s2,
+			fail: true,
+		},
+	} {
+		err := decodeStruct(stype, lv, test.ptr)
+		if (err != nil) != test.fail {
+			t.Errorf("#%d: got error %v, wanted fail: %v", i, err, test.fail)
+		}
+		if err == nil && !testEqual(test.ptr, test.want) {
+			t.Errorf("#%d: got %+v, want %+v", i, test.ptr, test.want)
 		}
 	}
 }

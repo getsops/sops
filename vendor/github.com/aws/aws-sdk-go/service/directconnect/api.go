@@ -15,7 +15,7 @@ const opAllocateConnectionOnInterconnect = "AllocateConnectionOnInterconnect"
 
 // AllocateConnectionOnInterconnectRequest generates a "aws/request.Request" representing the
 // client's request for the AllocateConnectionOnInterconnect operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -37,6 +37,8 @@ const opAllocateConnectionOnInterconnect = "AllocateConnectionOnInterconnect"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AllocateConnectionOnInterconnect
+//
+// Deprecated: AllocateConnectionOnInterconnect has been deprecated
 func (c *DirectConnect) AllocateConnectionOnInterconnectRequest(input *AllocateConnectionOnInterconnectInput) (req *request.Request, output *Connection) {
 	if c.Client.Config.Logger != nil {
 		c.Client.Config.Logger.Log("This operation, AllocateConnectionOnInterconnect, has been deprecated")
@@ -75,15 +77,17 @@ func (c *DirectConnect) AllocateConnectionOnInterconnectRequest(input *AllocateC
 // API operation AllocateConnectionOnInterconnect for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AllocateConnectionOnInterconnect
+//
+// Deprecated: AllocateConnectionOnInterconnect has been deprecated
 func (c *DirectConnect) AllocateConnectionOnInterconnect(input *AllocateConnectionOnInterconnectInput) (*Connection, error) {
 	req, out := c.AllocateConnectionOnInterconnectRequest(input)
 	return out, req.Send()
@@ -98,6 +102,8 @@ func (c *DirectConnect) AllocateConnectionOnInterconnect(input *AllocateConnecti
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: AllocateConnectionOnInterconnectWithContext has been deprecated
 func (c *DirectConnect) AllocateConnectionOnInterconnectWithContext(ctx aws.Context, input *AllocateConnectionOnInterconnectInput, opts ...request.Option) (*Connection, error) {
 	req, out := c.AllocateConnectionOnInterconnectRequest(input)
 	req.SetContext(ctx)
@@ -109,7 +115,7 @@ const opAllocateHostedConnection = "AllocateHostedConnection"
 
 // AllocateHostedConnectionRequest generates a "aws/request.Request" representing the
 // client's request for the AllocateHostedConnection operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -165,11 +171,11 @@ func (c *DirectConnect) AllocateHostedConnectionRequest(input *AllocateHostedCon
 // API operation AllocateHostedConnection for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -199,7 +205,7 @@ const opAllocatePrivateVirtualInterface = "AllocatePrivateVirtualInterface"
 
 // AllocatePrivateVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the AllocatePrivateVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -254,11 +260,11 @@ func (c *DirectConnect) AllocatePrivateVirtualInterfaceRequest(input *AllocatePr
 // API operation AllocatePrivateVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -288,7 +294,7 @@ const opAllocatePublicVirtualInterface = "AllocatePublicVirtualInterface"
 
 // AllocatePublicVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the AllocatePublicVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -350,11 +356,11 @@ func (c *DirectConnect) AllocatePublicVirtualInterfaceRequest(input *AllocatePub
 // API operation AllocatePublicVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -384,7 +390,7 @@ const opAssociateConnectionWithLag = "AssociateConnectionWithLag"
 
 // AssociateConnectionWithLagRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateConnectionWithLag operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -450,11 +456,11 @@ func (c *DirectConnect) AssociateConnectionWithLagRequest(input *AssociateConnec
 // API operation AssociateConnectionWithLag for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -484,7 +490,7 @@ const opAssociateHostedConnection = "AssociateHostedConnection"
 
 // AssociateHostedConnectionRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateHostedConnection operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -540,11 +546,11 @@ func (c *DirectConnect) AssociateHostedConnectionRequest(input *AssociateHostedC
 // API operation AssociateHostedConnection for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -574,7 +580,7 @@ const opAssociateVirtualInterface = "AssociateVirtualInterface"
 
 // AssociateVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -638,11 +644,11 @@ func (c *DirectConnect) AssociateVirtualInterfaceRequest(input *AssociateVirtual
 // API operation AssociateVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -672,7 +678,7 @@ const opConfirmConnection = "ConfirmConnection"
 
 // ConfirmConnectionRequest generates a "aws/request.Request" representing the
 // client's request for the ConfirmConnection operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -726,11 +732,11 @@ func (c *DirectConnect) ConfirmConnectionRequest(input *ConfirmConnectionInput) 
 // API operation ConfirmConnection for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -760,7 +766,7 @@ const opConfirmPrivateVirtualInterface = "ConfirmPrivateVirtualInterface"
 
 // ConfirmPrivateVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the ConfirmPrivateVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -814,11 +820,11 @@ func (c *DirectConnect) ConfirmPrivateVirtualInterfaceRequest(input *ConfirmPriv
 // API operation ConfirmPrivateVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -848,7 +854,7 @@ const opConfirmPublicVirtualInterface = "ConfirmPublicVirtualInterface"
 
 // ConfirmPublicVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the ConfirmPublicVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -901,11 +907,11 @@ func (c *DirectConnect) ConfirmPublicVirtualInterfaceRequest(input *ConfirmPubli
 // API operation ConfirmPublicVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -935,7 +941,7 @@ const opCreateBGPPeer = "CreateBGPPeer"
 
 // CreateBGPPeerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBGPPeer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -997,11 +1003,11 @@ func (c *DirectConnect) CreateBGPPeerRequest(input *CreateBGPPeerInput) (req *re
 // API operation CreateBGPPeer for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1031,7 +1037,7 @@ const opCreateConnection = "CreateConnection"
 
 // CreateConnectionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateConnection operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1098,11 +1104,11 @@ func (c *DirectConnect) CreateConnectionRequest(input *CreateConnectionInput) (r
 // API operation CreateConnection for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1132,7 +1138,7 @@ const opCreateDirectConnectGateway = "CreateDirectConnectGateway"
 
 // CreateDirectConnectGatewayRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDirectConnectGateway operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1189,11 +1195,11 @@ func (c *DirectConnect) CreateDirectConnectGatewayRequest(input *CreateDirectCon
 // API operation CreateDirectConnectGateway for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1223,7 +1229,7 @@ const opCreateDirectConnectGatewayAssociation = "CreateDirectConnectGatewayAssoc
 
 // CreateDirectConnectGatewayAssociationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDirectConnectGatewayAssociation operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1275,11 +1281,11 @@ func (c *DirectConnect) CreateDirectConnectGatewayAssociationRequest(input *Crea
 // API operation CreateDirectConnectGatewayAssociation for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1309,7 +1315,7 @@ const opCreateInterconnect = "CreateInterconnect"
 
 // CreateInterconnectRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInterconnect operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1382,11 +1388,11 @@ func (c *DirectConnect) CreateInterconnectRequest(input *CreateInterconnectInput
 // API operation CreateInterconnect for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1416,7 +1422,7 @@ const opCreateLag = "CreateLag"
 
 // CreateLagRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLag operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1490,11 +1496,11 @@ func (c *DirectConnect) CreateLagRequest(input *CreateLagInput) (req *request.Re
 // API operation CreateLag for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1524,7 +1530,7 @@ const opCreatePrivateVirtualInterface = "CreatePrivateVirtualInterface"
 
 // CreatePrivateVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePrivateVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1576,11 +1582,11 @@ func (c *DirectConnect) CreatePrivateVirtualInterfaceRequest(input *CreatePrivat
 // API operation CreatePrivateVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1610,7 +1616,7 @@ const opCreatePublicVirtualInterface = "CreatePublicVirtualInterface"
 
 // CreatePublicVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePublicVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1667,11 +1673,11 @@ func (c *DirectConnect) CreatePublicVirtualInterfaceRequest(input *CreatePublicV
 // API operation CreatePublicVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1701,7 +1707,7 @@ const opDeleteBGPPeer = "DeleteBGPPeer"
 
 // DeleteBGPPeerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBGPPeer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1753,11 +1759,11 @@ func (c *DirectConnect) DeleteBGPPeerRequest(input *DeleteBGPPeerInput) (req *re
 // API operation DeleteBGPPeer for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1787,7 +1793,7 @@ const opDeleteConnection = "DeleteConnection"
 
 // DeleteConnectionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteConnection operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1842,11 +1848,11 @@ func (c *DirectConnect) DeleteConnectionRequest(input *DeleteConnectionInput) (r
 // API operation DeleteConnection for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1876,7 +1882,7 @@ const opDeleteDirectConnectGateway = "DeleteDirectConnectGateway"
 
 // DeleteDirectConnectGatewayRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDirectConnectGateway operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1928,11 +1934,11 @@ func (c *DirectConnect) DeleteDirectConnectGatewayRequest(input *DeleteDirectCon
 // API operation DeleteDirectConnectGateway for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -1962,7 +1968,7 @@ const opDeleteDirectConnectGatewayAssociation = "DeleteDirectConnectGatewayAssoc
 
 // DeleteDirectConnectGatewayAssociationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDirectConnectGatewayAssociation operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2013,11 +2019,11 @@ func (c *DirectConnect) DeleteDirectConnectGatewayAssociationRequest(input *Dele
 // API operation DeleteDirectConnectGatewayAssociation for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2047,7 +2053,7 @@ const opDeleteInterconnect = "DeleteInterconnect"
 
 // DeleteInterconnectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInterconnect operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2099,11 +2105,11 @@ func (c *DirectConnect) DeleteInterconnectRequest(input *DeleteInterconnectInput
 // API operation DeleteInterconnect for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2133,7 +2139,7 @@ const opDeleteLag = "DeleteLag"
 
 // DeleteLagRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLag operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2184,11 +2190,11 @@ func (c *DirectConnect) DeleteLagRequest(input *DeleteLagInput) (req *request.Re
 // API operation DeleteLag for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2218,7 +2224,7 @@ const opDeleteVirtualInterface = "DeleteVirtualInterface"
 
 // DeleteVirtualInterfaceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteVirtualInterface operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2268,11 +2274,11 @@ func (c *DirectConnect) DeleteVirtualInterfaceRequest(input *DeleteVirtualInterf
 // API operation DeleteVirtualInterface for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2302,7 +2308,7 @@ const opDescribeConnectionLoa = "DescribeConnectionLoa"
 
 // DescribeConnectionLoaRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConnectionLoa operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2324,6 +2330,8 @@ const opDescribeConnectionLoa = "DescribeConnectionLoa"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeConnectionLoa
+//
+// Deprecated: DescribeConnectionLoa has been deprecated
 func (c *DirectConnect) DescribeConnectionLoaRequest(input *DescribeConnectionLoaInput) (req *request.Request, output *DescribeConnectionLoaOutput) {
 	if c.Client.Config.Logger != nil {
 		c.Client.Config.Logger.Log("This operation, DescribeConnectionLoa, has been deprecated")
@@ -2363,15 +2371,17 @@ func (c *DirectConnect) DescribeConnectionLoaRequest(input *DescribeConnectionLo
 // API operation DescribeConnectionLoa for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeConnectionLoa
+//
+// Deprecated: DescribeConnectionLoa has been deprecated
 func (c *DirectConnect) DescribeConnectionLoa(input *DescribeConnectionLoaInput) (*DescribeConnectionLoaOutput, error) {
 	req, out := c.DescribeConnectionLoaRequest(input)
 	return out, req.Send()
@@ -2386,6 +2396,8 @@ func (c *DirectConnect) DescribeConnectionLoa(input *DescribeConnectionLoaInput)
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: DescribeConnectionLoaWithContext has been deprecated
 func (c *DirectConnect) DescribeConnectionLoaWithContext(ctx aws.Context, input *DescribeConnectionLoaInput, opts ...request.Option) (*DescribeConnectionLoaOutput, error) {
 	req, out := c.DescribeConnectionLoaRequest(input)
 	req.SetContext(ctx)
@@ -2397,7 +2409,7 @@ const opDescribeConnections = "DescribeConnections"
 
 // DescribeConnectionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConnections operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2449,11 +2461,11 @@ func (c *DirectConnect) DescribeConnectionsRequest(input *DescribeConnectionsInp
 // API operation DescribeConnections for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2483,7 +2495,7 @@ const opDescribeConnectionsOnInterconnect = "DescribeConnectionsOnInterconnect"
 
 // DescribeConnectionsOnInterconnectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeConnectionsOnInterconnect operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2505,6 +2517,8 @@ const opDescribeConnectionsOnInterconnect = "DescribeConnectionsOnInterconnect"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeConnectionsOnInterconnect
+//
+// Deprecated: DescribeConnectionsOnInterconnect has been deprecated
 func (c *DirectConnect) DescribeConnectionsOnInterconnectRequest(input *DescribeConnectionsOnInterconnectInput) (req *request.Request, output *Connections) {
 	if c.Client.Config.Logger != nil {
 		c.Client.Config.Logger.Log("This operation, DescribeConnectionsOnInterconnect, has been deprecated")
@@ -2540,15 +2554,17 @@ func (c *DirectConnect) DescribeConnectionsOnInterconnectRequest(input *Describe
 // API operation DescribeConnectionsOnInterconnect for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeConnectionsOnInterconnect
+//
+// Deprecated: DescribeConnectionsOnInterconnect has been deprecated
 func (c *DirectConnect) DescribeConnectionsOnInterconnect(input *DescribeConnectionsOnInterconnectInput) (*Connections, error) {
 	req, out := c.DescribeConnectionsOnInterconnectRequest(input)
 	return out, req.Send()
@@ -2563,6 +2579,8 @@ func (c *DirectConnect) DescribeConnectionsOnInterconnect(input *DescribeConnect
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: DescribeConnectionsOnInterconnectWithContext has been deprecated
 func (c *DirectConnect) DescribeConnectionsOnInterconnectWithContext(ctx aws.Context, input *DescribeConnectionsOnInterconnectInput, opts ...request.Option) (*Connections, error) {
 	req, out := c.DescribeConnectionsOnInterconnectRequest(input)
 	req.SetContext(ctx)
@@ -2574,7 +2592,7 @@ const opDescribeDirectConnectGatewayAssociations = "DescribeDirectConnectGateway
 
 // DescribeDirectConnectGatewayAssociationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDirectConnectGatewayAssociations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2630,11 +2648,11 @@ func (c *DirectConnect) DescribeDirectConnectGatewayAssociationsRequest(input *D
 // API operation DescribeDirectConnectGatewayAssociations for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2664,7 +2682,7 @@ const opDescribeDirectConnectGatewayAttachments = "DescribeDirectConnectGatewayA
 
 // DescribeDirectConnectGatewayAttachmentsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDirectConnectGatewayAttachments operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2720,11 +2738,11 @@ func (c *DirectConnect) DescribeDirectConnectGatewayAttachmentsRequest(input *De
 // API operation DescribeDirectConnectGatewayAttachments for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2754,7 +2772,7 @@ const opDescribeDirectConnectGateways = "DescribeDirectConnectGateways"
 
 // DescribeDirectConnectGatewaysRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDirectConnectGateways operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2808,11 +2826,11 @@ func (c *DirectConnect) DescribeDirectConnectGatewaysRequest(input *DescribeDire
 // API operation DescribeDirectConnectGateways for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2842,7 +2860,7 @@ const opDescribeHostedConnections = "DescribeHostedConnections"
 
 // DescribeHostedConnectionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeHostedConnections operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2895,11 +2913,11 @@ func (c *DirectConnect) DescribeHostedConnectionsRequest(input *DescribeHostedCo
 // API operation DescribeHostedConnections for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -2929,7 +2947,7 @@ const opDescribeInterconnectLoa = "DescribeInterconnectLoa"
 
 // DescribeInterconnectLoaRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeInterconnectLoa operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2951,6 +2969,8 @@ const opDescribeInterconnectLoa = "DescribeInterconnectLoa"
 //    }
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeInterconnectLoa
+//
+// Deprecated: DescribeInterconnectLoa has been deprecated
 func (c *DirectConnect) DescribeInterconnectLoaRequest(input *DescribeInterconnectLoaInput) (req *request.Request, output *DescribeInterconnectLoaOutput) {
 	if c.Client.Config.Logger != nil {
 		c.Client.Config.Logger.Log("This operation, DescribeInterconnectLoa, has been deprecated")
@@ -2990,15 +3010,17 @@ func (c *DirectConnect) DescribeInterconnectLoaRequest(input *DescribeInterconne
 // API operation DescribeInterconnectLoa for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeInterconnectLoa
+//
+// Deprecated: DescribeInterconnectLoa has been deprecated
 func (c *DirectConnect) DescribeInterconnectLoa(input *DescribeInterconnectLoaInput) (*DescribeInterconnectLoaOutput, error) {
 	req, out := c.DescribeInterconnectLoaRequest(input)
 	return out, req.Send()
@@ -3013,6 +3035,8 @@ func (c *DirectConnect) DescribeInterconnectLoa(input *DescribeInterconnectLoaIn
 // the context is nil a panic will occur. In the future the SDK may create
 // sub-contexts for http.Requests. See https://golang.org/pkg/context/
 // for more information on using Contexts.
+//
+// Deprecated: DescribeInterconnectLoaWithContext has been deprecated
 func (c *DirectConnect) DescribeInterconnectLoaWithContext(ctx aws.Context, input *DescribeInterconnectLoaInput, opts ...request.Option) (*DescribeInterconnectLoaOutput, error) {
 	req, out := c.DescribeInterconnectLoaRequest(input)
 	req.SetContext(ctx)
@@ -3024,7 +3048,7 @@ const opDescribeInterconnects = "DescribeInterconnects"
 
 // DescribeInterconnectsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeInterconnects operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3076,11 +3100,11 @@ func (c *DirectConnect) DescribeInterconnectsRequest(input *DescribeInterconnect
 // API operation DescribeInterconnects for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3110,7 +3134,7 @@ const opDescribeLags = "DescribeLags"
 
 // DescribeLagsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeLags operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3162,11 +3186,11 @@ func (c *DirectConnect) DescribeLagsRequest(input *DescribeLagsInput) (req *requ
 // API operation DescribeLags for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3196,7 +3220,7 @@ const opDescribeLoa = "DescribeLoa"
 
 // DescribeLoaRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeLoa operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3253,11 +3277,11 @@ func (c *DirectConnect) DescribeLoaRequest(input *DescribeLoaInput) (req *reques
 // API operation DescribeLoa for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3287,7 +3311,7 @@ const opDescribeLocations = "DescribeLocations"
 
 // DescribeLocationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeLocations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3339,11 +3363,11 @@ func (c *DirectConnect) DescribeLocationsRequest(input *DescribeLocationsInput) 
 // API operation DescribeLocations for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3373,7 +3397,7 @@ const opDescribeTags = "DescribeTags"
 
 // DescribeTagsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTags operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3423,11 +3447,11 @@ func (c *DirectConnect) DescribeTagsRequest(input *DescribeTagsInput) (req *requ
 // API operation DescribeTags for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3457,7 +3481,7 @@ const opDescribeVirtualGateways = "DescribeVirtualGateways"
 
 // DescribeVirtualGatewaysRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVirtualGateways operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3513,11 +3537,11 @@ func (c *DirectConnect) DescribeVirtualGatewaysRequest(input *DescribeVirtualGat
 // API operation DescribeVirtualGateways for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3547,7 +3571,7 @@ const opDescribeVirtualInterfaces = "DescribeVirtualInterfaces"
 
 // DescribeVirtualInterfacesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVirtualInterfaces operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3604,11 +3628,11 @@ func (c *DirectConnect) DescribeVirtualInterfacesRequest(input *DescribeVirtualI
 // API operation DescribeVirtualInterfaces for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3638,7 +3662,7 @@ const opDisassociateConnectionFromLag = "DisassociateConnectionFromLag"
 
 // DisassociateConnectionFromLagRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateConnectionFromLag operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3698,11 +3722,11 @@ func (c *DirectConnect) DisassociateConnectionFromLagRequest(input *Disassociate
 // API operation DisassociateConnectionFromLag for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3732,7 +3756,7 @@ const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the TagResource operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3794,11 +3818,11 @@ func (c *DirectConnect) TagResourceRequest(input *TagResourceInput) (req *reques
 //   You have reached the limit on the number of tags that can be assigned to
 //   a Direct Connect resource.
 //
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3828,7 +3852,7 @@ const opUntagResource = "UntagResource"
 
 // UntagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResource operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3878,11 +3902,11 @@ func (c *DirectConnect) UntagResourceRequest(input *UntagResourceInput) (req *re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -3912,7 +3936,7 @@ const opUpdateLag = "UpdateLag"
 
 // UpdateLagRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateLag operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3976,11 +4000,11 @@ func (c *DirectConnect) UpdateLagRequest(input *UpdateLagInput) (req *request.Re
 // API operation UpdateLag for usage and error information.
 //
 // Returned Error Codes:
-//   * ErrCodeServerException "ServerException"
+//   * ErrCodeServerException "DirectConnectServerException"
 //   A server-side error occurred during the API call. The error message will
 //   contain additional details about the cause.
 //
-//   * ErrCodeClientException "ClientException"
+//   * ErrCodeClientException "DirectConnectClientException"
 //   The API was called with invalid parameters. The error message will contain
 //   additional details about the cause.
 //
@@ -4605,6 +4629,9 @@ type BGPPeer struct {
 	// Example: asdf34example
 	AuthKey *string `locationName:"authKey" type:"string"`
 
+	// The Direct Connection endpoint which the BGP peer terminates on.
+	AwsDeviceV2 *string `locationName:"awsDeviceV2" type:"string"`
+
 	// The state of the BGP peer.
 	//
 	//    * Verifying: The BGP peering addresses or ASN require validation before
@@ -4624,6 +4651,9 @@ type BGPPeer struct {
 	// The Up/Down state of the BGP peer.
 	//
 	//    * Up: The BGP peer is established.
+	//
+	// A state of up does not indicate the state of the routing function. Ensure
+	//    that you are receiving routes over the BGP session.
 	//
 	//    * Down: The BGP peer is down.
 	BgpStatus *string `locationName:"bgpStatus" type:"string" enum:"BGPStatus"`
@@ -4665,6 +4695,12 @@ func (s *BGPPeer) SetAsn(v int64) *BGPPeer {
 // SetAuthKey sets the AuthKey field's value.
 func (s *BGPPeer) SetAuthKey(v string) *BGPPeer {
 	s.AuthKey = &v
+	return s
+}
+
+// SetAwsDeviceV2 sets the AwsDeviceV2 field's value.
+func (s *BGPPeer) SetAwsDeviceV2(v string) *BGPPeer {
+	s.AwsDeviceV2 = &v
 	return s
 }
 
@@ -4997,8 +5033,13 @@ func (s *ConfirmPublicVirtualInterfaceOutput) SetVirtualInterfaceState(v string)
 type Connection struct {
 	_ struct{} `type:"structure"`
 
+	// Deprecated in favor of awsDeviceV2.
+	//
 	// The Direct Connection endpoint which the physical connection terminates on.
-	AwsDevice *string `locationName:"awsDevice" type:"string"`
+	AwsDevice *string `locationName:"awsDevice" deprecated:"true" type:"string"`
+
+	// The Direct Connection endpoint which the physical connection terminates on.
+	AwsDeviceV2 *string `locationName:"awsDeviceV2" type:"string"`
 
 	// Bandwidth of the connection.
 	//
@@ -5052,7 +5093,7 @@ type Connection struct {
 	LagId *string `locationName:"lagId" type:"string"`
 
 	// The time of the most recent call to DescribeLoa for this connection.
-	LoaIssueTime *time.Time `locationName:"loaIssueTime" type:"timestamp" timestampFormat:"unix"`
+	LoaIssueTime *time.Time `locationName:"loaIssueTime" type:"timestamp"`
 
 	// Where the connection is located.
 	//
@@ -5093,6 +5134,12 @@ func (s Connection) GoString() string {
 // SetAwsDevice sets the AwsDevice field's value.
 func (s *Connection) SetAwsDevice(v string) *Connection {
 	s.AwsDevice = &v
+	return s
+}
+
+// SetAwsDeviceV2 sets the AwsDeviceV2 field's value.
+func (s *Connection) SetAwsDeviceV2(v string) *Connection {
+	s.AwsDeviceV2 = &v
 	return s
 }
 
@@ -7633,8 +7680,13 @@ func (s *GatewayAttachment) SetVirtualInterfaceRegion(v string) *GatewayAttachme
 type Interconnect struct {
 	_ struct{} `type:"structure"`
 
+	// Deprecated in favor of awsDeviceV2.
+	//
 	// The Direct Connection endpoint which the physical connection terminates on.
-	AwsDevice *string `locationName:"awsDevice" type:"string"`
+	AwsDevice *string `locationName:"awsDevice" deprecated:"true" type:"string"`
+
+	// The Direct Connection endpoint which the physical connection terminates on.
+	AwsDeviceV2 *string `locationName:"awsDeviceV2" type:"string"`
 
 	// Bandwidth of the connection.
 	//
@@ -7677,7 +7729,7 @@ type Interconnect struct {
 	LagId *string `locationName:"lagId" type:"string"`
 
 	// The time of the most recent call to DescribeInterconnectLoa for this Interconnect.
-	LoaIssueTime *time.Time `locationName:"loaIssueTime" type:"timestamp" timestampFormat:"unix"`
+	LoaIssueTime *time.Time `locationName:"loaIssueTime" type:"timestamp"`
 
 	// Where the connection is located.
 	//
@@ -7707,6 +7759,12 @@ func (s Interconnect) GoString() string {
 // SetAwsDevice sets the AwsDevice field's value.
 func (s *Interconnect) SetAwsDevice(v string) *Interconnect {
 	s.AwsDevice = &v
+	return s
+}
+
+// SetAwsDeviceV2 sets the AwsDeviceV2 field's value.
+func (s *Interconnect) SetAwsDeviceV2(v string) *Interconnect {
+	s.AwsDeviceV2 = &v
 	return s
 }
 
@@ -7771,8 +7829,13 @@ type Lag struct {
 	// This is intended for use by AWS Direct Connect partners only.
 	AllowsHostedConnections *bool `locationName:"allowsHostedConnections" type:"boolean"`
 
+	// Deprecated in favor of awsDeviceV2.
+	//
 	// The AWS Direct Connection endpoint that hosts the LAG.
-	AwsDevice *string `locationName:"awsDevice" type:"string"`
+	AwsDevice *string `locationName:"awsDevice" deprecated:"true" type:"string"`
+
+	// The AWS Direct Connection endpoint that hosts the LAG.
+	AwsDeviceV2 *string `locationName:"awsDeviceV2" type:"string"`
 
 	// A list of connections bundled by this LAG.
 	Connections []*Connection `locationName:"connections" type:"list"`
@@ -7855,6 +7918,12 @@ func (s *Lag) SetAllowsHostedConnections(v bool) *Lag {
 // SetAwsDevice sets the AwsDevice field's value.
 func (s *Lag) SetAwsDevice(v string) *Lag {
 	s.AwsDevice = &v
+	return s
+}
+
+// SetAwsDeviceV2 sets the AwsDeviceV2 field's value.
+func (s *Lag) SetAwsDeviceV2(v string) *Lag {
+	s.AwsDeviceV2 = &v
 	return s
 }
 
@@ -7968,6 +8037,13 @@ type Location struct {
 	// The name of the AWS Direct Connect location. The name includes the colocation
 	// partner name and the physical site of the lit building.
 	LocationName *string `locationName:"locationName" type:"string"`
+
+	// The AWS region where the AWS Direct connect location is located.
+	//
+	// Example: us-east-1
+	//
+	// Default: None
+	Region *string `locationName:"region" type:"string"`
 }
 
 // String returns the string representation
@@ -7989,6 +8065,12 @@ func (s *Location) SetLocationCode(v string) *Location {
 // SetLocationName sets the LocationName field's value.
 func (s *Location) SetLocationName(v string) *Location {
 	s.LocationName = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *Location) SetRegion(v string) *Location {
+	s.Region = &v
 	return s
 }
 
@@ -8997,6 +9079,9 @@ type VirtualInterface struct {
 	// Example: asdf34example
 	AuthKey *string `locationName:"authKey" type:"string"`
 
+	// The Direct Connection endpoint which the virtual interface terminates on.
+	AwsDeviceV2 *string `locationName:"awsDeviceV2" type:"string"`
+
 	// A list of the BGP peers configured on this virtual interface.
 	BgpPeers []*BGPPeer `locationName:"bgpPeers" type:"list"`
 
@@ -9030,6 +9115,13 @@ type VirtualInterface struct {
 
 	// The AWS account that will own the new virtual interface.
 	OwnerAccount *string `locationName:"ownerAccount" type:"string"`
+
+	// The AWS region where the virtual interface is located.
+	//
+	// Example: us-east-1
+	//
+	// Default: None
+	Region *string `locationName:"region" type:"string"`
 
 	// A list of routes to be advertised to the AWS network in this region (public
 	// virtual interface).
@@ -9135,6 +9227,12 @@ func (s *VirtualInterface) SetAuthKey(v string) *VirtualInterface {
 	return s
 }
 
+// SetAwsDeviceV2 sets the AwsDeviceV2 field's value.
+func (s *VirtualInterface) SetAwsDeviceV2(v string) *VirtualInterface {
+	s.AwsDeviceV2 = &v
+	return s
+}
+
 // SetBgpPeers sets the BgpPeers field's value.
 func (s *VirtualInterface) SetBgpPeers(v []*BGPPeer) *VirtualInterface {
 	s.BgpPeers = v
@@ -9174,6 +9272,12 @@ func (s *VirtualInterface) SetLocation(v string) *VirtualInterface {
 // SetOwnerAccount sets the OwnerAccount field's value.
 func (s *VirtualInterface) SetOwnerAccount(v string) *VirtualInterface {
 	s.OwnerAccount = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *VirtualInterface) SetRegion(v string) *VirtualInterface {
+	s.Region = &v
 	return s
 }
 
@@ -9266,6 +9370,9 @@ const (
 // The Up/Down state of the BGP peer.
 //
 //    * Up: The BGP peer is established.
+//
+// A state of up does not indicate the state of the routing function. Ensure
+//    that you are receiving routes over the BGP session.
 //
 //    * Down: The BGP peer is down.
 const (

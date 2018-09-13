@@ -3,17 +3,17 @@ package assert
 import (
 	"testing"
 
+	"github.com/smartystreets/assertions/internal/unit"
 	"github.com/smartystreets/assertions/should"
-	"github.com/smartystreets/gunit"
 	"github.com/smartystreets/logging"
 )
 
 func TestFailedResultFixture(t *testing.T) {
-	gunit.Run(new(FailedResultFixture), t)
+	unit.Run(new(FailedResultFixture), t)
 }
 
 type FailedResultFixture struct {
-	*gunit.Fixture
+	*unit.Fixture
 
 	result *Result
 }

@@ -1,4 +1,6 @@
-// Package datastore provides access to the Google Cloud Datastore API.
+// Package datastore provides access to the Cloud Datastore API.
+//
+// This package is DEPRECATED. Use package cloud.google.com/go/datastore instead.
 //
 // See https://cloud.google.com/datastore/
 //
@@ -80,6 +82,7 @@ func (s *Service) userAgent() string {
 
 func NewProjectsService(s *Service) *ProjectsService {
 	rs := &ProjectsService{s: s}
+	rs.Indexes = NewProjectsIndexesService(s)
 	rs.Operations = NewProjectsOperationsService(s)
 	return rs
 }
@@ -87,7 +90,18 @@ func NewProjectsService(s *Service) *ProjectsService {
 type ProjectsService struct {
 	s *Service
 
+	Indexes *ProjectsIndexesService
+
 	Operations *ProjectsOperationsService
+}
+
+func NewProjectsIndexesService(s *Service) *ProjectsIndexesService {
+	rs := &ProjectsIndexesService{s: s}
+	return rs
+}
+
+type ProjectsIndexesService struct {
+	s *Service
 }
 
 func NewProjectsOperationsService(s *Service) *ProjectsOperationsService {
@@ -561,6 +575,8 @@ type GoogleDatastoreAdminV1CommonMetadata struct {
 	//   "OPERATION_TYPE_UNSPECIFIED" - Unspecified.
 	//   "EXPORT_ENTITIES" - ExportEntities.
 	//   "IMPORT_ENTITIES" - ImportEntities.
+	//   "CREATE_INDEX" - CreateIndex.
+	//   "DELETE_INDEX" - DeleteIndex.
 	OperationType string `json:"operationType,omitempty"`
 
 	// StartTime: The time that work began on the operation.
@@ -922,6 +938,205 @@ type GoogleDatastoreAdminV1ImportEntitiesRequest struct {
 
 func (s *GoogleDatastoreAdminV1ImportEntitiesRequest) MarshalJSON() ([]byte, error) {
 	type NoMethod GoogleDatastoreAdminV1ImportEntitiesRequest
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleDatastoreAdminV1Index: A minimal index definition.
+// Next tag: 8
+type GoogleDatastoreAdminV1Index struct {
+	// Ancestor: The index's ancestor mode.  Must not be
+	// ANCESTOR_MODE_UNSPECIFIED.
+	// Required.
+	//
+	// Possible values:
+	//   "ANCESTOR_MODE_UNSPECIFIED" - The ancestor mode is unspecified.
+	//   "NONE" - Do not include the entity's ancestors in the index.
+	//   "ALL_ANCESTORS" - Include all the entity's ancestors in the index.
+	Ancestor string `json:"ancestor,omitempty"`
+
+	// IndexId: The resource ID of the index.
+	// Output only.
+	IndexId string `json:"indexId,omitempty"`
+
+	// Kind: The entity kind to which this index applies.
+	// Required.
+	Kind string `json:"kind,omitempty"`
+
+	// ProjectId: Project ID.
+	// Output only.
+	ProjectId string `json:"projectId,omitempty"`
+
+	// Properties: An ordered sequence of property names and their index
+	// attributes.
+	// Required.
+	Properties []*GoogleDatastoreAdminV1IndexedProperty `json:"properties,omitempty"`
+
+	// State: The state of the index.
+	// Output only.
+	//
+	// Possible values:
+	//   "STATE_UNSPECIFIED" - The state is unspecified.
+	//   "CREATING" - The index is being created, and cannot be used by
+	// queries.
+	// There is an active long-running operation for the index.
+	// The index is updated when writing an entity.
+	// Some index data may exist.
+	//   "READY" - The index is ready to be used.
+	// The index is updated when writing an entity.
+	// The index is fully populated from all stored entities it applies to.
+	//   "DELETING" - The index is being deleted, and cannot be used by
+	// queries.
+	// There is an active long-running operation for the index.
+	// The index is not updated when writing an entity.
+	// Some index data may exist.
+	//   "ERROR" - The index was being created or deleted, but something
+	// went wrong.
+	// The index cannot by used by queries.
+	// There is no active long-running operation for the index,
+	// and the most recently finished long-running operation failed.
+	// The index is not updated when writing an entity.
+	// Some index data may exist.
+	State string `json:"state,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Ancestor") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Ancestor") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleDatastoreAdminV1Index) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleDatastoreAdminV1Index
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleDatastoreAdminV1IndexOperationMetadata: Metadata for Index
+// operations.
+type GoogleDatastoreAdminV1IndexOperationMetadata struct {
+	// Common: Metadata common to all Datastore Admin operations.
+	Common *GoogleDatastoreAdminV1CommonMetadata `json:"common,omitempty"`
+
+	// IndexId: The index resource ID that this operation is acting on.
+	IndexId string `json:"indexId,omitempty"`
+
+	// ProgressEntities: An estimate of the number of entities processed.
+	ProgressEntities *GoogleDatastoreAdminV1Progress `json:"progressEntities,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Common") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Common") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleDatastoreAdminV1IndexOperationMetadata) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleDatastoreAdminV1IndexOperationMetadata
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleDatastoreAdminV1IndexedProperty: Next tag: 3
+type GoogleDatastoreAdminV1IndexedProperty struct {
+	// Direction: The indexed property's direction.  Must not be
+	// DIRECTION_UNSPECIFIED.
+	// Required.
+	//
+	// Possible values:
+	//   "DIRECTION_UNSPECIFIED" - The direction is unspecified.
+	//   "ASCENDING" - The property's values are indexed so as to support
+	// sequencing in
+	// ascending order and also query by <, >, <=, >=, and =.
+	//   "DESCENDING" - The property's values are indexed so as to support
+	// sequencing in
+	// descending order and also query by <, >, <=, >=, and =.
+	Direction string `json:"direction,omitempty"`
+
+	// Name: The property name to index.
+	// Required.
+	Name string `json:"name,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Direction") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Direction") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleDatastoreAdminV1IndexedProperty) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleDatastoreAdminV1IndexedProperty
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleDatastoreAdminV1ListIndexesResponse: The response
+// for
+// google.datastore.admin.v1.DatastoreAdmin.ListIndexes.
+type GoogleDatastoreAdminV1ListIndexesResponse struct {
+	// Indexes: The indexes.
+	Indexes []*GoogleDatastoreAdminV1Index `json:"indexes,omitempty"`
+
+	// NextPageToken: The standard List next-page token.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Indexes") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Indexes") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleDatastoreAdminV1ListIndexesResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleDatastoreAdminV1ListIndexesResponse
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -2734,6 +2949,7 @@ func (c *ProjectsAllocateIdsCall) doRequest(alt string) (*http.Response, error) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:allocateIds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2869,6 +3085,7 @@ func (c *ProjectsBeginTransactionCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:beginTransaction")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3006,6 +3223,7 @@ func (c *ProjectsCommitCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:commit")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3155,6 +3373,7 @@ func (c *ProjectsExportCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:export")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3299,6 +3518,7 @@ func (c *ProjectsImportCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:import")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3434,6 +3654,7 @@ func (c *ProjectsLookupCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:lookup")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3571,6 +3792,7 @@ func (c *ProjectsReserveIdsCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:reserveIds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3706,6 +3928,7 @@ func (c *ProjectsRollbackCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:rollback")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3841,6 +4064,7 @@ func (c *ProjectsRunQueryCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}:runQuery")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3919,6 +4143,359 @@ func (c *ProjectsRunQueryCall) Do(opts ...googleapi.CallOption) (*RunQueryRespon
 
 }
 
+// method id "datastore.projects.indexes.get":
+
+type ProjectsIndexesGetCall struct {
+	s            *Service
+	projectId    string
+	indexId      string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// Get: Gets an index.
+func (r *ProjectsIndexesService) Get(projectId string, indexId string) *ProjectsIndexesGetCall {
+	c := &ProjectsIndexesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.indexId = indexId
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsIndexesGetCall) Fields(s ...googleapi.Field) *ProjectsIndexesGetCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsIndexesGetCall) IfNoneMatch(entityTag string) *ProjectsIndexesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsIndexesGetCall) Context(ctx context.Context) *ProjectsIndexesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *ProjectsIndexesGetCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *ProjectsIndexesGetCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/indexes/{indexId}")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+		"indexId":   c.indexId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "datastore.projects.indexes.get" call.
+// Exactly one of *GoogleDatastoreAdminV1Index or error will be non-nil.
+// Any non-2xx status code is an error. Response headers are in either
+// *GoogleDatastoreAdminV1Index.ServerResponse.Header or (if a response
+// was returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *ProjectsIndexesGetCall) Do(opts ...googleapi.CallOption) (*GoogleDatastoreAdminV1Index, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &GoogleDatastoreAdminV1Index{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Gets an index.",
+	//   "flatPath": "v1/projects/{projectId}/indexes/{indexId}",
+	//   "httpMethod": "GET",
+	//   "id": "datastore.projects.indexes.get",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "indexId"
+	//   ],
+	//   "parameters": {
+	//     "indexId": {
+	//       "description": "The resource ID of the index to get.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Project ID against which to make the request.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/projects/{projectId}/indexes/{indexId}",
+	//   "response": {
+	//     "$ref": "GoogleDatastoreAdminV1Index"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/datastore"
+	//   ]
+	// }
+
+}
+
+// method id "datastore.projects.indexes.list":
+
+type ProjectsIndexesListCall struct {
+	s            *Service
+	projectId    string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// List: Lists the indexes that match the specified filters.  Datastore
+// uses an
+// eventually consistent query to fetch the list of indexes and
+// may
+// occasionally return stale results.
+func (r *ProjectsIndexesService) List(projectId string) *ProjectsIndexesListCall {
+	c := &ProjectsIndexesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	return c
+}
+
+// Filter sets the optional parameter "filter":
+func (c *ProjectsIndexesListCall) Filter(filter string) *ProjectsIndexesListCall {
+	c.urlParams_.Set("filter", filter)
+	return c
+}
+
+// PageSize sets the optional parameter "pageSize": The maximum number
+// of items to return.  If zero, then all results will be
+// returned.
+func (c *ProjectsIndexesListCall) PageSize(pageSize int64) *ProjectsIndexesListCall {
+	c.urlParams_.Set("pageSize", fmt.Sprint(pageSize))
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": The
+// next_page_token value returned from a previous List request, if any.
+func (c *ProjectsIndexesListCall) PageToken(pageToken string) *ProjectsIndexesListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsIndexesListCall) Fields(s ...googleapi.Field) *ProjectsIndexesListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *ProjectsIndexesListCall) IfNoneMatch(entityTag string) *ProjectsIndexesListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsIndexesListCall) Context(ctx context.Context) *ProjectsIndexesListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *ProjectsIndexesListCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *ProjectsIndexesListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/projects/{projectId}/indexes")
+	urls += "?" + c.urlParams_.Encode()
+	req, _ := http.NewRequest("GET", urls, body)
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "datastore.projects.indexes.list" call.
+// Exactly one of *GoogleDatastoreAdminV1ListIndexesResponse or error
+// will be non-nil. Any non-2xx status code is an error. Response
+// headers are in either
+// *GoogleDatastoreAdminV1ListIndexesResponse.ServerResponse.Header or
+// (if a response was returned at all) in
+// error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
+// whether the returned error was because http.StatusNotModified was
+// returned.
+func (c *ProjectsIndexesListCall) Do(opts ...googleapi.CallOption) (*GoogleDatastoreAdminV1ListIndexesResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &GoogleDatastoreAdminV1ListIndexesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists the indexes that match the specified filters.  Datastore uses an\neventually consistent query to fetch the list of indexes and may\noccasionally return stale results.",
+	//   "flatPath": "v1/projects/{projectId}/indexes",
+	//   "httpMethod": "GET",
+	//   "id": "datastore.projects.indexes.list",
+	//   "parameterOrder": [
+	//     "projectId"
+	//   ],
+	//   "parameters": {
+	//     "filter": {
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "pageSize": {
+	//       "description": "The maximum number of items to return.  If zero, then all results will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "The next_page_token value returned from a previous List request, if any.",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Project ID against which to make the request.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v1/projects/{projectId}/indexes",
+	//   "response": {
+	//     "$ref": "GoogleDatastoreAdminV1ListIndexesResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/datastore"
+	//   ]
+	// }
+
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *ProjectsIndexesListCall) Pages(ctx context.Context, f func(*GoogleDatastoreAdminV1ListIndexesResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
 // method id "datastore.projects.operations.cancel":
 
 type ProjectsOperationsCancelCall struct {
@@ -3986,6 +4563,7 @@ func (c *ProjectsOperationsCancelCall) doRequest(alt string) (*http.Response, er
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4118,6 +4696,7 @@ func (c *ProjectsOperationsDeleteCall) doRequest(alt string) (*http.Response, er
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -4262,6 +4841,7 @@ func (c *ProjectsOperationsGetCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4439,6 +5019,7 @@ func (c *ProjectsOperationsListCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}/operations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

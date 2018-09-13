@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. LiveAndArchived Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -82,6 +82,12 @@ func (b *BucketHandle) Create(ctx context.Context, projectID string, attrs *Buck
 	}
 	req := b.c.raw.Buckets.Insert(projectID, bkt)
 	setClientHeader(req.Header())
+	if attrs != nil && attrs.PredefinedACL != "" {
+		req.PredefinedAcl(attrs.PredefinedACL)
+	}
+	if attrs != nil && attrs.PredefinedDefaultObjectACL != "" {
+		req.PredefinedDefaultObjectAcl(attrs.PredefinedDefaultObjectACL)
+	}
 	return runWithRetry(ctx, func() error { _, err := req.Context(ctx).Do(); return err })
 }
 
@@ -188,6 +194,12 @@ func (b *BucketHandle) Update(ctx context.Context, uattrs BucketAttrsToUpdate) (
 	if err != nil {
 		return nil, err
 	}
+	if uattrs.PredefinedACL != "" {
+		req.PredefinedAcl(uattrs.PredefinedACL)
+	}
+	if uattrs.PredefinedDefaultObjectACL != "" {
+		req.PredefinedDefaultObjectAcl(uattrs.PredefinedDefaultObjectACL)
+	}
 	// TODO(jba): retry iff metagen is set?
 	rb, err := req.Context(ctx).Do()
 	if err != nil {
@@ -222,6 +234,20 @@ type BucketAttrs struct {
 	// DefaultObjectACL is the list of access controls to
 	// apply to new objects when no object ACL is provided.
 	DefaultObjectACL []ACLRule
+
+	// If not empty, applies a predefined set of access controls. It should be set
+	// only when creating a bucket.
+	// It is always empty for BucketAttrs returned from the service.
+	// See https://cloud.google.com/storage/docs/json_api/v1/buckets/insert
+	// for valid values.
+	PredefinedACL string
+
+	// If not empty, applies a predefined set of default object access controls.
+	// It should be set only when creating a bucket.
+	// It is always empty for BucketAttrs returned from the service.
+	// See https://cloud.google.com/storage/docs/json_api/v1/buckets/insert
+	// for valid values.
+	PredefinedDefaultObjectACL string
 
 	// Location is the location of the bucket. It defaults to "US".
 	Location string
@@ -269,6 +295,15 @@ type BucketAttrs struct {
 
 	// The bucket's Cross-Origin Resource Sharing (CORS) configuration.
 	CORS []CORS
+
+	// The encryption configuration used by default for newly inserted objects.
+	Encryption *BucketEncryption
+
+	// The logging configuration.
+	Logging *BucketLogging
+
+	// The website configuration.
+	Website *BucketWebsite
 }
 
 // Lifecycle is the lifecycle configuration for objects in the bucket.
@@ -306,7 +341,7 @@ const (
 	rfc3339Date = "2006-01-02"
 
 	// DeleteAction is a lifecycle action that deletes a live and/or archived
-	// objects. Takes precendence over SetStorageClass actions.
+	// objects. Takes precedence over SetStorageClass actions.
 	DeleteAction = "Delete"
 
 	// SetStorageClassAction changes the storage class of live and/or archived
@@ -386,6 +421,34 @@ type LifecycleCondition struct {
 	NumNewerVersions int64
 }
 
+// BucketLogging holds the bucket's logging configuration, which defines the
+// destination bucket and optional name prefix for the current bucket's
+// logs.
+type BucketLogging struct {
+	// The destination bucket where the current bucket's logs
+	// should be placed.
+	LogBucket string
+
+	// A prefix for log object names.
+	LogObjectPrefix string
+}
+
+// Website holds the bucket's website configuration, controlling how the
+// service behaves when accessing bucket contents as a web site. See
+// https://cloud.google.com/storage/docs/static-website for more information.
+type BucketWebsite struct {
+	// If the requested object path is missing, the service will ensure the path has
+	// a trailing '/', append this suffix, and attempt to retrieve the resulting
+	// object. This allows the creation of index.html objects to represent directory
+	// pages.
+	MainPageSuffix string
+
+	// If the requested object path is missing, and any mainPageSuffix object is
+	// missing, if applicable, the service will return the named object from this
+	// bucket as the content for a 404 Not Found result.
+	NotFoundPage string
+}
+
 func newBucket(b *raw.Bucket) (*BucketAttrs, error) {
 	if b == nil {
 		return nil, nil
@@ -394,51 +457,28 @@ func newBucket(b *raw.Bucket) (*BucketAttrs, error) {
 	if err != nil {
 		return nil, err
 	}
-	bucket := &BucketAttrs{
+	return &BucketAttrs{
 		Name:              b.Name,
 		Location:          b.Location,
 		MetaGeneration:    b.Metageneration,
 		StorageClass:      b.StorageClass,
 		Created:           convertTime(b.TimeCreated),
 		VersioningEnabled: b.Versioning != nil && b.Versioning.Enabled,
+		ACL:               toBucketACLRules(b.Acl),
+		DefaultObjectACL:  toObjectACLRules(b.DefaultObjectAcl),
 		Labels:            b.Labels,
 		RequesterPays:     b.Billing != nil && b.Billing.RequesterPays,
 		Lifecycle:         toLifecycle(b.Lifecycle),
 		RetentionPolicy:   rp,
 		CORS:              toCORS(b.Cors),
-	}
-	acl := make([]ACLRule, len(b.Acl))
-	for i, rule := range b.Acl {
-		acl[i] = ACLRule{
-			Entity: ACLEntity(rule.Entity),
-			Role:   ACLRole(rule.Role),
-		}
-	}
-	bucket.ACL = acl
-	objACL := make([]ACLRule, len(b.DefaultObjectAcl))
-	for i, rule := range b.DefaultObjectAcl {
-		objACL[i] = ACLRule{
-			Entity: ACLEntity(rule.Entity),
-			Role:   ACLRole(rule.Role),
-		}
-	}
-	bucket.DefaultObjectACL = objACL
-	return bucket, nil
+		Encryption:        toBucketEncryption(b.Encryption),
+		Logging:           toBucketLogging(b.Logging),
+		Website:           toBucketWebsite(b.Website),
+	}, nil
 }
 
 // toRawBucket copies the editable attribute from b to the raw library's Bucket type.
 func (b *BucketAttrs) toRawBucket() *raw.Bucket {
-	var acl []*raw.BucketAccessControl
-	if len(b.ACL) > 0 {
-		acl = make([]*raw.BucketAccessControl, len(b.ACL))
-		for i, rule := range b.ACL {
-			acl[i] = &raw.BucketAccessControl{
-				Entity: string(rule.Entity),
-				Role:   string(rule.Role),
-			}
-		}
-	}
-	dACL := toRawObjectACL(b.DefaultObjectACL)
 	// Copy label map.
 	var labels map[string]string
 	if len(b.Labels) > 0 {
@@ -460,20 +500,23 @@ func (b *BucketAttrs) toRawBucket() *raw.Bucket {
 	}
 	return &raw.Bucket{
 		Name:             b.Name,
-		DefaultObjectAcl: dACL,
 		Location:         b.Location,
 		StorageClass:     b.StorageClass,
-		Acl:              acl,
+		Acl:              toRawBucketACL(b.ACL),
+		DefaultObjectAcl: toRawObjectACL(b.DefaultObjectACL),
 		Versioning:       v,
 		Labels:           labels,
 		Billing:          bb,
 		Lifecycle:        toRawLifecycle(b.Lifecycle),
 		RetentionPolicy:  b.RetentionPolicy.toRawRetentionPolicy(),
 		Cors:             toRawCORS(b.CORS),
+		Encryption:       b.Encryption.toRawBucketEncryption(),
+		Logging:          b.Logging.toRawBucketLogging(),
+		Website:          b.Website.toRawBucketWebsite(),
 	}
 }
 
-// The bucket's Cross-Origin Resource Sharing (CORS) configuration.
+// CORS is the bucket's Cross-Origin Resource Sharing (CORS) configuration.
 type CORS struct {
 	// MaxAge is the value to return in the Access-Control-Max-Age
 	// header used in preflight responses.
@@ -495,14 +538,23 @@ type CORS struct {
 	ResponseHeaders []string
 }
 
+// BucketEncryption is a bucket's encryption configuration.
+type BucketEncryption struct {
+	// A Cloud KMS key name, in the form
+	// projects/P/locations/L/keyRings/R/cryptoKeys/K, that will be used to encrypt
+	// objects inserted into this bucket, if no encryption method is specified.
+	// The key's location must be the same as the bucket's.
+	DefaultKMSKeyName string
+}
+
 type BucketAttrsToUpdate struct {
-	// VersioningEnabled, if set, updates whether the bucket uses versioning.
+	// If set, updates whether the bucket uses versioning.
 	VersioningEnabled optional.Bool
 
-	// RequesterPays, if set, updates whether the bucket is a Requester Pays bucket.
+	// If set, updates whether the bucket is a Requester Pays bucket.
 	RequesterPays optional.Bool
 
-	// RetentionPolicy, if set, updates the retention policy of the bucket. Using
+	// If set, updates the retention policy of the bucket. Using
 	// RetentionPolicy.RetentionPeriod = 0 will delete the existing policy.
 	//
 	// This feature is in private alpha release. It is not currently available to
@@ -510,10 +562,31 @@ type BucketAttrsToUpdate struct {
 	// subject to any SLA or deprecation policy.
 	RetentionPolicy *RetentionPolicy
 
-	// CORS, if set, replaces the CORS configuration with a new configuration.
-	// When an empty slice is provided, all CORS policies are removed; when nil
-	// is provided, the value is ignored in the update.
+	// If set, replaces the CORS configuration with a new configuration.
+	// An empty (rather than nil) slice causes all CORS policies to be removed.
 	CORS []CORS
+
+	// If set, replaces the encryption configuration of the bucket. Using
+	// BucketEncryption.DefaultKMSKeyName = "" will delete the existing
+	// configuration.
+	Encryption *BucketEncryption
+
+	// If set, replaces the lifecycle configuration of the bucket.
+	Lifecycle *Lifecycle
+
+	// If set, replaces the logging configuration of the bucket.
+	Logging *BucketLogging
+
+	// If set, replaces the website configuration of the bucket.
+	Website *BucketWebsite
+
+	// If not empty, applies a predefined set of access controls.
+	// See https://cloud.google.com/storage/docs/json_api/v1/buckets/patch.
+	PredefinedACL string
+
+	// If not empty, applies a predefined set of default object access controls.
+	// See https://cloud.google.com/storage/docs/json_api/v1/buckets/patch.
+	PredefinedDefaultObjectACL string
 
 	setLabels    map[string]string
 	deleteLabels map[string]bool
@@ -563,6 +636,43 @@ func (ua *BucketAttrsToUpdate) toRawBucket() *raw.Bucket {
 			ForceSendFields: []string{"RequesterPays"},
 		}
 	}
+	if ua.Encryption != nil {
+		if ua.Encryption.DefaultKMSKeyName == "" {
+			rb.NullFields = append(rb.NullFields, "Encryption")
+			rb.Encryption = nil
+		} else {
+			rb.Encryption = ua.Encryption.toRawBucketEncryption()
+		}
+	}
+	if ua.Lifecycle != nil {
+		rb.Lifecycle = toRawLifecycle(*ua.Lifecycle)
+	}
+	if ua.Logging != nil {
+		if *ua.Logging == (BucketLogging{}) {
+			rb.NullFields = append(rb.NullFields, "Logging")
+			rb.Logging = nil
+		} else {
+			rb.Logging = ua.Logging.toRawBucketLogging()
+		}
+	}
+	if ua.Website != nil {
+		if *ua.Website == (BucketWebsite{}) {
+			rb.NullFields = append(rb.NullFields, "Website")
+			rb.Website = nil
+		} else {
+			rb.Website = ua.Website.toRawBucketWebsite()
+		}
+	}
+	if ua.PredefinedACL != "" {
+		// Clear ACL or the call will fail.
+		rb.Acl = nil
+		rb.ForceSendFields = append(rb.ForceSendFields, "Acl")
+	}
+	if ua.PredefinedDefaultObjectACL != "" {
+		// Clear ACLs or the call will fail.
+		rb.DefaultObjectAcl = nil
+		rb.ForceSendFields = append(rb.ForceSendFields, "DefaultObjectAcl")
+	}
 	if ua.setLabels != nil || ua.deleteLabels != nil {
 		rb.Labels = map[string]string{}
 		for k, v := range ua.setLabels {
@@ -580,7 +690,7 @@ func (ua *BucketAttrsToUpdate) toRawBucket() *raw.Bucket {
 
 // If returns a new BucketHandle that applies a set of preconditions.
 // Preconditions already set on the BucketHandle are ignored.
-// Operations on the new handle will only occur if the preconditions are
+// Operations on the new handle will return an error if the preconditions are not
 // satisfied. The only valid preconditions for buckets are MetagenerationMatch
 // and MetagenerationNotMatch.
 func (b *BucketHandle) If(conds BucketConditions) *BucketHandle {
@@ -788,6 +898,62 @@ func toLifecycle(rl *raw.BucketLifecycle) Lifecycle {
 	return l
 }
 
+func (e *BucketEncryption) toRawBucketEncryption() *raw.BucketEncryption {
+	if e == nil {
+		return nil
+	}
+	return &raw.BucketEncryption{
+		DefaultKmsKeyName: e.DefaultKMSKeyName,
+	}
+}
+
+func toBucketEncryption(e *raw.BucketEncryption) *BucketEncryption {
+	if e == nil {
+		return nil
+	}
+	return &BucketEncryption{DefaultKMSKeyName: e.DefaultKmsKeyName}
+}
+
+func (b *BucketLogging) toRawBucketLogging() *raw.BucketLogging {
+	if b == nil {
+		return nil
+	}
+	return &raw.BucketLogging{
+		LogBucket:       b.LogBucket,
+		LogObjectPrefix: b.LogObjectPrefix,
+	}
+}
+
+func toBucketLogging(b *raw.BucketLogging) *BucketLogging {
+	if b == nil {
+		return nil
+	}
+	return &BucketLogging{
+		LogBucket:       b.LogBucket,
+		LogObjectPrefix: b.LogObjectPrefix,
+	}
+}
+
+func (w *BucketWebsite) toRawBucketWebsite() *raw.BucketWebsite {
+	if w == nil {
+		return nil
+	}
+	return &raw.BucketWebsite{
+		MainPageSuffix: w.MainPageSuffix,
+		NotFoundPage:   w.NotFoundPage,
+	}
+}
+
+func toBucketWebsite(w *raw.BucketWebsite) *BucketWebsite {
+	if w == nil {
+		return nil
+	}
+	return &BucketWebsite{
+		MainPageSuffix: w.MainPageSuffix,
+		NotFoundPage:   w.NotFoundPage,
+	}
+}
+
 // Objects returns an iterator over the objects in the bucket that match the Query q.
 // If q is nil, no filtering is done.
 func (b *BucketHandle) Objects(ctx context.Context, q *Query) *ObjectIterator {
@@ -868,8 +1034,6 @@ func (it *ObjectIterator) fetch(pageSize int, pageToken string) (string, error) 
 	}
 	return resp.NextPageToken, nil
 }
-
-// TODO(jbd): Add storage.buckets.update.
 
 // Buckets returns an iterator over the buckets in the project. You may
 // optionally set the iterator's Prefix field to restrict the list to buckets

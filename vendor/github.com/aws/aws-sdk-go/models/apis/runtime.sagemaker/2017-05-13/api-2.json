@@ -34,6 +34,11 @@
       "max":5242880,
       "sensitive":true
     },
+    "CustomAttributesHeader":{
+      "type":"string",
+      "max":1024,
+      "sensitive":true
+    },
     "EndpointName":{
       "type":"string",
       "max":63,
@@ -50,7 +55,8 @@
       },
       "error":{"httpStatusCode":500},
       "exception":true,
-      "fault":true
+      "fault":true,
+      "synthetic":true
     },
     "InvokeEndpointInput":{
       "type":"structure",
@@ -74,6 +80,11 @@
           "shape":"Header",
           "location":"header",
           "locationName":"Accept"
+        },
+        "CustomAttributes":{
+          "shape":"CustomAttributesHeader",
+          "location":"header",
+          "locationName":"X-Amzn-SageMaker-Custom-Attributes"
         }
       },
       "payload":"Body"
@@ -92,6 +103,11 @@
           "shape":"Header",
           "location":"header",
           "locationName":"x-Amzn-Invoked-Production-Variant"
+        },
+        "CustomAttributes":{
+          "shape":"CustomAttributesHeader",
+          "location":"header",
+          "locationName":"X-Amzn-SageMaker-Custom-Attributes"
         }
       },
       "payload":"Body"
@@ -119,7 +135,8 @@
       },
       "error":{"httpStatusCode":503},
       "exception":true,
-      "fault":true
+      "fault":true,
+      "synthetic":true
     },
     "StatusCode":{"type":"integer"},
     "ValidationError":{
@@ -128,7 +145,8 @@
         "Message":{"shape":"Message"}
       },
       "error":{"httpStatusCode":400},
-      "exception":true
+      "exception":true,
+      "synthetic":true
     }
   }
 }

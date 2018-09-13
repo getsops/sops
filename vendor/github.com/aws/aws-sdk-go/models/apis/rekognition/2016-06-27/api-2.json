@@ -118,6 +118,23 @@
         {"shape":"ProvisionedThroughputExceededException"}
       ]
     },
+    "DescribeCollection":{
+      "name":"DescribeCollection",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeCollectionRequest"},
+      "output":{"shape":"DescribeCollectionResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"InternalServerError"},
+        {"shape":"ThrottlingException"},
+        {"shape":"ProvisionedThroughputExceededException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "DescribeStreamProcessor":{
       "name":"DescribeStreamProcessor",
       "http":{
@@ -891,6 +908,22 @@
     "DeleteStreamProcessorResponse":{
       "type":"structure",
       "members":{
+      }
+    },
+    "DescribeCollectionRequest":{
+      "type":"structure",
+      "required":["CollectionId"],
+      "members":{
+        "CollectionId":{"shape":"CollectionId"}
+      }
+    },
+    "DescribeCollectionResponse":{
+      "type":"structure",
+      "members":{
+        "FaceCount":{"shape":"ULong"},
+        "FaceModelVersion":{"shape":"String"},
+        "CollectionARN":{"shape":"String"},
+        "CreationTimestamp":{"shape":"DateTime"}
       }
     },
     "DescribeStreamProcessorRequest":{

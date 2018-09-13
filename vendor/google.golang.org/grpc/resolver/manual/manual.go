@@ -81,7 +81,7 @@ func (r *Resolver) NewServiceConfig(sc string) {
 }
 
 // GenerateAndRegisterManualResolver generates a random scheme and a Resolver
-// with it. It also regieter this Resolver.
+// with it. It also registers this Resolver.
 // It returns the Resolver and a cleanup function to unregister it.
 func GenerateAndRegisterManualResolver() (*Resolver, func()) {
 	scheme := strconv.FormatInt(time.Now().UnixNano(), 36)

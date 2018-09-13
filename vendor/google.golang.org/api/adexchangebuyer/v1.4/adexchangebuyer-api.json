@@ -15,7 +15,7 @@
   "description": "Accesses your bidding-account information, submits creatives for validation, finds available direct deals, and retrieves performance reports.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/ad-exchange/buyer-rest",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/X7x239uWJ65N2aEP-IhQZbTrqjc\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/MJwOf3EG-7RF4hB9GZz8eDlZZS0\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/doubleclick-16.gif",
     "x32": "https://www.google.com/images/icons/product/doubleclick-32.gif"
@@ -60,12 +60,12 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
@@ -1255,7 +1255,7 @@
       }
     }
   },
-  "revision": "20180222",
+  "revision": "20180823",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
@@ -1680,6 +1680,10 @@
             "type": "object"
           },
           "type": "array"
+        },
+        "creativeStatusIdentityType": {
+          "description": "Creative status identity type that the creative item applies to. Ad Exchange real-time bidding is migrating to the sizeless creative verification. Originally, Ad Exchange assigned creative verification status to a unique combination of a buyer creative ID and creative dimensions. Post-migration, a single verification status will be assigned at the buyer creative ID level. This field allows to distinguish whether a given creative status applies to a unique combination of a buyer creative ID and creative dimensions, or to a buyer creative ID as a whole.",
+          "type": "string"
         },
         "dealsStatus": {
           "description": "Top-level deals status. Read-only. This field should not be set in requests. If disapproved, an entry for auctionType=DIRECT_DEALS (or ALL) in servingRestrictions will also exist. Note that this may be nuanced with other contextual restrictions, in which case it may be preferable to read from servingRestrictions directly.",
@@ -3346,10 +3350,6 @@
     "PublisherProfileApiProto": {
       "id": "PublisherProfileApiProto",
       "properties": {
-        "accountId": {
-          "description": "Deprecated: use the seller.account_id. The account id of the seller.",
-          "type": "string"
-        },
         "audience": {
           "description": "Publisher provided info on its audience.",
           "type": "string"

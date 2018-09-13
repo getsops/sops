@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ package testutil
 
 import (
 	"math"
+	"math/big"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/google/go-cmp/cmp"
@@ -27,6 +28,13 @@ var (
 	defaultCmpOptions = []cmp.Option{
 		// Use proto.Equal for protobufs
 		cmp.Comparer(proto.Equal),
+		// Use big.Rat.Cmp for big.Rats
+		cmp.Comparer(func(x, y *big.Rat) bool {
+			if x == nil || y == nil {
+				return x == y
+			}
+			return x.Cmp(y) == 0
+		}),
 		// NaNs compare equal
 		cmp.FilterValues(func(x, y float64) bool {
 			return math.IsNaN(x) && math.IsNaN(y)

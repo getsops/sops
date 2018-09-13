@@ -2360,9 +2360,6 @@ func TestServer_NoCrash_HandlerClose_Then_ClientClose(t *testing.T) {
 		// it did before.
 		st.writeData(1, true, []byte("foo"))
 
-		// Get our flow control bytes back, since the handler didn't get them.
-		st.wantWindowUpdate(0, uint32(len("foo")))
-
 		// Sent after a peer sends data anyway (admittedly the
 		// previous RST_STREAM might've still been in-flight),
 		// but they'll get the more friendly 'cancel' code
@@ -3722,4 +3719,134 @@ func TestIssue20704Race(t *testing.T) {
 		// reading the body:
 		resp.Body.Close()
 	}
+}
+
+func TestServer_Rejects_TooSmall(t *testing.T) {
+	testServerResponse(t, func(w http.ResponseWriter, r *http.Request) error {
+		ioutil.ReadAll(r.Body)
+		return nil
+	}, func(st *serverTester) {
+		st.writeHeaders(HeadersFrameParam{
+			StreamID: 1, // clients send odd numbers
+			BlockFragment: st.encodeHeader(
+				":method", "POST",
+				"content-length", "4",
+			),
+			EndStream:  false, // to say DATA frames are coming
+			EndHeaders: true,
+		})
+		st.writeData(1, true, []byte("12345"))
+
+		st.wantRSTStream(1, ErrCodeProtocol)
+	})
+}
+
+// Tests that a handler setting "Connection: close" results in a GOAWAY being sent,
+// and the connection still completing.
+func TestServerHandlerConnectionClose(t *testing.T) {
+	unblockHandler := make(chan bool, 1)
+	defer close(unblockHandler) // backup; in case of errors
+	testServerResponse(t, func(w http.ResponseWriter, r *http.Request) error {
+		w.Header().Set("Connection", "close")
+		w.Header().Set("Foo", "bar")
+		w.(http.Flusher).Flush()
+		<-unblockHandler
+		return nil
+	}, func(st *serverTester) {
+		st.writeHeaders(HeadersFrameParam{
+			StreamID:      1,
+			BlockFragment: st.encodeHeader(),
+			EndStream:     true,
+			EndHeaders:    true,
+		})
+		var sawGoAway bool
+		var sawRes bool
+		for {
+			f, err := st.readFrame()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			switch f := f.(type) {
+			case *GoAwayFrame:
+				sawGoAway = true
+				unblockHandler <- true
+				if f.LastStreamID != 1 || f.ErrCode != ErrCodeNo {
+					t.Errorf("unexpected GOAWAY frame: %v", summarizeFrame(f))
+				}
+			case *HeadersFrame:
+				goth := st.decodeHeader(f.HeaderBlockFragment())
+				wanth := [][2]string{
+					{":status", "200"},
+					{"foo", "bar"},
+				}
+				if !reflect.DeepEqual(goth, wanth) {
+					t.Errorf("got headers %v; want %v", goth, wanth)
+				}
+				sawRes = true
+			case *DataFrame:
+				if f.StreamID != 1 || !f.StreamEnded() || len(f.Data()) != 0 {
+					t.Errorf("unexpected DATA frame: %v", summarizeFrame(f))
+				}
+			default:
+				t.Logf("unexpected frame: %v", summarizeFrame(f))
+			}
+		}
+		if !sawGoAway {
+			t.Errorf("didn't see GOAWAY")
+		}
+		if !sawRes {
+			t.Errorf("didn't see response")
+		}
+	})
+}
+
+func TestServer_Headers_HalfCloseRemote(t *testing.T) {
+	var st *serverTester
+	writeData := make(chan bool)
+	writeHeaders := make(chan bool)
+	leaveHandler := make(chan bool)
+	st = newServerTester(t, func(w http.ResponseWriter, r *http.Request) {
+		if st.stream(1) == nil {
+			t.Errorf("nil stream 1 in handler")
+		}
+		if got, want := st.streamState(1), stateOpen; got != want {
+			t.Errorf("in handler, state is %v; want %v", got, want)
+		}
+		writeData <- true
+		if n, err := r.Body.Read(make([]byte, 1)); n != 0 || err != io.EOF {
+			t.Errorf("body read = %d, %v; want 0, EOF", n, err)
+		}
+		if got, want := st.streamState(1), stateHalfClosedRemote; got != want {
+			t.Errorf("in handler, state is %v; want %v", got, want)
+		}
+		writeHeaders <- true
+
+		<-leaveHandler
+	})
+	st.greet()
+
+	st.writeHeaders(HeadersFrameParam{
+		StreamID:      1,
+		BlockFragment: st.encodeHeader(),
+		EndStream:     false, // keep it open
+		EndHeaders:    true,
+	})
+	<-writeData
+	st.writeData(1, true, nil)
+
+	<-writeHeaders
+
+	st.writeHeaders(HeadersFrameParam{
+		StreamID:      1,
+		BlockFragment: st.encodeHeader(),
+		EndStream:     false, // keep it open
+		EndHeaders:    true,
+	})
+
+	defer close(leaveHandler)
+
+	st.wantRSTStream(1, ErrCodeStreamClosed)
 }

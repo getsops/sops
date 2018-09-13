@@ -84,6 +84,10 @@ type RekognitionAPI interface {
 	DeleteStreamProcessorWithContext(aws.Context, *rekognition.DeleteStreamProcessorInput, ...request.Option) (*rekognition.DeleteStreamProcessorOutput, error)
 	DeleteStreamProcessorRequest(*rekognition.DeleteStreamProcessorInput) (*request.Request, *rekognition.DeleteStreamProcessorOutput)
 
+	DescribeCollection(*rekognition.DescribeCollectionInput) (*rekognition.DescribeCollectionOutput, error)
+	DescribeCollectionWithContext(aws.Context, *rekognition.DescribeCollectionInput, ...request.Option) (*rekognition.DescribeCollectionOutput, error)
+	DescribeCollectionRequest(*rekognition.DescribeCollectionInput) (*request.Request, *rekognition.DescribeCollectionOutput)
+
 	DescribeStreamProcessor(*rekognition.DescribeStreamProcessorInput) (*rekognition.DescribeStreamProcessorOutput, error)
 	DescribeStreamProcessorWithContext(aws.Context, *rekognition.DescribeStreamProcessorInput, ...request.Option) (*rekognition.DescribeStreamProcessorOutput, error)
 	DescribeStreamProcessorRequest(*rekognition.DescribeStreamProcessorInput) (*request.Request, *rekognition.DescribeStreamProcessorOutput)

@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,6 +66,9 @@ type TableMetadata struct {
 
 	// If non-nil, the table is partitioned by time.
 	TimePartitioning *TimePartitioning
+
+	// Clustering specifies the data clustering configuration for the table.
+	Clustering *Clustering
 
 	// The time when this table expires. If not set, the table will persist
 	// indefinitely. Expired tables will be deleted and their storage reclaimed.
@@ -156,6 +159,10 @@ type TimePartitioning struct {
 	// table is partitioned by this field. The field must be a top-level TIMESTAMP or
 	// DATE field. Its mode must be NULLABLE or REQUIRED.
 	Field string
+
+	// If true, queries that reference this table must include a filter (e.g. a WHERE predicate)
+	// that can be used for partition elimination.
+	RequirePartitionFilter bool
 }
 
 func (p *TimePartitioning) toBQ() *bq.TimePartitioning {
@@ -163,9 +170,10 @@ func (p *TimePartitioning) toBQ() *bq.TimePartitioning {
 		return nil
 	}
 	return &bq.TimePartitioning{
-		Type:         "DAY",
-		ExpirationMs: int64(p.Expiration / time.Millisecond),
-		Field:        p.Field,
+		Type:                   "DAY",
+		ExpirationMs:           int64(p.Expiration / time.Millisecond),
+		Field:                  p.Field,
+		RequirePartitionFilter: p.RequirePartitionFilter,
 	}
 }
 
@@ -174,8 +182,33 @@ func bqToTimePartitioning(q *bq.TimePartitioning) *TimePartitioning {
 		return nil
 	}
 	return &TimePartitioning{
-		Expiration: time.Duration(q.ExpirationMs) * time.Millisecond,
-		Field:      q.Field,
+		Expiration:             time.Duration(q.ExpirationMs) * time.Millisecond,
+		Field:                  q.Field,
+		RequirePartitionFilter: q.RequirePartitionFilter,
+	}
+}
+
+// Clustering governs the organization of data within a partitioned table.
+// For more information, see https://cloud.google.com/bigquery/docs/clustered-tables
+type Clustering struct {
+	Fields []string
+}
+
+func (c *Clustering) toBQ() *bq.Clustering {
+	if c == nil {
+		return nil
+	}
+	return &bq.Clustering{
+		Fields: c.Fields,
+	}
+}
+
+func bqToClustering(q *bq.Clustering) *Clustering {
+	if q == nil {
+		return nil
+	}
+	return &Clustering{
+		Fields: q.Fields,
 	}
 }
 
@@ -291,6 +324,7 @@ func (tm *TableMetadata) toBQ() (*bq.Table, error) {
 		return nil, errors.New("bigquery: UseLegacy/StandardSQL requires ViewQuery")
 	}
 	t.TimePartitioning = tm.TimePartitioning.toBQ()
+	t.Clustering = tm.Clustering.toBQ()
 	if !tm.ExpirationTime.IsZero() {
 		t.ExpirationTime = tm.ExpirationTime.UnixNano() / 1e6
 	}
@@ -367,6 +401,7 @@ func bqToTableMetadata(t *bq.Table) (*TableMetadata, error) {
 		md.UseLegacySQL = t.View.UseLegacySql
 	}
 	md.TimePartitioning = bqToTimePartitioning(t.TimePartitioning)
+	md.Clustering = bqToClustering(t.Clustering)
 	if t.StreamingBuffer != nil {
 		md.StreamingBuffer = &StreamingBuffer{
 			EstimatedBytes:  t.StreamingBuffer.EstimatedBytes,
@@ -442,9 +477,16 @@ func (tm *TableMetadataToUpdate) toBQ() *bq.Table {
 		t.Schema = tm.Schema.toBQ()
 		forceSend("Schema")
 	}
+	if tm.EncryptionConfig != nil {
+		t.EncryptionConfiguration = tm.EncryptionConfig.toBQ()
+	}
 	if !tm.ExpirationTime.IsZero() {
 		t.ExpirationTime = tm.ExpirationTime.UnixNano() / 1e6
 		forceSend("ExpirationTime")
+	}
+	if tm.TimePartitioning != nil {
+		t.TimePartitioning = tm.TimePartitioning.toBQ()
+		t.TimePartitioning.ForceSendFields = []string{"Expiration", "RequirePartitionFilter"}
 	}
 	if tm.ViewQuery != nil {
 		t.View = &bq.ViewDefinition{
@@ -479,6 +521,10 @@ type TableMetadataToUpdate struct {
 	// When updating a schema, you can add columns but not remove them.
 	Schema Schema
 
+	// The table's encryption configuration.  When calling Update, ensure that
+	// all mutable fields of EncryptionConfig are populated.
+	EncryptionConfig *EncryptionConfig
+
 	// The time when this table expires.
 	ExpirationTime time.Time
 
@@ -487,6 +533,12 @@ type TableMetadataToUpdate struct {
 
 	// Use Legacy SQL for the view query.
 	UseLegacySQL optional.Bool
+
+	// TimePartitioning allows modification of certain aspects of partition
+	// configuration such as partition expiration and whether partition
+	// filtration is required at query time.  When calling Update, ensure
+	// that all mutable fields of TimePartitioning are populated.
+	TimePartitioning *TimePartitioning
 
 	labelUpdater
 }

@@ -19,13 +19,20 @@
 
 package training
 
-import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.2/customvision/training"
+import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.1/customvision/training"
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
 type BaseClient = original.BaseClient
+type Classifier = original.Classifier
+
+const (
+	Multiclass Classifier = original.Multiclass
+	Multilabel Classifier = original.Multilabel
+)
+
 type DomainType = original.DomainType
 
 const (
@@ -132,6 +139,9 @@ func New(aPIKey string) BaseClient {
 }
 func NewWithBaseURI(baseURI string, aPIKey string) BaseClient {
 	return original.NewWithBaseURI(baseURI, aPIKey)
+}
+func PossibleClassifierValues() []Classifier {
+	return original.PossibleClassifierValues()
 }
 func PossibleDomainTypeValues() []DomainType {
 	return original.PossibleDomainTypeValues()

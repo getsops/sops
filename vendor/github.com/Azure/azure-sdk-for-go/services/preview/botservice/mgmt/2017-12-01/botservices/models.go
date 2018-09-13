@@ -834,6 +834,8 @@ type ConnectionSettingParameter struct {
 type ConnectionSettingProperties struct {
 	// ClientID - Client Id associated with the Connection Setting.
 	ClientID *string `json:"clientId,omitempty"`
+	// SettingID - Setting Id set by the service for the Connection Setting.
+	SettingID *string `json:"settingId,omitempty"`
 	// ClientSecret - Client Secret associated with the Connection Setting
 	ClientSecret *string `json:"clientSecret,omitempty"`
 	// Scopes - Scopes associated with the Connection Setting

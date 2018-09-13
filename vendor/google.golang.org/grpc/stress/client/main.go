@@ -249,23 +249,23 @@ func performRPCs(gauge *gauge, conn *grpc.ClientConn, selector *weightedRandomTe
 }
 
 func logParameterInfo(addresses []string, tests []testCaseWithWeight) {
-	grpclog.Printf("server_addresses: %s", *serverAddresses)
-	grpclog.Printf("test_cases: %s", *testCases)
-	grpclog.Printf("test_duration_secs: %d", *testDurationSecs)
-	grpclog.Printf("num_channels_per_server: %d", *numChannelsPerServer)
-	grpclog.Printf("num_stubs_per_channel: %d", *numStubsPerChannel)
-	grpclog.Printf("metrics_port: %d", *metricsPort)
-	grpclog.Printf("use_tls: %t", *useTLS)
-	grpclog.Printf("use_test_ca: %t", *testCA)
-	grpclog.Printf("server_host_override: %s", *tlsServerName)
+	grpclog.Infof("server_addresses: %s", *serverAddresses)
+	grpclog.Infof("test_cases: %s", *testCases)
+	grpclog.Infof("test_duration_secs: %d", *testDurationSecs)
+	grpclog.Infof("num_channels_per_server: %d", *numChannelsPerServer)
+	grpclog.Infof("num_stubs_per_channel: %d", *numStubsPerChannel)
+	grpclog.Infof("metrics_port: %d", *metricsPort)
+	grpclog.Infof("use_tls: %t", *useTLS)
+	grpclog.Infof("use_test_ca: %t", *testCA)
+	grpclog.Infof("server_host_override: %s", *tlsServerName)
 
-	grpclog.Println("addresses:")
+	grpclog.Infoln("addresses:")
 	for i, addr := range addresses {
-		grpclog.Printf("%d. %s\n", i+1, addr)
+		grpclog.Infof("%d. %s\n", i+1, addr)
 	}
-	grpclog.Println("tests:")
+	grpclog.Infoln("tests:")
 	for i, test := range tests {
-		grpclog.Printf("%d. %v\n", i+1, test)
+		grpclog.Infof("%d. %v\n", i+1, test)
 	}
 }
 
@@ -332,6 +332,6 @@ func main() {
 		close(stop)
 	}
 	wg.Wait()
-	grpclog.Printf(" ===== ALL DONE ===== ")
+	grpclog.Infof(" ===== ALL DONE ===== ")
 
 }

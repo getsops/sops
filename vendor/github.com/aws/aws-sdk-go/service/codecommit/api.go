@@ -17,7 +17,7 @@ const opBatchGetRepositories = "BatchGetRepositories"
 
 // BatchGetRepositoriesRequest generates a "aws/request.Request" representing the
 // client's request for the BatchGetRepositories operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -128,7 +128,7 @@ const opCreateBranch = "CreateBranch"
 
 // CreateBranchRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBranch operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -256,7 +256,7 @@ const opCreatePullRequest = "CreatePullRequest"
 
 // CreatePullRequestRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePullRequest operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -433,7 +433,7 @@ const opCreateRepository = "CreateRepository"
 
 // CreateRepositoryRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRepository operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -543,7 +543,7 @@ const opDeleteBranch = "DeleteBranch"
 
 // DeleteBranchRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBranch operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -659,7 +659,7 @@ const opDeleteCommentContent = "DeleteCommentContent"
 
 // DeleteCommentContentRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCommentContent operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -750,7 +750,7 @@ const opDeleteRepository = "DeleteRepository"
 
 // DeleteRepositoryRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRepository operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -856,7 +856,7 @@ const opDescribePullRequestEvents = "DescribePullRequestEvents"
 
 // DescribePullRequestEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePullRequestEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1032,7 +1032,7 @@ const opGetBlob = "GetBlob"
 
 // GetBlobRequest generates a "aws/request.Request" representing the
 // client's request for the GetBlob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1150,7 +1150,7 @@ const opGetBranch = "GetBranch"
 
 // GetBranchRequest generates a "aws/request.Request" representing the
 // client's request for the GetBranch operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1264,7 +1264,7 @@ const opGetComment = "GetComment"
 
 // GetCommentRequest generates a "aws/request.Request" representing the
 // client's request for the GetComment operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1355,7 +1355,7 @@ const opGetCommentsForComparedCommit = "GetCommentsForComparedCommit"
 
 // GetCommentsForComparedCommitRequest generates a "aws/request.Request" representing the
 // client's request for the GetCommentsForComparedCommit operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1531,7 +1531,7 @@ const opGetCommentsForPullRequest = "GetCommentsForPullRequest"
 
 // GetCommentsForPullRequestRequest generates a "aws/request.Request" representing the
 // client's request for the GetCommentsForPullRequest operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1724,7 +1724,7 @@ const opGetCommit = "GetCommit"
 
 // GetCommitRequest generates a "aws/request.Request" representing the
 // client's request for the GetCommit operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1838,7 +1838,7 @@ const opGetDifferences = "GetDifferences"
 
 // GetDifferencesRequest generates a "aws/request.Request" representing the
 // client's request for the GetDifferences operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2025,7 +2025,7 @@ const opGetMergeConflicts = "GetMergeConflicts"
 
 // GetMergeConflictsRequest generates a "aws/request.Request" representing the
 // client's request for the GetMergeConflicts operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2159,7 +2159,7 @@ const opGetPullRequest = "GetPullRequest"
 
 // GetPullRequestRequest generates a "aws/request.Request" representing the
 // client's request for the GetPullRequest operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2262,7 +2262,7 @@ const opGetRepository = "GetRepository"
 
 // GetRepositoryRequest generates a "aws/request.Request" representing the
 // client's request for the GetRepository operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2372,7 +2372,7 @@ const opGetRepositoryTriggers = "GetRepositoryTriggers"
 
 // GetRepositoryTriggersRequest generates a "aws/request.Request" representing the
 // client's request for the GetRepositoryTriggers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2476,7 +2476,7 @@ const opListBranches = "ListBranches"
 
 // ListBranchesRequest generates a "aws/request.Request" representing the
 // client's request for the ListBranches operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2639,7 +2639,7 @@ const opListPullRequests = "ListPullRequests"
 
 // ListPullRequestsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPullRequests operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2817,7 +2817,7 @@ const opListRepositories = "ListRepositories"
 
 // ListRepositoriesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRepositories operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2958,7 +2958,7 @@ const opMergePullRequestByFastForward = "MergePullRequestByFastForward"
 
 // MergePullRequestByFastForwardRequest generates a "aws/request.Request" representing the
 // client's request for the MergePullRequestByFastForward operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3094,7 +3094,7 @@ const opPostCommentForComparedCommit = "PostCommentForComparedCommit"
 
 // PostCommentForComparedCommitRequest generates a "aws/request.Request" representing the
 // client's request for the PostCommentForComparedCommit operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3254,7 +3254,7 @@ const opPostCommentForPullRequest = "PostCommentForPullRequest"
 
 // PostCommentForPullRequestRequest generates a "aws/request.Request" representing the
 // client's request for the PostCommentForPullRequest operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3434,7 +3434,7 @@ const opPostCommentReply = "PostCommentReply"
 
 // PostCommentReplyRequest generates a "aws/request.Request" representing the
 // client's request for the PostCommentReply operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3543,7 +3543,7 @@ const opPutFile = "PutFile"
 
 // PutFileRequest generates a "aws/request.Request" representing the
 // client's request for the PutFile operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3583,7 +3583,8 @@ func (c *CodeCommit) PutFileRequest(input *PutFileInput) (req *request.Request, 
 
 // PutFile API operation for AWS CodeCommit.
 //
-// Adds or updates a file in an AWS CodeCommit repository.
+// Adds or updates a file in a branch in an AWS CodeCommit repository, and generates
+// a commit for the addition in the specified branch.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3729,7 +3730,7 @@ const opPutRepositoryTriggers = "PutRepositoryTriggers"
 
 // PutRepositoryTriggersRequest generates a "aws/request.Request" representing the
 // client's request for the PutRepositoryTriggers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3879,7 +3880,7 @@ const opTestRepositoryTriggers = "TestRepositoryTriggers"
 
 // TestRepositoryTriggersRequest generates a "aws/request.Request" representing the
 // client's request for the TestRepositoryTriggers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4031,7 +4032,7 @@ const opUpdateComment = "UpdateComment"
 
 // UpdateCommentRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateComment operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4133,7 +4134,7 @@ const opUpdateDefaultBranch = "UpdateDefaultBranch"
 
 // UpdateDefaultBranchRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDefaultBranch operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4252,7 +4253,7 @@ const opUpdatePullRequestDescription = "UpdatePullRequestDescription"
 
 // UpdatePullRequestDescriptionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePullRequestDescription operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4347,7 +4348,7 @@ const opUpdatePullRequestStatus = "UpdatePullRequestStatus"
 
 // UpdatePullRequestStatusRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePullRequestStatus operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4461,7 +4462,7 @@ const opUpdatePullRequestTitle = "UpdatePullRequestTitle"
 
 // UpdatePullRequestTitleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePullRequestTitle operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4559,7 +4560,7 @@ const opUpdateRepositoryDescription = "UpdateRepositoryDescription"
 
 // UpdateRepositoryDescriptionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRepositoryDescription operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4674,7 +4675,7 @@ const opUpdateRepositoryName = "UpdateRepositoryName"
 
 // UpdateRepositoryNameRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRepositoryName operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4944,7 +4945,7 @@ type Comment struct {
 	Content *string `locationName:"content" type:"string"`
 
 	// The date and time the comment was created, in timestamp format.
-	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
 
 	// A Boolean value indicating whether the comment has been deleted.
 	Deleted *bool `locationName:"deleted" type:"boolean"`
@@ -4953,7 +4954,7 @@ type Comment struct {
 	InReplyTo *string `locationName:"inReplyTo" type:"string"`
 
 	// The date and time the comment was most recently modified, in timestamp format.
-	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
 }
 
 // String returns the string representation
@@ -7912,7 +7913,7 @@ type PullRequest struct {
 	ClientRequestToken *string `locationName:"clientRequestToken" type:"string"`
 
 	// The date and time the pull request was originally created, in timestamp format.
-	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
 
 	// The user-defined description of the pull request. This description can be
 	// used to clarify what should be reviewed and other details of the request.
@@ -7920,7 +7921,7 @@ type PullRequest struct {
 
 	// The day and time of the last user or system activity on the pull request,
 	// in timestamp format.
-	LastActivityDate *time.Time `locationName:"lastActivityDate" type:"timestamp" timestampFormat:"unix"`
+	LastActivityDate *time.Time `locationName:"lastActivityDate" type:"timestamp"`
 
 	// The system-generated ID of the pull request.
 	PullRequestId *string `locationName:"pullRequestId" type:"string"`
@@ -8002,6 +8003,60 @@ func (s *PullRequest) SetTitle(v string) *PullRequest {
 	return s
 }
 
+// Metadata about the pull request that is used when comparing the pull request
+// source with its destination.
+type PullRequestCreatedEventMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The commit ID of the tip of the branch specified as the destination branch
+	// when the pull request was created.
+	DestinationCommitId *string `locationName:"destinationCommitId" type:"string"`
+
+	// The commit ID of the most recent commit that the source branch and the destination
+	// branch have in common.
+	MergeBase *string `locationName:"mergeBase" type:"string"`
+
+	// The name of the repository where the pull request was created.
+	RepositoryName *string `locationName:"repositoryName" min:"1" type:"string"`
+
+	// The commit ID on the source branch used when the pull request was created.
+	SourceCommitId *string `locationName:"sourceCommitId" type:"string"`
+}
+
+// String returns the string representation
+func (s PullRequestCreatedEventMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PullRequestCreatedEventMetadata) GoString() string {
+	return s.String()
+}
+
+// SetDestinationCommitId sets the DestinationCommitId field's value.
+func (s *PullRequestCreatedEventMetadata) SetDestinationCommitId(v string) *PullRequestCreatedEventMetadata {
+	s.DestinationCommitId = &v
+	return s
+}
+
+// SetMergeBase sets the MergeBase field's value.
+func (s *PullRequestCreatedEventMetadata) SetMergeBase(v string) *PullRequestCreatedEventMetadata {
+	s.MergeBase = &v
+	return s
+}
+
+// SetRepositoryName sets the RepositoryName field's value.
+func (s *PullRequestCreatedEventMetadata) SetRepositoryName(v string) *PullRequestCreatedEventMetadata {
+	s.RepositoryName = &v
+	return s
+}
+
+// SetSourceCommitId sets the SourceCommitId field's value.
+func (s *PullRequestCreatedEventMetadata) SetSourceCommitId(v string) *PullRequestCreatedEventMetadata {
+	s.SourceCommitId = &v
+	return s
+}
+
 // Returns information about a pull request event.
 type PullRequestEvent struct {
 	_ struct{} `type:"structure"`
@@ -8012,7 +8067,10 @@ type PullRequestEvent struct {
 	ActorArn *string `locationName:"actorArn" type:"string"`
 
 	// The day and time of the pull request event, in timestamp format.
-	EventDate *time.Time `locationName:"eventDate" type:"timestamp" timestampFormat:"unix"`
+	EventDate *time.Time `locationName:"eventDate" type:"timestamp"`
+
+	// Information about the source and destination branches for the pull request.
+	PullRequestCreatedEventMetadata *PullRequestCreatedEventMetadata `locationName:"pullRequestCreatedEventMetadata" type:"structure"`
 
 	// The type of the pull request event, for example a status change event (PULL_REQUEST_STATUS_CHANGED)
 	// or update event (PULL_REQUEST_SOURCE_REFERENCE_UPDATED).
@@ -8050,6 +8108,12 @@ func (s *PullRequestEvent) SetActorArn(v string) *PullRequestEvent {
 // SetEventDate sets the EventDate field's value.
 func (s *PullRequestEvent) SetEventDate(v time.Time) *PullRequestEvent {
 	s.EventDate = &v
+	return s
+}
+
+// SetPullRequestCreatedEventMetadata sets the PullRequestCreatedEventMetadata field's value.
+func (s *PullRequestEvent) SetPullRequestCreatedEventMetadata(v *PullRequestCreatedEventMetadata) *PullRequestEvent {
+	s.PullRequestCreatedEventMetadata = v
 	return s
 }
 
@@ -8138,6 +8202,10 @@ type PullRequestSourceReferenceUpdatedEventMetadata struct {
 	// of the branch at the time the pull request was updated.
 	BeforeCommitId *string `locationName:"beforeCommitId" type:"string"`
 
+	// The commit ID of the most recent commit that the source branch and the destination
+	// branch have in common.
+	MergeBase *string `locationName:"mergeBase" type:"string"`
+
 	// The name of the repository where the pull request was updated.
 	RepositoryName *string `locationName:"repositoryName" min:"1" type:"string"`
 }
@@ -8161,6 +8229,12 @@ func (s *PullRequestSourceReferenceUpdatedEventMetadata) SetAfterCommitId(v stri
 // SetBeforeCommitId sets the BeforeCommitId field's value.
 func (s *PullRequestSourceReferenceUpdatedEventMetadata) SetBeforeCommitId(v string) *PullRequestSourceReferenceUpdatedEventMetadata {
 	s.BeforeCommitId = &v
+	return s
+}
+
+// SetMergeBase sets the MergeBase field's value.
+func (s *PullRequestSourceReferenceUpdatedEventMetadata) SetMergeBase(v string) *PullRequestSourceReferenceUpdatedEventMetadata {
+	s.MergeBase = &v
 	return s
 }
 
@@ -8206,6 +8280,10 @@ type PullRequestTarget struct {
 	// into. Also known as the destination branch.
 	DestinationReference *string `locationName:"destinationReference" type:"string"`
 
+	// The commit ID of the most recent commit that the source branch and the destination
+	// branch have in common.
+	MergeBase *string `locationName:"mergeBase" type:"string"`
+
 	// Returns metadata about the state of the merge, including whether the merge
 	// has been made.
 	MergeMetadata *MergeMetadata `locationName:"mergeMetadata" type:"structure"`
@@ -8246,6 +8324,12 @@ func (s *PullRequestTarget) SetDestinationReference(v string) *PullRequestTarget
 	return s
 }
 
+// SetMergeBase sets the MergeBase field's value.
+func (s *PullRequestTarget) SetMergeBase(v string) *PullRequestTarget {
+	s.MergeBase = &v
+	return s
+}
+
 // SetMergeMetadata sets the MergeMetadata field's value.
 func (s *PullRequestTarget) SetMergeMetadata(v *MergeMetadata) *PullRequestTarget {
 	s.MergeMetadata = v
@@ -8273,7 +8357,8 @@ func (s *PullRequestTarget) SetSourceReference(v string) *PullRequestTarget {
 type PutFileInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the branch where you want to add or update the file.
+	// The name of the branch where you want to add or update the file. If this
+	// is an empty repository, this branch will be created.
 	//
 	// BranchName is a required field
 	BranchName *string `locationName:"branchName" min:"1" type:"string" required:"true"`
@@ -8312,9 +8397,11 @@ type PutFileInput struct {
 	Name *string `locationName:"name" type:"string"`
 
 	// The full commit ID of the head commit in the branch where you want to add
-	// or update the file. If the commit ID does not match the ID of the head commit
-	// at the time of the operation, an error will occur, and the file will not
-	// be added or updated.
+	// or update the file. If this is an empty repository, no commit ID is required.
+	// If this is not an empty repository, a commit ID is required.
+	//
+	// The commit ID must match the ID of the head commit at the time of the operation,
+	// or an error will occur, and the file will not be added or updated.
 	ParentCommitId *string `locationName:"parentCommitId" type:"string"`
 
 	// The name of the repository where you want to add or update the file.
@@ -8428,7 +8515,8 @@ type PutFileOutput struct {
 	// CommitId is a required field
 	CommitId *string `locationName:"commitId" type:"string" required:"true"`
 
-	// Tree information for the commit that contains this file change.
+	// The full SHA-1 pointer of the tree information for the commit that contains
+	// this file change.
 	//
 	// TreeId is a required field
 	TreeId *string `locationName:"treeId" type:"string" required:"true"`
@@ -8569,13 +8657,13 @@ type RepositoryMetadata struct {
 	CloneUrlSsh *string `locationName:"cloneUrlSsh" type:"string"`
 
 	// The date and time the repository was created, in timestamp format.
-	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
 
 	// The repository's default branch name.
 	DefaultBranch *string `locationName:"defaultBranch" min:"1" type:"string"`
 
 	// The date and time the repository was last modified, in timestamp format.
-	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
 
 	// A comment or description about the repository.
 	RepositoryDescription *string `locationName:"repositoryDescription" type:"string"`

@@ -25,7 +25,7 @@ intptr_t toNative(Local<Value> value) {
     Local<Array> array = Local<Array>::Cast(value);
     intptr_t* native = reinterpret_cast<intptr_t*>(malloc(array->Length() * sizeof(intptr_t))); // TODO memory leak
     for (uint32_t i = 0; i < array->Length(); i++) {
-      native[i] = toNative(array->CloneElementAt(i));
+      native[i] = toNative(array->Get(i));
     }
     return reinterpret_cast<intptr_t>(native);
   }

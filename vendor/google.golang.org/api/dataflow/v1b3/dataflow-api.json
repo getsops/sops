@@ -67,11 +67,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -91,12 +86,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -1554,7 +1543,7 @@
       }
     }
   },
-  "revision": "20180314",
+  "revision": "20180828",
   "rootUrl": "https://dataflow.googleapis.com/",
   "schemas": {
     "ApproximateProgress": {
@@ -1658,6 +1647,10 @@
           "description": "The time this event was emitted to indicate a new target or current\nnum_workers value.",
           "format": "google-datetime",
           "type": "string"
+        },
+        "workerPool": {
+          "description": "A short and friendly name for the worker pool this event refers to,\npopulated from the value of PoolStageRelation::user_pool_name.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1684,6 +1677,48 @@
           "description": "The maximum number of workers to cap scaling at.",
           "format": "int32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "BigQueryIODetails": {
+      "description": "Metadata for a BigQuery connector used by the job.",
+      "id": "BigQueryIODetails",
+      "properties": {
+        "dataset": {
+          "description": "Dataset accessed in the connection.",
+          "type": "string"
+        },
+        "projectId": {
+          "description": "Project accessed in the connection.",
+          "type": "string"
+        },
+        "query": {
+          "description": "Query used to access data in the connection.",
+          "type": "string"
+        },
+        "table": {
+          "description": "Table accessed in the connection.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BigTableIODetails": {
+      "description": "Metadata for a BigTable connector used by the job.",
+      "id": "BigTableIODetails",
+      "properties": {
+        "instanceId": {
+          "description": "InstanceId accessed in the connection.",
+          "type": "string"
+        },
+        "projectId": {
+          "description": "ProjectId accessed in the connection.",
+          "type": "string"
+        },
+        "tableId": {
+          "description": "TableId accessed in the connection.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2083,6 +2118,21 @@
       },
       "type": "object"
     },
+    "DatastoreIODetails": {
+      "description": "Metadata for a Datastore connector used by the job.",
+      "id": "DatastoreIODetails",
+      "properties": {
+        "namespace": {
+          "description": "Namespace used in the connection.",
+          "type": "string"
+        },
+        "projectId": {
+          "description": "ProjectId accessed in the connection.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "DerivedSource": {
       "description": "Specification of one of the bundles produced as a result of splitting\na Source (e.g. when executing a SourceSplitRequest, or when\nsplitting an active task using WorkItemStatus.dynamic_source_split),\nrelative to the source being split.",
       "id": "DerivedSource",
@@ -2331,7 +2381,8 @@
             "JOB_STATE_DRAINING",
             "JOB_STATE_DRAINED",
             "JOB_STATE_PENDING",
-            "JOB_STATE_CANCELLING"
+            "JOB_STATE_CANCELLING",
+            "JOB_STATE_QUEUED"
           ],
           "enumDescriptions": [
             "The job's run state isn't specified.",
@@ -2343,8 +2394,9 @@
             "`JOB_STATE_UPDATED` indicates that the job was successfully updated,\nmeaning that this job was stopped and another job was started, inheriting\nstate from this one. This is a terminal job state. This state may only be\nset by the Cloud Dataflow service, and only as a transition from\n`JOB_STATE_RUNNING`.",
             "`JOB_STATE_DRAINING` indicates that the job is in the process of draining.\nA draining job has stopped pulling from its input sources and is processing\nany data that remains in-flight. This state may be set via a Cloud Dataflow\n`UpdateJob` call, but only as a transition from `JOB_STATE_RUNNING`. Jobs\nthat are draining may only transition to `JOB_STATE_DRAINED`,\n`JOB_STATE_CANCELLED`, or `JOB_STATE_FAILED`.",
             "`JOB_STATE_DRAINED` indicates that the job has been drained.\nA drained job terminated by stopping pulling from its input sources and\nprocessing any data that remained in-flight when draining was requested.\nThis state is a terminal state, may only be set by the Cloud Dataflow\nservice, and only as a transition from `JOB_STATE_DRAINING`.",
-            "'JOB_STATE_PENDING' indicates that the job has been created but is not yet\nrunning.  Jobs that are pending may only transition to `JOB_STATE_RUNNING`,\nor `JOB_STATE_FAILED`.",
-            "'JOB_STATE_CANCELLING' indicates that the job has been explicitly cancelled\nand is in the process of stopping.  Jobs that are cancelling may only\ntransition to 'JOB_STATE_CANCELLED' or 'JOB_STATE_FAILED'."
+            "`JOB_STATE_PENDING` indicates that the job has been created but is not yet\nrunning.  Jobs that are pending may only transition to `JOB_STATE_RUNNING`,\nor `JOB_STATE_FAILED`.",
+            "`JOB_STATE_CANCELLING` indicates that the job has been explicitly cancelled\nand is in the process of stopping.  Jobs that are cancelling may only\ntransition to `JOB_STATE_CANCELLED` or `JOB_STATE_FAILED`.",
+            "`JOB_STATE_QUEUED` indicates that the job has been created but is being\ndelayed until launch. Jobs that are queued may only transition to\n`JOB_STATE_PENDING` or `JOB_STATE_CANCELLED`."
           ],
           "type": "string"
         }
@@ -2426,6 +2478,17 @@
       "properties": {
         "name": {
           "description": "The name of the failed location.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "FileIODetails": {
+      "description": "Metadata for a File connector used by the job.",
+      "id": "FileIODetails",
+      "properties": {
+        "filePattern": {
+          "description": "File Pattern used to access files by the connector.",
           "type": "string"
         }
       },
@@ -2664,7 +2727,8 @@
             "JOB_STATE_DRAINING",
             "JOB_STATE_DRAINED",
             "JOB_STATE_PENDING",
-            "JOB_STATE_CANCELLING"
+            "JOB_STATE_CANCELLING",
+            "JOB_STATE_QUEUED"
           ],
           "enumDescriptions": [
             "The job's run state isn't specified.",
@@ -2676,8 +2740,9 @@
             "`JOB_STATE_UPDATED` indicates that the job was successfully updated,\nmeaning that this job was stopped and another job was started, inheriting\nstate from this one. This is a terminal job state. This state may only be\nset by the Cloud Dataflow service, and only as a transition from\n`JOB_STATE_RUNNING`.",
             "`JOB_STATE_DRAINING` indicates that the job is in the process of draining.\nA draining job has stopped pulling from its input sources and is processing\nany data that remains in-flight. This state may be set via a Cloud Dataflow\n`UpdateJob` call, but only as a transition from `JOB_STATE_RUNNING`. Jobs\nthat are draining may only transition to `JOB_STATE_DRAINED`,\n`JOB_STATE_CANCELLED`, or `JOB_STATE_FAILED`.",
             "`JOB_STATE_DRAINED` indicates that the job has been drained.\nA drained job terminated by stopping pulling from its input sources and\nprocessing any data that remained in-flight when draining was requested.\nThis state is a terminal state, may only be set by the Cloud Dataflow\nservice, and only as a transition from `JOB_STATE_DRAINING`.",
-            "'JOB_STATE_PENDING' indicates that the job has been created but is not yet\nrunning.  Jobs that are pending may only transition to `JOB_STATE_RUNNING`,\nor `JOB_STATE_FAILED`.",
-            "'JOB_STATE_CANCELLING' indicates that the job has been explicitly cancelled\nand is in the process of stopping.  Jobs that are cancelling may only\ntransition to 'JOB_STATE_CANCELLED' or 'JOB_STATE_FAILED'."
+            "`JOB_STATE_PENDING` indicates that the job has been created but is not yet\nrunning.  Jobs that are pending may only transition to `JOB_STATE_RUNNING`,\nor `JOB_STATE_FAILED`.",
+            "`JOB_STATE_CANCELLING` indicates that the job has been explicitly cancelled\nand is in the process of stopping.  Jobs that are cancelling may only\ntransition to `JOB_STATE_CANCELLED` or `JOB_STATE_FAILED`.",
+            "`JOB_STATE_QUEUED` indicates that the job has been created but is being\ndelayed until launch. Jobs that are queued may only transition to\n`JOB_STATE_PENDING` or `JOB_STATE_CANCELLED`."
           ],
           "type": "string"
         },
@@ -2697,6 +2762,10 @@
         "id": {
           "description": "The unique ID of this job.\n\nThis field is set by the Cloud Dataflow service when the Job is\ncreated, and is immutable for the life of the job.",
           "type": "string"
+        },
+        "jobMetadata": {
+          "$ref": "JobMetadata",
+          "description": "This field is populated by the Dataflow service to support filtering jobs\nby the metadata values provided here. Populated for ListJobs and all GetJob\nviews SUMMARY and higher."
         },
         "labels": {
           "additionalProperties": {
@@ -2742,7 +2811,8 @@
             "JOB_STATE_DRAINING",
             "JOB_STATE_DRAINED",
             "JOB_STATE_PENDING",
-            "JOB_STATE_CANCELLING"
+            "JOB_STATE_CANCELLING",
+            "JOB_STATE_QUEUED"
           ],
           "enumDescriptions": [
             "The job's run state isn't specified.",
@@ -2754,8 +2824,9 @@
             "`JOB_STATE_UPDATED` indicates that the job was successfully updated,\nmeaning that this job was stopped and another job was started, inheriting\nstate from this one. This is a terminal job state. This state may only be\nset by the Cloud Dataflow service, and only as a transition from\n`JOB_STATE_RUNNING`.",
             "`JOB_STATE_DRAINING` indicates that the job is in the process of draining.\nA draining job has stopped pulling from its input sources and is processing\nany data that remains in-flight. This state may be set via a Cloud Dataflow\n`UpdateJob` call, but only as a transition from `JOB_STATE_RUNNING`. Jobs\nthat are draining may only transition to `JOB_STATE_DRAINED`,\n`JOB_STATE_CANCELLED`, or `JOB_STATE_FAILED`.",
             "`JOB_STATE_DRAINED` indicates that the job has been drained.\nA drained job terminated by stopping pulling from its input sources and\nprocessing any data that remained in-flight when draining was requested.\nThis state is a terminal state, may only be set by the Cloud Dataflow\nservice, and only as a transition from `JOB_STATE_DRAINING`.",
-            "'JOB_STATE_PENDING' indicates that the job has been created but is not yet\nrunning.  Jobs that are pending may only transition to `JOB_STATE_RUNNING`,\nor `JOB_STATE_FAILED`.",
-            "'JOB_STATE_CANCELLING' indicates that the job has been explicitly cancelled\nand is in the process of stopping.  Jobs that are cancelling may only\ntransition to 'JOB_STATE_CANCELLED' or 'JOB_STATE_FAILED'."
+            "`JOB_STATE_PENDING` indicates that the job has been created but is not yet\nrunning.  Jobs that are pending may only transition to `JOB_STATE_RUNNING`,\nor `JOB_STATE_FAILED`.",
+            "`JOB_STATE_CANCELLING` indicates that the job has been explicitly cancelled\nand is in the process of stopping.  Jobs that are cancelling may only\ntransition to `JOB_STATE_CANCELLED` or `JOB_STATE_FAILED`.",
+            "`JOB_STATE_QUEUED` indicates that the job has been created but is being\ndelayed until launch. Jobs that are queued may only transition to\n`JOB_STATE_PENDING` or `JOB_STATE_CANCELLED`."
           ],
           "type": "string"
         },
@@ -2868,6 +2939,59 @@
           "description": "The timestamp of the message.",
           "format": "google-datetime",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "JobMetadata": {
+      "description": "Metadata available primarily for filtering jobs. Will be included in the\nListJob response and Job SUMMARY view+.",
+      "id": "JobMetadata",
+      "properties": {
+        "bigTableDetails": {
+          "description": "Identification of a BigTable source used in the Dataflow job.",
+          "items": {
+            "$ref": "BigTableIODetails"
+          },
+          "type": "array"
+        },
+        "bigqueryDetails": {
+          "description": "Identification of a BigQuery source used in the Dataflow job.",
+          "items": {
+            "$ref": "BigQueryIODetails"
+          },
+          "type": "array"
+        },
+        "datastoreDetails": {
+          "description": "Identification of a Datastore source used in the Dataflow job.",
+          "items": {
+            "$ref": "DatastoreIODetails"
+          },
+          "type": "array"
+        },
+        "fileDetails": {
+          "description": "Identification of a File source used in the Dataflow job.",
+          "items": {
+            "$ref": "FileIODetails"
+          },
+          "type": "array"
+        },
+        "pubsubDetails": {
+          "description": "Identification of a PubSub source used in the Dataflow job.",
+          "items": {
+            "$ref": "PubSubIODetails"
+          },
+          "type": "array"
+        },
+        "sdkVersion": {
+          "$ref": "SdkVersion",
+          "description": "The SDK version used to run the job."
+        },
+        "spannerDetails": {
+          "description": "Identification of a Spanner source used in the Dataflow job.",
+          "items": {
+            "$ref": "SpannerIODetails"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -3144,6 +3268,10 @@
         },
         "distribution": {
           "description": "A struct value describing properties of a distribution of numeric values.",
+          "type": "any"
+        },
+        "gauge": {
+          "description": "A struct value describing properties of a Gauge.\nMetrics of gauge type show the value of a metric across time, and is\naggregated based on the newest value.",
           "type": "any"
         },
         "internal": {
@@ -3490,6 +3618,21 @@
       },
       "type": "object"
     },
+    "PubSubIODetails": {
+      "description": "Metadata for a PubSub connector used by the job.",
+      "id": "PubSubIODetails",
+      "properties": {
+        "subscription": {
+          "description": "Subscription used in the connection.",
+          "type": "string"
+        },
+        "topic": {
+          "description": "Topic accessed in the connection.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "PubsubLocation": {
       "description": "Identifies a pubsub location to use for transferring data into or\nout of a streaming Dataflow job.",
       "id": "PubsubLocation",
@@ -3655,6 +3798,39 @@
         },
         "zone": {
           "description": "The Compute Engine [availability\nzone](https://cloud.google.com/compute/docs/regions-zones/regions-zones)\nfor launching worker instances to run your pipeline.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SdkVersion": {
+      "description": "The version of the SDK used to run the jobl",
+      "id": "SdkVersion",
+      "properties": {
+        "sdkSupportStatus": {
+          "description": "The support status for this SDK version.",
+          "enum": [
+            "UNKNOWN",
+            "SUPPORTED",
+            "STALE",
+            "DEPRECATED",
+            "UNSUPPORTED"
+          ],
+          "enumDescriptions": [
+            "Cloud Dataflow is unaware of this version.",
+            "This is a known version of an SDK, and is supported.",
+            "A newer version of the SDK family exists, and an update is recommended.",
+            "This version of the SDK is deprecated and will eventually be no\nlonger supported.",
+            "Support for this SDK version has ended and it should no longer be used."
+          ],
+          "type": "string"
+        },
+        "version": {
+          "description": "The version of the SDK used to run the job.",
+          "type": "string"
+        },
+        "versionDisplayName": {
+          "description": "A readable string describing the version of the sdk.",
           "type": "string"
         }
       },
@@ -4085,6 +4261,25 @@
         "source": {
           "$ref": "Source",
           "description": "DEPRECATED"
+        }
+      },
+      "type": "object"
+    },
+    "SpannerIODetails": {
+      "description": "Metadata for a Spanner connector used by the job.",
+      "id": "SpannerIODetails",
+      "properties": {
+        "databaseId": {
+          "description": "DatabaseId accessed in the connection.",
+          "type": "string"
+        },
+        "instanceId": {
+          "description": "InstanceId accessed in the connection.",
+          "type": "string"
+        },
+        "projectId": {
+          "description": "ProjectId accessed in the connection.",
+          "type": "string"
         }
       },
       "type": "object"

@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -475,6 +475,7 @@ func TestNamespaceQuery(t *testing.T) {
 
 	var gs []Gopher
 
+	// Ignore errors for the rest of this test.
 	client.GetAll(ctx, NewQuery("gopher"), &gs)
 	if got, want := <-gotNamespace, ""; got != want {
 		t.Errorf("GetAll: got namespace %q, want %q", got, want)

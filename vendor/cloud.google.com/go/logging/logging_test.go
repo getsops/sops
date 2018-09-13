@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import (
 
 	cinternal "cloud.google.com/go/internal"
 	"cloud.google.com/go/internal/testutil"
+	"cloud.google.com/go/internal/uid"
 	"cloud.google.com/go/logging"
 	ltesting "cloud.google.com/go/logging/internal/testing"
 	"cloud.google.com/go/logging/logadmin"
@@ -46,7 +47,7 @@ import (
 
 const testLogIDPrefix = "GO-LOGGING-CLIENT/TEST-LOG"
 
-var uids = testutil.NewUIDSpace(testLogIDPrefix)
+var uids = uid.NewSpace(testLogIDPrefix, nil)
 
 var (
 	client        *logging.Client
@@ -228,6 +229,7 @@ func TestLogAndEntries(t *testing.T) {
 //   - HTTPRequest
 //   - Operation
 //   - Resource
+//   - SourceLocation
 func compareEntries(got, want []*logging.Entry) (string, bool) {
 	if len(got) != len(want) {
 		return fmt.Sprintf("got %d entries, want %d", len(got), len(want)), false
@@ -273,21 +275,6 @@ func entryForTesting(payload interface{}) *logging.Entry {
 		Payload:   payload,
 		LogName:   "projects/" + testProjectID + "/logs/" + testLogID,
 		Resource:  &mrpb.MonitoredResource{Type: "global", Labels: map[string]string{"project_id": testProjectID}},
-	}
-}
-
-func countLogEntries(ctx context.Context, filter string) int {
-	it := aclient.Entries(ctx, logadmin.Filter(filter))
-	n := 0
-	for {
-		_, err := it.Next()
-		if err == iterator.Done {
-			return n
-		}
-		if err != nil {
-			log.Fatalf("counting log entries: %v", err)
-		}
-		n++
 	}
 }
 

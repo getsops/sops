@@ -563,18 +563,18 @@
       "InputShape": {
         "type": "structure",
         "members": {
-		  "BlobArgs": {
-			"shape": "BlobsType"
-		  }
+          "BlobArgs": {
+            "shape": "BlobsType"
+          }
         }
       },
-	  "BlobsType": {
+      "BlobsType": {
         "type": "list",
         "member": {
           "shape": "BlobType"
         },
         "flattened": true
-	  },
+      },
       "BlobType": {
         "type": "blob"
       }
@@ -609,8 +609,19 @@
         "members": {
           "TimeArg": {
             "shape": "TimestampType"
+          },
+          "TimeCustom": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatType"
           }
         }
+      },
+      "TimestampFormatType": {
+        "timestampFormat": "unixTimestamp",
+        "type": "timestamp"
       },
       "TimestampType": {
         "type": "timestamp"
@@ -625,11 +636,13 @@
           "name": "OperationName"
         },
         "params": {
-          "TimeArg": 1422172800
+          "TimeArg": 1422172800,
+          "TimeCustom": 1422172800,
+          "TimeFormat": 1422172800
         },
         "serialized": {
           "uri": "/",
-          "body": "Action=OperationName&Version=2014-01-01&TimeArg=2015-01-25T08%3A00%3A00Z"
+          "body": "Action=OperationName&Version=2014-01-01&TimeArg=2015-01-25T08%3A00%3A00Z&TimeCustom=1422172800&TimeFormat=1422172800"
         }
       }
     ]
@@ -833,7 +846,7 @@
         "members": {
           "Token": {
             "shape": "StringType",
-              "idempotencyToken": true
+            "idempotencyToken": true
           }
         }
       },

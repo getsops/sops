@@ -14,11 +14,13 @@ import (
 // An Extension represents an ICMP extension.
 type Extension interface {
 	// Len returns the length of ICMP extension.
-	// Proto must be either the ICMPv4 or ICMPv6 protocol number.
+	// The provided proto must be either the ICMPv4 or ICMPv6
+	// protocol number.
 	Len(proto int) int
 
 	// Marshal returns the binary encoding of ICMP extension.
-	// Proto must be either the ICMPv4 or ICMPv6 protocol number.
+	// The provided proto must be either the ICMPv4 or ICMPv6
+	// protocol number.
 	Marshal(proto int) ([]byte, error)
 }
 

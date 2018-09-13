@@ -233,6 +233,14 @@ const (
 	SoldOut             ItemAvailability = original.SoldOut
 )
 
+type SafeSearch = original.SafeSearch
+
+const (
+	Moderate SafeSearch = original.Moderate
+	Off      SafeSearch = original.Off
+	Strict   SafeSearch = original.Strict
+)
+
 type Type = original.Type
 
 const (
@@ -350,6 +358,9 @@ func PossibleErrorSubCodeValues() []ErrorSubCode {
 }
 func PossibleItemAvailabilityValues() []ItemAvailability {
 	return original.PossibleItemAvailabilityValues()
+}
+func PossibleSafeSearchValues() []SafeSearch {
+	return original.PossibleSafeSearchValues()
 }
 func PossibleTypeValues() []Type {
 	return original.PossibleTypeValues()

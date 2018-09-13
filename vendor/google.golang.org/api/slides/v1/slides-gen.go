@@ -487,7 +487,9 @@ type CreateImageRequest struct {
 	// GIF
 	// format.
 	//
-	// The provided URL can be at most 2 kB in length.
+	// The provided URL can be at most 2 kB in length. The URL itself is
+	// saved
+	// with the image, and exposed via the Image.source_url field.
 	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ElementProperties")
@@ -1136,7 +1138,7 @@ func (s *CreateShapeResponse) MarshalJSON() ([]byte, error) {
 //
 // NOTE: Chart creation requires at least one of the
 // spreadsheets.readonly,
-// spreadsheets, drive.readonly, or drive OAuth scopes.
+// spreadsheets, drive.readonly, drive.file, or drive OAuth scopes.
 type CreateSheetsChartRequest struct {
 	// ChartId: The ID of the specific chart in the Google Sheets
 	// spreadsheet.
@@ -1419,6 +1421,11 @@ func (s *CreateTableResponse) MarshalJSON() ([]byte, error) {
 }
 
 // CreateVideoRequest: Creates a video.
+//
+// NOTE: Creating a video from Google Drive requires that the requesting
+// app
+// have at least one of the drive, drive.readonly, or drive.file OAuth
+// scopes.
 type CreateVideoRequest struct {
 	// ElementProperties: The element properties for the video.
 	//
@@ -1438,7 +1445,11 @@ type CreateVideoRequest struct {
 	//
 	// e.g. For YouTube video
 	// https://www.youtube.com/watch?v=7U3axjORYZ0,
-	// the ID is 7U3axjORYZ0.
+	// the ID is 7U3axjORYZ0. For a Google Drive
+	// video
+	// https://drive.google.com/file/d/1xCgQLFTJi5_Xl8DgW_lcUYq5e-q6Hi5
+	// Q the ID
+	// is 1xCgQLFTJi5_Xl8DgW_lcUYq5e-q6Hi5Q.
 	Id string `json:"id,omitempty"`
 
 	// ObjectId: A user-supplied object ID.
@@ -1461,6 +1472,7 @@ type CreateVideoRequest struct {
 	// Possible values:
 	//   "SOURCE_UNSPECIFIED" - The video source is unspecified.
 	//   "YOUTUBE" - The video source is YouTube.
+	//   "DRIVE" - The video source is Google Drive.
 	Source string `json:"source,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ElementProperties")
@@ -2543,7 +2555,8 @@ func (s *LayoutReference) MarshalJSON() ([]byte, error) {
 }
 
 // Line: A PageElement kind representing a
-// line, curved connector, or bent connector.
+// non-connector line, straight connector, curved connector, or bent
+// connector.
 type Line struct {
 	// LineProperties: The properties of the line.
 	LineProperties *LineProperties `json:"lineProperties,omitempty"`
@@ -2579,6 +2592,9 @@ type Line struct {
 	//   "CURVED_CONNECTOR_5" - Curved connector 5 form. Corresponds to
 	// ECMA-376 ST_ShapeType
 	// 'curvedConnector5'.
+	//   "STRAIGHT_LINE" - Straight line. Corresponds to ECMA-376
+	// ST_ShapeType 'line'. This line
+	// type is not a connector.
 	LineType string `json:"lineType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "LineProperties") to
@@ -3619,7 +3635,7 @@ type ParagraphStyle struct {
 	// inherited from the parent.
 	SpaceAbove *Dimension `json:"spaceAbove,omitempty"`
 
-	// SpaceBelow: The amount of extra space above the paragraph. If unset,
+	// SpaceBelow: The amount of extra space below the paragraph. If unset,
 	// the value is
 	// inherited from the parent.
 	SpaceBelow *Dimension `json:"spaceBelow,omitempty"`
@@ -4049,6 +4065,10 @@ func (s *RefreshSheetsChartRequest) MarshalJSON() ([]byte, error) {
 
 // ReplaceAllShapesWithImageRequest: Replaces all shapes that match the
 // given criteria with the provided image.
+//
+// The images replacing the shapes are rectangular after being inserted
+// into
+// the presentation and do not take on the forms of the shapes.
 type ReplaceAllShapesWithImageRequest struct {
 	// ContainsText: If set, this request will replace all of the shapes
 	// that contain the
@@ -4096,7 +4116,9 @@ type ReplaceAllShapesWithImageRequest struct {
 	// GIF
 	// format.
 	//
-	// The provided URL can be at most 2 kB in length.
+	// The provided URL can be at most 2 kB in length. The URL itself is
+	// saved
+	// with the image, and exposed via the Image.source_url field.
 	ImageUrl string `json:"imageUrl,omitempty"`
 
 	// PageObjectIds: If non-empty, limits the matches to page elements only
@@ -4393,7 +4415,9 @@ type ReplaceImageRequest struct {
 	// GIF
 	// format.
 	//
-	// The provided URL can be at most 2 kB in length.
+	// The provided URL can be at most 2 kB in length. The URL itself is
+	// saved
+	// with the image, and exposed via the Image.source_url field.
 	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ImageObjectId") to
@@ -5457,11 +5481,13 @@ func (s *Size) MarshalJSON() ([]byte, error) {
 // relevant for pages with page_type SLIDE.
 type SlideProperties struct {
 	// LayoutObjectId: The object ID of the layout that this slide is based
-	// on.
+	// on. This property is
+	// read-only.
 	LayoutObjectId string `json:"layoutObjectId,omitempty"`
 
 	// MasterObjectId: The object ID of the master that this slide is based
-	// on.
+	// on. This property is
+	// read-only.
 	MasterObjectId string `json:"masterObjectId,omitempty"`
 
 	// NotesPage: The notes page that this slide is associated with. It
@@ -5477,7 +5503,7 @@ type SlideProperties struct {
 	// speakerNotesObjectId field.
 	// The notes page is read-only except for the text content and styles of
 	// the
-	// speaker notes shape.
+	// speaker notes shape. This property is read-only.
 	NotesPage *Page `json:"notesPage,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "LayoutObjectId") to
@@ -6090,14 +6116,14 @@ func (s *TableColumnProperties) MarshalJSON() ([]byte, error) {
 // like this:
 //
 //
-//   [             ]
+//      [             ]
 //
 // A table range with location = (0, 0), row span = 3 and column span =
 // 2
 // specifies the following cells:
 //
-//    x     x
-//   [      x      ]
+//       x     x
+//      [      x      ]
 type TableRange struct {
 	// ColumnSpan: The column span of the table range.
 	ColumnSpan int64 `json:"columnSpan,omitempty"`
@@ -7480,11 +7506,12 @@ type Video struct {
 	// Possible values:
 	//   "SOURCE_UNSPECIFIED" - The video source is unspecified.
 	//   "YOUTUBE" - The video source is YouTube.
+	//   "DRIVE" - The video source is Google Drive.
 	Source string `json:"source,omitempty"`
 
-	// Url: An URL to a video. The URL is valid as long as the source
-	// video
-	// exists and sharing settings do not change.
+	// Url: An URL to a video. The URL is valid as long as the source video
+	// exists and
+	// sharing settings do not change.
 	Url string `json:"url,omitempty"`
 
 	// VideoProperties: The properties of the video.
@@ -7771,6 +7798,7 @@ func (c *PresentationsBatchUpdateCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/presentations/{presentationId}:batchUpdate")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7913,6 +7941,7 @@ func (c *PresentationsCreateCall) doRequest(alt string) (*http.Response, error) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/presentations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8044,6 +8073,7 @@ func (c *PresentationsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/presentations/{+presentationId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8190,6 +8220,7 @@ func (c *PresentationsPagesGetCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/presentations/{presentationId}/pages/{pageObjectId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8327,6 +8358,8 @@ func (c *PresentationsPagesGetThumbnailCall) ThumbnailPropertiesMimeType(thumbna
 // Possible values:
 //   "THUMBNAIL_SIZE_UNSPECIFIED"
 //   "LARGE"
+//   "MEDIUM"
+//   "SMALL"
 func (c *PresentationsPagesGetThumbnailCall) ThumbnailPropertiesThumbnailSize(thumbnailPropertiesThumbnailSize string) *PresentationsPagesGetThumbnailCall {
 	c.urlParams_.Set("thumbnailProperties.thumbnailSize", thumbnailPropertiesThumbnailSize)
 	return c
@@ -8378,6 +8411,7 @@ func (c *PresentationsPagesGetThumbnailCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/presentations/{presentationId}/pages/{pageObjectId}/thumbnail")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8460,7 +8494,9 @@ func (c *PresentationsPagesGetThumbnailCall) Do(opts ...googleapi.CallOption) (*
 	//       "description": "The optional thumbnail image size.\n\nIf you don't specify the size, the server chooses a default size of the\nimage.",
 	//       "enum": [
 	//         "THUMBNAIL_SIZE_UNSPECIFIED",
-	//         "LARGE"
+	//         "LARGE",
+	//         "MEDIUM",
+	//         "SMALL"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"

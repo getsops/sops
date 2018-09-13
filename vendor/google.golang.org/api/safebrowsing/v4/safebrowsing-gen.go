@@ -1,4 +1,4 @@
-// Package safebrowsing provides access to the Google Safe Browsing API.
+// Package safebrowsing provides access to the Safe Browsing API.
 //
 // See https://developers.google.com/safe-browsing/
 //
@@ -609,6 +609,8 @@ type ListUpdateRequest struct {
 	//   "SUBRESOURCE_FILTER" - Patterns to be used for activating the
 	// subresource filter. Interstitial
 	// will not be shown for patterns from this list.
+	//   "SUSPICIOUS" - Entities that are suspected to present a threat.
+	//   "TRICK_TO_BILL" - Trick-to-bill threat list.
 	ThreatType string `json:"threatType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Constraints") to
@@ -727,6 +729,8 @@ type ListUpdateResponse struct {
 	//   "SUBRESOURCE_FILTER" - Patterns to be used for activating the
 	// subresource filter. Interstitial
 	// will not be shown for patterns from this list.
+	//   "SUSPICIOUS" - Entities that are suspected to present a threat.
+	//   "TRICK_TO_BILL" - Trick-to-bill threat list.
 	ThreatType string `json:"threatType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Additions") to
@@ -1095,6 +1099,8 @@ type ThreatHit struct {
 	//   "SUBRESOURCE_FILTER" - Patterns to be used for activating the
 	// subresource filter. Interstitial
 	// will not be shown for patterns from this list.
+	//   "SUSPICIOUS" - Entities that are suspected to present a threat.
+	//   "TRICK_TO_BILL" - Trick-to-bill threat list.
 	ThreatType string `json:"threatType,omitempty"`
 
 	// UserInfo: Details about the user that encountered the threat.
@@ -1181,6 +1187,8 @@ type ThreatInfo struct {
 	//   "SUBRESOURCE_FILTER" - Patterns to be used for activating the
 	// subresource filter. Interstitial
 	// will not be shown for patterns from this list.
+	//   "SUSPICIOUS" - Entities that are suspected to present a threat.
+	//   "TRICK_TO_BILL" - Trick-to-bill threat list.
 	ThreatTypes []string `json:"threatTypes,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "PlatformTypes") to
@@ -1263,6 +1271,8 @@ type ThreatListDescriptor struct {
 	//   "SUBRESOURCE_FILTER" - Patterns to be used for activating the
 	// subresource filter. Interstitial
 	// will not be shown for patterns from this list.
+	//   "SUSPICIOUS" - Entities that are suspected to present a threat.
+	//   "TRICK_TO_BILL" - Trick-to-bill threat list.
 	ThreatType string `json:"threatType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "PlatformType") to
@@ -1353,6 +1363,8 @@ type ThreatMatch struct {
 	//   "SUBRESOURCE_FILTER" - Patterns to be used for activating the
 	// subresource filter. Interstitial
 	// will not be shown for patterns from this list.
+	//   "SUSPICIOUS" - Entities that are suspected to present a threat.
+	//   "TRICK_TO_BILL" - Trick-to-bill threat list.
 	ThreatType string `json:"threatType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "CacheDuration") to
@@ -1540,6 +1552,7 @@ func (c *EncodedFullHashesGetCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/encodedFullHashes/{encodedRequest}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1701,6 +1714,7 @@ func (c *EncodedUpdatesGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/encodedUpdates/{encodedRequest}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1838,6 +1852,7 @@ func (c *FullHashesFindCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/fullHashes:find")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -1957,6 +1972,7 @@ func (c *ThreatHitsCreateCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/threatHits")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2076,6 +2092,7 @@ func (c *ThreatListUpdatesFetchCall) doRequest(alt string) (*http.Response, erro
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/threatListUpdates:fetch")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2200,6 +2217,7 @@ func (c *ThreatListsListCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/threatLists")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2314,6 +2332,7 @@ func (c *ThreatMatchesFindCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v4/threatMatches:find")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

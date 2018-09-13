@@ -1349,8 +1349,8 @@ func (client AppServiceEnvironmentsClient) ListMetricDefinitionsResponder(resp *
 // name - name of the App Service Environment.
 // details - specify <code>true</code> to include instance details. The default is <code>false</code>.
 // filter - return only usages/metrics specified in the filter. Filter conforms to odata syntax. Example:
-// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and
-// endTime eq '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and
+// endTime eq 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppServiceEnvironmentsClient) ListMetrics(ctx context.Context, resourceGroupName string, name string, details *bool, filter string) (result ResourceMetricCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -1568,8 +1568,8 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleMetricDefinitionsComplet
 // timeGrain - time granularity of the metrics query.
 // details - specify <code>true</code> to include instance details. The default is <code>false</code>.
 // filter - return only usages/metrics specified in the filter. Filter conforms to odata syntax. Example:
-// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and
-// endTime eq '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and
+// endTime eq 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppServiceEnvironmentsClient) ListMultiRoleMetrics(ctx context.Context, resourceGroupName string, name string, startTime string, endTime string, timeGrain string, details *bool, filter string) (result ResourceMetricCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -1848,7 +1848,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricsPrepa
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{name}/multiRolePools/default/instances/{instance}metrics", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{name}/multiRolePools/default/instances/{instance}/metrics", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -2289,8 +2289,8 @@ func (client AppServiceEnvironmentsClient) ListOperationsResponder(resp *http.Re
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the App Service Environment.
 // filter - return only usages/metrics specified in the filter. Filter conforms to odata syntax. Example:
-// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and
-// endTime eq '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and
+// endTime eq 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppServiceEnvironmentsClient) ListUsages(ctx context.Context, resourceGroupName string, name string, filter string) (result CsmUsageQuotaCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -2687,8 +2687,8 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerMetricDefinitionsComplet
 // workerPoolName - name of worker pool
 // details - specify <code>true</code> to include instance details. The default is <code>false</code>.
 // filter - return only usages/metrics specified in the filter. Filter conforms to odata syntax. Example:
-// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and
-// endTime eq '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and
+// endTime eq 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppServiceEnvironmentsClient) ListWebWorkerMetrics(ctx context.Context, resourceGroupName string, name string, workerPoolName string, details *bool, filter string) (result ResourceMetricCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -3016,8 +3016,8 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricDefinitio
 // instance - name of the instance in the worker pool.
 // details - specify <code>true</code> to include instance details. The default is <code>false</code>.
 // filter - return only usages/metrics specified in the filter. Filter conforms to odata syntax. Example:
-// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq '2014-01-01T00:00:00Z' and
-// endTime eq '2014-12-31T23:59:59Z' and timeGrain eq duration'[Hour|Minute|Day]'.
+// $filter=(name.value eq 'Metric1' or name.value eq 'Metric2') and startTime eq 2014-01-01T00:00:00Z and
+// endTime eq 2014-12-31T23:59:59Z and timeGrain eq duration'[Hour|Minute|Day]'.
 func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetrics(ctx context.Context, resourceGroupName string, name string, workerPoolName string, instance string, details *bool, filter string) (result ResourceMetricCollectionPage, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
@@ -3073,7 +3073,7 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricsPreparer
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{name}/workerPools/{workerPoolName}/instances/{instance}metrics", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{name}/workerPools/{workerPoolName}/instances/{instance}/metrics", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -3626,80 +3626,6 @@ func (client AppServiceEnvironmentsClient) SuspendComplete(ctx context.Context, 
 	var future AppServiceEnvironmentsSuspendFuture
 	future, err = client.Suspend(ctx, resourceGroupName, name)
 	result.Future = future.Future
-	return
-}
-
-// SyncVirtualNetworkInfo resume an App Service Environment.
-// Parameters:
-// resourceGroupName - name of the resource group to which the resource belongs.
-// name - name of the App Service Environment.
-func (client AppServiceEnvironmentsClient) SyncVirtualNetworkInfo(ctx context.Context, resourceGroupName string, name string) (result autorest.Response, err error) {
-	if err := validation.Validate([]validation.Validation{
-		{TargetValue: resourceGroupName,
-			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+[^\.]$`, Chain: nil}}}}); err != nil {
-		return result, validation.NewError("web.AppServiceEnvironmentsClient", "SyncVirtualNetworkInfo", err.Error())
-	}
-
-	req, err := client.SyncVirtualNetworkInfoPreparer(ctx, resourceGroupName, name)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "SyncVirtualNetworkInfo", nil, "Failure preparing request")
-		return
-	}
-
-	resp, err := client.SyncVirtualNetworkInfoSender(req)
-	if err != nil {
-		result.Response = resp
-		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "SyncVirtualNetworkInfo", resp, "Failure sending request")
-		return
-	}
-
-	result, err = client.SyncVirtualNetworkInfoResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "SyncVirtualNetworkInfo", resp, "Failure responding to request")
-	}
-
-	return
-}
-
-// SyncVirtualNetworkInfoPreparer prepares the SyncVirtualNetworkInfo request.
-func (client AppServiceEnvironmentsClient) SyncVirtualNetworkInfoPreparer(ctx context.Context, resourceGroupName string, name string) (*http.Request, error) {
-	pathParameters := map[string]interface{}{
-		"name":              autorest.Encode("path", name),
-		"resourceGroupName": autorest.Encode("path", resourceGroupName),
-		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-	}
-
-	const APIVersion = "2018-02-01"
-	queryParameters := map[string]interface{}{
-		"api-version": APIVersion,
-	}
-
-	preparer := autorest.CreatePreparer(
-		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/hostingEnvironments/{name}/syncVirtualNetwork", pathParameters),
-		autorest.WithQueryParameters(queryParameters))
-	return preparer.Prepare((&http.Request{}).WithContext(ctx))
-}
-
-// SyncVirtualNetworkInfoSender sends the SyncVirtualNetworkInfo request. The method will close the
-// http.Response Body if it receives an error.
-func (client AppServiceEnvironmentsClient) SyncVirtualNetworkInfoSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
-		azure.DoRetryWithRegistration(client.Client))
-}
-
-// SyncVirtualNetworkInfoResponder handles the response to the SyncVirtualNetworkInfo request. The method always
-// closes the http.Response Body.
-func (client AppServiceEnvironmentsClient) SyncVirtualNetworkInfoResponder(resp *http.Response) (result autorest.Response, err error) {
-	err = autorest.Respond(
-		resp,
-		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
-		autorest.ByClosing())
-	result.Response = resp
 	return
 }
 

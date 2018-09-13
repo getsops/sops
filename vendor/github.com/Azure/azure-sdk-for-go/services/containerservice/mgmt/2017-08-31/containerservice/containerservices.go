@@ -69,7 +69,7 @@ func (client ContainerServicesClient) CreateOrUpdate(ctx context.Context, resour
 						}},
 					{Target: "parameters.Properties.LinuxProfile", Name: validation.Null, Rule: true,
 						Chain: []validation.Constraint{{Target: "parameters.Properties.LinuxProfile.AdminUsername", Name: validation.Null, Rule: true,
-							Chain: []validation.Constraint{{Target: "parameters.Properties.LinuxProfile.AdminUsername", Name: validation.Pattern, Rule: `^[a-z][a-z0-9_-]*$`, Chain: nil}}},
+							Chain: []validation.Constraint{{Target: "parameters.Properties.LinuxProfile.AdminUsername", Name: validation.Pattern, Rule: `^[A-Za-z][-A-Za-z0-9_]*$`, Chain: nil}}},
 							{Target: "parameters.Properties.LinuxProfile.SSH", Name: validation.Null, Rule: true,
 								Chain: []validation.Constraint{{Target: "parameters.Properties.LinuxProfile.SSH.PublicKeys", Name: validation.Null, Rule: true, Chain: nil}}},
 						}},

@@ -12,15 +12,43 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+
 type ByteBufferParams struct {
-	ReqSize  int32 `protobuf:"varint,1,opt,name=req_size,json=reqSize" json:"req_size,omitempty"`
-	RespSize int32 `protobuf:"varint,2,opt,name=resp_size,json=respSize" json:"resp_size,omitempty"`
+	ReqSize              int32    `protobuf:"varint,1,opt,name=req_size,json=reqSize,proto3" json:"req_size,omitempty"`
+	RespSize             int32    `protobuf:"varint,2,opt,name=resp_size,json=respSize,proto3" json:"resp_size,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ByteBufferParams) Reset()                    { *m = ByteBufferParams{} }
-func (m *ByteBufferParams) String() string            { return proto.CompactTextString(m) }
-func (*ByteBufferParams) ProtoMessage()               {}
-func (*ByteBufferParams) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
+func (m *ByteBufferParams) Reset()         { *m = ByteBufferParams{} }
+func (m *ByteBufferParams) String() string { return proto.CompactTextString(m) }
+func (*ByteBufferParams) ProtoMessage()    {}
+func (*ByteBufferParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_payloads_3abc71de35f06c83, []int{0}
+}
+func (m *ByteBufferParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ByteBufferParams.Unmarshal(m, b)
+}
+func (m *ByteBufferParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ByteBufferParams.Marshal(b, m, deterministic)
+}
+func (dst *ByteBufferParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ByteBufferParams.Merge(dst, src)
+}
+func (m *ByteBufferParams) XXX_Size() int {
+	return xxx_messageInfo_ByteBufferParams.Size(m)
+}
+func (m *ByteBufferParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_ByteBufferParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ByteBufferParams proto.InternalMessageInfo
 
 func (m *ByteBufferParams) GetReqSize() int32 {
 	if m != nil {
@@ -37,14 +65,36 @@ func (m *ByteBufferParams) GetRespSize() int32 {
 }
 
 type SimpleProtoParams struct {
-	ReqSize  int32 `protobuf:"varint,1,opt,name=req_size,json=reqSize" json:"req_size,omitempty"`
-	RespSize int32 `protobuf:"varint,2,opt,name=resp_size,json=respSize" json:"resp_size,omitempty"`
+	ReqSize              int32    `protobuf:"varint,1,opt,name=req_size,json=reqSize,proto3" json:"req_size,omitempty"`
+	RespSize             int32    `protobuf:"varint,2,opt,name=resp_size,json=respSize,proto3" json:"resp_size,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SimpleProtoParams) Reset()                    { *m = SimpleProtoParams{} }
-func (m *SimpleProtoParams) String() string            { return proto.CompactTextString(m) }
-func (*SimpleProtoParams) ProtoMessage()               {}
-func (*SimpleProtoParams) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
+func (m *SimpleProtoParams) Reset()         { *m = SimpleProtoParams{} }
+func (m *SimpleProtoParams) String() string { return proto.CompactTextString(m) }
+func (*SimpleProtoParams) ProtoMessage()    {}
+func (*SimpleProtoParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_payloads_3abc71de35f06c83, []int{1}
+}
+func (m *SimpleProtoParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SimpleProtoParams.Unmarshal(m, b)
+}
+func (m *SimpleProtoParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SimpleProtoParams.Marshal(b, m, deterministic)
+}
+func (dst *SimpleProtoParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SimpleProtoParams.Merge(dst, src)
+}
+func (m *SimpleProtoParams) XXX_Size() int {
+	return xxx_messageInfo_SimpleProtoParams.Size(m)
+}
+func (m *SimpleProtoParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_SimpleProtoParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SimpleProtoParams proto.InternalMessageInfo
 
 func (m *SimpleProtoParams) GetReqSize() int32 {
 	if m != nil {
@@ -61,42 +111,90 @@ func (m *SimpleProtoParams) GetRespSize() int32 {
 }
 
 type ComplexProtoParams struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ComplexProtoParams) Reset()                    { *m = ComplexProtoParams{} }
-func (m *ComplexProtoParams) String() string            { return proto.CompactTextString(m) }
-func (*ComplexProtoParams) ProtoMessage()               {}
-func (*ComplexProtoParams) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{2} }
+func (m *ComplexProtoParams) Reset()         { *m = ComplexProtoParams{} }
+func (m *ComplexProtoParams) String() string { return proto.CompactTextString(m) }
+func (*ComplexProtoParams) ProtoMessage()    {}
+func (*ComplexProtoParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_payloads_3abc71de35f06c83, []int{2}
+}
+func (m *ComplexProtoParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ComplexProtoParams.Unmarshal(m, b)
+}
+func (m *ComplexProtoParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ComplexProtoParams.Marshal(b, m, deterministic)
+}
+func (dst *ComplexProtoParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ComplexProtoParams.Merge(dst, src)
+}
+func (m *ComplexProtoParams) XXX_Size() int {
+	return xxx_messageInfo_ComplexProtoParams.Size(m)
+}
+func (m *ComplexProtoParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_ComplexProtoParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ComplexProtoParams proto.InternalMessageInfo
 
 type PayloadConfig struct {
 	// Types that are valid to be assigned to Payload:
 	//	*PayloadConfig_BytebufParams
 	//	*PayloadConfig_SimpleParams
 	//	*PayloadConfig_ComplexParams
-	Payload isPayloadConfig_Payload `protobuf_oneof:"payload"`
+	Payload              isPayloadConfig_Payload `protobuf_oneof:"payload"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
 }
 
-func (m *PayloadConfig) Reset()                    { *m = PayloadConfig{} }
-func (m *PayloadConfig) String() string            { return proto.CompactTextString(m) }
-func (*PayloadConfig) ProtoMessage()               {}
-func (*PayloadConfig) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{3} }
+func (m *PayloadConfig) Reset()         { *m = PayloadConfig{} }
+func (m *PayloadConfig) String() string { return proto.CompactTextString(m) }
+func (*PayloadConfig) ProtoMessage()    {}
+func (*PayloadConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_payloads_3abc71de35f06c83, []int{3}
+}
+func (m *PayloadConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PayloadConfig.Unmarshal(m, b)
+}
+func (m *PayloadConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PayloadConfig.Marshal(b, m, deterministic)
+}
+func (dst *PayloadConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PayloadConfig.Merge(dst, src)
+}
+func (m *PayloadConfig) XXX_Size() int {
+	return xxx_messageInfo_PayloadConfig.Size(m)
+}
+func (m *PayloadConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_PayloadConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PayloadConfig proto.InternalMessageInfo
 
 type isPayloadConfig_Payload interface {
 	isPayloadConfig_Payload()
 }
 
 type PayloadConfig_BytebufParams struct {
-	BytebufParams *ByteBufferParams `protobuf:"bytes,1,opt,name=bytebuf_params,json=bytebufParams,oneof"`
+	BytebufParams *ByteBufferParams `protobuf:"bytes,1,opt,name=bytebuf_params,json=bytebufParams,proto3,oneof"`
 }
+
 type PayloadConfig_SimpleParams struct {
-	SimpleParams *SimpleProtoParams `protobuf:"bytes,2,opt,name=simple_params,json=simpleParams,oneof"`
+	SimpleParams *SimpleProtoParams `protobuf:"bytes,2,opt,name=simple_params,json=simpleParams,proto3,oneof"`
 }
+
 type PayloadConfig_ComplexParams struct {
-	ComplexParams *ComplexProtoParams `protobuf:"bytes,3,opt,name=complex_params,json=complexParams,oneof"`
+	ComplexParams *ComplexProtoParams `protobuf:"bytes,3,opt,name=complex_params,json=complexParams,proto3,oneof"`
 }
 
 func (*PayloadConfig_BytebufParams) isPayloadConfig_Payload() {}
-func (*PayloadConfig_SimpleParams) isPayloadConfig_Payload()  {}
+
+func (*PayloadConfig_SimpleParams) isPayloadConfig_Payload() {}
+
 func (*PayloadConfig_ComplexParams) isPayloadConfig_Payload() {}
 
 func (m *PayloadConfig) GetPayload() isPayloadConfig_Payload {
@@ -200,17 +298,17 @@ func _PayloadConfig_OneofSizer(msg proto.Message) (n int) {
 	switch x := m.Payload.(type) {
 	case *PayloadConfig_BytebufParams:
 		s := proto.Size(x.BytebufParams)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
+		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case *PayloadConfig_SimpleParams:
 		s := proto.Size(x.SimpleParams)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case *PayloadConfig_ComplexParams:
 		s := proto.Size(x.ComplexParams)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case nil:
@@ -227,9 +325,9 @@ func init() {
 	proto.RegisterType((*PayloadConfig)(nil), "grpc.testing.PayloadConfig")
 }
 
-func init() { proto.RegisterFile("payloads.proto", fileDescriptor2) }
+func init() { proto.RegisterFile("payloads.proto", fileDescriptor_payloads_3abc71de35f06c83) }
 
-var fileDescriptor2 = []byte{
+var fileDescriptor_payloads_3abc71de35f06c83 = []byte{
 	// 254 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x48, 0xac, 0xcc,
 	0xc9, 0x4f, 0x4c, 0x29, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x49, 0x2f, 0x2a, 0x48,

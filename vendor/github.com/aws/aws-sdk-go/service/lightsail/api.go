@@ -14,7 +14,7 @@ const opAllocateStaticIp = "AllocateStaticIp"
 
 // AllocateStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the AllocateStaticIp operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -118,7 +118,7 @@ const opAttachDisk = "AttachDisk"
 
 // AttachDiskRequest generates a "aws/request.Request" representing the
 // client's request for the AttachDisk operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -223,7 +223,7 @@ const opAttachInstancesToLoadBalancer = "AttachInstancesToLoadBalancer"
 
 // AttachInstancesToLoadBalancerRequest generates a "aws/request.Request" representing the
 // client's request for the AttachInstancesToLoadBalancer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -330,7 +330,7 @@ const opAttachLoadBalancerTlsCertificate = "AttachLoadBalancerTlsCertificate"
 
 // AttachLoadBalancerTlsCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the AttachLoadBalancerTlsCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -441,7 +441,7 @@ const opAttachStaticIp = "AttachStaticIp"
 
 // AttachStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the AttachStaticIp operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -545,7 +545,7 @@ const opCloseInstancePublicPorts = "CloseInstancePublicPorts"
 
 // CloseInstancePublicPortsRequest generates a "aws/request.Request" representing the
 // client's request for the CloseInstancePublicPorts operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -649,7 +649,7 @@ const opCreateDisk = "CreateDisk"
 
 // CreateDiskRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDisk operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -756,7 +756,7 @@ const opCreateDiskFromSnapshot = "CreateDiskFromSnapshot"
 
 // CreateDiskFromSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDiskFromSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -863,7 +863,7 @@ const opCreateDiskSnapshot = "CreateDiskSnapshot"
 
 // CreateDiskSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDiskSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -980,7 +980,7 @@ const opCreateDomain = "CreateDomain"
 
 // CreateDomainRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDomain operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1084,7 +1084,7 @@ const opCreateDomainEntry = "CreateDomainEntry"
 
 // CreateDomainEntryRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDomainEntry operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1189,7 +1189,7 @@ const opCreateInstanceSnapshot = "CreateInstanceSnapshot"
 
 // CreateInstanceSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInstanceSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1294,7 +1294,7 @@ const opCreateInstances = "CreateInstances"
 
 // CreateInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInstances operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1398,7 +1398,7 @@ const opCreateInstancesFromSnapshot = "CreateInstancesFromSnapshot"
 
 // CreateInstancesFromSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInstancesFromSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1503,7 +1503,7 @@ const opCreateKeyPair = "CreateKeyPair"
 
 // CreateKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the CreateKeyPair operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1607,7 +1607,7 @@ const opCreateLoadBalancer = "CreateLoadBalancer"
 
 // CreateLoadBalancerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLoadBalancer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1718,7 +1718,7 @@ const opCreateLoadBalancerTlsCertificate = "CreateLoadBalancerTlsCertificate"
 
 // CreateLoadBalancerTlsCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLoadBalancerTlsCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1824,7 +1824,7 @@ const opDeleteDisk = "DeleteDisk"
 
 // DeleteDiskRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDisk operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1931,7 +1931,7 @@ const opDeleteDiskSnapshot = "DeleteDiskSnapshot"
 
 // DeleteDiskSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDiskSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2042,7 +2042,7 @@ const opDeleteDomain = "DeleteDomain"
 
 // DeleteDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDomain operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2146,7 +2146,7 @@ const opDeleteDomainEntry = "DeleteDomainEntry"
 
 // DeleteDomainEntryRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDomainEntry operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2250,7 +2250,7 @@ const opDeleteInstance = "DeleteInstance"
 
 // DeleteInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInstance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2354,7 +2354,7 @@ const opDeleteInstanceSnapshot = "DeleteInstanceSnapshot"
 
 // DeleteInstanceSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteInstanceSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2458,7 +2458,7 @@ const opDeleteKeyPair = "DeleteKeyPair"
 
 // DeleteKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteKeyPair operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2562,7 +2562,7 @@ const opDeleteLoadBalancer = "DeleteLoadBalancer"
 
 // DeleteLoadBalancerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLoadBalancer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2668,7 +2668,7 @@ const opDeleteLoadBalancerTlsCertificate = "DeleteLoadBalancerTlsCertificate"
 
 // DeleteLoadBalancerTlsCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLoadBalancerTlsCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2772,7 +2772,7 @@ const opDetachDisk = "DetachDisk"
 
 // DetachDiskRequest generates a "aws/request.Request" representing the
 // client's request for the DetachDisk operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2878,7 +2878,7 @@ const opDetachInstancesFromLoadBalancer = "DetachInstancesFromLoadBalancer"
 
 // DetachInstancesFromLoadBalancerRequest generates a "aws/request.Request" representing the
 // client's request for the DetachInstancesFromLoadBalancer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2985,7 +2985,7 @@ const opDetachStaticIp = "DetachStaticIp"
 
 // DetachStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the DetachStaticIp operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3089,7 +3089,7 @@ const opDownloadDefaultKeyPair = "DownloadDefaultKeyPair"
 
 // DownloadDefaultKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the DownloadDefaultKeyPair operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3193,7 +3193,7 @@ const opGetActiveNames = "GetActiveNames"
 
 // GetActiveNamesRequest generates a "aws/request.Request" representing the
 // client's request for the GetActiveNames operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3297,7 +3297,7 @@ const opGetBlueprints = "GetBlueprints"
 
 // GetBlueprintsRequest generates a "aws/request.Request" representing the
 // client's request for the GetBlueprints operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3404,7 +3404,7 @@ const opGetBundles = "GetBundles"
 
 // GetBundlesRequest generates a "aws/request.Request" representing the
 // client's request for the GetBundles operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3509,7 +3509,7 @@ const opGetDisk = "GetDisk"
 
 // GetDiskRequest generates a "aws/request.Request" representing the
 // client's request for the GetDisk operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3613,7 +3613,7 @@ const opGetDiskSnapshot = "GetDiskSnapshot"
 
 // GetDiskSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the GetDiskSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3717,7 +3717,7 @@ const opGetDiskSnapshots = "GetDiskSnapshots"
 
 // GetDiskSnapshotsRequest generates a "aws/request.Request" representing the
 // client's request for the GetDiskSnapshots operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3826,7 +3826,7 @@ const opGetDisks = "GetDisks"
 
 // GetDisksRequest generates a "aws/request.Request" representing the
 // client's request for the GetDisks operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3935,7 +3935,7 @@ const opGetDomain = "GetDomain"
 
 // GetDomainRequest generates a "aws/request.Request" representing the
 // client's request for the GetDomain operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4039,7 +4039,7 @@ const opGetDomains = "GetDomains"
 
 // GetDomainsRequest generates a "aws/request.Request" representing the
 // client's request for the GetDomains operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4143,7 +4143,7 @@ const opGetInstance = "GetInstance"
 
 // GetInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4248,7 +4248,7 @@ const opGetInstanceAccessDetails = "GetInstanceAccessDetails"
 
 // GetInstanceAccessDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceAccessDetails operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4353,7 +4353,7 @@ const opGetInstanceMetricData = "GetInstanceMetricData"
 
 // GetInstanceMetricDataRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceMetricData operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4458,7 +4458,7 @@ const opGetInstancePortStates = "GetInstancePortStates"
 
 // GetInstancePortStatesRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstancePortStates operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4562,7 +4562,7 @@ const opGetInstanceSnapshot = "GetInstanceSnapshot"
 
 // GetInstanceSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceSnapshot operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4666,7 +4666,7 @@ const opGetInstanceSnapshots = "GetInstanceSnapshots"
 
 // GetInstanceSnapshotsRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceSnapshots operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4770,7 +4770,7 @@ const opGetInstanceState = "GetInstanceState"
 
 // GetInstanceStateRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceState operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4874,7 +4874,7 @@ const opGetInstances = "GetInstances"
 
 // GetInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstances operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4979,7 +4979,7 @@ const opGetKeyPair = "GetKeyPair"
 
 // GetKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the GetKeyPair operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5083,7 +5083,7 @@ const opGetKeyPairs = "GetKeyPairs"
 
 // GetKeyPairsRequest generates a "aws/request.Request" representing the
 // client's request for the GetKeyPairs operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5187,7 +5187,7 @@ const opGetLoadBalancer = "GetLoadBalancer"
 
 // GetLoadBalancerRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoadBalancer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5291,7 +5291,7 @@ const opGetLoadBalancerMetricData = "GetLoadBalancerMetricData"
 
 // GetLoadBalancerMetricDataRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoadBalancerMetricData operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5395,7 +5395,7 @@ const opGetLoadBalancerTlsCertificates = "GetLoadBalancerTlsCertificates"
 
 // GetLoadBalancerTlsCertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoadBalancerTlsCertificates operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5505,7 +5505,7 @@ const opGetLoadBalancers = "GetLoadBalancers"
 
 // GetLoadBalancersRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoadBalancers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5613,7 +5613,7 @@ const opGetOperation = "GetOperation"
 
 // GetOperationRequest generates a "aws/request.Request" representing the
 // client's request for the GetOperation operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5719,7 +5719,7 @@ const opGetOperations = "GetOperations"
 
 // GetOperationsRequest generates a "aws/request.Request" representing the
 // client's request for the GetOperations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5827,7 +5827,7 @@ const opGetOperationsForResource = "GetOperationsForResource"
 
 // GetOperationsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the GetOperationsForResource operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5931,7 +5931,7 @@ const opGetRegions = "GetRegions"
 
 // GetRegionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetRegions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6036,7 +6036,7 @@ const opGetStaticIp = "GetStaticIp"
 
 // GetStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the GetStaticIp operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6140,7 +6140,7 @@ const opGetStaticIps = "GetStaticIps"
 
 // GetStaticIpsRequest generates a "aws/request.Request" representing the
 // client's request for the GetStaticIps operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6244,7 +6244,7 @@ const opImportKeyPair = "ImportKeyPair"
 
 // ImportKeyPairRequest generates a "aws/request.Request" representing the
 // client's request for the ImportKeyPair operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6348,7 +6348,7 @@ const opIsVpcPeered = "IsVpcPeered"
 
 // IsVpcPeeredRequest generates a "aws/request.Request" representing the
 // client's request for the IsVpcPeered operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6452,7 +6452,7 @@ const opOpenInstancePublicPorts = "OpenInstancePublicPorts"
 
 // OpenInstancePublicPortsRequest generates a "aws/request.Request" representing the
 // client's request for the OpenInstancePublicPorts operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6556,7 +6556,7 @@ const opPeerVpc = "PeerVpc"
 
 // PeerVpcRequest generates a "aws/request.Request" representing the
 // client's request for the PeerVpc operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6660,7 +6660,7 @@ const opPutInstancePublicPorts = "PutInstancePublicPorts"
 
 // PutInstancePublicPortsRequest generates a "aws/request.Request" representing the
 // client's request for the PutInstancePublicPorts operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6765,7 +6765,7 @@ const opRebootInstance = "RebootInstance"
 
 // RebootInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the RebootInstance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6872,7 +6872,7 @@ const opReleaseStaticIp = "ReleaseStaticIp"
 
 // ReleaseStaticIpRequest generates a "aws/request.Request" representing the
 // client's request for the ReleaseStaticIp operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6976,7 +6976,7 @@ const opStartInstance = "StartInstance"
 
 // StartInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the StartInstance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7081,7 +7081,7 @@ const opStopInstance = "StopInstance"
 
 // StopInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the StopInstance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7185,7 +7185,7 @@ const opUnpeerVpc = "UnpeerVpc"
 
 // UnpeerVpcRequest generates a "aws/request.Request" representing the
 // client's request for the UnpeerVpc operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7289,7 +7289,7 @@ const opUpdateDomainEntry = "UpdateDomainEntry"
 
 // UpdateDomainEntryRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDomainEntry operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7393,7 +7393,7 @@ const opUpdateLoadBalancerAttribute = "UpdateLoadBalancerAttribute"
 
 // UpdateLoadBalancerAttributeRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateLoadBalancerAttribute operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8914,6 +8914,8 @@ type CreateInstancesInput struct {
 	//
 	// In releases prior to June 12, 2017, this parameter was ignored by the API.
 	// It is now deprecated.
+	//
+	// Deprecated: CustomImageName has been deprecated
 	CustomImageName *string `locationName:"customImageName" deprecated:"true" type:"string"`
 
 	// The names to use for your new Lightsail instances. Separate multiple values
@@ -10163,15 +10165,19 @@ type Disk struct {
 	// In releases prior to November 14, 2017, this parameter returned attached
 	// for system disks in the API response. It is now deprecated, but still included
 	// in the response. Use isAttached instead.
+	//
+	// Deprecated: AttachmentState has been deprecated
 	AttachmentState *string `locationName:"attachmentState" deprecated:"true" type:"string"`
 
 	// The date when the disk was created.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// (Deprecated) The number of GB in use by the disk.
 	//
 	// In releases prior to November 14, 2017, this parameter was not included in
 	// the API response. It is now deprecated.
+	//
+	// Deprecated: GbInUse has been deprecated
 	GbInUse *int64 `locationName:"gbInUse" deprecated:"true" type:"integer"`
 
 	// The input/output operations per second (IOPS) of the disk.
@@ -10349,7 +10355,7 @@ type DiskSnapshot struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The date when the disk snapshot was created.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The Amazon Resource Name (ARN) of the source disk from which you are creating
 	// the disk snapshot.
@@ -10466,7 +10472,7 @@ type Domain struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The date when the domain recordset was created.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// An array of key-value pairs containing information about the domain entries.
 	DomainEntries []*DomainEntry `locationName:"domainEntries" type:"list"`
@@ -10558,6 +10564,8 @@ type DomainEntry struct {
 	//
 	// In releases prior to November 29, 2017, this parameter was not included in
 	// the API response. It is now deprecated.
+	//
+	// Deprecated: Options has been deprecated
 	Options map[string]*string `locationName:"options" deprecated:"true" type:"map"`
 
 	// The target AWS name server (e.g., ns-111.awsdns-22.com.).
@@ -11325,7 +11333,7 @@ type GetInstanceMetricDataInput struct {
 	// The end time of the time period.
 	//
 	// EndTime is a required field
-	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" required:"true"`
 
 	// The name of the instance for which you want to get metrics data.
 	//
@@ -11345,7 +11353,7 @@ type GetInstanceMetricDataInput struct {
 	// The start time of the time period.
 	//
 	// StartTime is a required field
-	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" required:"true"`
 
 	// The instance statistics.
 	//
@@ -11961,7 +11969,7 @@ type GetLoadBalancerMetricDataInput struct {
 	// The end time of the period.
 	//
 	// EndTime is a required field
-	EndTime *time.Time `locationName:"endTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+	EndTime *time.Time `locationName:"endTime" type:"timestamp" required:"true"`
 
 	// The name of the load balancer.
 	//
@@ -12061,7 +12069,7 @@ type GetLoadBalancerMetricDataInput struct {
 	// The start time of the period.
 	//
 	// StartTime is a required field
-	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"unix" required:"true"`
+	StartTime *time.Time `locationName:"startTime" type:"timestamp" required:"true"`
 
 	// An array of statistics that you want to request metrics for. Valid values
 	// are listed below.
@@ -12548,6 +12556,8 @@ type GetOperationsForResourceOutput struct {
 	//
 	// In releases prior to June 12, 2017, this parameter returned null by the API.
 	// It is now deprecated, and the API returns the nextPageToken parameter instead.
+	//
+	// Deprecated: NextPageCount has been deprecated
 	NextPageCount *string `locationName:"nextPageCount" deprecated:"true" type:"string"`
 
 	// An identifier that was returned from the previous call to this operation,
@@ -12906,7 +12916,7 @@ type Instance struct {
 	BundleId *string `locationName:"bundleId" type:"string"`
 
 	// The timestamp when the instance was created (e.g., 1479734909.17).
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The size of the vCPU and the amount of RAM for the instance.
 	Hardware *InstanceHardware `locationName:"hardware" type:"structure"`
@@ -13080,7 +13090,7 @@ type InstanceAccessDetails struct {
 	CertKey *string `locationName:"certKey" type:"string"`
 
 	// For SSH access, the date on which the temporary keys expire.
-	ExpiresAt *time.Time `locationName:"expiresAt" type:"timestamp" timestampFormat:"unix"`
+	ExpiresAt *time.Time `locationName:"expiresAt" type:"timestamp"`
 
 	// The name of this Amazon Lightsail instance.
 	InstanceName *string `locationName:"instanceName" type:"string"`
@@ -13519,7 +13529,7 @@ type InstanceSnapshot struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The timestamp when the snapshot was created (e.g., 1479907467.024).
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// An array of disk objects containing information about all block storage disks.
 	FromAttachedDisks []*Disk `locationName:"fromAttachedDisks" type:"list"`
@@ -13735,7 +13745,7 @@ type KeyPair struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The timestamp when the key pair was created (e.g., 1479816991.349).
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The RSA fingerprint of the key pair.
 	Fingerprint *string `locationName:"fingerprint" type:"string"`
@@ -13819,7 +13829,7 @@ type LoadBalancer struct {
 	ConfigurationOptions map[string]*string `locationName:"configurationOptions" type:"map"`
 
 	// The date when your load balancer was created.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The DNS name of your Lightsail load balancer.
 	DnsName *string `locationName:"dnsName" type:"string"`
@@ -13979,7 +13989,7 @@ type LoadBalancerTlsCertificate struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The time when you created your SSL/TLS certificate.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The domain name for your SSL/TLS certificate.
 	DomainName *string `locationName:"domainName" type:"string"`
@@ -13995,7 +14005,7 @@ type LoadBalancerTlsCertificate struct {
 	IsAttached *bool `locationName:"isAttached" type:"boolean"`
 
 	// The time when the SSL/TLS certificate was issued.
-	IssuedAt *time.Time `locationName:"issuedAt" type:"timestamp" timestampFormat:"unix"`
+	IssuedAt *time.Time `locationName:"issuedAt" type:"timestamp"`
 
 	// The issuer of the certificate.
 	Issuer *string `locationName:"issuer" type:"string"`
@@ -14014,10 +14024,10 @@ type LoadBalancerTlsCertificate struct {
 	Name *string `locationName:"name" type:"string"`
 
 	// The timestamp when the SSL/TLS certificate expires.
-	NotAfter *time.Time `locationName:"notAfter" type:"timestamp" timestampFormat:"unix"`
+	NotAfter *time.Time `locationName:"notAfter" type:"timestamp"`
 
 	// The timestamp when the SSL/TLS certificate is first valid.
-	NotBefore *time.Time `locationName:"notBefore" type:"timestamp" timestampFormat:"unix"`
+	NotBefore *time.Time `locationName:"notBefore" type:"timestamp"`
 
 	// An object containing information about the status of Lightsail's managed
 	// renewal for the certificate.
@@ -14051,7 +14061,7 @@ type LoadBalancerTlsCertificate struct {
 	RevocationReason *string `locationName:"revocationReason" type:"string" enum:"LoadBalancerTlsCertificateRevocationReason"`
 
 	// The timestamp when the SSL/TLS certificate was revoked.
-	RevokedAt *time.Time `locationName:"revokedAt" type:"timestamp" timestampFormat:"unix"`
+	RevokedAt *time.Time `locationName:"revokedAt" type:"timestamp"`
 
 	// The serial number of the certificate.
 	Serial *string `locationName:"serial" type:"string"`
@@ -14418,7 +14428,7 @@ type MetricDatapoint struct {
 	Sum *float64 `locationName:"sum" type:"double"`
 
 	// The timestamp (e.g., 1479816991.349).
-	Timestamp *time.Time `locationName:"timestamp" type:"timestamp" timestampFormat:"unix"`
+	Timestamp *time.Time `locationName:"timestamp" type:"timestamp"`
 
 	// The unit.
 	Unit *string `locationName:"unit" type:"string" enum:"MetricUnit"`
@@ -14581,7 +14591,7 @@ type Operation struct {
 	_ struct{} `type:"structure"`
 
 	// The timestamp when the operation was initialized (e.g., 1479816991.349).
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The error code.
 	ErrorCode *string `locationName:"errorCode" type:"string"`
@@ -14614,7 +14624,7 @@ type Operation struct {
 	Status *string `locationName:"status" type:"string" enum:"OperationStatus"`
 
 	// The timestamp when the status was changed (e.g., 1479816991.349).
-	StatusChangedAt *time.Time `locationName:"statusChangedAt" type:"timestamp" timestampFormat:"unix"`
+	StatusChangedAt *time.Time `locationName:"statusChangedAt" type:"timestamp"`
 }
 
 // String returns the string representation
@@ -15194,7 +15204,7 @@ type StaticIp struct {
 	AttachedTo *string `locationName:"attachedTo" type:"string"`
 
 	// The timestamp when the static IP was created (e.g., 1479735304.222).
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The static IP address.
 	IpAddress *string `locationName:"ipAddress" type:"string"`

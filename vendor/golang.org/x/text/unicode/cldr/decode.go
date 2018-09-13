@@ -101,7 +101,7 @@ func (d *Decoder) decode(dir, id string, r io.Reader) error {
 		if l.Identity == nil {
 			return fmt.Errorf("%s/%s: missing identity element", dir, id)
 		}
-		// TODO: verify when CLDR bug http://unicode.org/cldr/trac/ticket/8970
+		// TODO: verify when CLDR bug https://unicode.org/cldr/trac/ticket/8970
 		// is resolved.
 		// path := strings.Split(id, "_")
 		// if lang := l.Identity.Language.Type; lang != path[0] {

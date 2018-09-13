@@ -6,6 +6,7 @@
     "protocol":"rest-json",
     "serviceAbbreviation":"EFS",
     "serviceFullName":"Amazon Elastic File System",
+    "serviceId":"EFS",
     "signatureVersion":"v4",
     "uid":"elasticfilesystem-2015-02-01"
   },
@@ -23,7 +24,9 @@
         {"shape":"BadRequest"},
         {"shape":"InternalServerError"},
         {"shape":"FileSystemAlreadyExists"},
-        {"shape":"FileSystemLimitExceeded"}
+        {"shape":"FileSystemLimitExceeded"},
+        {"shape":"InsufficientThroughputCapacity"},
+        {"shape":"ThroughputLimitExceeded"}
       ]
     },
     "CreateMountTarget":{
@@ -186,6 +189,25 @@
         {"shape":"SecurityGroupLimitExceeded"},
         {"shape":"SecurityGroupNotFound"}
       ]
+    },
+    "UpdateFileSystem":{
+      "name":"UpdateFileSystem",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/2015-02-01/file-systems/{FileSystemId}",
+        "responseCode":202
+      },
+      "input":{"shape":"UpdateFileSystemRequest"},
+      "output":{"shape":"FileSystemDescription"},
+      "errors":[
+        {"shape":"BadRequest"},
+        {"shape":"FileSystemNotFound"},
+        {"shape":"IncorrectFileSystemLifeCycleState"},
+        {"shape":"InsufficientThroughputCapacity"},
+        {"shape":"InternalServerError"},
+        {"shape":"ThroughputLimitExceeded"},
+        {"shape":"TooManyRequests"}
+      ]
     }
   },
   "shapes":{
@@ -207,7 +229,9 @@
         "CreationToken":{"shape":"CreationToken"},
         "PerformanceMode":{"shape":"PerformanceMode"},
         "Encrypted":{"shape":"Encrypted"},
-        "KmsKeyId":{"shape":"KmsKeyId"}
+        "KmsKeyId":{"shape":"KmsKeyId"},
+        "ThroughputMode":{"shape":"ThroughputMode"},
+        "ProvisionedThroughputInMibps":{"shape":"ProvisionedThroughputInMibps"}
       }
     },
     "CreateMountTargetRequest":{
@@ -447,7 +471,9 @@
         "SizeInBytes":{"shape":"FileSystemSize"},
         "PerformanceMode":{"shape":"PerformanceMode"},
         "Encrypted":{"shape":"Encrypted"},
-        "KmsKeyId":{"shape":"KmsKeyId"}
+        "KmsKeyId":{"shape":"KmsKeyId"},
+        "ThroughputMode":{"shape":"ThroughputMode"},
+        "ProvisionedThroughputInMibps":{"shape":"ProvisionedThroughputInMibps"}
       }
     },
     "FileSystemDescriptions":{
@@ -517,6 +543,16 @@
       "error":{"httpStatusCode":409},
       "exception":true
     },
+    "InsufficientThroughputCapacity":{
+      "type":"structure",
+      "required":["ErrorCode"],
+      "members":{
+        "ErrorCode":{"shape":"ErrorCode"},
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":503},
+      "exception":true
+    },
     "InternalServerError":{
       "type":"structure",
       "required":["ErrorCode"],
@@ -548,6 +584,7 @@
       "enum":[
         "creating",
         "available",
+        "updating",
         "deleting",
         "deleted"
       ]
@@ -644,6 +681,10 @@
         "maxIO"
       ]
     },
+    "ProvisionedThroughputInMibps":{
+      "type":"double",
+      "min":0.0
+    },
     "SecurityGroup":{"type":"string"},
     "SecurityGroupLimitExceeded":{
       "type":"structure",
@@ -709,7 +750,34 @@
       "type":"list",
       "member":{"shape":"Tag"}
     },
+    "ThroughputLimitExceeded":{
+      "type":"structure",
+      "required":["ErrorCode"],
+      "members":{
+        "ErrorCode":{"shape":"ErrorCode"},
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":400},
+      "exception":true
+    },
+    "ThroughputMode":{
+      "type":"string",
+      "enum":[
+        "bursting",
+        "provisioned"
+      ]
+    },
     "Timestamp":{"type":"timestamp"},
+    "TooManyRequests":{
+      "type":"structure",
+      "required":["ErrorCode"],
+      "members":{
+        "ErrorCode":{"shape":"ErrorCode"},
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "error":{"httpStatusCode":429},
+      "exception":true
+    },
     "UnsupportedAvailabilityZone":{
       "type":"structure",
       "required":["ErrorCode"],
@@ -719,6 +787,19 @@
       },
       "error":{"httpStatusCode":400},
       "exception":true
+    },
+    "UpdateFileSystemRequest":{
+      "type":"structure",
+      "required":["FileSystemId"],
+      "members":{
+        "FileSystemId":{
+          "shape":"FileSystemId",
+          "location":"uri",
+          "locationName":"FileSystemId"
+        },
+        "ThroughputMode":{"shape":"ThroughputMode"},
+        "ProvisionedThroughputInMibps":{"shape":"ProvisionedThroughputInMibps"}
+      }
     }
   }
 }

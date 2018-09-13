@@ -17,7 +17,7 @@ const opBulkPublish = "BulkPublish"
 
 // BulkPublishRequest generates a "aws/request.Request" representing the
 // client's request for the BulkPublish operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -119,7 +119,7 @@ const opDeleteDataset = "DeleteDataset"
 
 // DeleteDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDataset operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -220,7 +220,7 @@ const opDescribeDataset = "DescribeDataset"
 
 // DescribeDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDataset operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -317,7 +317,7 @@ const opDescribeIdentityPoolUsage = "DescribeIdentityPoolUsage"
 
 // DescribeIdentityPoolUsageRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeIdentityPoolUsage operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -412,7 +412,7 @@ const opDescribeIdentityUsage = "DescribeIdentityUsage"
 
 // DescribeIdentityUsageRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeIdentityUsage operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -507,7 +507,7 @@ const opGetBulkPublishDetails = "GetBulkPublishDetails"
 
 // GetBulkPublishDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the GetBulkPublishDetails operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -598,7 +598,7 @@ const opGetCognitoEvents = "GetCognitoEvents"
 
 // GetCognitoEventsRequest generates a "aws/request.Request" representing the
 // client's request for the GetCognitoEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -693,7 +693,7 @@ const opGetIdentityPoolConfiguration = "GetIdentityPoolConfiguration"
 
 // GetIdentityPoolConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the GetIdentityPoolConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -787,7 +787,7 @@ const opListDatasets = "ListDatasets"
 
 // ListDatasetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDatasets operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -881,7 +881,7 @@ const opListIdentityPoolUsage = "ListIdentityPoolUsage"
 
 // ListIdentityPoolUsageRequest generates a "aws/request.Request" representing the
 // client's request for the ListIdentityPoolUsage operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -973,7 +973,7 @@ const opListRecords = "ListRecords"
 
 // ListRecordsRequest generates a "aws/request.Request" representing the
 // client's request for the ListRecords operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1068,7 +1068,7 @@ const opRegisterDevice = "RegisterDevice"
 
 // RegisterDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterDevice operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1164,7 +1164,7 @@ const opSetCognitoEvents = "SetCognitoEvents"
 
 // SetCognitoEventsRequest generates a "aws/request.Request" representing the
 // client's request for the SetCognitoEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1263,7 +1263,7 @@ const opSetIdentityPoolConfiguration = "SetIdentityPoolConfiguration"
 
 // SetIdentityPoolConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the SetIdentityPoolConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1360,7 +1360,7 @@ const opSubscribeToDataset = "SubscribeToDataset"
 
 // SubscribeToDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the SubscribeToDataset operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1457,7 +1457,7 @@ const opUnsubscribeFromDataset = "UnsubscribeFromDataset"
 
 // UnsubscribeFromDatasetRequest generates a "aws/request.Request" representing the
 // client's request for the UnsubscribeFromDataset operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1554,7 +1554,7 @@ const opUpdateRecords = "UpdateRecords"
 
 // UpdateRecordsRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRecords operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1811,7 +1811,7 @@ type Dataset struct {
 	_ struct{} `type:"structure"`
 
 	// Date on which the dataset was created.
-	CreationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationDate *time.Time `type:"timestamp"`
 
 	// Total size in bytes of the records in this dataset.
 	DataStorage *int64 `type:"long"`
@@ -1828,7 +1828,7 @@ type Dataset struct {
 	LastModifiedBy *string `type:"string"`
 
 	// Date when the dataset was last modified.
-	LastModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	LastModifiedDate *time.Time `type:"timestamp"`
 
 	// Number of records in this dataset.
 	NumRecords *int64 `type:"long"`
@@ -2302,10 +2302,10 @@ type GetBulkPublishDetailsOutput struct {
 
 	// If BulkPublishStatus is SUCCEEDED, the time the last bulk publish operation
 	// completed.
-	BulkPublishCompleteTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	BulkPublishCompleteTime *time.Time `type:"timestamp"`
 
 	// The date/time at which the last bulk publish was initiated.
-	BulkPublishStartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	BulkPublishStartTime *time.Time `type:"timestamp"`
 
 	// Status of the last bulk publish operation, valid values are: NOT_STARTED
 	// - No bulk publish has been requested for this identity pool
@@ -2533,7 +2533,7 @@ type IdentityPoolUsage struct {
 	IdentityPoolId *string `min:"1" type:"string"`
 
 	// Date on which the identity pool was last modified.
-	LastModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	LastModifiedDate *time.Time `type:"timestamp"`
 
 	// Number of sync sessions for the identity pool.
 	SyncSessionsCount *int64 `type:"long"`
@@ -2592,7 +2592,7 @@ type IdentityUsage struct {
 	IdentityPoolId *string `min:"1" type:"string"`
 
 	// Date on which the identity was last modified.
-	LastModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	LastModifiedDate *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -3102,7 +3102,7 @@ type Record struct {
 	_ struct{} `type:"structure"`
 
 	// The last modified date of the client device.
-	DeviceLastModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	DeviceLastModifiedDate *time.Time `type:"timestamp"`
 
 	// The key for the record.
 	Key *string `min:"1" type:"string"`
@@ -3111,7 +3111,7 @@ type Record struct {
 	LastModifiedBy *string `type:"string"`
 
 	// The date on which the record was last modified.
-	LastModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	LastModifiedDate *time.Time `type:"timestamp"`
 
 	// The server sync count for this record.
 	SyncCount *int64 `type:"long"`
@@ -3171,7 +3171,7 @@ type RecordPatch struct {
 	_ struct{} `type:"structure"`
 
 	// The last modified date of the client device.
-	DeviceLastModifiedDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	DeviceLastModifiedDate *time.Time `type:"timestamp"`
 
 	// The key associated with the record patch.
 	//

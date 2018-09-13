@@ -12,9 +12,9 @@
   "baseUrl": "https://texttospeech.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Texttospeech",
-  "description": "Cloud Text-to-Speech API.",
+  "description": "Synthesizes natural-sounding speech by applying powerful neural network models.",
   "discoveryVersion": "v1",
-  "documentationLink": "http://cloud.google.com/speech/text-to-speech/",
+  "documentationLink": "https://cloud.google.com/text-to-speech/",
   "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
@@ -60,11 +60,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -84,12 +79,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -140,7 +129,7 @@
     "voices": {
       "methods": {
         "list": {
-          "description": "Returns a list of Voice\nsupported for synthesis.",
+          "description": "Returns a list of Voice supported for synthesis.",
           "flatPath": "v1beta1/voices",
           "httpMethod": "GET",
           "id": "texttospeech.voices.list",
@@ -163,7 +152,7 @@
       }
     }
   },
-  "revision": "20180323",
+  "revision": "20180727",
   "rootUrl": "https://texttospeech.googleapis.com/",
   "schemas": {
     "AudioConfig": {
@@ -185,6 +174,13 @@
             "Opus encoded audio wrapped in an ogg container. The result will be a\nfile which can be played natively on Android, and in browsers (at least\nChrome and Firefox). The quality of the encoding is considerably higher\nthan MP3 while using approximately the same bitrate."
           ],
           "type": "string"
+        },
+        "effectsProfileId": {
+          "description": "An identifier which selects 'audio effects' profiles that are applied on\n(post synthesized) text to speech.\nEffects are applied on top of each other in the order they are given.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "pitch": {
           "description": "Optional speaking pitch, in the range [-20.0, 20.0]. 20 means increase 20\nsemitones from the original pitch. -20 means decrease 20 semitones from the\noriginal pitch.",

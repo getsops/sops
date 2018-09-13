@@ -41,6 +41,19 @@ func PossibleComputeRoleValues() []ComputeRole {
 	return []ComputeRole{IaaS, None, PaaS}
 }
 
+// Location enumerates the values for location.
+type Location string
+
+const (
+	// Global ...
+	Global Location = "global"
+)
+
+// PossibleLocationValues returns an array of possible values for the Location const type.
+func PossibleLocationValues() []Location {
+	return []Location{Global}
+}
+
 // OperatingSystem enumerates the values for operating system.
 type OperatingSystem string
 
@@ -95,10 +108,6 @@ type CustomerSubscription struct {
 	Name *string `json:"name,omitempty"`
 	// Type - Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Location - Location of the resource.
-	Location *string `json:"location,omitempty"`
-	// Tags - Custom tags for the resource.
-	Tags map[string]*string `json:"tags"`
 	// Etag - The entity tag used for optimistic concurency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
@@ -117,12 +126,6 @@ func (cs CustomerSubscription) MarshalJSON() ([]byte, error) {
 	}
 	if cs.Type != nil {
 		objectMap["type"] = cs.Type
-	}
-	if cs.Location != nil {
-		objectMap["location"] = cs.Location
-	}
-	if cs.Tags != nil {
-		objectMap["tags"] = cs.Tags
 	}
 	if cs.Etag != nil {
 		objectMap["etag"] = cs.Etag
@@ -174,24 +177,6 @@ func (cs *CustomerSubscription) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				cs.Type = &typeVar
-			}
-		case "location":
-			if v != nil {
-				var location string
-				err = json.Unmarshal(*v, &location)
-				if err != nil {
-					return err
-				}
-				cs.Location = &location
-			}
-		case "tags":
-			if v != nil {
-				var tags map[string]*string
-				err = json.Unmarshal(*v, &tags)
-				if err != nil {
-					return err
-				}
-				cs.Tags = tags
 			}
 		case "etag":
 			if v != nil {
@@ -334,6 +319,23 @@ type Display struct {
 	Operation *string `json:"operation,omitempty"`
 	// Description - The localized, friendly description for the operation. The description will be displayed to the user. It should be thorough and concise for used in both tooltips and detailed views.
 	Description *string `json:"description,omitempty"`
+}
+
+// ErrorDetails the details of the error.
+type ErrorDetails struct {
+	// Code - Error code.
+	Code *string `json:"code,omitempty"`
+	// Message - Error message indicating why the operation failed.
+	Message *string `json:"message,omitempty"`
+	// Target - The target of the particular error.
+	Target *string `json:"target,omitempty"`
+}
+
+// ErrorResponse error response indicates that the service is not able to process the incoming request. The reason
+// is provided in the error message.
+type ErrorResponse struct {
+	// Error - The details of the error.
+	Error *ErrorDetails `json:"error,omitempty"`
 }
 
 // ExtendedProduct extended description about the product required for installing it into Azure Stack.
@@ -700,10 +702,6 @@ type Product struct {
 	Name *string `json:"name,omitempty"`
 	// Type - Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Location - Location of the resource.
-	Location *string `json:"location,omitempty"`
-	// Tags - Custom tags for the resource.
-	Tags map[string]*string `json:"tags"`
 	// Etag - The entity tag used for optimistic concurency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
@@ -722,12 +720,6 @@ func (p Product) MarshalJSON() ([]byte, error) {
 	}
 	if p.Type != nil {
 		objectMap["type"] = p.Type
-	}
-	if p.Location != nil {
-		objectMap["location"] = p.Location
-	}
-	if p.Tags != nil {
-		objectMap["tags"] = p.Tags
 	}
 	if p.Etag != nil {
 		objectMap["etag"] = p.Etag
@@ -779,24 +771,6 @@ func (p *Product) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				p.Type = &typeVar
-			}
-		case "location":
-			if v != nil {
-				var location string
-				err = json.Unmarshal(*v, &location)
-				if err != nil {
-					return err
-				}
-				p.Location = &location
-			}
-		case "tags":
-			if v != nil {
-				var tags map[string]*string
-				err = json.Unmarshal(*v, &tags)
-				if err != nil {
-					return err
-				}
-				p.Tags = tags
 			}
 		case "etag":
 			if v != nil {
@@ -1195,20 +1169,10 @@ func (page RegistrationListPage) Values() []Registration {
 
 // RegistrationParameter registration resource
 type RegistrationParameter struct {
-	// RegistrationParameterProperties - Properties of the Auzre Stack registration resource
+	// RegistrationParameterProperties - Properties of the Azure Stack registration resource
 	*RegistrationParameterProperties `json:"properties,omitempty"`
-	// ID - ID of the resource.
-	ID *string `json:"id,omitempty"`
-	// Name - Name of the resource.
-	Name *string `json:"name,omitempty"`
-	// Type - Type of Resource.
-	Type *string `json:"type,omitempty"`
-	// Location - Location of the resource.
-	Location *string `json:"location,omitempty"`
-	// Tags - Custom tags for the resource.
-	Tags map[string]*string `json:"tags"`
-	// Etag - The entity tag used for optimistic concurency when modifying the resource.
-	Etag *string `json:"etag,omitempty"`
+	// Location - Location of the resource. Possible values include: 'Global'
+	Location Location `json:"location,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for RegistrationParameter.
@@ -1217,23 +1181,8 @@ func (rp RegistrationParameter) MarshalJSON() ([]byte, error) {
 	if rp.RegistrationParameterProperties != nil {
 		objectMap["properties"] = rp.RegistrationParameterProperties
 	}
-	if rp.ID != nil {
-		objectMap["id"] = rp.ID
-	}
-	if rp.Name != nil {
-		objectMap["name"] = rp.Name
-	}
-	if rp.Type != nil {
-		objectMap["type"] = rp.Type
-	}
-	if rp.Location != nil {
+	if rp.Location != "" {
 		objectMap["location"] = rp.Location
-	}
-	if rp.Tags != nil {
-		objectMap["tags"] = rp.Tags
-	}
-	if rp.Etag != nil {
-		objectMap["etag"] = rp.Etag
 	}
 	return json.Marshal(objectMap)
 }
@@ -1256,59 +1205,14 @@ func (rp *RegistrationParameter) UnmarshalJSON(body []byte) error {
 				}
 				rp.RegistrationParameterProperties = &registrationParameterProperties
 			}
-		case "id":
-			if v != nil {
-				var ID string
-				err = json.Unmarshal(*v, &ID)
-				if err != nil {
-					return err
-				}
-				rp.ID = &ID
-			}
-		case "name":
-			if v != nil {
-				var name string
-				err = json.Unmarshal(*v, &name)
-				if err != nil {
-					return err
-				}
-				rp.Name = &name
-			}
-		case "type":
-			if v != nil {
-				var typeVar string
-				err = json.Unmarshal(*v, &typeVar)
-				if err != nil {
-					return err
-				}
-				rp.Type = &typeVar
-			}
 		case "location":
 			if v != nil {
-				var location string
+				var location Location
 				err = json.Unmarshal(*v, &location)
 				if err != nil {
 					return err
 				}
-				rp.Location = &location
-			}
-		case "tags":
-			if v != nil {
-				var tags map[string]*string
-				err = json.Unmarshal(*v, &tags)
-				if err != nil {
-					return err
-				}
-				rp.Tags = tags
-			}
-		case "etag":
-			if v != nil {
-				var etag string
-				err = json.Unmarshal(*v, &etag)
-				if err != nil {
-					return err
-				}
-				rp.Etag = &etag
+				rp.Location = location
 			}
 		}
 	}
@@ -1340,6 +1244,18 @@ type Resource struct {
 	Name *string `json:"name,omitempty"`
 	// Type - Type of Resource.
 	Type *string `json:"type,omitempty"`
+	// Etag - The entity tag used for optimistic concurency when modifying the resource.
+	Etag *string `json:"etag,omitempty"`
+}
+
+// TrackedResource base resource object.
+type TrackedResource struct {
+	// ID - ID of the resource.
+	ID *string `json:"id,omitempty"`
+	// Name - Name of the resource.
+	Name *string `json:"name,omitempty"`
+	// Type - Type of Resource.
+	Type *string `json:"type,omitempty"`
 	// Location - Location of the resource.
 	Location *string `json:"location,omitempty"`
 	// Tags - Custom tags for the resource.
@@ -1348,26 +1264,26 @@ type Resource struct {
 	Etag *string `json:"etag,omitempty"`
 }
 
-// MarshalJSON is the custom marshaler for Resource.
-func (r Resource) MarshalJSON() ([]byte, error) {
+// MarshalJSON is the custom marshaler for TrackedResource.
+func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
+	if tr.ID != nil {
+		objectMap["id"] = tr.ID
 	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
+	if tr.Name != nil {
+		objectMap["name"] = tr.Name
 	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
+	if tr.Type != nil {
+		objectMap["type"] = tr.Type
 	}
-	if r.Location != nil {
-		objectMap["location"] = r.Location
+	if tr.Location != nil {
+		objectMap["location"] = tr.Location
 	}
-	if r.Tags != nil {
-		objectMap["tags"] = r.Tags
+	if tr.Tags != nil {
+		objectMap["tags"] = tr.Tags
 	}
-	if r.Etag != nil {
-		objectMap["etag"] = r.Etag
+	if tr.Etag != nil {
+		objectMap["etag"] = tr.Etag
 	}
 	return json.Marshal(objectMap)
 }

@@ -5,6 +5,7 @@
     "endpointPrefix":"xray",
     "protocol":"rest-json",
     "serviceFullName":"AWS X-Ray",
+    "serviceId":"XRay",
     "signatureVersion":"v4",
     "uid":"xray-2016-04-12"
   },
@@ -17,6 +18,85 @@
       },
       "input":{"shape":"BatchGetTracesRequest"},
       "output":{"shape":"BatchGetTracesResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "CreateSamplingRule":{
+      "name":"CreateSamplingRule",
+      "http":{
+        "method":"POST",
+        "requestUri":"/CreateSamplingRule"
+      },
+      "input":{"shape":"CreateSamplingRuleRequest"},
+      "output":{"shape":"CreateSamplingRuleResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"},
+        {"shape":"RuleLimitExceededException"}
+      ]
+    },
+    "DeleteSamplingRule":{
+      "name":"DeleteSamplingRule",
+      "http":{
+        "method":"POST",
+        "requestUri":"/DeleteSamplingRule"
+      },
+      "input":{"shape":"DeleteSamplingRuleRequest"},
+      "output":{"shape":"DeleteSamplingRuleResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "GetEncryptionConfig":{
+      "name":"GetEncryptionConfig",
+      "http":{
+        "method":"POST",
+        "requestUri":"/EncryptionConfig"
+      },
+      "input":{"shape":"GetEncryptionConfigRequest"},
+      "output":{"shape":"GetEncryptionConfigResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "GetSamplingRules":{
+      "name":"GetSamplingRules",
+      "http":{
+        "method":"POST",
+        "requestUri":"/GetSamplingRules"
+      },
+      "input":{"shape":"GetSamplingRulesRequest"},
+      "output":{"shape":"GetSamplingRulesResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "GetSamplingStatisticSummaries":{
+      "name":"GetSamplingStatisticSummaries",
+      "http":{
+        "method":"POST",
+        "requestUri":"/SamplingStatisticSummaries"
+      },
+      "input":{"shape":"GetSamplingStatisticSummariesRequest"},
+      "output":{"shape":"GetSamplingStatisticSummariesResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "GetSamplingTargets":{
+      "name":"GetSamplingTargets",
+      "http":{
+        "method":"POST",
+        "requestUri":"/SamplingTargets"
+      },
+      "input":{"shape":"GetSamplingTargetsRequest"},
+      "output":{"shape":"GetSamplingTargetsResult"},
       "errors":[
         {"shape":"InvalidRequestException"},
         {"shape":"ThrottledException"}
@@ -61,6 +141,19 @@
         {"shape":"ThrottledException"}
       ]
     },
+    "PutEncryptionConfig":{
+      "name":"PutEncryptionConfig",
+      "http":{
+        "method":"POST",
+        "requestUri":"/PutEncryptionConfig"
+      },
+      "input":{"shape":"PutEncryptionConfigRequest"},
+      "output":{"shape":"PutEncryptionConfigResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
     "PutTelemetryRecords":{
       "name":"PutTelemetryRecords",
       "http":{
@@ -82,6 +175,19 @@
       },
       "input":{"shape":"PutTraceSegmentsRequest"},
       "output":{"shape":"PutTraceSegmentsResult"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"ThrottledException"}
+      ]
+    },
+    "UpdateSamplingRule":{
+      "name":"UpdateSamplingRule",
+      "http":{
+        "method":"POST",
+        "requestUri":"/UpdateSamplingRule"
+      },
+      "input":{"shape":"UpdateSamplingRuleRequest"},
+      "output":{"shape":"UpdateSamplingRuleResult"},
       "errors":[
         {"shape":"InvalidRequestException"},
         {"shape":"ThrottledException"}
@@ -119,6 +225,22 @@
       "key":{"shape":"AnnotationKey"},
       "value":{"shape":"ValuesWithServiceIds"}
     },
+    "AttributeKey":{
+      "type":"string",
+      "max":32,
+      "min":1
+    },
+    "AttributeMap":{
+      "type":"map",
+      "key":{"shape":"AttributeKey"},
+      "value":{"shape":"AttributeValue"},
+      "max":5
+    },
+    "AttributeValue":{
+      "type":"string",
+      "max":32,
+      "min":1
+    },
     "BackendConnectionErrors":{
       "type":"structure",
       "members":{
@@ -144,6 +266,41 @@
         "Traces":{"shape":"TraceList"},
         "UnprocessedTraceIds":{"shape":"UnprocessedTraceIdList"},
         "NextToken":{"shape":"String"}
+      }
+    },
+    "BorrowCount":{
+      "type":"integer",
+      "min":0
+    },
+    "ClientID":{
+      "type":"string",
+      "max":24,
+      "min":24
+    },
+    "CreateSamplingRuleRequest":{
+      "type":"structure",
+      "required":["SamplingRule"],
+      "members":{
+        "SamplingRule":{"shape":"SamplingRule"}
+      }
+    },
+    "CreateSamplingRuleResult":{
+      "type":"structure",
+      "members":{
+        "SamplingRuleRecord":{"shape":"SamplingRuleRecord"}
+      }
+    },
+    "DeleteSamplingRuleRequest":{
+      "type":"structure",
+      "members":{
+        "RuleName":{"shape":"String"},
+        "RuleARN":{"shape":"String"}
+      }
+    },
+    "DeleteSamplingRuleResult":{
+      "type":"structure",
+      "members":{
+        "SamplingRuleRecord":{"shape":"SamplingRuleRecord"}
       }
     },
     "Double":{"type":"double"},
@@ -176,6 +333,33 @@
         "TotalResponseTime":{"shape":"NullableDouble"}
       }
     },
+    "EncryptionConfig":{
+      "type":"structure",
+      "members":{
+        "KeyId":{"shape":"String"},
+        "Status":{"shape":"EncryptionStatus"},
+        "Type":{"shape":"EncryptionType"}
+      }
+    },
+    "EncryptionKeyId":{
+      "type":"string",
+      "max":3000,
+      "min":1
+    },
+    "EncryptionStatus":{
+      "type":"string",
+      "enum":[
+        "UPDATING",
+        "ACTIVE"
+      ]
+    },
+    "EncryptionType":{
+      "type":"string",
+      "enum":[
+        "NONE",
+        "KMS"
+      ]
+    },
     "ErrorMessage":{"type":"string"},
     "ErrorStatistics":{
       "type":"structure",
@@ -196,6 +380,63 @@
       "type":"string",
       "max":2000,
       "min":1
+    },
+    "FixedRate":{
+      "type":"double",
+      "max":1,
+      "min":0
+    },
+    "GetEncryptionConfigRequest":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "GetEncryptionConfigResult":{
+      "type":"structure",
+      "members":{
+        "EncryptionConfig":{"shape":"EncryptionConfig"}
+      }
+    },
+    "GetSamplingRulesRequest":{
+      "type":"structure",
+      "members":{
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "GetSamplingRulesResult":{
+      "type":"structure",
+      "members":{
+        "SamplingRuleRecords":{"shape":"SamplingRuleRecordList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "GetSamplingStatisticSummariesRequest":{
+      "type":"structure",
+      "members":{
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "GetSamplingStatisticSummariesResult":{
+      "type":"structure",
+      "members":{
+        "SamplingStatisticSummaries":{"shape":"SamplingStatisticSummaryList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "GetSamplingTargetsRequest":{
+      "type":"structure",
+      "required":["SamplingStatisticsDocuments"],
+      "members":{
+        "SamplingStatisticsDocuments":{"shape":"SamplingStatisticsDocumentList"}
+      }
+    },
+    "GetSamplingTargetsResult":{
+      "type":"structure",
+      "members":{
+        "SamplingTargetDocuments":{"shape":"SamplingTargetDocumentList"},
+        "LastRuleModification":{"shape":"Timestamp"},
+        "UnprocessedStatistics":{"shape":"UnprocessedStatisticsList"}
+      }
     },
     "GetServiceGraphRequest":{
       "type":"structure",
@@ -256,6 +497,10 @@
         "NextToken":{"shape":"String"}
       }
     },
+    "HTTPMethod":{
+      "type":"string",
+      "max":10
+    },
     "Histogram":{
       "type":"list",
       "member":{"shape":"HistogramEntry"}
@@ -266,6 +511,10 @@
         "Value":{"shape":"Double"},
         "Count":{"shape":"Integer"}
       }
+    },
+    "Host":{
+      "type":"string",
+      "max":64
     },
     "Hostname":{
       "type":"string",
@@ -293,6 +542,25 @@
     "NullableDouble":{"type":"double"},
     "NullableInteger":{"type":"integer"},
     "NullableLong":{"type":"long"},
+    "Priority":{
+      "type":"integer",
+      "max":9999,
+      "min":1
+    },
+    "PutEncryptionConfigRequest":{
+      "type":"structure",
+      "required":["Type"],
+      "members":{
+        "KeyId":{"shape":"EncryptionKeyId"},
+        "Type":{"shape":"EncryptionType"}
+      }
+    },
+    "PutEncryptionConfigResult":{
+      "type":"structure",
+      "members":{
+        "EncryptionConfig":{"shape":"EncryptionConfig"}
+      }
+    },
     "PutTelemetryRecordsRequest":{
       "type":"structure",
       "required":["TelemetryRecords"],
@@ -321,9 +589,143 @@
         "UnprocessedTraceSegments":{"shape":"UnprocessedTraceSegmentList"}
       }
     },
+    "RequestCount":{
+      "type":"integer",
+      "min":0
+    },
+    "ReservoirSize":{
+      "type":"integer",
+      "min":0
+    },
     "ResourceARN":{
       "type":"string",
       "max":500
+    },
+    "RuleLimitExceededException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "RuleName":{
+      "type":"string",
+      "max":32,
+      "min":1
+    },
+    "SampledCount":{
+      "type":"integer",
+      "min":0
+    },
+    "SamplingRule":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "Priority",
+        "FixedRate",
+        "ReservoirSize",
+        "ServiceName",
+        "ServiceType",
+        "Host",
+        "HTTPMethod",
+        "URLPath",
+        "Version"
+      ],
+      "members":{
+        "RuleName":{"shape":"RuleName"},
+        "RuleARN":{"shape":"String"},
+        "ResourceARN":{"shape":"ResourceARN"},
+        "Priority":{"shape":"Priority"},
+        "FixedRate":{"shape":"FixedRate"},
+        "ReservoirSize":{"shape":"ReservoirSize"},
+        "ServiceName":{"shape":"ServiceName"},
+        "ServiceType":{"shape":"ServiceType"},
+        "Host":{"shape":"Host"},
+        "HTTPMethod":{"shape":"HTTPMethod"},
+        "URLPath":{"shape":"URLPath"},
+        "Version":{"shape":"Version"},
+        "Attributes":{"shape":"AttributeMap"}
+      }
+    },
+    "SamplingRuleRecord":{
+      "type":"structure",
+      "members":{
+        "SamplingRule":{"shape":"SamplingRule"},
+        "CreatedAt":{"shape":"Timestamp"},
+        "ModifiedAt":{"shape":"Timestamp"}
+      }
+    },
+    "SamplingRuleRecordList":{
+      "type":"list",
+      "member":{"shape":"SamplingRuleRecord"}
+    },
+    "SamplingRuleUpdate":{
+      "type":"structure",
+      "members":{
+        "RuleName":{"shape":"RuleName"},
+        "RuleARN":{"shape":"String"},
+        "ResourceARN":{"shape":"ResourceARN"},
+        "Priority":{"shape":"NullableInteger"},
+        "FixedRate":{"shape":"NullableDouble"},
+        "ReservoirSize":{"shape":"NullableInteger"},
+        "Host":{"shape":"Host"},
+        "ServiceName":{"shape":"ServiceName"},
+        "ServiceType":{"shape":"ServiceType"},
+        "HTTPMethod":{"shape":"HTTPMethod"},
+        "URLPath":{"shape":"URLPath"},
+        "Attributes":{"shape":"AttributeMap"}
+      }
+    },
+    "SamplingStatisticSummary":{
+      "type":"structure",
+      "members":{
+        "RuleName":{"shape":"String"},
+        "Timestamp":{"shape":"Timestamp"},
+        "RequestCount":{"shape":"Integer"},
+        "BorrowCount":{"shape":"Integer"},
+        "SampledCount":{"shape":"Integer"}
+      }
+    },
+    "SamplingStatisticSummaryList":{
+      "type":"list",
+      "member":{"shape":"SamplingStatisticSummary"}
+    },
+    "SamplingStatisticsDocument":{
+      "type":"structure",
+      "required":[
+        "RuleName",
+        "ClientID",
+        "Timestamp",
+        "RequestCount",
+        "SampledCount"
+      ],
+      "members":{
+        "RuleName":{"shape":"RuleName"},
+        "ClientID":{"shape":"ClientID"},
+        "Timestamp":{"shape":"Timestamp"},
+        "RequestCount":{"shape":"RequestCount"},
+        "SampledCount":{"shape":"SampledCount"},
+        "BorrowCount":{"shape":"BorrowCount"}
+      }
+    },
+    "SamplingStatisticsDocumentList":{
+      "type":"list",
+      "member":{"shape":"SamplingStatisticsDocument"},
+      "max":25
+    },
+    "SamplingTargetDocument":{
+      "type":"structure",
+      "members":{
+        "RuleName":{"shape":"String"},
+        "FixedRate":{"shape":"Double"},
+        "ReservoirQuota":{"shape":"NullableInteger"},
+        "ReservoirQuotaTTL":{"shape":"Timestamp"},
+        "Interval":{"shape":"NullableInteger"}
+      }
+    },
+    "SamplingTargetDocumentList":{
+      "type":"list",
+      "member":{"shape":"SamplingTargetDocument"}
     },
     "Segment":{
       "type":"structure",
@@ -376,6 +778,10 @@
       "type":"list",
       "member":{"shape":"Service"}
     },
+    "ServiceName":{
+      "type":"string",
+      "max":64
+    },
     "ServiceNames":{
       "type":"list",
       "member":{"shape":"String"}
@@ -389,6 +795,10 @@
         "TotalCount":{"shape":"NullableLong"},
         "TotalResponseTime":{"shape":"NullableDouble"}
       }
+    },
+    "ServiceType":{
+      "type":"string",
+      "max":64
     },
     "String":{"type":"string"},
     "TelemetryRecord":{
@@ -473,6 +883,22 @@
       "type":"list",
       "member":{"shape":"TraceUser"}
     },
+    "URLPath":{
+      "type":"string",
+      "max":128
+    },
+    "UnprocessedStatistics":{
+      "type":"structure",
+      "members":{
+        "RuleName":{"shape":"String"},
+        "ErrorCode":{"shape":"String"},
+        "Message":{"shape":"String"}
+      }
+    },
+    "UnprocessedStatisticsList":{
+      "type":"list",
+      "member":{"shape":"UnprocessedStatistics"}
+    },
     "UnprocessedTraceIdList":{
       "type":"list",
       "member":{"shape":"TraceId"}
@@ -489,6 +915,19 @@
       "type":"list",
       "member":{"shape":"UnprocessedTraceSegment"}
     },
+    "UpdateSamplingRuleRequest":{
+      "type":"structure",
+      "required":["SamplingRuleUpdate"],
+      "members":{
+        "SamplingRuleUpdate":{"shape":"SamplingRuleUpdate"}
+      }
+    },
+    "UpdateSamplingRuleResult":{
+      "type":"structure",
+      "members":{
+        "SamplingRuleRecord":{"shape":"SamplingRuleRecord"}
+      }
+    },
     "ValueWithServiceIds":{
       "type":"structure",
       "members":{
@@ -499,6 +938,10 @@
     "ValuesWithServiceIds":{
       "type":"list",
       "member":{"shape":"ValueWithServiceIds"}
+    },
+    "Version":{
+      "type":"integer",
+      "min":1
     }
   }
 }

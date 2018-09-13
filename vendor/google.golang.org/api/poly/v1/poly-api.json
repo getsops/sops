@@ -3,7 +3,7 @@
   "baseUrl": "https://poly.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Poly Service",
-  "description": "The Poly API provides read-only access to assets hosted on \u003ca href=\"https://poly.google.com\"\u003epoly.google.com\u003c/a\u003e.\n",
+  "description": "The Poly API provides read access to assets hosted on \u003ca href=\"https://poly.google.com\"\u003epoly.google.com\u003c/a\u003e to all, and upload access to \u003ca href=\"https://poly.google.com\"\u003epoly.google.com\u003c/a\u003e for whitelisted accounts.\n",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/poly/",
   "fullyEncodeReservedExpansion": true,
@@ -51,11 +51,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -75,12 +70,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -301,7 +290,7 @@
       }
     }
   },
-  "revision": "20180217",
+  "revision": "20180808",
   "rootUrl": "https://poly.googleapis.com/",
   "schemas": {
     "Asset": {
@@ -361,6 +350,10 @@
         "presentationParams": {
           "$ref": "PresentationParams",
           "description": "Hints for displaying the asset. Note that these parameters are not\nimmutable; the author of an asset may change them post-publication."
+        },
+        "remixInfo": {
+          "$ref": "RemixInfo",
+          "description": "The remix info for the asset."
         },
         "thumbnail": {
           "$ref": "File",
@@ -689,6 +682,10 @@
       "description": "Hints for displaying the asset, based on information available when the asset\nwas uploaded.",
       "id": "PresentationParams",
       "properties": {
+        "backgroundColor": {
+          "description": "A background color which could be used for displaying the 3D asset in a\n'thumbnail' or 'palette' style view. Authors have the option to set this\nbackground color when publishing or editing their asset.\n\nThis is represented as a six-digit hexademical triplet specifying the\nRGB components of the background color, e.g. #FF0000 for Red.",
+          "type": "string"
+        },
         "colorSpace": {
           "description": "The materials' diffuse/albedo color. This does not apply to vertex colors\nor texture maps.",
           "enum": [
@@ -737,12 +734,26 @@
       },
       "type": "object"
     },
+    "RemixInfo": {
+      "description": "Info about the sources of this asset (i.e. assets that were remixed to\ncreate this asset).",
+      "id": "RemixInfo",
+      "properties": {
+        "sourceAsset": {
+          "description": "Resource ids for the sources of this remix, of the form:\n`assets/{ASSET_ID}`",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "StartAssetImportResponse": {
-      "description": "A response message from a request to list.\nThis is returned in the response field of the Operation.",
+      "description": "A response message from a request to startImport.\nThis is returned in the response field of the Operation.",
       "id": "StartAssetImportResponse",
       "properties": {
         "assetId": {
-          "description": "The id of newly created asset. If this is empty when the operation is\ncomplete it means the import failed. Please refer to the\nasset_import_message field to understand what went wrong.",
+          "description": "The id of newly created asset. If this is empty when the operation is\ncomplete it means the import failed. Please refer to the\nassetImportMessages field to understand what went wrong.",
           "type": "string"
         },
         "assetImportId": {

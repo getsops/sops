@@ -77,11 +77,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -101,12 +96,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -288,7 +277,9 @@
                   "description": "The optional thumbnail image size.\n\nIf you don't specify the size, the server chooses a default size of the\nimage.",
                   "enum": [
                     "THUMBNAIL_SIZE_UNSPECIFIED",
-                    "LARGE"
+                    "LARGE",
+                    "MEDIUM",
+                    "SMALL"
                   ],
                   "location": "query",
                   "type": "string"
@@ -311,7 +302,7 @@
       }
     }
   },
-  "revision": "20180312",
+  "revision": "20180716",
   "rootUrl": "https://slides.googleapis.com/",
   "schemas": {
     "AffineTransform": {
@@ -504,7 +495,7 @@
           "type": "string"
         },
         "url": {
-          "description": "The image URL.\n\nThe image is fetched once at insertion time and a copy is stored for\ndisplay inside the presentation. Images must be less than 50MB in size,\ncannot exceed 25 megapixels, and must be in one of PNG, JPEG, or GIF\nformat.\n\nThe provided URL can be at most 2 kB in length.",
+          "description": "The image URL.\n\nThe image is fetched once at insertion time and a copy is stored for\ndisplay inside the presentation. Images must be less than 50MB in size,\ncannot exceed 25 megapixels, and must be in one of PNG, JPEG, or GIF\nformat.\n\nThe provided URL can be at most 2 kB in length. The URL itself is saved\nwith the image, and exposed via the Image.source_url field.",
           "type": "string"
         }
       },
@@ -939,7 +930,7 @@
       "type": "object"
     },
     "CreateSheetsChartRequest": {
-      "description": "Creates an embedded Google Sheets chart.\n\nNOTE: Chart creation requires at least one of the spreadsheets.readonly,\nspreadsheets, drive.readonly, or drive OAuth scopes.",
+      "description": "Creates an embedded Google Sheets chart.\n\nNOTE: Chart creation requires at least one of the spreadsheets.readonly,\nspreadsheets, drive.readonly, drive.file, or drive OAuth scopes.",
       "id": "CreateSheetsChartRequest",
       "properties": {
         "chartId": {
@@ -1060,7 +1051,7 @@
       "type": "object"
     },
     "CreateVideoRequest": {
-      "description": "Creates a video.",
+      "description": "Creates a video.\n\nNOTE: Creating a video from Google Drive requires that the requesting app\nhave at least one of the drive, drive.readonly, or drive.file OAuth scopes.",
       "id": "CreateVideoRequest",
       "properties": {
         "elementProperties": {
@@ -1068,7 +1059,7 @@
           "description": "The element properties for the video.\n\nThe PageElementProperties.size property is\noptional. If you don't specify a size, a default size is chosen by the\nserver.\n\nThe PageElementProperties.transform property is\noptional. The transform must not have shear components.\nIf you don't specify a transform, the video will be placed at the top left\ncorner of the page."
         },
         "id": {
-          "description": "The video source's unique identifier for this video.\n\ne.g. For YouTube video https://www.youtube.com/watch?v=7U3axjORYZ0,\nthe ID is 7U3axjORYZ0.",
+          "description": "The video source's unique identifier for this video.\n\ne.g. For YouTube video https://www.youtube.com/watch?v=7U3axjORYZ0,\nthe ID is 7U3axjORYZ0. For a Google Drive video\nhttps://drive.google.com/file/d/1xCgQLFTJi5_Xl8DgW_lcUYq5e-q6Hi5Q the ID\nis 1xCgQLFTJi5_Xl8DgW_lcUYq5e-q6Hi5Q.",
           "type": "string"
         },
         "objectId": {
@@ -1079,11 +1070,13 @@
           "description": "The video source.",
           "enum": [
             "SOURCE_UNSPECIFIED",
-            "YOUTUBE"
+            "YOUTUBE",
+            "DRIVE"
           ],
           "enumDescriptions": [
             "The video source is unspecified.",
-            "The video source is YouTube."
+            "The video source is YouTube.",
+            "The video source is Google Drive."
           ],
           "type": "string"
         }
@@ -1525,7 +1518,7 @@
       "type": "object"
     },
     "Line": {
-      "description": "A PageElement kind representing a\nline, curved connector, or bent connector.",
+      "description": "A PageElement kind representing a\nnon-connector line, straight connector, curved connector, or bent connector.",
       "id": "Line",
       "properties": {
         "lineProperties": {
@@ -1544,7 +1537,8 @@
             "CURVED_CONNECTOR_2",
             "CURVED_CONNECTOR_3",
             "CURVED_CONNECTOR_4",
-            "CURVED_CONNECTOR_5"
+            "CURVED_CONNECTOR_5",
+            "STRAIGHT_LINE"
           ],
           "enumDescriptions": [
             "An unspecified line type.",
@@ -1556,7 +1550,8 @@
             "Curved connector 2 form. Corresponds to ECMA-376 ST_ShapeType\n'curvedConnector2'.",
             "Curved connector 3 form. Corresponds to ECMA-376 ST_ShapeType\n'curvedConnector3'.",
             "Curved connector 4 form. Corresponds to ECMA-376 ST_ShapeType\n'curvedConnector4'.",
-            "Curved connector 5 form. Corresponds to ECMA-376 ST_ShapeType\n'curvedConnector5'."
+            "Curved connector 5 form. Corresponds to ECMA-376 ST_ShapeType\n'curvedConnector5'.",
+            "Straight line. Corresponds to ECMA-376 ST_ShapeType 'line'. This line\ntype is not a connector."
           ],
           "type": "string"
         }
@@ -2161,7 +2156,7 @@
         },
         "spaceBelow": {
           "$ref": "Dimension",
-          "description": "The amount of extra space above the paragraph. If unset, the value is\ninherited from the parent."
+          "description": "The amount of extra space below the paragraph. If unset, the value is\ninherited from the parent."
         },
         "spacingMode": {
           "description": "The spacing mode for the paragraph.",
@@ -2407,7 +2402,7 @@
       "type": "object"
     },
     "ReplaceAllShapesWithImageRequest": {
-      "description": "Replaces all shapes that match the given criteria with the provided image.",
+      "description": "Replaces all shapes that match the given criteria with the provided image.\n\nThe images replacing the shapes are rectangular after being inserted into\nthe presentation and do not take on the forms of the shapes.",
       "id": "ReplaceAllShapesWithImageRequest",
       "properties": {
         "containsText": {
@@ -2429,7 +2424,7 @@
           "type": "string"
         },
         "imageUrl": {
-          "description": "The image URL.\n\nThe image is fetched once at insertion time and a copy is stored for\ndisplay inside the presentation. Images must be less than 50MB in size,\ncannot exceed 25 megapixels, and must be in one of PNG, JPEG, or GIF\nformat.\n\nThe provided URL can be at most 2 kB in length.",
+          "description": "The image URL.\n\nThe image is fetched once at insertion time and a copy is stored for\ndisplay inside the presentation. Images must be less than 50MB in size,\ncannot exceed 25 megapixels, and must be in one of PNG, JPEG, or GIF\nformat.\n\nThe provided URL can be at most 2 kB in length. The URL itself is saved\nwith the image, and exposed via the Image.source_url field.",
           "type": "string"
         },
         "pageObjectIds": {
@@ -2574,7 +2569,7 @@
           "type": "string"
         },
         "url": {
-          "description": "The URL of the new image.\n\nThe image is fetched once at insertion time and a copy is stored for\ndisplay inside the presentation. Images must be less than 50MB in size,\ncannot exceed 25 megapixels, and must be in one of PNG, JPEG, or GIF\nformat.\n\nThe provided URL can be at most 2 kB in length.",
+          "description": "The URL of the new image.\n\nThe image is fetched once at insertion time and a copy is stored for\ndisplay inside the presentation. Images must be less than 50MB in size,\ncannot exceed 25 megapixels, and must be in one of PNG, JPEG, or GIF\nformat.\n\nThe provided URL can be at most 2 kB in length. The URL itself is saved\nwith the image, and exposed via the Image.source_url field.",
           "type": "string"
         }
       },
@@ -3340,16 +3335,16 @@
       "id": "SlideProperties",
       "properties": {
         "layoutObjectId": {
-          "description": "The object ID of the layout that this slide is based on.",
+          "description": "The object ID of the layout that this slide is based on. This property is\nread-only.",
           "type": "string"
         },
         "masterObjectId": {
-          "description": "The object ID of the master that this slide is based on.",
+          "description": "The object ID of the master that this slide is based on. This property is\nread-only.",
           "type": "string"
         },
         "notesPage": {
           "$ref": "Page",
-          "description": "The notes page that this slide is associated with. It defines the visual\nappearance of a notes page when printing or exporting slides with speaker\nnotes. A notes page inherits properties from the\nnotes master.\nThe placeholder shape with type BODY on the notes page contains the speaker\nnotes for this slide. The ID of this shape is identified by the\nspeakerNotesObjectId field.\nThe notes page is read-only except for the text content and styles of the\nspeaker notes shape."
+          "description": "The notes page that this slide is associated with. It defines the visual\nappearance of a notes page when printing or exporting slides with speaker\nnotes. A notes page inherits properties from the\nnotes master.\nThe placeholder shape with type BODY on the notes page contains the speaker\nnotes for this slide. The ID of this shape is identified by the\nspeakerNotesObjectId field.\nThe notes page is read-only except for the text content and styles of the\nspeaker notes shape. This property is read-only."
         }
       },
       "type": "object"
@@ -3634,7 +3629,7 @@
       "type": "object"
     },
     "TableRange": {
-      "description": "A table range represents a reference to a subset of a table.\n\nIt's important to note that the cells specified by a table range do not\nnecessarily form a rectangle. For example, let's say we have a 3 x 3 table\nwhere all the cells of the last row are merged together. The table looks\nlike this:\n\n           \n  [             ]\n\nA table range with location = (0, 0), row span = 3 and column span = 2\nspecifies the following cells:\n\n   x     x \n  [      x      ]",
+      "description": "A table range represents a reference to a subset of a table.\n\nIt's important to note that the cells specified by a table range do not\nnecessarily form a rectangle. For example, let's say we have a 3 x 3 table\nwhere all the cells of the last row are merged together. The table looks\nlike this:\n\n              \n     [             ]\n\nA table range with location = (0, 0), row span = 3 and column span = 2\nspecifies the following cells:\n\n      x     x \n     [      x      ]",
       "id": "TableRange",
       "properties": {
         "columnSpan": {
@@ -4287,16 +4282,18 @@
           "description": "The video source.",
           "enum": [
             "SOURCE_UNSPECIFIED",
-            "YOUTUBE"
+            "YOUTUBE",
+            "DRIVE"
           ],
           "enumDescriptions": [
             "The video source is unspecified.",
-            "The video source is YouTube."
+            "The video source is YouTube.",
+            "The video source is Google Drive."
           ],
           "type": "string"
         },
         "url": {
-          "description": "An URL to a video. The URL is valid as long as the source video\nexists and sharing settings do not change.",
+          "description": "An URL to a video. The URL is valid as long as the source video exists and\nsharing settings do not change.",
           "type": "string"
         },
         "videoProperties": {

@@ -438,6 +438,23 @@ func PossibleItemAvailabilityValues() []ItemAvailability {
 	return []ItemAvailability{Discontinued, InStock, InStoreOnly, LimitedAvailability, OnlineOnly, OutOfStock, PreOrder, SoldOut}
 }
 
+// SafeSearch enumerates the values for safe search.
+type SafeSearch string
+
+const (
+	// Moderate ...
+	Moderate SafeSearch = "Moderate"
+	// Off ...
+	Off SafeSearch = "Off"
+	// Strict ...
+	Strict SafeSearch = "Strict"
+)
+
+// PossibleSafeSearchValues returns an array of possible values for the SafeSearch const type.
+func PossibleSafeSearchValues() []SafeSearch {
+	return []SafeSearch{Moderate, Off, Strict}
+}
+
 // Type enumerates the values for type.
 type Type string
 
@@ -518,7 +535,7 @@ func PossibleTypeBasicPropertiesItemValues() []TypeBasicPropertiesItem {
 	return []TypeBasicPropertiesItem{TypeAggregateRating, TypePropertiesItem, TypeRating}
 }
 
-// BasicAction ...
+// BasicAction defines an action.
 type BasicAction interface {
 	AsImageAction() (*ImageAction, bool)
 	AsBasicImageAction() (BasicImageAction, bool)
@@ -530,7 +547,7 @@ type BasicAction interface {
 	AsAction() (*Action, bool)
 }
 
-// Action ...
+// Action defines an action.
 type Action struct {
 	// Result - The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
@@ -2686,7 +2703,7 @@ func (i Identifiable) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &i, true
 }
 
-// BasicImageAction ...
+// BasicImageAction defines an image action.
 type BasicImageAction interface {
 	AsImageEntityAction() (*ImageEntityAction, bool)
 	AsImageModuleAction() (*ImageModuleAction, bool)
@@ -2696,7 +2713,7 @@ type BasicImageAction interface {
 	AsImageAction() (*ImageAction, bool)
 }
 
-// ImageAction ...
+// ImageAction defines an image action.
 type ImageAction struct {
 	// ActionType - A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
@@ -3224,10 +3241,8 @@ func (ia *ImageAction) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageEntityAction ...
+// ImageEntityAction defines an entity action.
 type ImageEntityAction struct {
-	// Data - Information about the entity.
-	Data BasicThing `json:"data,omitempty"`
 	// ActionType - A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
 	// Result - The result produced in the action.
@@ -3272,7 +3287,6 @@ type ImageEntityAction struct {
 func (iea ImageEntityAction) MarshalJSON() ([]byte, error) {
 	iea.Type = TypeImageEntityAction
 	objectMap := make(map[string]interface{})
-	objectMap["data"] = iea.Data
 	if iea.ActionType != nil {
 		objectMap["actionType"] = iea.ActionType
 	}
@@ -3527,14 +3541,6 @@ func (iea *ImageEntityAction) UnmarshalJSON(body []byte) error {
 	}
 	for k, v := range m {
 		switch k {
-		case "data":
-			if v != nil {
-				data, err := unmarshalBasicThing(*v)
-				if err != nil {
-					return err
-				}
-				iea.Data = data
-			}
 		case "actionType":
 			if v != nil {
 				var actionType string
@@ -3721,7 +3727,7 @@ type ImageInfo struct {
 	CropArea *CropArea `json:"cropArea,omitempty"`
 }
 
-// ImageKnowledge ...
+// ImageKnowledge defines a visual search API response.
 type ImageKnowledge struct {
 	autorest.Response `json:"-"`
 	// Tags - A list of visual search tags.
@@ -3948,7 +3954,7 @@ func (ik ImageKnowledge) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &ik, true
 }
 
-// ImageModuleAction ...
+// ImageModuleAction defines an image list action.
 type ImageModuleAction struct {
 	// Data - A list of images.
 	Data *ImagesModule `json:"data,omitempty"`
@@ -5025,7 +5031,7 @@ func (ioVar *ImageObject) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageRecipesAction ...
+// ImageRecipesAction defines an recipe action.
 type ImageRecipesAction struct {
 	// Data - A list of recipes related to the image.
 	Data *RecipesModule `json:"data,omitempty"`
@@ -5514,7 +5520,7 @@ func (ira *ImageRecipesAction) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageRelatedSearchesAction ...
+// ImageRelatedSearchesAction defines an related search action.
 type ImageRelatedSearchesAction struct {
 	// Data - A list of queries related to the image.
 	Data *RelatedSearchesModule `json:"data,omitempty"`
@@ -6003,7 +6009,7 @@ func (irsa *ImageRelatedSearchesAction) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageShoppingSourcesAction ...
+// ImageShoppingSourcesAction defines a shopping sources action.
 type ImageShoppingSourcesAction struct {
 	// Data - A list of merchants that offer items related to the image.
 	Data *AggregateOffer `json:"data,omitempty"`
@@ -6509,7 +6515,7 @@ type ImagesModule struct {
 	Value *[]ImageObject `json:"value,omitempty"`
 }
 
-// ImageTag ...
+// ImageTag a visual search tag.
 type ImageTag struct {
 	// DisplayName - Display name for this tag. For the default tag, the display name is empty.
 	DisplayName *string `json:"displayName,omitempty"`
@@ -6901,7 +6907,7 @@ func (it *ImageTag) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageTagRegion ...
+// ImageTagRegion defines an image region relevant to the ImageTag.
 type ImageTagRegion struct {
 	// QueryRectangle - A rectangle that outlines the area of interest for this tag.
 	QueryRectangle *NormalizedQuadrilateral `json:"queryRectangle,omitempty"`
@@ -8854,7 +8860,7 @@ func (p Person) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &p, true
 }
 
-// Point2D ...
+// Point2D defines a 2D point with X and Y coordinates.
 type Point2D struct {
 	// X - The x-coordinate of the point.
 	X *float64 `json:"x,omitempty"`

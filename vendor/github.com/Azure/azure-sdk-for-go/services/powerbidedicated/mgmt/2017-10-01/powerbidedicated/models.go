@@ -230,6 +230,25 @@ func (future *CapacitiesUpdateFuture) Result(client CapacitiesClient) (dc Dedica
 	return
 }
 
+// CheckCapacityNameAvailabilityParameters details of capacity name request body.
+type CheckCapacityNameAvailabilityParameters struct {
+	// Name - Name for checking availability.
+	Name *string `json:"name,omitempty"`
+	// Type - The resource type of powerbi dedicated.
+	Type *string `json:"type,omitempty"`
+}
+
+// CheckCapacityNameAvailabilityResult the checking result of capacity name availibility.
+type CheckCapacityNameAvailabilityResult struct {
+	autorest.Response `json:"-"`
+	// NameAvailable - Indicator of availablity of the capacity name.
+	NameAvailable *bool `json:"nameAvailable,omitempty"`
+	// Reason - The reason of unavailability.
+	Reason *string `json:"reason,omitempty"`
+	// Message - The detailed message of the request unavailability.
+	Message *string `json:"message,omitempty"`
+}
+
 // DedicatedCapacities an array of Dedicated capacities resources.
 type DedicatedCapacities struct {
 	autorest.Response `json:"-"`

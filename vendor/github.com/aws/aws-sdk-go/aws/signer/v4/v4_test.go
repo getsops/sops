@@ -66,6 +66,11 @@ func buildRequest(serviceName, region, body string) (*http.Request, io.ReadSeeke
 	return buildRequestWithBodyReader(serviceName, region, reader)
 }
 
+func buildRequestReaderSeeker(serviceName, region, body string) (*http.Request, io.ReadSeeker) {
+	reader := &readerSeekerWrapper{strings.NewReader(body)}
+	return buildRequestWithBodyReader(serviceName, region, reader)
+}
+
 func buildRequestWithBodyReader(serviceName, region string, body io.Reader) (*http.Request, io.ReadSeeker) {
 	var bodyLen int
 
@@ -223,13 +228,33 @@ func TestSignBodyGlacier(t *testing.T) {
 	}
 }
 
-func TestPresignEmptyBodyS3(t *testing.T) {
-	req, body := buildRequest("s3", "us-east-1", "hello")
+func TestPresign_SignedPayload(t *testing.T) {
+	req, body := buildRequest("glacier", "us-east-1", "hello")
 	signer := buildSigner()
-	signer.Presign(req, body, "s3", "us-east-1", 5*time.Minute, time.Now())
+	signer.Presign(req, body, "glacier", "us-east-1", 5*time.Minute, time.Now())
+	hash := req.Header.Get("X-Amz-Content-Sha256")
+	if e, a := "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824", hash; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+}
+
+func TestPresign_UnsignedPayload(t *testing.T) {
+	req, body := buildRequest("service-name", "us-east-1", "hello")
+	signer := buildSigner()
+	signer.UnsignedPayload = true
+	signer.Presign(req, body, "service-name", "us-east-1", 5*time.Minute, time.Now())
 	hash := req.Header.Get("X-Amz-Content-Sha256")
 	if e, a := "UNSIGNED-PAYLOAD", hash; e != a {
 		t.Errorf("expect %v, got %v", e, a)
+	}
+}
+
+func TestPresign_UnsignedPayload_S3(t *testing.T) {
+	req, body := buildRequest("s3", "us-east-1", "hello")
+	signer := buildSigner()
+	signer.Presign(req, body, "s3", "us-east-1", 5*time.Minute, time.Now())
+	if a := req.Header.Get("X-Amz-Content-Sha256"); len(a) != 0 {
+		t.Errorf("expect no content sha256 got %v", a)
 	}
 }
 
@@ -675,7 +700,7 @@ func TestRequestHost(t *testing.T) {
 
 func BenchmarkPresignRequest(b *testing.B) {
 	signer := buildSigner()
-	req, body := buildRequest("dynamodb", "us-east-1", "{}")
+	req, body := buildRequestReaderSeeker("dynamodb", "us-east-1", "{}")
 	for i := 0; i < b.N; i++ {
 		signer.Presign(req, body, "dynamodb", "us-east-1", 300*time.Second, time.Now())
 	}
@@ -683,7 +708,7 @@ func BenchmarkPresignRequest(b *testing.B) {
 
 func BenchmarkSignRequest(b *testing.B) {
 	signer := buildSigner()
-	req, body := buildRequest("dynamodb", "us-east-1", "{}")
+	req, body := buildRequestReaderSeeker("dynamodb", "us-east-1", "{}")
 	for i := 0; i < b.N; i++ {
 		signer.Sign(req, body, "dynamodb", "us-east-1", time.Now())
 	}
@@ -714,4 +739,21 @@ func BenchmarkStripExcessSpaces(b *testing.B) {
 		cases := append([]string{}, stripExcessSpaceCases...)
 		stripExcessSpaces(cases)
 	}
+}
+
+// readerSeekerWrapper mimics the interface provided by request.offsetReader
+type readerSeekerWrapper struct {
+	r *strings.Reader
+}
+
+func (r *readerSeekerWrapper) Read(p []byte) (n int, err error) {
+	return r.r.Read(p)
+}
+
+func (r *readerSeekerWrapper) Seek(offset int64, whence int) (int64, error) {
+	return r.r.Seek(offset, whence)
+}
+
+func (r *readerSeekerWrapper) Len() int {
+	return r.r.Len()
 }

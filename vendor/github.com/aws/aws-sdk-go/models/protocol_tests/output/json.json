@@ -142,24 +142,38 @@
       "OutputShape": {
         "type": "structure",
         "members": {
-          "TimeMember": {
-            "shape": "TimeType"
+          "TimeArg": {
+            "shape": "TimestampType"
+          },
+          "TimeCustom": {
+            "timestampFormat": "rfc822",
+            "shape": "TimestampType"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatType"
           },
           "StructMember": {
             "shape": "TimeContainer"
           }
         }
       },
-      "TimeType": {
-        "type": "timestamp"
-      },
       "TimeContainer": {
         "type": "structure",
         "members": {
           "foo": {
-            "shape": "TimeType"
+            "shape": "TimestampType"
+          },
+          "bar": {
+            "shape": "TimestampFormatType"
           }
         }
+      },
+      "TimestampFormatType": {
+        "timestampFormat": "iso8601",
+        "type": "timestamp"
+      },
+      "TimestampType": {
+        "type": "timestamp"
       }
     },
     "cases": [
@@ -171,15 +185,18 @@
           "name": "OperationName"
         },
         "result": {
-          "TimeMember": 1398796238,
+          "TimeArg": 1398796238,
+          "TimeCustom": 1398796238,
+          "TimeFormat": 1398796238,
           "StructMember": {
-            "foo": 1398796238
+            "foo": 1398796238,
+            "bar": 1398796238
           }
         },
         "response": {
           "status_code": 200,
           "headers": {},
-          "body": "{\"TimeMember\": 1398796238, \"StructMember\": {\"foo\": 1398796238}}"
+          "body": "{\"TimeArg\": 1398796238, \"TimeCustom\": \"Tue, 29 Apr 2014 18:30:38 GMT\", \"TimeFormat\": \"2014-04-29T18:30:38Z\", \"StructMember\": {\"foo\": 1398796238, \"bar\": \"2014-04-29T18:30:38Z\"}}"
         }
       }
     ]
@@ -396,11 +413,11 @@
       }
     },
     "cases": [
-      {
+     {
         "given": {
           "output": {
             "shape": "OutputShape"
-          },
+        },
           "name": "OperationName"
         },
         "result": {

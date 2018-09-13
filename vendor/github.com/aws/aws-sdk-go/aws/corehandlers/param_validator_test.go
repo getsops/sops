@@ -2,8 +2,8 @@ package corehandlers_test
 
 import (
 	"fmt"
-	"testing"
 	"reflect"
+	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -256,7 +256,7 @@ func TestValidateFieldMinParameter(t *testing.T) {
 		req := testSvc.NewRequest(&request.Operation{}, &c.in, nil)
 		corehandlers.ValidateParametersHandler.Fn(req)
 
-		if e, a := c.err, req.Error; !reflect.DeepEqual(e,a) {
+		if e, a := c.err, req.Error; !reflect.DeepEqual(e, a) {
 			t.Errorf("%d, expect %v, got %v", i, e, a)
 		}
 	}

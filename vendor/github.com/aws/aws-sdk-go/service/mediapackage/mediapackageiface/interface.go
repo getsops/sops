@@ -102,6 +102,10 @@ type MediaPackageAPI interface {
 	RotateChannelCredentialsWithContext(aws.Context, *mediapackage.RotateChannelCredentialsInput, ...request.Option) (*mediapackage.RotateChannelCredentialsOutput, error)
 	RotateChannelCredentialsRequest(*mediapackage.RotateChannelCredentialsInput) (*request.Request, *mediapackage.RotateChannelCredentialsOutput)
 
+	RotateIngestEndpointCredentials(*mediapackage.RotateIngestEndpointCredentialsInput) (*mediapackage.RotateIngestEndpointCredentialsOutput, error)
+	RotateIngestEndpointCredentialsWithContext(aws.Context, *mediapackage.RotateIngestEndpointCredentialsInput, ...request.Option) (*mediapackage.RotateIngestEndpointCredentialsOutput, error)
+	RotateIngestEndpointCredentialsRequest(*mediapackage.RotateIngestEndpointCredentialsInput) (*request.Request, *mediapackage.RotateIngestEndpointCredentialsOutput)
+
 	UpdateChannel(*mediapackage.UpdateChannelInput) (*mediapackage.UpdateChannelOutput, error)
 	UpdateChannelWithContext(aws.Context, *mediapackage.UpdateChannelInput, ...request.Option) (*mediapackage.UpdateChannelOutput, error)
 	UpdateChannelRequest(*mediapackage.UpdateChannelInput) (*request.Request, *mediapackage.UpdateChannelOutput)

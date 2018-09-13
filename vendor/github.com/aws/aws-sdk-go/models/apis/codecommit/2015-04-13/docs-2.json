@@ -28,7 +28,7 @@
     "PostCommentForComparedCommit": "<p>Posts a comment on the comparison between two commits.</p>",
     "PostCommentForPullRequest": "<p>Posts a comment on a pull request.</p>",
     "PostCommentReply": "<p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>",
-    "PutFile": "<p>Adds or updates a file in an AWS CodeCommit repository.</p>",
+    "PutFile": "<p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>",
     "PutRepositoryTriggers": "<p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>",
     "TestRepositoryTriggers": "<p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>",
     "UpdateComment": "<p>Replaces the contents of a comment.</p>",
@@ -127,7 +127,7 @@
         "CreateBranchInput$branchName": "<p>The name of the new branch to create.</p>",
         "DeleteBranchInput$branchName": "<p>The name of the branch to delete.</p>",
         "GetBranchInput$branchName": "<p>The name of the branch for which you want to retrieve information.</p>",
-        "PutFileInput$branchName": "<p>The name of the branch where you want to add or update the file.</p>",
+        "PutFileInput$branchName": "<p>The name of the branch where you want to add or update the file. If this is an empty repository, this branch will be created.</p>",
         "RepositoryMetadata$defaultBranch": "<p>The repository's default branch name.</p>",
         "UpdateDefaultBranchInput$defaultBranchName": "<p>The name of the branch to set as the default.</p>"
       }
@@ -307,11 +307,16 @@
         "PostCommentForPullRequestInput$afterCommitId": "<p>The full commit ID of the commit in the source branch that is the current tip of the branch for the pull request when you post the comment.</p>",
         "PostCommentForPullRequestOutput$beforeCommitId": "<p>The full commit ID of the commit in the source branch used to create the pull request, or in the case of an updated pull request, the full commit ID of the commit used to update the pull request.</p>",
         "PostCommentForPullRequestOutput$afterCommitId": "<p>The full commit ID of the commit in the destination branch where the pull request will be merged.</p>",
+        "PullRequestCreatedEventMetadata$sourceCommitId": "<p>The commit ID on the source branch used when the pull request was created.</p>",
+        "PullRequestCreatedEventMetadata$destinationCommitId": "<p>The commit ID of the tip of the branch specified as the destination branch when the pull request was created.</p>",
+        "PullRequestCreatedEventMetadata$mergeBase": "<p>The commit ID of the most recent commit that the source branch and the destination branch have in common.</p>",
         "PullRequestSourceReferenceUpdatedEventMetadata$beforeCommitId": "<p>The full commit ID of the commit in the destination branch that was the tip of the branch at the time the pull request was updated.</p>",
         "PullRequestSourceReferenceUpdatedEventMetadata$afterCommitId": "<p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the pull request was updated.</p>",
+        "PullRequestSourceReferenceUpdatedEventMetadata$mergeBase": "<p>The commit ID of the most recent commit that the source branch and the destination branch have in common.</p>",
         "PullRequestTarget$destinationCommit": "<p>The full commit ID that is the tip of the destination branch. This is the commit where the pull request was or will be merged.</p>",
+        "PullRequestTarget$mergeBase": "<p>The commit ID of the most recent commit that the source branch and the destination branch have in common.</p>",
         "PullRequestTarget$sourceCommit": "<p>The full commit ID of the tip of the source branch used to create the pull request. If the pull request branch is updated by a push while the pull request is open, the commit ID will change to reflect the new tip of the branch.</p>",
-        "PutFileInput$parentCommitId": "<p>The full commit ID of the head commit in the branch where you want to add or update the file. If the commit ID does not match the ID of the head commit at the time of the operation, an error will occur, and the file will not be added or updated.</p>"
+        "PutFileInput$parentCommitId": "<p>The full commit ID of the head commit in the branch where you want to add or update the file. If this is an empty repository, no commit ID is required. If this is not an empty repository, a commit ID is required. </p> <p>The commit ID must match the ID of the head commit at the time of the operation, or an error will occur, and the file will not be added or updated.</p>"
       }
     },
     "CommitIdDoesNotExistException": {
@@ -1045,7 +1050,7 @@
         "PostCommentForPullRequestOutput$afterBlobId": "<p>In the directionality of the pull request, the blob ID of the 'after' blob.</p>",
         "PutFileOutput$commitId": "<p>The full SHA of the commit that contains this file change.</p>",
         "PutFileOutput$blobId": "<p>The ID of the blob, which is its SHA-1 pointer.</p>",
-        "PutFileOutput$treeId": "<p>Tree information for the commit that contains this file change.</p>"
+        "PutFileOutput$treeId": "<p>The full SHA-1 pointer of the tree information for the commit that contains this file change.</p>"
       }
     },
     "OrderEnum": {
@@ -1145,6 +1150,12 @@
     "PullRequestAlreadyClosedException": {
       "base": "<p>The pull request status cannot be updated because it is already closed.</p>",
       "refs": {
+      }
+    },
+    "PullRequestCreatedEventMetadata": {
+      "base": "<p>Metadata about the pull request that is used when comparing the pull request source with its destination.</p>",
+      "refs": {
+        "PullRequestEvent$pullRequestCreatedEventMetadata": "<p>Information about the source and destination branches for the pull request.</p>"
       }
     },
     "PullRequestDoesNotExistException": {
@@ -1360,6 +1371,7 @@
         "PostCommentForComparedCommitOutput$repositoryName": "<p>The name of the repository where you posted a comment on the comparison between commits.</p>",
         "PostCommentForPullRequestInput$repositoryName": "<p>The name of the repository where you want to post a comment on a pull request.</p>",
         "PostCommentForPullRequestOutput$repositoryName": "<p>The name of the repository where you posted a comment on a pull request.</p>",
+        "PullRequestCreatedEventMetadata$repositoryName": "<p>The name of the repository where the pull request was created.</p>",
         "PullRequestMergedStateChangedEventMetadata$repositoryName": "<p>The name of the repository where the pull request was created.</p>",
         "PullRequestSourceReferenceUpdatedEventMetadata$repositoryName": "<p>The name of the repository where the pull request was updated.</p>",
         "PullRequestTarget$repositoryName": "<p>The name of the repository that contains the pull request source and destination branches.</p>",

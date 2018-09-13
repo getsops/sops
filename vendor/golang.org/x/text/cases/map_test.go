@@ -143,7 +143,7 @@ var testCases = []testCase{
 
 	// Note: this specification is not currently part of CLDR. The same holds
 	// for the leading apostrophe handling for Dutch.
-	// See http://unicode.org/cldr/trac/ticket/7078.
+	// See https://unicode.org/cldr/trac/ticket/7078.
 	10: {
 		lang:  "af",
 		src:   "wag 'n bietjie",

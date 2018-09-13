@@ -26,9 +26,18 @@ func runtime_envs() []string {
 
 func setenv_c(k, v string) {
 	process := js.Global.Get("process")
-	if process != js.Undefined {
-		process.Get("env").Set(k, v)
+	if process == js.Undefined {
+		return
 	}
+	process.Get("env").Set(k, v)
+}
+
+func unsetenv_c(k string) {
+	process := js.Global.Get("process")
+	if process == js.Undefined {
+		return
+	}
+	process.Get("env").Delete(k)
 }
 
 var syscallModule *js.Object
@@ -91,6 +100,15 @@ func RawSyscall(trap, a1, a2, a3 uintptr) (r1, r2 uintptr, err Errno) {
 	}
 	printWarning()
 	return uintptr(minusOne), 0, EACCES
+}
+
+func rawSyscallNoError(trap, a1, a2, a3 uintptr) (r1, r2 uintptr) {
+	if f := syscall("Syscall"); f != nil {
+		r := f.Invoke(trap, a1, a2, a3)
+		return uintptr(r.Index(0).Int()), uintptr(r.Index(1).Int())
+	}
+	printWarning()
+	return uintptr(minusOne), 0
 }
 
 func RawSyscall6(trap, a1, a2, a3, a4, a5, a6 uintptr) (r1, r2 uintptr, err Errno) {

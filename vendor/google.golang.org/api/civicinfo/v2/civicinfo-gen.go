@@ -325,6 +325,10 @@ type Contest struct {
 	// the voter's ballot.
 	BallotPlacement int64 `json:"ballotPlacement,omitempty,string"`
 
+	// BallotTitle: The official title on the ballot for this contest, only
+	// where available.
+	BallotTitle string `json:"ballotTitle,omitempty"`
+
 	// Candidates: The candidate choices for this contest.
 	Candidates []*Candidate `json:"candidates,omitempty"`
 
@@ -794,6 +798,32 @@ func (s *ElectoralDistrict) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type FieldMetadataProto struct {
+	Internal *InternalFieldMetadataProto `json:"internal,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Internal") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Internal") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *FieldMetadataProto) MarshalJSON() ([]byte, error) {
+	type NoMethod FieldMetadataProto
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // GeographicDivision: Describes a political geography.
 type GeographicDivision struct {
 	// AlsoKnownAs: Any other valid OCD IDs that refer to the same
@@ -838,6 +868,173 @@ type GeographicDivision struct {
 
 func (s *GeographicDivision) MarshalJSON() ([]byte, error) {
 	type NoMethod GeographicDivision
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type InternalFieldMetadataProto struct {
+	IsAuto bool `json:"isAuto,omitempty"`
+
+	SourceSummary *InternalSourceSummaryProto `json:"sourceSummary,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IsAuto") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "IsAuto") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *InternalFieldMetadataProto) MarshalJSON() ([]byte, error) {
+	type NoMethod InternalFieldMetadataProto
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type InternalSourceSummaryProto struct {
+	Dataset string `json:"dataset,omitempty"`
+
+	Provider string `json:"provider,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Dataset") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Dataset") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *InternalSourceSummaryProto) MarshalJSON() ([]byte, error) {
+	type NoMethod InternalSourceSummaryProto
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LivegraphBacktraceRecordInfo struct {
+	DataSourcePublishMsec int64 `json:"dataSourcePublishMsec,omitempty,string"`
+
+	ExpId string `json:"expId,omitempty"`
+
+	ExpInfo *LivegraphBacktraceRecordInfoExpInfo `json:"expInfo,omitempty"`
+
+	IsRecon bool `json:"isRecon,omitempty"`
+
+	IsWlmThrottled bool `json:"isWlmThrottled,omitempty"`
+
+	NumberOfTriples int64 `json:"numberOfTriples,omitempty,string"`
+
+	Priority string `json:"priority,omitempty"`
+
+	Process string `json:"process,omitempty"`
+
+	ProxyReceiveMsec int64 `json:"proxyReceiveMsec,omitempty,string"`
+
+	ProxySentMsec int64 `json:"proxySentMsec,omitempty,string"`
+
+	RecordId string `json:"recordId,omitempty"`
+
+	ShouldMonitorLatency bool `json:"shouldMonitorLatency,omitempty"`
+
+	SubscriberReceiveMsec int64 `json:"subscriberReceiveMsec,omitempty,string"`
+
+	TopicBuildFinishMsec int64 `json:"topicBuildFinishMsec,omitempty,string"`
+
+	TopicBuildStartMsec int64 `json:"topicBuildStartMsec,omitempty,string"`
+
+	Version string `json:"version,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "DataSourcePublishMsec") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DataSourcePublishMsec") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LivegraphBacktraceRecordInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod LivegraphBacktraceRecordInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type LivegraphBacktraceRecordInfoExpInfo struct {
+	DeletedIns []string `json:"deletedIns,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DeletedIns") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DeletedIns") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *LivegraphBacktraceRecordInfoExpInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod LivegraphBacktraceRecordInfoExpInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type MessageSet struct {
+	RecordMessageSetExt *LivegraphBacktraceRecordInfo `json:"recordMessageSetExt,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "RecordMessageSetExt")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "RecordMessageSetExt") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *MessageSet) MarshalJSON() ([]byte, error) {
+	type NoMethod MessageSet
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -945,6 +1142,38 @@ func (s *Official) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type PointProto struct {
+	LatE7 int64 `json:"latE7,omitempty"`
+
+	LngE7 int64 `json:"lngE7,omitempty"`
+
+	Metadata *FieldMetadataProto `json:"metadata,omitempty"`
+
+	TemporaryData *MessageSet `json:"temporaryData,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "LatE7") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "LatE7") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *PointProto) MarshalJSON() ([]byte, error) {
+	type NoMethod PointProto
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // PollingLocation: A location where a voter can vote. This may be an
 // early vote site, an election day voting location, or a drop off
 // location for a completed ballot.
@@ -1019,21 +1248,7 @@ type PostalAddress struct {
 
 	DependentLocalityName string `json:"dependentLocalityName,omitempty"`
 
-	DependentThoroughfareLeadingType string `json:"dependentThoroughfareLeadingType,omitempty"`
-
 	DependentThoroughfareName string `json:"dependentThoroughfareName,omitempty"`
-
-	DependentThoroughfarePostDirection string `json:"dependentThoroughfarePostDirection,omitempty"`
-
-	DependentThoroughfarePreDirection string `json:"dependentThoroughfarePreDirection,omitempty"`
-
-	DependentThoroughfareTrailingType string `json:"dependentThoroughfareTrailingType,omitempty"`
-
-	DependentThoroughfaresConnector string `json:"dependentThoroughfaresConnector,omitempty"`
-
-	DependentThoroughfaresIndicator string `json:"dependentThoroughfaresIndicator,omitempty"`
-
-	DependentThoroughfaresType string `json:"dependentThoroughfaresType,omitempty"`
 
 	FirmName string `json:"firmName,omitempty"`
 
@@ -1059,17 +1274,9 @@ type PostalAddress struct {
 
 	SubPremiseName string `json:"subPremiseName,omitempty"`
 
-	ThoroughfareLeadingType string `json:"thoroughfareLeadingType,omitempty"`
-
 	ThoroughfareName string `json:"thoroughfareName,omitempty"`
 
 	ThoroughfareNumber string `json:"thoroughfareNumber,omitempty"`
-
-	ThoroughfarePostDirection string `json:"thoroughfarePostDirection,omitempty"`
-
-	ThoroughfarePreDirection string `json:"thoroughfarePreDirection,omitempty"`
-
-	ThoroughfareTrailingType string `json:"thoroughfareTrailingType,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AddressLines") to
 	// unconditionally include in API requests. By default, fields with
@@ -1090,6 +1297,52 @@ type PostalAddress struct {
 
 func (s *PostalAddress) MarshalJSON() ([]byte, error) {
 	type NoMethod PostalAddress
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type Provenance struct {
+	CollidedSegmentSource *StreetSegmentList `json:"collidedSegmentSource,omitempty"`
+
+	CtclContestUuid string `json:"ctclContestUuid,omitempty"`
+
+	CtclOfficeUuid string `json:"ctclOfficeUuid,omitempty"`
+
+	DatasetId int64 `json:"datasetId,omitempty,string"`
+
+	PrecinctId int64 `json:"precinctId,omitempty,string"`
+
+	PrecinctSplitId int64 `json:"precinctSplitId,omitempty,string"`
+
+	TsStreetSegmentId string `json:"tsStreetSegmentId,omitempty"`
+
+	Vip5PrecinctId string `json:"vip5PrecinctId,omitempty"`
+
+	Vip5StreetSegmentId string `json:"vip5StreetSegmentId,omitempty"`
+
+	VipStreetSegmentId int64 `json:"vipStreetSegmentId,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "CollidedSegmentSource") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "CollidedSegmentSource") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Provenance) MarshalJSON() ([]byte, error) {
+	type NoMethod Provenance
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1289,6 +1542,148 @@ func (s *Source) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type StreetSegment struct {
+	AdministrationRegionIds []string `json:"administrationRegionIds,omitempty"`
+
+	BeforeGeocodeId string `json:"beforeGeocodeId,omitempty"`
+
+	CatalistUniquePrecinctCode string `json:"catalistUniquePrecinctCode,omitempty"`
+
+	City string `json:"city,omitempty"`
+
+	CityCouncilDistrict string `json:"cityCouncilDistrict,omitempty"`
+
+	CongressionalDistrict string `json:"congressionalDistrict,omitempty"`
+
+	ContestIds []string `json:"contestIds,omitempty"`
+
+	CountyCouncilDistrict string `json:"countyCouncilDistrict,omitempty"`
+
+	CountyFips string `json:"countyFips,omitempty"`
+
+	DatasetId int64 `json:"datasetId,omitempty,string"`
+
+	EarlyVoteSiteByIds []string `json:"earlyVoteSiteByIds,omitempty"`
+
+	EndHouseNumber int64 `json:"endHouseNumber,omitempty,string"`
+
+	GeocodedPoint *PointProto `json:"geocodedPoint,omitempty"`
+
+	GeographicDivisionOcdIds []string `json:"geographicDivisionOcdIds,omitempty"`
+
+	Id string `json:"id,omitempty"`
+
+	JudicialDistrict string `json:"judicialDistrict,omitempty"`
+
+	MailOnly bool `json:"mailOnly,omitempty"`
+
+	MunicipalDistrict string `json:"municipalDistrict,omitempty"`
+
+	NcoaAddress string `json:"ncoaAddress,omitempty"`
+
+	OddOrEvens []string `json:"oddOrEvens,omitempty"`
+
+	OriginalId string `json:"originalId,omitempty"`
+
+	PollinglocationByIds []string `json:"pollinglocationByIds,omitempty"`
+
+	PrecinctName string `json:"precinctName,omitempty"`
+
+	PrecinctOcdId string `json:"precinctOcdId,omitempty"`
+
+	Provenances []*Provenance `json:"provenances,omitempty"`
+
+	Published bool `json:"published,omitempty"`
+
+	SchoolDistrict string `json:"schoolDistrict,omitempty"`
+
+	StartHouseNumber int64 `json:"startHouseNumber,omitempty,string"`
+
+	StartLatE7 int64 `json:"startLatE7,omitempty,string"`
+
+	StartLngE7 int64 `json:"startLngE7,omitempty,string"`
+
+	State string `json:"state,omitempty"`
+
+	StateHouseDistrict string `json:"stateHouseDistrict,omitempty"`
+
+	StateSenateDistrict string `json:"stateSenateDistrict,omitempty"`
+
+	StreetName string `json:"streetName,omitempty"`
+
+	SubAdministrativeAreaName string `json:"subAdministrativeAreaName,omitempty"`
+
+	SurrogateId int64 `json:"surrogateId,omitempty,string"`
+
+	TargetsmartUniquePrecinctCode string `json:"targetsmartUniquePrecinctCode,omitempty"`
+
+	TownshipDistrict string `json:"townshipDistrict,omitempty"`
+
+	UnitNumber string `json:"unitNumber,omitempty"`
+
+	UnitType string `json:"unitType,omitempty"`
+
+	VanPrecinctCode string `json:"vanPrecinctCode,omitempty"`
+
+	VoterGeographicDivisionOcdIds []string `json:"voterGeographicDivisionOcdIds,omitempty"`
+
+	WardDistrict string `json:"wardDistrict,omitempty"`
+
+	Wildcard bool `json:"wildcard,omitempty"`
+
+	Zip string `json:"zip,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "AdministrationRegionIds") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AdministrationRegionIds")
+	// to include in API requests with the JSON null value. By default,
+	// fields with empty values are omitted from API requests. However, any
+	// field with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *StreetSegment) MarshalJSON() ([]byte, error) {
+	type NoMethod StreetSegment
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type StreetSegmentList struct {
+	Segments []*StreetSegment `json:"segments,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Segments") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Segments") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *StreetSegmentList) MarshalJSON() ([]byte, error) {
+	type NoMethod StreetSegmentList
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // VoterInfoRequest: A request for information about a voter.
 type VoterInfoRequest struct {
 	ContextParams *ContextParams `json:"contextParams,omitempty"`
@@ -1349,9 +1744,17 @@ type VoterInfoResponse struct {
 	// NormalizedInput: The normalized version of the requested address
 	NormalizedInput *SimpleAddressType `json:"normalizedInput,omitempty"`
 
-	// OtherElections: If no election ID was specified in the query, and
-	// there was more than one election with data for the given voter, this
-	// will contain information about the other elections that could apply.
+	// OtherElections: When there are multiple elections for a voter
+	// address, the otherElections field is populated in the API response
+	// and there are two possibilities: 1. If the earliest election is not
+	// the intended election, specify the election ID of the desired
+	// election in a second API request using the electionId field. 2. If
+	// these elections occur on the same day, the API doesn?t return any
+	// polling location, contest, or election official information to ensure
+	// that an additional query is made. For user-facing applications, we
+	// recommend displaying these elections to the user to disambiguate. A
+	// second API request using the electionId field should be made for the
+	// election that is relevant to the user.
 	OtherElections []*Election `json:"otherElections,omitempty"`
 
 	// PollingLocations: Locations where the voter is eligible to vote on
@@ -1359,6 +1762,8 @@ type VoterInfoResponse struct {
 	PollingLocations []*PollingLocation `json:"pollingLocations,omitempty"`
 
 	PrecinctId string `json:"precinctId,omitempty"`
+
+	Segments []*StreetSegment `json:"segments,omitempty"`
 
 	// State: Local Election Information for the state that the voter votes
 	// in. For the US, there will only be one element in this array.
@@ -1500,6 +1905,7 @@ func (c *DivisionsSearchCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "divisions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1630,6 +2036,7 @@ func (c *ElectionsElectionQueryCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "elections")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1711,7 +2118,10 @@ func (r *ElectionsService) VoterInfoQuery(address string, voterinforequest *Vote
 
 // ElectionId sets the optional parameter "electionId": The unique ID of
 // the election to look up. A list of election IDs can be obtained at
-// https://www.googleapis.com/civicinfo/{version}/elections
+// https://www.googleapis.com/civicinfo/{version}/electionsIf no
+// election ID is specified in the query and there is more than one
+// election with data for the given voter, the additional elections are
+// provided in the otherElections response field.
 func (c *ElectionsVoterInfoQueryCall) ElectionId(electionId int64) *ElectionsVoterInfoQueryCall {
 	c.urlParams_.Set("electionId", fmt.Sprint(electionId))
 	return c
@@ -1780,6 +2190,7 @@ func (c *ElectionsVoterInfoQueryCall) doRequest(alt string) (*http.Response, err
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "voterinfo")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -1840,7 +2251,7 @@ func (c *ElectionsVoterInfoQueryCall) Do(opts ...googleapi.CallOption) (*VoterIn
 	//     },
 	//     "electionId": {
 	//       "default": "0",
-	//       "description": "The unique ID of the election to look up. A list of election IDs can be obtained at https://www.googleapis.com/civicinfo/{version}/elections",
+	//       "description": "The unique ID of the election to look up. A list of election IDs can be obtained at https://www.googleapis.com/civicinfo/{version}/electionsIf no election ID is specified in the query and there is more than one election with data for the given voter, the additional elections are provided in the otherElections response field.",
 	//       "format": "int64",
 	//       "location": "query",
 	//       "type": "string"
@@ -1991,6 +2402,7 @@ func (c *RepresentativesRepresentativeInfoByAddressCall) doRequest(alt string) (
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "representatives")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -2242,6 +2654,7 @@ func (c *RepresentativesRepresentativeInfoByDivisionCall) doRequest(alt string) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "representatives/{ocdId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)

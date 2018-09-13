@@ -69,7 +69,7 @@ func (client VirtualMachineScaleSetRollingUpgradesClient) CancelPreparer(ctx con
 		"vmScaleSetName":    autorest.Encode("path", VMScaleSetName),
 	}
 
-	const APIVersion = "2017-12-01"
+	const APIVersion = "2018-04-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -101,14 +101,13 @@ func (client VirtualMachineScaleSetRollingUpgradesClient) CancelSender(req *http
 
 // CancelResponder handles the response to the Cancel request. The method always
 // closes the http.Response Body.
-func (client VirtualMachineScaleSetRollingUpgradesClient) CancelResponder(resp *http.Response) (result OperationStatusResponse, err error) {
+func (client VirtualMachineScaleSetRollingUpgradesClient) CancelResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
-		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
+	result.Response = resp
 	return
 }
 
@@ -146,7 +145,7 @@ func (client VirtualMachineScaleSetRollingUpgradesClient) GetLatestPreparer(ctx 
 		"vmScaleSetName":    autorest.Encode("path", VMScaleSetName),
 	}
 
-	const APIVersion = "2017-12-01"
+	const APIVersion = "2018-04-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -208,7 +207,7 @@ func (client VirtualMachineScaleSetRollingUpgradesClient) StartOSUpgradePreparer
 		"vmScaleSetName":    autorest.Encode("path", VMScaleSetName),
 	}
 
-	const APIVersion = "2017-12-01"
+	const APIVersion = "2018-04-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -240,13 +239,12 @@ func (client VirtualMachineScaleSetRollingUpgradesClient) StartOSUpgradeSender(r
 
 // StartOSUpgradeResponder handles the response to the StartOSUpgrade request. The method always
 // closes the http.Response Body.
-func (client VirtualMachineScaleSetRollingUpgradesClient) StartOSUpgradeResponder(resp *http.Response) (result OperationStatusResponse, err error) {
+func (client VirtualMachineScaleSetRollingUpgradesClient) StartOSUpgradeResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
-		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
-	result.Response = autorest.Response{Response: resp}
+	result.Response = resp
 	return
 }

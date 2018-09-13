@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,6 +53,9 @@ func TestBQToTableMetadata(t *testing.T) {
 					Type:         "DAY",
 					Field:        "pfield",
 				},
+				Clustering: &bq.Clustering{
+					Fields: []string{"cfield1", "cfield2"},
+				},
 				EncryptionConfiguration: &bq.EncryptionConfiguration{KmsKeyName: "keyName"},
 				Type:   "EXTERNAL",
 				View:   &bq.ViewDefinition{Query: "view-query"},
@@ -77,6 +80,9 @@ func TestBQToTableMetadata(t *testing.T) {
 				TimePartitioning: &TimePartitioning{
 					Expiration: 7890 * time.Millisecond,
 					Field:      "pfield",
+				},
+				Clustering: &Clustering{
+					Fields: []string{"cfield1", "cfield2"},
 				},
 				StreamingBuffer: &StreamingBuffer{
 					EstimatedBytes:  11,
@@ -168,6 +174,9 @@ func TestTableMetadataToBQ(t *testing.T) {
 					Expiration: time.Second,
 					Field:      "ofDreams",
 				},
+				Clustering: &Clustering{
+					Fields: []string{"cfield1"},
+				},
 			},
 			&bq.Table{
 				View: &bq.ViewDefinition{
@@ -179,6 +188,9 @@ func TestTableMetadataToBQ(t *testing.T) {
 					Type:         "DAY",
 					ExpirationMs: 1000,
 					Field:        "ofDreams",
+				},
+				Clustering: &bq.Clustering{
+					Fields: []string{"cfield1"},
 				},
 			},
 		},

@@ -9,6 +9,7 @@ var (
 	NotEqual       = assertions.ShouldNotEqual
 	AlmostEqual    = assertions.ShouldAlmostEqual
 	NotAlmostEqual = assertions.ShouldNotAlmostEqual
+	EqualJSON      = assertions.ShouldEqualJSON
 	Resemble       = assertions.ShouldResemble
 	NotResemble    = assertions.ShouldNotResemble
 	PointTo        = assertions.ShouldPointTo
@@ -18,6 +19,7 @@ var (
 	BeTrue         = assertions.ShouldBeTrue
 	BeFalse        = assertions.ShouldBeFalse
 	BeZeroValue    = assertions.ShouldBeZeroValue
+	NotBeZeroValue = assertions.ShouldNotBeZeroValue
 
 	BeGreaterThan          = assertions.ShouldBeGreaterThan
 	BeGreaterThanOrEqualTo = assertions.ShouldBeGreaterThanOrEqualTo

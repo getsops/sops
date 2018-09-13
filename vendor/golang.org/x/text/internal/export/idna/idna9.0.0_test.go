@@ -10,7 +10,7 @@ import "testing"
 
 // TestLabelErrors tests strings returned in case of error. All results should
 // be identical to the reference implementation and can be verified at
-// http://unicode.org/cldr/utility/idna.jsp. The reference implementation,
+// https://unicode.org/cldr/utility/idna.jsp. The reference implementation,
 // however, seems to not display Bidi and ContextJ errors.
 //
 // In some cases the behavior of browsers is added as a comment. In all cases,

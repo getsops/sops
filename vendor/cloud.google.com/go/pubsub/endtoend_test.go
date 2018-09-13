@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,10 +41,10 @@ const (
 // Buffer log messages to debug failures.
 var logBuf bytes.Buffer
 
-// TestEndToEnd pumps many messages into a topic and tests that they are all
+// The end-to-end pumps many messages into a topic and tests that they are all
 // delivered to each subscription for the topic. It also tests that messages
 // are not unexpectedly redelivered.
-func TestEndToEnd(t *testing.T) {
+func TestIntegration_EndToEnd(t *testing.T) {
 	t.Parallel()
 	if testing.Short() {
 		t.Skip("Integration tests skipped in short mode")
@@ -203,7 +203,7 @@ func (c *consumer) consume(t *testing.T, ctx context.Context, sub *Subscription)
 	for _, dur := range c.durations {
 		ctx2, cancel := context.WithTimeout(ctx, dur)
 		defer cancel()
-		id := sub.name[len(sub.name)-2:]
+		id := sub.name[len(sub.name)-1:]
 		log.Printf("%s: start receive", id)
 		prev := c.total
 		err := sub.Receive(ctx2, c.process)

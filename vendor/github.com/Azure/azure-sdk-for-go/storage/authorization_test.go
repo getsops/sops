@@ -130,8 +130,8 @@ func (a *AuthorizationSuite) Test_buildCanonicalizedString(c *chk.C) {
 				headerXmsVersion: "2009-09-19",
 			},
 			canonicalizedResource: "/myaccount/ mycontainer\ncomp:metadata\nrestype:container\ntimeout:20",
-			auth: sharedKey,
-			out:  "GET\n\n\n\n\n\n\n\n\n\n\n\nx-ms-date:Sun, 11 Oct 2009 21:49:13 GMT\nx-ms-version:2009-09-19\n/myaccount/ mycontainer\ncomp:metadata\nrestype:container\ntimeout:20",
+			auth:                  sharedKey,
+			out:                   "GET\n\n\n\n\n\n\n\n\n\n\n\nx-ms-date:Sun, 11 Oct 2009 21:49:13 GMT\nx-ms-version:2009-09-19\n/myaccount/ mycontainer\ncomp:metadata\nrestype:container\ntimeout:20",
 		},
 		{
 			// Shared Key for Tables
@@ -141,8 +141,8 @@ func (a *AuthorizationSuite) Test_buildCanonicalizedString(c *chk.C) {
 				headerDate:        "Sun, 11 Oct 2009 19:52:39 GMT",
 			},
 			canonicalizedResource: "/testaccount1/Tables",
-			auth: sharedKeyForTable,
-			out:  "PUT\n\ntext/plain; charset=UTF-8\nSun, 11 Oct 2009 19:52:39 GMT\n/testaccount1/Tables",
+			auth:                  sharedKeyForTable,
+			out:                   "PUT\n\ntext/plain; charset=UTF-8\nSun, 11 Oct 2009 19:52:39 GMT\n/testaccount1/Tables",
 		},
 		{
 			// Shared Key Lite
@@ -154,8 +154,8 @@ func (a *AuthorizationSuite) Test_buildCanonicalizedString(c *chk.C) {
 				"x-ms-meta-m2":    "v2",
 			},
 			canonicalizedResource: "/testaccount1/mycontainer/hello.txt",
-			auth: sharedKeyLite,
-			out:  "PUT\n\ntext/plain; charset=UTF-8\n\nx-ms-date:Sun, 20 Sep 2009 20:36:40 GMT\nx-ms-meta-m1:v1\nx-ms-meta-m2:v2\n/testaccount1/mycontainer/hello.txt",
+			auth:                  sharedKeyLite,
+			out:                   "PUT\n\ntext/plain; charset=UTF-8\n\nx-ms-date:Sun, 20 Sep 2009 20:36:40 GMT\nx-ms-meta-m1:v1\nx-ms-meta-m2:v2\n/testaccount1/mycontainer/hello.txt",
 		},
 		{
 			// Shared Key Lite for Tables
@@ -164,8 +164,8 @@ func (a *AuthorizationSuite) Test_buildCanonicalizedString(c *chk.C) {
 				headerDate: "Sun, 11 Oct 2009 19:52:39 GMT",
 			},
 			canonicalizedResource: "/testaccount1/Tables",
-			auth: sharedKeyLiteForTable,
-			out:  "Sun, 11 Oct 2009 19:52:39 GMT\n/testaccount1/Tables",
+			auth:                  sharedKeyLiteForTable,
+			out:                   "Sun, 11 Oct 2009 19:52:39 GMT\n/testaccount1/Tables",
 		},
 	}
 

@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -365,12 +365,12 @@ func TestNewSpan(t *testing.T) {
 						},
 						Name: "www.googleapis.com/storage/v1/b/testbucket/o",
 					},
-					&api.TraceSpan{
+					{
 						Kind:   "RPC_CLIENT",
 						Labels: nil,
 						Name:   "/google.datastore.v1.Datastore/Lookup",
 					},
-					&api.TraceSpan{
+					{
 						Kind:   "RPC_CLIENT",
 						Labels: map[string]string{"error": "rpc error: code = Unknown desc = lookup failed"},
 						Name:   "/google.datastore.v1.Datastore/Lookup",
@@ -525,12 +525,12 @@ func testTrace(t *testing.T, synchronous bool, fromRequest bool) {
 						},
 						Name: "www.googleapis.com/storage/v1/b/testbucket/o",
 					},
-					&api.TraceSpan{
+					{
 						Kind:   "RPC_CLIENT",
 						Labels: nil,
 						Name:   "/google.datastore.v1.Datastore/Lookup",
 					},
-					&api.TraceSpan{
+					{
 						Kind:   "RPC_CLIENT",
 						Labels: map[string]string{"error": "rpc error: code = Unknown desc = lookup failed"},
 						Name:   "/google.datastore.v1.Datastore/Lookup",

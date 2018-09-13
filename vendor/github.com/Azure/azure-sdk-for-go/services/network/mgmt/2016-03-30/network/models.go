@@ -2041,7 +2041,7 @@ type AuthorizationPropertiesFormat struct {
 // operation failed, the response body includes the HTTP status code for the failed request and error information
 // regarding the failure.
 type AzureAsyncOperationResult struct {
-	// Status - Status of the AzureAsuncOperation. Possible values include: 'InProgress', 'Succeeded', 'Failed'
+	// Status - Status of the AzureAsyncOperation. Possible values include: 'InProgress', 'Succeeded', 'Failed'
 	Status OperationStatus `json:"status,omitempty"`
 	Error  *Error          `json:"error,omitempty"`
 }

@@ -14,7 +14,7 @@ const opCreateCluster = "CreateCluster"
 
 // CreateClusterRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCluster operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -100,6 +100,8 @@ func (c *DAX) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 //   * ErrCodeTagQuotaPerResourceExceeded "TagQuotaPerResourceExceeded"
 //   You have exceeded the maximum number of tags for this DAX cluster.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -132,7 +134,7 @@ const opCreateParameterGroup = "CreateParameterGroup"
 
 // CreateParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateParameterGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -192,6 +194,8 @@ func (c *DAX) CreateParameterGroupRequest(input *CreateParameterGroupInput) (req
 //   * ErrCodeInvalidParameterGroupStateFault "InvalidParameterGroupStateFault"
 //   One or more parameters in a parameter group are in an invalid state.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -224,7 +228,7 @@ const opCreateSubnetGroup = "CreateSubnetGroup"
 
 // CreateSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSubnetGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -288,6 +292,8 @@ func (c *DAX) CreateSubnetGroupRequest(input *CreateSubnetGroupInput) (req *requ
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   An invalid subnet identifier was specified.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dax-2017-04-19/CreateSubnetGroup
 func (c *DAX) CreateSubnetGroup(input *CreateSubnetGroupInput) (*CreateSubnetGroupOutput, error) {
 	req, out := c.CreateSubnetGroupRequest(input)
@@ -314,7 +320,7 @@ const opDecreaseReplicationFactor = "DecreaseReplicationFactor"
 
 // DecreaseReplicationFactorRequest generates a "aws/request.Request" representing the
 // client's request for the DecreaseReplicationFactor operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -376,6 +382,8 @@ func (c *DAX) DecreaseReplicationFactorRequest(input *DecreaseReplicationFactorI
 //   * ErrCodeInvalidClusterStateFault "InvalidClusterStateFault"
 //   The requested DAX cluster is not in the available state.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -408,7 +416,7 @@ const opDeleteCluster = "DeleteCluster"
 
 // DeleteClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCluster operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -467,6 +475,8 @@ func (c *DAX) DeleteClusterRequest(input *DeleteClusterInput) (req *request.Requ
 //   * ErrCodeInvalidClusterStateFault "InvalidClusterStateFault"
 //   The requested DAX cluster is not in the available state.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -499,7 +509,7 @@ const opDeleteParameterGroup = "DeleteParameterGroup"
 
 // DeleteParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteParameterGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -556,6 +566,8 @@ func (c *DAX) DeleteParameterGroupRequest(input *DeleteParameterGroupInput) (req
 //   * ErrCodeParameterGroupNotFoundFault "ParameterGroupNotFoundFault"
 //   The specified parameter group does not exist.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -588,7 +600,7 @@ const opDeleteSubnetGroup = "DeleteSubnetGroup"
 
 // DeleteSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSubnetGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -646,6 +658,8 @@ func (c *DAX) DeleteSubnetGroupRequest(input *DeleteSubnetGroupInput) (req *requ
 //   * ErrCodeSubnetGroupNotFoundFault "SubnetGroupNotFoundFault"
 //   The requested subnet group name does not refer to an existing subnet group.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dax-2017-04-19/DeleteSubnetGroup
 func (c *DAX) DeleteSubnetGroup(input *DeleteSubnetGroupInput) (*DeleteSubnetGroupOutput, error) {
 	req, out := c.DeleteSubnetGroupRequest(input)
@@ -672,7 +686,7 @@ const opDescribeClusters = "DescribeClusters"
 
 // DescribeClustersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeClusters operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -741,6 +755,8 @@ func (c *DAX) DescribeClustersRequest(input *DescribeClustersInput) (req *reques
 //   * ErrCodeClusterNotFoundFault "ClusterNotFoundFault"
 //   The requested cluster ID does not refer to an existing DAX cluster.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -773,7 +789,7 @@ const opDescribeDefaultParameters = "DescribeDefaultParameters"
 
 // DescribeDefaultParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDefaultParameters operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -823,6 +839,8 @@ func (c *DAX) DescribeDefaultParametersRequest(input *DescribeDefaultParametersI
 // API operation DescribeDefaultParameters for usage and error information.
 //
 // Returned Error Codes:
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -855,7 +873,7 @@ const opDescribeEvents = "DescribeEvents"
 
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -910,6 +928,8 @@ func (c *DAX) DescribeEventsRequest(input *DescribeEventsInput) (req *request.Re
 // API operation DescribeEvents for usage and error information.
 //
 // Returned Error Codes:
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -942,7 +962,7 @@ const opDescribeParameterGroups = "DescribeParameterGroups"
 
 // DescribeParameterGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeParameterGroups operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -996,6 +1016,8 @@ func (c *DAX) DescribeParameterGroupsRequest(input *DescribeParameterGroupsInput
 //   * ErrCodeParameterGroupNotFoundFault "ParameterGroupNotFoundFault"
 //   The specified parameter group does not exist.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1028,7 +1050,7 @@ const opDescribeParameters = "DescribeParameters"
 
 // DescribeParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeParameters operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1081,6 +1103,8 @@ func (c *DAX) DescribeParametersRequest(input *DescribeParametersInput) (req *re
 //   * ErrCodeParameterGroupNotFoundFault "ParameterGroupNotFoundFault"
 //   The specified parameter group does not exist.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1113,7 +1137,7 @@ const opDescribeSubnetGroups = "DescribeSubnetGroups"
 
 // DescribeSubnetGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSubnetGroups operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1167,6 +1191,8 @@ func (c *DAX) DescribeSubnetGroupsRequest(input *DescribeSubnetGroupsInput) (req
 //   * ErrCodeSubnetGroupNotFoundFault "SubnetGroupNotFoundFault"
 //   The requested subnet group name does not refer to an existing subnet group.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dax-2017-04-19/DescribeSubnetGroups
 func (c *DAX) DescribeSubnetGroups(input *DescribeSubnetGroupsInput) (*DescribeSubnetGroupsOutput, error) {
 	req, out := c.DescribeSubnetGroupsRequest(input)
@@ -1193,7 +1219,7 @@ const opIncreaseReplicationFactor = "IncreaseReplicationFactor"
 
 // IncreaseReplicationFactorRequest generates a "aws/request.Request" representing the
 // client's request for the IncreaseReplicationFactor operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1262,6 +1288,8 @@ func (c *DAX) IncreaseReplicationFactorRequest(input *IncreaseReplicationFactorI
 //   * ErrCodeNodeQuotaForCustomerExceededFault "NodeQuotaForCustomerExceededFault"
 //   You have attempted to exceed the maximum number of nodes for your AWS account.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1294,7 +1322,7 @@ const opListTags = "ListTags"
 
 // ListTagsRequest generates a "aws/request.Request" representing the
 // client's request for the ListTags operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1354,6 +1382,8 @@ func (c *DAX) ListTagsRequest(input *ListTagsInput) (req *request.Request, outpu
 //   * ErrCodeInvalidClusterStateFault "InvalidClusterStateFault"
 //   The requested DAX cluster is not in the available state.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1386,7 +1416,7 @@ const opRebootNode = "RebootNode"
 
 // RebootNodeRequest generates a "aws/request.Request" representing the
 // client's request for the RebootNode operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1446,6 +1476,8 @@ func (c *DAX) RebootNodeRequest(input *RebootNodeInput) (req *request.Request, o
 //   * ErrCodeInvalidClusterStateFault "InvalidClusterStateFault"
 //   The requested DAX cluster is not in the available state.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1478,7 +1510,7 @@ const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the TagResource operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1541,6 +1573,8 @@ func (c *DAX) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 //   * ErrCodeInvalidClusterStateFault "InvalidClusterStateFault"
 //   The requested DAX cluster is not in the available state.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1573,7 +1607,7 @@ const opUntagResource = "UntagResource"
 
 // UntagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResource operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1636,6 +1670,8 @@ func (c *DAX) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 //   * ErrCodeInvalidClusterStateFault "InvalidClusterStateFault"
 //   The requested DAX cluster is not in the available state.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1668,7 +1704,7 @@ const opUpdateCluster = "UpdateCluster"
 
 // UpdateClusterRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCluster operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1732,6 +1768,8 @@ func (c *DAX) UpdateClusterRequest(input *UpdateClusterInput) (req *request.Requ
 //   * ErrCodeParameterGroupNotFoundFault "ParameterGroupNotFoundFault"
 //   The specified parameter group does not exist.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1764,7 +1802,7 @@ const opUpdateParameterGroup = "UpdateParameterGroup"
 
 // UpdateParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateParameterGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1821,6 +1859,8 @@ func (c *DAX) UpdateParameterGroupRequest(input *UpdateParameterGroupInput) (req
 //   * ErrCodeParameterGroupNotFoundFault "ParameterGroupNotFoundFault"
 //   The specified parameter group does not exist.
 //
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
+//
 //   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
 //   The value for a parameter is invalid.
 //
@@ -1853,7 +1893,7 @@ const opUpdateSubnetGroup = "UpdateSubnetGroup"
 
 // UpdateSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSubnetGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1915,6 +1955,8 @@ func (c *DAX) UpdateSubnetGroupRequest(input *UpdateSubnetGroupInput) (req *requ
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   An invalid subnet identifier was specified.
+//
+//   * ErrCodeServiceLinkedRoleNotFoundFault "ServiceLinkedRoleNotFoundFault"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dax-2017-04-19/UpdateSubnetGroup
 func (c *DAX) UpdateSubnetGroup(input *UpdateSubnetGroupInput) (*UpdateSubnetGroupOutput, error) {
@@ -1988,6 +2030,10 @@ type Cluster struct {
 	// For example: sun:01:00-sun:09:00. Cluster maintenance normally takes less
 	// than 30 minutes, and is performed automatically within the maintenance window.
 	PreferredMaintenanceWindow *string `type:"string"`
+
+	// The description of the server-side encryption status on the specified DAX
+	// cluster.
+	SSEDescription *SSEDescription `type:"structure"`
 
 	// A list of security groups, and the status of each, for the nodes in the cluster.
 	SecurityGroups []*SecurityGroupMembership `type:"list"`
@@ -2081,6 +2127,12 @@ func (s *Cluster) SetParameterGroup(v *ParameterGroupStatus) *Cluster {
 // SetPreferredMaintenanceWindow sets the PreferredMaintenanceWindow field's value.
 func (s *Cluster) SetPreferredMaintenanceWindow(v string) *Cluster {
 	s.PreferredMaintenanceWindow = &v
+	return s
+}
+
+// SetSSEDescription sets the SSEDescription field's value.
+func (s *Cluster) SetSSEDescription(v *SSEDescription) *Cluster {
+	s.SSEDescription = v
 	return s
 }
 
@@ -2189,6 +2241,9 @@ type CreateClusterInput struct {
 	// ReplicationFactor is a required field
 	ReplicationFactor *int64 `type:"integer" required:"true"`
 
+	// Represents the settings used to enable server-side encryption on the cluster.
+	SSESpecification *SSESpecification `type:"structure"`
+
 	// A list of security group IDs to be assigned to each node in the DAX cluster.
 	// (Each of the security group ID is system-generated.)
 	//
@@ -2230,6 +2285,11 @@ func (s *CreateClusterInput) Validate() error {
 	}
 	if s.ReplicationFactor == nil {
 		invalidParams.Add(request.NewErrParamRequired("ReplicationFactor"))
+	}
+	if s.SSESpecification != nil {
+		if err := s.SSESpecification.Validate(); err != nil {
+			invalidParams.AddNested("SSESpecification", err.(request.ErrInvalidParams))
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2289,6 +2349,12 @@ func (s *CreateClusterInput) SetPreferredMaintenanceWindow(v string) *CreateClus
 // SetReplicationFactor sets the ReplicationFactor field's value.
 func (s *CreateClusterInput) SetReplicationFactor(v int64) *CreateClusterInput {
 	s.ReplicationFactor = &v
+	return s
+}
+
+// SetSSESpecification sets the SSESpecification field's value.
+func (s *CreateClusterInput) SetSSESpecification(v *SSESpecification) *CreateClusterInput {
+	s.SSESpecification = v
 	return s
 }
 
@@ -2925,7 +2991,7 @@ type DescribeEventsInput struct {
 
 	// The end of the time interval for which to retrieve events, specified in ISO
 	// 8601 format.
-	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	EndTime *time.Time `type:"timestamp"`
 
 	// The maximum number of results to include in the response. If more results
 	// exist than the specified MaxResults value, a token is included in the response
@@ -2949,7 +3015,7 @@ type DescribeEventsInput struct {
 
 	// The beginning of the time interval to retrieve events for, specified in ISO
 	// 8601 format.
-	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	StartTime *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -3343,7 +3409,7 @@ type Event struct {
 	_ struct{} `type:"structure"`
 
 	// The date and time when the event occurred.
-	Date *time.Time `type:"timestamp" timestampFormat:"unix"`
+	Date *time.Time `type:"timestamp"`
 
 	// A user-defined message associated with the event.
 	Message *string `type:"string"`
@@ -3573,7 +3639,7 @@ type Node struct {
 	Endpoint *Endpoint `type:"structure"`
 
 	// The date and time (in UNIX epoch format) when the node was launched.
-	NodeCreateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	NodeCreateTime *time.Time `type:"timestamp"`
 
 	// A system-generated identifier for the node.
 	NodeId *string `type:"string"`
@@ -3989,6 +4055,79 @@ func (s RebootNodeOutput) GoString() string {
 // SetCluster sets the Cluster field's value.
 func (s *RebootNodeOutput) SetCluster(v *Cluster) *RebootNodeOutput {
 	s.Cluster = v
+	return s
+}
+
+// The description of the server-side encryption status on the specified DAX
+// cluster.
+type SSEDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The current state of server-side encryption:
+	//
+	//    * ENABLING - Server-side encryption is being enabled.
+	//
+	//    * ENABLED - Server-side encryption is enabled.
+	//
+	//    * DISABLING - Server-side encryption is being disabled.
+	//
+	//    * DISABLED - Server-side encryption is disabled.
+	Status *string `type:"string" enum:"SSEStatus"`
+}
+
+// String returns the string representation
+func (s SSEDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SSEDescription) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *SSEDescription) SetStatus(v string) *SSEDescription {
+	s.Status = &v
+	return s
+}
+
+// Represents the settings used to enable server-side encryption.
+type SSESpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether server-side encryption is enabled (true) or disabled (false)
+	// on the cluster.
+	//
+	// Enabled is a required field
+	Enabled *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation
+func (s SSESpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SSESpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SSESpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SSESpecification"}
+	if s.Enabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("Enabled"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *SSESpecification) SetEnabled(v bool) *SSESpecification {
+	s.Enabled = &v
 	return s
 }
 
@@ -4607,6 +4746,20 @@ const (
 
 	// ParameterTypeNodeTypeSpecific is a ParameterType enum value
 	ParameterTypeNodeTypeSpecific = "NODE_TYPE_SPECIFIC"
+)
+
+const (
+	// SSEStatusEnabling is a SSEStatus enum value
+	SSEStatusEnabling = "ENABLING"
+
+	// SSEStatusEnabled is a SSEStatus enum value
+	SSEStatusEnabled = "ENABLED"
+
+	// SSEStatusDisabling is a SSEStatus enum value
+	SSEStatusDisabling = "DISABLING"
+
+	// SSEStatusDisabled is a SSEStatus enum value
+	SSEStatusDisabled = "DISABLED"
 )
 
 const (

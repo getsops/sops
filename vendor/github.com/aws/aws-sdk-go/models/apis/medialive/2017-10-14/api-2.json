@@ -12,6 +12,46 @@
     "serviceAbbreviation": "MediaLive"
   },
   "operations": {
+    "BatchUpdateSchedule": {
+      "name": "BatchUpdateSchedule",
+      "http": {
+        "method": "PUT",
+        "requestUri": "/prod/channels/{channelId}/schedule",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "BatchUpdateScheduleRequest"
+      },
+      "output": {
+        "shape": "BatchUpdateScheduleResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "UnprocessableEntityException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ]
+    },
     "CreateChannel": {
       "name": "CreateChannel",
       "http": {
@@ -27,10 +67,10 @@
       },
       "errors": [
         {
-          "shape": "UnprocessableEntityException"
+          "shape": "BadRequestException"
         },
         {
-          "shape": "BadRequestException"
+          "shape": "UnprocessableEntityException"
         },
         {
           "shape": "InternalServerErrorException"
@@ -237,6 +277,46 @@
         }
       ]
     },
+    "DeleteReservation": {
+      "name": "DeleteReservation",
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/prod/reservations/{reservationId}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "DeleteReservationRequest"
+      },
+      "output": {
+        "shape": "DeleteReservationResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        },
+        {
+          "shape": "ConflictException"
+        }
+      ]
+    },
     "DescribeChannel": {
       "name": "DescribeChannel",
       "http": {
@@ -323,6 +403,117 @@
       },
       "output": {
         "shape": "DescribeInputSecurityGroupResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ]
+    },
+    "DescribeOffering": {
+      "name": "DescribeOffering",
+      "http": {
+        "method": "GET",
+        "requestUri": "/prod/offerings/{offeringId}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "DescribeOfferingRequest"
+      },
+      "output": {
+        "shape": "DescribeOfferingResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ]
+    },
+    "DescribeReservation": {
+      "name": "DescribeReservation",
+      "http": {
+        "method": "GET",
+        "requestUri": "/prod/reservations/{reservationId}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "DescribeReservationRequest"
+      },
+      "output": {
+        "shape": "DescribeReservationResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ]
+    },
+    "DescribeSchedule": {
+      "name": "DescribeSchedule",
+      "http": {
+        "method": "GET",
+        "requestUri": "/prod/channels/{channelId}/schedule",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "DescribeScheduleRequest"
+      },
+      "output": {
+        "shape": "DescribeScheduleResponse"
       },
       "errors": [
         {
@@ -450,6 +641,114 @@
         }
       ]
     },
+    "ListOfferings": {
+      "name": "ListOfferings",
+      "http": {
+        "method": "GET",
+        "requestUri": "/prod/offerings",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "ListOfferingsRequest"
+      },
+      "output": {
+        "shape": "ListOfferingsResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ]
+    },
+    "ListReservations": {
+      "name": "ListReservations",
+      "http": {
+        "method": "GET",
+        "requestUri": "/prod/reservations",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "ListReservationsRequest"
+      },
+      "output": {
+        "shape": "ListReservationsResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ]
+    },
+    "PurchaseOffering": {
+      "name": "PurchaseOffering",
+      "http": {
+        "method": "POST",
+        "requestUri": "/prod/offerings/{offeringId}/purchase",
+        "responseCode": 201
+      },
+      "input": {
+        "shape": "PurchaseOfferingRequest"
+      },
+      "output": {
+        "shape": "PurchaseOfferingResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        },
+        {
+          "shape": "ConflictException"
+        }
+      ]
+    },
     "StartChannel": {
       "name": "StartChannel",
       "http": {
@@ -545,10 +844,10 @@
       },
       "errors": [
         {
-          "shape": "UnprocessableEntityException"
+          "shape": "BadRequestException"
         },
         {
-          "shape": "BadRequestException"
+          "shape": "UnprocessableEntityException"
         },
         {
           "shape": "InternalServerErrorException"
@@ -1121,6 +1420,13 @@
         "VISUAL_IMPAIRED_COMMENTARY"
       ]
     },
+    "AuthenticationScheme": {
+      "type": "string",
+      "enum": [
+        "AKAMAI",
+        "COMMON"
+      ]
+    },
     "AvailBlanking": {
       "type": "structure",
       "members": {
@@ -1187,6 +1493,101 @@
       "exception": true,
       "error": {
         "httpStatusCode": 400
+      }
+    },
+    "BatchScheduleActionCreateRequest": {
+      "type": "structure",
+      "members": {
+        "ScheduleActions": {
+          "shape": "__listOfScheduleAction",
+          "locationName": "scheduleActions"
+        }
+      },
+      "required": [
+        "ScheduleActions"
+      ]
+    },
+    "BatchScheduleActionCreateResult": {
+      "type": "structure",
+      "members": {
+        "ScheduleActions": {
+          "shape": "__listOfScheduleAction",
+          "locationName": "scheduleActions"
+        }
+      },
+      "required": [
+        "ScheduleActions"
+      ]
+    },
+    "BatchScheduleActionDeleteRequest": {
+      "type": "structure",
+      "members": {
+        "ActionNames": {
+          "shape": "__listOf__string",
+          "locationName": "actionNames"
+        }
+      },
+      "required": [
+        "ActionNames"
+      ]
+    },
+    "BatchScheduleActionDeleteResult": {
+      "type": "structure",
+      "members": {
+        "ScheduleActions": {
+          "shape": "__listOfScheduleAction",
+          "locationName": "scheduleActions"
+        }
+      },
+      "required": [
+        "ScheduleActions"
+      ]
+    },
+    "BatchUpdateScheduleRequest": {
+      "type": "structure",
+      "members": {
+        "ChannelId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "channelId"
+        },
+        "Creates": {
+          "shape": "BatchScheduleActionCreateRequest",
+          "locationName": "creates"
+        },
+        "Deletes": {
+          "shape": "BatchScheduleActionDeleteRequest",
+          "locationName": "deletes"
+        }
+      },
+      "required": [
+        "ChannelId"
+      ]
+    },
+    "BatchUpdateScheduleResponse": {
+      "type": "structure",
+      "members": {
+        "Creates": {
+          "shape": "BatchScheduleActionCreateResult",
+          "locationName": "creates"
+        },
+        "Deletes": {
+          "shape": "BatchScheduleActionDeleteResult",
+          "locationName": "deletes"
+        }
+      }
+    },
+    "BatchUpdateScheduleResult": {
+      "type": "structure",
+      "members": {
+        "Creates": {
+          "shape": "BatchScheduleActionCreateResult",
+          "locationName": "creates"
+        },
+        "Deletes": {
+          "shape": "BatchScheduleActionDeleteResult",
+          "locationName": "deletes"
+        }
       }
     },
     "BlackoutSlate": {
@@ -1406,6 +1807,10 @@
           "shape": "EmbeddedPlusScte20DestinationSettings",
           "locationName": "embeddedPlusScte20DestinationSettings"
         },
+        "RtmpCaptionInfoDestinationSettings": {
+          "shape": "RtmpCaptionInfoDestinationSettings",
+          "locationName": "rtmpCaptionInfoDestinationSettings"
+        },
         "Scte20PlusEmbeddedDestinationSettings": {
           "shape": "Scte20PlusEmbeddedDestinationSettings",
           "locationName": "scte20PlusEmbeddedDestinationSettings"
@@ -1534,6 +1939,10 @@
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
         },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -1615,6 +2024,10 @@
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
         },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -1665,6 +2078,10 @@
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
         },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -1677,7 +2094,7 @@
         "Reserved": {
           "shape": "__string",
           "locationName": "reserved",
-          "deprecated" : true
+          "deprecated": true
         },
         "RoleArn": {
           "shape": "__string",
@@ -1703,6 +2120,10 @@
         "InputSpecification": {
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
+        },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
         },
         "Name": {
           "shape": "__string",
@@ -1891,6 +2312,10 @@
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
         },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -1945,6 +2370,92 @@
       "members": {
       }
     },
+    "DeleteReservationRequest": {
+      "type": "structure",
+      "members": {
+        "ReservationId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "reservationId"
+        }
+      },
+      "required": [
+        "ReservationId"
+      ]
+    },
+    "DeleteReservationResponse": {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "locationName": "arn"
+        },
+        "Count": {
+          "shape": "__integer",
+          "locationName": "count"
+        },
+        "CurrencyCode": {
+          "shape": "__string",
+          "locationName": "currencyCode"
+        },
+        "Duration": {
+          "shape": "__integer",
+          "locationName": "duration"
+        },
+        "DurationUnits": {
+          "shape": "OfferingDurationUnits",
+          "locationName": "durationUnits"
+        },
+        "End": {
+          "shape": "__string",
+          "locationName": "end"
+        },
+        "FixedPrice": {
+          "shape": "__double",
+          "locationName": "fixedPrice"
+        },
+        "Name": {
+          "shape": "__string",
+          "locationName": "name"
+        },
+        "OfferingDescription": {
+          "shape": "__string",
+          "locationName": "offeringDescription"
+        },
+        "OfferingId": {
+          "shape": "__string",
+          "locationName": "offeringId"
+        },
+        "OfferingType": {
+          "shape": "OfferingType",
+          "locationName": "offeringType"
+        },
+        "Region": {
+          "shape": "__string",
+          "locationName": "region"
+        },
+        "ReservationId": {
+          "shape": "__string",
+          "locationName": "reservationId"
+        },
+        "ResourceSpecification": {
+          "shape": "ReservationResourceSpecification",
+          "locationName": "resourceSpecification"
+        },
+        "Start": {
+          "shape": "__string",
+          "locationName": "start"
+        },
+        "State": {
+          "shape": "ReservationState",
+          "locationName": "state"
+        },
+        "UsagePrice": {
+          "shape": "__double",
+          "locationName": "usagePrice"
+        }
+      }
+    },
     "DescribeChannelRequest": {
       "type": "structure",
       "members": {
@@ -1988,6 +2499,10 @@
         "InputSpecification": {
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
+        },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
         },
         "Name": {
           "shape": "__string",
@@ -2096,6 +2611,190 @@
         "WhitelistRules": {
           "shape": "__listOfInputWhitelistRule",
           "locationName": "whitelistRules"
+        }
+      }
+    },
+    "DescribeOfferingRequest": {
+      "type": "structure",
+      "members": {
+        "OfferingId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "offeringId"
+        }
+      },
+      "required": [
+        "OfferingId"
+      ]
+    },
+    "DescribeOfferingResponse": {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "locationName": "arn"
+        },
+        "CurrencyCode": {
+          "shape": "__string",
+          "locationName": "currencyCode"
+        },
+        "Duration": {
+          "shape": "__integer",
+          "locationName": "duration"
+        },
+        "DurationUnits": {
+          "shape": "OfferingDurationUnits",
+          "locationName": "durationUnits"
+        },
+        "FixedPrice": {
+          "shape": "__double",
+          "locationName": "fixedPrice"
+        },
+        "OfferingDescription": {
+          "shape": "__string",
+          "locationName": "offeringDescription"
+        },
+        "OfferingId": {
+          "shape": "__string",
+          "locationName": "offeringId"
+        },
+        "OfferingType": {
+          "shape": "OfferingType",
+          "locationName": "offeringType"
+        },
+        "Region": {
+          "shape": "__string",
+          "locationName": "region"
+        },
+        "ResourceSpecification": {
+          "shape": "ReservationResourceSpecification",
+          "locationName": "resourceSpecification"
+        },
+        "UsagePrice": {
+          "shape": "__double",
+          "locationName": "usagePrice"
+        }
+      }
+    },
+    "DescribeReservationRequest": {
+      "type": "structure",
+      "members": {
+        "ReservationId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "reservationId"
+        }
+      },
+      "required": [
+        "ReservationId"
+      ]
+    },
+    "DescribeReservationResponse": {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "locationName": "arn"
+        },
+        "Count": {
+          "shape": "__integer",
+          "locationName": "count"
+        },
+        "CurrencyCode": {
+          "shape": "__string",
+          "locationName": "currencyCode"
+        },
+        "Duration": {
+          "shape": "__integer",
+          "locationName": "duration"
+        },
+        "DurationUnits": {
+          "shape": "OfferingDurationUnits",
+          "locationName": "durationUnits"
+        },
+        "End": {
+          "shape": "__string",
+          "locationName": "end"
+        },
+        "FixedPrice": {
+          "shape": "__double",
+          "locationName": "fixedPrice"
+        },
+        "Name": {
+          "shape": "__string",
+          "locationName": "name"
+        },
+        "OfferingDescription": {
+          "shape": "__string",
+          "locationName": "offeringDescription"
+        },
+        "OfferingId": {
+          "shape": "__string",
+          "locationName": "offeringId"
+        },
+        "OfferingType": {
+          "shape": "OfferingType",
+          "locationName": "offeringType"
+        },
+        "Region": {
+          "shape": "__string",
+          "locationName": "region"
+        },
+        "ReservationId": {
+          "shape": "__string",
+          "locationName": "reservationId"
+        },
+        "ResourceSpecification": {
+          "shape": "ReservationResourceSpecification",
+          "locationName": "resourceSpecification"
+        },
+        "Start": {
+          "shape": "__string",
+          "locationName": "start"
+        },
+        "State": {
+          "shape": "ReservationState",
+          "locationName": "state"
+        },
+        "UsagePrice": {
+          "shape": "__double",
+          "locationName": "usagePrice"
+        }
+      }
+    },
+    "DescribeScheduleRequest": {
+      "type": "structure",
+      "members": {
+        "ChannelId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "channelId"
+        },
+        "MaxResults": {
+          "shape": "MaxResults",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "nextToken"
+        }
+      },
+      "required": [
+        "ChannelId"
+      ]
+    },
+    "DescribeScheduleResponse": {
+      "type": "structure",
+      "members": {
+        "NextToken": {
+          "shape": "__string",
+          "locationName": "nextToken"
+        },
+        "ScheduleActions": {
+          "shape": "__listOfScheduleAction",
+          "locationName": "scheduleActions"
         }
       }
     },
@@ -2629,6 +3328,15 @@
         "AFD_1110",
         "AFD_1111"
       ]
+    },
+    "FixedModeScheduleActionStartSettings": {
+      "type": "structure",
+      "members": {
+        "Time": {
+          "shape": "__string",
+          "locationName": "time"
+        }
+      }
     },
     "ForbiddenException": {
       "type": "structure",
@@ -4035,6 +4743,173 @@
         }
       }
     },
+    "ListOfferingsRequest": {
+      "type": "structure",
+      "members": {
+        "ChannelConfiguration": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "channelConfiguration"
+        },
+        "Codec": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "codec"
+        },
+        "MaxResults": {
+          "shape": "MaxResults",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "MaximumBitrate": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "maximumBitrate"
+        },
+        "MaximumFramerate": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "maximumFramerate"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "nextToken"
+        },
+        "Resolution": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "resolution"
+        },
+        "ResourceType": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "resourceType"
+        },
+        "SpecialFeature": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "specialFeature"
+        },
+        "VideoQuality": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "videoQuality"
+        }
+      }
+    },
+    "ListOfferingsResponse": {
+      "type": "structure",
+      "members": {
+        "NextToken": {
+          "shape": "__string",
+          "locationName": "nextToken"
+        },
+        "Offerings": {
+          "shape": "__listOfOffering",
+          "locationName": "offerings"
+        }
+      }
+    },
+    "ListOfferingsResultModel": {
+      "type": "structure",
+      "members": {
+        "NextToken": {
+          "shape": "__string",
+          "locationName": "nextToken"
+        },
+        "Offerings": {
+          "shape": "__listOfOffering",
+          "locationName": "offerings"
+        }
+      }
+    },
+    "ListReservationsRequest": {
+      "type": "structure",
+      "members": {
+        "Codec": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "codec"
+        },
+        "MaxResults": {
+          "shape": "MaxResults",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "MaximumBitrate": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "maximumBitrate"
+        },
+        "MaximumFramerate": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "maximumFramerate"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "nextToken"
+        },
+        "Resolution": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "resolution"
+        },
+        "ResourceType": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "resourceType"
+        },
+        "SpecialFeature": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "specialFeature"
+        },
+        "VideoQuality": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "videoQuality"
+        }
+      }
+    },
+    "ListReservationsResponse": {
+      "type": "structure",
+      "members": {
+        "NextToken": {
+          "shape": "__string",
+          "locationName": "nextToken"
+        },
+        "Reservations": {
+          "shape": "__listOfReservation",
+          "locationName": "reservations"
+        }
+      }
+    },
+    "ListReservationsResultModel": {
+      "type": "structure",
+      "members": {
+        "NextToken": {
+          "shape": "__string",
+          "locationName": "nextToken"
+        },
+        "Reservations": {
+          "shape": "__listOfReservation",
+          "locationName": "reservations"
+        }
+      }
+    },
+    "LogLevel": {
+      "type": "string",
+      "enum": [
+        "ERROR",
+        "WARNING",
+        "INFO",
+        "DEBUG",
+        "DISABLED"
+      ]
+    },
     "M2tsAbsentInputAudioBehavior": {
       "type": "string",
       "enum": [
@@ -4423,6 +5298,10 @@
           "shape": "M3u8TimedMetadataBehavior",
           "locationName": "timedMetadataBehavior"
         },
+        "TimedMetadataPid": {
+          "shape": "__string",
+          "locationName": "timedMetadataPid"
+        },
         "TransportStreamId": {
           "shape": "__integerMin0Max65535",
           "locationName": "transportStreamId"
@@ -4595,6 +5474,67 @@
         "httpStatusCode": 404
       }
     },
+    "Offering": {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "locationName": "arn"
+        },
+        "CurrencyCode": {
+          "shape": "__string",
+          "locationName": "currencyCode"
+        },
+        "Duration": {
+          "shape": "__integer",
+          "locationName": "duration"
+        },
+        "DurationUnits": {
+          "shape": "OfferingDurationUnits",
+          "locationName": "durationUnits"
+        },
+        "FixedPrice": {
+          "shape": "__double",
+          "locationName": "fixedPrice"
+        },
+        "OfferingDescription": {
+          "shape": "__string",
+          "locationName": "offeringDescription"
+        },
+        "OfferingId": {
+          "shape": "__string",
+          "locationName": "offeringId"
+        },
+        "OfferingType": {
+          "shape": "OfferingType",
+          "locationName": "offeringType"
+        },
+        "Region": {
+          "shape": "__string",
+          "locationName": "region"
+        },
+        "ResourceSpecification": {
+          "shape": "ReservationResourceSpecification",
+          "locationName": "resourceSpecification"
+        },
+        "UsagePrice": {
+          "shape": "__double",
+          "locationName": "usagePrice"
+        }
+      }
+    },
+    "OfferingDurationUnits": {
+      "type": "string",
+      "enum": [
+        "MONTHS"
+      ]
+    },
+    "OfferingType": {
+      "type": "string",
+      "enum": [
+        "NO_UPFRONT"
+      ]
+    },
     "Output": {
       "type": "structure",
       "members": {
@@ -4643,6 +5583,10 @@
           "shape": "__string",
           "locationName": "passwordParam"
         },
+        "StreamName": {
+          "shape": "__string",
+          "locationName": "streamName"
+        },
         "Url": {
           "shape": "__string",
           "locationName": "url"
@@ -4689,6 +5633,10 @@
           "shape": "MsSmoothGroupSettings",
           "locationName": "msSmoothGroupSettings"
         },
+        "RtmpGroupSettings": {
+          "shape": "RtmpGroupSettings",
+          "locationName": "rtmpGroupSettings"
+        },
         "UdpGroupSettings": {
           "shape": "UdpGroupSettings",
           "locationName": "udpGroupSettings"
@@ -4719,6 +5667,10 @@
           "shape": "MsSmoothOutputSettings",
           "locationName": "msSmoothOutputSettings"
         },
+        "RtmpOutputSettings": {
+          "shape": "RtmpOutputSettings",
+          "locationName": "rtmpOutputSettings"
+        },
         "UdpOutputSettings": {
           "shape": "UdpOutputSettings",
           "locationName": "udpOutputSettings"
@@ -4728,6 +5680,68 @@
     "PassThroughSettings": {
       "type": "structure",
       "members": {
+      }
+    },
+    "PurchaseOffering": {
+      "type": "structure",
+      "members": {
+        "Count": {
+          "shape": "__integerMin1",
+          "locationName": "count"
+        },
+        "Name": {
+          "shape": "__string",
+          "locationName": "name"
+        },
+        "RequestId": {
+          "shape": "__string",
+          "locationName": "requestId",
+          "idempotencyToken": true
+        }
+      }
+    },
+    "PurchaseOfferingRequest": {
+      "type": "structure",
+      "members": {
+        "Count": {
+          "shape": "__integerMin1",
+          "locationName": "count"
+        },
+        "Name": {
+          "shape": "__string",
+          "locationName": "name"
+        },
+        "OfferingId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "offeringId"
+        },
+        "RequestId": {
+          "shape": "__string",
+          "locationName": "requestId",
+          "idempotencyToken": true
+        }
+      },
+      "required": [
+        "OfferingId"
+      ]
+    },
+    "PurchaseOfferingResponse": {
+      "type": "structure",
+      "members": {
+        "Reservation": {
+          "shape": "Reservation",
+          "locationName": "reservation"
+        }
+      }
+    },
+    "PurchaseOfferingResultModel": {
+      "type": "structure",
+      "members": {
+        "Reservation": {
+          "shape": "Reservation",
+          "locationName": "reservation"
+        }
       }
     },
     "RemixSettings": {
@@ -4750,6 +5764,176 @@
         "ChannelMappings"
       ]
     },
+    "Reservation": {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "locationName": "arn"
+        },
+        "Count": {
+          "shape": "__integer",
+          "locationName": "count"
+        },
+        "CurrencyCode": {
+          "shape": "__string",
+          "locationName": "currencyCode"
+        },
+        "Duration": {
+          "shape": "__integer",
+          "locationName": "duration"
+        },
+        "DurationUnits": {
+          "shape": "OfferingDurationUnits",
+          "locationName": "durationUnits"
+        },
+        "End": {
+          "shape": "__string",
+          "locationName": "end"
+        },
+        "FixedPrice": {
+          "shape": "__double",
+          "locationName": "fixedPrice"
+        },
+        "Name": {
+          "shape": "__string",
+          "locationName": "name"
+        },
+        "OfferingDescription": {
+          "shape": "__string",
+          "locationName": "offeringDescription"
+        },
+        "OfferingId": {
+          "shape": "__string",
+          "locationName": "offeringId"
+        },
+        "OfferingType": {
+          "shape": "OfferingType",
+          "locationName": "offeringType"
+        },
+        "Region": {
+          "shape": "__string",
+          "locationName": "region"
+        },
+        "ReservationId": {
+          "shape": "__string",
+          "locationName": "reservationId"
+        },
+        "ResourceSpecification": {
+          "shape": "ReservationResourceSpecification",
+          "locationName": "resourceSpecification"
+        },
+        "Start": {
+          "shape": "__string",
+          "locationName": "start"
+        },
+        "State": {
+          "shape": "ReservationState",
+          "locationName": "state"
+        },
+        "UsagePrice": {
+          "shape": "__double",
+          "locationName": "usagePrice"
+        }
+      }
+    },
+    "ReservationCodec": {
+      "type": "string",
+      "enum": [
+        "MPEG2",
+        "AVC",
+        "HEVC",
+        "AUDIO"
+      ]
+    },
+    "ReservationMaximumBitrate": {
+      "type": "string",
+      "enum": [
+        "MAX_10_MBPS",
+        "MAX_20_MBPS",
+        "MAX_50_MBPS"
+      ]
+    },
+    "ReservationMaximumFramerate": {
+      "type": "string",
+      "enum": [
+        "MAX_30_FPS",
+        "MAX_60_FPS"
+      ]
+    },
+    "ReservationResolution": {
+      "type": "string",
+      "enum": [
+        "SD",
+        "HD",
+        "UHD"
+      ]
+    },
+    "ReservationResourceSpecification": {
+      "type": "structure",
+      "members": {
+        "Codec": {
+          "shape": "ReservationCodec",
+          "locationName": "codec"
+        },
+        "MaximumBitrate": {
+          "shape": "ReservationMaximumBitrate",
+          "locationName": "maximumBitrate"
+        },
+        "MaximumFramerate": {
+          "shape": "ReservationMaximumFramerate",
+          "locationName": "maximumFramerate"
+        },
+        "Resolution": {
+          "shape": "ReservationResolution",
+          "locationName": "resolution"
+        },
+        "ResourceType": {
+          "shape": "ReservationResourceType",
+          "locationName": "resourceType"
+        },
+        "SpecialFeature": {
+          "shape": "ReservationSpecialFeature",
+          "locationName": "specialFeature"
+        },
+        "VideoQuality": {
+          "shape": "ReservationVideoQuality",
+          "locationName": "videoQuality"
+        }
+      }
+    },
+    "ReservationResourceType": {
+      "type": "string",
+      "enum": [
+        "INPUT",
+        "OUTPUT",
+        "CHANNEL"
+      ]
+    },
+    "ReservationSpecialFeature": {
+      "type": "string",
+      "enum": [
+        "ADVANCED_AUDIO",
+        "AUDIO_NORMALIZATION"
+      ]
+    },
+    "ReservationState": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "EXPIRED",
+        "CANCELED",
+        "DELETED"
+      ]
+    },
+    "ReservationVideoQuality": {
+      "type": "string",
+      "enum": [
+        "STANDARD",
+        "ENHANCED",
+        "PREMIUM"
+      ]
+    },
     "ResourceConflict": {
       "type": "structure",
       "members": {
@@ -4767,6 +5951,154 @@
           "locationName": "message"
         }
       }
+    },
+    "RtmpCacheFullBehavior": {
+      "type": "string",
+      "enum": [
+        "DISCONNECT_IMMEDIATELY",
+        "WAIT_FOR_SERVER"
+      ]
+    },
+    "RtmpCaptionData": {
+      "type": "string",
+      "enum": [
+        "ALL",
+        "FIELD1_608",
+        "FIELD1_AND_FIELD2_608"
+      ]
+    },
+    "RtmpCaptionInfoDestinationSettings": {
+      "type": "structure",
+      "members": {
+      }
+    },
+    "RtmpGroupSettings": {
+      "type": "structure",
+      "members": {
+        "AuthenticationScheme": {
+          "shape": "AuthenticationScheme",
+          "locationName": "authenticationScheme"
+        },
+        "CacheFullBehavior": {
+          "shape": "RtmpCacheFullBehavior",
+          "locationName": "cacheFullBehavior"
+        },
+        "CacheLength": {
+          "shape": "__integerMin30",
+          "locationName": "cacheLength"
+        },
+        "CaptionData": {
+          "shape": "RtmpCaptionData",
+          "locationName": "captionData"
+        },
+        "RestartDelay": {
+          "shape": "__integerMin0",
+          "locationName": "restartDelay"
+        }
+      }
+    },
+    "RtmpOutputCertificateMode": {
+      "type": "string",
+      "enum": [
+        "SELF_SIGNED",
+        "VERIFY_AUTHENTICITY"
+      ]
+    },
+    "RtmpOutputSettings": {
+      "type": "structure",
+      "members": {
+        "CertificateMode": {
+          "shape": "RtmpOutputCertificateMode",
+          "locationName": "certificateMode"
+        },
+        "ConnectionRetryInterval": {
+          "shape": "__integerMin1",
+          "locationName": "connectionRetryInterval"
+        },
+        "Destination": {
+          "shape": "OutputLocationRef",
+          "locationName": "destination"
+        },
+        "NumRetries": {
+          "shape": "__integerMin0",
+          "locationName": "numRetries"
+        }
+      },
+      "required": [
+        "Destination"
+      ]
+    },
+    "ScheduleAction": {
+      "type": "structure",
+      "members": {
+        "ActionName": {
+          "shape": "__string",
+          "locationName": "actionName"
+        },
+        "ScheduleActionSettings": {
+          "shape": "ScheduleActionSettings",
+          "locationName": "scheduleActionSettings"
+        },
+        "ScheduleActionStartSettings": {
+          "shape": "ScheduleActionStartSettings",
+          "locationName": "scheduleActionStartSettings"
+        }
+      },
+      "required": [
+        "ActionName",
+        "ScheduleActionStartSettings",
+        "ScheduleActionSettings"
+      ]
+    },
+    "ScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "Scte35ReturnToNetworkSettings": {
+          "shape": "Scte35ReturnToNetworkScheduleActionSettings",
+          "locationName": "scte35ReturnToNetworkSettings"
+        },
+        "Scte35SpliceInsertSettings": {
+          "shape": "Scte35SpliceInsertScheduleActionSettings",
+          "locationName": "scte35SpliceInsertSettings"
+        },
+        "Scte35TimeSignalSettings": {
+          "shape": "Scte35TimeSignalScheduleActionSettings",
+          "locationName": "scte35TimeSignalSettings"
+        },
+        "StaticImageActivateSettings": {
+          "shape": "StaticImageActivateScheduleActionSettings",
+          "locationName": "staticImageActivateSettings"
+        },
+        "StaticImageDeactivateSettings": {
+          "shape": "StaticImageDeactivateScheduleActionSettings",
+          "locationName": "staticImageDeactivateSettings"
+        }
+      }
+    },
+    "ScheduleActionStartSettings": {
+      "type": "structure",
+      "members": {
+        "FixedModeScheduleActionStartSettings": {
+          "shape": "FixedModeScheduleActionStartSettings",
+          "locationName": "fixedModeScheduleActionStartSettings"
+        }
+      }
+    },
+    "ScheduleDescribeResultModel": {
+      "type": "structure",
+      "members": {
+        "NextToken": {
+          "shape": "__string",
+          "locationName": "nextToken"
+        },
+        "ScheduleActions": {
+          "shape": "__listOfScheduleAction",
+          "locationName": "scheduleActions"
+        }
+      },
+      "required": [
+        "ScheduleActions"
+      ]
     },
     "Scte20Convert608To708": {
       "type": "string",
@@ -4821,6 +6153,152 @@
         "IGNORE"
       ]
     },
+    "Scte35ArchiveAllowedFlag": {
+      "type": "string",
+      "enum": [
+        "ARCHIVE_NOT_ALLOWED",
+        "ARCHIVE_ALLOWED"
+      ]
+    },
+    "Scte35DeliveryRestrictions": {
+      "type": "structure",
+      "members": {
+        "ArchiveAllowedFlag": {
+          "shape": "Scte35ArchiveAllowedFlag",
+          "locationName": "archiveAllowedFlag"
+        },
+        "DeviceRestrictions": {
+          "shape": "Scte35DeviceRestrictions",
+          "locationName": "deviceRestrictions"
+        },
+        "NoRegionalBlackoutFlag": {
+          "shape": "Scte35NoRegionalBlackoutFlag",
+          "locationName": "noRegionalBlackoutFlag"
+        },
+        "WebDeliveryAllowedFlag": {
+          "shape": "Scte35WebDeliveryAllowedFlag",
+          "locationName": "webDeliveryAllowedFlag"
+        }
+      },
+      "required": [
+        "DeviceRestrictions",
+        "ArchiveAllowedFlag",
+        "WebDeliveryAllowedFlag",
+        "NoRegionalBlackoutFlag"
+      ]
+    },
+    "Scte35Descriptor": {
+      "type": "structure",
+      "members": {
+        "Scte35DescriptorSettings": {
+          "shape": "Scte35DescriptorSettings",
+          "locationName": "scte35DescriptorSettings"
+        }
+      },
+      "required": [
+        "Scte35DescriptorSettings"
+      ]
+    },
+    "Scte35DescriptorSettings": {
+      "type": "structure",
+      "members": {
+        "SegmentationDescriptorScte35DescriptorSettings": {
+          "shape": "Scte35SegmentationDescriptor",
+          "locationName": "segmentationDescriptorScte35DescriptorSettings"
+        }
+      },
+      "required": [
+        "SegmentationDescriptorScte35DescriptorSettings"
+      ]
+    },
+    "Scte35DeviceRestrictions": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "RESTRICT_GROUP0",
+        "RESTRICT_GROUP1",
+        "RESTRICT_GROUP2"
+      ]
+    },
+    "Scte35NoRegionalBlackoutFlag": {
+      "type": "string",
+      "enum": [
+        "REGIONAL_BLACKOUT",
+        "NO_REGIONAL_BLACKOUT"
+      ]
+    },
+    "Scte35ReturnToNetworkScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "SpliceEventId": {
+          "shape": "__integerMin0Max4294967295",
+          "locationName": "spliceEventId"
+        }
+      },
+      "required": [
+        "SpliceEventId"
+      ]
+    },
+    "Scte35SegmentationCancelIndicator": {
+      "type": "string",
+      "enum": [
+        "SEGMENTATION_EVENT_NOT_CANCELED",
+        "SEGMENTATION_EVENT_CANCELED"
+      ]
+    },
+    "Scte35SegmentationDescriptor": {
+      "type": "structure",
+      "members": {
+        "DeliveryRestrictions": {
+          "shape": "Scte35DeliveryRestrictions",
+          "locationName": "deliveryRestrictions"
+        },
+        "SegmentNum": {
+          "shape": "__integerMin0Max255",
+          "locationName": "segmentNum"
+        },
+        "SegmentationCancelIndicator": {
+          "shape": "Scte35SegmentationCancelIndicator",
+          "locationName": "segmentationCancelIndicator"
+        },
+        "SegmentationDuration": {
+          "shape": "__integerMin0Max1099511627775",
+          "locationName": "segmentationDuration"
+        },
+        "SegmentationEventId": {
+          "shape": "__integerMin0Max4294967295",
+          "locationName": "segmentationEventId"
+        },
+        "SegmentationTypeId": {
+          "shape": "__integerMin0Max255",
+          "locationName": "segmentationTypeId"
+        },
+        "SegmentationUpid": {
+          "shape": "__string",
+          "locationName": "segmentationUpid"
+        },
+        "SegmentationUpidType": {
+          "shape": "__integerMin0Max255",
+          "locationName": "segmentationUpidType"
+        },
+        "SegmentsExpected": {
+          "shape": "__integerMin0Max255",
+          "locationName": "segmentsExpected"
+        },
+        "SubSegmentNum": {
+          "shape": "__integerMin0Max255",
+          "locationName": "subSegmentNum"
+        },
+        "SubSegmentsExpected": {
+          "shape": "__integerMin0Max255",
+          "locationName": "subSegmentsExpected"
+        }
+      },
+      "required": [
+        "SegmentationEventId",
+        "SegmentationCancelIndicator"
+      ]
+    },
     "Scte35SpliceInsert": {
       "type": "structure",
       "members": {
@@ -4843,6 +6321,22 @@
       "enum": [
         "FOLLOW",
         "IGNORE"
+      ]
+    },
+    "Scte35SpliceInsertScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "Duration": {
+          "shape": "__integerMin0Max8589934591",
+          "locationName": "duration"
+        },
+        "SpliceEventId": {
+          "shape": "__integerMin0Max4294967295",
+          "locationName": "spliceEventId"
+        }
+      },
+      "required": [
+        "SpliceEventId"
       ]
     },
     "Scte35SpliceInsertWebDeliveryAllowedBehavior": {
@@ -4868,6 +6362,25 @@
           "locationName": "webDeliveryAllowedFlag"
         }
       }
+    },
+    "Scte35TimeSignalScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "Scte35Descriptors": {
+          "shape": "__listOfScte35Descriptor",
+          "locationName": "scte35Descriptors"
+        }
+      },
+      "required": [
+        "Scte35Descriptors"
+      ]
+    },
+    "Scte35WebDeliveryAllowedFlag": {
+      "type": "string",
+      "enum": [
+        "WEB_DELIVERY_NOT_ALLOWED",
+        "WEB_DELIVERY_ALLOWED"
+      ]
     },
     "SmoothGroupAudioOnlyTimecodeControl": {
       "type": "string",
@@ -4991,6 +6504,10 @@
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
         },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -5009,6 +6526,67 @@
         }
       }
     },
+    "StaticImageActivateScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "Duration": {
+          "shape": "__integerMin0",
+          "locationName": "duration"
+        },
+        "FadeIn": {
+          "shape": "__integerMin0",
+          "locationName": "fadeIn"
+        },
+        "FadeOut": {
+          "shape": "__integerMin0",
+          "locationName": "fadeOut"
+        },
+        "Height": {
+          "shape": "__integerMin1",
+          "locationName": "height"
+        },
+        "Image": {
+          "shape": "InputLocation",
+          "locationName": "image"
+        },
+        "ImageX": {
+          "shape": "__integerMin0",
+          "locationName": "imageX"
+        },
+        "ImageY": {
+          "shape": "__integerMin0",
+          "locationName": "imageY"
+        },
+        "Layer": {
+          "shape": "__integerMin0Max7",
+          "locationName": "layer"
+        },
+        "Opacity": {
+          "shape": "__integerMin0Max100",
+          "locationName": "opacity"
+        },
+        "Width": {
+          "shape": "__integerMin1",
+          "locationName": "width"
+        }
+      },
+      "required": [
+        "Image"
+      ]
+    },
+    "StaticImageDeactivateScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "FadeOut": {
+          "shape": "__integerMin0",
+          "locationName": "fadeOut"
+        },
+        "Layer": {
+          "shape": "__integerMin0Max7",
+          "locationName": "layer"
+        }
+      }
+    },
     "StaticKeySettings": {
       "type": "structure",
       "members": {
@@ -5022,6 +6600,7 @@
         }
       },
       "required": [
+        "KeyProviderServer",
         "StaticKeyValue"
       ]
     },
@@ -5068,6 +6647,10 @@
         "InputSpecification": {
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
+        },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
         },
         "Name": {
           "shape": "__string",
@@ -5249,6 +6832,10 @@
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
         },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -5282,6 +6869,10 @@
         "InputSpecification": {
           "shape": "InputSpecification",
           "locationName": "inputSpecification"
+        },
+        "LogLevel": {
+          "shape": "LogLevel",
+          "locationName": "logLevel"
         },
         "Name": {
           "shape": "__string",
@@ -5605,6 +7196,11 @@
       "min": 0,
       "max": 1000000
     },
+    "__integerMin0Max1099511627775": {
+      "type": "long",
+      "min": 0,
+      "max": 1099511627775
+    },
     "__integerMin0Max128": {
       "type": "integer",
       "min": 0,
@@ -5629,6 +7225,11 @@
       "type": "integer",
       "min": 0,
       "max": 3600
+    },
+    "__integerMin0Max4294967295": {
+      "type": "long",
+      "min": 0,
+      "max": 4294967295
     },
     "__integerMin0Max500": {
       "type": "integer",
@@ -5659,6 +7260,11 @@
       "type": "integer",
       "min": 0,
       "max": 8191
+    },
+    "__integerMin0Max8589934591": {
+      "type": "long",
+      "min": 0,
+      "max": 8589934591
     },
     "__integerMin1": {
       "type": "integer",
@@ -5731,6 +7337,10 @@
     "__integerMin3": {
       "type": "integer",
       "min": 3
+    },
+    "__integerMin30": {
+      "type": "integer",
+      "min": 30
     },
     "__integerMin4Max20": {
       "type": "integer",
@@ -5871,6 +7481,12 @@
         "shape": "InputWhitelistRuleCidr"
       }
     },
+    "__listOfOffering": {
+      "type": "list",
+      "member": {
+        "shape": "Offering"
+      }
+    },
     "__listOfOutput": {
       "type": "list",
       "member": {
@@ -5893,6 +7509,24 @@
       "type": "list",
       "member": {
         "shape": "OutputGroup"
+      }
+    },
+    "__listOfReservation": {
+      "type": "list",
+      "member": {
+        "shape": "Reservation"
+      }
+    },
+    "__listOfScheduleAction": {
+      "type": "list",
+      "member": {
+        "shape": "ScheduleAction"
+      }
+    },
+    "__listOfScte35Descriptor": {
+      "type": "list",
+      "member": {
+        "shape": "Scte35Descriptor"
       }
     },
     "__listOfValidationError": {

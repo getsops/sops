@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"Amazon Cognito Identity Provider",
+    "serviceId":"Cognito Identity Provider",
     "signatureVersion":"v4",
     "targetPrefix":"AWSCognitoIdentityProviderService",
     "uid":"cognito-idp-2016-04-18"
@@ -740,6 +741,7 @@
         {"shape":"InvalidParameterException"},
         {"shape":"NotAuthorizedException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"},
         {"shape":"InternalErrorException"}
       ]
     },
@@ -2861,12 +2863,14 @@
       ],
       "members":{
         "Domain":{"shape":"DomainType"},
-        "UserPoolId":{"shape":"UserPoolIdType"}
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "CustomDomainConfig":{"shape":"CustomDomainConfigType"}
       }
     },
     "CreateUserPoolDomainResponse":{
       "type":"structure",
       "members":{
+        "CloudFrontDomain":{"shape":"DomainType"}
       }
     },
     "CreateUserPoolRequest":{
@@ -2911,6 +2915,13 @@
       "member":{"shape":"SchemaAttributeType"},
       "max":25,
       "min":1
+    },
+    "CustomDomainConfigType":{
+      "type":"structure",
+      "required":["CertificateArn"],
+      "members":{
+        "CertificateArn":{"shape":"ArnType"}
+      }
     },
     "DateType":{"type":"timestamp"},
     "DefaultEmailOptionType":{
@@ -3189,9 +3200,10 @@
         "AWSAccountId":{"shape":"AWSAccountIdType"},
         "Domain":{"shape":"DomainType"},
         "S3Bucket":{"shape":"S3BucketType"},
-        "CloudFrontDistribution":{"shape":"ArnType"},
+        "CloudFrontDistribution":{"shape":"StringType"},
         "Version":{"shape":"DomainVersionType"},
-        "Status":{"shape":"DomainStatusType"}
+        "Status":{"shape":"DomainStatusType"},
+        "CustomDomainConfig":{"shape":"CustomDomainConfigType"}
       }
     },
     "DomainStatusType":{
@@ -3614,7 +3626,8 @@
         "SAML",
         "Facebook",
         "Google",
-        "LoginWithAmazon"
+        "LoginWithAmazon",
+        "OIDC"
       ]
     },
     "IdpIdentifierType":{
@@ -5019,8 +5032,10 @@
         "SmsConfigurationFailure":{"shape":"StringType"},
         "EmailConfigurationFailure":{"shape":"StringType"},
         "Domain":{"shape":"DomainType"},
+        "CustomDomain":{"shape":"DomainType"},
         "AdminCreateUserConfig":{"shape":"AdminCreateUserConfigType"},
-        "UserPoolAddOns":{"shape":"UserPoolAddOnsType"}
+        "UserPoolAddOns":{"shape":"UserPoolAddOnsType"},
+        "Arn":{"shape":"ArnType"}
       }
     },
     "UserStatusType":{

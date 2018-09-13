@@ -61,7 +61,7 @@
     "DataRetentionInHours": {
       "base": null,
       "refs": {
-        "CreateStreamInput$DataRetentionInHours": "<p>The number of hours that you want to retain the data in the stream. Kinesis Video Streams retains the data in a data store that is associated with the stream.</p> <p>The default value is 0, indicating that the stream does not persist data.</p>",
+        "CreateStreamInput$DataRetentionInHours": "<p>The number of hours that you want to retain the data in the stream. Kinesis Video Streams retains the data in a data store that is associated with the stream.</p> <p>The default value is 0, indicating that the stream does not persist data.</p> <p>When the <code>DataRetentionInHours</code> value is 0, consumers can still consume the fragments that remain in the service host buffer, which has a retention time limit of 5 minutes and a retention memory limit of 200 MB. Fragments are removed from the buffer when either limit is reached.</p>",
         "StreamInfo$DataRetentionInHours": "<p>How long the stream retains data, in hours.</p>"
       }
     },
@@ -177,7 +177,7 @@
       "refs": {
         "CreateStreamInput$MediaType": "<p>The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see <a href=\"http://www.iana.org/assignments/media-types/media-types.xhtml\">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href=\"https://tools.ietf.org/html/rfc6838#section-4.2\">Naming Requirements</a> for guidelines.</p> <p>To play video on the console, the media must be H.264 encoded, and you need to specify this video type in this parameter as <code>video/h264</code>. </p> <p>This parameter is optional; the default value is <code>null</code> (or empty in JSON).</p>",
         "StreamInfo$MediaType": "<p>The <code>MediaType</code> of the stream. </p>",
-        "UpdateStreamInput$MediaType": "<p>The stream's media type. Use <code>MediaType</code> to specify the type of content that the stream contains to the consumers of the stream. For more information about media types, see <a href=\"http://www.iana.org/assignments/media-types/media-types.xhtml\">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href=\"https://tools.sietf.org/html/rfc6838#section-4.2\">Naming Requirements</a>.</p> <p>To play video on the console, you must specify the correct video type. For example, if the video in the stream is H.264, specify <code>video/h264</code> as the <code>MediaType</code>.</p>"
+        "UpdateStreamInput$MediaType": "<p>The stream's media type. Use <code>MediaType</code> to specify the type of content that the stream contains to the consumers of the stream. For more information about media types, see <a href=\"http://www.iana.org/assignments/media-types/media-types.xhtml\">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href=\"https://tools.ietf.org/html/rfc6838#section-4.2\">Naming Requirements</a>.</p> <p>To play video on the console, you must specify the correct video type. For example, if the video in the stream is H.264, specify <code>video/h264</code> as the <code>MediaType</code>.</p>"
       }
     },
     "NextToken": {
@@ -352,7 +352,7 @@
       }
     },
     "VersionMismatchException": {
-      "base": "<p>The stream version that you specified is not the latest version. To get the latest version, use the <a href=\"http://docs.aws.amazon.com/kinesisvideo/latest/dg/API_DescribeStream.html\">DescribeStream</a> API.</p>",
+      "base": "<p>The stream version that you specified is not the latest version. To get the latest version, use the <a href=\"http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html\">DescribeStream</a> API.</p>",
       "refs": {
       }
     }

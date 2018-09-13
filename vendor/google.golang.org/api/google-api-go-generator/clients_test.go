@@ -35,7 +35,7 @@ import (
 	storage "google.golang.org/api/storage/v1"
 )
 
-//go:generate -command api go run gen.go docurls.go -install -api
+//go:generate -command api go run gen.go docurls.go replacements.go -install -api
 
 //go:generate api dfareporting:v2.8
 //go:generate api monitoring:v3
@@ -129,7 +129,7 @@ func TestMedia(t *testing.T) {
 	if g.MultipartForm != nil {
 		t.Errorf("MultipartForm = %#v; want nil", g.MultipartForm)
 	}
-	if w := "/b/mybucket/o?alt=json&uploadType=multipart"; g.RequestURI != w {
+	if w := "/b/mybucket/o?alt=json&prettyPrint=false&uploadType=multipart"; g.RequestURI != w {
 		t.Errorf("RequestURI = %q; want %q", g.RequestURI, w)
 	}
 	if w := "\r\n\r\n" + body + "\r\n"; !strings.Contains(string(handler.body), w) {
@@ -272,7 +272,7 @@ func TestNoMedia(t *testing.T) {
 	if g.MultipartForm != nil {
 		t.Errorf("MultipartForm = %#v; want nil", g.MultipartForm)
 	}
-	if w := "/b/mybucket/o?alt=json"; g.RequestURI != w {
+	if w := "/b/mybucket/o?alt=json&prettyPrint=false"; g.RequestURI != w {
 		t.Errorf("RequestURI = %q; want %q", g.RequestURI, w)
 	}
 	if w := `{"bucket":"mybucket","contentEncoding":"utf-8","contentLanguage":"en","contentType":"plain/text","name":"filename"}` + "\n"; string(handler.body) != w {
@@ -380,7 +380,7 @@ func TestParams(t *testing.T) {
 		t.Fatalf("len(reqURIs) = %v, want %v", g, w)
 	}
 	want := []string{
-		"/b/mybucket/o?alt=json&ifGenerationMatch=42&name=filename&projection=full&uploadType=resumable",
+		"/b/mybucket/o?alt=json&ifGenerationMatch=42&name=filename&prettyPrint=false&projection=full&uploadType=resumable",
 		"/uploadURL",
 	}
 	if !reflect.DeepEqual(handler.reqURIs, want) {
@@ -407,7 +407,7 @@ func TestRepeatedParams(t *testing.T) {
 		t.Fatalf("dfa.List: %v", err)
 	}
 	want := []string{
-		"/userprofiles/10/creatives?active=true&alt=json&ids=2&ids=3&maxResults=1&pageToken=abc&sizeIds=4&sizeIds=5&types=def&types=ghi",
+		"/userprofiles/10/creatives?active=true&alt=json&ids=2&ids=3&maxResults=1&pageToken=abc&prettyPrint=false&sizeIds=4&sizeIds=5&types=def&types=ghi",
 	}
 	if !reflect.DeepEqual(handler.reqURIs, want) {
 		t.Errorf("reqURIs = %#v, want = %#v", handler.reqURIs, want)

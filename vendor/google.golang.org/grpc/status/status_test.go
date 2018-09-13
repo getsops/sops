@@ -24,12 +24,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/golang/protobuf/ptypes/any"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	apb "github.com/golang/protobuf/ptypes/any"
 	dpb "github.com/golang/protobuf/ptypes/duration"
+	"golang.org/x/net/context"
 	cpb "google.golang.org/genproto/googleapis/rpc/code"
 	epb "google.golang.org/genproto/googleapis/rpc/errdetails"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
@@ -124,7 +123,7 @@ func TestFromErrorOK(t *testing.T) {
 type customError struct {
 	Code    codes.Code
 	Message string
-	Details []*any.Any
+	Details []*apb.Any
 }
 
 func (c customError) Error() string {
@@ -143,7 +142,7 @@ func (c customError) GRPCStatus() *Status {
 
 func TestFromErrorImplementsInterface(t *testing.T) {
 	code, message := codes.Internal, "test description"
-	details := []*any.Any{{
+	details := []*apb.Any{{
 		TypeUrl: "testUrl",
 		Value:   []byte("testValue"),
 	}}
@@ -328,4 +327,22 @@ func mustMarshalAny(msg proto.Message) *apb.Any {
 		panic(fmt.Sprintf("ptypes.MarshalAny(%+v) failed: %v", msg, err))
 	}
 	return any
+}
+
+func TestFromContextError(t *testing.T) {
+	testCases := []struct {
+		in   error
+		want *Status
+	}{
+		{in: nil, want: New(codes.OK, "")},
+		{in: context.DeadlineExceeded, want: New(codes.DeadlineExceeded, context.DeadlineExceeded.Error())},
+		{in: context.Canceled, want: New(codes.Canceled, context.Canceled.Error())},
+		{in: errors.New("other"), want: New(codes.Unknown, "other")},
+	}
+	for _, tc := range testCases {
+		got := FromContextError(tc.in)
+		if got.Code() != tc.want.Code() || got.Message() != tc.want.Message() {
+			t.Errorf("FromContextError(%v) = %v; want %v", tc.in, got, tc.want)
+		}
+	}
 }

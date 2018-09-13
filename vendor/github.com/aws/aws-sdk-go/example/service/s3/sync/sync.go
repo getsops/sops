@@ -5,6 +5,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"mime"
 	"os"
 	"path/filepath"
 	"strings"
@@ -69,10 +70,18 @@ func (iter *SyncFolderIterator) UploadObject() s3manager.BatchUploadObject {
 		iter.err = err
 	}
 
+	extension := filepath.Ext(fi.key)
+	mimeType := mime.TypeByExtension(extension)
+
+	if mimeType == "" {
+		mimeType = "binary/octet-stream"
+	}
+
 	input := s3manager.UploadInput{
-		Bucket: &iter.bucket,
-		Key:    &fi.key,
-		Body:   body,
+		Bucket:      &iter.bucket,
+		Key:         &fi.key,
+		Body:        body,
+		ContentType: &mimeType,
 	}
 
 	return s3manager.BatchUploadObject{

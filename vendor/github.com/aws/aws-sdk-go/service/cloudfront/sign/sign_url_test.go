@@ -1,11 +1,11 @@
 package sign
 
 import (
-	"crypto/rsa"
-	"math/rand"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/aws/aws-sdk-go/awstesting/mock"
 )
 
 var testSignTime = time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
@@ -20,11 +20,11 @@ var testSignURL = []struct {
 }{
 	{
 		"http://example.com/a", NewCannedPolicy("http://example.com/a", testSignTime), time.Time{}, true, false,
-		"http://example.com/a?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2V4YW1wbGUuY29tL2EiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjEyNTc4OTQwMDB9fX1dfQ__&Signature=Y6qvWOZNl99uNPMGprvrKXEmXpLWJ-xXKVHL~nmF0BR1jPb2XA2jor0MUYKBE4ViTkWZZ1dz46zSFMsEEfw~n6-SVYXZ2QHBBTkSAoxGtH6dH33Ph9pz~f9Wy7aYXq~9I-Ah0E6yC~BMiQuXe5qAOucuMPorKgPfC0dvLMw2EF0_&Key-Pair-Id=KeyID",
+		"http://example.com/a?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2V4YW1wbGUuY29tL2EiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjEyNTc4OTQwMDB9fX1dfQ__&Signature=cMutWOvPMOPuh0KFDsOdbML~1fe0eEBC1hdMLGRbYr3mTRrVbKDdUXL6l3vlbE0Og3rTRS6mlaSORTwesN1srESH1pXFUyCVba8tWqNy1frEiL7jZLyzA1KndH0olfJDfgHXdw-Edtk0m8mqY~AnGIYGYDu659dWeP49jVeYn30XF9sYkRCdS5IezAkqh8TO9tTDNGS4Ic6DQue4agHUFLNv1VErTafUxlSBp8hlPCuMdtZLEBLr9UJVc3oWJI3zc1~9JgVTDjbXYV1-HgTn8qQsbAU2KcieUonIzTme2td-7c2FCC0EAbOF~6QXTHWcAiSB5nVmbxn-Mx-QMVsiLw__&Key-Pair-Id=KeyID",
 	},
 	{
 		"http://example.com/a", nil, testSignTime, false, false,
-		"http://example.com/a?Expires=1257894000&Signature=Y6qvWOZNl99uNPMGprvrKXEmXpLWJ-xXKVHL~nmF0BR1jPb2XA2jor0MUYKBE4ViTkWZZ1dz46zSFMsEEfw~n6-SVYXZ2QHBBTkSAoxGtH6dH33Ph9pz~f9Wy7aYXq~9I-Ah0E6yC~BMiQuXe5qAOucuMPorKgPfC0dvLMw2EF0_&Key-Pair-Id=KeyID",
+		"http://example.com/a?Expires=1257894000&Signature=cMutWOvPMOPuh0KFDsOdbML~1fe0eEBC1hdMLGRbYr3mTRrVbKDdUXL6l3vlbE0Og3rTRS6mlaSORTwesN1srESH1pXFUyCVba8tWqNy1frEiL7jZLyzA1KndH0olfJDfgHXdw-Edtk0m8mqY~AnGIYGYDu659dWeP49jVeYn30XF9sYkRCdS5IezAkqh8TO9tTDNGS4Ic6DQue4agHUFLNv1VErTafUxlSBp8hlPCuMdtZLEBLr9UJVc3oWJI3zc1~9JgVTDjbXYV1-HgTn8qQsbAU2KcieUonIzTme2td-7c2FCC0EAbOF~6QXTHWcAiSB5nVmbxn-Mx-QMVsiLw__&Key-Pair-Id=KeyID",
 	},
 	{
 		"http://example.com/Ƿ", nil, testSignTime, false, true,
@@ -40,27 +40,18 @@ var testSignURL = []struct {
 	},
 	{
 		"rtmp://example.com/a", nil, testSignTime, false, false,
-		"a?Expires=1257894000&Signature=Ds9NbpGwIcDKG1iZDyjfPXp0ZFYSIzfvGzJj-x28XlXfrarHrJbTOQj3bec~aAyb8NAqghBYRdKF9~RdjNrdyxyiequo-SCjFgFHnRNIk0FiqH0fVt2NO63f0X8-Kbur9cPtJoHR9Jzk0I1CQnECqhL6A0OgPhijTfKUITocmzA_&Key-Pair-Id=KeyID",
+		"a?Expires=1257894000&Signature=GIOIWRaT1u5~JyNhyvsbvLfu1eYjmObAHPpV3p7wNL3X-Vts9uj2JPW3bX-xZp4HD~deps5f-GpPkIE7RPq7VCOZMLdckC4V9bvSphmMYP~OVoHwPiRMHgVW8pt9lsODGMAKVcMK-h2WROOxgzwDhfcGJQ~afs~Cz04Cus9tKScLFTNYHbLxpN0VI-vJwOvDW0tavGKxOmLeMDLTgLZSh90MjgESMME8zssks8rXngWxDgV-bLySe1VYHOcC07BMb5RkPaO036gjHJnw5hXhUCug0rkKcSxwU1IsJnGpgTkf7dVo453L2sLeRzK8R-6z9O2Onv6ow-ZoHx7fVw8rww__&Key-Pair-Id=KeyID",
 	},
 	{
 		"rtmp://example.com/a", NewCannedPolicy("a", testSignTime), time.Time{}, true, false,
-		"a?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiYSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTI1Nzg5NDAwMH19fV19&Signature=Ds9NbpGwIcDKG1iZDyjfPXp0ZFYSIzfvGzJj-x28XlXfrarHrJbTOQj3bec~aAyb8NAqghBYRdKF9~RdjNrdyxyiequo-SCjFgFHnRNIk0FiqH0fVt2NO63f0X8-Kbur9cPtJoHR9Jzk0I1CQnECqhL6A0OgPhijTfKUITocmzA_&Key-Pair-Id=KeyID",
+		"a?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiYSIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTI1Nzg5NDAwMH19fV19&Signature=GIOIWRaT1u5~JyNhyvsbvLfu1eYjmObAHPpV3p7wNL3X-Vts9uj2JPW3bX-xZp4HD~deps5f-GpPkIE7RPq7VCOZMLdckC4V9bvSphmMYP~OVoHwPiRMHgVW8pt9lsODGMAKVcMK-h2WROOxgzwDhfcGJQ~afs~Cz04Cus9tKScLFTNYHbLxpN0VI-vJwOvDW0tavGKxOmLeMDLTgLZSh90MjgESMME8zssks8rXngWxDgV-bLySe1VYHOcC07BMb5RkPaO036gjHJnw5hXhUCug0rkKcSxwU1IsJnGpgTkf7dVo453L2sLeRzK8R-6z9O2Onv6ow-ZoHx7fVw8rww__&Key-Pair-Id=KeyID",
 	},
 }
 
 // TODO Sign URL HTTP
 // TODO Sign URL RMTP
 func TestSignURL(t *testing.T) {
-	origRandReader := randReader
-	randReader = newRandomReader(rand.New(rand.NewSource(1)))
-	defer func() {
-		randReader = origRandReader
-	}()
-
-	privKey, err := rsa.GenerateKey(randReader, 1024)
-	if err != nil {
-		t.Fatalf("Unexpected priv key error, %#v", err)
-	}
+	privKey := mock.RSAPrivateKey
 
 	s := NewURLSigner("KeyID", privKey)
 

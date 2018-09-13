@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"Amazon CloudWatch Logs",
+    "serviceId":"CloudWatch Logs",
     "signatureVersion":"v4",
     "targetPrefix":"Logs_20140328",
     "uid":"logs-2014-03-28"
@@ -371,7 +372,8 @@
         {"shape":"InvalidSequenceTokenException"},
         {"shape":"DataAlreadyAcceptedException"},
         {"shape":"ResourceNotFoundException"},
-        {"shape":"ServiceUnavailableException"}
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"UnrecognizedClientException"}
       ]
     },
     "PutMetricFilter":{
@@ -848,6 +850,7 @@
       "members":{
         "logGroupName":{"shape":"LogGroupName"},
         "logStreamNames":{"shape":"InputLogStreamNames"},
+        "logStreamNamePrefix":{"shape":"LogStreamName"},
         "startTime":{"shape":"Timestamp"},
         "endTime":{"shape":"Timestamp"},
         "filterPattern":{"shape":"FilterPattern"},
@@ -1373,6 +1376,12 @@
       "min":0
     },
     "Token":{"type":"string"},
+    "UnrecognizedClientException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "UntagLogGroupRequest":{
       "type":"structure",
       "required":[

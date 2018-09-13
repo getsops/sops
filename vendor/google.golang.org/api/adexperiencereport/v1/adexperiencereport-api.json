@@ -59,11 +59,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -83,12 +78,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -163,7 +152,7 @@
       }
     }
   },
-  "revision": "20180129",
+  "revision": "20180821",
   "rootUrl": "https://adexperiencereport.googleapis.com/",
   "schemas": {
     "PlatformSummary": {
@@ -219,13 +208,15 @@
           "enumDescriptions": [
             "Ad standard not yet defined for your region.",
             "Region A.",
-            "Region B."
+            "Region B.",
+            "Region C."
           ],
           "items": {
             "enum": [
               "REGION_UNKNOWN",
               "REGION_A",
-              "REGION_B"
+              "REGION_B",
+              "REGION_C"
             ],
             "type": "string"
           },
@@ -243,7 +234,7 @@
       "type": "object"
     },
     "SiteSummaryResponse": {
-      "description": "Response message for GetSiteSummary.",
+      "description": "Response message for GetSiteSummary.\nDo not confuse with same message in google.chrome.abusiveexperiencereport.v1",
       "id": "SiteSummaryResponse",
       "properties": {
         "desktopSummary": {
@@ -277,7 +268,7 @@
     }
   },
   "servicePath": "",
-  "title": "Google Ad Experience Report API",
+  "title": "Ad Experience Report API",
   "version": "v1",
   "version_module": true
 }

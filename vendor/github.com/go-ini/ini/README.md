@@ -1,4 +1,4 @@
-INI [![Build Status](https://travis-ci.org/go-ini/ini.svg?branch=master)](https://travis-ci.org/go-ini/ini) [![Sourcegraph](https://sourcegraph.com/github.com/go-ini/ini/-/badge.svg)](https://sourcegraph.com/github.com/go-ini/ini?badge)
+INI [![Build Status](https://travis-ci.org/go-ini/ini.svg?branch=master)](https://travis-ci.org/go-ini/ini) [![Sourcegraph](https://img.shields.io/badge/view%20on-Sourcegraph-brightgreen.svg)](https://sourcegraph.com/github.com/go-ini/ini)
 ===
 
 ![](https://avatars0.githubusercontent.com/u/10216035?v=3&s=200)
@@ -19,6 +19,8 @@ Package ini provides INI file read and write functionality in Go.
 - Keep sections and keys in order as you parse and save.
 
 ## Installation
+
+The minimum requirement of Go is **1.6**.
 
 To use a tagged revision:
 

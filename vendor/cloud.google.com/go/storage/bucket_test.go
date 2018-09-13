@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,11 +30,12 @@ import (
 func TestBucketAttrsToRawBucket(t *testing.T) {
 	t.Parallel()
 	attrs := &BucketAttrs{
-		Name:             "name",
-		ACL:              []ACLRule{{Entity: "bob@example.com", Role: RoleOwner}},
-		DefaultObjectACL: []ACLRule{{Entity: AllUsers, Role: RoleReader}},
-		Location:         "loc",
-		StorageClass:     "class",
+		Name: "name",
+		ACL:  []ACLRule{{Entity: "bob@example.com", Role: RoleOwner, Domain: "d", Email: "e"}},
+		DefaultObjectACL: []ACLRule{{Entity: AllUsers, Role: RoleReader, EntityID: "eid",
+			ProjectTeam: &ProjectTeam{ProjectNumber: "17", Team: "t"}}},
+		Location:     "loc",
+		StorageClass: "class",
 		RetentionPolicy: &RetentionPolicy{
 			RetentionPeriod: 3 * time.Second,
 		},
@@ -51,15 +52,51 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 				ResponseHeaders: []string{"FOO"},
 			},
 		},
+		Encryption: &BucketEncryption{DefaultKMSKeyName: "key"},
+		Logging:    &BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:    &BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		Lifecycle: Lifecycle{
+			Rules: []LifecycleRule{{
+				Action: LifecycleAction{
+					Type:         SetStorageClassAction,
+					StorageClass: "NEARLINE",
+				},
+				Condition: LifecycleCondition{
+					AgeInDays:             10,
+					Liveness:              Live,
+					CreatedBefore:         time.Date(2017, 1, 2, 3, 4, 5, 6, time.UTC),
+					MatchesStorageClasses: []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"},
+					NumNewerVersions:      3,
+				},
+			}, {
+				Action: LifecycleAction{
+					Type: DeleteAction,
+				},
+				Condition: LifecycleCondition{
+					AgeInDays:             30,
+					Liveness:              Live,
+					CreatedBefore:         time.Date(2017, 1, 2, 3, 4, 5, 6, time.UTC),
+					MatchesStorageClasses: []string{"NEARLINE"},
+					NumNewerVersions:      10,
+				},
+			}, {
+				Action: LifecycleAction{
+					Type: DeleteAction,
+				},
+				Condition: LifecycleCondition{
+					Liveness: Archived,
+				},
+			}},
+		},
 	}
 	got := attrs.toRawBucket()
 	want := &raw.Bucket{
 		Name: "name",
 		Acl: []*raw.BucketAccessControl{
-			{Entity: "bob@example.com", Role: "OWNER"},
+			{Entity: "bob@example.com", Role: "OWNER"}, // other fields ignored on create/update
 		},
 		DefaultObjectAcl: []*raw.ObjectAccessControl{
-			{Entity: "allUsers", Role: "READER"},
+			{Entity: "allUsers", Role: "READER"}, // other fields ignored on create/update
 		},
 		Location:     "loc",
 		StorageClass: "class",
@@ -75,6 +112,42 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 				Origin:         []string{"*"},
 				ResponseHeader: []string{"FOO"},
 			},
+		},
+		Encryption: &raw.BucketEncryption{DefaultKmsKeyName: "key"},
+		Logging:    &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:    &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		Lifecycle: &raw.BucketLifecycle{
+			Rule: []*raw.BucketLifecycleRule{{
+				Action: &raw.BucketLifecycleRuleAction{
+					Type:         SetStorageClassAction,
+					StorageClass: "NEARLINE",
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					Age:                 10,
+					IsLive:              googleapi.Bool(true),
+					CreatedBefore:       "2017-01-02",
+					MatchesStorageClass: []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"},
+					NumNewerVersions:    3,
+				},
+			}, {
+				Action: &raw.BucketLifecycleRuleAction{
+					Type: DeleteAction,
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					Age:                 30,
+					IsLive:              googleapi.Bool(true),
+					CreatedBefore:       "2017-01-02",
+					MatchesStorageClass: []string{"NEARLINE"},
+					NumNewerVersions:    10,
+				},
+			}, {
+				Action: &raw.BucketLifecycleRuleAction{
+					Type: DeleteAction,
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					IsLive: googleapi.Bool(false),
+				},
+			}},
 		},
 	}
 	if msg := testutil.Diff(got, want); msg != "" {
@@ -96,6 +169,18 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 	au := &BucketAttrsToUpdate{
 		VersioningEnabled: false,
 		RequesterPays:     false,
+		RetentionPolicy:   &RetentionPolicy{RetentionPeriod: time.Hour},
+		Encryption:        &BucketEncryption{DefaultKMSKeyName: "key2"},
+		Lifecycle: &Lifecycle{
+			Rules: []LifecycleRule{
+				{
+					Action:    LifecycleAction{Type: "Delete"},
+					Condition: LifecycleCondition{AgeInDays: 30},
+				},
+			},
+		},
+		Logging: &BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website: &BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
 	}
 	au.SetLabel("a", "foo")
 	au.DeleteLabel("b")
@@ -114,7 +199,19 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 			RequesterPays:   false,
 			ForceSendFields: []string{"RequesterPays"},
 		},
-		NullFields: []string{"Labels.b"},
+		RetentionPolicy: &raw.BucketRetentionPolicy{RetentionPeriod: 3600},
+		Encryption:      &raw.BucketEncryption{DefaultKmsKeyName: "key2"},
+		NullFields:      []string{"Labels.b"},
+		Lifecycle: &raw.BucketLifecycle{
+			Rule: []*raw.BucketLifecycleRule{
+				{
+					Action:    &raw.BucketLifecycleRuleAction{Type: "Delete"},
+					Condition: &raw.BucketLifecycleRuleCondition{Age: 30},
+				},
+			},
+		},
+		Logging: &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website: &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
 	}
 	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
@@ -128,7 +225,21 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 		ForceSendFields: []string{"Labels"},
 		NullFields:      []string{"Labels.b"},
 	}
+	if msg := testutil.Diff(got, want); msg != "" {
+		t.Error(msg)
+	}
 
+	// Test nulls.
+	au3 := &BucketAttrsToUpdate{
+		RetentionPolicy: &RetentionPolicy{},
+		Encryption:      &BucketEncryption{},
+		Logging:         &BucketLogging{},
+		Website:         &BucketWebsite{},
+	}
+	got = au3.toRawBucket()
+	want = &raw.Bucket{
+		NullFields: []string{"RetentionPolicy", "Encryption", "Logging", "Website"},
+	}
 	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
@@ -268,6 +379,9 @@ func TestNewBucket(t *testing.T) {
 		Acl: []*raw.BucketAccessControl{
 			{Bucket: "name", Role: "READER", Email: "joe@example.com", Entity: "allUsers"},
 		},
+		Encryption: &raw.BucketEncryption{DefaultKmsKeyName: "key"},
+		Logging:    &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:    &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
 	}
 	want := &BucketAttrs{
 		Name:              "name",
@@ -306,8 +420,11 @@ func TestNewBucket(t *testing.T) {
 				ResponseHeaders: []string{"FOO"},
 			},
 		},
-		ACL:              []ACLRule{{Entity: "allUsers", Role: RoleReader}},
-		DefaultObjectACL: []ACLRule{},
+		Encryption:       &BucketEncryption{DefaultKMSKeyName: "key"},
+		Logging:          &BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:          &BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		ACL:              []ACLRule{{Entity: "allUsers", Role: RoleReader, Email: "joe@example.com"}},
+		DefaultObjectACL: nil,
 	}
 	got, err := newBucket(rb)
 	if err != nil {

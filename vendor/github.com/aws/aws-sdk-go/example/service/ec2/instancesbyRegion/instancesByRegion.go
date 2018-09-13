@@ -49,7 +49,7 @@ func main() {
 		ec2Svc := ec2.New(sess)
 		params := &ec2.DescribeInstancesInput{
 			Filters: []*ec2.Filter{
-				&ec2.Filter{
+				{
 					Name:   aws.String("instance-state-name"),
 					Values: aws.StringSlice(states),
 				},

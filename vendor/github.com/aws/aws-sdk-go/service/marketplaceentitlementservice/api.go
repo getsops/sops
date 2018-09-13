@@ -14,7 +14,7 @@ const opGetEntitlements = "GetEntitlements"
 
 // GetEntitlementsRequest generates a "aws/request.Request" representing the
 // client's request for the GetEntitlements operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -118,7 +118,7 @@ type Entitlement struct {
 	// the expiration date is the date at which the customer will renew or cancel
 	// their contract. Customers who are opting to renew their contract will still
 	// have entitlements with an expiration date.
-	ExpirationDate *time.Time `type:"timestamp" timestampFormat:"unix"`
+	ExpirationDate *time.Time `type:"timestamp"`
 
 	// The product code for which the given entitlement applies. Product codes are
 	// provided by AWS Marketplace when the product listing is created.

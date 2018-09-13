@@ -15,7 +15,7 @@ const opDescribeStream = "DescribeStream"
 
 // DescribeStreamRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeStream operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -107,7 +107,7 @@ const opGetRecords = "GetRecords"
 
 // GetRecordsRequest generates a "aws/request.Request" representing the
 // client's request for the GetRecords operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -226,7 +226,7 @@ const opGetShardIterator = "GetShardIterator"
 
 // GetShardIteratorRequest generates a "aws/request.Request" representing the
 // client's request for the GetShardIterator operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -326,7 +326,7 @@ const opListStreams = "ListStreams"
 
 // ListStreamsRequest generates a "aws/request.Request" representing the
 // client's request for the ListStreams operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1095,7 +1095,7 @@ type StreamDescription struct {
 	_ struct{} `type:"structure"`
 
 	// The date and time when the request to create this stream was issued.
-	CreationRequestDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationRequestDateTime *time.Time `type:"timestamp"`
 
 	// The key attribute(s) of the stream's DynamoDB table.
 	KeySchema []*dynamodb.KeySchemaElement `min:"1" type:"list"`
@@ -1233,7 +1233,7 @@ type StreamRecord struct {
 
 	// The approximate date and time when the stream record was created, in UNIX
 	// epoch time (http://www.epochconverter.com/) format.
-	ApproximateCreationDateTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	ApproximateCreationDateTime *time.Time `type:"timestamp"`
 
 	// The primary key attribute(s) for the DynamoDB item that was modified.
 	Keys map[string]*dynamodb.AttributeValue `type:"map"`

@@ -1,5 +1,5 @@
 /*
-Copyright 2016 Google Inc. All Rights Reserved.
+Copyright 2016 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/bigtable/bttest"
+	"cloud.google.com/go/bigtable/internal/gax"
 	"cloud.google.com/go/internal/testutil"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/google/go-cmp/cmp"
@@ -69,6 +70,7 @@ func setupFakeServer(opt ...grpc.ServerOption) (tbl *Table, cleanup func(), err 
 }
 
 func TestRetryApply(t *testing.T) {
+	gax.Logger = nil
 	ctx := context.Background()
 
 	errCount := 0
@@ -88,7 +90,7 @@ func TestRetryApply(t *testing.T) {
 	defer cleanup()
 
 	mut := NewMutation()
-	mut.Set("cf", "col", 1, []byte("val"))
+	mut.Set("cf", "col", 1000, []byte("val"))
 	if err := tbl.Apply(ctx, "row1", mut); err != nil {
 		t.Errorf("applying single mutation with retries: %v", err)
 	}
@@ -110,8 +112,8 @@ func TestRetryApply(t *testing.T) {
 	mutTrue := NewMutation()
 	mutTrue.DeleteRow()
 	mutFalse := NewMutation()
-	mutFalse.Set("cf", "col", 1, []byte("val"))
-	condMut := NewCondMutation(ValueFilter("."), mutTrue, mutFalse)
+	mutFalse.Set("cf", "col", 1000, []byte("val"))
+	condMut := NewCondMutation(ValueFilter(".*"), mutTrue, mutFalse)
 
 	errCount = 0
 	code = codes.Unavailable // Will be retried
@@ -135,6 +137,7 @@ func TestRetryApply(t *testing.T) {
 
 func TestRetryApplyBulk(t *testing.T) {
 	ctx := context.Background()
+	gax.Logger = nil
 
 	// Intercept requests and delegate to an interceptor defined by the test case
 	errCount := 0
@@ -179,28 +182,28 @@ func TestRetryApplyBulk(t *testing.T) {
 	f = func(ss grpc.ServerStream) error {
 		var err error
 		req := new(btpb.MutateRowsRequest)
-		ss.RecvMsg(req)
+		must(ss.RecvMsg(req))
 		switch errCount {
 		case 0:
 			// Retryable request failure
 			err = status.Errorf(codes.Unavailable, "")
 		case 1:
 			// Two mutations fail
-			writeMutateRowsResponse(ss, codes.Unavailable, codes.OK, codes.Aborted)
+			must(writeMutateRowsResponse(ss, codes.Unavailable, codes.OK, codes.Aborted))
 			err = nil
 		case 2:
 			// Two failures were retried. One will succeed.
 			if want, got := 2, len(req.Entries); want != got {
 				t.Errorf("2 bulk retries, got: %d, want %d", got, want)
 			}
-			writeMutateRowsResponse(ss, codes.OK, codes.Aborted)
+			must(writeMutateRowsResponse(ss, codes.OK, codes.Aborted))
 			err = nil
 		case 3:
 			// One failure was retried and will succeed.
 			if want, got := 1, len(req.Entries); want != got {
 				t.Errorf("1 bulk retry, got: %d, want %d", got, want)
 			}
-			writeMutateRowsResponse(ss, codes.OK)
+			must(writeMutateRowsResponse(ss, codes.OK))
 			err = nil
 		}
 		errCount++
@@ -218,12 +221,12 @@ func TestRetryApplyBulk(t *testing.T) {
 	f = func(ss grpc.ServerStream) error {
 		var err error
 		req := new(btpb.MutateRowsRequest)
-		ss.RecvMsg(req)
+		must(ss.RecvMsg(req))
 		switch errCount {
 		case 0:
 			// Give non-idempotent mutation a retryable error code.
 			// Nothing should be retried.
-			writeMutateRowsResponse(ss, codes.FailedPrecondition, codes.Aborted)
+			must(writeMutateRowsResponse(ss, codes.FailedPrecondition, codes.Aborted))
 			err = nil
 		case 1:
 			t.Errorf("unretryable errors: got one retry, want no retries")
@@ -245,8 +248,7 @@ func TestRetryApplyBulk(t *testing.T) {
 
 	// Test individual errors and a deadline exceeded
 	f = func(ss grpc.ServerStream) error {
-		writeMutateRowsResponse(ss, codes.FailedPrecondition, codes.OK, codes.Aborted)
-		return nil
+		return writeMutateRowsResponse(ss, codes.FailedPrecondition, codes.OK, codes.Aborted)
 	}
 	ctx, _ = context.WithTimeout(ctx, 100*time.Millisecond)
 	errors, err = tbl.ApplyBulk(ctx, []string{"row1", "row2", "row3"}, []*Mutation{m1, m2, m3})
@@ -298,6 +300,7 @@ func TestRetainRowsAfter(t *testing.T) {
 
 func TestRetryReadRows(t *testing.T) {
 	ctx := context.Background()
+	gax.Logger = nil
 
 	// Intercept requests and delegate to an interceptor defined by the test case
 	errCount := 0
@@ -320,7 +323,7 @@ func TestRetryReadRows(t *testing.T) {
 	f = func(ss grpc.ServerStream) error {
 		var err error
 		req := new(btpb.ReadRowsRequest)
-		ss.RecvMsg(req)
+		must(ss.RecvMsg(req))
 		switch errCount {
 		case 0:
 			// Retryable request failure
@@ -330,7 +333,7 @@ func TestRetryReadRows(t *testing.T) {
 			if want, got := "a", string(req.Rows.RowRanges[0].GetStartKeyClosed()); want != got {
 				t.Errorf("first retry, no data received yet: got %q, want %q", got, want)
 			}
-			writeReadRowsResponse(ss, "a", "b")
+			must(writeReadRowsResponse(ss, "a", "b"))
 			err = status.Errorf(codes.Unavailable, "")
 		case 2:
 			// Retryable request failure
@@ -340,7 +343,7 @@ func TestRetryReadRows(t *testing.T) {
 			err = status.Errorf(codes.Unavailable, "")
 		case 3:
 			// Write two more rows
-			writeReadRowsResponse(ss, "c", "d")
+			must(writeReadRowsResponse(ss, "c", "d"))
 			err = nil
 		}
 		errCount++
@@ -348,10 +351,10 @@ func TestRetryReadRows(t *testing.T) {
 	}
 
 	var got []string
-	tbl.ReadRows(ctx, NewRange("a", "z"), func(r Row) bool {
+	must(tbl.ReadRows(ctx, NewRange("a", "z"), func(r Row) bool {
 		got = append(got, r.Key())
 		return true
-	})
+	}))
 	want := []string{"a", "b", "c", "d"}
 	if !testutil.Equal(got, want) {
 		t.Errorf("retry range integration: got %v, want %v", got, want)
@@ -369,4 +372,10 @@ func writeReadRowsResponse(ss grpc.ServerStream, rowKeys ...string) error {
 		})
 	}
 	return ss.SendMsg(&btpb.ReadRowsResponse{Chunks: chunks})
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
 }

@@ -591,6 +591,10 @@ type EntityInfoProperties struct {
 	// InheritedPermissions - Possible values include: 'Noaccess', 'View', 'Edit', 'Delete'
 	InheritedPermissions InheritedPermissions `json:"inheritedPermissions,omitempty"`
 	NumberOfDescendants  *int32               `json:"numberOfDescendants,omitempty"`
+	// NumberOfChildren - Number of children is the number of Groups and Subscriptions that are exactly one level underneath the current Group.
+	NumberOfChildren *int32 `json:"numberOfChildren,omitempty"`
+	// NumberOfChildGroups - Number of child groups is the number of Groups that are exactly one level underneath the current Group.
+	NumberOfChildGroups *int32 `json:"numberOfChildGroups,omitempty"`
 	// ParentDisplayNameChain - The parent display name chain from the root group to the immediate parent
 	ParentDisplayNameChain *[]string `json:"parentDisplayNameChain,omitempty"`
 	// ParentNameChain - The parent name chain from the root group to the immediate parent
@@ -602,6 +606,8 @@ type EntityListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of entities.
 	Value *[]EntityInfo `json:"value,omitempty"`
+	// Count - Total count of records that match the filter
+	Count *int32 `json:"count,omitempty"`
 	// NextLink - The URL to use for getting the next set of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }

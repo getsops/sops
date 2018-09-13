@@ -50,7 +50,7 @@ func Test_SectionRaw(t *testing.T) {
 	Convey("Test section raw string", t, func() {
 		cfg, err := LoadSources(
 			LoadOptions{
-				Insensitive: true,
+				Insensitive:         true,
 				UnparseableSections: []string{"core_lesson", "comments"},
 			},
 			"testdata/aicc.ini")

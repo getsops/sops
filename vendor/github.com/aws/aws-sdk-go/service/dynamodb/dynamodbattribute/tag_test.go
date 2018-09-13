@@ -35,7 +35,7 @@ func TestTagParse(t *testing.T) {
 	for i, c := range cases {
 		actual := tag{}
 		if c.json {
-			actual.parseJSONTag(c.in)
+			actual.parseStructTag("json", c.in)
 		}
 		if c.av {
 			actual.parseAVTag(c.in)

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ var now atomic.Value
 
 func init() {
 	now.Store(time.Now)
+	ResetMinAckDeadline()
 }
 
 func timeNow() time.Time {
@@ -143,6 +144,14 @@ type Message struct {
 	// protected by server mutex
 	deliveries int
 	acks       int
+	Modacks    []Modack // modacks received by server for this message
+
+}
+
+type Modack struct {
+	AckID       string
+	AckDeadline int32
+	ReceivedAt  time.Time
 }
 
 // Messages returns information about all messages ever published.
@@ -201,7 +210,24 @@ func (s *gServer) GetTopic(_ context.Context, req *pb.GetTopicRequest) (*pb.Topi
 }
 
 func (s *gServer) UpdateTopic(_ context.Context, req *pb.UpdateTopicRequest) (*pb.Topic, error) {
-	return nil, status.Errorf(codes.Unimplemented, "unimplemented")
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	t := s.topics[req.Topic.Name]
+	if t == nil {
+		return nil, status.Errorf(codes.NotFound, "topic %q", req.Topic.Name)
+	}
+	for _, path := range req.UpdateMask.Paths {
+		switch path {
+		case "labels":
+			t.proto.Labels = req.Topic.Labels
+		case "message_storage_policy": // "fetch" the policy
+			t.proto.MessageStoragePolicy = &pb.MessageStoragePolicy{AllowedPersistenceRegions: []string{"US"}}
+		default:
+			return nil, status.Errorf(codes.InvalidArgument, "unknown field name %q", path)
+		}
+	}
+	return t.proto, nil
 }
 
 func (s *gServer) ListTopics(_ context.Context, req *pb.ListTopicsRequest) (*pb.ListTopicsResponse, error) {
@@ -298,7 +324,25 @@ func (s *gServer) CreateSubscription(_ context.Context, ps *pb.Subscription) (*p
 }
 
 // Can be set for testing.
-var minAckDeadlineSecs int32 = 10
+var minAckDeadlineSecs int32
+
+// SetMinAckDeadlineSecs changes the minack deadline to n. Must be
+// greater than or equal to 1 second. Remember to reset this value
+// to the default after your test changes it. Example usage:
+// 		pstest.SetMinAckDeadlineSecs(1)
+// 		defer pstest.ResetMinAckDeadlineSecs()
+func SetMinAckDeadline(n time.Duration) {
+	if n < time.Second {
+		panic("SetMinAckDeadline expects a value greater than 1 second")
+	}
+
+	minAckDeadlineSecs = int32(n / time.Second)
+}
+
+// ResetMinAckDeadlineSecs resets the minack deadline to the default.
+func ResetMinAckDeadline() {
+	minAckDeadlineSecs = 10
+}
 
 func checkAckDeadline(ads int32) error {
 	if ads < minAckDeadlineSecs || ads > 600 {
@@ -363,7 +407,9 @@ func (s *gServer) UpdateSubscription(_ context.Context, req *pb.UpdateSubscripti
 			}
 			sub.proto.MessageRetentionDuration = req.Subscription.MessageRetentionDuration
 
-			// TODO(jba): labels
+		case "labels":
+			sub.proto.Labels = req.Subscription.Labels
+
 		default:
 			return nil, status.Errorf(codes.InvalidArgument, "unknown field name %q", path)
 		}
@@ -525,6 +571,39 @@ func (s *subscription) stop() {
 	close(s.done)
 }
 
+func (s *gServer) Acknowledge(_ context.Context, req *pb.AcknowledgeRequest) (*emptypb.Empty, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if req.Subscription == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "missing subscription")
+	}
+	sub := s.subs[req.Subscription]
+	for _, id := range req.AckIds {
+		sub.ack(id)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (s *gServer) ModifyAckDeadline(_ context.Context, req *pb.ModifyAckDeadlineRequest) (*emptypb.Empty, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	now := time.Now()
+	for _, id := range req.AckIds {
+		s.msgsByID[id].Modacks = append(s.msgsByID[id].Modacks, Modack{AckID: id, AckDeadline: req.AckDeadlineSeconds, ReceivedAt: now})
+	}
+
+	if req.Subscription == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "missing subscription")
+	}
+	sub := s.subs[req.Subscription]
+	dur := secsToDur(req.AckDeadlineSeconds)
+	for _, id := range req.AckIds {
+		sub.modifyAckDeadline(id, dur)
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func (s *gServer) StreamingPull(sps pb.Subscriber_StreamingPullServer) error {
 	// Receive initial message configuring the pull.
 	req, err := sps.Recv()
@@ -545,6 +624,59 @@ func (s *gServer) StreamingPull(sps pb.Subscriber_StreamingPullServer) error {
 	err = st.pull(&s.wg)
 	sub.deleteStream(st)
 	return err
+}
+
+func (s *gServer) Seek(ctx context.Context, req *pb.SeekRequest) (*pb.SeekResponse, error) {
+	// Only handle time-based seeking for now.
+	// This fake doesn't deal with snapshots.
+	var target time.Time
+	switch v := req.Target.(type) {
+	case *pb.SeekRequest_Time:
+		var err error
+		target, err = ptypes.Timestamp(v.Time)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, "bad Time target: %v", err)
+		}
+	default:
+		return nil, status.Errorf(codes.Unimplemented, "unhandled Seek target type %T", v)
+	}
+
+	// The entire server must be locked while doing the work below,
+	// because the messages don't have any other synchronization.
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	sub := s.subs[req.Subscription]
+	if sub == nil {
+		return nil, status.Errorf(codes.NotFound, "subscription %s", req.Subscription)
+	}
+
+	// Drop all messages from sub that were published before the target time.
+	for id, m := range sub.msgs {
+		if m.publishTime.Before(target) {
+			delete(sub.msgs, id)
+			(*m.acks)++
+		}
+	}
+	// Un-ack any already-acked messages after this time;
+	// redelivering them to the subscription is the closest analogue here.
+	for _, m := range s.msgs {
+		if m.PublishTime.Before(target) {
+			continue
+		}
+		sub.msgs[m.ID] = &message{
+			publishTime: m.PublishTime,
+			proto: &pb.ReceivedMessage{
+				AckId: m.ID,
+				// This was not preserved!
+				//Message: pm,
+			},
+			deliveries:  &m.deliveries,
+			acks:        &m.acks,
+			streamIndex: -1,
+		}
+	}
+	return &pb.SeekResponse{}, nil
 }
 
 var retentionDuration = 10 * time.Minute

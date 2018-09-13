@@ -788,6 +788,23 @@ func PossibleMachineBootTypeValues() []MachineBootType {
 	return []MachineBootType{MachineBootTypeBIOS, MachineBootTypeEFI, MachineBootTypeUnknown}
 }
 
+// NameAvailabilityReason enumerates the values for name availability reason.
+type NameAvailabilityReason string
+
+const (
+	// NameAvailabilityReasonAlreadyExists ...
+	NameAvailabilityReasonAlreadyExists NameAvailabilityReason = "AlreadyExists"
+	// NameAvailabilityReasonAvailable ...
+	NameAvailabilityReasonAvailable NameAvailabilityReason = "Available"
+	// NameAvailabilityReasonInvalid ...
+	NameAvailabilityReasonInvalid NameAvailabilityReason = "Invalid"
+)
+
+// PossibleNameAvailabilityReasonValues returns an array of possible values for the NameAvailabilityReason const type.
+func PossibleNameAvailabilityReasonValues() []NameAvailabilityReason {
+	return []NameAvailabilityReason{NameAvailabilityReasonAlreadyExists, NameAvailabilityReasonAvailable, NameAvailabilityReasonInvalid}
+}
+
 // Percentile enumerates the values for percentile.
 type Percentile string
 
@@ -1280,6 +1297,15 @@ func (a *Assessment) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// AssessmentOptionsResultList list of assessment options.
+type AssessmentOptionsResultList struct {
+	autorest.Response `json:"-"`
+	// VMFamilies - Dictionary of VM families grouped by vm family name describing the targeted azure locations of VM family and the category of the family.
+	VMFamilies *[]VMFamily `json:"vmFamilies,omitempty"`
+	// ReservedInstanceVMFamilies - List of supported VM Families.
+	ReservedInstanceVMFamilies *[]string `json:"reservedInstanceVmFamilies,omitempty"`
+}
+
 // AssessmentProperties properties of an assessment.
 type AssessmentProperties struct {
 	// AzureLocation - Target Azure location for which the machines should be assessed. These enums are the same as used by Compute API. Possible values include: 'AzureLocationUnknown', 'AzureLocationEastAsia', 'AzureLocationSoutheastAsia', 'AzureLocationAustraliaEast', 'AzureLocationAustraliaSoutheast', 'AzureLocationBrazilSouth', 'AzureLocationCanadaCentral', 'AzureLocationCanadaEast', 'AzureLocationWestEurope', 'AzureLocationNorthEurope', 'AzureLocationCentralIndia', 'AzureLocationSouthIndia', 'AzureLocationWestIndia', 'AzureLocationJapanEast', 'AzureLocationJapanWest', 'AzureLocationKoreaCentral', 'AzureLocationKoreaSouth', 'AzureLocationUkWest', 'AzureLocationUkSouth', 'AzureLocationNorthCentralUs', 'AzureLocationEastUs', 'AzureLocationWestUs2', 'AzureLocationSouthCentralUs', 'AzureLocationCentralUs', 'AzureLocationEastUs2', 'AzureLocationWestUs', 'AzureLocationWestCentralUs', 'AzureLocationGermanyCentral', 'AzureLocationGermanyNortheast', 'AzureLocationChinaNorth', 'AzureLocationChinaEast'
@@ -1331,6 +1357,42 @@ type AssessmentResultList struct {
 	autorest.Response `json:"-"`
 	// Value - List of assessments.
 	Value *[]Assessment `json:"value,omitempty"`
+}
+
+// CheckNameAvailabilityParameters parameters for a check name availability request.
+type CheckNameAvailabilityParameters struct {
+	// Name - The name to check for availability
+	Name *string `json:"name,omitempty"`
+	// Type - The resource type. Must be set to Microsoft.Migrate/projects
+	Type *string `json:"type,omitempty"`
+}
+
+// CheckNameAvailabilityResult the CheckNameAvailability operation response.
+type CheckNameAvailabilityResult struct {
+	autorest.Response `json:"-"`
+	// NameAvailable - Gets a boolean value that indicates whether the name is available for you to use. If true, the name is available. If false, the name has already been taken or invalid and cannot be used.
+	NameAvailable *bool `json:"nameAvailable,omitempty"`
+	// Reason - Gets the reason that a project name could not be used. The Reason element is only returned if NameAvailable is false. Possible values include: 'NameAvailabilityReasonAvailable', 'NameAvailabilityReasonInvalid', 'NameAvailabilityReasonAlreadyExists'
+	Reason NameAvailabilityReason `json:"reason,omitempty"`
+	// Message - Gets an error message explaining the Reason value in more detail.
+	Message *string `json:"message,omitempty"`
+}
+
+// CloudError an error response from the Azure Migrate service.
+type CloudError struct {
+	Error *CloudErrorBody `json:"error,omitempty"`
+}
+
+// CloudErrorBody an error response from the Azure Migrate service.
+type CloudErrorBody struct {
+	// Code - An identifier for the error. Codes are invariant and are intended to be consumed programmatically.
+	Code *string `json:"code,omitempty"`
+	// Message - A message describing the error, intended to be suitable for display in a user interface.
+	Message *string `json:"message,omitempty"`
+	// Target - The target of the particular error. For example, the name of the property in error.
+	Target *string `json:"target,omitempty"`
+	// Details - A list of additional details about the error.
+	Details *[]CloudErrorBody `json:"details,omitempty"`
 }
 
 // Disk a disk discovered on a machine.
@@ -1859,4 +1921,14 @@ type ProjectResultList struct {
 	autorest.Response `json:"-"`
 	// Value - List of projects.
 	Value *[]Project `json:"value,omitempty"`
+}
+
+// VMFamily VM family name, the list of targeted azure locations and the category of the family.
+type VMFamily struct {
+	// FamilyName - Name of the VM family.
+	FamilyName *string `json:"familyName,omitempty"`
+	// TargetLocations - List of Azure regions.
+	TargetLocations *[]string `json:"targetLocations,omitempty"`
+	// Category - Category of the VM family.
+	Category *[]string `json:"category,omitempty"`
 }

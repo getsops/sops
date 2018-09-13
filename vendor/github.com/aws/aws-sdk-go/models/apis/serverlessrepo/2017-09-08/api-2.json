@@ -581,7 +581,8 @@
           "shape" : "__string",
           "locationName" : "templateUrl"
         }
-      }
+      },
+      "required" : [ "Description", "Name", "Author" ]
     },
     "CreateApplicationResponse" : {
       "type" : "structure",
@@ -745,7 +746,7 @@
           "locationName" : "stackName"
         }
       },
-      "required" : [ "ApplicationId" ]
+      "required" : [ "ApplicationId", "StackName" ]
     },
     "CreateCloudFormationChangeSetResponse" : {
       "type" : "structure",
@@ -1067,7 +1068,7 @@
           "locationName" : "statements"
         }
       },
-      "required" : [ "ApplicationId" ]
+      "required" : [ "ApplicationId", "Statements" ]
     },
     "PutApplicationPolicyResponse" : {
       "type" : "structure",

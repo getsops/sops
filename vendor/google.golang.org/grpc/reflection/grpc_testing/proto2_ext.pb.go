@@ -12,15 +12,42 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+
 type Extension struct {
-	Whatzit          *int32 `protobuf:"varint,1,opt,name=whatzit" json:"whatzit,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
+	Whatzit              *int32   `protobuf:"varint,1,opt,name=whatzit" json:"whatzit,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Extension) Reset()                    { *m = Extension{} }
-func (m *Extension) String() string            { return proto.CompactTextString(m) }
-func (*Extension) ProtoMessage()               {}
-func (*Extension) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (m *Extension) Reset()         { *m = Extension{} }
+func (m *Extension) String() string { return proto.CompactTextString(m) }
+func (*Extension) ProtoMessage()    {}
+func (*Extension) Descriptor() ([]byte, []int) {
+	return fileDescriptor_proto2_ext_4437118420d604f2, []int{0}
+}
+func (m *Extension) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Extension.Unmarshal(m, b)
+}
+func (m *Extension) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Extension.Marshal(b, m, deterministic)
+}
+func (dst *Extension) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Extension.Merge(dst, src)
+}
+func (m *Extension) XXX_Size() int {
+	return xxx_messageInfo_Extension.Size(m)
+}
+func (m *Extension) XXX_DiscardUnknown() {
+	xxx_messageInfo_Extension.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Extension proto.InternalMessageInfo
 
 func (m *Extension) GetWhatzit() int32 {
 	if m != nil && m.Whatzit != nil {
@@ -63,9 +90,9 @@ func init() {
 	proto.RegisterExtension(E_Baz)
 }
 
-func init() { proto.RegisterFile("proto2_ext.proto", fileDescriptor1) }
+func init() { proto.RegisterFile("proto2_ext.proto", fileDescriptor_proto2_ext_4437118420d604f2) }
 
-var fileDescriptor1 = []byte{
+var fileDescriptor_proto2_ext_4437118420d604f2 = []byte{
 	// 179 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x28, 0x28, 0xca, 0x2f,
 	0xc9, 0x37, 0x8a, 0x4f, 0xad, 0x28, 0xd1, 0x03, 0x33, 0x85, 0x78, 0xd2, 0x8b, 0x0a, 0x92, 0xf5,

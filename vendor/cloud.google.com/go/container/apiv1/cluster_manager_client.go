@@ -121,6 +121,8 @@ func defaultClusterManagerCallOptions() *ClusterManagerCallOptions {
 }
 
 // ClusterManagerClient is a client for interacting with Google Container Engine API.
+//
+// Methods, except Close, may be called concurrently. However, fields must not be modified concurrently with method calls.
 type ClusterManagerClient struct {
 	// The connection to the service.
 	conn *grpc.ClientConn

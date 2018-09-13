@@ -19,7 +19,7 @@
 
 package compute
 
-import original "github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2018-04-01/compute"
+import original "github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2018-06-01/compute"
 
 type AvailabilitySetsClient = original.AvailabilitySetsClient
 
@@ -30,6 +30,9 @@ const (
 type BaseClient = original.BaseClient
 type ContainerServicesClient = original.ContainerServicesClient
 type DisksClient = original.DisksClient
+type GalleriesClient = original.GalleriesClient
+type GalleryImagesClient = original.GalleryImagesClient
+type GalleryImageVersionsClient = original.GalleryImageVersionsClient
 type ImagesClient = original.ImagesClient
 type LogAnalyticsClient = original.LogAnalyticsClient
 type AccessLevel = original.AccessLevel
@@ -37,6 +40,15 @@ type AccessLevel = original.AccessLevel
 const (
 	None AccessLevel = original.None
 	Read AccessLevel = original.Read
+)
+
+type AggregatedReplicationState = original.AggregatedReplicationState
+
+const (
+	Completed  AggregatedReplicationState = original.Completed
+	Failed     AggregatedReplicationState = original.Failed
+	InProgress AggregatedReplicationState = original.InProgress
+	Unknown    AggregatedReplicationState = original.Unknown
 )
 
 type CachingTypes = original.CachingTypes
@@ -133,6 +145,14 @@ const (
 	DiskCreateOptionTypesFromImage DiskCreateOptionTypes = original.DiskCreateOptionTypesFromImage
 )
 
+type HostCaching = original.HostCaching
+
+const (
+	HostCachingNone      HostCaching = original.HostCachingNone
+	HostCachingReadOnly  HostCaching = original.HostCachingReadOnly
+	HostCachingReadWrite HostCaching = original.HostCachingReadWrite
+)
+
 type InstanceViewTypes = original.InstanceViewTypes
 
 const (
@@ -191,6 +211,54 @@ const (
 	HTTPS ProtocolTypes = original.HTTPS
 )
 
+type ProvisioningState = original.ProvisioningState
+
+const (
+	ProvisioningStateCreating  ProvisioningState = original.ProvisioningStateCreating
+	ProvisioningStateDeleting  ProvisioningState = original.ProvisioningStateDeleting
+	ProvisioningStateFailed    ProvisioningState = original.ProvisioningStateFailed
+	ProvisioningStateMigrating ProvisioningState = original.ProvisioningStateMigrating
+	ProvisioningStateSucceeded ProvisioningState = original.ProvisioningStateSucceeded
+	ProvisioningStateUpdating  ProvisioningState = original.ProvisioningStateUpdating
+)
+
+type ProvisioningState1 = original.ProvisioningState1
+
+const (
+	ProvisioningState1Creating  ProvisioningState1 = original.ProvisioningState1Creating
+	ProvisioningState1Deleting  ProvisioningState1 = original.ProvisioningState1Deleting
+	ProvisioningState1Failed    ProvisioningState1 = original.ProvisioningState1Failed
+	ProvisioningState1Migrating ProvisioningState1 = original.ProvisioningState1Migrating
+	ProvisioningState1Succeeded ProvisioningState1 = original.ProvisioningState1Succeeded
+	ProvisioningState1Updating  ProvisioningState1 = original.ProvisioningState1Updating
+)
+
+type ProvisioningState2 = original.ProvisioningState2
+
+const (
+	ProvisioningState2Creating  ProvisioningState2 = original.ProvisioningState2Creating
+	ProvisioningState2Deleting  ProvisioningState2 = original.ProvisioningState2Deleting
+	ProvisioningState2Failed    ProvisioningState2 = original.ProvisioningState2Failed
+	ProvisioningState2Migrating ProvisioningState2 = original.ProvisioningState2Migrating
+	ProvisioningState2Succeeded ProvisioningState2 = original.ProvisioningState2Succeeded
+	ProvisioningState2Updating  ProvisioningState2 = original.ProvisioningState2Updating
+)
+
+type ReplicationState = original.ReplicationState
+
+const (
+	ReplicationStateCompleted   ReplicationState = original.ReplicationStateCompleted
+	ReplicationStateFailed      ReplicationState = original.ReplicationStateFailed
+	ReplicationStateReplicating ReplicationState = original.ReplicationStateReplicating
+	ReplicationStateUnknown     ReplicationState = original.ReplicationStateUnknown
+)
+
+type ReplicationStatusTypes = original.ReplicationStatusTypes
+
+const (
+	ReplicationStatusTypesReplicationStatus ReplicationStatusTypes = original.ReplicationStatusTypesReplicationStatus
+)
+
 type ResourceIdentityType = original.ResourceIdentityType
 
 const (
@@ -232,10 +300,17 @@ const (
 type RollingUpgradeStatusCode = original.RollingUpgradeStatusCode
 
 const (
-	Cancelled      RollingUpgradeStatusCode = original.Cancelled
-	Completed      RollingUpgradeStatusCode = original.Completed
-	Faulted        RollingUpgradeStatusCode = original.Faulted
-	RollingForward RollingUpgradeStatusCode = original.RollingForward
+	RollingUpgradeStatusCodeCancelled      RollingUpgradeStatusCode = original.RollingUpgradeStatusCodeCancelled
+	RollingUpgradeStatusCodeCompleted      RollingUpgradeStatusCode = original.RollingUpgradeStatusCodeCompleted
+	RollingUpgradeStatusCodeFaulted        RollingUpgradeStatusCode = original.RollingUpgradeStatusCodeFaulted
+	RollingUpgradeStatusCodeRollingForward RollingUpgradeStatusCode = original.RollingUpgradeStatusCodeRollingForward
+)
+
+type ScaleTier = original.ScaleTier
+
+const (
+	S100 ScaleTier = original.S100
+	S30  ScaleTier = original.S30
 )
 
 type SettingNames = original.SettingNames
@@ -264,8 +339,9 @@ const (
 type StorageAccountTypes = original.StorageAccountTypes
 
 const (
-	StorageAccountTypesPremiumLRS  StorageAccountTypes = original.StorageAccountTypesPremiumLRS
-	StorageAccountTypesStandardLRS StorageAccountTypes = original.StorageAccountTypesStandardLRS
+	StorageAccountTypesPremiumLRS     StorageAccountTypes = original.StorageAccountTypesPremiumLRS
+	StorageAccountTypesStandardLRS    StorageAccountTypes = original.StorageAccountTypesStandardLRS
+	StorageAccountTypesStandardSSDLRS StorageAccountTypes = original.StorageAccountTypesStandardSSDLRS
 )
 
 type UpgradeMode = original.UpgradeMode
@@ -279,9 +355,9 @@ const (
 type UpgradeOperationInvoker = original.UpgradeOperationInvoker
 
 const (
-	Platform UpgradeOperationInvoker = original.Platform
-	Unknown  UpgradeOperationInvoker = original.Unknown
-	User     UpgradeOperationInvoker = original.User
+	UpgradeOperationInvokerPlatform UpgradeOperationInvoker = original.UpgradeOperationInvokerPlatform
+	UpgradeOperationInvokerUnknown  UpgradeOperationInvoker = original.UpgradeOperationInvokerUnknown
+	UpgradeOperationInvokerUser     UpgradeOperationInvoker = original.UpgradeOperationInvokerUser
 )
 
 type UpgradeState = original.UpgradeState
@@ -493,10 +569,13 @@ type APIErrorBase = original.APIErrorBase
 type AutoOSUpgradePolicy = original.AutoOSUpgradePolicy
 type AvailabilitySet = original.AvailabilitySet
 type AvailabilitySetListResult = original.AvailabilitySetListResult
+type AvailabilitySetListResultIterator = original.AvailabilitySetListResultIterator
+type AvailabilitySetListResultPage = original.AvailabilitySetListResultPage
 type AvailabilitySetProperties = original.AvailabilitySetProperties
 type AvailabilitySetUpdate = original.AvailabilitySetUpdate
 type BootDiagnostics = original.BootDiagnostics
 type BootDiagnosticsInstanceView = original.BootDiagnosticsInstanceView
+type CloudError = original.CloudError
 type ContainerService = original.ContainerService
 type ContainerServiceAgentPoolProfile = original.ContainerServiceAgentPoolProfile
 type ContainerServiceCustomProfile = original.ContainerServiceCustomProfile
@@ -519,6 +598,7 @@ type CreationData = original.CreationData
 type DataDisk = original.DataDisk
 type DataDiskImage = original.DataDiskImage
 type DiagnosticsProfile = original.DiagnosticsProfile
+type Disallowed = original.Disallowed
 type Disk = original.Disk
 type DiskEncryptionSettings = original.DiskEncryptionSettings
 type DiskInstanceView = original.DiskInstanceView
@@ -535,6 +615,36 @@ type DisksUpdateFuture = original.DisksUpdateFuture
 type DiskUpdate = original.DiskUpdate
 type DiskUpdateProperties = original.DiskUpdateProperties
 type EncryptionSettings = original.EncryptionSettings
+type GalleriesCreateOrUpdateFuture = original.GalleriesCreateOrUpdateFuture
+type GalleriesDeleteFuture = original.GalleriesDeleteFuture
+type Gallery = original.Gallery
+type GalleryArtifactPublishingProfileBase = original.GalleryArtifactPublishingProfileBase
+type GalleryArtifactSource = original.GalleryArtifactSource
+type GalleryDataDiskImage = original.GalleryDataDiskImage
+type GalleryDiskImage = original.GalleryDiskImage
+type GalleryIdentifier = original.GalleryIdentifier
+type GalleryImage = original.GalleryImage
+type GalleryImageIdentifier = original.GalleryImageIdentifier
+type GalleryImageList = original.GalleryImageList
+type GalleryImageListIterator = original.GalleryImageListIterator
+type GalleryImageListPage = original.GalleryImageListPage
+type GalleryImageProperties = original.GalleryImageProperties
+type GalleryImagesCreateOrUpdateFuture = original.GalleryImagesCreateOrUpdateFuture
+type GalleryImagesDeleteFuture = original.GalleryImagesDeleteFuture
+type GalleryImageVersion = original.GalleryImageVersion
+type GalleryImageVersionList = original.GalleryImageVersionList
+type GalleryImageVersionListIterator = original.GalleryImageVersionListIterator
+type GalleryImageVersionListPage = original.GalleryImageVersionListPage
+type GalleryImageVersionProperties = original.GalleryImageVersionProperties
+type GalleryImageVersionPublishingProfile = original.GalleryImageVersionPublishingProfile
+type GalleryImageVersionsCreateOrUpdateFuture = original.GalleryImageVersionsCreateOrUpdateFuture
+type GalleryImageVersionsDeleteFuture = original.GalleryImageVersionsDeleteFuture
+type GalleryImageVersionStorageProfile = original.GalleryImageVersionStorageProfile
+type GalleryList = original.GalleryList
+type GalleryListIterator = original.GalleryListIterator
+type GalleryListPage = original.GalleryListPage
+type GalleryOSDiskImage = original.GalleryOSDiskImage
+type GalleryProperties = original.GalleryProperties
 type GrantAccessData = original.GrantAccessData
 type HardwareProfile = original.HardwareProfile
 type Image = original.Image
@@ -545,6 +655,7 @@ type ImageListResultIterator = original.ImageListResultIterator
 type ImageListResultPage = original.ImageListResultPage
 type ImageOSDisk = original.ImageOSDisk
 type ImageProperties = original.ImageProperties
+type ImagePurchasePlan = original.ImagePurchasePlan
 type ImageReference = original.ImageReference
 type ImagesCreateOrUpdateFuture = original.ImagesCreateOrUpdateFuture
 type ImagesDeleteFuture = original.ImagesDeleteFuture
@@ -568,14 +679,13 @@ type LogAnalyticsExportThrottledRequestsFuture = original.LogAnalyticsExportThro
 type LogAnalyticsInputBase = original.LogAnalyticsInputBase
 type LogAnalyticsOperationResult = original.LogAnalyticsOperationResult
 type LogAnalyticsOutput = original.LogAnalyticsOutput
-type LongRunningOperationProperties = original.LongRunningOperationProperties
 type MaintenanceRedeployStatus = original.MaintenanceRedeployStatus
+type ManagedArtifact = original.ManagedArtifact
 type ManagedDiskParameters = original.ManagedDiskParameters
 type NetworkInterfaceReference = original.NetworkInterfaceReference
 type NetworkInterfaceReferenceProperties = original.NetworkInterfaceReferenceProperties
 type NetworkProfile = original.NetworkProfile
 type OperationListResult = original.OperationListResult
-type OperationStatusResponse = original.OperationStatusResponse
 type OperationValue = original.OperationValue
 type OperationValueDisplay = original.OperationValueDisplay
 type OSDisk = original.OSDisk
@@ -583,9 +693,13 @@ type OSDiskImage = original.OSDiskImage
 type OSProfile = original.OSProfile
 type Plan = original.Plan
 type PurchasePlan = original.PurchasePlan
+type RecommendedMachineConfiguration = original.RecommendedMachineConfiguration
 type RecoveryWalkResponse = original.RecoveryWalkResponse
+type RegionalReplicationStatus = original.RegionalReplicationStatus
+type ReplicationStatus = original.ReplicationStatus
 type RequestRateByIntervalInput = original.RequestRateByIntervalInput
 type Resource = original.Resource
+type ResourceRange = original.ResourceRange
 type ResourceSku = original.ResourceSku
 type ResourceSkuCapabilities = original.ResourceSkuCapabilities
 type ResourceSkuCapacity = original.ResourceSkuCapacity
@@ -611,7 +725,6 @@ type RunCommandListResultIterator = original.RunCommandListResultIterator
 type RunCommandListResultPage = original.RunCommandListResultPage
 type RunCommandParameterDefinition = original.RunCommandParameterDefinition
 type RunCommandResult = original.RunCommandResult
-type RunCommandResultProperties = original.RunCommandResultProperties
 type Sku = original.Sku
 type Snapshot = original.Snapshot
 type SnapshotList = original.SnapshotList
@@ -645,7 +758,6 @@ type VirtualMachine = original.VirtualMachine
 type VirtualMachineAgentInstanceView = original.VirtualMachineAgentInstanceView
 type VirtualMachineCaptureParameters = original.VirtualMachineCaptureParameters
 type VirtualMachineCaptureResult = original.VirtualMachineCaptureResult
-type VirtualMachineCaptureResultProperties = original.VirtualMachineCaptureResultProperties
 type VirtualMachineExtension = original.VirtualMachineExtension
 type VirtualMachineExtensionHandlerInstanceView = original.VirtualMachineExtensionHandlerInstanceView
 type VirtualMachineExtensionImage = original.VirtualMachineExtensionImage
@@ -660,6 +772,7 @@ type VirtualMachineExtensionUpdate = original.VirtualMachineExtensionUpdate
 type VirtualMachineExtensionUpdateProperties = original.VirtualMachineExtensionUpdateProperties
 type VirtualMachineHealthStatus = original.VirtualMachineHealthStatus
 type VirtualMachineIdentity = original.VirtualMachineIdentity
+type VirtualMachineIdentityUserAssignedIdentitiesValue = original.VirtualMachineIdentityUserAssignedIdentitiesValue
 type VirtualMachineImage = original.VirtualMachineImage
 type VirtualMachineImageProperties = original.VirtualMachineImageProperties
 type VirtualMachineImageResource = original.VirtualMachineImageResource
@@ -679,10 +792,12 @@ type VirtualMachineScaleSetExtensionProperties = original.VirtualMachineScaleSet
 type VirtualMachineScaleSetExtensionsCreateOrUpdateFuture = original.VirtualMachineScaleSetExtensionsCreateOrUpdateFuture
 type VirtualMachineScaleSetExtensionsDeleteFuture = original.VirtualMachineScaleSetExtensionsDeleteFuture
 type VirtualMachineScaleSetIdentity = original.VirtualMachineScaleSetIdentity
+type VirtualMachineScaleSetIdentityUserAssignedIdentitiesValue = original.VirtualMachineScaleSetIdentityUserAssignedIdentitiesValue
 type VirtualMachineScaleSetInstanceView = original.VirtualMachineScaleSetInstanceView
 type VirtualMachineScaleSetInstanceViewStatusesSummary = original.VirtualMachineScaleSetInstanceViewStatusesSummary
 type VirtualMachineScaleSetIPConfiguration = original.VirtualMachineScaleSetIPConfiguration
 type VirtualMachineScaleSetIPConfigurationProperties = original.VirtualMachineScaleSetIPConfigurationProperties
+type VirtualMachineScaleSetIPTag = original.VirtualMachineScaleSetIPTag
 type VirtualMachineScaleSetListOSUpgradeHistory = original.VirtualMachineScaleSetListOSUpgradeHistory
 type VirtualMachineScaleSetListOSUpgradeHistoryIterator = original.VirtualMachineScaleSetListOSUpgradeHistoryIterator
 type VirtualMachineScaleSetListOSUpgradeHistoryPage = original.VirtualMachineScaleSetListOSUpgradeHistoryPage
@@ -707,6 +822,7 @@ type VirtualMachineScaleSetPublicIPAddressConfiguration = original.VirtualMachin
 type VirtualMachineScaleSetPublicIPAddressConfigurationDNSSettings = original.VirtualMachineScaleSetPublicIPAddressConfigurationDNSSettings
 type VirtualMachineScaleSetPublicIPAddressConfigurationProperties = original.VirtualMachineScaleSetPublicIPAddressConfigurationProperties
 type VirtualMachineScaleSetRollingUpgradesCancelFuture = original.VirtualMachineScaleSetRollingUpgradesCancelFuture
+type VirtualMachineScaleSetRollingUpgradesStartExtensionUpgradeFuture = original.VirtualMachineScaleSetRollingUpgradesStartExtensionUpgradeFuture
 type VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture = original.VirtualMachineScaleSetRollingUpgradesStartOSUpgradeFuture
 type VirtualMachineScaleSetsCreateOrUpdateFuture = original.VirtualMachineScaleSetsCreateOrUpdateFuture
 type VirtualMachineScaleSetsDeallocateFuture = original.VirtualMachineScaleSetsDeallocateFuture
@@ -755,6 +871,7 @@ type VirtualMachineScaleSetVMsRedeployFuture = original.VirtualMachineScaleSetVM
 type VirtualMachineScaleSetVMsReimageAllFuture = original.VirtualMachineScaleSetVMsReimageAllFuture
 type VirtualMachineScaleSetVMsReimageFuture = original.VirtualMachineScaleSetVMsReimageFuture
 type VirtualMachineScaleSetVMsRestartFuture = original.VirtualMachineScaleSetVMsRestartFuture
+type VirtualMachineScaleSetVMsRunCommandFuture = original.VirtualMachineScaleSetVMsRunCommandFuture
 type VirtualMachineScaleSetVMsStartFuture = original.VirtualMachineScaleSetVMsStartFuture
 type VirtualMachineScaleSetVMsUpdateFuture = original.VirtualMachineScaleSetVMsUpdateFuture
 type VirtualMachinesCaptureFuture = original.VirtualMachinesCaptureFuture
@@ -815,6 +932,24 @@ func NewDisksClient(subscriptionID string) DisksClient {
 func NewDisksClientWithBaseURI(baseURI string, subscriptionID string) DisksClient {
 	return original.NewDisksClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewGalleriesClient(subscriptionID string) GalleriesClient {
+	return original.NewGalleriesClient(subscriptionID)
+}
+func NewGalleriesClientWithBaseURI(baseURI string, subscriptionID string) GalleriesClient {
+	return original.NewGalleriesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewGalleryImagesClient(subscriptionID string) GalleryImagesClient {
+	return original.NewGalleryImagesClient(subscriptionID)
+}
+func NewGalleryImagesClientWithBaseURI(baseURI string, subscriptionID string) GalleryImagesClient {
+	return original.NewGalleryImagesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewGalleryImageVersionsClient(subscriptionID string) GalleryImageVersionsClient {
+	return original.NewGalleryImageVersionsClient(subscriptionID)
+}
+func NewGalleryImageVersionsClientWithBaseURI(baseURI string, subscriptionID string) GalleryImageVersionsClient {
+	return original.NewGalleryImageVersionsClientWithBaseURI(baseURI, subscriptionID)
+}
 func NewImagesClient(subscriptionID string) ImagesClient {
 	return original.NewImagesClient(subscriptionID)
 }
@@ -829,6 +964,9 @@ func NewLogAnalyticsClientWithBaseURI(baseURI string, subscriptionID string) Log
 }
 func PossibleAccessLevelValues() []AccessLevel {
 	return original.PossibleAccessLevelValues()
+}
+func PossibleAggregatedReplicationStateValues() []AggregatedReplicationState {
+	return original.PossibleAggregatedReplicationStateValues()
 }
 func PossibleCachingTypesValues() []CachingTypes {
 	return original.PossibleCachingTypesValues()
@@ -847,6 +985,9 @@ func PossibleDiskCreateOptionValues() []DiskCreateOption {
 }
 func PossibleDiskCreateOptionTypesValues() []DiskCreateOptionTypes {
 	return original.PossibleDiskCreateOptionTypesValues()
+}
+func PossibleHostCachingValues() []HostCaching {
+	return original.PossibleHostCachingValues()
 }
 func PossibleInstanceViewTypesValues() []InstanceViewTypes {
 	return original.PossibleInstanceViewTypesValues()
@@ -872,6 +1013,21 @@ func PossiblePassNamesValues() []PassNames {
 func PossibleProtocolTypesValues() []ProtocolTypes {
 	return original.PossibleProtocolTypesValues()
 }
+func PossibleProvisioningStateValues() []ProvisioningState {
+	return original.PossibleProvisioningStateValues()
+}
+func PossibleProvisioningState1Values() []ProvisioningState1 {
+	return original.PossibleProvisioningState1Values()
+}
+func PossibleProvisioningState2Values() []ProvisioningState2 {
+	return original.PossibleProvisioningState2Values()
+}
+func PossibleReplicationStateValues() []ReplicationState {
+	return original.PossibleReplicationStateValues()
+}
+func PossibleReplicationStatusTypesValues() []ReplicationStatusTypes {
+	return original.PossibleReplicationStatusTypesValues()
+}
 func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 	return original.PossibleResourceIdentityTypeValues()
 }
@@ -889,6 +1045,9 @@ func PossibleRollingUpgradeActionTypeValues() []RollingUpgradeActionType {
 }
 func PossibleRollingUpgradeStatusCodeValues() []RollingUpgradeStatusCode {
 	return original.PossibleRollingUpgradeStatusCodeValues()
+}
+func PossibleScaleTierValues() []ScaleTier {
+	return original.PossibleScaleTierValues()
 }
 func PossibleSettingNamesValues() []SettingNames {
 	return original.PossibleSettingNamesValues()

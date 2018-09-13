@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"text/template"
+	"unicode"
 
 	"github.com/gopherjs/gopherjs/compiler/analysis"
 	"github.com/gopherjs/gopherjs/compiler/typesutil"
@@ -642,4 +644,30 @@ func endsWithReturn(stmts []ast.Stmt) bool {
 
 func encodeIdent(name string) string {
 	return strings.Replace(url.QueryEscape(name), "%", "$", -1)
+}
+
+// formatJSStructTagVal returns JavaScript code for accessing an object's property
+// identified by jsTag. It prefers the dot notation over the bracket notation when
+// possible, since the dot notation produces slightly smaller output.
+//
+// For example:
+//
+// 	"my_name" -> ".my_name"
+// 	"my name" -> `["my name"]`
+//
+// For more information about JavaScript property accessors and identifiers, see
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_Accessors and
+// https://developer.mozilla.org/en-US/docs/Glossary/Identifier.
+//
+func formatJSStructTagVal(jsTag string) string {
+	for i, r := range jsTag {
+		ok := unicode.IsLetter(r) || (i != 0 && unicode.IsNumber(r)) || r == '$' || r == '_'
+		if !ok {
+			// Saw an invalid JavaScript identifier character,
+			// so use bracket notation.
+			return `["` + template.JSEscapeString(jsTag) + `"]`
+		}
+	}
+	// Safe to use dot notation without any escaping.
+	return "." + jsTag
 }

@@ -68,6 +68,18 @@ type ARecord struct {
 	Ipv4Address *string `json:"ipv4Address,omitempty"`
 }
 
+// AzureEntityResource the resource model definition for a Azure Resource Manager resource with an etag.
+type AzureEntityResource struct {
+	// Etag - Resource Etag.
+	Etag *string `json:"etag,omitempty"`
+	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - The name of the resource
+	Name *string `json:"name,omitempty"`
+	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	Type *string `json:"type,omitempty"`
+}
+
 // CaaRecord a CAA record.
 type CaaRecord struct {
 	// Flags - The flags for this CAA record as an integer between 0 and 255.
@@ -114,6 +126,17 @@ type MxRecord struct {
 type NsRecord struct {
 	// Nsdname - The name server name for this NS record.
 	Nsdname *string `json:"nsdname,omitempty"`
+}
+
+// ProxyResource the resource model definition for a ARM proxy resource. It will have everything other than
+// required location and tags
+type ProxyResource struct {
+	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - The name of the resource
+	Name *string `json:"name,omitempty"`
+	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	Type *string `json:"type,omitempty"`
 }
 
 // PtrRecord a PTR record.
@@ -401,39 +424,14 @@ type RecordSetUpdateParameters struct {
 	RecordSet *RecordSet `json:"RecordSet,omitempty"`
 }
 
-// Resource common properties of an Azure Resource Manager resource
+// Resource ...
 type Resource struct {
-	// ID - Resource ID.
+	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
-	// Location - Resource location.
-	Location *string `json:"location,omitempty"`
-	// Tags - Resource tags.
-	Tags map[string]*string `json:"tags"`
-}
-
-// MarshalJSON is the custom marshaler for Resource.
-func (r Resource) MarshalJSON() ([]byte, error) {
-	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
-	if r.Location != nil {
-		objectMap["location"] = r.Location
-	}
-	if r.Tags != nil {
-		objectMap["tags"] = r.Tags
-	}
-	return json.Marshal(objectMap)
 }
 
 // SoaRecord an SOA record.
@@ -472,6 +470,41 @@ type SubResource struct {
 	ID *string `json:"id,omitempty"`
 }
 
+// TrackedResource the resource model definition for a ARM tracked top level resource
+type TrackedResource struct {
+	// Tags - Resource tags.
+	Tags map[string]*string `json:"tags"`
+	// Location - The geo-location where the resource lives
+	Location *string `json:"location,omitempty"`
+	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - The name of the resource
+	Name *string `json:"name,omitempty"`
+	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	Type *string `json:"type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for TrackedResource.
+func (tr TrackedResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tr.Tags != nil {
+		objectMap["tags"] = tr.Tags
+	}
+	if tr.Location != nil {
+		objectMap["location"] = tr.Location
+	}
+	if tr.ID != nil {
+		objectMap["id"] = tr.ID
+	}
+	if tr.Name != nil {
+		objectMap["name"] = tr.Name
+	}
+	if tr.Type != nil {
+		objectMap["type"] = tr.Type
+	}
+	return json.Marshal(objectMap)
+}
+
 // TxtRecord a TXT record.
 type TxtRecord struct {
 	// Value - The text value of this TXT record.
@@ -485,16 +518,16 @@ type Zone struct {
 	Etag *string `json:"etag,omitempty"`
 	// ZoneProperties - The properties of the zone.
 	*ZoneProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
-	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
-	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
-	Type *string `json:"type,omitempty"`
-	// Location - Resource location.
-	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
+	// Location - The geo-location where the resource lives
+	Location *string `json:"location,omitempty"`
+	// ID - Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - The name of the resource
+	Name *string `json:"name,omitempty"`
+	// Type - The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for Zone.
@@ -506,6 +539,12 @@ func (z Zone) MarshalJSON() ([]byte, error) {
 	if z.ZoneProperties != nil {
 		objectMap["properties"] = z.ZoneProperties
 	}
+	if z.Tags != nil {
+		objectMap["tags"] = z.Tags
+	}
+	if z.Location != nil {
+		objectMap["location"] = z.Location
+	}
 	if z.ID != nil {
 		objectMap["id"] = z.ID
 	}
@@ -514,12 +553,6 @@ func (z Zone) MarshalJSON() ([]byte, error) {
 	}
 	if z.Type != nil {
 		objectMap["type"] = z.Type
-	}
-	if z.Location != nil {
-		objectMap["location"] = z.Location
-	}
-	if z.Tags != nil {
-		objectMap["tags"] = z.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -551,6 +584,24 @@ func (z *Zone) UnmarshalJSON(body []byte) error {
 				}
 				z.ZoneProperties = &zoneProperties
 			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				z.Tags = tags
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				z.Location = &location
+			}
 		case "id":
 			if v != nil {
 				var ID string
@@ -577,24 +628,6 @@ func (z *Zone) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				z.Type = &typeVar
-			}
-		case "location":
-			if v != nil {
-				var location string
-				err = json.Unmarshal(*v, &location)
-				if err != nil {
-					return err
-				}
-				z.Location = &location
-			}
-		case "tags":
-			if v != nil {
-				var tags map[string]*string
-				err = json.Unmarshal(*v, &tags)
-				if err != nil {
-					return err
-				}
-				z.Tags = tags
 			}
 		}
 	}

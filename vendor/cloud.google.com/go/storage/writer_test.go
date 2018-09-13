@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,11 +15,8 @@
 package storage
 
 import (
-	"bytes"
 	"crypto/sha256"
 	"encoding/base64"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
@@ -29,62 +26,27 @@ import (
 	"golang.org/x/net/context"
 
 	"google.golang.org/api/googleapi"
-	"google.golang.org/api/option"
 )
 
-type fakeTransport struct {
-	gotReq  *http.Request
-	gotBody []byte
-	results []transportResult
-}
-
-type transportResult struct {
-	res *http.Response
-	err error
-}
-
-func (t *fakeTransport) addResult(res *http.Response, err error) {
-	t.results = append(t.results, transportResult{res, err})
-}
-
-func (t *fakeTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	t.gotReq = req
-	t.gotBody = nil
-	if req.Body != nil {
-		bytes, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			return nil, err
-		}
-		t.gotBody = bytes
-	}
-	if len(t.results) == 0 {
-		return nil, fmt.Errorf("error handling request")
-	}
-	result := t.results[0]
-	t.results = t.results[1:]
-	return result.res, result.err
-}
+var testEncryptionKey = []byte("secret-key-that-is-32-bytes-long")
 
 func TestErrorOnObjectsInsertCall(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
 	const contents = "hello world"
 
-	doWrite := func(hc *http.Client) *Writer {
-		client, err := NewClient(ctx, option.WithHTTPClient(hc))
-		if err != nil {
-			t.Fatalf("error when creating client: %v", err)
-		}
+	doWrite := func(mt *mockTransport) *Writer {
+		client := mockClient(t, mt)
 		wc := client.Bucket("bucketname").Object("filename1").NewWriter(ctx)
 		wc.ContentType = "text/plain"
 
 		// We can't check that the Write fails, since it depends on the write to the
-		// underling fakeTransport failing which is racy.
+		// underling mockTransport failing which is racy.
 		wc.Write([]byte(contents))
 		return wc
 	}
 
-	wc := doWrite(&http.Client{Transport: &fakeTransport{}})
+	wc := doWrite(&mockTransport{})
 	// Close must always return an error though since it waits for the transport to
 	// have closed.
 	if err := wc.Close(); err == nil {
@@ -92,20 +54,15 @@ func TestErrorOnObjectsInsertCall(t *testing.T) {
 	}
 
 	// Retry on 5xx
-	ft := &fakeTransport{}
-	ft.addResult(&http.Response{
-		StatusCode: 503,
-		Body:       ioutil.NopCloser(&bytes.Buffer{}),
-	}, nil)
-	ft.addResult(&http.Response{
-		StatusCode: 200,
-		Body:       ioutil.NopCloser(strings.NewReader("{}")),
-	}, nil)
-	wc = doWrite(&http.Client{Transport: ft})
+	mt := &mockTransport{}
+	mt.addResult(&http.Response{StatusCode: 503, Body: bodyReader("")}, nil)
+	mt.addResult(&http.Response{StatusCode: 200, Body: bodyReader("{}")}, nil)
+
+	wc = doWrite(mt)
 	if err := wc.Close(); err != nil {
 		t.Errorf("got %v, want nil", err)
 	}
-	got := string(ft.gotBody)
+	got := string(mt.gotBody)
 	if !strings.Contains(got, contents) {
 		t.Errorf("got body %q, which does not contain %q", got, contents)
 	}
@@ -114,51 +71,58 @@ func TestErrorOnObjectsInsertCall(t *testing.T) {
 func TestEncryption(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
-	ft := &fakeTransport{}
-	hc := &http.Client{Transport: ft}
-	client, err := NewClient(ctx, option.WithHTTPClient(hc))
-	if err != nil {
-		t.Fatalf("error when creating client: %v", err)
-	}
+	mt := &mockTransport{}
+	mt.addResult(&http.Response{StatusCode: 200, Body: bodyReader("{}")}, nil)
+	client := mockClient(t, mt)
 	obj := client.Bucket("bucketname").Object("filename1")
-	key := []byte("secret-key-that-is-32-bytes-long")
-	wc := obj.Key(key).NewWriter(ctx)
-	// TODO(jba): use something other than fakeTransport, which always returns error.
-	wc.Write([]byte("hello world"))
-	wc.Close()
-	if got, want := ft.gotReq.Header.Get("x-goog-encryption-algorithm"), "AES256"; got != want {
+	wc := obj.Key(testEncryptionKey).NewWriter(ctx)
+	if _, err := wc.Write([]byte("hello world")); err != nil {
+		t.Fatal(err)
+	}
+	if err := wc.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if got, want := mt.gotReq.Header.Get("x-goog-encryption-algorithm"), "AES256"; got != want {
 		t.Errorf("algorithm: got %q, want %q", got, want)
 	}
-	gotKey, err := base64.StdEncoding.DecodeString(ft.gotReq.Header.Get("x-goog-encryption-key"))
+	gotKey, err := base64.StdEncoding.DecodeString(mt.gotReq.Header.Get("x-goog-encryption-key"))
 	if err != nil {
 		t.Fatalf("decoding key: %v", err)
 	}
-	if !testutil.Equal(gotKey, key) {
-		t.Errorf("key: got %v, want %v", gotKey, key)
+	if !testutil.Equal(gotKey, testEncryptionKey) {
+		t.Errorf("key: got %v, want %v", gotKey, testEncryptionKey)
 	}
-	wantHash := sha256.Sum256(key)
-	gotHash, err := base64.StdEncoding.DecodeString(ft.gotReq.Header.Get("x-goog-encryption-key-sha256"))
+	wantHash := sha256.Sum256(testEncryptionKey)
+	gotHash, err := base64.StdEncoding.DecodeString(mt.gotReq.Header.Get("x-goog-encryption-key-sha256"))
 	if err != nil {
 		t.Fatalf("decoding hash: %v", err)
 	}
 	if !testutil.Equal(gotHash, wantHash[:]) { // wantHash is an array
 		t.Errorf("hash: got\n%v, want\n%v", gotHash, wantHash)
 	}
+
+	// Using a customer-supplied encryption key and a KMS key together is an error.
+	checkKMSError := func(msg string, err error) {
+		if err == nil {
+			t.Errorf("%s: got nil, want error", msg)
+		} else if !strings.Contains(err.Error(), "KMS") {
+			t.Errorf(`%s: got %q, want it to contain "KMS"`, msg, err)
+		}
+	}
+
+	wc = obj.Key(testEncryptionKey).NewWriter(ctx)
+	wc.KMSKeyName = "key"
+	_, err = wc.Write([]byte{})
+	checkKMSError("Write", err)
+	checkKMSError("Close", wc.Close())
 }
 
 // This test demonstrates the data race on Writer.err that can happen when the
 // Writer's context is cancelled. To see the race, comment out the w.mu.Lock/Unlock
 // lines in writer.go and run this test with -race.
 func TestRaceOnCancel(t *testing.T) {
-	ctx := context.Background()
-	ft := &fakeTransport{}
-	hc := &http.Client{Transport: ft}
-	client, err := NewClient(ctx, option.WithHTTPClient(hc))
-	if err != nil {
-		t.Fatalf("error when creating client: %v", err)
-	}
-
-	cctx, cancel := context.WithCancel(ctx)
+	client := mockClient(t, &mockTransport{})
+	cctx, cancel := context.WithCancel(context.Background())
 	w := client.Bucket("b").Object("o").NewWriter(cctx)
 	w.ChunkSize = googleapi.MinUploadChunkSize
 	buf := make([]byte, w.ChunkSize)

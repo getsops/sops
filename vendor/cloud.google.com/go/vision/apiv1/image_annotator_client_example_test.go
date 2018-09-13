@@ -49,3 +49,26 @@ func ExampleImageAnnotatorClient_BatchAnnotateImages() {
 	// TODO: Use resp.
 	_ = resp
 }
+
+func ExampleImageAnnotatorClient_AsyncBatchAnnotateFiles() {
+	ctx := context.Background()
+	c, err := vision.NewImageAnnotatorClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &visionpb.AsyncBatchAnnotateFilesRequest{
+		// TODO: Fill request struct fields.
+	}
+	op, err := c.AsyncBatchAnnotateFiles(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	resp, err := op.Wait(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}

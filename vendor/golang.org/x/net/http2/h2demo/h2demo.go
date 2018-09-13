@@ -160,6 +160,9 @@ func echoCapitalHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "PUT required.", 400)
 		return
 	}
+	if f, ok := w.(http.Flusher); ok {
+		f.Flush()
+	}
 	io.Copy(flushWriter{w}, capitalizeReader{r.Body})
 }
 

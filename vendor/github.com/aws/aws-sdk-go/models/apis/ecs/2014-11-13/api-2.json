@@ -679,6 +679,7 @@
       "members":{
         "name":{"shape":"String"},
         "image":{"shape":"String"},
+        "repositoryCredentials":{"shape":"RepositoryCredentials"},
         "cpu":{"shape":"Integer"},
         "memory":{"shape":"BoxedInteger"},
         "memoryReservation":{"shape":"BoxedInteger"},
@@ -790,8 +791,7 @@
       "type":"structure",
       "required":[
         "serviceName",
-        "taskDefinition",
-        "desiredCount"
+        "taskDefinition"
       ],
       "members":{
         "cluster":{"shape":"String"},
@@ -808,7 +808,8 @@
         "placementConstraints":{"shape":"PlacementConstraints"},
         "placementStrategy":{"shape":"PlacementStrategies"},
         "networkConfiguration":{"shape":"NetworkConfiguration"},
-        "healthCheckGracePeriodSeconds":{"shape":"BoxedInteger"}
+        "healthCheckGracePeriodSeconds":{"shape":"BoxedInteger"},
+        "schedulingStrategy":{"shape":"SchedulingStrategy"}
       }
     },
     "CreateServiceResponse":{
@@ -849,7 +850,8 @@
       "required":["service"],
       "members":{
         "cluster":{"shape":"String"},
-        "service":{"shape":"String"}
+        "service":{"shape":"String"},
+        "force":{"shape":"BoxedBoolean"}
       }
     },
     "DeleteServiceResponse":{
@@ -1037,6 +1039,16 @@
       "key":{"shape":"String"},
       "value":{"shape":"String"}
     },
+    "DockerVolumeConfiguration":{
+      "type":"structure",
+      "members":{
+        "scope":{"shape":"Scope"},
+        "autoprovision":{"shape":"BoxedBoolean"},
+        "driver":{"shape":"String"},
+        "driverOpts":{"shape":"StringMap"},
+        "labels":{"shape":"StringMap"}
+      }
+    },
     "Double":{"type":"double"},
     "EnvironmentVariables":{
       "type":"list",
@@ -1187,7 +1199,8 @@
         "cluster":{"shape":"String"},
         "nextToken":{"shape":"String"},
         "maxResults":{"shape":"BoxedInteger"},
-        "launchType":{"shape":"LaunchType"}
+        "launchType":{"shape":"LaunchType"},
+        "schedulingStrategy":{"shape":"SchedulingStrategy"}
       }
     },
     "ListServicesResponse":{
@@ -1472,6 +1485,13 @@
         "taskDefinition":{"shape":"TaskDefinition"}
       }
     },
+    "RepositoryCredentials":{
+      "type":"structure",
+      "required":["credentialsParameter"],
+      "members":{
+        "credentialsParameter":{"shape":"String"}
+      }
+    },
     "RequiresAttributes":{
       "type":"list",
       "member":{"shape":"Attribute"}
@@ -1515,6 +1535,20 @@
         "failures":{"shape":"Failures"}
       }
     },
+    "SchedulingStrategy":{
+      "type":"string",
+      "enum":[
+        "REPLICA",
+        "DAEMON"
+      ]
+    },
+    "Scope":{
+      "type":"string",
+      "enum":[
+        "task",
+        "shared"
+      ]
+    },
     "ServerException":{
       "type":"structure",
       "members":{
@@ -1546,7 +1580,8 @@
         "placementConstraints":{"shape":"PlacementConstraints"},
         "placementStrategy":{"shape":"PlacementStrategies"},
         "networkConfiguration":{"shape":"NetworkConfiguration"},
-        "healthCheckGracePeriodSeconds":{"shape":"BoxedInteger"}
+        "healthCheckGracePeriodSeconds":{"shape":"BoxedInteger"},
+        "schedulingStrategy":{"shape":"SchedulingStrategy"}
       }
     },
     "ServiceEvent":{
@@ -1581,7 +1616,9 @@
       "type":"structure",
       "members":{
         "registryArn":{"shape":"String"},
-        "port":{"shape":"BoxedInteger"}
+        "port":{"shape":"BoxedInteger"},
+        "containerName":{"shape":"String"},
+        "containerPort":{"shape":"BoxedInteger"}
       }
     },
     "Services":{
@@ -1641,6 +1678,11 @@
     "StringList":{
       "type":"list",
       "member":{"shape":"String"}
+    },
+    "StringMap":{
+      "type":"map",
+      "key":{"shape":"String"},
+      "value":{"shape":"String"}
     },
     "SubmitContainerStateChangeRequest":{
       "type":"structure",
@@ -1923,7 +1965,8 @@
       "type":"structure",
       "members":{
         "name":{"shape":"String"},
-        "host":{"shape":"HostVolumeProperties"}
+        "host":{"shape":"HostVolumeProperties"},
+        "dockerVolumeConfiguration":{"shape":"DockerVolumeConfiguration"}
       }
     },
     "VolumeFrom":{

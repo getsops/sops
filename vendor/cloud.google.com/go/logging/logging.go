@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -578,6 +577,10 @@ type Entry struct {
 	// if any. If it contains a relative resource name, the name is assumed to
 	// be relative to //tracing.googleapis.com.
 	Trace string
+
+	// Optional. Source code location information associated with the log entry,
+	// if any.
+	SourceLocation *logpb.LogEntrySourceLocation
 }
 
 // HTTPRequest contains an http.Request as well as additional
@@ -713,7 +716,7 @@ func jsonValueToStructValue(v interface{}) *structpb.Value {
 // Prefer Log for most uses.
 // TODO(jba): come up with a better name (LogNow?) or eliminate.
 func (l *Logger) LogSync(ctx context.Context, e Entry) error {
-	ent, err := toLogEntry(e)
+	ent, err := l.toLogEntry(e)
 	if err != nil {
 		return err
 	}
@@ -728,7 +731,7 @@ func (l *Logger) LogSync(ctx context.Context, e Entry) error {
 
 // Log buffers the Entry for output to the logging service. It never blocks.
 func (l *Logger) Log(e Entry) {
-	ent, err := toLogEntry(e)
+	ent, err := l.toLogEntry(e)
 	if err != nil {
 		l.client.error(err)
 		return
@@ -771,14 +774,7 @@ func (l *Logger) writeLogEntries(entries []*logpb.LogEntry) {
 // (for example by calling SetFlags or SetPrefix).
 func (l *Logger) StandardLogger(s Severity) *log.Logger { return l.stdLoggers[s] }
 
-func trunc32(i int) int32 {
-	if i > math.MaxInt32 {
-		i = math.MaxInt32
-	}
-	return int32(i)
-}
-
-func toLogEntry(e Entry) (*logpb.LogEntry, error) {
+func (l *Logger) toLogEntry(e Entry) (*logpb.LogEntry, error) {
 	if e.LogName != "" {
 		return nil, errors.New("logging: Entry.LogName should be not be set when writing")
 	}
@@ -790,15 +786,24 @@ func toLogEntry(e Entry) (*logpb.LogEntry, error) {
 	if err != nil {
 		return nil, err
 	}
+	if e.Trace == "" && e.HTTPRequest != nil && e.HTTPRequest.Request != nil {
+		traceHeader := e.HTTPRequest.Request.Header.Get("X-Cloud-Trace-Context")
+		if traceHeader != "" {
+			// Set to a relative resource name, as described at
+			// https://cloud.google.com/appengine/docs/flexible/go/writing-application-logs.
+			e.Trace = fmt.Sprintf("%s/traces/%s", l.client.parent, traceHeader)
+		}
+	}
 	ent := &logpb.LogEntry{
-		Timestamp:   ts,
-		Severity:    logtypepb.LogSeverity(e.Severity),
-		InsertId:    e.InsertID,
-		HttpRequest: fromHTTPRequest(e.HTTPRequest),
-		Operation:   e.Operation,
-		Labels:      e.Labels,
-		Trace:       e.Trace,
-		Resource:    e.Resource,
+		Timestamp:      ts,
+		Severity:       logtypepb.LogSeverity(e.Severity),
+		InsertId:       e.InsertID,
+		HttpRequest:    fromHTTPRequest(e.HTTPRequest),
+		Operation:      e.Operation,
+		Labels:         e.Labels,
+		Trace:          e.Trace,
+		Resource:       e.Resource,
+		SourceLocation: e.SourceLocation,
 	}
 	switch p := e.Payload.(type) {
 	case string:

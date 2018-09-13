@@ -599,7 +599,7 @@
     ]
   },
   {
-    "description": "Blob and timestamp shapes",
+    "description": "Blob shapes",
     "metadata": {
       "protocol": "rest-xml",
       "apiVersion": "2014-01-01"
@@ -616,16 +616,10 @@
       "StructureShape": {
         "type": "structure",
         "members": {
-          "t": {
-            "shape": "TShape"
-          },
           "b": {
             "shape": "BShape"
           }
         }
-      },
-      "TShape": {
-        "type": "timestamp"
       },
       "BShape": {
         "type": "blob"
@@ -647,15 +641,118 @@
         },
         "params": {
           "StructureParam": {
-            "t": 1422172800,
             "b": "foo"
           }
         },
         "serialized": {
           "method": "POST",
-          "body": "<OperationRequest xmlns=\"https://foo/\"><StructureParam><t>2015-01-25T08:00:00Z</t><b>Zm9v</b></StructureParam></OperationRequest>",
+          "body": "<OperationRequest xmlns=\"https://foo/\"><StructureParam><b>Zm9v</b></StructureParam></OperationRequest>",
           "uri": "/2014-01-01/hostedzone",
           "headers": {}
+        }
+      }
+    ]
+  },
+  {
+    "description": "Timestamp shapes",
+    "metadata": {
+      "protocol": "rest-xml",
+      "apiVersion": "2014-01-01"
+    },
+    "shapes": {
+      "InputShape": {
+        "type": "structure",
+        "members": {
+          "TimeArg": {
+            "shape": "TimestampType"
+          },
+          "TimeArgInHeader": {
+            "shape": "TimestampType",
+            "location": "header",
+            "locationName": "x-amz-timearg"
+          },
+          "TimeArgInQuery": {
+            "shape": "TimestampType",
+            "location": "querystring",
+            "locationName": "TimeQuery"
+          },
+          "TimeCustom": {
+            "timestampFormat": "rfc822",
+            "shape": "TimestampType"
+          },
+          "TimeCustomInHeader": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType",
+            "location": "header",
+            "locationName": "x-amz-timecustom-header"
+          },
+          "TimeCustomInQuery": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType",
+            "location": "querystring",
+            "locationName": "TimeCustomQuery"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatRfcType"
+          },
+          "TimeFormatInHeader": {
+            "shape": "TimestampFormatUnixType",
+            "location": "header",
+            "locationName": "x-amz-timeformat-header"
+          },
+          "TimeFormatInQuery": {
+            "shape": "TimestampFormatUnixType",
+            "location": "querystring",
+            "locationName": "TimeFormatQuery"
+          }
+        }
+      },
+      "TimestampFormatRfcType": {
+        "timestampFormat": "rfc822",
+        "type": "timestamp"
+      },
+      "TimestampFormatUnixType": {
+        "timestampFormat": "unixTimestamp",
+        "type": "timestamp"
+      },
+      "TimestampType": {
+        "type": "timestamp"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "http": {
+            "method": "POST",
+            "requestUri": "/2014-01-01/hostedzone"
+          },
+          "input": {
+            "shape": "InputShape",
+            "locationName": "TimestampStructure",
+            "xmlNamespace": {"uri": "https://foo/"}
+          },
+          "name": "OperationName"
+        },
+        "params": {
+          "TimeArg": 1422172800,
+          "TimeArgInQuery": 1422172800,
+          "TimeArgInHeader": 1422172800,
+          "TimeCustom": 1422172800,
+          "TimeCustomInQuery": 1422172800,
+          "TimeCustomInHeader": 1422172800,
+          "TimeFormat": 1422172800,
+          "TimeFormatInQuery": 1422172800,
+          "TimeFormatInHeader": 1422172800
+        },
+        "serialized": {
+          "method": "POST",
+          "body": "<TimestampStructure xmlns=\"https://foo/\"><TimeArg>2015-01-25T08:00:00Z</TimeArg><TimeCustom>Sun, 25 Jan 2015 08:00:00 GMT</TimeCustom><TimeFormat>Sun, 25 Jan 2015 08:00:00 GMT</TimeFormat></TimestampStructure>",
+          "uri": "/2014-01-01/hostedzone?TimeQuery=2015-01-25T08%3A00%3A00Z&TimeCustomQuery=1422172800&TimeFormatQuery=1422172800",
+          "headers": {
+            "x-amz-timearg": "Sun, 25 Jan 2015 08:00:00 GMT",
+            "x-amz-timecustom-header": "1422172800",
+            "x-amz-timeformat-header": "1422172800"
+          }
         }
       }
     ]
@@ -1205,21 +1302,21 @@
         }
       },
       "Grantee": {
-         "type": "structure",
-         "members": {
-           "Type": {
-             "shape": "Type",
-             "locationName": "xsi:type",
-             "xmlAttribute": true
-           },
-           "EmailAddress": {
-             "shape": "StringType"
-           }
-         },
-         "xmlNamespace": {
-           "prefix": "xsi",
-           "uri":"http://www.w3.org/2001/XMLSchema-instance"
-         }
+        "type": "structure",
+        "members": {
+          "Type": {
+            "shape": "Type",
+            "locationName": "xsi:type",
+            "xmlAttribute": true
+          },
+          "EmailAddress": {
+            "shape": "StringType"
+          }
+        },
+        "xmlNamespace": {
+          "prefix": "xsi",
+          "uri":"http://www.w3.org/2001/XMLSchema-instance"
+        }
       },
       "Type": {
         "type": "string"
@@ -1587,51 +1684,6 @@
     ]
   },
   {
-    "description": "Timestamp in header",
-    "metadata": {
-      "protocol": "rest-xml",
-      "apiVersion": "2014-01-01"
-    },
-    "shapes": {
-      "InputShape": {
-        "type": "structure",
-        "members": {
-          "TimeArgInHeader": {
-            "shape": "TimestampType",
-            "location": "header",
-            "locationName": "x-amz-timearg"
-          }
-        }
-      },
-      "TimestampType": {
-        "type": "timestamp"
-      }
-    },
-    "cases": [
-      {
-        "given": {
-          "input": {
-            "shape": "InputShape"
-          },
-          "http": {
-            "method": "POST",
-            "requestUri": "/path"
-          },
-          "name": "OperationName"
-        },
-        "params": {
-          "TimeArgInHeader": 1422172800
-        },
-        "serialized": {
-          "method": "POST",
-          "body": "",
-          "uri": "/path",
-          "headers": {"x-amz-timearg": "Sun, 25 Jan 2015 08:00:00 GMT"}
-        }
-      }
-    ]
-  },
-  {
     "description": "Idempotency token auto fill",
     "metadata": {
       "protocol": "rest-xml",
@@ -1643,7 +1695,7 @@
         "members": {
           "Token": {
             "shape": "StringType",
-              "idempotencyToken": true
+            "idempotencyToken": true
           }
         }
       },

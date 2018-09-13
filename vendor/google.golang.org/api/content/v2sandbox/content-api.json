@@ -15,7 +15,7 @@
   "description": "Manages product items, inventory, and Merchant Center accounts for Google Shopping.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/shopping-content",
-  "etag": "\"-iA1DTNe4s-I6JZXPt1t1Ypy8IU/GzeGhrgiJKQlQpHAXI2VovJdlQo\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/GgBKM4eW6PbUI0IwUflHrQshXJ4\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -60,18 +60,230 @@
       "type": "boolean"
     },
     "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+      "description": "An opaque string that represents a user for quota purposes. Must not exceed 40 characters.",
       "location": "query",
       "type": "string"
     },
     "userIp": {
-      "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+      "description": "Deprecated. Please use quotaUser instead.",
       "location": "query",
       "type": "string"
     }
   },
   "protocol": "rest",
   "resources": {
+    "orderinvoices": {
+      "methods": {
+        "createchargeinvoice": {
+          "description": "Creates a charge invoice for a shipment group, and triggers a charge capture for non-facilitated payment orders.",
+          "httpMethod": "POST",
+          "id": "content.orderinvoices.createchargeinvoice",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the order.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderinvoices/{orderId}/createChargeInvoice",
+          "request": {
+            "$ref": "OrderinvoicesCreateChargeInvoiceRequest"
+          },
+          "response": {
+            "$ref": "OrderinvoicesCreateChargeInvoiceResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        },
+        "createrefundinvoice": {
+          "description": "Creates a refund invoice for one or more shipment groups, and triggers a refund for non-facilitated payment orders. This can only be used for line items that have previously been charged using createChargeInvoice. All amounts (except for the summary) are incremental with respect to the previous invoice.",
+          "httpMethod": "POST",
+          "id": "content.orderinvoices.createrefundinvoice",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the order.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderinvoices/{orderId}/createRefundInvoice",
+          "request": {
+            "$ref": "OrderinvoicesCreateRefundInvoiceRequest"
+          },
+          "response": {
+            "$ref": "OrderinvoicesCreateRefundInvoiceResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        }
+      }
+    },
+    "orderpayments": {
+      "methods": {
+        "notifyauthapproved": {
+          "description": "Notify about successfully authorizing user's payment method for a given amount.",
+          "httpMethod": "POST",
+          "id": "content.orderpayments.notifyauthapproved",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the order for for which payment authorization is happening.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderpayments/{orderId}/notifyAuthApproved",
+          "request": {
+            "$ref": "OrderpaymentsNotifyAuthApprovedRequest"
+          },
+          "response": {
+            "$ref": "OrderpaymentsNotifyAuthApprovedResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        },
+        "notifyauthdeclined": {
+          "description": "Notify about failure to authorize user's payment method.",
+          "httpMethod": "POST",
+          "id": "content.orderpayments.notifyauthdeclined",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the order for which payment authorization was declined.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderpayments/{orderId}/notifyAuthDeclined",
+          "request": {
+            "$ref": "OrderpaymentsNotifyAuthDeclinedRequest"
+          },
+          "response": {
+            "$ref": "OrderpaymentsNotifyAuthDeclinedResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        },
+        "notifycharge": {
+          "description": "Notify about charge on user's selected payments method.",
+          "httpMethod": "POST",
+          "id": "content.orderpayments.notifycharge",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the order for which charge is happening.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderpayments/{orderId}/notifyCharge",
+          "request": {
+            "$ref": "OrderpaymentsNotifyChargeRequest"
+          },
+          "response": {
+            "$ref": "OrderpaymentsNotifyChargeResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        },
+        "notifyrefund": {
+          "description": "Notify about refund on user's selected payments method.",
+          "httpMethod": "POST",
+          "id": "content.orderpayments.notifyrefund",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the order for which charge is happening.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderpayments/{orderId}/notifyRefund",
+          "request": {
+            "$ref": "OrderpaymentsNotifyRefundRequest"
+          },
+          "response": {
+            "$ref": "OrderpaymentsNotifyRefundResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        }
+      }
+    },
     "orders": {
       "methods": {
         "acknowledge": {
@@ -207,6 +419,40 @@
             "https://www.googleapis.com/auth/content"
           ]
         },
+        "canceltestorderbycustomer": {
+          "description": "Sandbox only. Cancels a test order for customer-initiated cancellation.",
+          "httpMethod": "POST",
+          "id": "content.orders.canceltestorderbycustomer",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the test order to cancel.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/testorders/{orderId}/cancelByCustomer",
+          "request": {
+            "$ref": "OrdersCancelTestOrderByCustomerRequest"
+          },
+          "response": {
+            "$ref": "OrdersCancelTestOrderByCustomerResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        },
         "createtestorder": {
           "description": "Sandbox only. Creates a test order.",
           "httpMethod": "POST",
@@ -320,6 +566,11 @@
             "templateName"
           ],
           "parameters": {
+            "country": {
+              "description": "The country of the template to retrieve. Defaults to US.",
+              "location": "query",
+              "type": "string"
+            },
             "merchantId": {
               "description": "The ID of the account that should manage the order. This cannot be a multi-client account.",
               "format": "uint64",
@@ -355,7 +606,7 @@
           ]
         },
         "instorerefundlineitem": {
-          "description": "Notifies that item return and refund was handled directly in store.",
+          "description": "Notifies that item return and refund was handled directly by merchant outside of Google payments processing (e.g. cash refund done in store).",
           "httpMethod": "POST",
           "id": "content.orders.instorerefundlineitem",
           "parameterOrder": [
@@ -484,7 +735,7 @@
           ]
         },
         "refund": {
-          "description": "Refund a portion of the order, up to the full amount paid.",
+          "description": "Deprecated, please use returnRefundLineItem instead.",
           "httpMethod": "POST",
           "id": "content.orders.refund",
           "parameterOrder": [
@@ -792,9 +1043,23 @@
       }
     }
   },
-  "revision": "20180316",
+  "revision": "20180829",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
+    "Amount": {
+      "id": "Amount",
+      "properties": {
+        "pretax": {
+          "$ref": "Price",
+          "description": "[required] Value before taxes."
+        },
+        "tax": {
+          "$ref": "Price",
+          "description": "[required] Tax value."
+        }
+      },
+      "type": "object"
+    },
     "Error": {
       "description": "An error returned by the API.",
       "id": "Error",
@@ -832,6 +1097,56 @@
         },
         "message": {
           "description": "The message of the first error in errors.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "InvoiceSummary": {
+      "id": "InvoiceSummary",
+      "properties": {
+        "additionalChargeSummaries": {
+          "description": "Summary of the total amounts of the additional charges.",
+          "items": {
+            "$ref": "InvoiceSummaryAdditionalChargeSummary"
+          },
+          "type": "array"
+        },
+        "customerBalance": {
+          "$ref": "Amount",
+          "description": "[required] Customer balance on this invoice. A negative amount means the customer is paying, a positive one means the customer is receiving money. Note: the sum of merchant_balance, customer_balance and google_balance must always be zero.\n\nFurthermore the absolute value of this amount is expected to be equal to the sum of product amount and additional charges, minus promotions."
+        },
+        "googleBalance": {
+          "$ref": "Amount",
+          "description": "[required] Google balance on this invoice. A negative amount means Google is paying, a positive one means Google is receiving money. Note: the sum of merchant_balance, customer_balance and google_balance must always be zero."
+        },
+        "merchantBalance": {
+          "$ref": "Amount",
+          "description": "[required] Merchant balance on this invoice. A negative amount means the merchant is paying, a positive one means the merchant is receiving money. Note: the sum of merchant_balance, customer_balance and google_balance must always be zero."
+        },
+        "productTotal": {
+          "$ref": "Amount",
+          "description": "[required] Total price for the product."
+        },
+        "promotionSummaries": {
+          "description": "Summary for each promotion.",
+          "items": {
+            "$ref": "Promotion"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "InvoiceSummaryAdditionalChargeSummary": {
+      "id": "InvoiceSummaryAdditionalChargeSummary",
+      "properties": {
+        "totalAmount": {
+          "$ref": "Amount",
+          "description": "[required] Total additional charge for this type."
+        },
+        "type": {
+          "description": "[required] Type of the additional charge.",
           "type": "string"
         }
       },
@@ -967,7 +1282,7 @@
           "type": "string"
         },
         "region": {
-          "description": "Top-level administrative subdivision of the country (e.g. \"CA\").",
+          "description": "Top-level administrative subdivision of the country. For example, a state like California (\"CA\") or a province like Quebec (\"QC\").",
           "type": "string"
         },
         "streetAddress": {
@@ -997,7 +1312,7 @@
           "type": "integer"
         },
         "reason": {
-          "description": "The reason for the cancellation. Orders that are cancelled with a noInventory reason will lead to the removal of the product from POG until you make an update to that product. This will not affect your Shopping ads.",
+          "description": "The reason for the cancellation. Orders that are cancelled with a noInventory reason will lead to the removal of the product from Shopping Actions until you make an update to that product. This will not affect your Shopping ads.",
           "type": "string"
         },
         "reasonText": {
@@ -1015,11 +1330,33 @@
           "type": "string"
         },
         "explicitMarketingPreference": {
-          "description": "If set, this indicates the user explicitly chose to opt in or out of providing marketing rights to the merchant. If unset, this indicates the user has already made this choice in a previous purchase, and was thus not shown the marketing right opt in/out checkbox during the checkout flow.",
+          "description": "Deprecated. Please use marketingRightsInfo instead.",
           "type": "boolean"
         },
         "fullName": {
           "description": "Full name of the customer.",
+          "type": "string"
+        },
+        "marketingRightsInfo": {
+          "$ref": "OrderCustomerMarketingRightsInfo",
+          "description": "Customer's marketing preferences."
+        }
+      },
+      "type": "object"
+    },
+    "OrderCustomerMarketingRightsInfo": {
+      "id": "OrderCustomerMarketingRightsInfo",
+      "properties": {
+        "explicitMarketingPreference": {
+          "description": "Last known user selection regarding marketing preferences. In certain cases this selection might not be known, so this field would be empty.",
+          "type": "string"
+        },
+        "lastUpdatedTimestamp": {
+          "description": "Timestamp when last time marketing preference was updated. Could be empty, if user wasn't offered a selection yet.",
+          "type": "string"
+        },
+        "marketingEmailAddress": {
+          "description": "Email address that can be used for marketing purposes. This field is only filled when explicitMarketingPreference is equal to 'granted'.",
           "type": "string"
         }
       },
@@ -1485,7 +1822,7 @@
           "type": "string"
         },
         "deliveryDate": {
-          "description": "Date on which the shipment has been delivered, in ISO 8601 format. Present only if status is delievered",
+          "description": "Date on which the shipment has been delivered, in ISO 8601 format. Present only if status is delivered",
           "type": "string"
         },
         "id": {
@@ -1525,6 +1862,232 @@
           "description": "The quantity that is shipped.",
           "format": "uint32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "OrderinvoicesCreateChargeInvoiceRequest": {
+      "id": "OrderinvoicesCreateChargeInvoiceRequest",
+      "properties": {
+        "invoiceId": {
+          "description": "[required] The ID of the invoice.",
+          "type": "string"
+        },
+        "invoiceSummary": {
+          "$ref": "InvoiceSummary",
+          "description": "[required] Invoice summary."
+        },
+        "lineItemInvoices": {
+          "description": "[required] Invoice details per line item.",
+          "items": {
+            "$ref": "ShipmentInvoiceLineItemInvoice"
+          },
+          "type": "array"
+        },
+        "operationId": {
+          "description": "[required] The ID of the operation, unique across all operations for a given order.",
+          "type": "string"
+        },
+        "shipmentGroupId": {
+          "description": "[required] ID of the shipment group.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderinvoicesCreateChargeInvoiceResponse": {
+      "id": "OrderinvoicesCreateChargeInvoiceResponse",
+      "properties": {
+        "executionStatus": {
+          "description": "The status of the execution.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "content#orderinvoicesCreateChargeInvoiceResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#orderinvoicesCreateChargeInvoiceResponse\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderinvoicesCreateRefundInvoiceRequest": {
+      "id": "OrderinvoicesCreateRefundInvoiceRequest",
+      "properties": {
+        "invoiceId": {
+          "description": "[required] The ID of the invoice.",
+          "type": "string"
+        },
+        "operationId": {
+          "description": "[required] The ID of the operation, unique across all operations for a given order.",
+          "type": "string"
+        },
+        "refundOnlyOption": {
+          "$ref": "OrderinvoicesCustomBatchRequestEntryCreateRefundInvoiceRefundOption",
+          "description": "Option to create a refund-only invoice. Exactly one of refundOnlyOption or returnOption must be provided."
+        },
+        "returnOption": {
+          "$ref": "OrderinvoicesCustomBatchRequestEntryCreateRefundInvoiceReturnOption",
+          "description": "Option to create an invoice for a refund and mark all items within the invoice as returned. Exactly one of refundOnlyOption or returnOption must be provided."
+        },
+        "shipmentInvoices": {
+          "description": "Invoice details for different shipment groups.",
+          "items": {
+            "$ref": "ShipmentInvoice"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "OrderinvoicesCreateRefundInvoiceResponse": {
+      "id": "OrderinvoicesCreateRefundInvoiceResponse",
+      "properties": {
+        "executionStatus": {
+          "description": "The status of the execution.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "content#orderinvoicesCreateRefundInvoiceResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#orderinvoicesCreateRefundInvoiceResponse\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderinvoicesCustomBatchRequestEntryCreateRefundInvoiceRefundOption": {
+      "id": "OrderinvoicesCustomBatchRequestEntryCreateRefundInvoiceRefundOption",
+      "properties": {
+        "description": {
+          "description": "Optional description of the refund reason.",
+          "type": "string"
+        },
+        "reason": {
+          "description": "[required] Reason for the refund.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderinvoicesCustomBatchRequestEntryCreateRefundInvoiceReturnOption": {
+      "id": "OrderinvoicesCustomBatchRequestEntryCreateRefundInvoiceReturnOption",
+      "properties": {
+        "description": {
+          "description": "Optional description of the return reason.",
+          "type": "string"
+        },
+        "reason": {
+          "description": "[required] Reason for the return.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyAuthApprovedRequest": {
+      "id": "OrderpaymentsNotifyAuthApprovedRequest",
+      "properties": {
+        "authAmountPretax": {
+          "$ref": "Price"
+        },
+        "authAmountTax": {
+          "$ref": "Price"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyAuthApprovedResponse": {
+      "id": "OrderpaymentsNotifyAuthApprovedResponse",
+      "properties": {
+        "executionStatus": {
+          "description": "The status of the execution.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "content#orderpaymentsNotifyAuthApprovedResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#orderpaymentsNotifyAuthApprovedResponse\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyAuthDeclinedRequest": {
+      "id": "OrderpaymentsNotifyAuthDeclinedRequest",
+      "properties": {
+        "declineReason": {
+          "description": "Reason why payment authorization was declined.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyAuthDeclinedResponse": {
+      "id": "OrderpaymentsNotifyAuthDeclinedResponse",
+      "properties": {
+        "executionStatus": {
+          "description": "The status of the execution.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "content#orderpaymentsNotifyAuthDeclinedResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#orderpaymentsNotifyAuthDeclinedResponse\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyChargeRequest": {
+      "id": "OrderpaymentsNotifyChargeRequest",
+      "properties": {
+        "chargeState": {
+          "description": "Whether charge was successful.",
+          "type": "string"
+        },
+        "invoiceId": {
+          "description": "Invoice ID from orderInvoice service that corresponds to the charge.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyChargeResponse": {
+      "id": "OrderpaymentsNotifyChargeResponse",
+      "properties": {
+        "executionStatus": {
+          "description": "The status of the execution.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "content#orderpaymentsNotifyChargeResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#orderpaymentsNotifyChargeResponse\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyRefundRequest": {
+      "id": "OrderpaymentsNotifyRefundRequest",
+      "properties": {
+        "invoiceId": {
+          "description": "Invoice ID from orderInvoice service that corresponds to the charge.",
+          "type": "string"
+        },
+        "refundState": {
+          "description": "Whether refund was successful.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderpaymentsNotifyRefundResponse": {
+      "id": "OrderpaymentsNotifyRefundResponse",
+      "properties": {
+        "executionStatus": {
+          "description": "The status of the execution.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "content#orderpaymentsNotifyRefundResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#orderpaymentsNotifyRefundResponse\".",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1570,7 +2133,7 @@
       "properties": {
         "amount": {
           "$ref": "Price",
-          "description": "Amount to refund for the cancelation. Optional. If not set, Google will calculate the default based on the price and tax of the items involved. The amount must not be larger than the net amount left on the order."
+          "description": "Deprecated. Please use amountPretax and amountTax instead."
         },
         "amountPretax": {
           "$ref": "Price",
@@ -1656,9 +2219,34 @@
       },
       "type": "object"
     },
+    "OrdersCancelTestOrderByCustomerRequest": {
+      "id": "OrdersCancelTestOrderByCustomerRequest",
+      "properties": {
+        "reason": {
+          "description": "The reason for the cancellation.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrdersCancelTestOrderByCustomerResponse": {
+      "id": "OrdersCancelTestOrderByCustomerResponse",
+      "properties": {
+        "kind": {
+          "default": "content#ordersCancelTestOrderByCustomerResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#ordersCancelTestOrderByCustomerResponse\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "OrdersCreateTestOrderRequest": {
       "id": "OrdersCreateTestOrderRequest",
       "properties": {
+        "country": {
+          "description": "The  CLDR territory code of the country of the test order to create. Affects the currency and addresses of orders created via template_name, or the addresses of orders created via test_order.\n\nAcceptable values are:  \n- \"US\" \n- \"FR\"  Defaults to US.",
+          "type": "string"
+        },
         "templateName": {
           "description": "The test order template to use. Specify as an alternative to testOrder as a shortcut for retrieving a template and then creating an order using that template.",
           "type": "string"
@@ -1793,7 +2381,7 @@
       "properties": {
         "amount": {
           "$ref": "Price",
-          "description": "Amount to refund for the cancelation. Optional. If not set, Google will calculate the default based on the price and tax of the items involved. The amount must not be larger than the net amount left on the order."
+          "description": "Deprecated. Please use amountPretax and amountTax instead."
         },
         "amountPretax": {
           "$ref": "Price",
@@ -1867,7 +2455,7 @@
       "properties": {
         "amount": {
           "$ref": "Price",
-          "description": "The amount that is refunded."
+          "description": "Deprecated. Please use amountPretax and amountTax instead."
         },
         "amountPretax": {
           "$ref": "Price",
@@ -1947,7 +2535,7 @@
       "properties": {
         "amountPretax": {
           "$ref": "Price",
-          "description": "The amount that is refunded. Optional, but if filled then both amountPretax and amountTax must be set."
+          "description": "The amount that is refunded. If omitted, refundless return is assumed (same as calling returnLineItem method). Optional, but if filled then both amountPretax and amountTax must be set."
         },
         "amountTax": {
           "$ref": "Price",
@@ -2010,6 +2598,10 @@
             "$ref": "OrderShipmentLineItemShipment"
           },
           "type": "array"
+        },
+        "shipmentGroupId": {
+          "description": "ID of the shipment group. Required for orders that use the orderinvoices service.",
+          "type": "string"
         },
         "shipmentId": {
           "description": "Deprecated. Please use shipmentInfo instead. The ID of the shipment.",
@@ -2081,6 +2673,10 @@
           "description": "The carrier handling the shipment. Not updated if missing. See shipments[].carrier in the  Orders resource representation for a list of acceptable values.",
           "type": "string"
         },
+        "deliveryDate": {
+          "description": "Date on which the shipment has been delivered, in ISO 8601 format. Optional and can be provided only if status is delivered.",
+          "type": "string"
+        },
         "shipmentId": {
           "description": "The ID of the shipment.",
           "type": "string"
@@ -2127,7 +2723,7 @@
           "description": "A list of errors defined if and only if the request failed."
         },
         "executionStatus": {
-          "description": "The status of the execution. Only defined if the method is not get or getByMerchantOrderId and if the request was successful.",
+          "description": "The status of the execution. Only defined if  \n- the request was successful; and \n- the method is not get, getByMerchantOrderId, or one of the test methods.",
           "type": "string"
         },
         "kind": {
@@ -2252,7 +2848,7 @@
       "properties": {
         "amount": {
           "$ref": "Price",
-          "description": "The amount that is refunded."
+          "description": "Deprecated. Please use amountPretax and amountTax instead."
         },
         "amountPretax": {
           "$ref": "Price",
@@ -2389,7 +2985,7 @@
       "properties": {
         "amountPretax": {
           "$ref": "Price",
-          "description": "The amount that is refunded. Optional, but if filled then both amountPretax and amountTax must be set."
+          "description": "The amount that is refunded. If omitted, refundless return is assumed (same as calling returnLineItem method). Optional, but if filled then both amountPretax and amountTax must be set."
         },
         "amountTax": {
           "$ref": "Price",
@@ -2493,6 +3089,10 @@
         },
         "operationId": {
           "description": "The ID of the operation. Unique across all operations for a given order.",
+          "type": "string"
+        },
+        "shipmentGroupId": {
+          "description": "ID of the shipment group. Required for orders that use the orderinvoices service.",
           "type": "string"
         },
         "shipmentId": {
@@ -2605,6 +3205,10 @@
           "description": "The carrier handling the shipment. Not updated if missing. See shipments[].carrier in the  Orders resource representation for a list of acceptable values.",
           "type": "string"
         },
+        "deliveryDate": {
+          "description": "Date on which the shipment has been delivered, in ISO 8601 format. Optional and can be provided only if status is delivered.",
+          "type": "string"
+        },
         "operationId": {
           "description": "The ID of the operation. Unique across all operations for a given order.",
           "type": "string"
@@ -2653,6 +3257,66 @@
       },
       "type": "object"
     },
+    "Promotion": {
+      "id": "Promotion",
+      "properties": {
+        "promotionAmount": {
+          "$ref": "Amount",
+          "description": "[required] Amount of the promotion. The values here are the promotion applied to the unit price pretax and to the total of the tax amounts."
+        },
+        "promotionId": {
+          "description": "[required] ID of the promotion.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ShipmentInvoice": {
+      "id": "ShipmentInvoice",
+      "properties": {
+        "invoiceSummary": {
+          "$ref": "InvoiceSummary",
+          "description": "[required] Invoice summary."
+        },
+        "lineItemInvoices": {
+          "description": "[required] Invoice details per line item.",
+          "items": {
+            "$ref": "ShipmentInvoiceLineItemInvoice"
+          },
+          "type": "array"
+        },
+        "shipmentGroupId": {
+          "description": "[required] ID of the shipment group.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ShipmentInvoiceLineItemInvoice": {
+      "id": "ShipmentInvoiceLineItemInvoice",
+      "properties": {
+        "lineItemId": {
+          "description": "ID of the line item. Either lineItemId or productId must be set.",
+          "type": "string"
+        },
+        "productId": {
+          "description": "ID of the product. This is the REST ID used in the products service. Either lineItemId or productId must be set.",
+          "type": "string"
+        },
+        "shipmentUnitIds": {
+          "description": "[required] Unit IDs to define specific units within the line item.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "unitInvoice": {
+          "$ref": "UnitInvoice",
+          "description": "[required] Invoice details for a single unit."
+        }
+      },
+      "type": "object"
+    },
     "TestOrder": {
       "id": "TestOrder",
       "properties": {
@@ -2664,6 +3328,10 @@
             ]
           },
           "description": "The details of the customer who placed the order."
+        },
+        "enableOrderinvoices": {
+          "description": "Whether the orderinvoices service should support this order.",
+          "type": "boolean"
         },
         "kind": {
           "default": "content#testOrder",
@@ -2749,11 +3417,29 @@
           "type": "string"
         },
         "explicitMarketingPreference": {
-          "description": "If set, this indicates the user explicitly chose to opt in or out of providing marketing rights to the merchant. If unset, this indicates the user has already made this choice in a previous purchase, and was thus not shown the marketing right opt in/out checkbox during the checkout flow. Optional.",
+          "description": "Deprecated. Please use marketingRightsInfo instead.",
           "type": "boolean"
         },
         "fullName": {
           "description": "Full name of the customer.",
+          "type": "string"
+        },
+        "marketingRightsInfo": {
+          "$ref": "TestOrderCustomerMarketingRightsInfo",
+          "description": "Customer's marketing preferences."
+        }
+      },
+      "type": "object"
+    },
+    "TestOrderCustomerMarketingRightsInfo": {
+      "id": "TestOrderCustomerMarketingRightsInfo",
+      "properties": {
+        "explicitMarketingPreference": {
+          "description": "Last know user use selection regards marketing preferences. In certain cases selection might not be known, so this field would be empty.",
+          "type": "string"
+        },
+        "lastUpdatedTimestamp": {
+          "description": "Timestamp when last time marketing preference was updated. Could be empty, if user wasn't offered a selection yet.",
           "type": "string"
         }
       },
@@ -2935,6 +3621,76 @@
         },
         "type": {
           "description": "The type of instrument. Note that real orders might have different values than the four values accepted by createTestOrder.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UnitInvoice": {
+      "id": "UnitInvoice",
+      "properties": {
+        "additionalCharges": {
+          "description": "Additional charges for a unit, e.g. shipping costs.",
+          "items": {
+            "$ref": "UnitInvoiceAdditionalCharge"
+          },
+          "type": "array"
+        },
+        "promotions": {
+          "description": "Promotions applied to a unit.",
+          "items": {
+            "$ref": "Promotion"
+          },
+          "type": "array"
+        },
+        "unitPricePretax": {
+          "$ref": "Price",
+          "description": "[required] Price of the unit, before applying taxes."
+        },
+        "unitPriceTaxes": {
+          "description": "Tax amounts to apply to the unit price.",
+          "items": {
+            "$ref": "UnitInvoiceTaxLine"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "UnitInvoiceAdditionalCharge": {
+      "id": "UnitInvoiceAdditionalCharge",
+      "properties": {
+        "additionalChargeAmount": {
+          "$ref": "Amount",
+          "description": "[required] Amount of the additional charge."
+        },
+        "additionalChargePromotions": {
+          "description": "Promotions applied to the additional charge.",
+          "items": {
+            "$ref": "Promotion"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "[required] Type of the additional charge.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UnitInvoiceTaxLine": {
+      "id": "UnitInvoiceTaxLine",
+      "properties": {
+        "taxAmount": {
+          "$ref": "Price",
+          "description": "[required] Tax amount for the tax type."
+        },
+        "taxName": {
+          "description": "Optional name of the tax type. This should only be provided if taxType is otherFeeTax.",
+          "type": "string"
+        },
+        "taxType": {
+          "description": "[required] Type of the tax.",
           "type": "string"
         }
       },

@@ -204,7 +204,6 @@ func TestGetObjectCBC2(t *testing.T) {
 			},
 			Body: ioutil.NopCloser(bytes.NewBuffer(b)),
 		}
-		fmt.Println("HEADER", r.HTTPResponse.Header)
 		out.Metadata = make(map[string]*string)
 		out.Metadata["x-amz-wrap-alg"] = aws.String(s3crypto.KMSWrap)
 	})

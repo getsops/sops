@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,18 +15,18 @@
 package bigtable
 
 import (
+	"fmt"
 	"math"
 	"sort"
+	"strings"
 	"testing"
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
-
-	"fmt"
+	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 	btapb "google.golang.org/genproto/googleapis/bigtable/admin/v2"
-	"strings"
 )
 
 func TestAdminIntegration(t *testing.T) {
@@ -102,7 +102,7 @@ func TestAdminIntegration(t *testing.T) {
 		t.Errorf("adminClient.Tables returned %#v, want %#v", got, want)
 	}
 
-	adminClient.WaitForReplication(ctx, "mytable")
+	must(adminClient.WaitForReplication(ctx, "mytable"))
 
 	if err := adminClient.DeleteTable(ctx, "myothertable"); err != nil {
 		t.Fatalf("Deleting table: %v", err)
@@ -154,7 +154,7 @@ func TestAdminIntegration(t *testing.T) {
 	for _, prefix := range prefixes {
 		for i := 0; i < 5; i++ {
 			mut := NewMutation()
-			mut.Set("cf", "col", 0, []byte("1"))
+			mut.Set("cf", "col", 1000, []byte("1"))
 			if err := tbl.Apply(ctx, fmt.Sprintf("%v-%v", prefix, i), mut); err != nil {
 				t.Fatalf("Mutating row: %v", err)
 			}
@@ -172,13 +172,13 @@ func TestAdminIntegration(t *testing.T) {
 	}
 
 	var gotRowCount int
-	tbl.ReadRows(ctx, RowRange{}, func(row Row) bool {
+	must(tbl.ReadRows(ctx, RowRange{}, func(row Row) bool {
 		gotRowCount += 1
 		if !strings.HasPrefix(row.Key(), "b") {
 			t.Errorf("Invalid row after dropping range: %v", row)
 		}
 		return true
-	})
+	}))
 	if gotRowCount != 5 {
 		t.Errorf("Invalid row count after dropping range: got %v, want %v", gotRowCount, 5)
 	}
@@ -274,7 +274,7 @@ func TestAdminSnapshotIntegration(t *testing.T) {
 	list := func(cluster string) ([]*SnapshotInfo, error) {
 		infos := []*SnapshotInfo(nil)
 
-		it := adminClient.ListSnapshots(ctx, cluster)
+		it := adminClient.Snapshots(ctx, cluster)
 		for {
 			s, err := it.Next()
 			if err == iterator.Done {
@@ -430,4 +430,149 @@ func TestGranularity(t *testing.T) {
 	if table.Granularity != btapb.Table_TimestampGranularity(btapb.Table_MILLIS) {
 		t.Errorf("ModifyColumnFamilies returned granularity %#v, want %#v", table.Granularity, btapb.Table_TimestampGranularity(btapb.Table_MILLIS))
 	}
+}
+
+func TestInstanceAdminClient_AppProfile(t *testing.T) {
+	testEnv, err := NewIntegrationEnv()
+	if err != nil {
+		t.Fatalf("IntegrationEnv: %v", err)
+	}
+	defer testEnv.Close()
+
+	timeout := 2 * time.Second
+	if testEnv.Config().UseProd {
+		timeout = 5 * time.Minute
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	adminClient, err := testEnv.NewAdminClient()
+	if err != nil {
+		t.Fatalf("NewAdminClient: %v", err)
+	}
+	defer adminClient.Close()
+
+	iAdminClient, err := testEnv.NewInstanceAdminClient()
+	if err != nil {
+		t.Fatalf("NewInstanceAdminClient: %v", err)
+	}
+
+	if iAdminClient == nil {
+		return
+	}
+
+	defer iAdminClient.Close()
+	profile := ProfileConf{
+		ProfileID:     "app_profile1",
+		InstanceID:    adminClient.instance,
+		ClusterID:     testEnv.Config().Cluster,
+		Description:   "creating new app profile 1",
+		RoutingPolicy: SingleClusterRouting,
+	}
+
+	createdProfile, err := iAdminClient.CreateAppProfile(ctx, profile)
+	if err != nil {
+		t.Fatalf("Creating app profile: %v", err)
+
+	}
+
+	gotProfile, err := iAdminClient.GetAppProfile(ctx, adminClient.instance, "app_profile1")
+
+	if err != nil {
+		t.Fatalf("Get app profile: %v", err)
+	}
+
+	if !proto.Equal(createdProfile, gotProfile) {
+		t.Fatalf("created profile: %s, got profile: %s", createdProfile.Name, gotProfile.Name)
+
+	}
+
+	list := func(instanceID string) ([]*btapb.AppProfile, error) {
+		profiles := []*btapb.AppProfile(nil)
+
+		it := iAdminClient.ListAppProfiles(ctx, instanceID)
+		for {
+			s, err := it.Next()
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				return nil, err
+			}
+			profiles = append(profiles, s)
+		}
+		return profiles, err
+	}
+
+	profiles, err := list(adminClient.instance)
+	if err != nil {
+		t.Fatalf("List app profile: %v", err)
+	}
+
+	if got, want := len(profiles), 1; got != want {
+		t.Fatalf("Initial app profile list len: %d, want: %d", got, want)
+	}
+
+	for _, test := range []struct {
+		desc   string
+		uattrs ProfileAttrsToUpdate
+		want   *btapb.AppProfile // nil means error
+	}{
+		{
+			desc:   "empty update",
+			uattrs: ProfileAttrsToUpdate{},
+			want:   nil,
+		},
+
+		{
+			desc:   "empty description update",
+			uattrs: ProfileAttrsToUpdate{Description: ""},
+			want: &btapb.AppProfile{
+				Name:          gotProfile.Name,
+				Description:   "",
+				RoutingPolicy: gotProfile.RoutingPolicy,
+				Etag:          gotProfile.Etag},
+		},
+		{
+			desc: "routing update",
+			uattrs: ProfileAttrsToUpdate{
+				RoutingPolicy: SingleClusterRouting,
+				ClusterID:     testEnv.Config().Cluster,
+			},
+			want: &btapb.AppProfile{
+				Name:        gotProfile.Name,
+				Description: "",
+				Etag:        gotProfile.Etag,
+				RoutingPolicy: &btapb.AppProfile_SingleClusterRouting_{
+					SingleClusterRouting: &btapb.AppProfile_SingleClusterRouting{
+						ClusterId: testEnv.Config().Cluster,
+					}},
+			},
+		},
+	} {
+		err = iAdminClient.UpdateAppProfile(ctx, adminClient.instance, "app_profile1", test.uattrs)
+		if err != nil {
+			if test.want != nil {
+				t.Errorf("%s: %v", test.desc, err)
+			}
+			continue
+		}
+		if err == nil && test.want == nil {
+			t.Errorf("%s: got nil, want error", test.desc)
+			continue
+		}
+
+		got, _ := iAdminClient.GetAppProfile(ctx, adminClient.instance, "app_profile1")
+
+		if !proto.Equal(got, test.want) {
+			t.Fatalf("%s : got profile : %v, want profile: %v", test.desc, gotProfile, test.want)
+		}
+
+	}
+
+	err = iAdminClient.DeleteAppProfile(ctx, adminClient.instance, "app_profile1")
+	if err != nil {
+		t.Fatalf("Delete app profile: %v", err)
+	}
+
 }

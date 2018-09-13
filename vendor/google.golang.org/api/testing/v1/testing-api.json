@@ -61,11 +61,6 @@
       "location": "query",
       "type": "string"
     },
-    "bearer_token": {
-      "description": "OAuth bearer token.",
-      "location": "query",
-      "type": "string"
-    },
     "callback": {
       "description": "JSONP",
       "location": "query",
@@ -85,12 +80,6 @@
       "description": "OAuth 2.0 token for the current user.",
       "location": "query",
       "type": "string"
-    },
-    "pp": {
-      "default": "true",
-      "description": "Pretty-print response.",
-      "location": "query",
-      "type": "boolean"
     },
     "prettyPrint": {
       "default": "true",
@@ -257,7 +246,8 @@
               "enum": [
                 "ENVIRONMENT_TYPE_UNSPECIFIED",
                 "ANDROID",
-                "NETWORK_CONFIGURATION"
+                "NETWORK_CONFIGURATION",
+                "PROVIDED_SOFTWARE"
               ],
               "location": "path",
               "required": true,
@@ -281,7 +271,7 @@
       }
     }
   },
-  "revision": "20180316",
+  "revision": "20180901",
   "rootUrl": "https://testing.googleapis.com/",
   "schemas": {
     "Account": {
@@ -363,21 +353,21 @@
       "properties": {
         "appApk": {
           "$ref": "FileReference",
-          "description": "The APK for the application under test.\nRequired"
+          "description": "The APK for the application under test."
         },
         "appPackageId": {
           "description": "The java package for the application under test.\nOptional, default is determined by examining the application's manifest.",
           "type": "string"
         },
         "orchestratorOption": {
-          "description": "The option of whether running each test within its own invocation of\ninstrumentation with Android Test Orchestrator or not.\n** Orchestrator is only compatible with AndroidJUnitRunner version 1.0 or\nhigher! **\nOrchestrator offers the following benefits:\n - No shared state\n - Crashes are isolated\n - Logs are scoped per test\n\nSee\n\u003chttps://developer.android.com/training/testing/junit-runner.html#using-android-test-orchestrator\u003e\nfor more information about Android Test Orchestrator.\n\nOptional, if empty, test will be run without orchestrator.",
+          "description": "The option of whether running each test within its own invocation of\ninstrumentation with Android Test Orchestrator or not.\n** Orchestrator is only compatible with AndroidJUnitRunner version 1.0 or\nhigher! **\nOrchestrator offers the following benefits:\n - No shared state\n - Crashes are isolated\n - Logs are scoped per test\n\nSee\n\u003chttps://developer.android.com/training/testing/junit-runner.html#using-android-test-orchestrator\u003e\nfor more information about Android Test Orchestrator.\n\nOptional. If not set, the test will be run without the orchestrator.",
           "enum": [
             "ORCHESTRATOR_OPTION_UNSPECIFIED",
             "USE_ORCHESTRATOR",
             "DO_NOT_USE_ORCHESTRATOR"
           ],
           "enumDescriptions": [
-            "This means that the server should choose the mode. And test will be run\nwithout orchestrator.\nUsing orchestrator is highly encouraged because of all the benefits it\noffers. And in the future, all instrumentation tests will be run with\norchestrator by default if preference unspecified.",
+            "Default value: the server will choose the mode. Currently implies that\nthe test will run without the orchestrator. In the future,\nall instrumentation tests will be run with the orchestrator.\nUsing the orchestrator is highly encouraged because of all the benefits it\noffers.",
             "Run test using orchestrator.\n** Only compatible with AndroidJUnitRunner version 1.0 or higher! **\nRecommended.",
             "Run test without using orchestrator."
           ],
@@ -466,6 +456,22 @@
           ],
           "type": "string"
         },
+        "formFactor": {
+          "description": "Whther this device is a phone, tablet, wearable, etc.\n@OutputOnly",
+          "enum": [
+            "DEVICE_FORM_FACTOR_UNSPECIFIED",
+            "PHONE",
+            "TABLET",
+            "WEARABLE"
+          ],
+          "enumDescriptions": [
+            "Do not use. For proto versioning only.",
+            "This device has the shape of a phone",
+            "This device has the shape of a tablet",
+            "This device has the shape of a watch or other wearable"
+          ],
+          "type": "string"
+        },
         "id": {
           "description": "The unique opaque id for this model.\nUse this for invoking the TestExecutionService.\n@OutputOnly",
           "type": "string"
@@ -527,7 +533,7 @@
       "properties": {
         "appApk": {
           "$ref": "FileReference",
-          "description": "The APK for the application under test.\nRequired"
+          "description": "The APK for the application under test."
         },
         "appInitialActivity": {
           "description": "The initial activity that should be used to start the app.\nOptional",
@@ -569,7 +575,7 @@
       "type": "object"
     },
     "AndroidRuntimeConfiguration": {
-      "description": "Configuration that can be selected at the time a test is run.",
+      "description": "Android configuration that can be selected at the time a test is run.",
       "id": "AndroidRuntimeConfiguration",
       "properties": {
         "locales": {
@@ -595,7 +601,7 @@
       "properties": {
         "appApk": {
           "$ref": "FileReference",
-          "description": "The APK for the application under test.\nRequired"
+          "description": "The APK for the application under test."
         },
         "appPackageId": {
           "description": "The java package for the application under test.\nOptional, default is determined by examining the application's manifest.",
@@ -794,7 +800,7 @@
           "type": "integer"
         },
         "month": {
-          "description": "Month of year. Must be from 1 to 12.",
+          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a date without a\nmonth.",
           "format": "int32",
           "type": "integer"
         },
@@ -1042,6 +1048,17 @@
       },
       "type": "object"
     },
+    "ProvidedSoftwareCatalog": {
+      "description": "The currently provided software environment on the devices under test.",
+      "id": "ProvidedSoftwareCatalog",
+      "properties": {
+        "orchestratorVersion": {
+          "description": "A string representing the current version of Android Test Orchestrator that\nis provided by TestExecutionService. Example: \"1.0.2 beta\"",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "RegularFile": {
       "description": "A file or directory to install on the device before the test starts",
       "id": "RegularFile",
@@ -1173,6 +1190,10 @@
         "networkConfigurationCatalog": {
           "$ref": "NetworkConfigurationCatalog",
           "description": "Supported network configurations"
+        },
+        "softwareCatalog": {
+          "$ref": "ProvidedSoftwareCatalog",
+          "description": "The software test environment provided by TestExecutionService."
         }
       },
       "type": "object"
@@ -1282,7 +1303,10 @@
             "SCENARIO_NOT_DECLARED",
             "DEVICE_ADMIN_RECEIVER",
             "TEST_ONLY_APK",
-            "NO_CODE_APK"
+            "MALFORMED_IPA",
+            "NO_CODE_APK",
+            "INVALID_INPUT_APK",
+            "INVALID_APK_PREVIEW_SDK"
           ],
           "enumDescriptions": [
             "Do not use. For proto versioning only.",
@@ -1305,7 +1329,10 @@
             "The request contains a scenario number that was not declared in the\nmanifest.",
             "Device administrator applications are not allowed.",
             "The APK is marked as \"testOnly\".\nNOT USED",
-            "APK contains no code.\nSee also\nhttps://developer.android.com/guide/topics/manifest/application-element.html#code"
+            "The input IPA could not be parsed.\nNOT USED",
+            "APK contains no code.\nSee also\nhttps://developer.android.com/guide/topics/manifest/application-element.html#code",
+            "Either the provided input APK path was malformed,\nthe APK file does not exist, or the user does not have permission to\naccess the APK file.",
+            "APK is built for a preview SDK which is unsupported"
           ],
           "type": "string"
         },
@@ -1407,7 +1434,7 @@
           "type": "array"
         },
         "networkProfile": {
-          "description": "The network traffic profile used for running the test.\nOptional",
+          "description": "Optional. The network traffic profile used for running the test.\nAvailable network profiles can be queried by using the\nNETWORK_CONFIGURATION environment type when calling\nTestEnvironmentDiscoveryService.GetTestEnvironmentCatalog.",
           "type": "string"
         }
       },
@@ -1544,6 +1571,6 @@
     }
   },
   "servicePath": "",
-  "title": "Google Cloud Testing API",
+  "title": "Cloud Testing API",
   "version": "v1"
 }

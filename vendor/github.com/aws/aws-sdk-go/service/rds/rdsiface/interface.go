@@ -80,6 +80,10 @@ type RDSAPI interface {
 	AuthorizeDBSecurityGroupIngressWithContext(aws.Context, *rds.AuthorizeDBSecurityGroupIngressInput, ...request.Option) (*rds.AuthorizeDBSecurityGroupIngressOutput, error)
 	AuthorizeDBSecurityGroupIngressRequest(*rds.AuthorizeDBSecurityGroupIngressInput) (*request.Request, *rds.AuthorizeDBSecurityGroupIngressOutput)
 
+	BacktrackDBCluster(*rds.BacktrackDBClusterInput) (*rds.BacktrackDBClusterOutput, error)
+	BacktrackDBClusterWithContext(aws.Context, *rds.BacktrackDBClusterInput, ...request.Option) (*rds.BacktrackDBClusterOutput, error)
+	BacktrackDBClusterRequest(*rds.BacktrackDBClusterInput) (*request.Request, *rds.BacktrackDBClusterOutput)
+
 	CopyDBClusterParameterGroup(*rds.CopyDBClusterParameterGroupInput) (*rds.CopyDBClusterParameterGroupOutput, error)
 	CopyDBClusterParameterGroupWithContext(aws.Context, *rds.CopyDBClusterParameterGroupInput, ...request.Option) (*rds.CopyDBClusterParameterGroupOutput, error)
 	CopyDBClusterParameterGroupRequest(*rds.CopyDBClusterParameterGroupInput) (*request.Request, *rds.CopyDBClusterParameterGroupOutput)
@@ -192,6 +196,10 @@ type RDSAPI interface {
 	DescribeCertificatesWithContext(aws.Context, *rds.DescribeCertificatesInput, ...request.Option) (*rds.DescribeCertificatesOutput, error)
 	DescribeCertificatesRequest(*rds.DescribeCertificatesInput) (*request.Request, *rds.DescribeCertificatesOutput)
 
+	DescribeDBClusterBacktracks(*rds.DescribeDBClusterBacktracksInput) (*rds.DescribeDBClusterBacktracksOutput, error)
+	DescribeDBClusterBacktracksWithContext(aws.Context, *rds.DescribeDBClusterBacktracksInput, ...request.Option) (*rds.DescribeDBClusterBacktracksOutput, error)
+	DescribeDBClusterBacktracksRequest(*rds.DescribeDBClusterBacktracksInput) (*request.Request, *rds.DescribeDBClusterBacktracksOutput)
+
 	DescribeDBClusterParameterGroups(*rds.DescribeDBClusterParameterGroupsInput) (*rds.DescribeDBClusterParameterGroupsOutput, error)
 	DescribeDBClusterParameterGroupsWithContext(aws.Context, *rds.DescribeDBClusterParameterGroupsInput, ...request.Option) (*rds.DescribeDBClusterParameterGroupsOutput, error)
 	DescribeDBClusterParameterGroupsRequest(*rds.DescribeDBClusterParameterGroupsInput) (*request.Request, *rds.DescribeDBClusterParameterGroupsOutput)
@@ -211,6 +219,9 @@ type RDSAPI interface {
 	DescribeDBClusters(*rds.DescribeDBClustersInput) (*rds.DescribeDBClustersOutput, error)
 	DescribeDBClustersWithContext(aws.Context, *rds.DescribeDBClustersInput, ...request.Option) (*rds.DescribeDBClustersOutput, error)
 	DescribeDBClustersRequest(*rds.DescribeDBClustersInput) (*request.Request, *rds.DescribeDBClustersOutput)
+
+	DescribeDBClustersPages(*rds.DescribeDBClustersInput, func(*rds.DescribeDBClustersOutput, bool) bool) error
+	DescribeDBClustersPagesWithContext(aws.Context, *rds.DescribeDBClustersInput, func(*rds.DescribeDBClustersOutput, bool) bool, ...request.Option) error
 
 	DescribeDBEngineVersions(*rds.DescribeDBEngineVersionsInput) (*rds.DescribeDBEngineVersionsOutput, error)
 	DescribeDBEngineVersionsWithContext(aws.Context, *rds.DescribeDBEngineVersionsInput, ...request.Option) (*rds.DescribeDBEngineVersionsOutput, error)
@@ -362,6 +373,10 @@ type RDSAPI interface {
 	ListTagsForResource(*rds.ListTagsForResourceInput) (*rds.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *rds.ListTagsForResourceInput, ...request.Option) (*rds.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*rds.ListTagsForResourceInput) (*request.Request, *rds.ListTagsForResourceOutput)
+
+	ModifyCurrentDBClusterCapacity(*rds.ModifyCurrentDBClusterCapacityInput) (*rds.ModifyCurrentDBClusterCapacityOutput, error)
+	ModifyCurrentDBClusterCapacityWithContext(aws.Context, *rds.ModifyCurrentDBClusterCapacityInput, ...request.Option) (*rds.ModifyCurrentDBClusterCapacityOutput, error)
+	ModifyCurrentDBClusterCapacityRequest(*rds.ModifyCurrentDBClusterCapacityInput) (*request.Request, *rds.ModifyCurrentDBClusterCapacityOutput)
 
 	ModifyDBCluster(*rds.ModifyDBClusterInput) (*rds.ModifyDBClusterOutput, error)
 	ModifyDBClusterWithContext(aws.Context, *rds.ModifyDBClusterInput, ...request.Option) (*rds.ModifyDBClusterOutput, error)

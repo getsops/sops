@@ -1,4 +1,6 @@
-// Package dataproc provides access to the Google Cloud Dataproc API.
+// Package dataproc provides access to the Cloud Dataproc API.
+//
+// This package is DEPRECATED. Use package cloud.google.com/go/dataproc/apiv1 instead.
 //
 // See https://cloud.google.com/dataproc/
 //
@@ -180,8 +182,8 @@ type AcceleratorConfig struct {
 	// accelerator type resource to expose to this instance. See Compute
 	// Engine AcceleratorTypes(
 	// /compute/docs/reference/beta/acceleratorTypes)Examples *
-	// https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 *
-	// nvidia-tesla-k80
+	// https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * nvidia-tesla-k80Auto Zone Exception: If you are using the Cloud Dataproc Auto Zone Placement feature, you must use the short name of the accelerator type resource, for example,
+	// nvidia-tesla-k80.
 	AcceleratorTypeUri string `json:"acceleratorTypeUri,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AcceleratorCount") to
@@ -210,6 +212,12 @@ func (s *AcceleratorConfig) MarshalJSON() ([]byte, error) {
 
 // Binding: Associates members with a role.
 type Binding struct {
+	// Condition: Unimplemented. The condition that is associated with this
+	// binding. NOTE: an unsatisfied condition will not allow user access
+	// via current binding. Different bindings, including their conditions,
+	// are examined independently.
+	Condition *Expr `json:"condition,omitempty"`
+
 	// Members: Specifies the identities requesting access for a Cloud
 	// Platform resource. members can have the following values:
 	// allUsers: A special identifier that represents anyone who is  on the
@@ -218,8 +226,7 @@ type Binding struct {
 	// who is authenticated with a Google account or a service
 	// account.
 	// user:{emailid}: An email address that represents a specific Google
-	// account. For example, alice@gmail.com or
-	// joe@example.com.
+	// account. For example, alice@gmail.com .
 	// serviceAccount:{emailid}: An email address that represents a service
 	// account. For example,
 	// my-other-app@appspot.gserviceaccount.com.
@@ -230,10 +237,10 @@ type Binding struct {
 	Members []string `json:"members,omitempty"`
 
 	// Role: Role that is assigned to members. For example, roles/viewer,
-	// roles/editor, or roles/owner. Required
+	// roles/editor, or roles/owner.
 	Role string `json:"role,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "Members") to
+	// ForceSendFields is a list of field names (e.g. "Condition") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -241,7 +248,7 @@ type Binding struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "Members") to include in
+	// NullFields is a list of field names (e.g. "Condition") to include in
 	// API requests with the JSON null value. By default, fields with empty
 	// values are omitted from API requests. However, any field with an
 	// empty value appearing in NullFields will be sent to the server as
@@ -284,9 +291,9 @@ type Cluster struct {
 	// labels can be associated with a cluster.
 	Labels map[string]string `json:"labels,omitempty"`
 
-	// Metrics: Contains cluster daemon metrics such as HDFS and YARN
-	// stats.Beta Feature: This report is available for testing purposes
-	// only. It may be changed before final release.
+	// Metrics: Output only. Contains cluster daemon metrics such as HDFS
+	// and YARN stats.Beta Feature: This report is available for testing
+	// purposes only. It may be changed before final release.
 	Metrics *ClusterMetrics `json:"metrics,omitempty"`
 
 	// ProjectId: Required. The Google Cloud Platform project ID that the
@@ -336,6 +343,9 @@ type ClusterConfig struct {
 	// deployed, and then it will create and manage this project-level,
 	// per-location bucket for you.
 	ConfigBucket string `json:"configBucket,omitempty"`
+
+	// EncryptionConfig: Optional. Encryption settings for the cluster.
+	EncryptionConfig *EncryptionConfig `json:"encryptionConfig,omitempty"`
 
 	// GceClusterConfig: Required. The shared Compute Engine config settings
 	// for all instances in a cluster.
@@ -750,6 +760,86 @@ type Empty struct {
 	googleapi.ServerResponse `json:"-"`
 }
 
+// EncryptionConfig: Encryption settings for the cluster.
+type EncryptionConfig struct {
+	// GcePdKmsKeyName: Optional. The Cloud KMS key name to use for PD disk
+	// encryption for all instances in the cluster.
+	GcePdKmsKeyName string `json:"gcePdKmsKeyName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "GcePdKmsKeyName") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "GcePdKmsKeyName") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *EncryptionConfig) MarshalJSON() ([]byte, error) {
+	type NoMethod EncryptionConfig
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// Expr: Represents an expression text. Example:
+// title: "User account presence"
+// description: "Determines whether the request has a user
+// account"
+// expression: "size(request.user) > 0"
+//
+type Expr struct {
+	// Description: An optional description of the expression. This is a
+	// longer text which describes the expression, e.g. when hovered over it
+	// in a UI.
+	Description string `json:"description,omitempty"`
+
+	// Expression: Textual representation of an expression in Common
+	// Expression Language syntax.The application context of the containing
+	// message determines which well-known feature set of CEL is supported.
+	Expression string `json:"expression,omitempty"`
+
+	// Location: An optional string indicating the location of the
+	// expression for error reporting, e.g. a file name and a position in
+	// the file.
+	Location string `json:"location,omitempty"`
+
+	// Title: An optional title for the expression, i.e. a short string
+	// describing its purpose. This can be used e.g. in UIs which allow to
+	// enter the expression.
+	Title string `json:"title,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Description") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Description") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Expr) MarshalJSON() ([]byte, error) {
+	type NoMethod Expr
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // GceClusterConfig: Common config settings for resources of Compute
 // Engine cluster instances, applicable to all instances in the cluster.
 type GceClusterConfig struct {
@@ -784,7 +874,7 @@ type GceClusterConfig struct {
 
 	// ServiceAccount: Optional. The service account of the instances.
 	// Defaults to the default Compute Engine service account. Custom
-	// service accounts need permissions equivalent to the folloing IAM
+	// service accounts need permissions equivalent to the following IAM
 	// roles:
 	// roles/logging.logWriter
 	// roles/storage.objectAdmin(see
@@ -793,8 +883,8 @@ type GceClusterConfig struct {
 	ServiceAccount string `json:"serviceAccount,omitempty"`
 
 	// ServiceAccountScopes: Optional. The URIs of service account scopes to
-	// be included in Google Compute Engine instances. The following base
-	// set of scopes is always
+	// be included in Compute Engine instances. The following base set of
+	// scopes is always
 	// included:
 	// https://www.googleapis.com/auth/cloud.useraccounts.readonly
 	//
@@ -860,6 +950,10 @@ func (s *GceClusterConfig) MarshalJSON() ([]byte, error) {
 	type NoMethod GceClusterConfig
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GetIamPolicyRequest: Request message for GetIamPolicy method.
+type GetIamPolicyRequest struct {
 }
 
 // HadoopJob: A Cloud Dataproc job for running Apache Hadoop MapReduce
@@ -998,14 +1092,14 @@ type InstanceGroupConfig struct {
 	// DiskConfig: Optional. Disk option config settings.
 	DiskConfig *DiskConfig `json:"diskConfig,omitempty"`
 
-	// ImageUri: Output only. The Compute Engine image resource used for
-	// cluster instances. Inferred from SoftwareConfig.image_version.
+	// ImageUri: Optional. The Compute Engine image resource used for
+	// cluster instances. It can be specified or may be inferred from
+	// SoftwareConfig.image_version.
 	ImageUri string `json:"imageUri,omitempty"`
 
-	// InstanceNames: Optional. The list of instance names. Cloud Dataproc
-	// derives the names from cluster_name, num_instances, and the instance
-	// group if not set by user (recommended practice is to let Cloud
-	// Dataproc derive the name).
+	// InstanceNames: Output only. The list of instance names. Cloud
+	// Dataproc derives the names from cluster_name, num_instances, and the
+	// instance group.
 	InstanceNames []string `json:"instanceNames,omitempty"`
 
 	// IsPreemptible: Optional. Specifies that this instance group contains
@@ -1019,7 +1113,9 @@ type InstanceGroupConfig struct {
 	// zones/us-east1-a/machineTypes/n1-standard-2
 	// projects/[project_id]/zone
 	// s/us-east1-a/machineTypes/n1-standard-2
-	// n1-standard-2
+	// n1-standard-2Auto Zone Exception: If you are using the Cloud Dataproc
+	// Auto Zone Placement feature, you must use the short name of the
+	// machine type resource, for example, n1-standard-2.
 	MachineTypeUri string `json:"machineTypeUri,omitempty"`
 
 	// ManagedGroupConfig: Output only. The config for Compute Engine
@@ -1061,14 +1157,21 @@ func (s *InstanceGroupConfig) MarshalJSON() ([]byte, error) {
 // InstantiateWorkflowTemplateRequest: A request to instantiate a
 // workflow template.
 type InstantiateWorkflowTemplateRequest struct {
-	// InstanceId: Optional. A tag that prevents multiple concurrent
-	// workflow instances with the same tag from running. This mitigates
-	// risk of concurrent instances started due to retries.It is recommended
-	// to always set this value to a UUID
+	// InstanceId: Deprecated. Please use request_id field instead.
+	InstanceId string `json:"instanceId,omitempty"`
+
+	// Parameters: Optional. Map from parameter names to values that should
+	// be used for those parameters.
+	Parameters map[string]string `json:"parameters,omitempty"`
+
+	// RequestId: Optional. A tag that prevents multiple concurrent workflow
+	// instances with the same tag from running. This mitigates risk of
+	// concurrent instances started due to retries.It is recommended to
+	// always set this value to a UUID
 	// (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag
 	// must contain only letters (a-z, A-Z), numbers (0-9), underscores (_),
 	// and hyphens (-). The maximum length is 40 characters.
-	InstanceId string `json:"instanceId,omitempty"`
+	RequestId string `json:"requestId,omitempty"`
 
 	// Version: Optional. The version of workflow template to instantiate.
 	// If specified, the workflow will be instantiated only if the current
@@ -1833,6 +1936,37 @@ func (s *OrderedJob) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// ParameterValidation: Configuration for parameter validation.
+type ParameterValidation struct {
+	// Regex: Validation based on regular expressions.
+	Regex *RegexValidation `json:"regex,omitempty"`
+
+	// Values: Validation based on a list of allowed values.
+	Values *ValueValidation `json:"values,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Regex") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Regex") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ParameterValidation) MarshalJSON() ([]byte, error) {
+	type NoMethod ParameterValidation
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // PigJob: A Cloud Dataproc job for running Apache Pig
 // (https://pig.apache.org/) queries on YARN.
 type PigJob struct {
@@ -1893,10 +2027,10 @@ func (s *PigJob) MarshalJSON() ([]byte, error) {
 
 // Policy: Defines an Identity and Access Management (IAM) policy. It is
 // used to specify access control policies for Cloud Platform
-// resources.A Policy consists of a list of bindings. A Binding binds a
+// resources.A Policy consists of a list of bindings. A binding binds a
 // list of members to a role, where the members can be user accounts,
 // Google groups, Google domains, and service accounts. A role is a
-// named list of permissions defined by IAM.Example
+// named list of permissions defined by IAM.JSON Example
 // {
 //   "bindings": [
 //     {
@@ -1905,7 +2039,7 @@ func (s *PigJob) MarshalJSON() ([]byte, error) {
 //         "user:mike@example.com",
 //         "group:admins@example.com",
 //         "domain:google.com",
-//         "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+//         "serviceAccount:my-other-app@appspot.gserviceaccount.com"
 //       ]
 //     },
 //     {
@@ -1914,6 +2048,17 @@ func (s *PigJob) MarshalJSON() ([]byte, error) {
 //     }
 //   ]
 // }
+// YAML Example
+// bindings:
+// - members:
+//   - user:mike@example.com
+//   - group:admins@example.com
+//   - domain:google.com
+//   - serviceAccount:my-other-app@appspot.gserviceaccount.com
+//   role: roles/owner
+// - members:
+//   - user:sean@example.com
+//   role: roles/viewer
 // For a description of IAM and its features, see the IAM developer's
 // guide (https://cloud.google.com/iam/docs).
 type Policy struct {
@@ -2066,6 +2211,36 @@ func (s *QueryList) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// RegexValidation: Validation based on regular expressions.
+type RegexValidation struct {
+	// Regexes: Required. RE2 regular expressions used to validate the
+	// parameter's value. The value must match the regex in its entirety
+	// (substring matches are not sufficient).
+	Regexes []string `json:"regexes,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Regexes") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Regexes") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *RegexValidation) MarshalJSON() ([]byte, error) {
+	type NoMethod RegexValidation
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // SetIamPolicyRequest: Request message for SetIamPolicy method.
 type SetIamPolicyRequest struct {
 	// Policy: REQUIRED: The complete policy to be applied to the resource.
@@ -2101,8 +2276,9 @@ func (s *SetIamPolicyRequest) MarshalJSON() ([]byte, error) {
 // the cluster.
 type SoftwareConfig struct {
 	// ImageVersion: Optional. The version of software inside the cluster.
-	// It must match the regular expression [0-9]+\.[0-9]+. If unspecified,
-	// it defaults to the latest version (see Cloud Dataproc Versioning).
+	// It must be one of the supported Cloud Dataproc Versions, such as
+	// "1.2" (including a subminor version, such as "1.2.29"), or the
+	// "preview" version. If unspecified, it defaults to the latest version.
 	ImageVersion string `json:"imageVersion,omitempty"`
 
 	// Properties: Optional. The properties to set on daemon config
@@ -2368,6 +2544,98 @@ func (s *SubmitJobRequest) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// TemplateParameter: A configurable parameter that replaces one or more
+// fields in the template. Parameterizable fields: - Labels - File uris
+// - Job properties - Job arguments - Script variables - Main class (in
+// HadoopJob and SparkJob) - Zone (in ClusterSelector)
+type TemplateParameter struct {
+	// Description: Optional. Brief description of the parameter. Must not
+	// exceed 1024 characters.
+	Description string `json:"description,omitempty"`
+
+	// Fields: Required. Paths to all fields that the parameter replaces. A
+	// field is allowed to appear in at most one parameter's list of field
+	// paths.A field path is similar in syntax to a
+	// google.protobuf.FieldMask. For example, a field path that references
+	// the zone field of a workflow template's cluster selector would be
+	// specified as <code>placement.clusterSelector.zone</code>.Also, field
+	// paths can reference fields using the following syntax:
+	// Values in maps can be referenced by key.
+	// Examples<br>
+	// labels'key'
+	// placement.clusterSelector.clusterLabels'key'
+	//
+	// placement.managedCluster.labels'key'
+	// placement.clusterSelector.cluster
+	// Labels'key'
+	// jobsstep-id.labels'key'
+	// Jobs in the jobs list can be referenced by step-id.
+	// Examples:<br>
+	// jobsstep-id.hadoopJob.mainJarFileUri
+	// jobsstep-id.hiveJob
+	// .queryFileUri
+	// jobsstep-id.pySparkJob.mainPythonFileUri
+	// jobsstep-id.had
+	// oopJob.jarFileUris0
+	// jobsstep-id.hadoopJob.archiveUris0
+	// jobsstep-id.had
+	// oopJob.fileUris0
+	// jobsstep-id.pySparkJob.pythonFileUris0
+	// Items in repeated fields can be referenced by a zero-based index.
+	// Example:<br>
+	// jobsstep-id.sparkJob.args0
+	// Other
+	// examples:
+	// jobsstep-id.hadoopJob.properties'key'
+	// jobsstep-id.hadoopJob.
+	// args0
+	// jobsstep-id.hiveJob.scriptVariables'key'
+	// jobsstep-id.hadoopJob.m
+	// ainJarFileUri
+	// placement.clusterSelector.zoneIt may not be possible to parameterize
+	// maps and repeated fields in their entirety since only individual map
+	// values and individual items in repeated fields can be referenced. For
+	// example, the following field paths are
+	// invalid:
+	// placement.clusterSelector.clusterLabels
+	// jobsstep-id.sparkJob.
+	// args
+	Fields []string `json:"fields,omitempty"`
+
+	// Name: Required. Parameter name. The parameter name is used as the
+	// key, and paired with the parameter value, which are passed to the
+	// template when the template is instantiated. The name must contain
+	// only capital letters (A-Z), numbers (0-9), and underscores (_), and
+	// must not start with a number. The maximum length is 40 characters.
+	Name string `json:"name,omitempty"`
+
+	// Validation: Optional. Validation rules to be applied to this
+	// parameter's value.
+	Validation *ParameterValidation `json:"validation,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Description") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Description") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *TemplateParameter) MarshalJSON() ([]byte, error) {
+	type NoMethod TemplateParameter
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // TestIamPermissionsRequest: Request message for TestIamPermissions
 // method.
 type TestIamPermissionsRequest struct {
@@ -2430,6 +2698,34 @@ type TestIamPermissionsResponse struct {
 
 func (s *TestIamPermissionsResponse) MarshalJSON() ([]byte, error) {
 	type NoMethod TestIamPermissionsResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ValueValidation: Validation based on a list of allowed values.
+type ValueValidation struct {
+	// Values: Required. List of allowed values for the parameter.
+	Values []string `json:"values,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Values") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Values") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ValueValidation) MarshalJSON() ([]byte, error) {
+	type NoMethod ValueValidation
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -2597,6 +2893,11 @@ type WorkflowTemplate struct {
 	// in https://cloud.google.com/apis/design/resource_names of the form
 	// projects/{project_id}/regions/{region}/workflowTemplates/{template_id}
 	Name string `json:"name,omitempty"`
+
+	// Parameters: Optional. Template parameters whose values are
+	// substituted into the template. Values for parameters must be provided
+	// when the template is instantiated.
+	Parameters []*TemplateParameter `json:"parameters,omitempty"`
 
 	// Placement: Required. WorkflowTemplate scheduling information.
 	Placement *WorkflowTemplatePlacement `json:"placement,omitempty"`
@@ -2804,6 +3105,7 @@ func (c *ProjectsLocationsWorkflowTemplatesCreateCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+parent}/workflowTemplates")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2941,6 +3243,7 @@ func (c *ProjectsLocationsWorkflowTemplatesDeleteCall) doRequest(alt string) (*h
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -3095,6 +3398,7 @@ func (c *ProjectsLocationsWorkflowTemplatesGetCall) doRequest(alt string) (*http
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3242,6 +3546,7 @@ func (c *ProjectsLocationsWorkflowTemplatesGetIamPolicyCall) doRequest(alt strin
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3381,6 +3686,7 @@ func (c *ProjectsLocationsWorkflowTemplatesInstantiateCall) doRequest(alt string
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}:instantiate")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3537,6 +3843,7 @@ func (c *ProjectsLocationsWorkflowTemplatesInstantiateInlineCall) doRequest(alt 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+parent}/workflowTemplates:instantiateInline")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3698,6 +4005,7 @@ func (c *ProjectsLocationsWorkflowTemplatesListCall) doRequest(alt string) (*htt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+parent}/workflowTemplates")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3863,6 +4171,7 @@ func (c *ProjectsLocationsWorkflowTemplatesSetIamPolicyCall) doRequest(alt strin
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4003,6 +4312,7 @@ func (c *ProjectsLocationsWorkflowTemplatesTestIamPermissionsCall) doRequest(alt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4139,6 +4449,7 @@ func (c *ProjectsLocationsWorkflowTemplatesUpdateCall) doRequest(alt string) (*h
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -4290,6 +4601,7 @@ func (c *ProjectsRegionsClustersCreateCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4456,6 +4768,7 @@ func (c *ProjectsRegionsClustersDeleteCall) doRequest(alt string) (*http.Respons
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/clusters/{clusterName}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -4619,6 +4932,7 @@ func (c *ProjectsRegionsClustersDiagnoseCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/clusters/{clusterName}:diagnose")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4780,6 +5094,7 @@ func (c *ProjectsRegionsClustersGetCall) doRequest(alt string) (*http.Response, 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/clusters/{clusterName}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4936,6 +5251,7 @@ func (c *ProjectsRegionsClustersGetIamPolicyCall) doRequest(alt string) (*http.R
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5109,6 +5425,7 @@ func (c *ProjectsRegionsClustersListCall) doRequest(alt string) (*http.Response,
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/clusters")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5381,6 +5698,7 @@ func (c *ProjectsRegionsClustersPatchCall) doRequest(alt string) (*http.Response
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/clusters/{clusterName}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -5549,6 +5867,7 @@ func (c *ProjectsRegionsClustersSetIamPolicyCall) doRequest(alt string) (*http.R
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5689,6 +6008,7 @@ func (c *ProjectsRegionsClustersTestIamPermissionsCall) doRequest(alt string) (*
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5830,6 +6150,7 @@ func (c *ProjectsRegionsJobsCancelCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/jobs/{jobId}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5978,6 +6299,7 @@ func (c *ProjectsRegionsJobsDeleteCall) doRequest(alt string) (*http.Response, e
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/jobs/{jobId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -6136,6 +6458,7 @@ func (c *ProjectsRegionsJobsGetCall) doRequest(alt string) (*http.Response, erro
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/jobs/{jobId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6292,6 +6615,7 @@ func (c *ProjectsRegionsJobsGetIamPolicyCall) doRequest(alt string) (*http.Respo
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6481,6 +6805,7 @@ func (c *ProjectsRegionsJobsListCall) doRequest(alt string) (*http.Response, err
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/jobs")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6688,6 +7013,7 @@ func (c *ProjectsRegionsJobsPatchCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/jobs/{jobId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PATCH", urls, body)
@@ -6845,6 +7171,7 @@ func (c *ProjectsRegionsJobsSetIamPolicyCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6982,6 +7309,7 @@ func (c *ProjectsRegionsJobsSubmitCall) doRequest(alt string) (*http.Response, e
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/projects/{projectId}/regions/{region}/jobs:submit")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7129,6 +7457,7 @@ func (c *ProjectsRegionsJobsTestIamPermissionsCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7266,6 +7595,7 @@ func (c *ProjectsRegionsOperationsCancelCall) doRequest(alt string) (*http.Respo
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}:cancel")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -7394,6 +7724,7 @@ func (c *ProjectsRegionsOperationsDeleteCall) doRequest(alt string) (*http.Respo
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -7535,6 +7866,7 @@ func (c *ProjectsRegionsOperationsGetCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7676,6 +8008,7 @@ func (c *ProjectsRegionsOperationsGetIamPolicyCall) doRequest(alt string) (*http
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7845,6 +8178,7 @@ func (c *ProjectsRegionsOperationsListCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8015,6 +8349,7 @@ func (c *ProjectsRegionsOperationsSetIamPolicyCall) doRequest(alt string) (*http
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8155,6 +8490,7 @@ func (c *ProjectsRegionsOperationsTestIamPermissionsCall) doRequest(alt string) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8290,6 +8626,7 @@ func (c *ProjectsRegionsWorkflowTemplatesCreateCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+parent}/workflowTemplates")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -8427,6 +8764,7 @@ func (c *ProjectsRegionsWorkflowTemplatesDeleteCall) doRequest(alt string) (*htt
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -8581,6 +8919,7 @@ func (c *ProjectsRegionsWorkflowTemplatesGetCall) doRequest(alt string) (*http.R
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8728,6 +9067,7 @@ func (c *ProjectsRegionsWorkflowTemplatesGetIamPolicyCall) doRequest(alt string)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:getIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8867,6 +9207,7 @@ func (c *ProjectsRegionsWorkflowTemplatesInstantiateCall) doRequest(alt string) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}:instantiate")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9023,6 +9364,7 @@ func (c *ProjectsRegionsWorkflowTemplatesInstantiateInlineCall) doRequest(alt st
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+parent}/workflowTemplates:instantiateInline")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9184,6 +9526,7 @@ func (c *ProjectsRegionsWorkflowTemplatesListCall) doRequest(alt string) (*http.
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+parent}/workflowTemplates")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9349,6 +9692,7 @@ func (c *ProjectsRegionsWorkflowTemplatesSetIamPolicyCall) doRequest(alt string)
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:setIamPolicy")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9489,6 +9833,7 @@ func (c *ProjectsRegionsWorkflowTemplatesTestIamPermissionsCall) doRequest(alt s
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+resource}:testIamPermissions")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9625,6 +9970,7 @@ func (c *ProjectsRegionsWorkflowTemplatesUpdateCall) doRequest(alt string) (*htt
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta2/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)

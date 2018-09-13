@@ -297,13 +297,15 @@ const (
 	StandardAkamai SkuName = "Standard_Akamai"
 	// StandardChinaCdn ...
 	StandardChinaCdn SkuName = "Standard_ChinaCdn"
+	// StandardMicrosoft ...
+	StandardMicrosoft SkuName = "Standard_Microsoft"
 	// StandardVerizon ...
 	StandardVerizon SkuName = "Standard_Verizon"
 )
 
 // PossibleSkuNameValues returns an array of possible values for the SkuName const type.
 func PossibleSkuNameValues() []SkuName {
-	return []SkuName{CustomVerizon, PremiumVerizon, StandardAkamai, StandardChinaCdn, StandardVerizon}
+	return []SkuName{CustomVerizon, PremiumVerizon, StandardAkamai, StandardChinaCdn, StandardMicrosoft, StandardVerizon}
 }
 
 // CacheExpirationActionParameters defines the parameters for the cache expiration action.
@@ -2667,7 +2669,7 @@ func (page ResourceUsageListResultPage) Values() []ResourceUsage {
 
 // Sku the pricing tier (defines a CDN provider, feature list and rate) of the CDN profile.
 type Sku struct {
-	// Name - Name of the pricing tier. Possible values include: 'StandardVerizon', 'PremiumVerizon', 'CustomVerizon', 'StandardAkamai', 'StandardChinaCdn'
+	// Name - Name of the pricing tier. Possible values include: 'StandardVerizon', 'PremiumVerizon', 'CustomVerizon', 'StandardAkamai', 'StandardChinaCdn', 'StandardMicrosoft'
 	Name SkuName `json:"name,omitempty"`
 }
 

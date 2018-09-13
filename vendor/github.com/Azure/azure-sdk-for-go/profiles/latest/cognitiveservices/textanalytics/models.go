@@ -22,23 +22,6 @@ package textanalytics
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/textanalytics"
 
 type BaseClient = original.BaseClient
-type AzureRegions = original.AzureRegions
-
-const (
-	Australiaeast  AzureRegions = original.Australiaeast
-	Brazilsouth    AzureRegions = original.Brazilsouth
-	Eastasia       AzureRegions = original.Eastasia
-	Eastus         AzureRegions = original.Eastus
-	Eastus2        AzureRegions = original.Eastus2
-	Northeurope    AzureRegions = original.Northeurope
-	Southcentralus AzureRegions = original.Southcentralus
-	Southeastasia  AzureRegions = original.Southeastasia
-	Westcentralus  AzureRegions = original.Westcentralus
-	Westeurope     AzureRegions = original.Westeurope
-	Westus         AzureRegions = original.Westus
-	Westus2        AzureRegions = original.Westus2
-)
-
 type BatchInput = original.BatchInput
 type DetectedLanguage = original.DetectedLanguage
 type EntitiesBatchResult = original.EntitiesBatchResult
@@ -58,14 +41,11 @@ type MultiLanguageInput = original.MultiLanguageInput
 type SentimentBatchResult = original.SentimentBatchResult
 type SentimentBatchResultItem = original.SentimentBatchResultItem
 
-func New(azureRegion AzureRegions) BaseClient {
-	return original.New(azureRegion)
+func New(endpoint string) BaseClient {
+	return original.New(endpoint)
 }
-func NewWithoutDefaults(azureRegion AzureRegions) BaseClient {
-	return original.NewWithoutDefaults(azureRegion)
-}
-func PossibleAzureRegionsValues() []AzureRegions {
-	return original.PossibleAzureRegionsValues()
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

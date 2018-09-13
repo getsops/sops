@@ -175,7 +175,7 @@ func TestCanSupportProjectionsWithStructs(t *testing.T) {
 
 func TestCanSupportSliceOfStructsWithFunctions(t *testing.T) {
 	assert := assert.New(t)
-	data := []scalars{scalars{"a1", "b1"}, scalars{"a2", "b2"}}
+	data := []scalars{{"a1", "b1"}, {"a2", "b2"}}
 	result, err := Search("length(@)", data)
 	assert.Nil(err)
 	assert.Equal(result.(float64), 2.0)

@@ -1,4 +1,6 @@
-// Package datastore provides access to the Google Cloud Datastore API.
+// Package datastore provides access to the Cloud Datastore API.
+//
+// This package is DEPRECATED. Use package cloud.google.com/go/datastore instead.
 //
 // See https://cloud.google.com/datastore/
 //
@@ -531,6 +533,8 @@ type GoogleDatastoreAdminV1CommonMetadata struct {
 	//   "OPERATION_TYPE_UNSPECIFIED" - Unspecified.
 	//   "EXPORT_ENTITIES" - ExportEntities.
 	//   "IMPORT_ENTITIES" - ImportEntities.
+	//   "CREATE_INDEX" - CreateIndex.
+	//   "DELETE_INDEX" - DeleteIndex.
 	OperationType string `json:"operationType,omitempty"`
 
 	// StartTime: The time that work began on the operation.
@@ -762,6 +766,41 @@ type GoogleDatastoreAdminV1ImportEntitiesMetadata struct {
 
 func (s *GoogleDatastoreAdminV1ImportEntitiesMetadata) MarshalJSON() ([]byte, error) {
 	type NoMethod GoogleDatastoreAdminV1ImportEntitiesMetadata
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleDatastoreAdminV1IndexOperationMetadata: Metadata for Index
+// operations.
+type GoogleDatastoreAdminV1IndexOperationMetadata struct {
+	// Common: Metadata common to all Datastore Admin operations.
+	Common *GoogleDatastoreAdminV1CommonMetadata `json:"common,omitempty"`
+
+	// IndexId: The index resource ID that this operation is acting on.
+	IndexId string `json:"indexId,omitempty"`
+
+	// ProgressEntities: An estimate of the number of entities processed.
+	ProgressEntities *GoogleDatastoreAdminV1Progress `json:"progressEntities,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Common") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Common") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleDatastoreAdminV1IndexOperationMetadata) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleDatastoreAdminV1IndexOperationMetadata
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -2345,6 +2384,7 @@ func (c *ProjectsAllocateIdsCall) doRequest(alt string) (*http.Response, error) 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectId}:allocateIds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2480,6 +2520,7 @@ func (c *ProjectsBeginTransactionCall) doRequest(alt string) (*http.Response, er
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectId}:beginTransaction")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2617,6 +2658,7 @@ func (c *ProjectsCommitCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectId}:commit")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2752,6 +2794,7 @@ func (c *ProjectsLookupCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectId}:lookup")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -2889,6 +2932,7 @@ func (c *ProjectsReserveIdsCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectId}:reserveIds")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3024,6 +3068,7 @@ func (c *ProjectsRollbackCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectId}:rollback")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3159,6 +3204,7 @@ func (c *ProjectsRunQueryCall) doRequest(alt string) (*http.Response, error) {
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v1beta3/projects/{projectId}:runQuery")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)

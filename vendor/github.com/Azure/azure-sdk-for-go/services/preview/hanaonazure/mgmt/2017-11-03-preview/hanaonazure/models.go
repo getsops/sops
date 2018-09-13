@@ -39,6 +39,29 @@ func PossibleHanaHardwareTypeNamesEnumValues() []HanaHardwareTypeNamesEnum {
 	return []HanaHardwareTypeNamesEnum{CiscoUCS, HPE}
 }
 
+// HanaInstancePowerStateEnum enumerates the values for hana instance power state enum.
+type HanaInstancePowerStateEnum string
+
+const (
+	// Restarting ...
+	Restarting HanaInstancePowerStateEnum = "restarting"
+	// Started ...
+	Started HanaInstancePowerStateEnum = "started"
+	// Starting ...
+	Starting HanaInstancePowerStateEnum = "starting"
+	// Stopped ...
+	Stopped HanaInstancePowerStateEnum = "stopped"
+	// Stopping ...
+	Stopping HanaInstancePowerStateEnum = "stopping"
+	// Unknown ...
+	Unknown HanaInstancePowerStateEnum = "unknown"
+)
+
+// PossibleHanaInstancePowerStateEnumValues returns an array of possible values for the HanaInstancePowerStateEnum const type.
+func PossibleHanaInstancePowerStateEnumValues() []HanaInstancePowerStateEnum {
+	return []HanaInstancePowerStateEnum{Restarting, Started, Starting, Stopped, Stopping, Unknown}
+}
+
 // HanaInstanceSizeNamesEnum enumerates the values for hana instance size names enum.
 type HanaInstanceSizeNamesEnum string
 
@@ -96,7 +119,7 @@ type Disk struct {
 
 // Display detailed HANA operation information
 type Display struct {
-	// Provider - The localized friendly form of the resource provider name. This form is also expected to include the publisher/company responsible. Use Title Casing. Begin with “Microsoft” for 1st party services.
+	// Provider - The localized friendly form of the resource provider name. This form is also expected to include the publisher/company responsible. Use Title Casing. Begin with "Microsoft" for 1st party services.
 	Provider *string `json:"provider,omitempty"`
 	// Resource - The localized friendly form of the resource type related to this action/operation. This form should match the public documentation for the resource provider. Use Title Casing. For examples, refer to the “name” section.
 	Resource *string `json:"resource,omitempty"`
@@ -238,6 +261,8 @@ type HanaInstanceProperties struct {
 	NetworkProfile *NetworkProfile `json:"networkProfile,omitempty"`
 	// HanaInstanceID - Specifies the HANA instance unique ID.
 	HanaInstanceID *string `json:"hanaInstanceId,omitempty"`
+	// PowerState - Resource power state. Possible values include: 'Starting', 'Started', 'Stopping', 'Stopped', 'Restarting', 'Unknown'
+	PowerState HanaInstancePowerStateEnum `json:"powerState,omitempty"`
 }
 
 // HanaInstancesListResult the response from the List HANA Instances operation.

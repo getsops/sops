@@ -17,7 +17,7 @@ const opCountClosedWorkflowExecutions = "CountClosedWorkflowExecutions"
 
 // CountClosedWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the CountClosedWorkflowExecutions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -129,7 +129,7 @@ const opCountOpenWorkflowExecutions = "CountOpenWorkflowExecutions"
 
 // CountOpenWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the CountOpenWorkflowExecutions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -241,7 +241,7 @@ const opCountPendingActivityTasks = "CountPendingActivityTasks"
 
 // CountPendingActivityTasksRequest generates a "aws/request.Request" representing the
 // client's request for the CountPendingActivityTasks operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -347,7 +347,7 @@ const opCountPendingDecisionTasks = "CountPendingDecisionTasks"
 
 // CountPendingDecisionTasksRequest generates a "aws/request.Request" representing the
 // client's request for the CountPendingDecisionTasks operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -453,7 +453,7 @@ const opDeprecateActivityType = "DeprecateActivityType"
 
 // DeprecateActivityTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeprecateActivityType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -569,7 +569,7 @@ const opDeprecateDomain = "DeprecateDomain"
 
 // DeprecateDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeprecateDomain operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -683,7 +683,7 @@ const opDeprecateWorkflowType = "DeprecateWorkflowType"
 
 // DeprecateWorkflowTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeprecateWorkflowType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -800,7 +800,7 @@ const opDescribeActivityType = "DescribeActivityType"
 
 // DescribeActivityTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeActivityType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -908,7 +908,7 @@ const opDescribeDomain = "DescribeDomain"
 
 // DescribeDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDomain operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1010,7 +1010,7 @@ const opDescribeWorkflowExecution = "DescribeWorkflowExecution"
 
 // DescribeWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeWorkflowExecution operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1115,7 +1115,7 @@ const opDescribeWorkflowType = "DescribeWorkflowType"
 
 // DescribeWorkflowTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeWorkflowType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1223,7 +1223,7 @@ const opGetWorkflowExecutionHistory = "GetWorkflowExecutionHistory"
 
 // GetWorkflowExecutionHistoryRequest generates a "aws/request.Request" representing the
 // client's request for the GetWorkflowExecutionHistory operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1385,7 +1385,7 @@ const opListActivityTypes = "ListActivityTypes"
 
 // ListActivityTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListActivityTypes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1546,7 +1546,7 @@ const opListClosedWorkflowExecutions = "ListClosedWorkflowExecutions"
 
 // ListClosedWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListClosedWorkflowExecutions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1716,7 +1716,7 @@ const opListDomains = "ListDomains"
 
 // ListDomainsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDomains operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1874,7 +1874,7 @@ const opListOpenWorkflowExecutions = "ListOpenWorkflowExecutions"
 
 // ListOpenWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListOpenWorkflowExecutions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2044,7 +2044,7 @@ const opListWorkflowTypes = "ListWorkflowTypes"
 
 // ListWorkflowTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListWorkflowTypes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2203,7 +2203,7 @@ const opPollForActivityTask = "PollForActivityTask"
 
 // PollForActivityTaskRequest generates a "aws/request.Request" representing the
 // client's request for the PollForActivityTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2321,7 +2321,7 @@ const opPollForDecisionTask = "PollForDecisionTask"
 
 // PollForDecisionTaskRequest generates a "aws/request.Request" representing the
 // client's request for the PollForDecisionTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2505,7 +2505,7 @@ const opRecordActivityTaskHeartbeat = "RecordActivityTaskHeartbeat"
 
 // RecordActivityTaskHeartbeatRequest generates a "aws/request.Request" representing the
 // client's request for the RecordActivityTaskHeartbeat operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2631,7 +2631,7 @@ const opRegisterActivityType = "RegisterActivityType"
 
 // RegisterActivityTypeRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterActivityType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2757,7 +2757,7 @@ const opRegisterDomain = "RegisterDomain"
 
 // RegisterDomainRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterDomain operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2865,7 +2865,7 @@ const opRegisterWorkflowType = "RegisterWorkflowType"
 
 // RegisterWorkflowTypeRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterWorkflowType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2994,7 +2994,7 @@ const opRequestCancelWorkflowExecution = "RequestCancelWorkflowExecution"
 
 // RequestCancelWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the RequestCancelWorkflowExecution operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3108,7 +3108,7 @@ const opRespondActivityTaskCanceled = "RespondActivityTaskCanceled"
 
 // RespondActivityTaskCanceledRequest generates a "aws/request.Request" representing the
 // client's request for the RespondActivityTaskCanceled operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3225,7 +3225,7 @@ const opRespondActivityTaskCompleted = "RespondActivityTaskCompleted"
 
 // RespondActivityTaskCompletedRequest generates a "aws/request.Request" representing the
 // client's request for the RespondActivityTaskCompleted operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3341,7 +3341,7 @@ const opRespondActivityTaskFailed = "RespondActivityTaskFailed"
 
 // RespondActivityTaskFailedRequest generates a "aws/request.Request" representing the
 // client's request for the RespondActivityTaskFailed operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3452,7 +3452,7 @@ const opRespondDecisionTaskCompleted = "RespondDecisionTaskCompleted"
 
 // RespondDecisionTaskCompletedRequest generates a "aws/request.Request" representing the
 // client's request for the RespondDecisionTaskCompleted operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3552,7 +3552,7 @@ const opSignalWorkflowExecution = "SignalWorkflowExecution"
 
 // SignalWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the SignalWorkflowExecution operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3664,7 +3664,7 @@ const opStartWorkflowExecution = "StartWorkflowExecution"
 
 // StartWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the StartWorkflowExecution operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3810,7 +3810,7 @@ const opTerminateWorkflowExecution = "TerminateWorkflowExecution"
 
 // TerminateWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the TerminateWorkflowExecution operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4555,10 +4555,10 @@ type ActivityTypeInfo struct {
 	// The date and time this activity type was created through RegisterActivityType.
 	//
 	// CreationDate is a required field
-	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix" required:"true"`
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" required:"true"`
 
 	// If DEPRECATED, the date and time DeprecateActivityType was called.
-	DeprecationDate *time.Time `locationName:"deprecationDate" type:"timestamp" timestampFormat:"unix"`
+	DeprecationDate *time.Time `locationName:"deprecationDate" type:"timestamp"`
 
 	// The description of the activity type provided in RegisterActivityType.
 	Description *string `locationName:"description" type:"string"`
@@ -7034,7 +7034,7 @@ type DescribeWorkflowExecutionOutput struct {
 	// The time when the last activity task was scheduled for this workflow execution.
 	// You can use this information to determine if the workflow has not made progress
 	// for an unusually long period of time and might require a corrective action.
-	LatestActivityTaskTimestamp *time.Time `locationName:"latestActivityTaskTimestamp" type:"timestamp" timestampFormat:"unix"`
+	LatestActivityTaskTimestamp *time.Time `locationName:"latestActivityTaskTimestamp" type:"timestamp"`
 
 	// The latest executionContext provided by the decider for this workflow execution.
 	// A decider can provide an executionContext (a free-form string) when closing
@@ -7283,12 +7283,12 @@ type ExecutionTimeFilter struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the latest start or close date and time to return.
-	LatestDate *time.Time `locationName:"latestDate" type:"timestamp" timestampFormat:"unix"`
+	LatestDate *time.Time `locationName:"latestDate" type:"timestamp"`
 
 	// Specifies the oldest start or close date and time to return.
 	//
 	// OldestDate is a required field
-	OldestDate *time.Time `locationName:"oldestDate" type:"timestamp" timestampFormat:"unix" required:"true"`
+	OldestDate *time.Time `locationName:"oldestDate" type:"timestamp" required:"true"`
 }
 
 // String returns the string representation
@@ -7897,7 +7897,7 @@ type HistoryEvent struct {
 	// The date and time when the event occurred.
 	//
 	// EventTimestamp is a required field
-	EventTimestamp *time.Time `locationName:"eventTimestamp" type:"timestamp" timestampFormat:"unix" required:"true"`
+	EventTimestamp *time.Time `locationName:"eventTimestamp" type:"timestamp" required:"true"`
 
 	// The type of the history event.
 	//
@@ -14108,7 +14108,7 @@ type WorkflowExecutionInfo struct {
 
 	// The time when the workflow execution was closed. Set only if the execution
 	// status is CLOSED.
-	CloseTimestamp *time.Time `locationName:"closeTimestamp" type:"timestamp" timestampFormat:"unix"`
+	CloseTimestamp *time.Time `locationName:"closeTimestamp" type:"timestamp"`
 
 	// The workflow execution this information is about.
 	//
@@ -14127,7 +14127,7 @@ type WorkflowExecutionInfo struct {
 	// The time when the execution was started.
 	//
 	// StartTimestamp is a required field
-	StartTimestamp *time.Time `locationName:"startTimestamp" type:"timestamp" timestampFormat:"unix" required:"true"`
+	StartTimestamp *time.Time `locationName:"startTimestamp" type:"timestamp" required:"true"`
 
 	// The list of tags associated with the workflow execution. Tags can be used
 	// to identify and list workflow executions of interest through the visibility
@@ -14889,11 +14889,11 @@ type WorkflowTypeInfo struct {
 	// The date when this type was registered.
 	//
 	// CreationDate is a required field
-	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix" required:"true"`
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" required:"true"`
 
 	// If the type is in deprecated state, then it is set to the date when the type
 	// was deprecated.
-	DeprecationDate *time.Time `locationName:"deprecationDate" type:"timestamp" timestampFormat:"unix"`
+	DeprecationDate *time.Time `locationName:"deprecationDate" type:"timestamp"`
 
 	// The description of the type registered through RegisterWorkflowType.
 	Description *string `locationName:"description" type:"string"`

@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -112,8 +112,7 @@ func NewClient(ctx context.Context, opts ...option.ClientOption) (*Client, error
 //
 // Close need not be called at program exit.
 func (c *Client) Close() error {
-	// Set fields to nil so that subsequent uses
-	// will panic.
+	// Set fields to nil so that subsequent uses will panic.
 	c.hc = nil
 	c.raw = nil
 	return nil
@@ -346,7 +345,7 @@ func (o *ObjectHandle) Generation(gen int64) *ObjectHandle {
 
 // If returns a new ObjectHandle that applies a set of preconditions.
 // Preconditions already set on the ObjectHandle are ignored.
-// Operations on the new handle will only occur if the preconditions are
+// Operations on the new handle will return an error if the preconditions are not
 // satisfied. See https://cloud.google.com/storage/docs/generations-preconditions
 // for more details.
 func (o *ObjectHandle) If(conds Conditions) *ObjectHandle {
@@ -467,6 +466,9 @@ func (o *ObjectHandle) Update(ctx context.Context, uattrs ObjectAttrsToUpdate) (
 	if o.userProject != "" {
 		call.UserProject(o.userProject)
 	}
+	if uattrs.PredefinedACL != "" {
+		call.PredefinedAcl(uattrs.PredefinedACL)
+	}
 	if err := setEncryptionHeaders(call.Header(), o.encryptionKey, false); err != nil {
 		return nil, err
 	}
@@ -480,6 +482,16 @@ func (o *ObjectHandle) Update(ctx context.Context, uattrs ObjectAttrsToUpdate) (
 		return nil, err
 	}
 	return newObject(obj), nil
+}
+
+// BucketName returns the name of the bucket.
+func (o *ObjectHandle) BucketName() string {
+	return o.bucket
+}
+
+// ObjectName returns the name of the object.
+func (o *ObjectHandle) ObjectName() string {
+	return o.object
 }
 
 // ObjectAttrsToUpdate is used to update the attributes of an object.
@@ -501,6 +513,10 @@ type ObjectAttrsToUpdate struct {
 	CacheControl       optional.String
 	Metadata           map[string]string // set to map[string]string{} to delete
 	ACL                []ACLRule
+
+	// If not empty, applies a predefined set of access controls. ACL must be nil.
+	// See https://cloud.google.com/storage/docs/json_api/v1/objects/patch.
+	PredefinedACL string
 }
 
 // Delete deletes the single specified object.
@@ -549,7 +565,8 @@ func (o *ObjectHandle) ReadCompressed(compressed bool) *ObjectHandle {
 // attribute is specified, the content type will be automatically sniffed
 // using net/http.DetectContentType.
 //
-// It is the caller's responsibility to call Close when writing is done.
+// It is the caller's responsibility to call Close when writing is done. To
+// stop writing without saving the data, cancel the context.
 func (o *ObjectHandle) NewWriter(ctx context.Context) *Writer {
 	return &Writer{
 		ctx:         ctx,
@@ -595,23 +612,8 @@ func parseKey(key []byte) (*rsa.PrivateKey, error) {
 	return parsed, nil
 }
 
-func toRawObjectACL(oldACL []ACLRule) []*raw.ObjectAccessControl {
-	var acl []*raw.ObjectAccessControl
-	if len(oldACL) > 0 {
-		acl = make([]*raw.ObjectAccessControl, len(oldACL))
-		for i, rule := range oldACL {
-			acl[i] = &raw.ObjectAccessControl{
-				Entity: string(rule.Entity),
-				Role:   string(rule.Role),
-			}
-		}
-	}
-	return acl
-}
-
 // toRawObject copies the editable attributes from o to the raw library's Object type.
 func (o *ObjectAttrs) toRawObject(bucket string) *raw.Object {
-	acl := toRawObjectACL(o.ACL)
 	return &raw.Object{
 		Bucket:             bucket,
 		Name:               o.Name,
@@ -621,7 +623,7 @@ func (o *ObjectAttrs) toRawObject(bucket string) *raw.Object {
 		CacheControl:       o.CacheControl,
 		ContentDisposition: o.ContentDisposition,
 		StorageClass:       o.StorageClass,
-		Acl:                acl,
+		Acl:                toRawObjectACL(o.ACL),
 		Metadata:           o.Metadata,
 	}
 }
@@ -648,6 +650,14 @@ type ObjectAttrs struct {
 
 	// ACL is the list of access control rules for the object.
 	ACL []ACLRule
+
+	// If not empty, applies a predefined set of access controls. It should be set
+	// only when writing, copying or composing an object. When copying or composing,
+	// it acts as the destinationPredefinedAcl parameter.
+	// PredefinedACL is always empty for ObjectAttrs returned from the service.
+	// See https://cloud.google.com/storage/docs/json_api/v1/objects/insert
+	// for valid values.
+	PredefinedACL string
 
 	// Owner is the owner of the object. This field is read-only.
 	//
@@ -722,6 +732,14 @@ type ObjectAttrs struct {
 	// encryption in Google Cloud Storage.
 	CustomerKeySHA256 string
 
+	// Cloud KMS key name, in the form
+	// projects/P/locations/L/keyRings/R/cryptoKeys/K, used to encrypt this object,
+	// if the object is encrypted by such a key.
+	//
+	// Providing both a KMSKeyName and a customer-supplied encryption key (via
+	// ObjectHandle.Key) will result in an error when writing an object.
+	KMSKeyName string
+
 	// Prefix is set only for ObjectAttrs which represent synthetic "directory
 	// entries" when iterating over buckets using Query.Delimiter. See
 	// ObjectIterator.Next. When set, no other fields in ObjectAttrs will be
@@ -743,13 +761,6 @@ func newObject(o *raw.Object) *ObjectAttrs {
 	if o == nil {
 		return nil
 	}
-	acl := make([]ACLRule, len(o.Acl))
-	for i, rule := range o.Acl {
-		acl[i] = ACLRule{
-			Entity: ACLEntity(rule.Entity),
-			Role:   ACLRole(rule.Role),
-		}
-	}
 	owner := ""
 	if o.Owner != nil {
 		owner = o.Owner.Entity
@@ -766,7 +777,7 @@ func newObject(o *raw.Object) *ObjectAttrs {
 		ContentType:        o.ContentType,
 		ContentLanguage:    o.ContentLanguage,
 		CacheControl:       o.CacheControl,
-		ACL:                acl,
+		ACL:                toObjectACLRules(o.Acl),
 		Owner:              owner,
 		ContentEncoding:    o.ContentEncoding,
 		ContentDisposition: o.ContentDisposition,
@@ -779,6 +790,7 @@ func newObject(o *raw.Object) *ObjectAttrs {
 		Metageneration:     o.Metageneration,
 		StorageClass:       o.StorageClass,
 		CustomerKeySHA256:  sha256,
+		KMSKeyName:         o.KmsKeyName,
 		Created:            convertTime(o.TimeCreated),
 		Deleted:            convertTime(o.TimeDeleted),
 		Updated:            convertTime(o.Updated),
@@ -1064,4 +1076,12 @@ func setEncryptionHeaders(headers http.Header, key []byte, copySource bool) erro
 	return nil
 }
 
-// TODO(jbd): Add storage.objects.watch.
+// ServiceAccount fetches the email address of the given project's Google Cloud Storage service account.
+func (c *Client) ServiceAccount(ctx context.Context, projectID string) (string, error) {
+	r := c.raw.Projects.ServiceAccount.Get(projectID)
+	res, err := r.Context(ctx).Do()
+	if err != nil {
+		return "", err
+	}
+	return res.EmailAddress, nil
+}

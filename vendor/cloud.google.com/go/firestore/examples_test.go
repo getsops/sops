@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -454,6 +454,34 @@ func ExampleQuery_Documents_path_methods() {
 	// You can call Documents directly on a CollectionRef as well.
 	iter2 := client.Collection("States").Documents(ctx)
 	_ = iter2 // TODO: Use iter2.
+}
+
+func ExampleQuery_Snapshots() {
+	ctx := context.Background()
+	client, err := firestore.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer client.Close()
+
+	q := client.Collection("States").Select("pop").
+		Where("pop", ">", 10).
+		OrderBy("pop", firestore.Desc).
+		Limit(10)
+	qsnapIter := q.Snapshots(ctx)
+	// Listen forever for changes to the query's results.
+	for {
+		qsnap, err := qsnapIter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		fmt.Printf("At %s there were %d results.\n", qsnap.ReadTime, qsnap.Size)
+		_ = qsnap.Documents // TODO: Iterate over the results if desired.
+		_ = qsnap.Changes   // TODO: Use the list of incremental changes if desired.
+	}
 }
 
 func ExampleDocumentIterator_Next() {

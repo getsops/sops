@@ -129,7 +129,7 @@ func TestUploadOrderMulti(t *testing.T) {
 	}
 
 	if "VERSION-ID" != *resp.VersionID {
-		t.Errorf("Expected %q, but received %q", "VERSION-ID", resp.VersionID)
+		t.Errorf("Expected %q, but received %q", "VERSION-ID", *resp.VersionID)
 	}
 
 	// Validate input values
@@ -302,7 +302,7 @@ func TestUploadOrderSingle(t *testing.T) {
 	}
 
 	if e := "VERSION-ID"; e != *resp.VersionID {
-		t.Errorf("Expected %q, but received %q", e, resp.VersionID)
+		t.Errorf("Expected %q, but received %q", e, *resp.VersionID)
 	}
 
 	if len(resp.UploadID) > 0 {

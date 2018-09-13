@@ -7,7 +7,7 @@
 //
 // This package defines command line flags that are common to most generation
 // tools. The flags allow for specifying specific Unicode and CLDR versions
-// in the public Unicode data repository (http://www.unicode.org/Public).
+// in the public Unicode data repository (https://www.unicode.org/Public).
 //
 // A local Unicode data mirror can be set through the flag -local or the
 // environment variable UNICODE_DIR. The former takes precedence. The local
@@ -40,7 +40,7 @@ import (
 
 var (
 	url = flag.String("url",
-		"http://www.unicode.org/Public",
+		"https://www.unicode.org/Public",
 		"URL of Unicode database directory")
 	iana = flag.String("iana",
 		"http://www.iana.org",

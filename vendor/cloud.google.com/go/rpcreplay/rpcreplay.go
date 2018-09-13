@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,6 +44,14 @@ type Recorder struct {
 	f    *os.File
 	next int
 	err  error
+	// BeforeFunc defines a function that can inspect and modify requests and responses
+	// written to the replay file. It does not modify messages sent to the service.
+	// It is run once before a request is written to the replay file, and once before a response
+	// is written to the replay file.
+	// The function is called with the method name and the message that triggered the callback.
+	// If the function returns an error, the error will be returned to the client.
+	// This is only executed for unary RPCs; streaming RPCs are not supported.
+	BeforeFunc func(string, proto.Message) error
 }
 
 // NewRecorder creates a recorder that writes to filename. The file will
@@ -106,9 +114,14 @@ func (r *Recorder) interceptUnary(ctx context.Context, method string, req, res i
 	ereq := &entry{
 		kind:   pb.Entry_REQUEST,
 		method: method,
-		msg:    message{msg: req.(proto.Message)},
+		msg:    message{msg: proto.Clone(req.(proto.Message))},
 	}
 
+	if r.BeforeFunc != nil {
+		if err := r.BeforeFunc(method, ereq.msg.msg); err != nil {
+			return err
+		}
+	}
 	refIndex, err := r.writeEntry(ereq)
 	if err != nil {
 		return err
@@ -128,7 +141,12 @@ func (r *Recorder) interceptUnary(ctx context.Context, method string, req, res i
 		r.mu.Unlock()
 		return ierr
 	}
-	eres.msg.set(res, ierr)
+	eres.msg.set(proto.Clone(res.(proto.Message)), ierr)
+	if r.BeforeFunc != nil {
+		if err := r.BeforeFunc(method, eres.msg.msg); err != nil {
+			return err
+		}
+	}
 	if _, err := r.writeEntry(eres); err != nil {
 		return err
 	}
@@ -231,6 +249,12 @@ type Replayer struct {
 	mu      sync.Mutex
 	calls   []*call
 	streams []*stream
+	// BeforeFunc defines a function that can inspect and modify requests before they
+	// are matched for responses from the replay file.
+	// The function is called with the method name and the message that triggered the callback.
+	// If the function returns an error, the error will be returned to the client.
+	// This is only executed for unary RPCs; streaming RPCs are not supported.
+	BeforeFunc func(string, proto.Message) error
 }
 
 // A call represents a unary RPC, with a request and response (or error).
@@ -367,6 +391,11 @@ func (r *Replayer) Close() error {
 
 func (r *Replayer) interceptUnary(_ context.Context, method string, req, res interface{}, _ *grpc.ClientConn, _ grpc.UnaryInvoker, _ ...grpc.CallOption) error {
 	mreq := req.(proto.Message)
+	if r.BeforeFunc != nil {
+		if err := r.BeforeFunc(method, mreq); err != nil {
+			return err
+		}
+	}
 	r.log("request %s (%s)", method, req)
 	call := r.extractCall(method, mreq)
 	if call == nil {

@@ -192,6 +192,10 @@ type IAMAPI interface {
 	DeleteRoleWithContext(aws.Context, *iam.DeleteRoleInput, ...request.Option) (*iam.DeleteRoleOutput, error)
 	DeleteRoleRequest(*iam.DeleteRoleInput) (*request.Request, *iam.DeleteRoleOutput)
 
+	DeleteRolePermissionsBoundary(*iam.DeleteRolePermissionsBoundaryInput) (*iam.DeleteRolePermissionsBoundaryOutput, error)
+	DeleteRolePermissionsBoundaryWithContext(aws.Context, *iam.DeleteRolePermissionsBoundaryInput, ...request.Option) (*iam.DeleteRolePermissionsBoundaryOutput, error)
+	DeleteRolePermissionsBoundaryRequest(*iam.DeleteRolePermissionsBoundaryInput) (*request.Request, *iam.DeleteRolePermissionsBoundaryOutput)
+
 	DeleteRolePolicy(*iam.DeleteRolePolicyInput) (*iam.DeleteRolePolicyOutput, error)
 	DeleteRolePolicyWithContext(aws.Context, *iam.DeleteRolePolicyInput, ...request.Option) (*iam.DeleteRolePolicyOutput, error)
 	DeleteRolePolicyRequest(*iam.DeleteRolePolicyInput) (*request.Request, *iam.DeleteRolePolicyOutput)
@@ -223,6 +227,10 @@ type IAMAPI interface {
 	DeleteUser(*iam.DeleteUserInput) (*iam.DeleteUserOutput, error)
 	DeleteUserWithContext(aws.Context, *iam.DeleteUserInput, ...request.Option) (*iam.DeleteUserOutput, error)
 	DeleteUserRequest(*iam.DeleteUserInput) (*request.Request, *iam.DeleteUserOutput)
+
+	DeleteUserPermissionsBoundary(*iam.DeleteUserPermissionsBoundaryInput) (*iam.DeleteUserPermissionsBoundaryOutput, error)
+	DeleteUserPermissionsBoundaryWithContext(aws.Context, *iam.DeleteUserPermissionsBoundaryInput, ...request.Option) (*iam.DeleteUserPermissionsBoundaryOutput, error)
+	DeleteUserPermissionsBoundaryRequest(*iam.DeleteUserPermissionsBoundaryInput) (*request.Request, *iam.DeleteUserPermissionsBoundaryOutput)
 
 	DeleteUserPolicy(*iam.DeleteUserPolicyInput) (*iam.DeleteUserPolicyOutput, error)
 	DeleteUserPolicyWithContext(aws.Context, *iam.DeleteUserPolicyInput, ...request.Option) (*iam.DeleteUserPolicyOutput, error)
@@ -516,9 +524,17 @@ type IAMAPI interface {
 	PutGroupPolicyWithContext(aws.Context, *iam.PutGroupPolicyInput, ...request.Option) (*iam.PutGroupPolicyOutput, error)
 	PutGroupPolicyRequest(*iam.PutGroupPolicyInput) (*request.Request, *iam.PutGroupPolicyOutput)
 
+	PutRolePermissionsBoundary(*iam.PutRolePermissionsBoundaryInput) (*iam.PutRolePermissionsBoundaryOutput, error)
+	PutRolePermissionsBoundaryWithContext(aws.Context, *iam.PutRolePermissionsBoundaryInput, ...request.Option) (*iam.PutRolePermissionsBoundaryOutput, error)
+	PutRolePermissionsBoundaryRequest(*iam.PutRolePermissionsBoundaryInput) (*request.Request, *iam.PutRolePermissionsBoundaryOutput)
+
 	PutRolePolicy(*iam.PutRolePolicyInput) (*iam.PutRolePolicyOutput, error)
 	PutRolePolicyWithContext(aws.Context, *iam.PutRolePolicyInput, ...request.Option) (*iam.PutRolePolicyOutput, error)
 	PutRolePolicyRequest(*iam.PutRolePolicyInput) (*request.Request, *iam.PutRolePolicyOutput)
+
+	PutUserPermissionsBoundary(*iam.PutUserPermissionsBoundaryInput) (*iam.PutUserPermissionsBoundaryOutput, error)
+	PutUserPermissionsBoundaryWithContext(aws.Context, *iam.PutUserPermissionsBoundaryInput, ...request.Option) (*iam.PutUserPermissionsBoundaryOutput, error)
+	PutUserPermissionsBoundaryRequest(*iam.PutUserPermissionsBoundaryInput) (*request.Request, *iam.PutUserPermissionsBoundaryOutput)
 
 	PutUserPolicy(*iam.PutUserPolicyInput) (*iam.PutUserPolicyOutput, error)
 	PutUserPolicyWithContext(aws.Context, *iam.PutUserPolicyInput, ...request.Option) (*iam.PutUserPolicyOutput, error)

@@ -54,6 +54,12 @@ func (client ContainerGroupsClient) CreateOrUpdate(ctx context.Context, resource
 						Chain: []validation.Constraint{{Target: "containerGroup.ContainerGroupProperties.IPAddress.Ports", Name: validation.Null, Rule: true, Chain: nil},
 							{Target: "containerGroup.ContainerGroupProperties.IPAddress.Type", Name: validation.Null, Rule: true, Chain: nil},
 						}},
+					{Target: "containerGroup.ContainerGroupProperties.Diagnostics", Name: validation.Null, Rule: false,
+						Chain: []validation.Constraint{{Target: "containerGroup.ContainerGroupProperties.Diagnostics.LogAnalytics", Name: validation.Null, Rule: false,
+							Chain: []validation.Constraint{{Target: "containerGroup.ContainerGroupProperties.Diagnostics.LogAnalytics.WorkspaceID", Name: validation.Null, Rule: true, Chain: nil},
+								{Target: "containerGroup.ContainerGroupProperties.Diagnostics.LogAnalytics.WorkspaceKey", Name: validation.Null, Rule: true, Chain: nil},
+							}},
+						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("containerinstance.ContainerGroupsClient", "CreateOrUpdate", err.Error())
 	}
@@ -81,7 +87,7 @@ func (client ContainerGroupsClient) CreateOrUpdatePreparer(ctx context.Context, 
 		"subscriptionId":     autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-04-01"
+	const APIVersion = "2018-06-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -161,7 +167,7 @@ func (client ContainerGroupsClient) DeletePreparer(ctx context.Context, resource
 		"subscriptionId":     autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-04-01"
+	const APIVersion = "2018-06-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -230,7 +236,7 @@ func (client ContainerGroupsClient) GetPreparer(ctx context.Context, resourceGro
 		"subscriptionId":     autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-04-01"
+	const APIVersion = "2018-06-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -295,7 +301,7 @@ func (client ContainerGroupsClient) ListPreparer(ctx context.Context) (*http.Req
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-04-01"
+	const APIVersion = "2018-06-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -390,7 +396,7 @@ func (client ContainerGroupsClient) ListByResourceGroupPreparer(ctx context.Cont
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-04-01"
+	const APIVersion = "2018-06-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -450,6 +456,143 @@ func (client ContainerGroupsClient) ListByResourceGroupComplete(ctx context.Cont
 	return
 }
 
+// Restart restarts all containers in a contaienr group in place. If container image has updates, new image will be
+// downloaded.
+// Parameters:
+// resourceGroupName - the name of the resource group.
+// containerGroupName - the name of the container group.
+func (client ContainerGroupsClient) Restart(ctx context.Context, resourceGroupName string, containerGroupName string) (result ContainerGroupsRestartFuture, err error) {
+	req, err := client.RestartPreparer(ctx, resourceGroupName, containerGroupName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Restart", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.RestartSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Restart", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// RestartPreparer prepares the Restart request.
+func (client ContainerGroupsClient) RestartPreparer(ctx context.Context, resourceGroupName string, containerGroupName string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"containerGroupName": autorest.Encode("path", containerGroupName),
+		"resourceGroupName":  autorest.Encode("path", resourceGroupName),
+		"subscriptionId":     autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-06-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerInstance/containerGroups/{containerGroupName}/restart", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// RestartSender sends the Restart request. The method will close the
+// http.Response Body if it receives an error.
+func (client ContainerGroupsClient) RestartSender(req *http.Request) (future ContainerGroupsRestartFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// RestartResponder handles the response to the Restart request. The method always
+// closes the http.Response Body.
+func (client ContainerGroupsClient) RestartResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
+// Stop stops all containers in a contaienr group. Compute resources will be deallocated and billing will stop.
+// Parameters:
+// resourceGroupName - the name of the resource group.
+// containerGroupName - the name of the container group.
+func (client ContainerGroupsClient) Stop(ctx context.Context, resourceGroupName string, containerGroupName string) (result autorest.Response, err error) {
+	req, err := client.StopPreparer(ctx, resourceGroupName, containerGroupName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Stop", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.StopSender(req)
+	if err != nil {
+		result.Response = resp
+		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Stop", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.StopResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "Stop", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// StopPreparer prepares the Stop request.
+func (client ContainerGroupsClient) StopPreparer(ctx context.Context, resourceGroupName string, containerGroupName string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"containerGroupName": autorest.Encode("path", containerGroupName),
+		"resourceGroupName":  autorest.Encode("path", resourceGroupName),
+		"subscriptionId":     autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-06-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerInstance/containerGroups/{containerGroupName}/stop", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// StopSender sends the Stop request. The method will close the
+// http.Response Body if it receives an error.
+func (client ContainerGroupsClient) StopSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// StopResponder handles the response to the Stop request. The method always
+// closes the http.Response Body.
+func (client ContainerGroupsClient) StopResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
 // Update updates container group tags with specified values.
 // Parameters:
 // resourceGroupName - the name of the resource group.
@@ -485,7 +628,7 @@ func (client ContainerGroupsClient) UpdatePreparer(ctx context.Context, resource
 		"subscriptionId":     autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-04-01"
+	const APIVersion = "2018-06-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

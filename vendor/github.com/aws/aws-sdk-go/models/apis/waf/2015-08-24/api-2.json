@@ -260,6 +260,20 @@
         {"shape":"WAFNonEmptyEntityException"}
       ]
     },
+    "DeleteLoggingConfiguration":{
+      "name":"DeleteLoggingConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteLoggingConfigurationRequest"},
+      "output":{"shape":"DeleteLoggingConfigurationResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFStaleDataException"}
+      ]
+    },
     "DeletePermissionPolicy":{
       "name":"DeletePermissionPolicy",
       "http":{
@@ -355,7 +369,8 @@
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFNonEmptyEntityException"}
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFInvalidOperationException"}
       ]
     },
     "DeleteSizeConstraintSet":{
@@ -490,6 +505,19 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFInvalidAccountException"},
+        {"shape":"WAFNonexistentItemException"}
+      ]
+    },
+    "GetLoggingConfiguration":{
+      "name":"GetLoggingConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetLoggingConfigurationRequest"},
+      "output":{"shape":"GetLoggingConfigurationResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
         {"shape":"WAFNonexistentItemException"}
       ]
     },
@@ -712,6 +740,20 @@
         {"shape":"WAFInvalidAccountException"}
       ]
     },
+    "ListLoggingConfigurations":{
+      "name":"ListLoggingConfigurations",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListLoggingConfigurationsRequest"},
+      "output":{"shape":"ListLoggingConfigurationsResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFInvalidParameterException"}
+      ]
+    },
     "ListRateBasedRules":{
       "name":"ListRateBasedRules",
       "http":{
@@ -839,6 +881,20 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFInvalidAccountException"}
+      ]
+    },
+    "PutLoggingConfiguration":{
+      "name":"PutLoggingConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutLoggingConfigurationRequest"},
+      "output":{"shape":"PutLoggingConfigurationResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFStaleDataException"}
       ]
     },
     "PutPermissionPolicy":{
@@ -1486,6 +1542,18 @@
         "ChangeToken":{"shape":"ChangeToken"}
       }
     },
+    "DeleteLoggingConfigurationRequest":{
+      "type":"structure",
+      "required":["ResourceArn"],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"}
+      }
+    },
+    "DeleteLoggingConfigurationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeletePermissionPolicyRequest":{
       "type":"structure",
       "required":["ResourceArn"],
@@ -2038,6 +2106,19 @@
         "IPSet":{"shape":"IPSet"}
       }
     },
+    "GetLoggingConfigurationRequest":{
+      "type":"structure",
+      "required":["ResourceArn"],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"}
+      }
+    },
+    "GetLoggingConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "LoggingConfiguration":{"shape":"LoggingConfiguration"}
+      }
+    },
     "GetPermissionPolicyRequest":{
       "type":"structure",
       "required":["ResourceArn"],
@@ -2361,6 +2442,20 @@
         "IPSets":{"shape":"IPSetSummaries"}
       }
     },
+    "ListLoggingConfigurationsRequest":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "Limit":{"shape":"PaginationLimit"}
+      }
+    },
+    "ListLoggingConfigurationsResponse":{
+      "type":"structure",
+      "members":{
+        "LoggingConfigurations":{"shape":"LoggingConfigurations"},
+        "NextMarker":{"shape":"NextMarker"}
+      }
+    },
     "ListRateBasedRulesRequest":{
       "type":"structure",
       "members":{
@@ -2501,6 +2596,28 @@
         "XssMatchSets":{"shape":"XssMatchSetSummaries"}
       }
     },
+    "LogDestinationConfigs":{
+      "type":"list",
+      "member":{"shape":"ResourceArn"},
+      "max":1,
+      "min":1
+    },
+    "LoggingConfiguration":{
+      "type":"structure",
+      "required":[
+        "ResourceArn",
+        "LogDestinationConfigs"
+      ],
+      "members":{
+        "ResourceArn":{"shape":"ResourceArn"},
+        "LogDestinationConfigs":{"shape":"LogDestinationConfigs"},
+        "RedactedFields":{"shape":"RedactedFields"}
+      }
+    },
+    "LoggingConfigurations":{
+      "type":"list",
+      "member":{"shape":"LoggingConfiguration"}
+    },
     "ManagedKey":{"type":"string"},
     "ManagedKeys":{
       "type":"list",
@@ -2514,7 +2631,9 @@
         "QUERY_STRING",
         "HEADER",
         "METHOD",
-        "BODY"
+        "BODY",
+        "SINGLE_QUERY_ARG",
+        "ALL_QUERY_ARGS"
       ]
     },
     "MetricName":{"type":"string"},
@@ -2603,6 +2722,19 @@
       "type":"list",
       "member":{"shape":"Predicate"}
     },
+    "PutLoggingConfigurationRequest":{
+      "type":"structure",
+      "required":["LoggingConfiguration"],
+      "members":{
+        "LoggingConfiguration":{"shape":"LoggingConfiguration"}
+      }
+    },
+    "PutLoggingConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "LoggingConfiguration":{"shape":"LoggingConfiguration"}
+      }
+    },
     "PutPermissionPolicyRequest":{
       "type":"structure",
       "required":[
@@ -2642,7 +2774,12 @@
     },
     "RateLimit":{
       "type":"long",
+      "max":2000000000,
       "min":2000
+    },
+    "RedactedFields":{
+      "type":"list",
+      "member":{"shape":"FieldToMatch"}
     },
     "RegexMatchSet":{
       "type":"structure",

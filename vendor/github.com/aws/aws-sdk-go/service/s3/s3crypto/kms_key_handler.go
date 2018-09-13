@@ -39,7 +39,7 @@ func NewKMSKeyGenerator(kmsClient kmsiface.KMSAPI, cmkID string) CipherDataGener
 //	sess := session.New(&aws.Config{})
 //	cmkID := "arn to key"
 //	matdesc := s3crypto.MaterialDescription{}
-//	handler, err := s3crypto.NewKMSKeyGeneratorWithMatDesc(kms.New(sess), cmkID, matdesc)
+//	handler := s3crypto.NewKMSKeyGeneratorWithMatDesc(kms.New(sess), cmkID, matdesc)
 func NewKMSKeyGeneratorWithMatDesc(kmsClient kmsiface.KMSAPI, cmkID string, matdesc MaterialDescription) CipherDataGenerator {
 	if matdesc == nil {
 		matdesc = MaterialDescription{}
@@ -55,6 +55,25 @@ func NewKMSKeyGeneratorWithMatDesc(kmsClient kmsiface.KMSAPI, cmkID string, matd
 	kp.CipherData.WrapAlgorithm = KMSWrap
 	kp.CipherData.MaterialDescription = matdesc
 	return kp
+}
+
+// NewKMSWrapEntry builds returns a new KMS key provider and its decrypt handler.
+//
+// Example:
+//	sess := session.New(&aws.Config{})
+//	customKMSClient := kms.New(sess)
+//	decryptHandler := s3crypto.NewKMSWrapEntry(customKMSClient)
+//
+//	svc := s3crypto.NewDecryptionClient(sess, func(svc *s3crypto.DecryptionClient) {
+//		svc.WrapRegistry[KMSWrap] = decryptHandler
+//	}))
+func NewKMSWrapEntry(kmsClient kmsiface.KMSAPI) WrapEntry {
+	// These values are read only making them thread safe
+	kp := &kmsKeyHandler{
+		kms: kmsClient,
+	}
+
+	return kp.decryptHandler
 }
 
 // decryptHandler initializes a KMS keyprovider with a material description. This

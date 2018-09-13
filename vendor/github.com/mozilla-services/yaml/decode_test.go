@@ -971,6 +971,52 @@ func (s *S) TestUnmarshalSliceOnPreset(c *C) {
 	c.Assert(v.A, DeepEquals, []int{2})
 }
 
+func (s *S) TestUnmarshalDocuments(c *C) {
+	docTests := []struct {
+		data  string
+		value interface{}
+	}{
+		{
+			"---\nkey1: value1\n---\nkey2: value2",
+			[]map[string]string{
+				{"key1": "value1"},
+				{"key2": "value2"},
+			},
+		},
+		{
+			"#comment 1\n---\nkey1: value1\n---\nkey2: value2 # comment",
+			[]map[string]string{
+				{"key1": "value1"},
+				{"key2": "value2"},
+			},
+		},
+		{
+			"---\n-\n - g\n - h\n-\n - i\n---\n-\n - j\n---\n-\n - k\n---",
+			[][][]string{
+				{{"g", "h"}, {"i"}},
+				{{"j"}},
+				{{"k"}},
+			},
+		},
+		{
+			"---\na:\n -\n   b: 1\n - h\n...\n---\nc:\n - j\nd:\n e: f",
+			[]yaml.MapSlice{
+				{{"a", []interface{}{yaml.MapSlice{{"b", 1}}, "h"}}},
+				{{"c", []interface{}{"j"}}, {"d", yaml.MapSlice{{"e", "f"}}}},
+			},
+		},
+	}
+	for _, item := range docTests {
+		v := reflect.ValueOf(item.value)
+		t := reflect.New(v.Type())
+		err := yaml.UnmarshalDocuments([]byte(item.data), t.Interface())
+		if _, ok := err.(*yaml.TypeError); !ok {
+			c.Assert(err, IsNil)
+		}
+		c.Assert(t.Elem().Interface(), DeepEquals, item.value)
+	}
+}
+
 //var data []byte
 //func init() {
 //	var err error

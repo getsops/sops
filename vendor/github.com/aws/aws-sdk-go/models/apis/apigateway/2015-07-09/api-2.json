@@ -1941,7 +1941,8 @@
       "type":"structure",
       "members":{
         "apiId":{"shape":"String"},
-        "stage":{"shape":"String"}
+        "stage":{"shape":"String"},
+        "throttle":{"shape":"MapOfApiStageThrottleSettings"}
       }
     },
     "Authorizer":{
@@ -2147,7 +2148,8 @@
         "cacheClusterEnabled":{"shape":"NullableBoolean"},
         "cacheClusterSize":{"shape":"CacheClusterSize"},
         "variables":{"shape":"MapOfStringToString"},
-        "canarySettings":{"shape":"DeploymentCanarySettings"}
+        "canarySettings":{"shape":"DeploymentCanarySettings"},
+        "tracingEnabled":{"shape":"NullableBoolean"}
       }
     },
     "CreateDocumentationPartRequest":{
@@ -2264,7 +2266,8 @@
         "binaryMediaTypes":{"shape":"ListOfString"},
         "minimumCompressionSize":{"shape":"NullableInteger"},
         "apiKeySource":{"shape":"ApiKeySourceType"},
-        "endpointConfiguration":{"shape":"EndpointConfiguration"}
+        "endpointConfiguration":{"shape":"EndpointConfiguration"},
+        "policy":{"shape":"String"}
       }
     },
     "CreateStageRequest":{
@@ -2288,6 +2291,7 @@
         "variables":{"shape":"MapOfStringToString"},
         "documentationVersion":{"shape":"String"},
         "canarySettings":{"shape":"CanarySettings"},
+        "tracingEnabled":{"shape":"Boolean"},
         "tags":{"shape":"MapOfStringToString"}
       }
     },
@@ -2857,7 +2861,8 @@
       "type":"string",
       "enum":[
         "REGIONAL",
-        "EDGE"
+        "EDGE",
+        "PRIVATE"
       ]
     },
     "ExportResponse":{
@@ -4146,6 +4151,11 @@
       ]
     },
     "Long":{"type":"long"},
+    "MapOfApiStageThrottleSettings":{
+      "type":"map",
+      "key":{"shape":"String"},
+      "value":{"shape":"ThrottleSettings"}
+    },
     "MapOfHeaderValues":{
       "type":"map",
       "key":{"shape":"String"},
@@ -4568,7 +4578,8 @@
         "binaryMediaTypes":{"shape":"ListOfString"},
         "minimumCompressionSize":{"shape":"NullableInteger"},
         "apiKeySource":{"shape":"ApiKeySourceType"},
-        "endpointConfiguration":{"shape":"EndpointConfiguration"}
+        "endpointConfiguration":{"shape":"EndpointConfiguration"},
+        "policy":{"shape":"String"}
       }
     },
     "RestApis":{
@@ -4656,6 +4667,7 @@
         "documentationVersion":{"shape":"String"},
         "accessLogSettings":{"shape":"AccessLogSettings"},
         "canarySettings":{"shape":"CanarySettings"},
+        "tracingEnabled":{"shape":"Boolean"},
         "tags":{"shape":"MapOfStringToString"},
         "createdDate":{"shape":"Timestamp"},
         "lastUpdatedDate":{"shape":"Timestamp"}

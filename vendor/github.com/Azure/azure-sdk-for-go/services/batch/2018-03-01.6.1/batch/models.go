@@ -1755,7 +1755,7 @@ type CloudTask struct {
 	CommandLine *string `json:"commandLine,omitempty"`
 	// ContainerSettings - If the pool that will run this task has containerConfiguration set, this must be set as well. If the pool that will run this task doesn't have containerConfiguration set, this must not be set. When this is specified, all directories recursively below the AZ_BATCH_NODE_ROOT_DIR (the root of Azure Batch directories on the node) are mapped into the container, all task environment variables are mapped into the container, and the task command line is executed in the container.
 	ContainerSettings *TaskContainerSettings `json:"containerSettings,omitempty"`
-	// ResourceFiles - For multi-instance tasks, the resource files will only be downloaded to the compute node on which the primary task is executed.
+	// ResourceFiles - For multi-instance tasks, the resource files will only be downloaded to the compute node on which the primary task is executed. There is a maximum size for the list of resource files.  When the max size is exceeded, the request will fail and the response error code will be RequestEntityTooLarge. If this occurs, the collection of ResourceFiles must be reduced in size. This can be achieved using .zip files, Application Packages, or Docker Containers.
 	ResourceFiles *[]ResourceFile `json:"resourceFiles,omitempty"`
 	// OutputFiles - For multi-instance tasks, the files will only be uploaded from the compute node on which the primary task is executed.
 	OutputFiles         *[]OutputFile         `json:"outputFiles,omitempty"`
@@ -2283,7 +2283,7 @@ type JobManagerTask struct {
 	CommandLine *string `json:"commandLine,omitempty"`
 	// ContainerSettings - If the pool that will run this task has containerConfiguration set, this must be set as well. If the pool that will run this task doesn't have containerConfiguration set, this must not be set. When this is specified, all directories recursively below the AZ_BATCH_NODE_ROOT_DIR (the root of Azure Batch directories on the node) are mapped into the container, all task environment variables are mapped into the container, and the task command line is executed in the container.
 	ContainerSettings *TaskContainerSettings `json:"containerSettings,omitempty"`
-	// ResourceFiles - Files listed under this element are located in the task's working directory.
+	// ResourceFiles - Files listed under this element are located in the task's working directory. There is a maximum size for the list of resource files.  When the max size is exceeded, the request will fail and the response error code will be RequestEntityTooLarge. If this occurs, the collection of ResourceFiles must be reduced in size. This can be achieved using .zip files, Application Packages, or Docker Containers.
 	ResourceFiles *[]ResourceFile `json:"resourceFiles,omitempty"`
 	// OutputFiles - For multi-instance tasks, the files will only be uploaded from the compute node on which the primary task is executed.
 	OutputFiles         *[]OutputFile         `json:"outputFiles,omitempty"`
@@ -2352,7 +2352,7 @@ type JobPreparationTask struct {
 	CommandLine *string `json:"commandLine,omitempty"`
 	// ContainerSettings - When this is specified, all directories recursively below the AZ_BATCH_NODE_ROOT_DIR (the root of Azure Batch directories on the node) are mapped into the container, all task environment variables are mapped into the container, and the task command line is executed in the container.
 	ContainerSettings *TaskContainerSettings `json:"containerSettings,omitempty"`
-	// ResourceFiles - Files listed under this element are located in the task's working directory.
+	// ResourceFiles - Files listed under this element are located in the task's working directory.  There is a maximum size for the list of resource files.  When the max size is exceeded, the request will fail and the response error code will be RequestEntityTooLarge. If this occurs, the collection of ResourceFiles must be reduced in size. This can be achieved using .zip files, Application Packages, or Docker Containers.
 	ResourceFiles       *[]ResourceFile       `json:"resourceFiles,omitempty"`
 	EnvironmentSettings *[]EnvironmentSetting `json:"environmentSettings,omitempty"`
 	Constraints         *TaskConstraints      `json:"constraints,omitempty"`
@@ -2597,7 +2597,7 @@ type MultiInstanceSettings struct {
 	NumberOfInstances *int32 `json:"numberOfInstances,omitempty"`
 	// CoordinationCommandLine - A typical coordination command line launches a background service and verifies that the service is ready to process inter-node messages.
 	CoordinationCommandLine *string `json:"coordinationCommandLine,omitempty"`
-	// CommonResourceFiles - The difference between common resource files and task resource files is that common resource files are downloaded for all subtasks including the primary, whereas task resource files are downloaded only for the primary. Also note that these resource files are not downloaded to the task working directory, but instead are downloaded to the task root directory (one directory above the working directory).
+	// CommonResourceFiles - The difference between common resource files and task resource files is that common resource files are downloaded for all subtasks including the primary, whereas task resource files are downloaded only for the primary. Also note that these resource files are not downloaded to the task working directory, but instead are downloaded to the task root directory (one directory above the working directory).  There is a maximum size for the list of resource files.  When the max size is exceeded, the request will fail and the response error code will be RequestEntityTooLarge. If this occurs, the collection of ResourceFiles must be reduced in size. This can be achieved using .zip files, Application Packages, or Docker Containers.
 	CommonResourceFiles *[]ResourceFile `json:"commonResourceFiles,omitempty"`
 }
 
@@ -3338,7 +3338,7 @@ type SubtaskInformation struct {
 
 // TaskAddCollectionParameter ...
 type TaskAddCollectionParameter struct {
-	// Value - The total serialized size of this collection must be less than 4MB. If it is greater than 4MB (for example if each task has 100's of resource files or environment variables), the request will fail with code 'RequestBodyTooLarge' and should be retried again with fewer tasks.
+	// Value - The total serialized size of this collection must be less than 1MB. If it is greater than 1MB (for example if each task has 100's of resource files or environment variables), the request will fail with code 'RequestBodyTooLarge' and should be retried again with fewer tasks.
 	Value *[]TaskAddParameter `json:"value,omitempty"`
 }
 
@@ -3366,7 +3366,7 @@ type TaskAddParameter struct {
 	ContainerSettings *TaskContainerSettings `json:"containerSettings,omitempty"`
 	// ExitConditions - How the Batch service should respond when the task completes.
 	ExitConditions *ExitConditions `json:"exitConditions,omitempty"`
-	// ResourceFiles - For multi-instance tasks, the resource files will only be downloaded to the compute node on which the primary task is executed.
+	// ResourceFiles - For multi-instance tasks, the resource files will only be downloaded to the compute node on which the primary task is executed. There is a maximum size for the list of resource files.  When the max size is exceeded, the request will fail and the response error code will be RequestEntityTooLarge. If this occurs, the collection of ResourceFiles must be reduced in size. This can be achieved using .zip files, Application Packages, or Docker Containers.
 	ResourceFiles *[]ResourceFile `json:"resourceFiles,omitempty"`
 	// OutputFiles - For multi-instance tasks, the files will only be uploaded from the compute node on which the primary task is executed.
 	OutputFiles         *[]OutputFile         `json:"outputFiles,omitempty"`

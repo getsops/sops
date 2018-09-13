@@ -105,6 +105,13 @@ var knownFails = map[string]failReason{
 	"fixedbugs/issue22083.go": {category: requiresSourceMapSupport}, // Technically, added in Go 1.9.2.
 	"fixedbugs/issue22660.go": {category: notApplicable, desc: "test of gc compiler, uses os/exec.Command"},
 	"fixedbugs/issue23305.go": {desc: "GopherJS fails to compile println(0xffffffff), maybe because 32-bit arch"},
+
+	// These are new tests in Go 1.11.
+	"fixedbugs/issue21221.go":  {category: usesUnsupportedPackage, desc: "uses unsafe package and compares nil pointers"},
+	"fixedbugs/issue22662.go":  {desc: "line directives not fully working. Error: got /private/var/folders/b8/66r1c5856mqds1mrf2tjtq8w0000gn/T:1; want ??:1"},
+	"fixedbugs/issue22662b.go": {category: usesUnsupportedPackage, desc: "os/exec.Command unsupported"},
+	"fixedbugs/issue23188.go":  {desc: "incorrect order of evaluation of index operations"},
+	"fixedbugs/issue24547.go":  {desc: "incorrect computing method sets with shadowed methods"},
 }
 
 type failCategory uint8

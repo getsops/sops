@@ -67,7 +67,7 @@ func InfoFromLangID(compactIndex compact.ID, numberSystem string) Info {
 							}
 							// Fall back to Latin and start from the original
 							// language. See
-							// http://unicode.org/reports/tr35/#Locale_Inheritance.
+							// https://unicode.org/reports/tr35/#Locale_Inheritance.
 							ns = numLatn
 							langIndex = compactIndex
 							continue outerLoop

@@ -147,55 +147,19 @@
       "InputShape": {
         "type": "structure",
         "members": {
-          "ListStrings": {
-            "shape": "ListStringType"
-          },
-          "ListBools": {
-            "shape": "ListBoolType"
-          },
-          "ListFloats": {
-            "shape": "ListFloatType"
-          },
-          "ListIntegers": {
-            "shape": "ListIntegerType"
+          "ListArg": {
+            "shape": "ListType"
           }
         }
       },
-      "ListStringType": {
+      "ListType": {
         "type": "list",
         "member": {
-          "shape": "StringType"
+          "shape": "Strings"
         }
       },
-      "ListBoolType": {
-        "type": "list",
-        "member": {
-          "shape": "BoolType"
-        }
-      },
-      "ListFloatType": {
-        "type": "list",
-        "member": {
-          "shape": "FloatType"
-        }
-      },
-      "ListIntegerType": {
-        "type": "list",
-        "member": {
-          "shape": "IntegerType"
-        }
-      },
-      "StringType": {
+      "Strings": {
         "type": "string"
-      },
-      "BoolType": {
-        "type": "boolean"
-      },
-      "FloatType": {
-        "type": "float"
-      },
-      "IntegerType": {
-        "type": "integer"
       }
     },
     "cases": [
@@ -207,30 +171,15 @@
           "name": "OperationName"
         },
         "params": {
-          "ListStrings": [
+          "ListArg": [
             "foo",
             "bar",
             "baz"
-          ],
-          "ListBools": [
-            true,
-            false,
-            false
-          ],
-          "ListFloats": [
-            1.1,
-            2.718,
-            3.14
-          ],
-          "ListIntegers": [
-            0,
-            1,
-            2
           ]
         },
         "serialized": {
           "uri": "/",
-          "body": "Action=OperationName&Version=2014-01-01&ListStrings.1=foo&ListStrings.2=bar&ListStrings.3=baz&ListBools.1=true&ListBools.2=false&ListBools.3=false&ListFloats.1=1.1&ListFloats.2=2.718&ListFloats.3=3.14&ListIntegers.1=0&ListIntegers.2=1&ListIntegers.3=2"
+          "body": "Action=OperationName&Version=2014-01-01&ListArg.1=foo&ListArg.2=bar&ListArg.3=baz"
         }
       }
     ]
@@ -383,8 +332,19 @@
         "members": {
           "TimeArg": {
             "shape": "TimestampType"
+          },
+          "TimeCustom": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatType"
           }
         }
+      },
+      "TimestampFormatType": {
+        "timestampFormat": "unixTimestamp",
+        "type": "timestamp"
       },
       "TimestampType": {
         "type": "timestamp"
@@ -399,11 +359,13 @@
           "name": "OperationName"
         },
         "params": {
-          "TimeArg": 1422172800
+          "TimeArg": 1422172800,
+          "TimeCustom": 1422172800,
+          "TimeFormat": 1422172800
         },
         "serialized": {
           "uri": "/",
-          "body": "Action=OperationName&Version=2014-01-01&TimeArg=2015-01-25T08%3A00%3A00Z"
+          "body": "Action=OperationName&Version=2014-01-01&TimeArg=2015-01-25T08%3A00%3A00Z&TimeCustom=1422172800&TimeFormat=1422172800"
         }
       }
     ]
@@ -420,7 +382,7 @@
         "members": {
           "Token": {
             "shape": "StringType",
-              "idempotencyToken": true
+            "idempotencyToken": true
           }
         }
       },

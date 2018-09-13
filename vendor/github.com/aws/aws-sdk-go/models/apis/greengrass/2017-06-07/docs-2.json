@@ -698,7 +698,7 @@
         "ListVersionsResponse$NextToken" : "The token for the next set of results, or ''null'' if there are no additional results.",
         "LocalDeviceResourceData$SourcePath" : "The local absolute path of the device resource. The source path for a device resource can refer only to a character device or block device under ''/dev''.",
         "LocalVolumeResourceData$DestinationPath" : "The absolute local path of the resource inside the lambda environment.",
-        "LocalVolumeResourceData$SourcePath" : "The local absolute path of the volume resource on the host. The source path for a volume resource type cannot start with ''/proc'' or ''/sys''.",
+        "LocalVolumeResourceData$SourcePath" : "The local absolute path of the volume resource on the host. The source path for a volume resource type cannot start with ''/sys''.",
         "Logger$Id" : "The id of the logger.",
         "ResetDeploymentsResponse$DeploymentArn" : "The ARN of the deployment.",
         "ResetDeploymentsResponse$DeploymentId" : "The ID of the deployment.",

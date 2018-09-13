@@ -123,9 +123,19 @@
     "AwsDevice": {
       "base": "<p>An abstract ID for the physical Direct Connect endpoint.</p> <p>Example: EQC50-abcdef123456</p>",
       "refs": {
-        "Connection$awsDevice": "<p>The Direct Connection endpoint which the physical connection terminates on.</p>",
-        "Interconnect$awsDevice": "<p>The Direct Connection endpoint which the physical connection terminates on.</p>",
-        "Lag$awsDevice": "<p>The AWS Direct Connection endpoint that hosts the LAG.</p>"
+        "Connection$awsDevice": "<p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>",
+        "Interconnect$awsDevice": "<p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>",
+        "Lag$awsDevice": "<p>Deprecated in favor of awsDeviceV2.</p> <p>The AWS Direct Connection endpoint that hosts the LAG.</p>"
+      }
+    },
+    "AwsDeviceV2": {
+      "base": null,
+      "refs": {
+        "BGPPeer$awsDeviceV2": "<p>The Direct Connection endpoint which the BGP peer terminates on.</p>",
+        "Connection$awsDeviceV2": "<p>The Direct Connection endpoint which the physical connection terminates on.</p>",
+        "Interconnect$awsDeviceV2": "<p>The Direct Connection endpoint which the physical connection terminates on.</p>",
+        "Lag$awsDeviceV2": "<p>The AWS Direct Connection endpoint that hosts the LAG.</p>",
+        "VirtualInterface$awsDeviceV2": "<p>The Direct Connection endpoint which the virtual interface terminates on.</p>"
       }
     },
     "BGPAuthKey": {
@@ -159,7 +169,7 @@
       }
     },
     "BGPStatus": {
-      "base": "<p>The Up/Down state of the BGP peer.</p> <ul> <li> <p> <b>Up</b>: The BGP peer is established.</p> </li> <li> <p> <b>Down</b>: The BGP peer is down.</p> </li> </ul>",
+      "base": "<p>The Up/Down state of the BGP peer.</p> <ul> <li> <p> <b>Up</b>: The BGP peer is established.</p> <note> <p>A state of <code>up</code> does not indicate the state of the routing function. Ensure that you are receiving routes over the BGP session.</p> </note> </li> <li> <p> <b>Down</b>: The BGP peer is down.</p> </li> </ul>",
       "refs": {
         "BGPPeer$bgpStatus": null
       }
@@ -863,7 +873,9 @@
       "refs": {
         "Connection$region": null,
         "Interconnect$region": null,
-        "Lag$region": null
+        "Lag$region": null,
+        "Location$region": "<p>The AWS region where the AWS Direct connect location is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>",
+        "VirtualInterface$region": "<p>The AWS region where the virtual interface is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>"
       }
     },
     "ResourceArn": {

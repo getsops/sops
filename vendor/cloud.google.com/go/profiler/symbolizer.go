@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,10 +32,7 @@ type function interface {
 
 // funcForPC is a wrapper for runtime.FuncForPC. Defined as var for testing.
 var funcForPC = func(pc uintptr) function {
-	if f := runtime.FuncForPC(pc); f != nil {
-		return f
-	}
-	return nil
+	return runtime.FuncForPC(pc)
 }
 
 // parseAndSymbolize parses a profile from a buffer, symbolizes it

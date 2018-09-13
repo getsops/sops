@@ -117,11 +117,17 @@ const (
 	NineFullStopFive ServerVersion = "9.5"
 	// NineFullStopSix ...
 	NineFullStopSix ServerVersion = "9.6"
+	// OneZero ...
+	OneZero ServerVersion = "10"
+	// OneZeroFullStopTwo ...
+	OneZeroFullStopTwo ServerVersion = "10.2"
+	// OneZeroFullStopZero ...
+	OneZeroFullStopZero ServerVersion = "10.0"
 )
 
 // PossibleServerVersionValues returns an array of possible values for the ServerVersion const type.
 func PossibleServerVersionValues() []ServerVersion {
-	return []ServerVersion{NineFullStopFive, NineFullStopSix}
+	return []ServerVersion{NineFullStopFive, NineFullStopSix, OneZero, OneZeroFullStopTwo, OneZeroFullStopZero}
 }
 
 // SkuTier enumerates the values for sku tier.
@@ -1053,7 +1059,7 @@ type ServerListResult struct {
 type ServerProperties struct {
 	// AdministratorLogin - The administrator's login name of a server. Can only be specified when the server is being created (and is required for creation).
 	AdministratorLogin *string `json:"administratorLogin,omitempty"`
-	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix'
+	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix', 'OneZero', 'OneZeroFullStopZero', 'OneZeroFullStopTwo'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
@@ -1077,7 +1083,7 @@ type BasicServerPropertiesForCreate interface {
 
 // ServerPropertiesForCreate the properties used to create a new server.
 type ServerPropertiesForCreate struct {
-	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix'
+	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix', 'OneZero', 'OneZeroFullStopZero', 'OneZeroFullStopTwo'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
@@ -1182,7 +1188,7 @@ type ServerPropertiesForDefaultCreate struct {
 	AdministratorLogin *string `json:"administratorLogin,omitempty"`
 	// AdministratorLoginPassword - The password of the administrator login.
 	AdministratorLoginPassword *string `json:"administratorLoginPassword,omitempty"`
-	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix'
+	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix', 'OneZero', 'OneZeroFullStopZero', 'OneZeroFullStopTwo'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
@@ -1247,7 +1253,7 @@ func (spfdc ServerPropertiesForDefaultCreate) AsBasicServerPropertiesForCreate()
 type ServerPropertiesForGeoRestore struct {
 	// SourceServerID - The source server id to restore from.
 	SourceServerID *string `json:"sourceServerId,omitempty"`
-	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix'
+	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix', 'OneZero', 'OneZeroFullStopZero', 'OneZeroFullStopTwo'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
@@ -1310,7 +1316,7 @@ type ServerPropertiesForRestore struct {
 	SourceServerID *string `json:"sourceServerId,omitempty"`
 	// RestorePointInTime - Restore point creation time (ISO8601 format), specifying the time to restore from.
 	RestorePointInTime *date.Time `json:"restorePointInTime,omitempty"`
-	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix'
+	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix', 'OneZero', 'OneZeroFullStopZero', 'OneZeroFullStopTwo'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
@@ -1632,7 +1638,7 @@ type ServerUpdateParametersProperties struct {
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 	// AdministratorLoginPassword - The password of the administrator login.
 	AdministratorLoginPassword *string `json:"administratorLoginPassword,omitempty"`
-	// Version - The version of a server. Possible values include: 'NineFullStopFive', 'NineFullStopSix'
+	// Version - The version of a server. Possible values include: 'NineFullStopFive', 'NineFullStopSix', 'OneZero', 'OneZeroFullStopZero', 'OneZeroFullStopTwo'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`

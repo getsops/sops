@@ -529,6 +529,19 @@
         {"shape":"ServiceFailureException"}
       ]
     },
+    "DeleteRolePermissionsBoundary":{
+      "name":"DeleteRolePermissionsBoundary",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteRolePermissionsBoundaryRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"UnmodifiableEntityException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
     "DeleteRolePolicy":{
       "name":"DeleteRolePolicy",
       "http":{
@@ -634,6 +647,18 @@
         {"shape":"LimitExceededException"},
         {"shape":"NoSuchEntityException"},
         {"shape":"DeleteConflictException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "DeleteUserPermissionsBoundary":{
+      "name":"DeleteUserPermissionsBoundary",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteUserPermissionsBoundaryRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -1495,6 +1520,21 @@
         {"shape":"ServiceFailureException"}
       ]
     },
+    "PutRolePermissionsBoundary":{
+      "name":"PutRolePermissionsBoundary",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutRolePermissionsBoundaryRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"UnmodifiableEntityException"},
+        {"shape":"PolicyNotAttachableException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
     "PutRolePolicy":{
       "name":"PutRolePolicy",
       "http":{
@@ -1507,6 +1547,20 @@
         {"shape":"MalformedPolicyDocumentException"},
         {"shape":"NoSuchEntityException"},
         {"shape":"UnmodifiableEntityException"},
+        {"shape":"ServiceFailureException"}
+      ]
+    },
+    "PutUserPermissionsBoundary":{
+      "name":"PutUserPermissionsBoundary",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutUserPermissionsBoundaryRequest"},
+      "errors":[
+        {"shape":"NoSuchEntityException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"PolicyNotAttachableException"},
         {"shape":"ServiceFailureException"}
       ]
     },
@@ -2018,6 +2072,13 @@
         "PolicyArn":{"shape":"arnType"}
       }
     },
+    "AttachedPermissionsBoundary":{
+      "type":"structure",
+      "members":{
+        "PermissionsBoundaryType":{"shape":"PermissionsBoundaryAttachmentType"},
+        "PermissionsBoundaryArn":{"shape":"arnType"}
+      }
+    },
     "AttachedPolicy":{
       "type":"structure",
       "members":{
@@ -2219,7 +2280,8 @@
         "RoleName":{"shape":"roleNameType"},
         "AssumeRolePolicyDocument":{"shape":"policyDocumentType"},
         "Description":{"shape":"roleDescriptionType"},
-        "MaxSessionDuration":{"shape":"roleMaxSessionDurationType"}
+        "MaxSessionDuration":{"shape":"roleMaxSessionDurationType"},
+        "PermissionsBoundary":{"shape":"arnType"}
       }
     },
     "CreateRoleResponse":{
@@ -2283,7 +2345,8 @@
       "required":["UserName"],
       "members":{
         "Path":{"shape":"pathType"},
-        "UserName":{"shape":"userNameType"}
+        "UserName":{"shape":"userNameType"},
+        "PermissionsBoundary":{"shape":"arnType"}
       }
     },
     "CreateUserResponse":{
@@ -2438,6 +2501,13 @@
         "VersionId":{"shape":"policyVersionIdType"}
       }
     },
+    "DeleteRolePermissionsBoundaryRequest":{
+      "type":"structure",
+      "required":["RoleName"],
+      "members":{
+        "RoleName":{"shape":"roleNameType"}
+      }
+    },
     "DeleteRolePolicyRequest":{
       "type":"structure",
       "required":[
@@ -2509,6 +2579,13 @@
       "members":{
         "UserName":{"shape":"existingUserNameType"},
         "CertificateId":{"shape":"certificateIdType"}
+      }
+    },
+    "DeleteUserPermissionsBoundaryRequest":{
+      "type":"structure",
+      "required":["UserName"],
+      "members":{
+        "UserName":{"shape":"userNameType"}
       }
     },
     "DeleteUserPolicyRequest":{
@@ -3261,6 +3338,7 @@
         "PolicyArn":{"shape":"arnType"},
         "EntityFilter":{"shape":"EntityType"},
         "PathPrefix":{"shape":"pathType"},
+        "PolicyUsageFilter":{"shape":"PolicyUsageType"},
         "Marker":{"shape":"markerType"},
         "MaxItems":{"shape":"maxItemsType"}
       }
@@ -3397,6 +3475,7 @@
         "Scope":{"shape":"policyScopeType"},
         "OnlyAttached":{"shape":"booleanType"},
         "PathPrefix":{"shape":"policyPathType"},
+        "PolicyUsageFilter":{"shape":"PolicyUsageType"},
         "Marker":{"shape":"markerType"},
         "MaxItems":{"shape":"maxItemsType"}
       }
@@ -3645,6 +3724,7 @@
         "Path":{"shape":"policyPathType"},
         "DefaultVersionId":{"shape":"policyVersionIdType"},
         "AttachmentCount":{"shape":"attachmentCountType"},
+        "PermissionsBoundaryUsageCount":{"shape":"attachmentCountType"},
         "IsAttachable":{"shape":"booleanType"},
         "Description":{"shape":"policyDescriptionType"},
         "CreateDate":{"shape":"dateType"},
@@ -3716,6 +3796,10 @@
       },
       "exception":true
     },
+    "PermissionsBoundaryAttachmentType":{
+      "type":"string",
+      "enum":["PermissionsBoundaryPolicy"]
+    },
     "Policy":{
       "type":"structure",
       "members":{
@@ -3725,6 +3809,7 @@
         "Path":{"shape":"policyPathType"},
         "DefaultVersionId":{"shape":"policyVersionIdType"},
         "AttachmentCount":{"shape":"attachmentCountType"},
+        "PermissionsBoundaryUsageCount":{"shape":"attachmentCountType"},
         "IsAttachable":{"shape":"booleanType"},
         "Description":{"shape":"policyDescriptionType"},
         "CreateDate":{"shape":"dateType"},
@@ -3804,6 +3889,13 @@
         "none"
       ]
     },
+    "PolicyUsageType":{
+      "type":"string",
+      "enum":[
+        "PermissionsPolicy",
+        "PermissionsBoundary"
+      ]
+    },
     "PolicyUser":{
       "type":"structure",
       "members":{
@@ -3844,6 +3936,17 @@
         "PolicyDocument":{"shape":"policyDocumentType"}
       }
     },
+    "PutRolePermissionsBoundaryRequest":{
+      "type":"structure",
+      "required":[
+        "RoleName",
+        "PermissionsBoundary"
+      ],
+      "members":{
+        "RoleName":{"shape":"roleNameType"},
+        "PermissionsBoundary":{"shape":"arnType"}
+      }
+    },
     "PutRolePolicyRequest":{
       "type":"structure",
       "required":[
@@ -3855,6 +3958,17 @@
         "RoleName":{"shape":"roleNameType"},
         "PolicyName":{"shape":"policyNameType"},
         "PolicyDocument":{"shape":"policyDocumentType"}
+      }
+    },
+    "PutUserPermissionsBoundaryRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "PermissionsBoundary"
+      ],
+      "members":{
+        "UserName":{"shape":"userNameType"},
+        "PermissionsBoundary":{"shape":"arnType"}
       }
     },
     "PutUserPolicyRequest":{
@@ -4004,7 +4118,8 @@
         "CreateDate":{"shape":"dateType"},
         "AssumeRolePolicyDocument":{"shape":"policyDocumentType"},
         "Description":{"shape":"roleDescriptionType"},
-        "MaxSessionDuration":{"shape":"roleMaxSessionDurationType"}
+        "MaxSessionDuration":{"shape":"roleMaxSessionDurationType"},
+        "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
     },
     "RoleDetail":{
@@ -4018,7 +4133,8 @@
         "AssumeRolePolicyDocument":{"shape":"policyDocumentType"},
         "InstanceProfileList":{"shape":"instanceProfileListType"},
         "RolePolicyList":{"shape":"policyDetailListType"},
-        "AttachedManagedPolicies":{"shape":"attachedPoliciesListType"}
+        "AttachedManagedPolicies":{"shape":"attachedPoliciesListType"},
+        "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
     },
     "RoleUsageListType":{
@@ -4540,7 +4656,8 @@
         "UserId":{"shape":"idType"},
         "Arn":{"shape":"arnType"},
         "CreateDate":{"shape":"dateType"},
-        "PasswordLastUsed":{"shape":"dateType"}
+        "PasswordLastUsed":{"shape":"dateType"},
+        "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
     },
     "UserDetail":{
@@ -4553,7 +4670,8 @@
         "CreateDate":{"shape":"dateType"},
         "UserPolicyList":{"shape":"policyDetailListType"},
         "GroupList":{"shape":"groupNameListType"},
-        "AttachedManagedPolicies":{"shape":"attachedPoliciesListType"}
+        "AttachedManagedPolicies":{"shape":"attachedPoliciesListType"},
+        "PermissionsBoundary":{"shape":"AttachedPermissionsBoundary"}
       }
     },
     "VirtualMFADevice":{

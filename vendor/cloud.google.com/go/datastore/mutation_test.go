@@ -1,4 +1,4 @@
-// Copyright 2018 Google Inc. All Rights Reserved.
+// Copyright 2018 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ func TestMutationProtos(t *testing.T) {
 		return &pb.Entity{
 			Key: keyToProto(k),
 			Properties: map[string]*pb.Value{
-				"n": &pb.Value{ValueType: &pb.Value_StringValue{StringValue: "v"}},
+				"n": {ValueType: &pb.Value_StringValue{StringValue: "v"}},
 			},
 		}
 	}
@@ -60,10 +60,10 @@ func TestMutationProtos(t *testing.T) {
 				NewDelete(keys[3]),
 			},
 			want: []*pb.Mutation{
-				&pb.Mutation{Operation: &pb.Mutation_Insert{Insert: entityForKey(keys[0])}},
-				&pb.Mutation{Operation: &pb.Mutation_Upsert{Upsert: entityForKey(keys[1])}},
-				&pb.Mutation{Operation: &pb.Mutation_Update{Update: entityForKey(keys[2])}},
-				&pb.Mutation{Operation: &pb.Mutation_Delete{Delete: keyToProto(keys[3])}},
+				{Operation: &pb.Mutation_Insert{Insert: entityForKey(keys[0])}},
+				{Operation: &pb.Mutation_Upsert{Upsert: entityForKey(keys[1])}},
+				{Operation: &pb.Mutation_Update{Update: entityForKey(keys[2])}},
+				{Operation: &pb.Mutation_Delete{Delete: keyToProto(keys[3])}},
 			},
 		},
 		{
@@ -76,9 +76,9 @@ func TestMutationProtos(t *testing.T) {
 				NewDelete(keys[0]),
 			},
 			want: []*pb.Mutation{
-				&pb.Mutation{Operation: &pb.Mutation_Delete{Delete: keyToProto(keys[0])}},
-				&pb.Mutation{Operation: &pb.Mutation_Insert{Insert: entityForKey(keys[1])}},
-				&pb.Mutation{Operation: &pb.Mutation_Delete{Delete: keyToProto(keys[2])}},
+				{Operation: &pb.Mutation_Delete{Delete: keyToProto(keys[0])}},
+				{Operation: &pb.Mutation_Insert{Insert: entityForKey(keys[1])}},
+				{Operation: &pb.Mutation_Delete{Delete: keyToProto(keys[2])}},
 			},
 		},
 	} {

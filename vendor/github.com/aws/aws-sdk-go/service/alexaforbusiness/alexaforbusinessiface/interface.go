@@ -164,6 +164,13 @@ type AlexaForBusinessAPI interface {
 	GetSkillGroupWithContext(aws.Context, *alexaforbusiness.GetSkillGroupInput, ...request.Option) (*alexaforbusiness.GetSkillGroupOutput, error)
 	GetSkillGroupRequest(*alexaforbusiness.GetSkillGroupInput) (*request.Request, *alexaforbusiness.GetSkillGroupOutput)
 
+	ListDeviceEvents(*alexaforbusiness.ListDeviceEventsInput) (*alexaforbusiness.ListDeviceEventsOutput, error)
+	ListDeviceEventsWithContext(aws.Context, *alexaforbusiness.ListDeviceEventsInput, ...request.Option) (*alexaforbusiness.ListDeviceEventsOutput, error)
+	ListDeviceEventsRequest(*alexaforbusiness.ListDeviceEventsInput) (*request.Request, *alexaforbusiness.ListDeviceEventsOutput)
+
+	ListDeviceEventsPages(*alexaforbusiness.ListDeviceEventsInput, func(*alexaforbusiness.ListDeviceEventsOutput, bool) bool) error
+	ListDeviceEventsPagesWithContext(aws.Context, *alexaforbusiness.ListDeviceEventsInput, func(*alexaforbusiness.ListDeviceEventsOutput, bool) bool, ...request.Option) error
+
 	ListSkills(*alexaforbusiness.ListSkillsInput) (*alexaforbusiness.ListSkillsOutput, error)
 	ListSkillsWithContext(aws.Context, *alexaforbusiness.ListSkillsInput, ...request.Option) (*alexaforbusiness.ListSkillsOutput, error)
 	ListSkillsRequest(*alexaforbusiness.ListSkillsInput) (*request.Request, *alexaforbusiness.ListSkillsOutput)

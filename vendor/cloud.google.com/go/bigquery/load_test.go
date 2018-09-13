@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -104,6 +104,7 @@ func TestLoad(t *testing.T) {
 				WriteDisposition:            WriteTruncate,
 				Labels:                      map[string]string{"a": "b"},
 				TimePartitioning:            &TimePartitioning{Expiration: 1234 * time.Millisecond},
+				Clustering:                  &Clustering{Fields: []string{"cfield1"}},
 				DestinationEncryptionConfig: &EncryptionConfig{KMSKeyName: "keyName"},
 				SchemaUpdateOptions:         []string{"ALLOW_FIELD_ADDITION"},
 			},
@@ -116,6 +117,9 @@ func TestLoad(t *testing.T) {
 				j.Configuration.Load.TimePartitioning = &bq.TimePartitioning{
 					Type:         "DAY",
 					ExpirationMs: 1234,
+				}
+				j.Configuration.Load.Clustering = &bq.Clustering{
+					Fields: []string{"cfield1"},
 				}
 				j.Configuration.Load.DestinationEncryptionConfiguration = &bq.EncryptionConfiguration{KmsKeyName: "keyName"}
 				j.JobReference = &bq.JobReference{

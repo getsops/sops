@@ -15,7 +15,7 @@ const opCreateCluster = "CreateCluster"
 
 // CreateClusterRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCluster operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -113,7 +113,7 @@ const opCreateService = "CreateService"
 
 // CreateServiceRequest generates a "aws/request.Request" representing the
 // client's request for the CreateService operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -180,17 +180,21 @@ func (c *ECS) CreateServiceRequest(input *CreateServiceInput) (req *request.Requ
 // balancer are considered healthy if they are in the RUNNING state. Tasks for
 // services that do use a load balancer are considered healthy if they are in
 // the RUNNING state and the container instance they are hosted on is reported
-// as healthy by the load balancer. The default value for minimumHealthyPercent
-// is 50% in the console and 100% for the AWS CLI, the AWS SDKs, and the APIs.
+// as healthy by the load balancer. The default value for a replica service
+// for minimumHealthyPercent is 50% in the console and 100% for the AWS CLI,
+// the AWS SDKs, and the APIs. The default value for a daemon service for minimumHealthyPercent
+// is 0% for the AWS CLI, the AWS SDKs, and the APIs and 50% for the console.
 //
 // The maximumPercent parameter represents an upper limit on the number of your
 // service's tasks that are allowed in the RUNNING or PENDING state during a
 // deployment, as a percentage of the desiredCount (rounded down to the nearest
 // integer). This parameter enables you to define the deployment batch size.
-// For example, if your service has a desiredCount of four tasks and a maximumPercent
-// value of 200%, the scheduler can start four new tasks before stopping the
-// four older tasks (provided that the cluster resources required to do this
-// are available). The default value for maximumPercent is 200%.
+// For example, if your replica service has a desiredCount of four tasks and
+// a maximumPercent value of 200%, the scheduler can start four new tasks before
+// stopping the four older tasks (provided that the cluster resources required
+// to do this are available). The default value for a replica service for maximumPercent
+// is 200%. If you are using a daemon service type, the maximumPercent should
+// remain at 100%, which is the default value.
 //
 // When the service scheduler launches new tasks, it determines task placement
 // in your cluster using the following logic:
@@ -203,11 +207,11 @@ func (c *ECS) CreateServiceRequest(input *CreateServiceInput) (req *request.Requ
 //    Zones in this manner (although you can choose a different placement strategy)
 //    with the placementStrategy parameter):
 //
-// Sort the valid container instances by the fewest number of running tasks
-//    for this service in the same Availability Zone as the instance. For example,
-//    if zone A has one running service task and zones B and C each have zero,
-//    valid container instances in either zone B or C are considered optimal
-//    for placement.
+// Sort the valid container instances, giving priority to instances that have
+//    the fewest number of running tasks for this service in their respective
+//    Availability Zone. For example, if zone A has one running service task
+//    and zones B and C each have zero, valid container instances in either
+//    zone B or C are considered optimal for placement.
 //
 // Place the new service task on a valid container instance in an optimal Availability
 //    Zone (based on the previous steps), favoring container instances with
@@ -244,7 +248,7 @@ func (c *ECS) CreateServiceRequest(input *CreateServiceInput) (req *request.Requ
 //   The specified platform version does not exist.
 //
 //   * ErrCodePlatformTaskDefinitionIncompatibilityException "PlatformTaskDefinitionIncompatibilityException"
-//   The specified platform version does not satisfy the task definition’s required
+//   The specified platform version does not satisfy the task definition's required
 //   capabilities.
 //
 //   * ErrCodeAccessDeniedException "AccessDeniedException"
@@ -276,7 +280,7 @@ const opDeleteAttributes = "DeleteAttributes"
 
 // DeleteAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAttributes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -365,7 +369,7 @@ const opDeleteCluster = "DeleteCluster"
 
 // DeleteClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCluster operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -472,7 +476,7 @@ const opDeleteService = "DeleteService"
 
 // DeleteServiceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteService operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -526,6 +530,9 @@ func (c *ECS) DeleteServiceRequest(input *DeleteServiceInput) (req *request.Requ
 // API operations. However, in the future, INACTIVE services may be cleaned
 // up and purged from Amazon ECS record keeping, and DescribeServices API operations
 // on those services return a ServiceNotFoundException error.
+//
+// If you attempt to create a new service with the same name as an existing
+// service in either ACTIVE or DRAINING status, you will receive an error.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -581,7 +588,7 @@ const opDeregisterContainerInstance = "DeregisterContainerInstance"
 
 // DeregisterContainerInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the DeregisterContainerInstance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -687,7 +694,7 @@ const opDeregisterTaskDefinition = "DeregisterTaskDefinition"
 
 // DeregisterTaskDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeregisterTaskDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -789,7 +796,7 @@ const opDescribeClusters = "DescribeClusters"
 
 // DescribeClustersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeClusters operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -877,7 +884,7 @@ const opDescribeContainerInstances = "DescribeContainerInstances"
 
 // DescribeContainerInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeContainerInstances operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -970,7 +977,7 @@ const opDescribeServices = "DescribeServices"
 
 // DescribeServicesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeServices operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1062,7 +1069,7 @@ const opDescribeTaskDefinition = "DescribeTaskDefinition"
 
 // DescribeTaskDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTaskDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1155,7 +1162,7 @@ const opDescribeTasks = "DescribeTasks"
 
 // DescribeTasksRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTasks operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1247,7 +1254,7 @@ const opDiscoverPollEndpoint = "DiscoverPollEndpoint"
 
 // DiscoverPollEndpointRequest generates a "aws/request.Request" representing the
 // client's request for the DiscoverPollEndpoint operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1334,7 +1341,7 @@ const opListAttributes = "ListAttributes"
 
 // ListAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAttributes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1424,7 +1431,7 @@ const opListClusters = "ListClusters"
 
 // ListClustersRequest generates a "aws/request.Request" representing the
 // client's request for the ListClusters operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1568,7 +1575,7 @@ const opListContainerInstances = "ListContainerInstances"
 
 // ListContainerInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the ListContainerInstances operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1720,7 +1727,7 @@ const opListServices = "ListServices"
 
 // ListServicesRequest generates a "aws/request.Request" representing the
 // client's request for the ListServices operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1868,7 +1875,7 @@ const opListTaskDefinitionFamilies = "ListTaskDefinitionFamilies"
 
 // ListTaskDefinitionFamiliesRequest generates a "aws/request.Request" representing the
 // client's request for the ListTaskDefinitionFamilies operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2018,7 +2025,7 @@ const opListTaskDefinitions = "ListTaskDefinitions"
 
 // ListTaskDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListTaskDefinitions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2164,7 +2171,7 @@ const opListTasks = "ListTasks"
 
 // ListTasksRequest generates a "aws/request.Request" representing the
 // client's request for the ListTasks operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2321,7 +2328,7 @@ const opPutAttributes = "PutAttributes"
 
 // PutAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the PutAttributes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2419,7 +2426,7 @@ const opRegisterContainerInstance = "RegisterContainerInstance"
 
 // RegisterContainerInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterContainerInstance operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2511,7 +2518,7 @@ const opRegisterTaskDefinition = "RegisterTaskDefinition"
 
 // RegisterTaskDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterTaskDefinition operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2568,7 +2575,7 @@ func (c *ECS) RegisterTaskDefinitionRequest(input *RegisterTaskDefinitionInput) 
 // definition with the networkMode parameter. The available network modes correspond
 // to those described in Network settings (https://docs.docker.com/engine/reference/run/#/network-settings)
 // in the Docker run reference. If you specify the awsvpc network mode, the
-// task is allocated an Elastic Network Interface, and you must specify a NetworkConfiguration
+// task is allocated an elastic network interface, and you must specify a NetworkConfiguration
 // when you create a service or run a task with the task definition. For more
 // information, see Task Networking (http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html)
 // in the Amazon Elastic Container Service Developer Guide.
@@ -2619,7 +2626,7 @@ const opRunTask = "RunTask"
 
 // RunTaskRequest generates a "aws/request.Request" representing the
 // client's request for the RunTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2682,7 +2689,7 @@ func (c *ECS) RunTaskRequest(input *RunTaskInput) (req *request.Request, output 
 //    it. Run the DescribeTasks command using an exponential backoff algorithm
 //    to ensure that you allow enough time for the previous command to propagate
 //    through the system. To do this, run the DescribeTasks command repeatedly,
-//    starting with a couple of seconds of wait time, and increasing gradually
+//    starting with a couple of seconds of wait time and increasing gradually
 //    up to five minutes of wait time.
 //
 //    * Add wait time between subsequent commands, even if the DescribeTasks
@@ -2721,7 +2728,7 @@ func (c *ECS) RunTaskRequest(input *RunTaskInput) (req *request.Request, output 
 //   The specified platform version does not exist.
 //
 //   * ErrCodePlatformTaskDefinitionIncompatibilityException "PlatformTaskDefinitionIncompatibilityException"
-//   The specified platform version does not satisfy the task definition’s required
+//   The specified platform version does not satisfy the task definition's required
 //   capabilities.
 //
 //   * ErrCodeAccessDeniedException "AccessDeniedException"
@@ -2757,7 +2764,7 @@ const opStartTask = "StartTask"
 
 // StartTaskRequest generates a "aws/request.Request" representing the
 // client's request for the StartTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2854,7 +2861,7 @@ const opStopTask = "StopTask"
 
 // StopTaskRequest generates a "aws/request.Request" representing the
 // client's request for the StopTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2957,7 +2964,7 @@ const opSubmitContainerStateChange = "SubmitContainerStateChange"
 
 // SubmitContainerStateChangeRequest generates a "aws/request.Request" representing the
 // client's request for the SubmitContainerStateChange operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3047,7 +3054,7 @@ const opSubmitTaskStateChange = "SubmitTaskStateChange"
 
 // SubmitTaskStateChangeRequest generates a "aws/request.Request" representing the
 // client's request for the SubmitTaskStateChange operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3137,7 +3144,7 @@ const opUpdateContainerAgent = "UpdateContainerAgent"
 
 // UpdateContainerAgentRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateContainerAgent operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3257,7 +3264,7 @@ const opUpdateContainerInstancesState = "UpdateContainerInstancesState"
 
 // UpdateContainerInstancesStateRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateContainerInstancesState operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3392,7 +3399,7 @@ const opUpdateService = "UpdateService"
 
 // UpdateServiceRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateService operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3545,7 +3552,7 @@ func (c *ECS) UpdateServiceRequest(input *UpdateServiceInput) (req *request.Requ
 //   The specified platform version does not exist.
 //
 //   * ErrCodePlatformTaskDefinitionIncompatibilityException "PlatformTaskDefinitionIncompatibilityException"
-//   The specified platform version does not satisfy the task definition’s required
+//   The specified platform version does not satisfy the task definition's required
 //   capabilities.
 //
 //   * ErrCodeAccessDeniedException "AccessDeniedException"
@@ -3577,7 +3584,7 @@ func (c *ECS) UpdateServiceWithContext(ctx aws.Context, input *UpdateServiceInpu
 type Attachment struct {
 	_ struct{} `type:"structure"`
 
-	// Details of the attachment. For Elastic Network Interfaces, this includes
+	// Details of the attachment. For elastic network interfaces, this includes
 	// the network interface ID, the MAC address, the subnet ID, and the private
 	// IPv4 address.
 	Details []*KeyValuePair `locationName:"details" type:"list"`
@@ -3760,15 +3767,20 @@ type AwsVpcConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Whether the task's elastic network interface receives a public IP address.
+	// The default value is DISABLED.
 	AssignPublicIp *string `locationName:"assignPublicIp" type:"string" enum:"AssignPublicIp"`
 
 	// The security groups associated with the task or service. If you do not specify
 	// a security group, the default security group for the VPC is used. There is
 	// a limit of 5 security groups able to be specified per AwsVpcConfiguration.
+	//
+	// All specified security groups must be from the same VPC.
 	SecurityGroups []*string `locationName:"securityGroups" type:"list"`
 
 	// The subnets associated with the task or service. There is a limit of 10 subnets
 	// able to be specified per AwsVpcConfiguration.
+	//
+	// All specified subnets must be from the same VPC.
 	//
 	// Subnets is a required field
 	Subnets []*string `locationName:"subnets" type:"list" required:"true"`
@@ -3827,7 +3839,7 @@ type Cluster struct {
 	ActiveServicesCount *int64 `locationName:"activeServicesCount" type:"integer"`
 
 	// The Amazon Resource Name (ARN) that identifies the cluster. The ARN contains
-	// the arn:aws:ecs namespace, followed by the region of the cluster, the AWS
+	// the arn:aws:ecs namespace, followed by the Region of the cluster, the AWS
 	// account ID of the cluster owner, the cluster namespace, and then the cluster
 	// name. For example, arn:aws:ecs:region:012345678910:cluster/test..
 	ClusterArn *string `locationName:"clusterArn" type:"string"`
@@ -3838,7 +3850,8 @@ type Cluster struct {
 	// The number of tasks in the cluster that are in the PENDING state.
 	PendingTasksCount *int64 `locationName:"pendingTasksCount" type:"integer"`
 
-	// The number of container instances registered into the cluster.
+	// The number of container instances registered into the cluster. This includes
+	// container instances in both ACTIVE and DRAINING status.
 	RegisteredContainerInstancesCount *int64 `locationName:"registeredContainerInstancesCount" type:"integer"`
 
 	// The number of tasks in the cluster that are in the RUNNING state.
@@ -4032,16 +4045,16 @@ type ContainerDefinition struct {
 	_ struct{} `type:"structure"`
 
 	// The command that is passed to the container. This parameter maps to Cmd in
-	// the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the COMMAND parameter to docker run (https://docs.docker.com/engine/reference/run/).
 	// For more information, see https://docs.docker.com/engine/reference/builder/#cmd
 	// (https://docs.docker.com/engine/reference/builder/#cmd).
 	Command []*string `locationName:"command" type:"list"`
 
 	// The number of cpu units reserved for the container. This parameter maps to
-	// CpuShares in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// CpuShares in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --cpu-shares option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// This field is optional for tasks using the Fargate launch type, and the only
@@ -4096,31 +4109,31 @@ type ContainerDefinition struct {
 	Cpu *int64 `locationName:"cpu" type:"integer"`
 
 	// When this parameter is true, networking is disabled within the container.
-	// This parameter maps to NetworkDisabled in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/).
+	// This parameter maps to NetworkDisabled in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/).
 	//
 	// This parameter is not supported for Windows containers.
 	DisableNetworking *bool `locationName:"disableNetworking" type:"boolean"`
 
 	// A list of DNS search domains that are presented to the container. This parameter
-	// maps to DnsSearch in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// maps to DnsSearch in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --dns-search option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// This parameter is not supported for Windows containers.
 	DnsSearchDomains []*string `locationName:"dnsSearchDomains" type:"list"`
 
 	// A list of DNS servers that are presented to the container. This parameter
-	// maps to Dns in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// maps to Dns in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --dns option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// This parameter is not supported for Windows containers.
 	DnsServers []*string `locationName:"dnsServers" type:"list"`
 
 	// A key/value map of labels to add to the container. This parameter maps to
-	// Labels in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// Labels in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --label option to docker run (https://docs.docker.com/engine/reference/run/).
 	// This parameter requires version 1.18 of the Docker Remote API or greater
 	// on your container instance. To check the Docker Remote API version on your
@@ -4132,8 +4145,8 @@ type ContainerDefinition struct {
 	// security systems. This field is not valid for containers in tasks using the
 	// Fargate launch type.
 	//
-	// This parameter maps to SecurityOpt in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// This parameter maps to SecurityOpt in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --security-opt option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// The Amazon ECS container agent running on a container instance must register
@@ -4151,16 +4164,16 @@ type ContainerDefinition struct {
 	// agent or enter your commands and arguments as command array items instead.
 	//
 	// The entry point that is passed to the container. This parameter maps to Entrypoint
-	// in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --entrypoint option to docker run (https://docs.docker.com/engine/reference/run/).
 	// For more information, see https://docs.docker.com/engine/reference/builder/#entrypoint
 	// (https://docs.docker.com/engine/reference/builder/#entrypoint).
 	EntryPoint []*string `locationName:"entryPoint" type:"list"`
 
 	// The environment variables to pass to a container. This parameter maps to
-	// Env in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// Env in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --env option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// We do not recommend using plaintext environment variables for sensitive information,
@@ -4183,24 +4196,26 @@ type ContainerDefinition struct {
 
 	// A list of hostnames and IP address mappings to append to the /etc/hosts file
 	// on the container. If using the Fargate launch type, this may be used to list
-	// non-Fargate hosts you want the container to talk to. This parameter maps
-	// to ExtraHosts in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// non-Fargate hosts to which the container can talk. This parameter maps to
+	// ExtraHosts in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --add-host option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// This parameter is not supported for Windows containers.
 	ExtraHosts []*HostEntry `locationName:"extraHosts" type:"list"`
 
 	// The health check command and associated configuration parameters for the
-	// container. This parameter maps to HealthCheck in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// container. This parameter maps to HealthCheck in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the HEALTHCHECK parameter of docker run (https://docs.docker.com/engine/reference/run/).
 	HealthCheck *HealthCheck `locationName:"healthCheck" type:"structure"`
 
 	// The hostname to use for your container. This parameter maps to Hostname in
-	// the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --hostname option to docker run (https://docs.docker.com/engine/reference/run/).
+	//
+	// The hostname parameter is not supported if using the awsvpc networkMode.
 	Hostname *string `locationName:"hostname" type:"string"`
 
 	// The image used to start a container. This string is passed directly to the
@@ -4209,9 +4224,9 @@ type ContainerDefinition struct {
 	// repository-url/image@digest. Up to 255 letters (uppercase and lowercase),
 	// numbers, hyphens, underscores, colons, periods, forward slashes, and number
 	// signs are allowed. This parameter maps to Image in the Create a container
-	// (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
-	// and the IMAGE parameter of docker run (https://docs.docker.com/engine/reference/run/).
+	// (https://docs.docker.com/engine/api/v1.35/#create-a-container) section of
+	// the Docker Remote API (https://docs.docker.com/engine/api/v1.35/) and the
+	// IMAGE parameter of docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	//    * When a new task starts, the Amazon ECS container agent pulls the latest
 	//    version of the specified image and tag for the container to use. However,
@@ -4241,8 +4256,8 @@ type ContainerDefinition struct {
 	// numbers, hyphens, and underscores are allowed. For more information about
 	// linking Docker containers, go to https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/
 	// (https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/).
-	// This parameter maps to Links in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// This parameter maps to Links in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --link option to docker run (https://docs.docker.com/engine/reference/commandline/run/).
 	//
 	// This parameter is not supported for Windows containers.
@@ -4263,8 +4278,8 @@ type ContainerDefinition struct {
 	//
 	// If using the Fargate launch type, the only supported value is awslogs.
 	//
-	// This parameter maps to LogConfig in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// This parameter maps to LogConfig in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --log-driver option to docker run (https://docs.docker.com/engine/reference/run/).
 	// By default, containers use the same logging driver that the Docker daemon
 	// uses; however the container may use a different logging driver than the Docker
@@ -4294,8 +4309,8 @@ type ContainerDefinition struct {
 
 	// The hard limit (in MiB) of memory to present to the container. If your container
 	// attempts to exceed the memory specified here, the container is killed. This
-	// parameter maps to Memory in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// parameter maps to Memory in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --memory option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// If your containers are part of a task using the Fargate launch type, this
@@ -4319,8 +4334,8 @@ type ContainerDefinition struct {
 	// it needs to, up to either the hard limit specified with the memory parameter
 	// (if applicable), or all of the available memory on the container instance,
 	// whichever comes first. This parameter maps to MemoryReservation in the Create
-	// a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --memory-reservation option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// You must specify a non-zero integer for one or both of memory or memoryReservation
@@ -4342,8 +4357,8 @@ type ContainerDefinition struct {
 
 	// The mount points for data volumes in your container.
 	//
-	// This parameter maps to Volumes in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// This parameter maps to Volumes in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --volume option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// Windows containers can mount whole directories on the same drive as $env:ProgramData.
@@ -4355,8 +4370,8 @@ type ContainerDefinition struct {
 	// in a task definition, the name of one container can be entered in the links
 	// of another container to connect the containers. Up to 255 letters (uppercase
 	// and lowercase), numbers, hyphens, and underscores are allowed. This parameter
-	// maps to name in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// maps to name in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --name option to docker run (https://docs.docker.com/engine/reference/run/).
 	Name *string `locationName:"name" type:"string"`
 
@@ -4371,8 +4386,8 @@ type ContainerDefinition struct {
 	// There is no loopback for port mappings on Windows, so you cannot access a
 	// container's mapped port from the host itself.
 	//
-	// This parameter maps to PortBindings in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// This parameter maps to PortBindings in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --publish option to docker run (https://docs.docker.com/engine/reference/run/).
 	// If the network mode of a task definition is set to none, then you can't specify
 	// port mappings. If the network mode of a task definition is set to host, then
@@ -4381,14 +4396,14 @@ type ContainerDefinition struct {
 	//
 	// After a task reaches the RUNNING status, manual and automatic host and container
 	// port assignments are visible in the Network Bindings section of a container
-	// description for a selected task in the Amazon ECS console, or the networkBindings
-	// section DescribeTasks responses.
+	// description for a selected task in the Amazon ECS console. The assignments
+	// are also visible in the networkBindings section DescribeTasks responses.
 	PortMappings []*PortMapping `locationName:"portMappings" type:"list"`
 
 	// When this parameter is true, the container is given elevated privileges on
 	// the host container instance (similar to the root user). This parameter maps
-	// to Privileged in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// to Privileged in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --privileged option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// This parameter is not supported for Windows containers or tasks using the
@@ -4397,16 +4412,19 @@ type ContainerDefinition struct {
 
 	// When this parameter is true, the container is given read-only access to its
 	// root file system. This parameter maps to ReadonlyRootfs in the Create a container
-	// (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
-	// and the --read-only option to docker run.
+	// (https://docs.docker.com/engine/api/v1.35/#create-a-container) section of
+	// the Docker Remote API (https://docs.docker.com/engine/api/v1.35/) and the
+	// --read-only option to docker run.
 	//
 	// This parameter is not supported for Windows containers.
 	ReadonlyRootFilesystem *bool `locationName:"readonlyRootFilesystem" type:"boolean"`
 
+	// The private repository authentication credentials to use.
+	RepositoryCredentials *RepositoryCredentials `locationName:"repositoryCredentials" type:"structure"`
+
 	// A list of ulimits to set in the container. This parameter maps to Ulimits
-	// in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --ulimit option to docker run (https://docs.docker.com/engine/reference/run/).
 	// Valid naming values are displayed in the Ulimit data type. This parameter
 	// requires version 1.18 of the Docker Remote API or greater on your container
@@ -4418,22 +4436,22 @@ type ContainerDefinition struct {
 	Ulimits []*Ulimit `locationName:"ulimits" type:"list"`
 
 	// The user name to use inside the container. This parameter maps to User in
-	// the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --user option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// This parameter is not supported for Windows containers.
 	User *string `locationName:"user" type:"string"`
 
 	// Data volumes to mount from another container. This parameter maps to VolumesFrom
-	// in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --volumes-from option to docker run (https://docs.docker.com/engine/reference/run/).
 	VolumesFrom []*VolumeFrom `locationName:"volumesFrom" type:"list"`
 
 	// The working directory in which to run commands inside the container. This
-	// parameter maps to WorkingDir in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// parameter maps to WorkingDir in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --workdir option to docker run (https://docs.docker.com/engine/reference/run/).
 	WorkingDirectory *string `locationName:"workingDirectory" type:"string"`
 }
@@ -4474,6 +4492,11 @@ func (s *ContainerDefinition) Validate() error {
 	if s.LogConfiguration != nil {
 		if err := s.LogConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("LogConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RepositoryCredentials != nil {
+		if err := s.RepositoryCredentials.Validate(); err != nil {
+			invalidParams.AddNested("RepositoryCredentials", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.Ulimits != nil {
@@ -4637,6 +4660,12 @@ func (s *ContainerDefinition) SetReadonlyRootFilesystem(v bool) *ContainerDefini
 	return s
 }
 
+// SetRepositoryCredentials sets the RepositoryCredentials field's value.
+func (s *ContainerDefinition) SetRepositoryCredentials(v *RepositoryCredentials) *ContainerDefinition {
+	s.RepositoryCredentials = v
+	return s
+}
+
 // SetUlimits sets the Ulimits field's value.
 func (s *ContainerDefinition) SetUlimits(v []*Ulimit) *ContainerDefinition {
 	s.Ulimits = v
@@ -4667,15 +4696,15 @@ type ContainerInstance struct {
 	_ struct{} `type:"structure"`
 
 	// This parameter returns true if the agent is connected to Amazon ECS. Registered
-	// instances with an agent that may be unhealthy or stopped return false. Instances
-	// without a connected agent can't accept placement requests.
+	// instances with an agent that may be unhealthy or stopped return false. Only
+	// instances connected to an agent can accept placement requests.
 	AgentConnected *bool `locationName:"agentConnected" type:"boolean"`
 
 	// The status of the most recent agent update. If an update has never been requested,
 	// this value is NULL.
 	AgentUpdateStatus *string `locationName:"agentUpdateStatus" type:"string" enum:"AgentUpdateStatus"`
 
-	// The Elastic Network Interfaces associated with the container instance.
+	// The elastic network interfaces associated with the container instance.
 	Attachments []*Attachment `locationName:"attachments" type:"list"`
 
 	// The attributes set for the container instance, either by the Amazon ECS container
@@ -4683,7 +4712,7 @@ type ContainerInstance struct {
 	Attributes []*Attribute `locationName:"attributes" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the container instance. The ARN contains
-	// the arn:aws:ecs namespace, followed by the region of the container instance,
+	// the arn:aws:ecs namespace, followed by the Region of the container instance,
 	// the AWS account ID of the container instance owner, the container-instance
 	// namespace, and then the container instance ID. For example, arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
 	ContainerInstanceArn *string `locationName:"containerInstanceArn" type:"string"`
@@ -4695,7 +4724,7 @@ type ContainerInstance struct {
 	PendingTasksCount *int64 `locationName:"pendingTasksCount" type:"integer"`
 
 	// The Unix time stamp for when the container instance was registered.
-	RegisteredAt *time.Time `locationName:"registeredAt" type:"timestamp" timestampFormat:"unix"`
+	RegisteredAt *time.Time `locationName:"registeredAt" type:"timestamp"`
 
 	// For CPU and memory resource types, this parameter describes the amount of
 	// each resource that was available on the container instance when the container
@@ -4707,12 +4736,12 @@ type ContainerInstance struct {
 	RegisteredResources []*Resource `locationName:"registeredResources" type:"list"`
 
 	// For CPU and memory resource types, this parameter describes the remaining
-	// CPU and memory on the that has not already been allocated to tasks (and is
-	// therefore available for new tasks). For port resource types, this parameter
-	// describes the ports that were reserved by the Amazon ECS container agent
-	// (at instance registration time) and any task containers that have reserved
-	// port mappings on the host (with the host or bridge network mode). Any port
-	// that is not specified here is available for new tasks.
+	// CPU and memory that has not already been allocated to tasks and is therefore
+	// available for new tasks. For port resource types, this parameter describes
+	// the ports that were reserved by the Amazon ECS container agent (at instance
+	// registration time) and any task containers that have reserved port mappings
+	// on the host (with the host or bridge network mode). Any port that is not
+	// specified here is available for new tasks.
 	RemainingResources []*Resource `locationName:"remainingResources" type:"list"`
 
 	// The number of tasks on the container instance that are in the RUNNING status.
@@ -5027,8 +5056,8 @@ func (s *CreateClusterOutput) SetCluster(v *Cluster) *CreateClusterOutput {
 type CreateServiceInput struct {
 	_ struct{} `type:"structure"`
 
-	// Unique, case-sensitive identifier you provide to ensure the idempotency of
-	// the request. Up to 32 ASCII characters are allowed.
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request. Up to 32 ASCII characters are allowed.
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
 	// The short name or full Amazon Resource Name (ARN) of the cluster on which
@@ -5042,16 +5071,14 @@ type CreateServiceInput struct {
 
 	// The number of instantiations of the specified task definition to place and
 	// keep running on your cluster.
-	//
-	// DesiredCount is a required field
-	DesiredCount *int64 `locationName:"desiredCount" type:"integer" required:"true"`
+	DesiredCount *int64 `locationName:"desiredCount" type:"integer"`
 
 	// The period of time, in seconds, that the Amazon ECS service scheduler should
 	// ignore unhealthy Elastic Load Balancing target health checks after a task
 	// has first started. This is only valid if your service is configured to use
 	// a load balancer. If your service's tasks take a while to start and respond
 	// to Elastic Load Balancing health checks, you can specify a health check grace
-	// period of up to 1,800 seconds during which the ECS service scheduler ignores
+	// period of up to 7,200 seconds during which the ECS service scheduler ignores
 	// health check status. This grace period can prevent the ECS service scheduler
 	// from marking tasks as unhealthy and stopping them before they have time to
 	// come up.
@@ -5077,6 +5104,13 @@ type CreateServiceInput struct {
 	// balancer. When a task from this service is placed on a container instance,
 	// the container instance and port combination is registered as a target in
 	// the target group specified here.
+	//
+	// Services with tasks that use the awsvpc network mode (for example, those
+	// with the Fargate launch type) only support Application Load Balancers and
+	// Network Load Balancers; Classic Load Balancers are not supported. Also, when
+	// you create any target groups for these services, you must choose ip as the
+	// target type, not instance, because tasks that use the awsvpc network mode
+	// are associated with an elastic network interface, not an Amazon EC2 instance.
 	LoadBalancers []*LoadBalancer `locationName:"loadBalancers" type:"list"`
 
 	// The network configuration for the service. This parameter is required for
@@ -5121,16 +5155,39 @@ type CreateServiceInput struct {
 	// in the IAM User Guide.
 	Role *string `locationName:"role" type:"string"`
 
+	// The scheduling strategy to use for the service. For more information, see
+	// Services (http://docs.aws.amazon.com/AmazonECS/latest/developerguideecs_services.html).
+	//
+	// There are two service scheduler strategies available:
+	//
+	//    * REPLICA-The replica scheduling strategy places and maintains the desired
+	//    number of tasks across your cluster. By default, the service scheduler
+	//    spreads tasks across Availability Zones. You can use task placement strategies
+	//    and constraints to customize task placement decisions.
+	//
+	//    * DAEMON-The daemon scheduling strategy deploys exactly one task on each
+	//    active container instance that meets all of the task placement constraints
+	//    that you specify in your cluster. When using this strategy, there is no
+	//    need to specify a desired number of tasks, a task placement strategy,
+	//    or use Service Auto Scaling policies.
+	//
+	// Fargate tasks do not support the DAEMON scheduling strategy.
+	SchedulingStrategy *string `locationName:"schedulingStrategy" type:"string" enum:"SchedulingStrategy"`
+
 	// The name of your service. Up to 255 letters (uppercase and lowercase), numbers,
 	// hyphens, and underscores are allowed. Service names must be unique within
 	// a cluster, but you can have similarly named services in multiple clusters
-	// within a region or across multiple regions.
+	// within a Region or across multiple Regions.
 	//
 	// ServiceName is a required field
 	ServiceName *string `locationName:"serviceName" type:"string" required:"true"`
 
-	// The details of the service discovery registries you want to assign to this
-	// service. For more information, see Service Discovery (http://docs.aws.amazon.com/AmazonECS/latest/developerguideservice-discovery.html).
+	// The details of the service discovery registries to assign to this service.
+	// For more information, see Service Discovery (http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html).
+	//
+	// Service discovery is supported for Fargate tasks if using platform version
+	// v1.1.0 or later. For more information, see AWS Fargate Platform Versions
+	// (http://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html).
 	ServiceRegistries []*ServiceRegistry `locationName:"serviceRegistries" type:"list"`
 
 	// The family and revision (family:revision) or full ARN of the task definition
@@ -5154,9 +5211,6 @@ func (s CreateServiceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateServiceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateServiceInput"}
-	if s.DesiredCount == nil {
-		invalidParams.Add(request.NewErrParamRequired("DesiredCount"))
-	}
 	if s.ServiceName == nil {
 		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
 	}
@@ -5244,6 +5298,12 @@ func (s *CreateServiceInput) SetPlatformVersion(v string) *CreateServiceInput {
 // SetRole sets the Role field's value.
 func (s *CreateServiceInput) SetRole(v string) *CreateServiceInput {
 	s.Role = &v
+	return s
+}
+
+// SetSchedulingStrategy sets the SchedulingStrategy field's value.
+func (s *CreateServiceInput) SetSchedulingStrategy(v string) *CreateServiceInput {
+	s.SchedulingStrategy = &v
 	return s
 }
 
@@ -5442,6 +5502,11 @@ type DeleteServiceInput struct {
 	// is assumed.
 	Cluster *string `locationName:"cluster" type:"string"`
 
+	// If true, allows you to delete a service even if it has not been scaled down
+	// to zero tasks. It is only necessary to use this if the service is using the
+	// REPLICA scheduling strategy.
+	Force *bool `locationName:"force" type:"boolean"`
+
 	// The name of the service to delete.
 	//
 	// Service is a required field
@@ -5474,6 +5539,12 @@ func (s *DeleteServiceInput) Validate() error {
 // SetCluster sets the Cluster field's value.
 func (s *DeleteServiceInput) SetCluster(v string) *DeleteServiceInput {
 	s.Cluster = &v
+	return s
+}
+
+// SetForce sets the Force field's value.
+func (s *DeleteServiceInput) SetForce(v bool) *DeleteServiceInput {
+	s.Force = &v
 	return s
 }
 
@@ -5511,7 +5582,7 @@ type Deployment struct {
 	_ struct{} `type:"structure"`
 
 	// The Unix time stamp for when the service was created.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The most recent desired count of tasks that was specified for the service
 	// to deploy or maintain.
@@ -5524,7 +5595,7 @@ type Deployment struct {
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// The VPC subnet and security group configuration for tasks that receive their
-	// own Elastic Network Interface by using the awsvpc networking mode.
+	// own elastic network interface by using the awsvpc networking mode.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
 	// The number of tasks in the deployment that are in the PENDING status.
@@ -5546,7 +5617,7 @@ type Deployment struct {
 	TaskDefinition *string `locationName:"taskDefinition" type:"string"`
 
 	// The Unix time stamp for when the service was last updated.
-	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp" timestampFormat:"unix"`
+	UpdatedAt *time.Time `locationName:"updatedAt" type:"timestamp"`
 }
 
 // String returns the string representation
@@ -5675,7 +5746,7 @@ type DeregisterContainerInstanceInput struct {
 	Cluster *string `locationName:"cluster" type:"string"`
 
 	// The container instance ID or full ARN of the container instance to deregister.
-	// The ARN contains the arn:aws:ecs namespace, followed by the region of the
+	// The ARN contains the arn:aws:ecs namespace, followed by the Region of the
 	// container instance, the AWS account ID of the container instance owner, the
 	// container-instance namespace, and then the container instance ID. For example,
 	// arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
@@ -5914,7 +5985,8 @@ type DescribeContainerInstancesInput struct {
 	// default cluster is assumed.
 	Cluster *string `locationName:"cluster" type:"string"`
 
-	// A list of container instance IDs or full ARN entries.
+	// A list of up to 100 container instance IDs or full Amazon Resource Name (ARN)
+	// entries.
 	//
 	// ContainerInstances is a required field
 	ContainerInstances []*string `locationName:"containerInstances" type:"list" required:"true"`
@@ -6279,7 +6351,7 @@ type DiscoverPollEndpointInput struct {
 	Cluster *string `locationName:"cluster" type:"string"`
 
 	// The container instance ID or full ARN of the container instance. The ARN
-	// contains the arn:aws:ecs namespace, followed by the region of the container
+	// contains the arn:aws:ecs namespace, followed by the Region of the container
 	// instance, the AWS account ID of the container instance owner, the container-instance
 	// namespace, and then the container instance ID. For example, arn:aws:ecs:region:aws_account_id:container-instance/container_instance_ID.
 	ContainerInstance *string `locationName:"containerInstance" type:"string"`
@@ -6339,6 +6411,87 @@ func (s *DiscoverPollEndpointOutput) SetTelemetryEndpoint(v string) *DiscoverPol
 	return s
 }
 
+// The configuration for the Docker volume. This parameter is specified when
+// using Docker volumes.
+type DockerVolumeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// If this value is true, the Docker volume is created if it does not already
+	// exist.
+	//
+	// This field is only used if the scope is shared.
+	Autoprovision *bool `locationName:"autoprovision" type:"boolean"`
+
+	// The Docker volume driver to use. The driver value must match the driver name
+	// provided by Docker because it is used for task placement. If the driver was
+	// installed using the Docker plugin CLI, use docker plugin ls to retrieve the
+	// driver name from your container instance. If the driver was installed using
+	// another method, use Docker plugin discovery to retrieve the driver name.
+	// For more information, see Docker plugin discovery (https://docs.docker.com/engine/extend/plugin_api/#plugin-discovery).
+	// This parameter maps to Driver in the Create a volume (https://docs.docker.com/engine/api/v1.35/#operation/VolumeCreate)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
+	// and the xxdriver option to docker volume create (https://docs.docker.com/engine/reference/commandline/volume_create/).
+	Driver *string `locationName:"driver" type:"string"`
+
+	// A map of Docker driver specific options passed through. This parameter maps
+	// to DriverOpts in the Create a volume (https://docs.docker.com/engine/api/v1.35/#operation/VolumeCreate)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
+	// and the xxopt option to docker volume create (https://docs.docker.com/engine/reference/commandline/volume_create/).
+	DriverOpts map[string]*string `locationName:"driverOpts" type:"map"`
+
+	// Custom metadata to add to your Docker volume. This parameter maps to Labels
+	// in the Create a volume (https://docs.docker.com/engine/api/v1.35/#operation/VolumeCreate)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
+	// and the xxlabel option to docker volume create (https://docs.docker.com/engine/reference/commandline/volume_create/).
+	Labels map[string]*string `locationName:"labels" type:"map"`
+
+	// The scope for the Docker volume which determines it's lifecycle. Docker volumes
+	// that are scoped to a task are automatically provisioned when the task starts
+	// and destroyed when the task stops. Docker volumes that are scoped as shared
+	// persist after the task stops.
+	Scope *string `locationName:"scope" type:"string" enum:"Scope"`
+}
+
+// String returns the string representation
+func (s DockerVolumeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DockerVolumeConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetAutoprovision sets the Autoprovision field's value.
+func (s *DockerVolumeConfiguration) SetAutoprovision(v bool) *DockerVolumeConfiguration {
+	s.Autoprovision = &v
+	return s
+}
+
+// SetDriver sets the Driver field's value.
+func (s *DockerVolumeConfiguration) SetDriver(v string) *DockerVolumeConfiguration {
+	s.Driver = &v
+	return s
+}
+
+// SetDriverOpts sets the DriverOpts field's value.
+func (s *DockerVolumeConfiguration) SetDriverOpts(v map[string]*string) *DockerVolumeConfiguration {
+	s.DriverOpts = v
+	return s
+}
+
+// SetLabels sets the Labels field's value.
+func (s *DockerVolumeConfiguration) SetLabels(v map[string]*string) *DockerVolumeConfiguration {
+	s.Labels = v
+	return s
+}
+
+// SetScope sets the Scope field's value.
+func (s *DockerVolumeConfiguration) SetScope(v string) *DockerVolumeConfiguration {
+	s.Scope = &v
+	return s
+}
+
 // A failed resource.
 type Failure struct {
 	_ struct{} `type:"structure"`
@@ -6387,8 +6540,8 @@ type HealthCheck struct {
 	// [ "CMD-SHELL", "curl -f http://localhost/ || exit 1" ]
 	//
 	// An exit code of 0 indicates success, and non-zero exit code indicates failure.
-	// For more information, see HealthCheck in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/).
+	// For more information, see HealthCheck in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/).
 	//
 	// Command is a required field
 	Command []*string `locationName:"command" type:"list" required:"true"`
@@ -6399,7 +6552,7 @@ type HealthCheck struct {
 
 	// The number of times to retry a failed health check before the container is
 	// considered unhealthy. You may specify between 1 and 10 retries. The default
-	// value is 3 retries.
+	// value is 3.
 	Retries *int64 `locationName:"retries" type:"integer"`
 
 	// The optional grace period within which to provide containers time to bootstrap
@@ -6414,7 +6567,7 @@ type HealthCheck struct {
 
 	// The time period in seconds to wait for a health check to succeed before it
 	// is considered a failure. You may specify between 2 and 60 seconds. The default
-	// value is 5 seconds.
+	// value is 5.
 	Timeout *int64 `locationName:"timeout" type:"integer"`
 }
 
@@ -6525,17 +6678,18 @@ func (s *HostEntry) SetIpAddress(v string) *HostEntry {
 	return s
 }
 
-// Details on a container instance host volume.
+// Details on a container instance bind mount host volume.
 type HostVolumeProperties struct {
 	_ struct{} `type:"structure"`
 
-	// The path on the host container instance that is presented to the container.
-	// If this parameter is empty, then the Docker daemon has assigned a host path
-	// for you. If the host parameter contains a sourcePath file location, then
-	// the data volume persists at the specified location on the host container
-	// instance until you delete it manually. If the sourcePath value does not exist
-	// on the host container instance, the Docker daemon creates it. If the location
-	// does exist, the contents of the source path folder are exported.
+	// When the host parameter is used, specify a sourcePath to declare the path
+	// on the host container instance that is presented to the container. If this
+	// parameter is empty, then the Docker daemon has assigned a host path for you.
+	// If the host parameter contains a sourcePath file location, then the data
+	// volume persists at the specified location on the host container instance
+	// until you delete it manually. If the sourcePath value does not exist on the
+	// host container instance, the Docker daemon creates it. If the location does
+	// exist, the contents of the source path folder are exported.
 	//
 	// If you are using the Fargate launch type, the sourcePath parameter is not
 	// supported.
@@ -6570,8 +6724,8 @@ type KernelCapabilities struct {
 
 	// The Linux capabilities for the container that have been added to the default
 	// configuration provided by Docker. This parameter maps to CapAdd in the Create
-	// a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --cap-add option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// If you are using tasks that use the Fargate launch type, the add parameter
@@ -6589,8 +6743,8 @@ type KernelCapabilities struct {
 
 	// The Linux capabilities for the container that have been removed from the
 	// default configuration provided by Docker. This parameter maps to CapDrop
-	// in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --cap-drop option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// Valid values: "ALL" | "AUDIT_CONTROL" | "AUDIT_WRITE" | "BLOCK_SUSPEND" |
@@ -6673,8 +6827,8 @@ type LinuxParameters struct {
 	Capabilities *KernelCapabilities `locationName:"capabilities" type:"structure"`
 
 	// Any host devices to expose to the container. This parameter maps to Devices
-	// in the Create a container (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/#create-a-container)
-	// section of the Docker Remote API (https://docs.docker.com/engine/reference/api/docker_remote_api_v1.27/)
+	// in the Create a container (https://docs.docker.com/engine/api/v1.35/#create-a-container)
+	// section of the Docker Remote API (https://docs.docker.com/engine/api/v1.35/)
 	// and the --device option to docker run (https://docs.docker.com/engine/reference/run/).
 	//
 	// If you are using tasks that use the Fargate launch type, the devices parameter
@@ -6689,12 +6843,18 @@ type LinuxParameters struct {
 	// command: sudo docker version | grep "Server API version"
 	InitProcessEnabled *bool `locationName:"initProcessEnabled" type:"boolean"`
 
-	// The value for the size of the /dev/shm volume. This parameter maps to the
-	// --shm-size option to docker run (https://docs.docker.com/engine/reference/run/).
+	// The value for the size (in MiB) of the /dev/shm volume. This parameter maps
+	// to the --shm-size option to docker run (https://docs.docker.com/engine/reference/run/).
+	//
+	// If you are using tasks that use the Fargate launch type, the sharedMemorySize
+	// parameter is not supported.
 	SharedMemorySize *int64 `locationName:"sharedMemorySize" type:"integer"`
 
-	// The container path, mount options, and size of the tmpfs mount. This parameter
-	// maps to the --tmpfs option to docker run (https://docs.docker.com/engine/reference/run/).
+	// The container path, mount options, and size (in MiB) of the tmpfs mount.
+	// This parameter maps to the --tmpfs option to docker run (https://docs.docker.com/engine/reference/run/).
+	//
+	// If you are using tasks that use the Fargate launch type, the tmpfs parameter
+	// is not supported.
 	Tmpfs []*Tmpfs `locationName:"tmpfs" type:"list"`
 }
 
@@ -7105,7 +7265,7 @@ type ListServicesInput struct {
 	// is assumed.
 	Cluster *string `locationName:"cluster" type:"string"`
 
-	// The launch type for services you want to list.
+	// The launch type for the services to list.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// The maximum number of service results returned by ListServices in paginated
@@ -7125,6 +7285,9 @@ type ListServicesInput struct {
 	// This token should be treated as an opaque identifier that is only used to
 	// retrieve the next items in a list and not for other programmatic purposes.
 	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The scheduling strategy for services to list.
+	SchedulingStrategy *string `locationName:"schedulingStrategy" type:"string" enum:"SchedulingStrategy"`
 }
 
 // String returns the string representation
@@ -7158,6 +7321,12 @@ func (s *ListServicesInput) SetMaxResults(v int64) *ListServicesInput {
 // SetNextToken sets the NextToken field's value.
 func (s *ListServicesInput) SetNextToken(v string) *ListServicesInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetSchedulingStrategy sets the SchedulingStrategy field's value.
+func (s *ListServicesInput) SetSchedulingStrategy(v string) *ListServicesInput {
+	s.SchedulingStrategy = &v
 	return s
 }
 
@@ -7451,7 +7620,7 @@ type ListTasksInput struct {
 	// a family limits the results to tasks that belong to that family.
 	Family *string `locationName:"family" type:"string"`
 
-	// The launch type for services you want to list.
+	// The launch type for services to list.
 	LaunchType *string `locationName:"launchType" type:"string" enum:"LaunchType"`
 
 	// The maximum number of task results returned by ListTasks in paginated output.
@@ -7581,6 +7750,13 @@ func (s *ListTasksOutput) SetTaskArns(v []*string) *ListTasksOutput {
 }
 
 // Details on a load balancer that is used with a service.
+//
+// Services with tasks that use the awsvpc network mode (for example, those
+// with the Fargate launch type) only support Application Load Balancers and
+// Network Load Balancers; Classic Load Balancers are not supported. Also, when
+// you create any target groups for these services, you must choose ip as the
+// target type, not instance, because tasks that use the awsvpc network mode
+// are associated with an elastic network interface, not an Amazon EC2 instance.
 type LoadBalancer struct {
 	_ struct{} `type:"structure"`
 
@@ -7599,6 +7775,11 @@ type LoadBalancer struct {
 
 	// The full Amazon Resource Name (ARN) of the Elastic Load Balancing target
 	// group associated with a service.
+	//
+	// If your service's task definition uses the awsvpc network mode (which is
+	// required for the Fargate launch type), you must choose ip as the target type,
+	// not instance, because tasks that use the awsvpc network mode are associated
+	// with an elastic network interface, not an Amazon EC2 instance.
 	TargetGroupArn *string `locationName:"targetGroupArn" type:"string"`
 }
 
@@ -7717,7 +7898,8 @@ type MountPoint struct {
 	// value is false.
 	ReadOnly *bool `locationName:"readOnly" type:"boolean"`
 
-	// The name of the volume to mount.
+	// The name of the volume to mount. Must be a volume name referenced in the
+	// name parameter of task definition volume.
 	SourceVolume *string `locationName:"sourceVolume" type:"string"`
 }
 
@@ -7808,6 +7990,8 @@ type NetworkConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// The VPC subnets and security groups associated with a task.
+	//
+	// All specified subnets and security groups must be from the same VPC.
 	AwsvpcConfiguration *AwsVpcConfiguration `locationName:"awsvpcConfiguration" type:"structure"`
 }
 
@@ -7842,7 +8026,7 @@ func (s *NetworkConfiguration) SetAwsvpcConfiguration(v *AwsVpcConfiguration) *N
 	return s
 }
 
-// An object representing the Elastic Network Interface for tasks that use the
+// An object representing the elastic network interface for tasks that use the
 // awsvpc network mode.
 type NetworkInterface struct {
 	_ struct{} `type:"structure"`
@@ -7891,9 +8075,9 @@ func (s *NetworkInterface) SetPrivateIpv4Address(v string) *NetworkInterface {
 type PlacementConstraint struct {
 	_ struct{} `type:"structure"`
 
-	// A cluster query language expression to apply to the constraint. Note you
-	// cannot specify an expression if the constraint type is distinctInstance.
-	// For more information, see Cluster Query Language (http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html)
+	// A cluster query language expression to apply to the constraint. You cannot
+	// specify an expression if the constraint type is distinctInstance. For more
+	// information, see Cluster Query Language (http://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html)
 	// in the Amazon Elastic Container Service Developer Guide.
 	Expression *string `locationName:"expression" type:"string"`
 
@@ -8284,8 +8468,8 @@ type RegisterTaskDefinitionInput struct {
 
 	// The number of CPU units used by the task. It can be expressed as an integer
 	// using CPU units, for example 1024, or as a string using vCPUs, for example
-	// 1 vCPU or 1 vcpu, in a task definition but will be converted to an integer
-	// indicating the CPU units when the task definition is registered.
+	// 1 vCPU or 1 vcpu, in a task definition. String values are converted to an
+	// integer indicating the CPU units when the task definition is registered.
 	//
 	// Task-level CPU and memory parameters are ignored for Windows containers.
 	// We recommend specifying container-level resources for Windows containers.
@@ -8327,8 +8511,8 @@ type RegisterTaskDefinitionInput struct {
 
 	// The amount of memory (in MiB) used by the task. It can be expressed as an
 	// integer using MiB, for example 1024, or as a string using GB, for example
-	// 1GB or 1 GB, in a task definition but will be converted to an integer indicating
-	// the MiB when the task definition is registered.
+	// 1GB or 1 GB, in a task definition. String values are converted to an integer
+	// indicating the MiB when the task definition is registered.
 	//
 	// Task-level CPU and memory parameters are ignored for Windows containers.
 	// We recommend specifying container-level resources for Windows containers.
@@ -8527,6 +8711,46 @@ func (s *RegisterTaskDefinitionOutput) SetTaskDefinition(v *TaskDefinition) *Reg
 	return s
 }
 
+// The repository credentials for private registry authentication.
+type RepositoryCredentials struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) or name of the secret containing the private
+	// repository credentials.
+	//
+	// CredentialsParameter is a required field
+	CredentialsParameter *string `locationName:"credentialsParameter" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RepositoryCredentials) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RepositoryCredentials) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RepositoryCredentials) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RepositoryCredentials"}
+	if s.CredentialsParameter == nil {
+		invalidParams.Add(request.NewErrParamRequired("CredentialsParameter"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCredentialsParameter sets the CredentialsParameter field's value.
+func (s *RepositoryCredentials) SetCredentialsParameter(v string) *RepositoryCredentials {
+	s.CredentialsParameter = &v
+	return s
+}
+
 // Describes the resources available for a container instance.
 type Resource struct {
 	_ struct{} `type:"structure"`
@@ -8542,7 +8766,8 @@ type Resource struct {
 	// precision floating-point type.
 	LongValue *int64 `locationName:"longValue" type:"long"`
 
-	// The name of the resource, such as cpu, memory, ports, or a user-defined resource.
+	// The name of the resource, such as CPU, MEMORY, PORTS, PORTS_UDP, or a user-defined
+	// resource.
 	Name *string `locationName:"name" type:"string"`
 
 	// When the stringSetValue type is set, the value of the resource must be a
@@ -8803,7 +9028,7 @@ type Service struct {
 	ClusterArn *string `locationName:"clusterArn" type:"string"`
 
 	// The Unix time stamp for when the service was created.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// Optional deployment parameters that control how many tasks run during the
 	// deployment and the ordering of stopping and starting tasks.
@@ -8832,10 +9057,17 @@ type Service struct {
 	// A list of Elastic Load Balancing load balancer objects, containing the load
 	// balancer name, the container name (as it appears in a container definition),
 	// and the container port to access from the load balancer.
+	//
+	// Services with tasks that use the awsvpc network mode (for example, those
+	// with the Fargate launch type) only support Application Load Balancers and
+	// Network Load Balancers; Classic Load Balancers are not supported. Also, when
+	// you create any target groups for these services, you must choose ip as the
+	// target type, not instance, because tasks that use the awsvpc network mode
+	// are associated with an elastic network interface, not an Amazon EC2 instance.
 	LoadBalancers []*LoadBalancer `locationName:"loadBalancers" type:"list"`
 
 	// The VPC subnet and security group configuration for tasks that receive their
-	// own Elastic Network Interface by using the awsvpc networking mode.
+	// own elastic network interface by using the awsvpc networking mode.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
 	// The number of tasks in the cluster that are in the PENDING state.
@@ -8860,15 +9092,32 @@ type Service struct {
 	// The number of tasks in the cluster that are in the RUNNING state.
 	RunningCount *int64 `locationName:"runningCount" type:"integer"`
 
+	// The scheduling strategy to use for the service. For more information, see
+	// Services (http://docs.aws.amazon.com/AmazonECS/latest/developerguideecs_services.html).
+	//
+	// There are two service scheduler strategies available:
+	//
+	//    * REPLICA-The replica scheduling strategy places and maintains the desired
+	//    number of tasks across your cluster. By default, the service scheduler
+	//    spreads tasks across Availability Zones. You can use task placement strategies
+	//    and constraints to customize task placement decisions.
+	//
+	//    * DAEMON-The daemon scheduling strategy deploys exactly one task on each
+	//    container instance in your cluster. When using this strategy, do not specify
+	//    a desired number of tasks or any task placement strategies.
+	//
+	// Fargate tasks do not support the DAEMON scheduling strategy.
+	SchedulingStrategy *string `locationName:"schedulingStrategy" type:"string" enum:"SchedulingStrategy"`
+
 	// The ARN that identifies the service. The ARN contains the arn:aws:ecs namespace,
-	// followed by the region of the service, the AWS account ID of the service
+	// followed by the Region of the service, the AWS account ID of the service
 	// owner, the service namespace, and then the service name. For example, arn:aws:ecs:region:012345678910:service/my-service.
 	ServiceArn *string `locationName:"serviceArn" type:"string"`
 
 	// The name of your service. Up to 255 letters (uppercase and lowercase), numbers,
 	// hyphens, and underscores are allowed. Service names must be unique within
 	// a cluster, but you can have similarly named services in multiple clusters
-	// within a region or across multiple regions.
+	// within a Region or across multiple Regions.
 	ServiceName *string `locationName:"serviceName" type:"string"`
 
 	ServiceRegistries []*ServiceRegistry `locationName:"serviceRegistries" type:"list"`
@@ -8988,6 +9237,12 @@ func (s *Service) SetRunningCount(v int64) *Service {
 	return s
 }
 
+// SetSchedulingStrategy sets the SchedulingStrategy field's value.
+func (s *Service) SetSchedulingStrategy(v string) *Service {
+	s.SchedulingStrategy = &v
+	return s
+}
+
 // SetServiceArn sets the ServiceArn field's value.
 func (s *Service) SetServiceArn(v string) *Service {
 	s.ServiceArn = &v
@@ -9023,7 +9278,7 @@ type ServiceEvent struct {
 	_ struct{} `type:"structure"`
 
 	// The Unix time stamp for when the event was triggered.
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The ID string of the event.
 	Id *string `locationName:"id" type:"string"`
@@ -9064,12 +9319,32 @@ func (s *ServiceEvent) SetMessage(v string) *ServiceEvent {
 type ServiceRegistry struct {
 	_ struct{} `type:"structure"`
 
-	// The port value used if your Service Discovery service specified an SRV record.
+	// The container name value, already specified in the task definition, to be
+	// used for your service discovery service. If the task definition that your
+	// service task specifies uses the bridge or host network mode, you must specify
+	// a containerName and containerPort combination from the task definition. If
+	// the task definition that your service task specifies uses the awsvpc network
+	// mode and a type SRV DNS record is used, you must specify either a containerName
+	// and containerPort combination or a port value, but not both.
+	ContainerName *string `locationName:"containerName" type:"string"`
+
+	// The port value, already specified in the task definition, to be used for
+	// your service discovery service. If the task definition your service task
+	// specifies uses the bridge or host network mode, you must specify a containerName
+	// and containerPort combination from the task definition. If the task definition
+	// your service task specifies uses the awsvpc network mode and a type SRV DNS
+	// record is used, you must specify either a containerName and containerPort
+	// combination or a port value, but not both.
+	ContainerPort *int64 `locationName:"containerPort" type:"integer"`
+
+	// The port value used if your service discovery service specified an SRV record.
+	// This field is required if both the awsvpc network mode and SRV records are
+	// used.
 	Port *int64 `locationName:"port" type:"integer"`
 
-	// The Amazon Resource Name (ARN) of the Service Registry. The currently supported
-	// service registry is Amazon Route 53 Auto Naming Service. For more information,
-	// see Service (https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
+	// The Amazon Resource Name (ARN) of the service registry. The currently supported
+	// service registry is Amazon Route 53 Auto Naming. For more information, see
+	// Service (https://docs.aws.amazon.com/Route53/latest/APIReference/API_autonaming_Service.html).
 	RegistryArn *string `locationName:"registryArn" type:"string"`
 }
 
@@ -9081,6 +9356,18 @@ func (s ServiceRegistry) String() string {
 // GoString returns the string representation
 func (s ServiceRegistry) GoString() string {
 	return s.String()
+}
+
+// SetContainerName sets the ContainerName field's value.
+func (s *ServiceRegistry) SetContainerName(v string) *ServiceRegistry {
+	s.ContainerName = &v
+	return s
+}
+
+// SetContainerPort sets the ContainerPort field's value.
+func (s *ServiceRegistry) SetContainerPort(v int64) *ServiceRegistry {
+	s.ContainerPort = &v
+	return s
 }
 
 // SetPort sets the Port field's value.
@@ -9115,7 +9402,7 @@ type StartTaskInput struct {
 	Group *string `locationName:"group" type:"string"`
 
 	// The VPC subnet and security group configuration for tasks that receive their
-	// own Elastic Network Interface by using the awsvpc networking mode.
+	// own elastic network interface by using the awsvpc networking mode.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
 	// A list of container overrides in JSON format that specify the name of a container
@@ -9453,13 +9740,13 @@ type SubmitTaskStateChangeInput struct {
 	Containers []*ContainerStateChange `locationName:"containers" type:"list"`
 
 	// The Unix time stamp for when the task execution stopped.
-	ExecutionStoppedAt *time.Time `locationName:"executionStoppedAt" type:"timestamp" timestampFormat:"unix"`
+	ExecutionStoppedAt *time.Time `locationName:"executionStoppedAt" type:"timestamp"`
 
 	// The Unix time stamp for when the container image pull began.
-	PullStartedAt *time.Time `locationName:"pullStartedAt" type:"timestamp" timestampFormat:"unix"`
+	PullStartedAt *time.Time `locationName:"pullStartedAt" type:"timestamp"`
 
 	// The Unix time stamp for when the container image pull completed.
-	PullStoppedAt *time.Time `locationName:"pullStoppedAt" type:"timestamp" timestampFormat:"unix"`
+	PullStoppedAt *time.Time `locationName:"pullStoppedAt" type:"timestamp"`
 
 	// The reason for the state change request.
 	Reason *string `locationName:"reason" type:"string"`
@@ -9582,7 +9869,7 @@ func (s *SubmitTaskStateChangeOutput) SetAcknowledgment(v string) *SubmitTaskSta
 type Task struct {
 	_ struct{} `type:"structure"`
 
-	// The Elastic Network Adapter associated with the task if the task uses the
+	// The elastic network adapter associated with the task if the task uses the
 	// awsvpc network mode.
 	Attachments []*Attachment `locationName:"attachments" type:"list"`
 
@@ -9593,7 +9880,7 @@ type Task struct {
 	Connectivity *string `locationName:"connectivity" type:"string" enum:"Connectivity"`
 
 	// The Unix time stamp for when the task last went into CONNECTED status.
-	ConnectivityAt *time.Time `locationName:"connectivityAt" type:"timestamp" timestampFormat:"unix"`
+	ConnectivityAt *time.Time `locationName:"connectivityAt" type:"timestamp"`
 
 	// The ARN of the container instances that host the task.
 	ContainerInstanceArn *string `locationName:"containerInstanceArn" type:"string"`
@@ -9603,8 +9890,8 @@ type Task struct {
 
 	// The number of CPU units used by the task. It can be expressed as an integer
 	// using CPU units, for example 1024, or as a string using vCPUs, for example
-	// 1 vCPU or 1 vcpu, in a task definition but is converted to an integer indicating
-	// the CPU units when the task definition is registered.
+	// 1 vCPU or 1 vcpu, in a task definition. String values are converted to an
+	// integer indicating the CPU units when the task definition is registered.
 	//
 	// If using the EC2 launch type, this field is optional. Supported values are
 	// between 128 CPU units (0.125 vCPUs) and 10240 CPU units (10 vCPUs).
@@ -9631,13 +9918,14 @@ type Task struct {
 
 	// The Unix time stamp for when the task was created (the task entered the PENDING
 	// state).
-	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
-	// The desired status of the task.
+	// The desired status of the task. For more information, see Task Lifecycle
+	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_life_cycle.html).
 	DesiredStatus *string `locationName:"desiredStatus" type:"string"`
 
 	// The Unix time stamp for when the task execution stopped.
-	ExecutionStoppedAt *time.Time `locationName:"executionStoppedAt" type:"timestamp" timestampFormat:"unix"`
+	ExecutionStoppedAt *time.Time `locationName:"executionStoppedAt" type:"timestamp"`
 
 	// The name of the task group associated with the task.
 	Group *string `locationName:"group" type:"string"`
@@ -9655,7 +9943,8 @@ type Task struct {
 	// override any Docker health checks that exist in the container image.
 	HealthStatus *string `locationName:"healthStatus" type:"string" enum:"HealthStatus"`
 
-	// The last known status of the task.
+	// The last known status of the task. For more information, see Task Lifecycle
+	// (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_life_cycle.html).
 	LastStatus *string `locationName:"lastStatus" type:"string"`
 
 	// The launch type on which your task is running.
@@ -9663,8 +9952,8 @@ type Task struct {
 
 	// The amount of memory (in MiB) used by the task. It can be expressed as an
 	// integer using MiB, for example 1024, or as a string using GB, for example
-	// 1GB or 1 GB, in a task definition but is converted to an integer indicating
-	// the MiB when the task definition is registered.
+	// 1GB or 1 GB, in a task definition. String values are converted to an integer
+	// indicating the MiB when the task definition is registered.
 	//
 	// If using the EC2 launch type, this field is optional.
 	//
@@ -9697,14 +9986,14 @@ type Task struct {
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
 	// The Unix time stamp for when the container image pull began.
-	PullStartedAt *time.Time `locationName:"pullStartedAt" type:"timestamp" timestampFormat:"unix"`
+	PullStartedAt *time.Time `locationName:"pullStartedAt" type:"timestamp"`
 
 	// The Unix time stamp for when the container image pull completed.
-	PullStoppedAt *time.Time `locationName:"pullStoppedAt" type:"timestamp" timestampFormat:"unix"`
+	PullStoppedAt *time.Time `locationName:"pullStoppedAt" type:"timestamp"`
 
 	// The Unix time stamp for when the task started (the task transitioned from
 	// the PENDING state to the RUNNING state).
-	StartedAt *time.Time `locationName:"startedAt" type:"timestamp" timestampFormat:"unix"`
+	StartedAt *time.Time `locationName:"startedAt" type:"timestamp"`
 
 	// The tag specified when a task is started. If the task is started by an Amazon
 	// ECS service, then the startedBy parameter contains the deployment ID of the
@@ -9713,14 +10002,14 @@ type Task struct {
 
 	// The Unix time stamp for when the task was stopped (the task transitioned
 	// from the RUNNING state to the STOPPED state).
-	StoppedAt *time.Time `locationName:"stoppedAt" type:"timestamp" timestampFormat:"unix"`
+	StoppedAt *time.Time `locationName:"stoppedAt" type:"timestamp"`
 
 	// The reason the task was stopped.
 	StoppedReason *string `locationName:"stoppedReason" type:"string"`
 
-	// The Unix time stamp for when the task will stop (transitions from the RUNNING
+	// The Unix time stamp for when the task stops (transitions from the RUNNING
 	// state to STOPPED).
-	StoppingAt *time.Time `locationName:"stoppingAt" type:"timestamp" timestampFormat:"unix"`
+	StoppingAt *time.Time `locationName:"stoppingAt" type:"timestamp"`
 
 	// The Amazon Resource Name (ARN) of the task.
 	TaskArn *string `locationName:"taskArn" type:"string"`
@@ -10247,7 +10536,7 @@ func (s *TaskOverride) SetTaskRoleArn(v string) *TaskOverride {
 type Tmpfs struct {
 	_ struct{} `type:"structure"`
 
-	// The absolute file path where the tmpfs volume will be mounted.
+	// The absolute file path where the tmpfs volume is to be mounted.
 	//
 	// ContainerPath is a required field
 	ContainerPath *string `locationName:"containerPath" type:"string" required:"true"`
@@ -10259,9 +10548,10 @@ type Tmpfs struct {
 	// "nomand" | "atime" | "noatime" | "diratime" | "nodiratime" | "bind" | "rbind"
 	// | "unbindable" | "runbindable" | "private" | "rprivate" | "shared" | "rshared"
 	// | "slave" | "rslave" | "relatime" | "norelatime" | "strictatime" | "nostrictatime"
+	// | "mode" | "uid" | "gid" | "nr_inodes" | "nr_blocks" | "mpol"
 	MountOptions []*string `locationName:"mountOptions" type:"list"`
 
-	// The size of the tmpfs volume.
+	// The size (in MiB) of the tmpfs volume.
 	//
 	// Size is a required field
 	Size *int64 `locationName:"size" type:"integer" required:"true"`
@@ -10592,7 +10882,7 @@ type UpdateServiceInput struct {
 	// network configuration, this does not trigger a new service deployment.
 	NetworkConfiguration *NetworkConfiguration `locationName:"networkConfiguration" type:"structure"`
 
-	// The platform version you want to update your service to run.
+	// The platform version that your service should run.
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
 	// The name of the service to update.
@@ -10757,15 +11047,24 @@ func (s *VersionInfo) SetDockerVersion(v string) *VersionInfo {
 	return s
 }
 
-// A data volume used in a task definition.
+// A data volume used in a task definition. For tasks that use a Docker volume,
+// specify a DockerVolumeConfiguration. For tasks that use a bind mount host
+// volume, specify a host and optional sourcePath. For more information, see
+// Using Data Volumes in Tasks (http://docs.aws.amazon.com/AmazonECS/latest/developerguideusing_data_volumes.html).
 type Volume struct {
 	_ struct{} `type:"structure"`
 
-	// The contents of the host parameter determine whether your data volume persists
-	// on the host container instance and where it is stored. If the host parameter
-	// is empty, then the Docker daemon assigns a host path for your data volume,
-	// but the data is not guaranteed to persist after the containers associated
-	// with it stop running.
+	// The configuration for the Docker volume. This parameter is specified when
+	// using Docker volumes.
+	DockerVolumeConfiguration *DockerVolumeConfiguration `locationName:"dockerVolumeConfiguration" type:"structure"`
+
+	// This parameter is specified when using bind mount host volumes. Bind mount
+	// host volumes are supported when using either the EC2 or Fargate launch types.
+	// The contents of the host parameter determine whether your bind mount host
+	// volume persists on the host container instance and where it is stored. If
+	// the host parameter is empty, then the Docker daemon assigns a host path for
+	// your data volume, but the data is not guaranteed to persist after the containers
+	// associated with it stop running.
 	//
 	// Windows containers can mount whole directories on the same drive as $env:ProgramData.
 	// Windows containers cannot mount directories on a different drive, and mount
@@ -10787,6 +11086,12 @@ func (s Volume) String() string {
 // GoString returns the string representation
 func (s Volume) GoString() string {
 	return s.String()
+}
+
+// SetDockerVolumeConfiguration sets the DockerVolumeConfiguration field's value.
+func (s *Volume) SetDockerVolumeConfiguration(v *DockerVolumeConfiguration) *Volume {
+	s.DockerVolumeConfiguration = v
+	return s
 }
 
 // SetHost sets the Host field's value.
@@ -10989,6 +11294,22 @@ const (
 
 	// PlacementStrategyTypeBinpack is a PlacementStrategyType enum value
 	PlacementStrategyTypeBinpack = "binpack"
+)
+
+const (
+	// SchedulingStrategyReplica is a SchedulingStrategy enum value
+	SchedulingStrategyReplica = "REPLICA"
+
+	// SchedulingStrategyDaemon is a SchedulingStrategy enum value
+	SchedulingStrategyDaemon = "DAEMON"
+)
+
+const (
+	// ScopeTask is a Scope enum value
+	ScopeTask = "task"
+
+	// ScopeShared is a Scope enum value
+	ScopeShared = "shared"
 )
 
 const (

@@ -166,24 +166,54 @@
       "OutputShape": {
         "type": "structure",
         "members": {
-          "TimeMember": {
-            "shape": "TimeType"
+          "TimeArg": {
+            "shape": "TimestampType"
+          },
+          "TimeArgInHeader": {
+            "shape": "TimestampType",
+            "location": "header",
+            "locationName": "x-amz-timearg"
+          },
+          "TimeCustom": {
+            "timestampFormat": "rfc822",
+            "shape": "TimestampType"
+          },
+          "TimeCustomInHeader": {
+            "timestampFormat": "unixTimestamp",
+            "shape": "TimestampType",
+            "location": "header",
+            "locationName": "x-amz-timecustom"
+          },
+          "TimeFormat": {
+            "shape": "TimestampFormatType"
+          },
+          "TimeFormatInHeader": {
+            "shape": "TimestampFormatType",
+            "location": "header",
+            "locationName": "x-amz-timeformat"
           },
           "StructMember": {
             "shape": "TimeContainer"
           }
         }
       },
-      "TimeType": {
-        "type": "timestamp"
-      },
       "TimeContainer": {
         "type": "structure",
         "members": {
           "foo": {
-            "shape": "TimeType"
+            "shape": "TimestampType"
+          },
+          "bar": {
+            "shape": "TimestampFormatType"
           }
         }
+      },
+      "TimestampFormatType": {
+        "timestampFormat": "iso8601",
+        "type": "timestamp"
+      },
+      "TimestampType": {
+        "type": "timestamp"
       }
     },
     "cases": [
@@ -195,15 +225,25 @@
           "name": "OperationName"
         },
         "result": {
-          "TimeMember": 1398796238,
+          "TimeArg": 1398796238,
+          "TimeArgInHeader": 1398796238,
+          "TimeCustom": 1398796238,
+          "TimeCustomInHeader": 1398796238,
+          "TimeFormat": 1398796238,
+          "TimeFormatInHeader": 1398796238,
           "StructMember": {
-            "foo": 1398796238
+            "foo": 1398796238,
+            "bar": 1398796238
           }
         },
         "response": {
           "status_code": 200,
-          "headers": {},
-          "body": "{\"TimeMember\": 1398796238, \"StructMember\": {\"foo\": 1398796238}}"
+          "headers": {
+            "x-amz-timearg": "Tue, 29 Apr 2014 18:30:38 GMT",
+            "x-amz-timecustom": "1398796238",
+            "x-amz-timeformat": "2014-04-29T18:30:38Z"
+          },
+          "body": "{\"TimeArg\": 1398796238, \"TimeCustom\": \"Tue, 29 Apr 2014 18:30:38 GMT\", \"TimeFormat\": \"2014-04-29T18:30:38Z\", \"StructMember\": {\"foo\": 1398796238, \"bar\": \"2014-04-29T18:30:38Z\"}}"
         }
       }
     ]
@@ -672,21 +712,6 @@
           "status_code": 200,
           "headers": {},
           "body": "{\"BodyListField\":[\"{\\\"Foo\\\":\\\"Bar\\\"}\"]}"
-        }
-      },
-      {
-        "given": {
-          "output": {
-            "shape": "OutputShape"
-          },
-          "name": "OperationName"
-        },
-        "result": {
-        },
-        "response": {
-          "status_code": 200,
-          "headers": {},
-          "body": ""
         }
       }
     ]

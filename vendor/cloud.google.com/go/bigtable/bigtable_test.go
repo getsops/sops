@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Google Inc. All Rights Reserved.
+Copyright 2015 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -80,6 +80,7 @@ func TestApplyErrors(t *testing.T) {
 }
 
 func TestClientIntegration(t *testing.T) {
+	// TODO(jba): go1.9: Use subtests.
 	start := time.Now()
 	lastCheckpoint := start
 	checkpoint := func(s string) {
@@ -146,7 +147,7 @@ func TestClientIntegration(t *testing.T) {
 	for row, ss := range initialData {
 		mut := NewMutation()
 		for _, name := range ss {
-			mut.Set("follows", name, 0, []byte("1"))
+			mut.Set("follows", name, 1000, []byte("1"))
 		}
 		if err := tbl.Apply(ctx, row, mut); err != nil {
 			t.Errorf("Mutating row %q: %v", row, err)
@@ -162,7 +163,7 @@ func TestClientIntegration(t *testing.T) {
 
 	// Do a conditional mutation with a complex filter.
 	mutTrue := NewMutation()
-	mutTrue.Set("follows", "wmckinley", 0, []byte("1"))
+	mutTrue.Set("follows", "wmckinley", 1000, []byte("1"))
 	filter := ChainFilters(ColumnFilter("gwash[iz].*"), ValueFilter("."))
 	mut := NewCondMutation(filter, mutTrue, nil)
 	if err := tbl.Apply(ctx, "tjefferson", mut); err != nil {
@@ -186,8 +187,8 @@ func TestClientIntegration(t *testing.T) {
 	}
 	wantRow := Row{
 		"follows": []ReadItem{
-			{Row: "jadams", Column: "follows:gwashington", Value: []byte("1")},
-			{Row: "jadams", Column: "follows:tjefferson", Value: []byte("1")},
+			{Row: "jadams", Column: "follows:gwashington", Timestamp: 1000, Value: []byte("1")},
+			{Row: "jadams", Column: "follows:tjefferson", Timestamp: 1000, Value: []byte("1")},
 		},
 	}
 	if !testutil.Equal(row, wantRow) {
@@ -238,6 +239,12 @@ func TestClientIntegration(t *testing.T) {
 			want:   "gwashington-jadams-1,jadams-tjefferson-1,tjefferson-jadams-1,wmckinley-tjefferson-1",
 		},
 		{
+			desc:   "read all, with ColumnFilter, prefix",
+			rr:     RowRange{},
+			filter: ColumnFilter("j"), // no matches
+			want:   "",
+		},
+		{
 			desc:   "read range, with ColumnRangeFilter",
 			rr:     RowRange{},
 			filter: ColumnRangeFilter("follows", "h", "k"),
@@ -260,6 +267,12 @@ func TestClientIntegration(t *testing.T) {
 			rr:     RowRange{},
 			filter: RowKeyFilter(".*wash.*"),
 			want:   "gwashington-jadams-1",
+		},
+		{
+			desc:   "read with RowKeyFilter, prefix",
+			rr:     RowRange{},
+			filter: RowKeyFilter("gwash"),
+			want:   "",
 		},
 		{
 			desc:   "read with RowKeyFilter, no matches",
@@ -369,7 +382,7 @@ func TestClientIntegration(t *testing.T) {
 			opts = append(opts, tc.limit)
 		}
 		var elt []string
-		err := tbl.ReadRows(context.Background(), tc.rr, func(r Row) bool {
+		err := tbl.ReadRows(ctx, tc.rr, func(r Row) bool {
 			for _, ris := range r {
 				for _, ri := range ris {
 					elt = append(elt, formatReadItem(ri))
@@ -385,6 +398,7 @@ func TestClientIntegration(t *testing.T) {
 			t.Errorf("%s: wrong reads.\n got %q\nwant %q", tc.desc, got, tc.want)
 		}
 	}
+
 	// Read a RowList
 	var elt []string
 	keys := RowList{"wmckinley", "gwashington", "jadams"}
@@ -494,11 +508,11 @@ func TestClientIntegration(t *testing.T) {
 	}
 
 	// Check for google-cloud-go/issues/723. RMWs that insert new rows should keep row order sorted in the emulator.
-	row, err = tbl.ApplyReadModifyWrite(ctx, "issue-723-2", appendRMW([]byte{0}))
+	_, err = tbl.ApplyReadModifyWrite(ctx, "issue-723-2", appendRMW([]byte{0}))
 	if err != nil {
 		t.Fatalf("ApplyReadModifyWrite null string: %v", err)
 	}
-	row, err = tbl.ApplyReadModifyWrite(ctx, "issue-723-1", appendRMW([]byte{0}))
+	_, err = tbl.ApplyReadModifyWrite(ctx, "issue-723-1", appendRMW([]byte{0}))
 	if err != nil {
 		t.Fatalf("ApplyReadModifyWrite null string: %v", err)
 	}
@@ -518,7 +532,7 @@ func TestClientIntegration(t *testing.T) {
 	}
 	const numVersions = 4
 	mut = NewMutation()
-	for i := 0; i < numVersions; i++ {
+	for i := 1; i < numVersions; i++ {
 		// Timestamps are used in thousands because the server
 		// only permits that granularity.
 		mut.Set("ts", "col", Timestamp(i*1000), []byte(fmt.Sprintf("val-%d", i)))
@@ -536,11 +550,9 @@ func TestClientIntegration(t *testing.T) {
 		{Row: "testrow", Column: "ts:col", Timestamp: 3000, Value: []byte("val-3")},
 		{Row: "testrow", Column: "ts:col", Timestamp: 2000, Value: []byte("val-2")},
 		{Row: "testrow", Column: "ts:col", Timestamp: 1000, Value: []byte("val-1")},
-		{Row: "testrow", Column: "ts:col", Timestamp: 0, Value: []byte("val-0")},
 		{Row: "testrow", Column: "ts:col2", Timestamp: 3000, Value: []byte("val-3")},
 		{Row: "testrow", Column: "ts:col2", Timestamp: 2000, Value: []byte("val-2")},
 		{Row: "testrow", Column: "ts:col2", Timestamp: 1000, Value: []byte("val-1")},
-		{Row: "testrow", Column: "ts:col2", Timestamp: 0, Value: []byte("val-0")},
 	}}
 	if !testutil.Equal(r, wantRow) {
 		t.Errorf("Cell with multiple versions,\n got %v\nwant %v", r, wantRow)
@@ -577,11 +589,9 @@ func TestClientIntegration(t *testing.T) {
 		t.Fatalf("Reading row: %v", err)
 	}
 	wantRow = Row{"ts": []ReadItem{
-		{Row: "testrow", Column: "ts:col", Timestamp: 0, Value: []byte("val-0")},
 		{Row: "testrow", Column: "ts:col2", Timestamp: 3000, Value: []byte("val-3")},
 		{Row: "testrow", Column: "ts:col2", Timestamp: 2000, Value: []byte("val-2")},
 		{Row: "testrow", Column: "ts:col2", Timestamp: 1000, Value: []byte("val-1")},
-		{Row: "testrow", Column: "ts:col2", Timestamp: 0, Value: []byte("val-0")},
 	}}
 	if !testutil.Equal(r, wantRow) {
 		t.Errorf("Cell with multiple versions and CellsPerRowOffsetFilter(3),\n got %v\nwant %v", r, wantRow)
@@ -674,9 +684,9 @@ func TestClientIntegration(t *testing.T) {
 	}
 
 	mut = NewMutation()
-	mut.Set("status", "start", 0, []byte("1"))
-	mut.Set("status", "end", 0, []byte("2"))
-	mut.Set("ts", "col", 0, []byte("3"))
+	mut.Set("status", "start", 2000, []byte("2"))
+	mut.Set("status", "end", 3000, []byte("3"))
+	mut.Set("ts", "col", 1000, []byte("1"))
 	if err := tbl.Apply(ctx, "row1", mut); err != nil {
 		t.Errorf("Mutating row: %v", err)
 	}
@@ -696,7 +706,7 @@ func TestClientIntegration(t *testing.T) {
 		t.Fatalf("Reading row: %v", err)
 	}
 	wantRow = Row{"ts": []ReadItem{
-		{Row: "row1", Column: "ts:col", Timestamp: 0, Value: []byte("3")},
+		{Row: "row1", Column: "ts:col", Timestamp: 1000, Value: []byte("1")},
 	}}
 	if !testutil.Equal(r, wantRow) {
 		t.Errorf("column family was not deleted.\n got %v\n want %v", r, wantRow)
@@ -709,11 +719,11 @@ func TestClientIntegration(t *testing.T) {
 	}
 	wantRow = Row{
 		"ts": []ReadItem{
-			{Row: "row2", Column: "ts:col", Timestamp: 0, Value: []byte("3")},
+			{Row: "row2", Column: "ts:col", Timestamp: 1000, Value: []byte("1")},
 		},
 		"status": []ReadItem{
-			{Row: "row2", Column: "status:end", Timestamp: 0, Value: []byte("2")},
-			{Row: "row2", Column: "status:start", Timestamp: 0, Value: []byte("1")},
+			{Row: "row2", Column: "status:end", Timestamp: 3000, Value: []byte("3")},
+			{Row: "row2", Column: "status:start", Timestamp: 2000, Value: []byte("2")},
 		},
 	}
 	if !testutil.Equal(r, wantRow) {
@@ -723,9 +733,9 @@ func TestClientIntegration(t *testing.T) {
 
 	// Check DeleteCellsInColumn
 	mut = NewMutation()
-	mut.Set("status", "start", 0, []byte("1"))
-	mut.Set("status", "middle", 0, []byte("2"))
-	mut.Set("status", "end", 0, []byte("3"))
+	mut.Set("status", "start", 2000, []byte("2"))
+	mut.Set("status", "middle", 3000, []byte("3"))
+	mut.Set("status", "end", 1000, []byte("1"))
 	if err := tbl.Apply(ctx, "row3", mut); err != nil {
 		t.Errorf("Mutating row: %v", err)
 	}
@@ -740,8 +750,8 @@ func TestClientIntegration(t *testing.T) {
 	}
 	wantRow = Row{
 		"status": []ReadItem{
-			{Row: "row3", Column: "status:end", Timestamp: 0, Value: []byte("3")},
-			{Row: "row3", Column: "status:start", Timestamp: 0, Value: []byte("1")},
+			{Row: "row3", Column: "status:end", Timestamp: 1000, Value: []byte("1")},
+			{Row: "row3", Column: "status:start", Timestamp: 2000, Value: []byte("2")},
 		},
 	}
 	if !testutil.Equal(r, wantRow) {
@@ -758,7 +768,7 @@ func TestClientIntegration(t *testing.T) {
 	}
 	wantRow = Row{
 		"status": []ReadItem{
-			{Row: "row3", Column: "status:end", Timestamp: 0, Value: []byte("3")},
+			{Row: "row3", Column: "status:end", Timestamp: 1000, Value: []byte("1")},
 		},
 	}
 	if !testutil.Equal(r, wantRow) {
@@ -778,7 +788,7 @@ func TestClientIntegration(t *testing.T) {
 	}
 	// Add same cell after delete
 	mut = NewMutation()
-	mut.Set("status", "end", 0, []byte("3"))
+	mut.Set("status", "end", 1000, []byte("1"))
 	if err := tbl.Apply(ctx, "row3", mut); err != nil {
 		t.Errorf("Mutating row: %v", err)
 	}
@@ -809,7 +819,7 @@ func TestClientIntegration(t *testing.T) {
 			case 30 <= r && r < 100:
 				// Do a write.
 				mut := NewMutation()
-				mut.Set("ts", "col", 0, []byte("data"))
+				mut.Set("ts", "col", 1000, []byte("data"))
 				if err := tbl.Apply(ctx, "testrow", mut); err != nil {
 					t.Errorf("Concurrent write: %v", err)
 				}
@@ -824,7 +834,7 @@ func TestClientIntegration(t *testing.T) {
 	nonsense := []byte("lorem ipsum dolor sit amet, ")
 	fill(bigBytes, nonsense)
 	mut = NewMutation()
-	mut.Set("ts", "col", 0, bigBytes)
+	mut.Set("ts", "col", 1000, bigBytes)
 	if err := tbl.Apply(ctx, "bigrow", mut); err != nil {
 		t.Errorf("Big write: %v", err)
 	}
@@ -833,7 +843,7 @@ func TestClientIntegration(t *testing.T) {
 		t.Errorf("Big read: %v", err)
 	}
 	wantRow = Row{"ts": []ReadItem{
-		{Row: "bigrow", Column: "ts:col", Value: bigBytes},
+		{Row: "bigrow", Column: "ts:col", Timestamp: 1000, Value: bigBytes},
 	}}
 	if !testutil.Equal(r, wantRow) {
 		t.Errorf("Big read returned incorrect bytes: %v", r)
@@ -844,7 +854,7 @@ func TestClientIntegration(t *testing.T) {
 	sem := make(chan int, 50) // do up to 50 mutations at a time.
 	for i := 0; i < 1000; i++ {
 		mut := NewMutation()
-		mut.Set("ts", "big-scan", 0, medBytes)
+		mut.Set("ts", "big-scan", 1000, medBytes)
 		row := fmt.Sprintf("row-%d", i)
 		wg.Add(1)
 		go func() {
@@ -879,6 +889,9 @@ func TestClientIntegration(t *testing.T) {
 		rc++
 		return true
 	}, LimitRows(int64(wantRc)))
+	if err != nil {
+		t.Fatal(err)
+	}
 	if rc != wantRc {
 		t.Errorf("Scan with row limit returned %d rows, want %d", rc, wantRc)
 	}
@@ -898,7 +911,7 @@ func TestClientIntegration(t *testing.T) {
 	for row, ss := range bulkData {
 		mut := NewMutation()
 		for _, name := range ss {
-			mut.Set("bulk", name, 0, []byte("1"))
+			mut.Set("bulk", name, 1000, []byte("1"))
 		}
 		rowKeys = append(rowKeys, row)
 		muts = append(muts, mut)
@@ -920,7 +933,7 @@ func TestClientIntegration(t *testing.T) {
 		}
 		var wantItems []ReadItem
 		for _, val := range ss {
-			wantItems = append(wantItems, ReadItem{Row: rowKey, Column: "bulk:" + val, Value: []byte("1")})
+			wantItems = append(wantItems, ReadItem{Row: rowKey, Column: "bulk:" + val, Timestamp: 1000, Value: []byte("1")})
 		}
 		wantRow := Row{"bulk": wantItems}
 		if !testutil.Equal(row, wantRow) {
@@ -1095,7 +1108,7 @@ func TestSampleRowKeys(t *testing.T) {
 	for row, ss := range initialData {
 		mut := NewMutation()
 		for _, name := range ss {
-			mut.Set("follows", name, 0, []byte("1"))
+			mut.Set("follows", name, 1000, []byte("1"))
 		}
 		if err := tbl.Apply(ctx, row, mut); err != nil {
 			t.Errorf("Mutating row %q: %v", row, err)

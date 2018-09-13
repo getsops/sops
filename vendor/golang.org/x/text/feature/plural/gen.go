@@ -7,7 +7,7 @@
 package main
 
 // This file generates data for the CLDR plural rules, as defined in
-//    http://unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
+//    https://unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
 //
 // We assume a slightly simplified grammar:
 //

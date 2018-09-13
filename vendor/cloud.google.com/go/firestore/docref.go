@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -96,9 +96,11 @@ func (d *DocumentRef) Get(ctx context.Context) (*DocumentSnapshot, error) {
 //     is the underlying type of a Integer.
 //   - float32 and float64 convert to Double.
 //   - []byte converts to Bytes.
-//   - time.Time converts to Timestamp.
-//   - latlng.LatLng converts to GeoPoint. latlng is the package
-//     "google.golang.org/genproto/googleapis/type/latlng".
+//   - time.Time and *ts.Timestamp convert to Timestamp. ts is the package
+//     "github.com/golang/protobuf/ptypes/timestamp".
+//   - *latlng.LatLng converts to GeoPoint. latlng is the package
+//     "google.golang.org/genproto/googleapis/type/latlng". You should always use
+//     a pointer to a LatLng.
 //   - Slices convert to Array.
 //   - Maps and structs convert to Map.
 //   - nils of any type convert to Null.
@@ -143,7 +145,8 @@ func (d *DocumentRef) newCreateWrites(data interface{}) ([]*pb.Write, error) {
 // Set creates or overwrites the document with the given data. See DocumentRef.Create
 // for the acceptable values of data. Without options, Set overwrites the document
 // completely. Specify one of the Merge options to preserve an existing document's
-// fields.
+// fields. To delete some fields, use a Merge option with firestore.Delete as the
+// field value.
 func (d *DocumentRef) Set(ctx context.Context, data interface{}, opts ...SetOption) (*WriteResult, error) {
 	ws, err := d.newSetWrites(data, opts)
 	if err != nil {
@@ -182,6 +185,10 @@ func (d *DocumentRef) newSetWrites(data interface{}, opts []SetOption) ([]*pb.Wr
 		if v.Kind() != reflect.Map {
 			return nil, errors.New("firestore: MergeAll can only be specified with map data")
 		}
+		if v.Len() == 0 {
+			// Special case: MergeAll with an empty map.
+			return d.newUpdateWithTransform(&pb.Document{Name: d.Path}, []FieldPath{}, nil, nil, true), nil
+		}
 		fpvsFromData(v, nil, &fpvs)
 	} else {
 		// Set with merge paths.  Collect only the values at the given paths.
@@ -218,6 +225,10 @@ func fpvsFromData(v reflect.Value, prefix FieldPath, fpvs *[]fpv) {
 // removePathsIf creates a new slice of FieldPaths that contains
 // exactly those elements of fps for which pred returns false.
 func removePathsIf(fps []FieldPath, pred func(FieldPath) bool) []FieldPath {
+	// Return fps if it's empty to preserve the distinction betweeen nil and zero-length.
+	if len(fps) == 0 {
+		return fps
+	}
 	var result []FieldPath
 	for _, fp := range fps {
 		if !pred(fp) {
@@ -344,7 +355,7 @@ func (d *DocumentRef) newUpdateWithTransform(doc *pb.Document, updatePaths []Fie
 	if updateOnEmpty || len(doc.Fields) > 0 ||
 		len(updatePaths) > 0 || (pc != nil && len(serverTimestampPaths) == 0) {
 		var mask *pb.DocumentMask
-		if len(updatePaths) > 0 {
+		if updatePaths != nil {
 			sfps := toServiceFieldPaths(updatePaths)
 			sort.Strings(sfps) // TODO(jba): make tests pass without this
 			mask = &pb.DocumentMask{FieldPaths: sfps}
@@ -603,9 +614,9 @@ func (it *DocumentSnapshotIterator) Next() (*DocumentSnapshot, error) {
 	return snap.(*DocumentSnapshot), nil
 }
 
-// Stop stops receiving snapshots.
-// You should always call Stop when you are done with an iterator, to free up resources.
-// It is not safe to call Stop concurrently with Next.
+// Stop stops receiving snapshots. You should always call Stop when you are done with
+// a DocumentSnapshotIterator, to free up resources. It is not safe to call Stop
+// concurrently with Next.
 func (it *DocumentSnapshotIterator) Stop() {
 	it.ws.stop()
 }

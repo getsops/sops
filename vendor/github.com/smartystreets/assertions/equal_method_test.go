@@ -3,15 +3,15 @@ package assertions
 import (
 	"testing"
 
-	"github.com/smartystreets/gunit"
+	"github.com/smartystreets/assertions/internal/unit"
 )
 
 func TestEqualityFixture(t *testing.T) {
-	gunit.Run(new(EqualityFixture), t)
+	unit.Run(new(EqualityFixture), t)
 }
 
 type EqualityFixture struct {
-	*gunit.Fixture
+	*unit.Fixture
 }
 
 func (this *EqualityFixture) TestNilNil() {

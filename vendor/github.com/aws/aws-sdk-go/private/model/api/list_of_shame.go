@@ -1,13 +1,34 @@
 package api
 
+type persistAPIType struct {
+	output bool
+	input  bool
+}
+
+type persistAPITypes map[string]map[string]persistAPIType
+
+func (ts persistAPITypes) Lookup(serviceName, opName string) persistAPIType {
+	service, ok := shamelist[serviceName]
+	if !ok {
+		return persistAPIType{}
+	}
+
+	return service[opName]
+}
+
+func (ts persistAPITypes) Input(serviceName, opName string) bool {
+	return ts.Lookup(serviceName, opName).input
+}
+
+func (ts persistAPITypes) Output(serviceName, opName string) bool {
+	return ts.Lookup(serviceName, opName).output
+}
+
 // shamelist is used to not rename certain operation's input and output shapes.
 // We need to maintain backwards compatibility with pre-existing services. Since
 // not generating unique input/output shapes is not desired, we will generate
 // unique input/output shapes for new operations.
-var shamelist = map[string]map[string]struct {
-	input  bool
-	output bool
-}{
+var shamelist = persistAPITypes{
 	"APIGateway": {
 		"CreateApiKey": {
 			output: true,
@@ -352,6 +373,11 @@ var shamelist = map[string]map[string]struct {
 			output: true,
 		},
 	},
+	"ElasticTranscoder": {
+		"CreateJob": {
+			output: true,
+		},
+	},
 	"Glacier": {
 		"DescribeJob": {
 			output: true,
@@ -431,6 +457,54 @@ var shamelist = map[string]map[string]struct {
 			output: true,
 		},
 	},
+	"MQ": {
+		"CreateBroker": {
+			input:  true,
+			output: true,
+		},
+		"CreateConfiguration": {
+			input:  true,
+			output: true,
+		},
+		"CreateUser": {
+			input: true,
+		},
+		"DeleteBroker": {
+			output: true,
+		},
+		"DescribeBroker": {
+			output: true,
+		},
+		"DescribeUser": {
+			output: true,
+		},
+		"DescribeConfigurationRevision": {
+			output: true,
+		},
+		"ListBrokers": {
+			output: true,
+		},
+		"ListConfigurations": {
+			output: true,
+		},
+		"ListConfigurationRevisions": {
+			output: true,
+		},
+		"ListUsers": {
+			output: true,
+		},
+		"UpdateBroker": {
+			input:  true,
+			output: true,
+		},
+		"UpdateConfiguration": {
+			input:  true,
+			output: true,
+		},
+		"UpdateUser": {
+			input: true,
+		},
+	},
 	"RDS": {
 		"ModifyDBClusterParameterGroup": {
 			output: true,
@@ -470,6 +544,20 @@ var shamelist = map[string]map[string]struct {
 		"GetBucketNotificationConfiguration": {
 			input:  true,
 			output: true,
+		},
+	},
+	"ServerlessApplicationRepository": {
+		"CreateApplication": {
+			input: true,
+		},
+		"CreateApplicationVersion": {
+			input: true,
+		},
+		"CreateCloudFormationChangeSet": {
+			input: true,
+		},
+		"UpdateApplication": {
+			input: true,
 		},
 	},
 	"SWF": {

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -62,10 +62,6 @@ type ro struct{}
 func (ro) config(t *Transaction) { t.readOnly = true }
 
 var (
-	// ErrConcurrentTransaction is returned when a transaction is rolled back due
-	// to a conflict with a concurrent transaction.
-	ErrConcurrentTransaction = errors.New("firestore: concurrent transaction")
-
 	// Defined here for testing.
 	errReadAfterWrite     = errors.New("firestore: read after write in transaction")
 	errWriteReadOnly      = errors.New("firestore: write in read-only transaction")
@@ -89,9 +85,9 @@ func checkTransaction(ctx context.Context) error {
 // f must not call Commit or Rollback on the provided Transaction.
 //
 // If f returns nil, RunTransaction commits the transaction. If the commit fails due
-// to a conflicting transaction, RunTransaction retries f. It gives up and returns
-// ErrConcurrentTransaction after a number of attempts that can be configured with
-// the MaxAttempts option. If the commit succeeds, RunTransaction returns a nil error.
+// to a conflicting transaction, RunTransaction retries f. It gives up and returns an
+// error after a number of attempts that can be configured with the MaxAttempts
+// option. If the commit succeeds, RunTransaction returns a nil error.
 //
 // If f returns non-nil, then the transaction will be rolled back and
 // this method will return the same error. The function f is not retried.

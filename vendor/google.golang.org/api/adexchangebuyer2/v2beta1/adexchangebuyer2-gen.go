@@ -1066,7 +1066,7 @@ func (s *Correction) MarshalJSON() ([]byte, error) {
 
 // Creative: A creative and its classification data.
 //
-// Next ID: 31
+// Next ID: 38
 type Creative struct {
 	// AccountId: The account that this creative belongs to.
 	// Can be used to filter the response of the
@@ -1167,6 +1167,10 @@ type Creative struct {
 	//   "APPROVED" - The creative has been approved.
 	//   "DISAPPROVED" - The creative has been disapproved.
 	DealsStatus string `json:"dealsStatus,omitempty"`
+
+	// DeclaredClickThroughUrls: The set of declared destination URLs for
+	// the creative.
+	DeclaredClickThroughUrls []string `json:"declaredClickThroughUrls,omitempty"`
 
 	// DetectedAdvertiserIds: @OutputOnly Detected advertiser IDs, if any.
 	DetectedAdvertiserIds googleapi.Int64s `json:"detectedAdvertiserIds,omitempty"`
@@ -1371,26 +1375,28 @@ func (s *CreativeStatusRow) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// Date: Represents a whole calendar date, e.g. date of birth. The time
-// of day and
-// time zone are either specified elsewhere or are not significant. The
-// date
-// is relative to the Proleptic Gregorian Calendar. The day may be 0
+// Date: Represents a whole calendar date, for example date of birth.
+// The time of day
+// and time zone are either specified elsewhere or are not significant.
+// The date
+// is relative to the Proleptic Gregorian Calendar. The day can be 0
 // to
-// represent a year and month where the day is not significant, e.g.
-// credit card
-// expiration date. The year may be 0 to represent a month and day
-// independent
-// of year, e.g. anniversary date. Related types are
-// google.type.TimeOfDay
-// and `google.protobuf.Timestamp`.
+// represent a year and month where the day is not significant, for
+// example
+// credit card expiration date. The year can be 0 to represent a month
+// and day
+// independent of year, for example anniversary date. Related types
+// are
+// google.type.TimeOfDay and `google.protobuf.Timestamp`.
 type Date struct {
 	// Day: Day of month. Must be from 1 to 31 and valid for the year and
 	// month, or 0
 	// if specifying a year/month where the day is not significant.
 	Day int64 `json:"day,omitempty"`
 
-	// Month: Month of year. Must be from 1 to 12.
+	// Month: Month of year. Must be from 1 to 12, or 0 if specifying a date
+	// without a
+	// month.
 	Month int64 `json:"month,omitempty"`
 
 	// Year: Year of date. Must be from 1 to 9999, or 0 if specifying a date
@@ -1587,6 +1593,13 @@ type Disapproval struct {
 	// specifications.
 	//   "UNSUPPORTED_FLASH_CONTENT" - Flash content was found in an
 	// unsupported context.
+	//   "MISUSE_BY_OMID_SCRIPT" - Misuse by an Open Measurement SDK script.
+	//   "NON_WHITELISTED_OMID_VENDOR" - Use of an Open Measurement SDK
+	// vendor not on approved whitelist.
+	//   "DESTINATION_EXPERIENCE" - Unacceptable landing page.
+	//   "UNSUPPORTED_LANGUAGE" - Unsupported language.
+	//   "NON_SSL_COMPLIANT" - Non-SSL compliant.
+	//   "TEMPORARY_PAUSE" - Temporary pausing of creative.
 	Reason string `json:"reason,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Details") to
@@ -1724,6 +1737,14 @@ type FilterSet struct {
 	//   "MOBILE" - The ad impression appears on a mobile device.
 	Platforms []string `json:"platforms,omitempty"`
 
+	// PublisherIdentifiers: For Exchange Bidding buyers only.
+	// The list of publisher identifiers on which to filter; may be
+	// empty.
+	// The filters represented by multiple publisher identifiers are
+	// ORed
+	// together.
+	PublisherIdentifiers []string `json:"publisherIdentifiers,omitempty"`
+
 	// RealtimeTimeRange: An open-ended realtime time range, defined by the
 	// aggregation start
 	// timestamp.
@@ -1734,8 +1755,9 @@ type FilterSet struct {
 	// Interpreted relative to Pacific time zone.
 	RelativeDateRange *RelativeDateRange `json:"relativeDateRange,omitempty"`
 
-	// SellerNetworkIds: The list of IDs of the seller (publisher) networks
-	// on which to filter;
+	// SellerNetworkIds: For Ad Exchange buyers only.
+	// The list of IDs of the seller (publisher) networks on which to
+	// filter;
 	// may be empty. The filters represented by multiple seller network IDs
 	// are
 	// ORed together (i.e. if non-empty, results must match any one of
@@ -3259,11 +3281,22 @@ type ServingRestriction struct {
 	// Contexts: The contexts for the restriction.
 	Contexts []*ServingContext `json:"contexts,omitempty"`
 
-	// DisapprovalReasons: Any disapprovals bound to this restriction.
+	// Disapproval: Disapproval bound to this restriction.
 	// Only present if status=DISAPPROVED.
 	// Can be used to filter the response of the
 	// creatives.list
 	// method.
+	Disapproval *Disapproval `json:"disapproval,omitempty"`
+
+	// DisapprovalReasons: Any disapprovals bound to this restriction.
+	// Only present if status=DISAPPROVED.
+	// Can be used to filter the response of
+	// the
+	// creatives.list
+	// method.
+	// Deprecated; please use
+	// disapproval
+	// field instead.
 	DisapprovalReasons []*Disapproval `json:"disapprovalReasons,omitempty"`
 
 	// Status: The status of the creative in this context (for example, it
@@ -3463,6 +3496,7 @@ func (c *AccountsClientsCreateCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -3607,6 +3641,7 @@ func (c *AccountsClientsGetCall) doRequest(alt string) (*http.Response, error) {
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3785,6 +3820,7 @@ func (c *AccountsClientsListCall) doRequest(alt string) (*http.Response, error) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -3956,6 +3992,7 @@ func (c *AccountsClientsUpdateCall) doRequest(alt string) (*http.Response, error
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -4103,6 +4140,7 @@ func (c *AccountsClientsInvitationsCreateCall) doRequest(alt string) (*http.Resp
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}/invitations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -4258,6 +4296,7 @@ func (c *AccountsClientsInvitationsGetCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}/invitations/{invitationId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4440,6 +4479,7 @@ func (c *AccountsClientsInvitationsListCall) doRequest(alt string) (*http.Respon
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}/invitations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4624,6 +4664,7 @@ func (c *AccountsClientsUsersGetCall) doRequest(alt string) (*http.Response, err
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}/users/{userId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4804,6 +4845,7 @@ func (c *AccountsClientsUsersListCall) doRequest(alt string) (*http.Response, er
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}/users")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -4981,6 +5023,7 @@ func (c *AccountsClientsUsersUpdateCall) doRequest(alt string) (*http.Response, 
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/clients/{clientAccountId}/users/{userId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -5147,6 +5190,7 @@ func (c *AccountsCreativesCreateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5299,6 +5343,7 @@ func (c *AccountsCreativesGetCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives/{creativeId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5424,7 +5469,7 @@ func (c *AccountsCreativesListCall) PageToken(pageToken string) *AccountsCreativ
 // Query sets the optional parameter "query": An optional query string
 // to filter creatives. If no filter is specified,
 // all active creatives will be returned.
-// Supported queries
+// <p>Supported queries
 // are:
 // <ul>
 // <li>accountId=<i>account_id_string</i>
@@ -5495,6 +5540,7 @@ func (c *AccountsCreativesListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -5569,7 +5615,7 @@ func (c *AccountsCreativesListCall) Do(opts ...googleapi.CallOption) (*ListCreat
 	//       "type": "string"
 	//     },
 	//     "query": {
-	//       "description": "An optional query string to filter creatives. If no filter is specified,\nall active creatives will be returned.\nSupported queries are:\n\u003cul\u003e\n\u003cli\u003eaccountId=\u003ci\u003eaccount_id_string\u003c/i\u003e\n\u003cli\u003ecreativeId=\u003ci\u003ecreative_id_string\u003c/i\u003e\n\u003cli\u003edealsStatus: {approved, conditionally_approved, disapproved,\n                   not_checked}\n\u003cli\u003eopenAuctionStatus: {approved, conditionally_approved, disapproved,\n                          not_checked}\n\u003cli\u003eattribute: {a numeric attribute from the list of attributes}\n\u003cli\u003edisapprovalReason: {a reason from\nDisapprovalReason}\n\u003c/ul\u003e\nExample: 'accountId=12345 AND (dealsStatus:disapproved AND\ndisapprovalReason:unacceptable_content) OR attribute:47'",
+	//       "description": "An optional query string to filter creatives. If no filter is specified,\nall active creatives will be returned.\n\u003cp\u003eSupported queries are:\n\u003cul\u003e\n\u003cli\u003eaccountId=\u003ci\u003eaccount_id_string\u003c/i\u003e\n\u003cli\u003ecreativeId=\u003ci\u003ecreative_id_string\u003c/i\u003e\n\u003cli\u003edealsStatus: {approved, conditionally_approved, disapproved,\n                   not_checked}\n\u003cli\u003eopenAuctionStatus: {approved, conditionally_approved, disapproved,\n                          not_checked}\n\u003cli\u003eattribute: {a numeric attribute from the list of attributes}\n\u003cli\u003edisapprovalReason: {a reason from\nDisapprovalReason}\n\u003c/ul\u003e\nExample: 'accountId=12345 AND (dealsStatus:disapproved AND\ndisapprovalReason:unacceptable_content) OR attribute:47'",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -5667,6 +5713,7 @@ func (c *AccountsCreativesStopWatchingCall) doRequest(alt string) (*http.Respons
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives/{creativeId}:stopWatching")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -5811,6 +5858,7 @@ func (c *AccountsCreativesUpdateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives/{creativeId}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("PUT", urls, body)
@@ -5957,6 +6005,7 @@ func (c *AccountsCreativesWatchCall) doRequest(alt string) (*http.Response, erro
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives/{creativeId}:watch")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6101,6 +6150,7 @@ func (c *AccountsCreativesDealAssociationsAddCall) doRequest(alt string) (*http.
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives/{creativeId}/dealAssociations:add")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6294,6 +6344,7 @@ func (c *AccountsCreativesDealAssociationsListCall) doRequest(alt string) (*http
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives/{creativeId}/dealAssociations")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -6472,6 +6523,7 @@ func (c *AccountsCreativesDealAssociationsRemoveCall) doRequest(alt string) (*ht
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/accounts/{accountId}/creatives/{creativeId}/dealAssociations:remove")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6625,6 +6677,7 @@ func (c *BiddersAccountsFilterSetsCreateCall) doRequest(alt string) (*http.Respo
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+ownerName}/filterSets")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -6760,6 +6813,7 @@ func (c *BiddersAccountsFilterSetsDeleteCall) doRequest(alt string) (*http.Respo
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -6901,6 +6955,7 @@ func (c *BiddersAccountsFilterSetsGetCall) doRequest(alt string) (*http.Response
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7063,6 +7118,7 @@ func (c *BiddersAccountsFilterSetsListCall) doRequest(alt string) (*http.Respons
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+ownerName}/filterSets")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7254,6 +7310,7 @@ func (c *BiddersAccountsFilterSetsBidMetricsListCall) doRequest(alt string) (*ht
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/bidMetrics")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7447,6 +7504,7 @@ func (c *BiddersAccountsFilterSetsBidResponseErrorsListCall) doRequest(alt strin
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/bidResponseErrors")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7642,6 +7700,7 @@ func (c *BiddersAccountsFilterSetsBidResponsesWithoutBidsListCall) doRequest(alt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/bidResponsesWithoutBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -7837,6 +7896,7 @@ func (c *BiddersAccountsFilterSetsFilteredBidRequestsListCall) doRequest(alt str
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBidRequests")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8030,6 +8090,7 @@ func (c *BiddersAccountsFilterSetsFilteredBidsListCall) doRequest(alt string) (*
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8226,6 +8287,7 @@ func (c *BiddersAccountsFilterSetsFilteredBidsCreativesListCall) doRequest(alt s
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/creatives")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8433,6 +8495,7 @@ func (c *BiddersAccountsFilterSetsFilteredBidsDetailsListCall) doRequest(alt str
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/details")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8636,6 +8699,7 @@ func (c *BiddersAccountsFilterSetsImpressionMetricsListCall) doRequest(alt strin
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/impressionMetrics")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -8829,6 +8893,7 @@ func (c *BiddersAccountsFilterSetsLosingBidsListCall) doRequest(alt string) (*ht
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/losingBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9023,6 +9088,7 @@ func (c *BiddersAccountsFilterSetsNonBillableWinningBidsListCall) doRequest(alt 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/nonBillableWinningBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9199,6 +9265,7 @@ func (c *BiddersFilterSetsCreateCall) doRequest(alt string) (*http.Response, err
 	}
 	reqHeaders.Set("Content-Type", "application/json")
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+ownerName}/filterSets")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("POST", urls, body)
@@ -9334,6 +9401,7 @@ func (c *BiddersFilterSetsDeleteCall) doRequest(alt string) (*http.Response, err
 	reqHeaders.Set("User-Agent", c.s.userAgent())
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("DELETE", urls, body)
@@ -9475,6 +9543,7 @@ func (c *BiddersFilterSetsGetCall) doRequest(alt string) (*http.Response, error)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+name}")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9637,6 +9706,7 @@ func (c *BiddersFilterSetsListCall) doRequest(alt string) (*http.Response, error
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+ownerName}/filterSets")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -9828,6 +9898,7 @@ func (c *BiddersFilterSetsBidMetricsListCall) doRequest(alt string) (*http.Respo
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/bidMetrics")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -10021,6 +10092,7 @@ func (c *BiddersFilterSetsBidResponseErrorsListCall) doRequest(alt string) (*htt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/bidResponseErrors")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -10216,6 +10288,7 @@ func (c *BiddersFilterSetsBidResponsesWithoutBidsListCall) doRequest(alt string)
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/bidResponsesWithoutBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -10411,6 +10484,7 @@ func (c *BiddersFilterSetsFilteredBidRequestsListCall) doRequest(alt string) (*h
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBidRequests")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -10604,6 +10678,7 @@ func (c *BiddersFilterSetsFilteredBidsListCall) doRequest(alt string) (*http.Res
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -10800,6 +10875,7 @@ func (c *BiddersFilterSetsFilteredBidsCreativesListCall) doRequest(alt string) (
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/creatives")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11007,6 +11083,7 @@ func (c *BiddersFilterSetsFilteredBidsDetailsListCall) doRequest(alt string) (*h
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/filteredBids/{creativeStatusId}/details")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11210,6 +11287,7 @@ func (c *BiddersFilterSetsImpressionMetricsListCall) doRequest(alt string) (*htt
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/impressionMetrics")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11403,6 +11481,7 @@ func (c *BiddersFilterSetsLosingBidsListCall) doRequest(alt string) (*http.Respo
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/losingBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
@@ -11597,6 +11676,7 @@ func (c *BiddersFilterSetsNonBillableWinningBidsListCall) doRequest(alt string) 
 	}
 	var body io.Reader = nil
 	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
 	urls := googleapi.ResolveRelative(c.s.BasePath, "v2beta1/{+filterSetName}/nonBillableWinningBids")
 	urls += "?" + c.urlParams_.Encode()
 	req, _ := http.NewRequest("GET", urls, body)
